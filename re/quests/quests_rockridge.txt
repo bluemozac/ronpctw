@@ -1,0 +1,7102 @@
+﻿//===== rAthena Script =======================================
+//= Rock Ridge Quests.
+//===== Description: =========================================
+//= [Official Conversion]
+//--- Quests list:
+// Note: "rock_main_quest" is officially "rrmain" variable.
+//===== Changelogs: ==========================================
+//= 1.0 First version. [Capuche]
+//============================================================
+
+alberta,240,103,5	script	Karam Pucci#alberta	4_M_SEAMAN,3,3,{
+	if (rock_main_quest == 0 && isbegin_quest(7790) == 0) {// first time
+		if (BaseLevel < 100) {
+			mes "[卡拉姆·普基]";
+			mes "您好，新興的冒險家！";
+			mes "我可以和你說話嗎？";
+			next;
+			if (select( "What can I do for you?", "I'm busy." ) == 2) {
+				mes "[卡拉姆·普基]";
+				mes "那是無情的。";
+				mes "我打算告訴您一個新的大陸，但是如果您不想知道，那對我來說很好。";
+				next;
+				mes "[卡拉姆·普基]";
+				mes "再看一下，無論如何，您太虛弱了，無法去那裡。";
+				mes "好吧，繼續前進。";
+				mes "如果您的朋友至少是 ^4d4dfflevel 100 ^00000，請告訴他們來和我說話，好嗎？";
+				close;
+			}
+			mes "[卡拉姆·普基]";
+			mes "您聽說過有關新大陸的消息嗎？";
+			mes "我的公司Pink Rose在尋找新市場時偶然發現了它。";
+			next;
+			mes "[卡拉姆·普基]";
+			mes "現在有一個名為 ^4d4dffrock Ridge ^000000的城市，";
+			mes "許多人已經蜂擁而至，想要新土地必須提供的黃金。";
+			next;
+			mes "[卡拉姆·普基]";
+			mes "如果您願意，我可以將您送到那裡。";
+			mes "你怎麼說？";
+			next;
+			mes "[卡拉姆·普基]";
+			mes "通常，船舶票價為 ^4d4dfff10,000 Zeny ^000000，一次單向旅行，";
+			mes "但是我可以為您放棄一次。";
+			next;
+			if (select( "I'm in! I'm in!", "Let me take a rain check." ) == 2) {
+				mes "[卡拉姆·普基]";
+				mes "嗯？當然，沒問題。";
+				mes "但是，下次帶很多朋友帶來很多朋友，好嗎？";
+				mes "巖嶺是夢想和機遇的土地。";
+				close;
+			}
+			mes "[卡拉姆·普基]";
+			mes "好的！然後讓我們去";
+			mes "岩石嶺，黃金和機會的土地！";
+			setquest 7790;// Rock Ridge, Land of Opportunities
+			completequest 7790;// Rock Ridge, Land of Opportunities
+			close;
+		}
+		mes "[卡拉姆·普基]";
+		mes "你看起來像一個有能力的冒險家。";
+		mes "我一直在尋找像你這樣的人。";
+		next;
+		mes "[卡拉姆·普基]";
+		mes "您聽說過有關新大陸的消息嗎？";
+		mes "我的公司Pink Rose在尋找新市場時偶然發現了它。";
+		next;
+		mes "[卡拉姆·普基]";
+		mes "現在有一個名為 ^4d4dffrock Ridge ^000000的城市，";
+		mes "許多人已經蜂擁而至，想要新土地必須提供的黃金。";
+		next;
+		select("Why are you looking for adventurers?", "Are you looking for settlers?");
+		mes "[卡拉姆·普基]";
+		mes "實際上...";
+		mes "Rock Ridge有一點問題，";
+		mes "這不是公民可以處理的事情。";
+		next;
+		mes "[卡拉姆·普基]";
+		mes "巖嶺是一個採礦城，";
+		mes "因此，它的大多數公民都是礦工和商人。";
+		next;
+		mes "[卡拉姆·普基]";
+		mes "最近，一組 ^4d4dffbandits決定他們想要礦山 ^000000。";
+		next;
+		select("所以這是一個使命。");
+		mes "[卡拉姆·普基]";
+		mes "嗯？是的，我想在某種程度上。";
+		mes "如果您與Rock Ridge市長 ^4d4dfffcostello ^000000與 ^4d4dffcostello ^000000交談，您可以找到更多有關它的信息。";
+		mes "除了城市需要有能力的冒險家的幫助外，我不太了解。";
+		next;
+		if (select( "Got it.", "I'm not doing it." ) == 2) {
+			mes "[卡拉姆·普基]";
+			mes "* gro吟*好吧，那我最好找別人。";
+			mes "謝謝你的寶貴時間。";
+			close;
+		}
+		mes "[卡拉姆·普基]";
+		mes "好吧，然後我們去岩石嶺。";
+		mes "那個地方很遠，到達那裡很昂貴，但是我可以為您放棄一次船票。";
+		next;
+		mes "[卡拉姆·普基]";
+		mes "然後走吧。";
+		setquest 7790;// Rock Ridge, Land of Opportunities
+		setquest 7791;// Problems in Rock Ridge
+		completequest 7790;
+		rock_main_quest = 1;
+		close2;
+		warp "harboro1",70,215;
+		end;
+	}
+	mes "[卡拉姆·普基]";
+	mes "嘿，歡迎回來。";
+	mes "這是訪問Rock Ridge的完美一天，不是嗎？";
+	next;
+	if (select( "Off we go to Rock Ridge!", "No." ) == 2) {
+		mes "[卡拉姆·普基]";
+		mes "HMPF，你為什麼這麼無情？";
+		mes "好吧，但是如果您改變主意，請回來。";
+		close;
+	}
+	if (BaseLevel >= 100 && rock_main_quest == 0) {
+		mes "[卡拉姆·普基]";
+		mes "順便說一句，您變得非常強大。";
+		mes "你看起來像一個有能力的冒險家。";
+		next;
+		mes "[卡拉姆·普基]";
+		mes "您有興趣在Rock Ridge工作嗎？";
+		next;
+		mes "[卡拉姆·普基]";
+		mes "實際上...";
+		mes "Rock Ridge有一點問題，";
+		mes "這不是公民可以處理的事情。";
+		next;
+		mes "[卡拉姆·普基]";
+		mes "您聽說過Rock Ridge的土匪嗎？";
+		mes "最近，一組 ^4d4dffbandits決定他們想要礦山 ^000000。";
+		next;
+		mes "[卡拉姆·普基]";
+		mes "如果您與Rock Ridge市長 ^4d4dfffcostello ^000000與 ^4d4dffcostello ^000000交談，您可以找到更多有關它的信息。";
+		mes "除了城市需要有能力的冒險家的幫助外，我不太了解。";
+		next;
+		mes "[卡拉姆·普基]";
+		mes "然後走吧。";
+		setquest 7791;// Problems in Rock Ridge
+		rock_main_quest = 1;
+		next;
+	}
+	if (Zeny < 10000) {
+		mes "[卡拉姆·普基]";
+		mes "嗯，我認為您沒有足夠的錢來支付票價。";
+		mes "這個地方很遠，所以到達那裡很昂貴。";
+		mes "我不是告訴你是 ^4d4dff10,000 zeny ^000000到達那裡嗎？";
+		close;
+	}
+	mes "[卡拉姆·普基]";
+	mes "如果您不想被海浪掃除，請抓住鐵軌！";
+	Zeny = Zeny - 10000;
+	close2;
+	warp "harboro1",70,215;
+	end;
+
+OnTouch:
+	if (isbegin_quest(7790) == 0) {
+		if (BaseLevel < 100)
+		    npctalk "Hello, promising adventurer! How about I introduce you to a new place for you to explore?", "", bc_self;
+		else
+			npctalk "Hey, may I talk to you for a second?", "", bc_self;
+	}
+	end;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "BaseLevel >= 100 && !isbegin_quest(7790)" );
+	end;
+}
+
+harboro1,80,218,5	script	Costello#harboro1	4_M_COSTELL,{
+	if (rock_main_quest == 0) {
+		npctalk "...Ah, what's taking Karam so long? I needed people yesterday!";
+		end;
+	}
+	if (rock_main_quest == 1) {
+		setpcblock PCBLOCK_NPC, true;
+		unittalk getcharid(3), "" + strcharinfo(0) + " : Mr. Costello?", bc_self;
+		sleep2 1000;
+		npctalk "*Gasp*", "", bc_self;;
+		sleep2 1000;
+		setpcblock PCBLOCK_NPC, false;
+		mes "[科斯特洛]";
+		mes "* ahem*是的，這是他。";
+		mes "我是Rock Ridge市長Costello。";
+		mes "你認識我，因為...？";
+		next;
+		select("死。卡拉姆·普基免費。");
+		mes "[科斯特洛]";
+		mes "哦，他做到了！";
+		mes "歡迎！我一直在等你！";
+		mes "那麼卡拉姆告訴你多少？";
+		next;
+		mes "[科斯特洛]";
+		mes "啊，所以他告訴你土匪。";
+		mes "如您所見，Rock Ridge是建在荒原上的開拓者村。";
+		next;
+		mes "[科斯特洛]";
+		mes "當然，它的大多數居民都來自Midgard。";
+		next;
+		select("在你到達之前這裡一直沒人住嗎？");
+		mes "[科斯特洛]";
+		mes "不，有幾個土著部落。";
+		mes "其中之一是 ^4d4dffcacti ^000000，住在附近的可愛的人。";
+		next;
+		mes "[科斯特洛]";
+		mes "如果不適合他們，我們就無法建造岩石脊。";
+		mes "他們是我們的好朋友。";
+		next;
+		mes "[科斯特洛]";
+		mes "另一個部落是 ^4d4dfftauruses ^000000。";
+		mes "這些金牛座是戰爭的，掠奪是他們唯一的生活方式。";
+		next;
+		mes "[科斯特洛]";
+		mes "仙人掌和我們的人民稱他們為 ^4d4dfffbuffalo土匪 ^000000。";
+		next;
+		mes "[科斯特洛]";
+		mes "這是因為他們一直在捕食我們，而且情況越來越糟。";
+		mes "現在，我們的Vigilante集團和警長辦公室還不足以使他們陷入困境。";
+		next;
+		mes "[科斯特洛]";
+		mes "粉紅色的玫瑰總部已決定，它需要Midgard的能力冒險家來照顧這種情況。";
+		mes "這就是為什麼您被邀請到Rock Ridge的原因。";
+		next;
+		mes "[科斯特洛]";
+		mes "最近，我們用來運輸礦石的貨運火車 ^4d4dffstole ^000000。";
+		mes "好像還不夠，他們居住在我們礦山內。現在我無法獲得任何利潤，公司對我不滿意。";
+		next;
+		mes "[科斯特洛]";
+		mes "那礦工呢？他們充滿希望來到這裡，但是現在他們沒有工作或金錢生活在街上。";
+		mes "*喘著粗氣*不要告訴任何人在村里沒有工作要做。";
+		mes "我不能讓人們在到達後立即離開。";
+		next;
+		mes "[科斯特洛]";
+		mes "無論如何，如果您能照顧布法羅土匪，我將不勝感激。";
+		mes "只要您這樣做，我就不在乎您如何做。";
+		next;
+		mes "[科斯特洛]";
+		mes "去警長，告訴他您來幫助布法羅土匪的情況。他會告訴你該怎麼辦。";
+		mes "請幫助粉紅色玫瑰嗎？我的意思是，洛克山脊。";
+		rock_main_quest = 2;
+		erasequest 7791;
+		setquest 7792;// Problems in Rock Ridge 2
+		next;
+		select("警長是誰？");
+		mes "[科斯特洛]";
+		mes "哦，對不起，我沒有告訴你他的名字，對嗎？";
+		mes "沿著東部村莊的主要道路，您將看到警長辦公室。";
+		mes "您也可以在我面前向指南詢問指示。";
+		next;
+		mes "[科斯特洛]";
+		mes "當您到達那裡時，請先生 ^4d4dfffwyatt Warp ^000000。";
+		mes "是的，那是他的名字。";
+		mes "哈哈，哈哈！";
+		close;
+	}
+	if (rock_main_quest == 2) {
+		mes "[科斯特洛]";
+		mes "沿著東部村莊的主要道路，您將看到警長辦公室。";
+		mes "^4d4d4dffwyatt Warp ^000000是這個村莊的警長，他可以告訴您更多有關土匪的信息。";
+		close;
+	}
+	if (rock_main_quest == 3) {
+		mes "[科斯特洛]";
+		mes "你看起來很嚴峻。怎麼了？";
+		mes "布法羅土匪想與我們討價還價。";
+		mes "對於礦石。他們想要交換什麼？";
+		next;
+		select("你。");
+		mes "[科斯特洛]";
+		npctalk "EXCUSE ME?", "", bc_self;
+		mes "什麼？這對您有意義嗎？";
+		mes "他們一定已經失去了理智！";
+		next;
+		mes "[科斯特洛]";
+		mes "他們為什麼要我想要我？";
+		mes "你只是在開玩笑，對嗎？請說你是。";
+		next;
+		npctalk "Geez! This makes no sense!", "", bc_self;
+		mes "[科斯特洛]";
+		mes "他們想和我和懷亞特說話，沒有其他人。";
+		mes "啊！我不想對懷亞特這樣做，但我只是要把岩石嶺留在下一艘船上。";
+		next;
+		unittalk getcharid(3), "" + strcharinfo(0) + " : ...", bc_self;
+		mes "[科斯特洛]";
+		mes "你為什麼那樣看我？";
+		mes "當然，保護我公司的利潤很重要，但是如果我已經死了，我不能那樣做，現在可以嗎？";
+		next;
+		select("我是開玩笑的。");
+		npctalk "Huh?", "", bc_self;
+		mes "[科斯特洛]";
+		mes "他們想要討價還價呢？你也在開玩笑嗎？";
+		mes "我明白了。";
+		next;
+		mes "[科斯特洛]";
+		mes "您不能參加會議，也許假裝是總部的人？";
+		mes "您可以聽他們說的話，";
+		next;
+		mes "[科斯特洛]";
+		mes "並告訴他們您必須先與總部交談。";
+		mes "毫米，...";
+		next;
+		mes "[科斯特洛]";
+		mes "你臉上那個奇怪的表情？";
+		mes "...無論如何，懷亞特和您可以在沒有我的情況下參加會議。";
+		mes "現在，對不起。我最好找到一個隱藏的地方...";
+		next;
+		mes "^4d4dfffcostello正在環顧四周，焦急地bab著。";
+		mes "我應該告訴懷亞特，Costello想听聽土匪的說法。 ^000000";
+		rock_main_quest = 4;
+		erasequest 7793;
+		setquest 7794;// Expected Response
+		close;
+	}
+	if (rock_main_quest == 4 || rock_main_quest == 5) {
+		mes "[科斯特洛]";
+		mes "我 - 我會指望你，冒險家。";
+		mes "您可以聽他們說的話，";
+		next;
+		mes "[科斯特洛]";
+		mes "並告訴他們您必須先與總部交談。";
+		mes "...無論如何，懷亞特和您可以在沒有我的情況下參加會議。";
+		mes "如果您需要我，我會在這裡。";
+		close2;
+		npctalk "Argh, I don't want to be responsible for this hellhole!", "", bc_self;
+		end;
+	}
+	if (rock_main_quest == 6) {
+		mes "[科斯特洛]";
+		mes "我聽到了這個消息。";
+		mes "您已經抓到了臭名昭著的布法羅土匪領袖約翰尼·詹姆斯（Johnny James）。";
+		mes "這意味著我們現在有一個討價還價的籌碼。";
+		next;
+		mes "[科斯特洛]";
+		mes "什麼討價還價？也許我們可以從他身上提取礦石的位置。";
+		mes "我會讓警長扭曲照顧這個。";
+		close;
+	}
+	if (rock_main_quest < 13) {
+		mes "[科斯特洛]";
+		mes "毫米，我們只付給他們 ^4d4dffa百萬Zeny或So ^000000的礦石呢？";
+		mes "這將使雙方都更容易。";
+		next;
+		select("你有那麼多錢嗎？");
+		mes "[科斯特洛]";
+		mes "當然，不是。";
+		mes "但是我很確定你會這樣做。";
+		mes "正義有時會如此昂貴...";
+		next;
+		mes "[科斯特洛]";
+		mes "對不起，我這麼說。那是毫無意義的。";
+		mes "您和警長會照顧好它。我會遠離它。";
+		mes "你這樣做。";
+		close;
+	}
+	if (rock_main_quest == 13 || rock_main_quest == 14) {
+		mes "[科斯特洛]";
+		mes "我聽說您仍在與他們討價還價。";
+		mes "我也聽到了一個奇怪的謠言，";
+		mes "但是您應該知道我不會對您懷有怨恨。";
+		next;
+		mes "[科斯特洛]";
+		mes "只要您代理市長，我就會安全。";
+		close;
+	}
+	if (rock_main_quest == 15) {
+		mes "[科斯特洛]";
+		mes "怎麼樣了？";
+		mes "警長扭曲只對我微笑。";
+		next;
+		mes "[科斯特洛]";
+		mes "為什麼我聽到你是下一任市長？";
+		mes "到底發生了什麼？";
+		next;
+		if (select( "It's a secret.", "You should pack and leave." ) == 1) {
+			mes "[科斯特洛]";
+			mes "為什麼，這是某種秘密操作？";
+			mes "這與您假裝成為土匪會議的市長有關。";
+			next;
+			mes "[科斯特洛]";
+			mes "我還可以，只要您不想成為市長。";
+			mes "我要做的就是等待。";
+			close;
+		}
+		mes "[科斯特洛]";
+		mes "誰...？";
+		mes "...!!";
+		next;
+		select("我在逗你呢。呼吸。");
+		mes "[科斯特洛]";
+		mes "*褲子褲*";
+		mes "你的意思是，你知道嗎？";
+		mes "我在碼頭方面的人身安全問題，";
+		next;
+		mes "[科斯特洛]";
+		mes "這沒有足夠的理由被解僱。";
+		mes "如果那是個玩笑，那就沒什麼好笑的。";
+		mes "我要和警長扭曲談論你。";
+		close;
+	}
+	if (rock_main_quest < 22) {
+		mes "[科斯特洛]";
+		mes "如果我們不必擔心那些布法羅土匪...！";
+		close;
+	}
+	mes "[科斯特洛]";
+	mes "我要代表Rock Ridge和我的公司感謝您。";
+	mes "...";
+	mes "我真的很感謝您所做的一切，...和...";
+	mes "嗯，我不知道該說些什麼。";
+	next;
+	mes "[科斯特洛]";
+	mes "順便說一句，您已宣布與阿爾伯特·福特（Albert Ford）進行戰爭。";
+	mes "我想我必須在碼頭停留更長的時間。";
+	mes "要招募更多的冒險家和所有人。";
+	mes "啊，我很忙，我不介意忙碌！";
+	close;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 1 || rock_main_quest == 3" );
+	end;
+}
+
+har_in01,20,30,5	script	Wyatt Warp#har_in01	4_M_YATTWARP,{
+	disable_items;
+	if (checkweight(1301,3) == 0) {
+		mes "- 您攜帶太多的物品以進行此任務。 -";
+		close;
+	}
+	if (rock_main_quest < 2) {
+		mes "[懷亞特·厄普]";
+		mes "您是新定居者嗎？";
+		mes "人們只是不會停止來這個村莊。";
+		mes "嘿，我們不是在招聘。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "如果您正在尋找工作，請去其他地方。";
+		mes "也許Costello可以僱用您在礦山工作。";
+		close;
+	}
+	if (rock_main_quest == 2) {
+		mes "[懷亞特·厄普]";
+		mes "這是什麼？";
+		mes "我手頭上有一個非常緊急和嚴重的事情。請不要打擾我。";
+		next;
+		select("我知道布法羅強盜的事。");
+		mes "[懷亞特·厄普]";
+		mes "毫米？等等，Costello寄給您了嗎？";
+		mes "粉紅色的玫瑰總部表示，它會發送幫助來應對布法羅土匪。";
+		mes "它給了我冒險家。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "順便說一句，Costello在哪裡？他是市長？在這樣的關鍵時刻，他不能消失在我身上！";
+		mes "哦，對嗎？他沒有消失。他在碼頭上，所以他可以暫時離開。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "為什麼我一直忘記我對那個男人的任何期望？";
+		mes "至少我有你，冒險家。我敢肯定，我們可以在我們兩個之間處理這一點。";
+		next;
+		select("我能做些什麼？");
+		mes "[懷亞特·厄普]";
+		mes "您是否聽說土匪攻擊了我們的貨運火車並偷走了其中的所有礦石？";
+		mes "好，那麼您還必須知道他們在我們的礦山中居住。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "我知道為什麼粉紅色的玫瑰對此不滿意。";
+		mes "礦山生產的 ^4d4d4dffpurple礦石 ^000000非常有利可圖。實際上，它們是粉紅色玫瑰的最暢銷產品。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "地獄，這是這個村莊存在的原因。";
+		mes "土匪從公司偷走了它們。";
+		mes "為什麼公司如此激動是完全可以理解的。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "而現在，我剛剛收到了這些野蠻人的來信。";
+		mes "他們想討價還價。";
+		mes "我不知道他們需要什麼以換取礦石，";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "但是根據那封信，土匪領導人 ^4d4dfffjohnny james ^000000想與我們一對一的人交談。";
+		mes "必須是科斯特洛，對嗎？";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "或者，也許您可以遇到他，假裝成為總部的人。我和你一起去。";
+		next;
+		if (select( "We should talk to Mayor Costello first.", "That's an interesting idea." ) == 1) {
+			mes "[懷亞特·厄普]";
+			mes "好吧，然後去和他說話。";
+			mes "如果我們無法避免這次會議，那麼我們最好做好準備。";
+			next;
+			mes "[懷亞特·厄普]";
+			mes "我敢肯定，像往常一樣，您可以在碼頭上找到Costello。";
+			mes "我已經知道他會說什麼，但他是市長。至少他需要知道發生了什麼。";
+		}
+		else {
+			mes "[懷亞特·厄普]";
+			mes "該公司這次派出了一個有能力的冒險家。";
+			mes "我們可以在我們兩個之間照顧好這兩個，但是市長需要知道他村莊的情況。";
+			next;
+			mes "[懷亞特·厄普]";
+			mes "好吧，然後去和他說話。";
+			mes "同時，我將為會議做準備。";
+			next;
+			mes "[懷亞特·厄普]";
+			mes "我敢肯定，像往常一樣，您可以在碼頭上找到Costello。";
+		}
+		mes "我稍後再在這裡見。";
+		rock_main_quest = 3;
+		erasequest 7792;// Problems in Rock Ridge 2
+		setquest 7793;// Good News
+		close;
+	}
+	if (rock_main_quest == 3) {
+		mes "[懷亞特·厄普]";
+		mes "我敢肯定，像往常一樣，您可以在碼頭上找到Costello。";
+		mes "我稍後再在這裡見。";
+		close;
+	}
+	if (rock_main_quest == 4) {
+		mes "[懷亞特·厄普]";
+		mes "啊，你回來了。";
+		mes "我準備開會了。";
+		mes "就是你和我，對嗎？";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "Costello呢？";
+		mes "他不想去那裡。";
+		mes "我知道是你而不是他。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "現在是時候見土匪了。";
+		mes "通過東門離開村莊，您將進入 ^4d4dffkiwawa沙漠 ^000000。";
+		mes "這就是仙人掌所說的荒原。無論如何，沙漠北側有一個 ^4d4dffunmov的貨運 ^000000。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "如果您認為找不到它，那就遵循鐵路。";
+		mes "我們將在火車上等他。";
+		mes "讓我們去看看那個布法羅土匪的領導者 ^4d4dffffjohnny james ^000000是多麼醜陋。";
+		rock_main_quest = 5;
+		erasequest 7794;// Expected Response
+		setquest 7795;// Negotiation on the Railroad
+		close;
+	}
+	if (rock_main_quest == 5) {
+		mes "[懷亞特·厄普]";
+		mes "從東門口退出，沿著鐵路北。您會看到一個 ^4d4dffunmoving貨運火車 ^000000。";
+		mes "讓我們在火車上等待土匪。";
+		close;
+	}
+	if (rock_main_quest == 6) {
+		setpcblock PCBLOCK_NPC, true;
+		npctalk "I say we turn him against the rest of his gang.", "Ivoka Skudi#rr03", bc_self;
+		sleep2 2000;
+		npctalk "Don't you think regular torture or threats would work?", "", bc_self;
+		sleep2 3000;
+		npctalk "Johnny James isn't the only one we have to worry about. There's?", "Ivoka Skudi#rr03", bc_self;
+		sleep2 1000;
+		npctalk "I know. There's Albert.", "", bc_self;
+		sleep2 2000;
+		setpcblock PCBLOCK_NPC, false;
+		mes "[懷亞特·厄普]";
+		mes "歡迎。";
+		mes "*笑*你是如此有用。只是讓您站在我們旁邊，就像魅力一樣。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "無論如何，約翰尼·詹姆斯（Johnny James）比我想像的要頑固。";
+		mes "他仍然沒有告訴我們被盜的礦石在哪裡。";
+		next;
+		npctalk "He probably wants us to exchange him for the ores.", "Ivoka Skudi#rr03", bc_self;
+		mes "[懷亞特·厄普]";
+		mes "那是可能的。";
+		mes "我猜阿爾伯特·福特（Albert Ford）想盡快與我們交談。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "但這只是暫時的。";
+		sleep2 1000;
+		npctalk "We have to reclaim the mine too!", "Ivoka Skudi#rr03", bc_self;
+		mes "這是正確的。我們也必須收回該礦。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "因此，我們一直在討論下一步行動。";
+		mes "伊沃卡（Ivoka）想將他與他的團伙其他成員抗衡。";
+		next;
+		select("他只要告訴我們礦石在哪裡，然後就可以自由地離開這裡。");
+		mes "[懷亞特·厄普]";
+		mes "通常，這將是第一件事。";
+		mes "問題是，";
+		mes "這個約翰尼傢伙不正常。";
+		mes "也許他在等待東西。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "無論哪種方式，他拒絕合作都是讓我們困難的事情。";
+		mes "我認為我們應該等到Albert與我們聯繫開會，";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "但是伊沃卡有一個不同的想法。";
+		mes "讓我們聽聽他要說的話。";
+		rock_main_quest = 7;
+		questinfo_refresh();	// the update of the variable refreshes questinfo
+		close;
+	}
+	if (rock_main_quest == 7) {
+		mes "[懷亞特·厄普]";
+		mes "讓我們聽聽伊沃卡所說的話。";
+		close;
+	}
+	if (rock_main_quest == 8) {
+		mes "[懷亞特·厄普]";
+		mes "^4d4dfffjohnny James被鎖在地下室^000000。";
+		mes "讓我們嘗試讓他相信艾伯特出賣了他，而他唯一離開這裡的機會就是與我們交談。";
+		close;
+	}
+	if (rock_main_quest == 9) {
+		mes "[懷亞特·厄普]";
+		mes "Johnny甚至給您提供了信號Albert的密碼嗎？";
+		mes "他正在幫助我們趕上阿爾伯特。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "好吧，然後去和阿爾伯特見面。";
+		mes "同時，我將進一步嚇到約翰尼。";
+		mes "MWA哈哈！";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "哦，對！我幾乎忘記了 ^4d4dffshawn McCurdy ^000000想要與您談論該礦。";
+		mes "您可以在出門的路上找到他。你為什麼不和他說話？";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "誰知道？您可能會發現與水牛匪一起使用的東西。";
+		rock_main_quest = 10;
+		erasequest 7798;
+		setquest 7799;// Shawn McCurdy's Weapon 1
+		close;
+	}
+	if (rock_main_quest == 10) {
+		mes "[懷亞特·厄普]";
+		mes "我會讓你與阿爾伯特進行談判。";
+		mes "我想在他認為你真的來自總部時得到他。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "哦，您應該在出門時與Shawn McCurdy交談。";
+		mes "他說他有重要的事情要告訴你。";
+		close;
+	}
+	if (rock_main_quest == 11) {
+		mes "[懷亞特·厄普]";
+		mes "我懂了。";
+		mes "我們可以用它來說服土匪，礦山不像他們認為的那麼有用。";
+		mes "這不是一個完整的謊言。否則不會很快。";
+		next;
+	}
+	if (rock_main_quest < 14) {
+		mes "[懷亞特·厄普]";
+		mes "這取決於您和肖恩。";
+		mes "就像肖恩（Shawn）所說的那樣，去礦山的第二層，買一個礦石，並將其展示給阿爾伯特。";
+		mes "那會進一步馴服他。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "我該如何到達我的？";
+		mes "沿著鐵路東部。";
+		mes "嘗試保持正確的軌道。";
+		close;
+	}
+	if (rock_main_quest == 14) {
+		if (isbegin_quest(7809) == 0 && countitem(25247) > 0) {
+			mes "[懷亞特·厄普]";
+			mes "肖恩是對的。";
+			mes "給我礦石。";
+			mes "我會把它給肖恩。";
+			delitem 25247, countitem(25247);// Violet_Stone
+			setquest 7809;// Collecting Ores
+			completequest 7809;// Collecting Ores
+			next;
+		}
+		mes "[懷亞特·厄普]";
+		mes "嗯？你手裡的頭髮是什麼？";
+		mes "阿爾伯特的鬃毛？";
+		mes "你真的照顧他嗎？";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "哎呀，你的冒險家是一個可怕的東西。";
+		mes "毫米？不？哦，他把它給了你。";
+		mes "啊，愚弄約翰尼！";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "*搖頭*哈哈哈。";
+		mes "好吧，最後一次去和約翰尼談談。";
+		mes "我們至少應該讓他有一個美好的夢想，對嗎？";
+		close;
+	}
+	if (rock_main_quest == 15) {
+		if (isbegin_quest(7809) == 0 && countitem(25247) > 0) {
+			mes "[懷亞特·厄普]";
+			mes "肖恩是對的。";
+			mes "給我礦石。";
+			mes "我會把它給肖恩。";
+			delitem 25247, countitem(25247);// Violet_Stone
+			setquest 7809;// Collecting Ores
+			completequest 7809;// Collecting Ores
+			next;
+		}
+		mes "[懷亞特·厄普]";
+		mes "好吧，那我讓肖恩處理這個。";
+		mes "你能告訴肖恩礦石在哪裡嗎？";
+		mes "我會和Costello談談。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "哦，然後";
+		mes "我認為是時候警告阿爾伯特了。";
+		mes "告訴他，他們呆在礦山內的時間越長，他們的生活機會卻很小。";
+		next;
+		select("你只是要和他們戰鬥嗎？");
+		mes "[懷亞特·厄普]";
+		mes "是的，我們已經完成了。";
+		mes "是時候威脅他們了。";
+		mes "目前， ^4d4dffllook for shawn for shawn。 ^000000";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "一旦我們取回礦石，我們就無需擔心。";
+		mes "消除岩石山脊和礦山周圍的布法羅匪徒，";
+		mes "並向阿爾伯特展示他們的 ^4d4dfffmufflers和圍巾。 ^000000";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "他很愚蠢，但即使他也知道那意味著什麼。";
+		mes "*笑*誰知道冒險家會如此有用？";
+		mes "我要告訴Costello招募更多像您這樣的冒險家！";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "現在轉到 ^4d4dffshawn McCurdy ^000000，對嗎？";
+		mes "我們已經完成了匪徒！";
+		mes "掛在那裡！";
+		rock_main_quest = 16;
+		erasequest 7804;// Location of the Ores
+		setquest 7805;// Location of the Ores 2
+		close;
+	}
+	if (rock_main_quest == 16) {
+		mes "[懷亞特·厄普]";
+		mes "現在轉到 ^4d4dffshawn McCurdy ^000000，對嗎？";
+		mes "我們已經完成了匪徒！";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "一旦我們取回礦石，我們就會取下土匪！";
+		mes "不要忘記這次教艾伯特一課。";
+		close;
+	}
+	if (rock_main_quest < 21) {
+		mes "[懷亞特·厄普]";
+		mes "*笑*我該如何處理水牛匪？";
+		mes "只是想和他們玩耍的想法讓我興奮。";
+		close;
+	}
+	if (rock_main_quest == 21) {
+		if (countitem(25248) < 1) {// note: player can't finish the quest without the item
+			mes "[懷亞特·厄普]";
+			mes "肖恩說你會帶礦盒。它在哪裡？";
+			mes "如果您把它留在某個地方，因為它很重，請帶上它。";
+			close;
+		}
+		mes "[懷亞特·厄普]";
+		mes "它怎麼走了？";
+		mes "您已宣布與阿爾伯特·福特（Albert Ford）的戰爭。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "姆瓦哈哈哈哈哈哈！";
+		mes "這正是我想要的！";
+		mes "我們最好引進更多的冒險家，因此我們可以立即擺脫土匪！";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "你是洛克山脊的英雄。";
+		mes "礦井中的第一層是為了完成的，但是二樓有足夠的儲備，可以讓我們持續一段時間。礦山的問題得到了解決。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "我唯一要做的就是獎勵您。";
+		mes "在這裡，選擇您喜歡的一個。";
+		mes "岩石嶺謝謝你";
+		mes "為了您的幫助。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "這兩個徽章均由美國警惕者戴，但它們提供了不同的效果。";
+		mes "我有" + mesitemlink( 28495, false, "Vigilante Badge (L)" );
+		mes "和" + mesitemlink( 28496, false, "Vigilante Badge (R)" ) + ".";
+		mes "選擇您喜歡的一個。";
+		next;
+		setarray .@item_name$[0], "Vigilante Badge (L)", "Vigilante Badge (R)";
+		setarray .@item_id[0], 28495, 28496;
+		.@s = select( "Vigilante Badge (L)", "Vigilante Badge (R)" ) - 1;
+		mes "[懷亞特·厄普]";
+		mes "你想要" + mesitemlink( .@item_id[.@s], false, .@item_name$[.@s] ) + "?";
+		mes "絕佳的選擇！";
+		mes "您確定您想要這個嗎？";
+		next;
+		if (select( "Yes.", "No." ) == 2) {
+			mes "[懷亞特·厄普]";
+			mes "你想小心";
+			mes "關於你得到的，我明白了。";
+			mes "慢慢來。";
+			close;
+		}
+		mes "[懷亞特·厄普]";
+		mes "在這裡，您已經賺了。";
+		mes "為自己感到驕傲。";
+		mes "這是獎勵金錢。";
+		rock_main_quest = 22;
+		delitem 25248,1;// Violet_Stone_Box
+		erasequest 7808;// Case Solved
+		setquest 9457;// Solved Anyway
+		completequest 9457;// Solved Anyway
+		getitem .@item_id[.@s],1;
+		getitem 25250,200;// Coin_Of_Rr
+		getexp 2500000,1200000;
+		close;
+	}
+	mes "[懷亞特·厄普]";
+	mes "您將希望帶回了Rock Ridge。";
+	mes "年輕英雄，";
+	mes "站著高大，像您擁有的世界一樣環遊世界！";
+	close;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW,
+		"rock_main_quest == 2 || rock_main_quest == 4 || rock_main_quest == 6 || rock_main_quest == 9 || rock_main_quest == 15 || rock_main_quest == 21" );
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 14 && isbegin_quest(7809) == 0 && countitem(25247) > 0" );
+	end;
+}
+
+har_in01,14,24,5	script	Ivoka Skudi#rr03	4_M_EVOKASCUDI,{
+	if (checkweight(1301,3) == 0) {
+		mes "- 您攜帶太多的物品以進行此任務。 -";
+		close;
+	}
+	if (rock_main_quest < 7) {
+		mes "[召喚護盾]";
+		mes "這是警長辦公室。";
+		mes "在這裡，那些做某事的人不應該用手銬來。";
+		close;
+	}
+	if (rock_main_quest == 7) {
+		mes "[召喚護盾]";
+		mes "約翰尼必須擔心在他的幫派中失去自己的位置，即使他的舉止好像不是。";
+		mes "阿爾伯特已經跑了曾經。";
+		next;
+		mes "[召喚護盾]";
+		mes "啊，當然，阿爾伯特跑了。那是這樣，他可以帶他的朋友們。";
+		mes "好吧，讓我改寫嗎？我們讓他奔跑。";
+		next;
+		mes "[召喚護盾]";
+		mes "當約翰尼看到那時，您認為他怎麼想？";
+		next;
+		select("他可能認為艾伯特背叛了他。");
+		mes "[召喚護盾]";
+		mes "這是正確的。不信任的種子已經種植。我們現在要做的就是";
+		next;
+		mes "[召喚護盾]";
+		mes "告訴約翰尼，阿爾伯特和其他人拋棄了他。阿爾伯特現在是他們的領導者！";
+		mes "這是陳詞濫調，但完全令人信服，不是嗎？";
+		next;
+		npctalk "But they would never do that. They'd rather raid our village to save him than betray him.", "Wyatt Warp#har_in01", bc_self;
+		sleep2 2000;
+		mes "[召喚護盾]";
+		mes "啊，你有一點。這更合理，不是嗎？";
+		mes "冒險家，這就是您發揮作用的地方。";
+		next;
+		mes "[召喚護盾]";
+		mes "有人需要說服阿爾伯特，約翰尼不值得一毛錢作為人質";
+		mes "我們希望那是你。";
+		next;
+		mes "[召喚護盾]";
+		mes "告訴他";
+		mes "我們不需要礦石";
+		mes "並讓他認為他沒有議價籌碼。";
+		next;
+		mes "[召喚護盾]";
+		mes "而且我們一直想要約翰尼。";
+		mes "如果我們能讓他相信這一點，那麼我們就可以從力量立場進行談判。";
+		next;
+		select("那礦井呢？");
+		mes "[召喚護盾]";
+		mes "您可以告訴他總部正在考慮關閉它。";
+		mes "這並不是那些水牛有辦法確認這一點。";
+		next;
+		mes "[召喚護盾]";
+		mes "如果有必要的話，我可以傳播一個謠言，說村里的所有工作空缺都已填補。 *笑*";
+		npctalk "You think we should pressure Albert, I see. What about Johnny?", "Wyatt Warp#har_in01", bc_self;
+		next;
+		mes "[召喚護盾]";
+		mes "我們可以告訴他阿爾伯特放棄了他，";
+		mes "而且他正在與其他所有人反對他成為他們的領導者。";
+		next;
+		npctalk "I see.", "Wyatt Warp#har_in01", bc_self;
+		mes "[懷亞特·厄普]";
+		mes "嗯，這不是一個壞主意。";
+		mes "我想知道Costello的想法。";
+		mes "他可能會說些愚蠢的話，例如 ^4d4dffppay他們對礦石 ^000000的Zeny左右。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "他想用錢解決一切嗎？別人的錢。";
+		mes "我說我們現在應該按照計劃。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "您在這場演出中起著非常重要的作用。";
+		mes "我們在第一次會議上撒謊很好，並說您來自總部。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "現在，讓我們先照顧約翰尼，好嗎？";
+		mes "阿爾伯特的間諜已經進出地下室。";
+		sleep2 1000;
+		npctalk "Yes, and we can use him to our advantage.", "Wyatt Warp#har_in01", bc_self;
+		next;
+		mes "[懷亞特·厄普]";
+		mes "伊沃卡的對。";
+		mes "讓間諜看看你和約翰尼說話。";
+		mes "並說服約翰尼，阿爾伯特放棄了你。";
+		rock_main_quest = 8;
+		erasequest 7796;
+		setquest 7797;// Hear Me Out 1
+		close;
+	}
+	if (rock_main_quest == 8) {
+		mes "[召喚護盾]";
+		mes "冒險家，我們將指望您！";
+		mes "不要給約翰尼一個思考的機會。";
+		next;
+		mes "[召喚護盾]";
+		mes "約翰尼被關在地下監獄中。";
+		mes "讓我們去玩他！";
+		close;
+	}
+	if (rock_main_quest < 14) {
+		mes "[召喚護盾]";
+		mes "敲打礦山前三遍的岩石，艾伯特會出來。";
+		mes "我認為那是礦工在用餐時間使用的信號。";
+		next;
+		mes "[召喚護盾]";
+		mes "愚蠢的水牛。";
+		mes "他們甚至無法提出自己的信號。";
+		close;
+	}
+	if (rock_main_quest == 14 || rock_main_quest == 15) {
+		mes "[召喚護盾]";
+		mes "它奏效了！";
+		mes "來吧，讓我們去玩約翰尼！";
+		mes "*笑*";
+		close;
+	}
+	mes "[召喚護盾]";
+	mes "我可以想像水牛會如何反應。";
+	mes "我最好更努力地訓練我們的警惕性。";
+	close;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 6 || rock_main_quest == 7" );
+	end;
+}
+
+har_in01,34,28,0	script	har_in01_jail	WARPNPC,1,1,{
+	end;
+OnTouch:
+	if (rock_main_quest < 6) {
+		mes "[召喚護盾]";
+		mes "你不能進入那裡。";
+		mes "這是一個監獄牢房。";
+		close;
+	}
+	warp "har_in01",99,27;
+	end;
+}
+
+// Prison
+har_in01,100,14,3	script	Vigilante#srdg01	4_M_CACTUSLADY,{
+	setpcblock PCBLOCK_NPC, true;
+	npctalk "You'd better not do anything stupid.", "", bc_self;
+	sleep2 1000;
+	npctalk "I'm watching you like a hawk.", "", bc_self;
+	setpcblock PCBLOCK_NPC, false;
+	end;
+}
+
+har_in01,81,30,3	script	Harold#srdg01	4_TOWER_09,{
+	setpcblock PCBLOCK_NPC, true;
+	emotion ET_OHNO;
+	npctalk "I can't believe you. Ugh!", "", bc_self;
+	sleep2 1000;
+	npctalk "What are you talking about?", "Egring#srdg01", bc_self;
+	sleep2 1000;
+	emotion ET_ANGER;
+	npctalk "You didn't pay the restaurant bill on purpose, so you could go to jail, and then you've fattened yourself on prison food. That's messed up!", "", bc_self;
+	sleep2 1000;
+	emotion ET_HNG, getnpcid(0, "Egring#srdg01");
+	npctalk "I can't help it when the food is so delicious.", "Egring#srdg01", bc_self;
+	sleep2 1000;
+	npctalk "Well, that I agree.", "", bc_self;
+	setpcblock PCBLOCK_NPC, false;
+	end;
+}
+
+har_in01,78,25,5	script	Egring#srdg01	4_DR_TORTEL,{
+	setpcblock PCBLOCK_NPC, true;
+	emotion ET_THROB;
+	npctalk "When are we eating today? What are we having? Beans?", "", bc_self;
+	sleep2 1000;
+	npctalk "It hasn't been even thirty minutes since our last meal!", "Harold#srdg01", bc_self;
+	setpcblock PCBLOCK_NPC, false;
+	end;
+}
+
+har_in01,89,26,5	script	Johnny James#har_in01	4_M_JOHNNYJAMES,{
+	disable_items;
+	if (checkweight(1301,3) == 0) {
+		mes "- 您攜帶太多的物品以進行此任務。 -";
+		close;
+	}
+	if (rock_main_quest < 8) {
+		npctalk "You sneaky bastards, how dare you show up again! Go to hell!", "", bc_self;
+		end;
+	}
+	if (rock_main_quest == 8) {
+		.@player_name$ = strcharinfo(0);
+
+		setpcblock PCBLOCK_NPC, true;
+		npctalk "You sneaky bastards, how dare you show up again? Go to hell!", "", bc_self;
+		sleep2 2000;
+		cloakoffnpcself(  "Ivoka Skudi#har02" );
+		setpcblock PCBLOCK_NPC, false;
+		npctalk "Ah, you'd better show some respect to our future mayor.", "Ivoka Skudi#har02", bc_self;
+		mes "[召喚護盾]";
+		mes "我告訴你我可以照顧他。";
+		mes "您不必來這裡與他交談。";
+		next;
+		unittalk getcharid(3), "" + .@player_name$ + " : But the negotiation isn't over.", bc_self;
+		mes "[召喚護盾]";
+		mes "什麼談判？";
+		mes "甚至他的第二次命令也放棄了他。";
+		mes "他是人質的無用。";
+		next;
+		npctalk "What? Are you talking about Albert?", "", bc_self;
+		mes "[召喚護盾]";
+		mes "唯一要做的就是吊死他，所以其他人會學會不要再次與我們惹惱！";
+		mes "未來市長先生。";
+		next;
+		mes "[召喚護盾]";
+		mes "甚至警長也同意我的看法。";
+		mes "明天聽起來如何？還是下天的第二天？";
+		mes "等等，今天更好。這是懸掛水牛的完美一天！";
+		next;
+		npctalk "Hang what buffalo? Wait, are you talking about me?", "", bc_self;
+		mes "[約翰尼·詹姆斯]";
+		mes "你一直在告訴我奇怪的東西。";
+		mes "你想要什麼？";
+		next;
+		select("艾伯特現在是你們幫派的新領導。");
+		mes "[約翰尼·詹姆斯]";
+		mes "你在說什麼？ ！";
+		mes "你認為我會相信你嗎？";
+		next;
+		npctalk "But he left you and hasn't come back to save you.", "Ivoka Skudi#har02", bc_self;
+		select("他說他會以一百万澤尼的價格把礦石賣給我們。");
+		mes "[約翰尼·詹姆斯]";
+		mes "什麼？阿爾伯特，那個白痴！";
+		mes "你不是在撒謊嗎？";
+		mes "你為什麼告訴我這個？";
+		next;
+		select("這樣你就可以為自己的懲罰做好準備。");
+		npctalk "Yes. The Sheriff's looking forward to the day he'd be executed. Hah hah hah!", "Ivoka Skudi#har02", bc_self;
+		mes "[約翰尼·詹姆斯]";
+		mes "嘿，嘿！";
+		mes "我沒有機會離開這裡嗎？";
+		mes "我要在這裡死嗎？";
+		next;
+		unittalk getcharid(3), "" + .@player_name$ + " : Actually, you have.", bc_self;
+		mes "[" + .@player_name$ + "]";
+		mes "阿爾伯特希望我們為礦石付錢。";
+		mes "但是，如果您告訴我們它們在哪裡，我們就不必付錢給他。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "此外，我們也希望礦山回來。我們一點也不願意與他達成協議。";
+		mes "約翰尼，如果您幫助我們，我們可以在不花錢的情況下恢復礦石。";
+		npctalk "You're right, Mr. Future Mayor. You're genius!", "Ivoka Skudi#har02", bc_self;
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "如果您幫助我們，我們將為您照顧Albert。無論如何，他妨礙了我們的路。";
+		mes "你怎麼說？";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "只是您知道，此優惠不會在桌上太久。";
+		mes "希望您能做出正確的決定。";
+		next;
+		npctalk "...", "", bc_self;
+		select("別再看窗外了。");
+		mes "[召喚護盾]";
+		mes "是的，我們知道間諜。";
+		mes "他在這裡看看你什麼時候終於被絞死了。";
+		next;
+		mes "[召喚護盾]";
+		mes "如果他在這裡救你，他會試圖通過酒吧與您交談，不是嗎？";
+		mes "如果我是他，我會試圖給你發便箋。";
+		next;
+		mes "[召喚護盾]";
+		mes "他給你發了筆記嗎？";
+		mes "他至少為您存入了囚犯嗎？";
+		npctalk "...", "", bc_self;
+		sleep2 2000;
+		next;
+		npctalk "Tell you what.", "", bc_self;
+		mes "[約翰尼·詹姆斯]";
+		mes "我會告訴你礦石在哪裡";
+		mes "如果你讓我走。";
+		mes "還有一個條件。";
+		next;
+		select("繼續。");
+		mes "[約翰尼·詹姆斯]";
+		mes "...你能照顧那個叛徒，艾伯特嗎？";
+		mes "我會告訴您您可以用來稱呼他藏身的密碼。";
+		next;
+		mes "[約翰尼·詹姆斯]";
+		mes "^4d4dfffknock在礦井前面的凹入岩石上三遍，^000000，Albert將出來。";
+		mes "那你可以照顧他。";
+		next;
+		mes "[約翰尼·詹姆斯]";
+		mes "並帶我 ^4d4dfffhis mane ^000000作為證明。";
+		mes "如果當我離開這裡時，阿爾伯特還活著，我就無法回到我的幫派。";
+		mes "我要他走了。";
+		next;
+		mes "[約翰尼·詹姆斯]";
+		mes "我會告訴你礦石之後的位置。";
+		next;
+		select("交易。");
+		mes "[約翰尼·詹姆斯]";
+		mes "...該死的！";
+		mes "直到您有 ^4d4dffalbert的Mane ^000000向我展示，才回來嗎？";
+		mes "現在在這裡離開！";
+		rock_main_quest = 9;
+		erasequest 7797;
+		setquest 7798;// Perfectly Prime
+		close;
+	}
+	if (rock_main_quest < 14) {
+		mes "[約翰尼·詹姆斯]";
+		mes "直到您有 ^4d4dffalbert的Mane ^000000向我展示，才回來嗎？";
+		mes "現在在這裡離開！";
+		close;
+	}
+	if (rock_main_quest == 14) {
+		if (countitem(25249) < 1) {
+			mes "[約翰尼·詹姆斯]";
+			mes "帶我那個混蛋的鬃毛！";
+			close;
+		}
+		mes "[約翰尼·詹姆斯]";
+		mes "那個狡猾的混蛋，他出賣了我！";
+		mes "當他喝醉時，他曾經告訴我他的壽命比我更長。";
+		next;
+		mes "[約翰尼·詹姆斯]";
+		mes "他的間諜在窗外，甚至像我一樣指著他的手指！";
+		mes "阿爾伯特怎麼樣？";
+		next;
+		select("給他看他的鬃毛。");
+		mes "[約翰尼·詹姆斯]";
+		mes "...你確定他死了嗎？";
+		mes "因為他的間諜剛剛指著我的手指，就像我對我一樣。";
+		next;
+		select("他應該沒聽說過吧");
+		mes "[約翰尼·詹姆斯]";
+		mes "...也許你是對的。您一完成他就來這裡了嗎？";
+		mes "這就是為什麼他的間諜沒有聽說過他的死。";
+		next;
+		mes "[約翰尼·詹姆斯]";
+		mes "好吧，這很有意義。";
+		mes "當我離開這裡時，我會派那個傢伙加入阿爾伯特。";
+		mes "*笑*";
+		next;
+		mes "[約翰尼·詹姆斯]";
+		mes "那個叛徒認為他的壽命比我更長。";
+		mes "看看誰現在還在呼吸！";
+		next;
+		mes "[約翰尼·詹姆斯]";
+		mes "好吧，我會告訴你礦石在哪裡。";
+		mes "它們是礦山二樓 ^000000的電梯。";
+		mes "我們打破了電梯，因此我們可以將它們隱藏在其下面。";
+		next;
+		mes "[約翰尼·詹姆斯]";
+		mes "你們中的許多人都需要抬起電梯。";
+		mes "祝你好運。";
+		mes "而且不要忘記告訴警長我合作。";
+		rock_main_quest = 15;
+		delitem 25249,1;// Mane_Of_Cow
+		erasequest 7803;// Happy for Broken Trust
+		setquest 7804;// Location of the Ores
+		close;
+	}
+	if (rock_main_quest == 15) {
+		mes "[約翰尼·詹姆斯]";
+		mes "grr，如果我離開這裡...";
+		mes "*笑*我會讓你為羞辱我付費。";
+		close;
+	}
+	mes "[約翰尼·詹姆斯]";
+	mes "你這麼長時間才花了什麼？";
+	mes "我不喜歡等待。";
+	close;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 8 || rock_main_quest == 14" );
+	end;
+}
+
+har_in01,88,22,6	script	Ivoka Skudi#har02	4_M_EVOKASCUDI,{
+	if (rock_main_quest == 9) {
+		mes "[召喚護盾]";
+		mes "（竊竊私語）他比我想像的要簡單。讓我們去報告警長。";
+		close2;
+		cloakonnpcself(  "Ivoka Skudi#har02" );
+		end;
+	}
+	end;
+OnInit:
+	cloakonnpc();
+	end;
+}
+
+// Fild 1
+rockrdg1,160,306,3	duplicate(dummy_cloaked_npc)	Johnny James#revt04	4_M_JOHNNYJAMES
+rockrdg1,168,306,3	duplicate(dummy_cloaked_npc)	Albert Ford#revt08	4_M_ALBERTFORD
+rockrdg1,156,302,7	duplicate(dummy_cloaked_npc)	Ivoka Skudi#revt02	4_M_EVOKASCUDI
+rockrdg1,156,306,5	duplicate(dummy_cloaked_npc)	Cactus Gunslinger#revt01	4_M_EVOKASCUDI
+rockrdg1,161,302,1	duplicate(dummy_cloaked_npc)	Cactus Gunslinger#revt02	4_M_EVOKASCUDI
+rockrdg1,164,306,3	duplicate(dummy_cloaked_npc)	Cactus Gunslinger#revt03	4_M_EVOKASCUDI
+
+rockrdg1,156,312,3	script	Unmoving Freight Train#	4_ENERGY_RED,{
+	if (rock_main_quest == 5) {
+		setpcblock PCBLOCK_NPC, true;
+		unittalk getcharid(3), "" + strcharinfo(0) + " : I think this is the place, but maybe I came too early.", bc_self;
+		sleep2 2000;
+		cloakoffnpcself( "Johnny James#revt04" );
+		sleep2 1000;
+		emotion ET_QUESTION, getnpcid(0,"Johnny James#revt04");
+		npctalk "Who's this? You're not the one I was expecting.", "Johnny James#revt04", bc_self;
+		sleep2 1000;
+		cloakoffnpcself( "Albert Ford#revt08" );
+		npctalk "Hey Boss, I told you not to go without me.", "Albert Ford#revt08", bc_self;
+		sleep2 2000;
+		npctalk "Mm? I don't remember if Costello looks like that.", "Albert Ford#revt08", bc_self;
+		sleep2 2500;
+		npctalk "Hey, I'm having an important meeting here. Scram!", "Johnny James#revt04", bc_self;
+		sleep2 2000;
+		cloakoffnpcself( "Wyatt Warp#revt03" );
+		sleep2 1000;
+		npctalk "Johnny James? You shouldn't be so rude to the Officer.", "Wyatt Warp#revt03", bc_self;
+		sleep2 2500;
+		npctalk "Ah, the sheriff's here. Who's that with you? I told you I wanted to talk to the mayor.", "Johnny James#revt04", bc_self;
+		sleep2 2500;
+		npctalk "Don't you want your ores and mine back, hmm?", "Johnny James#revt04", bc_self;
+		if (select( "I'm from Headquarters.", "I'm the mayor." ) == 1)
+			unittalk getcharid(3), "" + strcharinfo(0) + " : I came all the way from Headquarters for this meeting.", bc_self;
+		else
+			unittalk getcharid(3), "" + strcharinfo(0) + " : You don't keep up with the news, do you? I'm the mayor now.", bc_self;
+		sleep2 2000;
+		npctalk "Yes. You'll have to talk to him, not Costello.", "Wyatt Warp#revt03", bc_self;
+		sleep2 2500;
+		emotion ET_AHA, getnpcid(0,"Johnny James#revt04");
+		npctalk "So the rumor was right: Costello finally got the hell out of Dodge, huh? Mwa hah hah!", "Johnny James#revt04", bc_self;
+		sleep2 3000;
+		emotion ET_THINK, getnpcid(0,"Albert Ford#revt08");
+		npctalk "These guys could be lying.", "Albert Ford#revt08", bc_self;
+		sleep2 3000;
+		npctalk "What good would lying do to us? We're the beggars here. Now tell us what you want.", "Wyatt Warp#revt03", bc_self;
+		sleep2 3000;
+		npctalk "So he could go back to the Headquarters with your demand.", "Wyatt Warp#revt03", bc_self;
+		sleep2 2500;
+		npctalk "*Snort* You're an enemy, but I admire your straightforwardness. We want?", "Johnny James#revt04", bc_self;
+		sleep2 3000;
+		npctalk "Okay, that's enough.", "Wyatt Warp#revt03", bc_self;
+		sleep2 300;
+		npctalk "What? I haven't even started?", "Johnny James#revt04", bc_self;
+		sleep2 500;
+		specialeffect 563, AREA, "Johnny James#revt04";
+		cloakoffnpcself( "Cactus Gunslinger#revt05" );
+		cloakoffnpcself( "Cactus Gunslinger#revt06" );
+		cloakoffnpcself( "Cactus Gunslinger#revt07" );
+		cloakoffnpcself( "Ivoka Skudi#revt02" );
+		npctalk "Freeze!", "Ivoka Skudi#revt02", bc_self;
+		sleep2 1000;
+		specialeffect 453, AREA, "Johnny James#revt04";
+		npctalk "Freeze!", "Cactus Gunslinger#revt05", bc_self;
+		npctalk "You're trapped,", "Cactus Gunslinger#revt06", bc_self;
+		npctalk "Buffaloes!", "Cactus Gunslinger#revt07", bc_self;
+		npctalk "Wh-what the hell's going on?", "Johnny James#revt04", bc_self;
+		sleep2 2000;
+		npctalk "Boss! Boss!", "Albert Ford#revt08", bc_self;
+		sleep2 2000;
+		specialeffect 563, AREA, "Johnny James#revt04";
+		npctalk "Buffaloes!", "Cactus Gunslinger#revt05", bc_self;
+		npctalk "Buffaloes!", "Cactus Gunslinger#revt06", bc_self;
+		npctalk "Buffaloes!", "Cactus Gunslinger#revt07", bc_self;
+		sleep2 2000;
+		npctalk "*Chuckle*", "Wyatt Warp#revt03", bc_self;
+		npctalk "Everything went just as we planned!", "Ivoka Skudi#revt02", bc_self;
+		sleep2 2000;
+		npctalk "You goddamn Cacti! You were disguised as the plants!", "Johnny James#revt04", bc_self;
+		sleep2 3000;
+		npctalk "Albert, stop looking and do something!", "Johnny James#revt04", bc_self;
+		sleep2 2000;
+		npctalk "I-I'll go bring the rest of our gang!", "Albert Ford#revt08", bc_self;
+		sleep2 1000;
+		npctalk "WHAT?", "Johnny James#revt04", bc_self;
+		cloakonnpcself( "Albert Ford#revt08" );
+		sleep2 1000;
+		npctalk "ALBERT!", "Johnny James#revt04", bc_self;
+		sleep2 2000;
+		npctalk "Hey Johnny, your friend left you.", "Wyatt Warp#revt03", bc_self;
+		npctalk "He ran to save himself. *Chuckle*", "Ivoka Skudi#revt02", bc_self;
+		sleep2 3000;
+		npctalk "Ivoka and our Cacti friends, you did a good job! You can take him away now.", "Wyatt Warp#revt03", bc_self;
+		sleep2 1000;
+		npctalk "Let's go!", "Cactus Gunslinger#revt05", bc_self;
+		npctalk "We've got you now!", "Cactus Gunslinger#revt06", bc_self;
+		npctalk "Stop resisting!", "Cactus Gunslinger#revt07", bc_self;
+		sleep2 1000;
+		npctalk "Hmpf, don't you want your ores back?!", "Johnny James#revt04", bc_self;
+		sleep2 1000;
+		npctalk "Who cares about the ores?", "Cactus Gunslinger#revt05", bc_self;
+		sleep2 1000;
+		npctalk "Our job is to take you away!", "Cactus Gunslinger#revt06", bc_self;
+		sleep2 1000;
+		npctalk "Shut up before I put a ring through your nose!", "Cactus Gunslinger#revt07", bc_self;
+		sleep2 1000;
+		npctalk "Guys, let's go!", "Ivoka Skudi#revt02", bc_self;
+		sleep2 2000;
+		cloakonnpcself( "Cactus Gunslinger#revt05" );
+		cloakonnpcself( "Cactus Gunslinger#revt06" );
+		cloakonnpcself( "Cactus Gunslinger#revt07" );
+		cloakonnpcself( "Ivoka Skudi#revt02" );
+		cloakonnpcself( "Johnny James#revt04" );
+		sleep2 2000;
+		npctalk "Let's go back, shall we?", "Wyatt Warp#revt03", bc_self;
+		rock_main_quest = 6;
+		erasequest 7795;
+		setquest 7796;// Unexpected Arrest
+		setpcblock PCBLOCK_NPC, false;
+		end;
+	}
+	mes "這毫無價值，被遺棄了。";
+	close;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 5" );
+	end;
+}
+
+rockrdg1,153,303,5	script	Wyatt Warp#revt03	4_M_YATTWARP,{
+	if (rock_main_quest == 6) {
+		mes "[懷亞特·厄普]";
+		mes "Ivoka的計劃完美無缺。";
+		mes "它之所以起作用，是因為他和他的朋友是仙人掌。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "如果Costello與我們同在，那麼該計劃可能沒有奏效。";
+		mes "您是一個陌生人，比我們想像的要分散他們的注意力。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "現在，我們可以與土匪相等的基礎進行談判。";
+		mes "誰知道？我們可以將約翰尼換成被盜的礦石。";
+		next;
+		mes "[懷亞特·厄普]";
+		mes "讓我們回到我的辦公室。";
+		close2;
+		cloakonnpcself(  "Wyatt Warp#revt03" );
+		end;
+	}
+	end;
+OnInit:
+	cloakonnpc();
+	end;
+}
+
+harboro1,288,193,5	script	Shawn McCurdy#harboro1	4_M_SEANMCCURDY,{
+	if (rock_main_quest < 10) {
+		mes "[肖恩·麥柯迪]";
+		mes "我擔心礦工可能無法長期工作，";
+		mes "而且我們負擔不起。";
+		mes "這是因為土匪，對嗎？";
+		close;
+	}
+	if (rock_main_quest == 10) {
+		mes "[肖恩·麥柯迪]";
+		mes "哦，您是我聽說的冒險家可能會成為我們的新市長嗎？";
+		mes "很高興見到你！我叫肖恩·麥庫迪（Shawn McCurdy），我是礦山的領班。";
+		mes "你可以叫我肖恩。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "警長扭曲告訴了你一切，對嗎？";
+		mes "我聽說您一直很忙，因為與土匪進行了談判。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "這也與礦山有關，不是嗎？";
+		mes "阿爾伯特·福特（Albert Ford），我可能有一種可以用來對抗其中之一的武器。";
+		next;
+		select("那會是什麼？");
+		mes "[肖恩·麥柯迪]";
+		mes "未加工的礦石。就像土匪從我們那裡偷走的那樣。";
+		mes "除非經過處理，否則這些礦石是一文不值的，";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "就像鑽石一樣。";
+		mes "換句話說，礦石對匪徒沒有用。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "他們偷走的礦石等於三個月的工作。";
+		mes "這並不是很多，與大多數人的想法相反。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "礦山只有一層";
+		mes "但是最近，我們在其下方鑽了另一個樓層。";
+		mes "那個地板上有很多礦石，所以我們在一樓生產了幾倍。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "如有必要，我們可以在幾天之內生產價值幾週的礦石。";
+		mes "我們只是因為土匪蹲在礦山中而無法工作。";
+		next;
+		select("所以目前這個礦沒有什麼用處。");
+		mes "[肖恩·麥柯迪]";
+		mes "不。因為有一種方法可以到達礦井的二樓。";
+		mes "那就是我正在談論的武器。";
+		mes "土匪僅在一樓。我們可以潛入二樓並繼續挖掘。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "這將顯示他們一直在浪費時間蹲在礦山的那些土匪。";
+		next;
+		select("那你還等什麼？");
+		mes "[肖恩·麥柯迪]";
+		mes "現在，這是問題所在。";
+		mes "當我們第一次打開二樓時，沒有電梯，";
+		mes "因此，我們不得不直接從地面鑽孔和工人通道。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "自從電梯開始運行以來，我們停止使用通道";
+		mes "但這並沒有被阻止。我們仍然可以使用它。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "而且我認為土匪對此不了解。";
+		mes "臨時通道連接到二樓最遠的角";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "而且土匪並沒有那麼深入檢查。";
+		mes "我可以說，因為開口周圍沒有強盜。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "因此，我認為我們應該潛入二樓並收集礦石。";
+		mes "由於土匪在礦山開設了商店，因此大多數經驗豐富的礦工離開了。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "而且臨時段落並不安全，因為它被重新批准了。";
+		mes "只有您能進出的人就不會受到傷害。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "無論如何，您必須去礦山進行與艾伯特的談判。";
+		mes "您可以在前往聚會場所的路上撿起一些礦石，並向他展示。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "礦山二樓的入口位於礦山正門 ^000000的南部 ^4d4dfffarther。";
+		mes "我需要做一些安排。我在那裡見你。";
+		rock_main_quest = 11;
+		erasequest 7799;
+		setquest 7800;// Shawn McCurdy's Weapon 2
+		close;
+	}
+	if (rock_main_quest == 11) {
+		mes "[肖恩·麥柯迪]";
+		mes "礦山二樓的入口位於礦山正門 ^000000的南部 ^4d4dfffarther。";
+		mes "我需要做一些安排。我在那裡見你。";
+		close;
+	}
+	if (rock_main_quest < 16) {
+		mes "[肖恩·麥柯迪]";
+		mes "用於開發目的的臨時通道將保持有用。";
+		mes "當然，對於像您這樣的冒險家和岩石嶺。";
+		close;
+	}
+	if (rock_main_quest == 16) {
+		mes "[肖恩·麥柯迪]";
+		mes "所以我聽到了。";
+		mes "我做出了所有必要的安排。";
+		mes "誰知道他們會被隱藏在我們的鼻子下方？";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "這就解釋了為什麼土匪在礦山周圍站著守衛。";
+		mes "現在，所有這些都單擊到位。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "我們知道另一條通道通向礦山的二樓。";
+		mes "我們走吧！";
+		close;
+	}
+	if (rock_main_quest == 22) {
+		mes "[肖恩·麥柯迪]";
+		mes "很快，我要帶一些礦工恢復到足以在礦井的二樓工作。";
+		mes "當然，我們必須小心，因為土匪仍在礦山內。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "他們在一樓，所以我們將擋住電梯。";
+		mes "有很多事情要做。";
+		close;
+	}
+	end;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 10" );
+	end;
+}
+
+rockrdg2,347,216,5	script	Shawn McCurdy#rockrdg2	4_M_SEANMCCURDY,{
+	if (rock_main_quest < 11) {
+		npctalk "*Gasp* Adventurer, be careful! This place isn't safe since the Buffalo Bandits have occupied the nearby mine.", "", bc_self;
+		end;
+	}
+	if (rock_main_quest == 11 || rock_main_quest == 12) {
+		if (rock_main_quest == 11) {
+			mes "[肖恩·麥柯迪]";
+			mes "哇！你是誰？";
+			sleep2 1000;
+			unittalk getcharid(3), "" + strcharinfo(0) + " : Take it easy. It's me.", bc_self;
+			next;
+			mes "[肖恩·麥柯迪]";
+			mes "哦，哇。冒險家。";
+			mes "在如此危險的地方讓我感到緊張。";
+			mes "我很高興您安全地來到這裡。";
+			next;
+			mes "[肖恩·麥柯迪]";
+			mes "上次我來到這裡，";
+			mes "我隱藏了入口，以防萬一。";
+			mes "你想下樓嗎？";
+		}
+		else {
+			if (countitem(25247) > 0) {
+				mes "[肖恩·麥柯迪]";
+				mes "這顯示了您作為冒險家的經歷。";
+				mes "即使我沒有告訴您要尋找什麼，您也發現了一個大型，優質的礦石。";
+				next;
+				mes "[肖恩·麥柯迪]";
+				mes "好工作！這應該說服阿爾伯特。";
+				mes "讓我們去和他談判！";
+				rock_main_quest = 13;
+				erasequest 7801;
+				setquest 7802;// Hear Me Out 2
+				close;
+			}
+			mes "[肖恩·麥柯迪]";
+			mes "我們需要一個礦石來愚弄阿爾伯特和其他土匪。你想現在去嗎？";
+		}
+		next;
+		if (select( "Let's do that.", "I'm not ready yet." ) == 2) {
+			mes "[肖恩·麥柯迪]";
+			mes "呆在這裡太久是危險的。";
+			mes "請快點。";
+			close;
+		}
+		mes "[肖恩·麥柯迪]";
+		mes "看你的腳。";
+		close2;
+		warp "rockmi2",14,86;
+		end;
+	}
+	if (rock_main_quest == 13) {
+		if (countitem(25247) > 0) {
+			mes "[肖恩·麥柯迪]";
+			mes "好的！";
+			mes "現在，您最好前往Albert。祝他好運與他談判！";
+			mes "礦山的入口在這裡有點以北。";
+			next;
+			mes "[肖恩·麥柯迪]";
+			mes "希望我的意見對您有所幫助！";
+			close;
+		}
+		mes "[肖恩·麥柯迪]";
+		mes "冒險家，您在哪裡離開了那個大而美麗的礦石？你失去了嗎？";
+		mes "您需要再次挖掘嗎？";
+		next;
+		if (select( "Yes.", "I'm not ready yet." ) == 2) {
+			mes "[肖恩·麥柯迪]";
+			mes "呆在這裡太久是危險的。";
+			mes "請快點。";
+			close;
+		}
+		mes "[肖恩·麥柯迪]";
+		mes "希望這次您不會失去它。";
+		mes "看你的腳。";
+		close2;
+		warp "rockmi2",14,86;
+		end;
+	}
+	if (rock_main_quest < 16) {
+		mes "[肖恩·麥柯迪]";
+		mes "我正在研究如何繼續使用這個地方。";
+		mes "當然，我不確定您是否只能與他們的領導人交談，但是...";
+		close;
+	}
+	if (rock_main_quest < 20) {
+		mes "[肖恩·麥柯迪]";
+		mes "好的，您最好去看看布法羅土匪在找到這個地方。";
+		close2;
+		warp "rockmi2",14,86;
+		end;
+	}
+	if (rock_main_quest == 20) {
+		mes "[肖恩·麥柯迪]";
+		mes "現在剩下的唯一的是阿爾伯特·福特。";
+		mes "他必須等待約翰尼的處決，以便他可以成為他的幫派的領導人。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "但是，土匪可能知道我們正在尋找盒子。";
+		mes "現在輪到我們對他們堅定了。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "請 ^4d4d4dffeliminate Buffalo Bandits，並在您的路上搭配5張棕色的消音器和5塊土匪圍巾 ^000000。";
+		mes "讓我們把阿爾伯特帶到角落！";
+		close;
+	}
+	mes "[肖恩·麥柯迪]";
+	mes "我謹慎，因為我不想讓土匪了解這個入口。";
+	mes "冒險家，請小心。";
+	close;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 11 || rock_main_quest == 12" );
+	end;
+}
+
+rockmi2,10,86,5	script	Shawn McCurdy#rockmi2	4_M_SEANMCCURDY,{
+	if (rock_main_quest == 11) {
+		mes "[肖恩·麥柯迪]";
+		mes "讓我們開始工作吧？";
+		mes "遵循這段狹窄的通道，您會看到一條礦物質。";
+		mes "這個地方在礦物中很豐富。";
+		mes "只需獲得足夠尺寸的紫色礦石 ^000000。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "同時，我將檢查我們需要用來備份的皮帶輪。";
+		mes "我們急忙做到了，所以有時有點不安全。哈哈。";
+		rock_main_quest = 12;
+		erasequest 7800;
+		setquest 7801;// Shawn McCurdy's Weapon 3
+		close;
+	}
+	if (rock_main_quest == 12) {
+		if (countitem(25247) < 1) {
+			mes "[肖恩·麥柯迪]";
+			mes "冒險家，get ^4d4dff1紫色礦石 ^000000。";
+			mes "我將檢查我們需要用來備份的皮帶輪。";
+			close;
+		}
+		mes "[肖恩·麥柯迪]";
+		mes "這顯示了您作為冒險家的經歷。";
+		mes "即使我沒有告訴您要尋找什麼，您也發現了一個大型，優質的礦石。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "好工作！這應該說服阿爾伯特。";
+		mes "好吧，讓我們回去。";
+		erasequest 7801;
+		setquest 7802;// Hear Me Out 2
+		rock_main_quest = 13;
+		close2;
+		warp "rockrdg2",348,214;
+		end;
+	}
+	if (rock_main_quest == 13) {
+		mes "[肖恩·麥柯迪]";
+		mes "確保您擁有礦石。";
+		mes "你準備好回去了嗎？";
+		next;
+		if (select( "Yes.", "Let me go get a different one." ) == 2) {
+			mes "[肖恩·麥柯迪]";
+			mes "我在這裡等。";
+			close;
+		}
+		mes "[肖恩·麥柯迪]";
+		mes "好吧，我們走了！";
+		close2;
+		warp "rockrdg2",348,214;
+		end;
+	}
+	if (rock_main_quest == 14) {
+		mes "[肖恩·麥柯迪]";
+		mes "談判是如何進行的？";
+		mes "讓我們回到村莊。人民必須在等我們。";
+		close;
+	}
+	if (rock_main_quest == 16) {
+		mes "[肖恩·麥柯迪]";
+		mes "從礦山的中心向北移動，您會看到損壞的電梯。";
+		mes "愚蠢的土匪，我簡直不敢相信他們只是為了隱藏礦石而打破了電梯。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "他們認為自己很聰明，";
+		mes "但這證明了他們的愚蠢。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "檢查礦石的位置，並僅帶上 ^4d4dff1礦盒 ^000000。";
+		mes "我將其餘的其他地方移動。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "土匪可能會在礦山周圍守衛。";
+		mes "請小心。";
+		rock_main_quest = 17;
+		erasequest 7805;// Location of the Ores 2
+		setquest 7806;// Location of the Ores 3
+		close;
+	}
+	if (rock_main_quest == 17) {
+		mes "[肖恩·麥柯迪]";
+		mes "損壞的電梯位於該礦中心的北部。";
+		mes "檢查礦石的位置，並僅帶上 ^4d4dff1礦盒 ^000000。";
+		mes "我將其餘的其他地方移動。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "土匪可能會在礦山周圍守衛。";
+		mes "請小心。";
+		close;
+	}
+	if (rock_main_quest == 18) {
+		mes "[肖恩·麥柯迪]";
+		mes "啊，我應該知道";
+		mes "他們會在電梯周圍巡邏。";
+		mes "擺脫您看到的任何水牛匪徒，然後獲得礦石。";
+		close;
+	}
+	if (rock_main_quest == 19) {
+		mes "[肖恩·麥柯迪]";
+		mes "是的，您帶來了正確的盒子。";
+		mes "^4D4DFFALBERT FORD^000000如果看到這個，他將撞到屋頂。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "讓我們離開這裡，然後艾伯特（Albert）發現為什麼他的土匪無法從巡邏職責中回來。";
+		mes "哦，但是您首先需要向他 ^4d4dfftalk。 ^000000";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "請 ^4d4d4dffeliminate Buffalo Bandits，並在您的路上搭配5張棕色的消音器和5塊土匪圍巾 ^000000。";
+		next;
+		mes "[肖恩·麥柯迪]";
+		mes "他們將幫助創造警長經過的局勢。";
+		mes "讓我們上去，好嗎？";
+		erasequest 7806;// Location of the Ores 3
+		setquest 7807;// Ace up Our Sleeve
+		rock_main_quest = 20;
+		close2;
+		warp "rockrdg2",348,214;
+		end;
+	}
+	if (rock_main_quest == 20) {
+		mes "[肖恩·麥柯迪]";
+		mes "來吧，您需要擺脫布法羅土匪，讓阿爾伯特措手不及！";
+		mes "我們走了！";
+		close2;
+		warp "rockrdg2",348,214;
+		end;
+	}
+	warp "rockrdg2",348,214;	// debug
+	end;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 11 || rock_main_quest == 16" );
+	end;
+}
+
+rockmi2,97,120,5	script	Broken Elevator#rrevt10	4_ENERGY_WHITE,{
+	if (checkweight(1301,3) == 0) {
+		mes "- 您攜帶太多的物品以進行此任務。 -";
+		close;
+	}
+	if (rock_main_quest < 17) {
+		mes "電梯損壞。";
+		close;
+	}
+	if (rock_main_quest == 17) {
+		mes "[？ ？ ？ ]";
+		mes "嘿，看，";
+		mes "一隻老鼠偷偷摸摸。";
+		next;
+		mes "[？ ？ ？ ]";
+		mes "我們已經抓到的很好，";
+		mes "不是嗎？";
+		close2;
+		rock_main_quest = 18;
+		monster "rockmi2", 95,116,"Buffalo Bandit",3736,1, "Broken Elevator#rrevt10::OnMyMobDead";
+		monster "rockmi2",101,116,"Buffalo Bandit",3737,1, "Broken Elevator#rrevt10::OnMyMobDead";
+		monster "rockmi2", 99,110,"Buffalo Bandit",3738,1, "Broken Elevator#rrevt10::OnMyMobDead";
+		hideonnpc "Broken Elevator#rrevt10";
+		end;
+	}
+	if (rock_main_quest == 18) {
+		mes "我從電梯底部取下了盤子，並在其下面找到了一塊礦石。";
+		unittalk getcharid(3), "" + strcharinfo(0) + " : Shawn said just one box.", bc_self;
+		getitem 25248,1;// Violet_Stone_Box
+		rock_main_quest = 19;
+		close;
+	}
+	if (rock_main_quest == 19) {
+		unittalk getcharid(3), "" + strcharinfo(0) + " : I have no more business here. I'd better go back to Shawn.", bc_self;
+		end;
+	}
+	end;
+
+OnMyMobDead:
+	sleep2 1000;
+	if (mobcount( "rockmi2", "Broken Elevator#rrevt10::OnMyMobDead" ) < 1)
+		hideoffnpc "Broken Elevator#rrevt10";
+	end;
+}
+
+
+rockrdg2,279,313,3	script	Concaved Rock#revt09	4_ENERGY_RED,{
+	if (rock_main_quest == 13) {
+		mes "這一定是岩石約翰尼·詹姆斯（Johnny James）告訴我的信號。";
+		next;
+		if (select( "Knock, knock-knock-knock, knock.", "Knock, knock, knock." ) == 2) {
+			mes "我覺得我應該幫助他們做一個雪人。";
+			mes "什麼都沒有發生。";
+			close;
+		}
+		npctalk "Boss? Is that you, Boss?", "Albert Ford#rockrdg2", bc_self;
+		cloakoffnpcself( "Albert Ford#rockrdg2" );
+		close;
+	}
+	if (rock_main_quest == 14) {
+		if (countitem(25249) < 1) {
+			mes "我敲了信號岩石，艾伯特·福特（Albert Ford）出來了。";
+			npctalk "Who are you?!", "Albert Ford#rockrdg2", bc_self;
+			cloakoffnpcself( "Albert Ford#rockrdg2" );
+			close;
+		}
+		mes "我現在不必使用它。";
+		close;
+	}
+	if (rock_main_quest == 20) {
+		if (checkquest(7807,HUNTING) < 2) {
+			mes "我最好擺脫布法羅土匪，足以嚇到阿爾伯特·福特。";
+			close;
+		}
+		mes "我敲了信號岩石，艾伯特·福特（Albert Ford）出來了。";
+		npctalk "Who are you?!", "Albert Ford#rockrdg2", bc_self;
+		cloakoffnpcself( "Albert Ford#rockrdg2" );
+		close;
+	}
+	if (rock_main_quest == 20) {
+		if (checkquest(7807,HUNTING) < 2) {
+			mes "我最好擺脫布法羅土匪，足以嚇到阿爾伯特·福特。";
+			close;
+		}
+		if (countitem(25249) < 1) {
+			mes "我敲了信號岩石，艾伯特·福特（Albert Ford）出來了。";
+			cloakoffnpcself( "Albert Ford#rockrdg2" );
+			npctalk "Who are you?!", "Albert Ford#rockrdg2", bc_self;
+			close;
+		}
+		mes "我沒有一盒礦石可以向阿爾伯特·福特（Albert Ford）展示。";
+		close;
+	}
+	if (rock_main_quest == 22) {
+		mes "我沒有用了。";
+		close;
+	}
+	mes "當撞擊時，這岩石會產生深厚的迴聲聲音。";
+	mes "礦工使用它來發出礦井內部的信號。";
+	close;
+}
+
+rockrdg2,295,309,3	script	Albert Ford#rockrdg2	4_M_ALBERTFORD,{
+	if (checkweight(1301,3) == 0) {
+		mes "- 您攜帶太多的物品以進行此任務。 -";
+		close;
+	}
+	disable_items;
+	.@account_id = getcharid(3);
+	.@player_name$ = strcharinfo(0);
+    if (rock_main_quest < 13) {
+		npctalk "Those jerks of Rock Ridge have underestimated us. *Gritting his teeth*", "", bc_self;
+		end;
+	}
+	if (rock_main_quest == 13) {
+		mes "[阿爾伯特·福特]";
+		mes "你到底是誰？";
+		mes "您怎麼知道只有老闆的密碼？";
+		next;
+		select("我是來和你談判的。");
+		mes "[阿爾伯特·福特]";
+		mes "你必須開玩笑。";
+		mes "當您帶走老闆的那一刻，談判就不在桌子上。";
+		next;
+		switch( select( "You're right. I'm not here to negotiate.", "I'm here to tell you that Johnny is about to betray you." ) ) {
+		case 1:
+			mes "[" + .@player_name$ + "]";
+			mes "我告訴你真相。";
+			mes "我來告訴你總部的決定。";
+			mes "我們節省了很多礦石，足以不要錯過您從我們那裡偷走的少量。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "我們對他們沒有用，您會陷入困境。";
+			next;
+			npctalk "What about the Boss?", "", bc_self;
+			unittalk .@account_id, "" + .@player_name$ + " : You mean Johnny James?", bc_self;
+			mes "[" + .@player_name$ + "]";
+			mes "我們也沒有用。";
+			mes "但是警長一直想要他。";
+			mes "不久，他將在法院審判。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "約翰尼放棄了。";
+			mes "他認為您從那以後出賣了他？你知道？你沒有他跑了。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "他甚至提出要告訴我們礦石在哪里以換取他的自由。";
+			mes "但是，當然，我們不需要他的信息。";
+			mes "我想讓你知道你的老闆有多怯ward。";
+			break;
+		case 2:
+			mes "[阿爾伯特·福特]";
+			mes "你在說什麼？";
+			mes "老闆出賣了我們嗎？";
+			mes "他為什麼要這樣做？";
+			mes "停止說謊！";
+			unittalk .@account_id, "" + .@player_name$ + " : Why do you think I'm lying?", bc_self;
+			next;
+			mes "[阿爾伯特·福特]";
+			mes "我知道Costello仍然是您的市長，因為我檢查過！";
+			mes "您在上次會議上撒謊，您將成為新市長！";
+			unittalk .@account_id, "" + .@player_name$ + " : Ah, that.", bc_self;
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "好吧，我仍然來自總部。";
+			mes "我負責這種情況。";
+			mes "當我解決此案時，我將替換Costello擔任市長。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "Costello想離開。";
+			mes "他之所以在這裡，是因為總部把他留在這裡。";
+			mes "不要將我與他相提並論。";
+			next;
+			npctalk "What do you mean, the Boss is about to betray us?", "", bc_self;
+			unittalk .@account_id, "" + .@player_name$ + " : You mean Johnny James?", bc_self;
+			mes "[" + .@player_name$ + "]";
+			mes "總部已決定";
+			mes "沒有您被盜的礦石，我們已經擁有足夠的礦石。";
+			mes "所以...";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "我們也沒有用。";
+			mes "但是警長一直想要他。";
+			mes "不久，他將在法院審判。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "約翰尼放棄了。";
+			mes "他認為您從那以後出賣了他？你知道？你沒有他跑了。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "他甚至提出要告訴我們礦石在哪里以換取他的自由。";
+			mes "因為他已經正式提出了這一報價，所以我們不能忽略它。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "我想讓你知道你的老闆有多怯ward。";
+			break;
+		}
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "如果我們想要礦石，那麼我們可以隨時與約翰尼交談";
+		mes "而不是與您打交道。";
+		next;
+		npctalk "I ran", "", bc_self;
+		mes "[阿爾伯特·福特]";
+		mes "尋求幫助。";
+		mes "我們總是可以入侵您的村莊，並將老闆帶回我們！";
+		mes "我不敢相信老闆對我的看法很少。";
+		next;
+		mes "[阿爾伯特·福特]";
+		mes "但是話又說回來，你可能對我撒謊。";
+		mes "您不是要在我和我的老闆之間駕駛楔子，是嗎？";
+		next;
+		select("你認為是誰告訴我如何向你發出信號的？");
+		mes "[阿爾伯特·福特]";
+		mes "...!!";
+		mes "他告訴你了嗎？";
+		mes "他真的背叛了我們嗎？";
+		unittalk .@account_id, "" + .@player_name$ + " : How many times do I have to tell you?", bc_self;
+		next;
+		mes "[阿爾伯特·福特]";
+		mes "我們一直在考慮營救他的方法，";
+		mes "當他與我們的敵人交朋友時。我們不需要像他這樣的自私叛徒。";
+		next;
+		mes "[阿爾伯特·福特]";
+		mes "你一路來到這裡告訴我這一點。為什麼？";
+		next;
+		select("告訴我們礦石在哪裡。");
+		mes "[阿爾伯特·福特]";
+		mes "你說你不需要它們！";
+		next;
+		select("不，但它們是懲罰約翰尼所必需的。");
+		mes "[" + .@player_name$ + "]";
+		mes "我是說，";
+		mes "該公司想為我的一切價值擠奶，";
+		mes "約翰尼知道這一點。他正試圖將礦石用作無jail的卡片。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "但是警長扭曲不想要那個。";
+		mes "他希望約翰尼被絞死以供全世界看。";
+		mes "他不想放開犯罪分子來換成一堆礦石。";
+		next;
+		select("給他看礦石。");
+		mes "[" + .@player_name$ + "]";
+		mes "我帶來了這個，以防您不相信我。";
+		mes "美麗，不是嗎？";
+		mes "我們發現了一種新的靜脈。它的位置是秘密的。";
+		next;
+		npctalk "No... This means we've been staying here for nothing.", "", bc_self;
+		mes "[" + .@player_name$ + "]";
+		mes "您可以為我們所關心的所有礦坑帶來這個死坑。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "好吧，讓我改寫。";
+		mes "您可以放棄約翰尼並親自帶領您的幫派。";
+		mes "一旦膽小的科斯特洛（Costello）離開大陸，我將成為新市長。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "如果您是幫派的領導者，我願意與您開展業務。";
+		mes "考慮一下您的未來。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "您想與我們分享該礦的利潤。";
+		mes "約翰尼首先出賣了你。";
+		mes "有什麼要考慮的？";
+		npctalk "I need to talk to the others...", "", bc_self;
+		next;
+		mes "[阿爾伯特·福特]";
+		mes "如果他真的背叛了我們，那麼我們想自己懲罰他。";
+		mes "其他人需要知道真相。";
+		next;
+		mes "[阿爾伯特·福特]";
+		mes "我需要時間。";
+		sleep2 2000;
+		unittalk .@account_id, "" + .@player_name$ + " : We don't have time. Johnny will buy his way out of jail.", bc_self;
+		mes "...好吧，我們不再擔心那個叛徒了。";
+		next;
+		mes "[阿爾伯特·福特]";
+		mes "但是，在我們擺脫他之前，我不會告訴您礦石的位置。";
+		mes "那些該死的礦石是我們陷入困境的原因。";
+		next;
+		mes "[阿爾伯特·福特]";
+		mes "現在爭奪。";
+		next;
+		select("抱歉，我可以有一縷你的鬃毛嗎？");
+		mes "[阿爾伯特·福特]";
+		mes "為什麼？你在示意什麼？";
+		unittalk .@account_id, "" + .@player_name$ + " : Sheriff Warp wants it as proof of our negotiation.", bc_self;
+		next;
+		mes "[阿爾伯特·福特]";
+		mes "那個警長的混蛋，";
+		mes "他甚至不能相信自己的人民，可以嗎？";
+		mes "HMPF。";
+		mes "那裡。";
+		mes "現在，得到！";
+		next;
+		mes "[阿爾伯特·福特]";
+		mes "下次我們見面時，我們會在約翰尼的葬禮上見面嗎？";
+		getitem 25249,1;// Mane_Of_Cow
+		erasequest 7802;// Hear Me Out 2
+		setquest 7803;// Happy for Broken Trust
+		rock_main_quest = 14;
+		close2;
+		cloakonnpcself();
+		end;
+	}
+	if (rock_main_quest == 14 && countitem(25249) < 1) {
+		mes "[阿爾伯特·福特]";
+		mes "這次是什麼？";
+		mes "叛徒發生了什麼事嗎？";
+		next;
+		select("我可以再要一縷你的鬃毛嗎？");
+		mes "[阿爾伯特·福特]";
+		mes "你失去了我給你的那個嗎？";
+		mes "這並不能使我更確定我相信您的決定。";
+		mes "我們沒有時間爭論。";
+		next;
+		mes "[阿爾伯特·福特]";
+		mes "在這裡，請。";
+		getitem 25249,1;// Mane_Of_Cow
+		close2;
+		cloakonnpcself();
+		end;
+	}
+	if (rock_main_quest == 20 && checkquest(7807,HUNTING) == 2) {
+		if (countitem(25278) < 5 || countitem(25283) < 5) {
+			mes "（我沒有足夠的棕色消音器和匪徒的圍巾來威脅阿爾伯特·福特。）";
+			unittalk .@account_id, "" + .@player_name$ + " : I was just passing by. I'll come back later.", bc_self;
+			next;
+			mes "[阿爾伯特·福特]";
+			mes "什麼？這是什麼？";
+			mes "除非你有東西告訴我，否則不要給我打電話！";
+			close2;
+			cloakonnpcself();
+			end;
+		}
+		mes "[阿爾伯特·福特]";
+		mes "這次是什麼？";
+		mes "我很忙。";
+		next;
+		select("礦井內發生了什麼事情嗎？");
+		mes "[阿爾伯特·福特]";
+		mes "是的。我派出巡邏職責的一些傢伙沒有回來，還有一些礦石？";
+		npctalk "...Wait.", "", bc_self;
+		next;
+		mes "[阿爾伯特·福特]";
+		mes "那個盒子！";
+		mes "你是小偷！";
+		mes "我們的談判發生了什麼？";
+		mes "約翰尼自由嗎？";
+		next;
+		select("啊？不。");
+		mes "[" + .@player_name$ + "]";
+		mes "你為什麼會這樣？";
+		mes "是的，他告訴我們礦石在哪裡，但是我們還沒有結束討價還價。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "他放棄了位置，因為他以為你已經死了。";
+		mes "如果他離開並意識到自己還活著，您會遇到麻煩，不是嗎？";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "不用擔心。約翰尼無法逃避法律。";
+		mes "警長扭曲決心將他吊死。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "哦，我認為我不會成為下一位市長。";
+		mes "我來告訴你。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "如果我告訴您有關從礦山分享利潤的信息，我就不記得了。";
+		mes "當我進行談話時，我可能這麼說。";
+		next;
+		npctalk "All this time you've been playing with us!", "", bc_self;
+		mes "[阿爾伯特·福特]";
+		mes "你對我們做了什麼？";
+		mes "聽到這一切後，您認為我們會原諒您嗎？";
+		next;
+		mes "[阿爾伯特·福特]";
+		mes "什麼？掛老闆？";
+		mes "我們會掛你的嗎？你們所有人！";
+		mes "你狡猾的混蛋！";
+		next;
+		mes "[阿爾伯特·福特]";
+		mes "我們將攻擊您的村莊並將其夷為平地！";
+		next;
+		unittalk .@account_id, "" + .@player_name$ + " : Are you sure about that?", bc_self;
+		mes "[阿爾伯特·福特]";
+		mes "這次你想做什麼？";
+		next;
+		specialeffect EF_HIT2;
+		sleep2 2000;
+
+		if (countitem(25278) >= 5 && countitem(25283) >= 5) {
+			delitem 25283,5;// BrownMuffler
+			delitem 25278,5;// BanditsScarf
+			for ( .@i = 0; .@i < 5; ++.@i ) {
+				getfreecell("rockrdg2",.@x,.@y,295,309,4,4);
+				makeitem 25283,1, "rockrdg2", .@x,.@y;// BrownMuffler
+				getfreecell("rockrdg2",.@x,.@y,296,309,4,4);
+				makeitem 25278,1, "rockrdg2", .@x,.@y;// BanditsScarf
+			}
+			npctalk "What are you doing? What the hell is this?!", "", bc_self;
+			mes "[阿爾伯特·福特]";
+			mes "等待！ ...你！";
+			mes "你對我的男人做了什麼？";
+			next;
+			select("你的威脅不會起作用。");
+			unittalk .@account_id, "" + .@player_name$ + " : You guys have become pretty famous among adventurers.", bc_self;
+			mes "[" + .@player_name$ + "]";
+			mes "如果願意，來到村莊。";
+			mes "在踏入岩石嶺之前，您會死亡。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "阿爾伯特，您不再對我們有用，但是我會讓你一個人呆著。目前。";
+			mes "祝你好運到成熟的老年。";
+			next;
+			specialeffect EF_SCREEN_QUAKE;
+			npctalk "You slimy bastards! I won't forgive you!", "", bc_self;
+			mes "[阿爾伯特·福特]";
+			mes "HMPF，我們可能已經失去了與您的戰鬥，";
+			mes "但是，即使我們對我們沒有用，我們也不會把礦山還給您！";
+			mes "我們將笑一次！";
+			erasequest 7807;// Ace up Our Sleeve
+			setquest 7808;// Case Solved
+			rock_main_quest = 21;
+			close2;
+			cloakonnpcself();
+		}
+		end;
+	}
+    npctalk "I'll kill you! All of you!", "", bc_self;
+	end;
+OnInit:
+	cloakonnpc();
+	end;
+}
+
+
+// Cacturon quest
+rockrdg1,341,133,3	script	Mrs. Cacturon#rrrem01	4_M_CACTUSLADY,{
+	if (rock_main_quest < 22) {
+		mes "[太太。仙人掌]";
+		mes "我很確定我沒有見過你。是什麼把你帶到這個村莊？";
+		close;
+	}
+	if (checkweight(1301,3) == 0) {
+		mes "[太太。仙人掌]";
+		mes "我很確定我沒有見過你。您正在攜帶一個非常沉重的袋子。為什麼，您需要某種東西來使您紮根，因為它是如此大風？";
+		next;
+		mes "[太太。仙人掌]";
+		mes "...我是在開玩笑。但是您最好減輕書包。除非您有家人要餵養，否則攜帶太多是適得其反的。";
+		close;
+	}
+	if (isbegin_quest(16078) != 2) {// first time
+		.@player_name$ = strcharinfo(0);
+		switch( checkquest(16078,HUNTING) ) {
+		case -1:
+			mes "[小萊克特]";
+			mes "是的，媽媽的家！媽媽，你買了果汁嗎？我的龍舌蘭味汁！";
+			emotion ET_DELIGHT, getnpcid(0, "Little Lecter#rrrem02");
+			next;
+			mes "[小萊克特]";
+			mes "犯錯？媽媽，你跌倒了嗎？為什麼你的衣服這麼臟？";
+			emotion ET_QUESTION, getnpcid(0, "Little Lecter#rrrem02");
+			next;
+			mes "[太太。仙人掌]";
+			mes "是的，我在家。 MM，Lecter，我有一些要告訴你的。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "...對不起，萊克特，但是我今天沒有龍舌蘭味的果汁。";
+			emotion ET_THINK;
+			next;
+			mes "[小萊克特]";
+			mes "犯錯？為什麼不呢？我以為您今天去了岩石嶺市場。";
+			mes "格蘭普斯說，您會帶上龍舌蘭味的果汁。我整天都在等待。哇！";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "（男孩，這裡很大。發生了什麼事嗎？）";
+			next;
+			mes "[太太。仙人掌]";
+			mes "因為萊克特...停止哭泣。聰明的仙人掌孩子不會那麼容易哭泣！";
+			next;
+			if (select( "Hello. Is there a problem?", "Ignore it." ) == 2) {
+				mes "[" + .@player_name$ + "]";
+				mes "（我最好不要參與。我厭倦了照顧別人的混亂。）";
+				close;
+			}
+			mes "[" + .@player_name$ + "]";
+			mes "對不起，有問題嗎？";
+			next;
+			mes "[太太。仙人掌]";
+			mes "我們只是在這里處理一個小家庭問題。你是誰？我可以告訴你不是從這裡附近的。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "我是冒險家。我想知道您是否需要幫助。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "冒險家？一直在洛克嶺（Rock Ridge）到這裡？";
+			mes "...好吧，那你能聽到我的聲音嗎？我想問你一個忙。";
+			next;
+			mes "[小萊克特]";
+			mes "哇！我的龍舌蘭味汁！哇！";
+			emotion ET_CRY, getnpcid(0, "Little Lecter#rrrem02");
+			next;
+			mes "[太太。仙人掌]";
+			mes "今天，當我受到一些土狼的攻擊時，我正從岩石嶺市場回到途中。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "我打了牙和釘子來保護我的雜貨。除了我兒子喜歡的龍舌蘭飲料混合物外，我設法保存了大部分東西。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "龍舌蘭飲料混合物？";
+			emotion ET_QUESTION, playerattached();
+			next;
+			mes "[太太。仙人掌]";
+			mes "這是龍舌蘭味的飲料粉。";
+			mes "它易於使用，味道類似於真正的龍舌蘭汁。年輕的仙人掌喜歡這種飲料。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "不過，對我來說太甜了。好吧，這並不重要。";
+			mes "奇怪的冒險家，您會這麼友善，以至於找到我在荒原中丟失的龍舌蘭飲料混合物嗎？";
+			next;
+			mes "[太太。仙人掌]";
+			mes "當您使用它時，也許您也可以剔除 ^0000cdcoyotes ^000000。 Hunt ^0000CD30 ^000000為我。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "^0000cdagave飲料混合物 ^000000有7包。我丟失了整個場景，我懷疑您會發現整個組合完整。如果您只能找到 ^0000CD5 Packs ^000000，我會很高興。";
+			next;
+			if (select( "Sure, I can do that.", "I'd love to help, but..." ) == 2) {
+				mes "[" + .@player_name$ + "]";
+				mes "對不起。我很想幫忙，但我的盤子上已經足夠了。";
+				next;
+				mes "[太太。仙人掌]";
+				mes "我明白。最近，每個人都有足夠的盤子。";
+				close;
+			}
+			mes "[" + .@player_name$ + "]";
+			mes "當然，我可以做到。您要我 ^0000cdfind 5龍舌蘭汁混合和狩獵30郊狼 ^000000，對嗎？";
+			next;
+			mes "[太太。仙人掌]";
+			mes "是的。謝謝。";
+			mes "我懷疑您可以找到所有7包。到目前為止，至少有幾個必須被撕裂和溢出。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "只需帶上 ^0000CD5龍舌蘭汁混合 ^000000即可。這足以使我的兒子快樂。";
+			mes "^ff000000，可以埋在地面上，被某人撿起或被土狼發現。 ^000000";
+			next;
+			mes "[太太。仙人掌]";
+			mes "在小屋時環顧四周，對嗎？謝謝。";
+			setquest 16078;// Peace of the Family
+			close;
+		case 0:
+		case 1:
+			if (countitem(25246) < 5) {
+				mes "[太太。仙人掌]";
+				mes "奇怪的冒險家。我請您狩獵 ^0000CD30土狼 ^000000。你好嗎？";
+				mes "謝謝你為我做這件事。並找到 ^0000CD5果汁混合 ^000000。如果不適合您，事情會變得更加困難。謝謝。";
+				close;
+			}
+			mes "[太太。仙人掌]";
+			mes "您發現比我想像的更多的龍舌蘭果汁混合物。謝謝，奇怪的冒險家。";
+			mes "我不想強加您的好意，但是您可以狩獵 ^0000CD30 ^000000 ^0000cdcoyotes ^000000嗎？";
+			close;
+		case 2:
+			if (countitem(25246) < 5) {
+				mes "[太太。仙人掌]";
+				mes "感謝您為我狩獵土狼。順便說一句，您是否看到周圍的一些 ^0000cdjuice混合包 ^000000？";
+				mes "那裡必須還有一些果汁混合物。如果您能找到5個，我會很感激。";
+				close;
+			}
+			mes "[小萊克特]";
+			mes "這是龍舌蘭味的果汁嗎？您是否為我找到了這種龍舌蘭味的果汁？是的！萊克特想現在喝它！";
+			next;
+			mes "[太太。仙人掌]";
+			mes "萊克特，您應該先感謝冒險家。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "我認為他太忙於攪拌果汁，聽到你的聲音。沒關係。我沒有這樣做是為了感謝。他真的必須喜歡它。";
+			next;
+			mes "[小萊克特]";
+			mes "是的，我喜歡它！很多！呵呵！謝謝你！";
+			emotion ET_SMILE, getnpcid(0, "Little Lecter#rrrem02");
+			next;
+			mes "[太太。仙人掌]";
+			mes "嘆...";
+			emotion ET_SCRATCH;
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "他很高興。你為什麼嘆息？";
+			next;
+			mes "[太太。仙人掌]";
+			mes "看著他很高興喝那種假果汁讓我想起我小時候我曾經喝過的真正的龍舌蘭汁。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "這不是工廠製造的粉末。真正的龍舌蘭汁花了很多時間和精力來使我們只在特殊場合喝酒。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "在那些日子裡，我的全家人會聚集在一起，一起製作龍舌蘭汁。我們還會用龍舌蘭葉子包裹的牛排，有時來自遙遠的親戚也會拜訪我們整夜一起演奏音樂和跳舞。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "我小時候玩得很開心，但是我的孩子從來沒有經歷過任何事情。如今，每個人都太忙了，無法聚集或整夜唱歌，唱歌和跳舞。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "但是我們仙人掌希望盡可能地保留我們的傳統，向我們的孩子教他們。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "啊，我說話太多了。對不起，我花了你的時間，冒險家。";
+			mes "謝謝。請接受。這並不多，但我希望您會喜歡的。";
+			emotion ET_PROFUSELY_SWEAT;
+			next;
+			mes "[太太。仙人掌]";
+			mes "如果您不忙，您可以回來尋找更多的土狼嗎？最近有比以前更多的土狼。就像我們一樣，它們是自然界的一部分，但它們威脅著我們的安全。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "我可能無法給兒子真正的龍舌蘭汁，但我至少希望能夠去買他想要的東西。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "從今天開始，如果您每天都能幫助我，我會很感激。";
+			mes "如果您能提供更長的時間，我將非常感謝。您激發我更加努力地為兒子帶來更好的生活。";
+			emotion ET_SMILE;
+			delitem 25246,5;// Juice_Package
+			completequest 16078;// Peace of the Family
+			setquest 16079;// Back for More Coyotes Tomorrow
+			getitem 25250,2;// Coin_Of_Rr
+			getexp 55560,52710;
+			close;
+		}
+	}
+	switch( checkquest(16079,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes "[太太。仙人掌]";
+		mes "您需要停止您的工作並有時會查看，否則您會錯過重要的細節。";
+		next;
+		mes "[太太。仙人掌]";
+		mes "和往常一樣，我很感謝您的幫助，但是您需要在早上回來。謝謝。";
+		close;
+	case 2:
+		erasequest 16079;// Back for More Coyotes Tomorrow
+		break;
+	}
+	switch( checkquest(16080,HUNTING) ) {
+	case -1:
+		mes "奇怪的冒險家，謝謝您回來。";
+		mes "你來為我狩獵土狼，對嗎？";
+		next;
+		if (select( "Yes.", "No, I came to talk." ) == 2) {
+			mes "[太太。仙人掌]";
+			mes "你不像往常那麼忙，是嗎？";
+			mes "感謝您，我也不太忙。";
+			next;
+			mes "[太太。仙人掌]";
+			mes "做某事是一種祝福。";
+			mes "我們早上醒來，努力償還大自然的禮物，並在晚上上床睡覺。";
+			emotion ET_DELIGHT;
+			next;
+			mes "[太太。仙人掌]";
+			mes "但是，當然，您需要像現在一樣的時間休息。整天工作，不休息會使人的生活變得乏味。";
+			close;
+		}
+		mes "[太太。仙人掌]";
+		mes "與往常一樣，請為我狩獵 ^0000CD30土狼 ^000000。";
+		mes "每天晚上，他們分組出現，彷彿說我們永遠無法擺脫所有這些。";
+		next;
+		mes "[太太。仙人掌]";
+		mes "但是我相信每天的一個小變化最終會產生巨大的變化。";
+		mes "而且您正在使它成為可能。謝謝。";
+		setquest 16080;// Hunting Coyotes Again
+		close;
+	case 0:
+	case 1:
+		mes "[太太。仙人掌]";
+		mes "我要你狩獵30個土狼。你狩獵了多少？";
+		mes "如果您累了，請先休息一下。我不想讓您的要求負擔您的負擔。";
+		close;
+	case 2:
+		mes "[太太。仙人掌]";
+		mes "你從狩獵中回來。我不是為此負擔你，是嗎？";
+		mes "請盡可能多地狩獵土狼。如果您打算經常參觀這個地方，它們對您來說和對我們一樣麻煩。";
+		next;
+		mes "[太太。仙人掌]";
+		mes "這是我能做的最好的。我希望你會喜歡的。我要感謝您代表我的家人的幫助。";
+		erasequest 16080;// Hunting Coyotes Again
+		setquest 16079;// Back for More Coyotes Tomorrow
+		getitem 25250,2;// Coin_Of_Rr
+		getexp 55560,52710;
+		close;
+	}
+	end;
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 22 && (!isbegin_quest(16078) || (checkquest(16078,HUNTING) == 2 && countitem(25246) >= 5))" );
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 22 && checkquest(16080,HUNTING) == 2" );
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 22 && checkquest(16079,PLAYTIME) == 2" );
+	end;
+}
+
+rockrdg1,339,134,3	script	Little Lecter#rrrem02	4_M_CACTUSCHILD,{
+	if (isbegin_quest(16078) == 2) {
+		mes "[小萊克特]";
+		mes "我喜歡龍舌蘭味的果汁。我想每天喝它。";
+		next;
+		mes "[小萊克特]";
+		mes "龍舌蘭汁？你是說我最喜歡的龍舌蘭味汁嗎？";
+		close;
+	}
+	switch( checkquest(16078,HUNTING) ) {
+	case -1:
+		mes "[小萊克特]";
+		mes "媽媽說她會給我帶來龍舌蘭味的果汁。我的龍舌蘭味汁...";
+		close;
+	case 0:
+	case 1:
+		mes "[小萊克特]";
+		mes "哇！哇！我的龍舌蘭味汁！";
+		mes "*嗅探*我必須等待幾天才能獲得龍舌蘭味的果汁？萊克特不想...等等... boohoo！";
+		emotion 28, getnpcid(0,"Little Lecter#rrrem02");
+		close;
+	case 2:
+		if (countitem(25246) < 5) {
+			mes "[小萊克特]";
+			mes "哇！哇！我的龍舌蘭味汁！";
+			mes "*嗅探*我必須等待幾天才能獲得龍舌蘭味的果汁？萊克特不想...等等... boohoo！";
+			emotion 28;
+			close;
+		}
+		mes "[小萊克特]";
+		mes "哇，龍舌蘭味的果汁！謝謝，冒險家！";
+		mes "你能和我媽媽說話嗎？直到她說我可以，我才能喝它。";
+		emotion 18;
+		close;
+	}
+	end;
+}
+
+rockrdg1,182,124,3	script	Suspicious Sand Mound#rremef05	4_ENERGY_RED,15,15,{
+	if (checkweight(1301,3) == 0) {
+		mes "- 一個破爛的織物小袋被一半埋在沙丘中，但我拿著太多的東西來檢查它。我最好先照亮我的書包。 -";
+		close;
+	}
+	if (checkquest(16078,HUNTING) != 0 && checkquest(16078,HUNTING) != 1 || countitem("Juice_Package") > 4 || isbegin_quest(16082) == 2) {
+		mes "- 一個破爛的織物袋被埋在沙丘中。我認為這只是垃圾。 -";
+		close;
+	}
+	mes "- 一個破爛的織物袋被埋在沙丘中。可能是仙人掌夫人的果汁混合包裝。 -";
+	next;
+	mes "- 我靠近拿起小袋。它上面有果汁混合品牌徽標。幸運的是，這並沒有撕裂。 -";
+	next;
+	mes "- 我把沙子從小袋上搖了，把它放在書包裡。 -";
+	getitem 25246,1;	// Juice_Package
+	setquest 16082;
+	completequest 16082;
+	cloakonnpcself( "Suspicious Sand Mound#rremef05" );
+	if (countitem("Juice_Package") > 4) {
+		next;
+		.@name$ = strcharinfo(0);
+		mes "[" + .@name$ + "]";
+		mes "甚至仙人掌夫人也不認為她可以將所有七個套餐都收回。";
+		mes "這應該足夠了。我最好結束；給村莊並向她報告。";
+		if (checkquest(16078,HUNTING) < 2) {
+			next;
+			mes "[" + .@name$ + "]";
+			mes "哦，對嗎？我還需要狩獵30個土狼。";
+		}
+	}
+	close;
+OnTouch:
+	if (checkquest(16078,HUNTING) != 0 && checkquest(16078,HUNTING) != 1 || countitem("Juice_Package") > 4 || isbegin_quest(16082) == 2)
+		cloakonnpcself( "Suspicious Sand Mound#rremef05" );
+	else
+		cloakoffnpcself( "Suspicious Sand Mound#rremef05" );
+	end;
+OnInit:
+	cloakonnpc();
+	end;
+}
+rockrdg1,182,124,3	duplicate(Suspicious Sand Mound#rremef05)	Suspicious Sand Mound#rrem01	4_SOIL
+
+
+rockrdg1,286,247,3	script	Suspicious Sand Mound#rremef06	4_ENERGY_RED,15,15,{
+	if (checkweight(1301,3) == 0) {
+		mes "- 這片沙子有些奇怪，但是我攜帶的太多了，無法檢查它。我最好先照亮我的書包。 -";
+		close;
+	}
+	.@quest_id = callsub( S_Quest );
+	.@npc_name$ = callsub( S_Name );
+
+	if (checkquest(16078,HUNTING) != 0 && checkquest(16078,HUNTING) != 1 || countitem("Juice_Package") > 4 || isbegin_quest(.@quest_id) == 2) {
+		mes "- 有人一定把這堆沙子堆成了。 -";
+		close;
+	}
+	mes "- 一個破爛的織物袋被埋在沙丘中。可能是仙人掌夫人的果汁混合包裝。 -";
+	next;
+	if (rand(1,2) == 1) {
+		mes "- 我靠近拿起小袋。它上面有果汁混合品牌徽標。幸運的是，這並沒有撕裂。 -";
+		next;
+		mes "- 我把沙子從小袋上搖了，把它放在書包裡。 -";
+		getitem 25246,1;	// Juice_Package
+		setquest .@quest_id;
+		completequest .@quest_id;
+		cloakonnpcself( .@npc_name$ );
+		if (countitem("Juice_Package") > 4) {
+			next;
+			.@name$ = strcharinfo(0);
+			mes "[" + .@name$ + "]";
+			mes "甚至仙人掌夫人也不認為她可以將所有七個套餐都收回。";
+			mes "這應該足夠了。我最好結束；給村莊並向她報告。";
+			if (checkquest(16078,HUNTING) < 2) {
+				next;
+				mes "[" + .@name$ + "]";
+				mes "哦，對嗎？我還需要狩獵30個土狼。";
+			}
+		}
+		close;
+	}
+	mes "- 我拿起小袋。甜味粉末開始從底部的眼淚中傾瀉而出。 -";
+	next;
+	mes "- 這不是可用的。我只需要離開它，尋找另一個。 -";
+	setquest .@quest_id;
+	completequest .@quest_id;
+	cloakonnpcself();
+	close;
+
+S_Quest:
+	if (compare(strnpcinfo(2), "rremef"))
+		.@id = atoi( replacestr( strnpcinfo(2), "rremef", "" ) );
+	else {
+		.@id = atoi( replacestr( strnpcinfo(2), "rrem", "" ) );
+		.@id += 4;
+	}
+	return (16084 - 6 + .@id);
+
+S_Name:
+	if (compare(strnpcinfo(2), "rremef"))
+		return strnpcinfo(2);
+	.@id = atoi( replacestr( strnpcinfo(2), "rrem", "" ) );
+	.@id += 4;
+	.@string$ = strnpcinfo(1) + "#rrem" + (.@id < 10 ? "0" : "") + .@id;	// example: rremef06 for rrem02
+	return .@string$;
+
+OnTouch:
+	.@quest_id = callsub( S_Quest );
+	.@npc_name$ = callsub( S_Name );
+	if (checkquest(16078,HUNTING) != 0 && checkquest(16078,HUNTING) != 1 || countitem("Juice_Package") > 4 || isbegin_quest(.@quest_id) == 2)
+		cloakonnpcself( .@npc_name$ );
+	else
+		cloakoffnpcself( .@npc_name$ );
+	end;
+
+OnInit:
+	cloakonnpc();
+	end;
+}
+rockrdg1,202,246,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rremef07	4_ENERGY_RED,15,15
+rockrdg1,149,103,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rremef08	4_ENERGY_RED,15,15
+rockrdg1,96,141,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rremef09	4_ENERGY_RED,15,15
+rockrdg1,122,243,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rremef10	4_ENERGY_RED,15,15
+rockrdg1,330,240,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rremef11	4_ENERGY_RED,15,15
+rockrdg1,242,287,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rremef12	4_ENERGY_RED,15,15
+rockrdg1,89,216,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rremef13	4_ENERGY_RED,15,15
+rockrdg1,77,259,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rremef14	4_ENERGY_RED,15,15
+
+rockrdg1,286,247,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rrem02	4_SOIL
+rockrdg1,202,246,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rrem03	4_SOIL
+rockrdg1,149,103,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rrem04	4_SOIL
+rockrdg1,96,141,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rrem05	4_SOIL
+rockrdg1,122,243,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rrem06	4_SOIL
+rockrdg1,330,240,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rrem07	4_SOIL
+rockrdg1,242,287,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rrem08	4_SOIL
+rockrdg1,89,216,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rrem09	4_SOIL
+rockrdg1,77,259,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rrem10	4_SOIL
+// rockrdg1,77,259,3	duplicate(Suspicious Sand Mound#rremef06)	Suspicious Sand Mound#rremef14	4_SOIL	// duplicate name
+
+rockrdg1,146,164,1	script	Wasteland Cactuten#rremef01	4_ENERGY_RED,15,15,{
+	if (checkweight(1301,3) == 0) {
+		mes "[荒原由仙人掌]";
+		mes "看來所有陌生人都很貪婪，您也不例外。";
+		mes "你為什麼要攜帶那麼多？";
+		next;
+		mes "- 我最好減輕我的書包，然後再次與他交談。 -";
+		close;
+	}
+	if (isbegin_quest(16078) == 1 && isbegin_quest(16083) == 0 && countitem(25246) < 5) {
+		.@player_name$ = strcharinfo(0);
+		mes "[荒原由仙人掌]";
+		mes "為什麼，您以前沒看過仙人掌嗎？我很忙。繼續前進。";
+		next;
+		select("問他是否見過果汁混合包裝。");
+		mes "[" + .@player_name$ + "]";
+		mes "您是否在這裡看到了一些果汁混合包裝？";
+		next;
+		mes "[荒原由仙人掌]";
+		mes "果汁混合包裝？如果您說的是我發現的包裹，那是岩石之間的，那是的，我有。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "是仙人掌夫人的。讓我把它帶回她。";
+		next;
+		mes "[荒原由仙人掌]";
+		mes "否。為什麼我會給你仙人掌失去的東西？";
+		next;
+		if (select( "Threaten him.", "Persuade him." ) == 1) {
+			mes "[" + .@player_name$ + "]";
+			mes "我代表她在這裡。如果你一直固執，";
+			mes "那我必須使用武力。";
+			next;
+			mes "[荒原由仙人掌]";
+			mes "鮮血會流血，我不想要那個。您可以擁有包裹，陌生人。";
+			mes "但是仙人掌應該為自己信任像你這樣的暴徒而感到羞恥。";
+			next;
+			mes "- 我有果汁混合套餐，但是我很難威脅他得到它們。 -";
+		}
+		else {
+			mes "[" + .@player_name$ + "]";
+			mes "我一直在尋找一些果汁混合包裝，因為我知道有人丟失了它們。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "這是其中之一，它不屬於您。";
+			next;
+			mes "[荒原由仙人掌]";
+			mes "你說得對。它不屬於我。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "那你為什麼不讓我把它帶回它的所有者呢？仙人掌夫人的孩子很沮喪，因為他不能吃他最喜歡的果汁。我只希望他快樂。";
+			next;
+			mes "[荒原由仙人掌]";
+			mes "MM ...您的邏輯不是完全完美無缺的，但至少證明您知道仙人掌和萊克特。";
+			next;
+			mes "[荒原由仙人掌]";
+			mes "好吧，我給你。但是，如果我發現您對我撒謊，我會看到您為背叛仙人掌的信任而付費。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "我發誓我不是在撒謊。";
+			next;
+			mes "- 我有果汁混合套餐。 -";
+		}
+		getitem 25246,1;// Juice_Package
+		setquest 16083;// Discovered Wasteland Cactuten
+		erasequest 16083;// Discovered Wasteland Cactuten
+		cloakonnpcself( "Wasteland Cactuten#rremef01" );
+		if (countitem(25246) > 4) {
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "甚至仙人掌夫人也不認為她可以將所有七個套餐都收回。";
+			mes "這應該足夠了。我最好回到村莊並向她報告。";
+			if (checkquest(16078,HUNTING) < 2) {
+				next;
+				mes "[" + .@player_name$ + "]";
+				mes "哦，對嗎？我還需要狩獵30個土狼。";
+			}
+		}
+		close;
+	}
+	mes "[荒原由仙人掌]";
+	mes "為什麼，您以前沒看過仙人掌嗎？我很忙。繼續前進。";
+	close;
+
+OnTouch:
+	if (isbegin_quest(16078) != 1 || countitem("Juice_Package") > 4 || isbegin_quest(16083) > 1)
+		cloakonnpcself( "Wasteland Cactuten#rremef01" );
+	else
+		cloakoffnpcself( "Wasteland Cactuten#rremef01" );
+	end;
+
+OnInit:
+	cloakonnpc();
+	end;
+}
+rockrdg1,146,164,1	duplicate(Wasteland Cactuten#rremef01)	Wasteland Cactuten#rrem03	4_M_CACTUSMAN2
+
+rockrdg1,195,183,3	script	Curious Coyote#rremef03	4_ENERGY_RED,15,15,{
+	end;
+OnTouch:
+	if (isbegin_quest(16078) != 1 || countitem("Juice_Package") > 4 || isbegin_quest(16085) > 1)
+		cloakonnpcself( "Curious Coyote#rremef03" );
+	else
+		cloakoffnpcself( "Curious Coyote#rremef03" );
+	end;
+OnInit:
+	cloakonnpc();
+	end;
+}
+
+rockrdg1,195,183,3	script	Curious Coyote#rrem05	COYOTE,4,4,{
+	end;
+OnTouch:
+	if (checkweight(1301,3) == 0) {
+		mes "- 土狼的嘴裡有些東西，它正在搖搖頭，玩東西。但是我攜帶太多了，無法檢查它的嘴裡。我最好先照亮我的書包。 -";
+		close;
+	}
+	if (isbegin_quest(16078) == 1 && isbegin_quest(16085) == 0 && countitem(25246) < 5) {
+		.@player_name$ = strcharinfo(0);
+		mes "- 土狼的嘴裡有些東西，它正在搖搖頭，玩東西。可能是仙人掌夫人的果汁混合包裝。 -";
+		next;
+		mes "- 也許我應該大喊大叫並嚇到它。我應該大喊什麼？ -";
+		input .@string$;
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "*清除喉嚨*" + .@string$ + "!";
+		next;
+		mes "[好奇的土狼]";
+		mes "是的！";
+		next;
+		mes "- 嚇了一跳，土狼向後傾斜。我靠近檢查它的掉落了。這是一個果汁混合包！ -";
+		getitem 25246,1;// Juice_Package
+		setquest 16085;// Discovered Coyote
+		completequest 16085;// Discovered Coyote
+		cloakonnpcself( "Curious Coyote#rremef03" );
+		if (countitem(25246) > 4) {
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "甚至仙人掌夫人也不認為她可以將所有七個套餐都收回。";
+			mes "這應該足夠了。我最好回到村莊並向她報告。";
+			if (checkquest(16078,HUNTING) < 2) {
+				next;
+				mes "[" + .@player_name$ + "]";
+				mes "哦，對嗎？我還需要狩獵30個土狼。";
+			}
+		}
+		close;
+	}
+}
+
+rockrdg1,305,200,3	script	Cactus Girl#rremef02	4_ENERGY_RED,15,15,{
+	if (checkweight(1301,3) == 0) {
+		mes "[仙人掌女孩]";
+		mes "陌生人...";
+		next;
+		mes "[仙人掌女孩]";
+		mes "您迷戀材料。你不知道他們只給你壓倒嗎？";
+		next;
+		mes "- 我最好減輕我的書包，然後再次與他交談。 -";
+		close;
+	}
+	if (isbegin_quest(16078) == 1 && isbegin_quest(16087) == 0 && countitem(25246) < 5) {
+		.@player_name$ = strcharinfo(0);
+		mes "[仙人掌女孩]";
+		mes "陌生人...";
+		mes "不要靠近我，否則。";
+		emotion ET_ANGER;
+		next;
+		select("你見過果汁混合包裝嗎？");
+		mes "[" + .@player_name$ + "]";
+		mes "您是否在這裡看到了一些果汁混合包裝？";
+		next;
+		mes "[仙人掌女孩]";
+		mes "果汁混合包裝？";
+		mes "...您在尋找這個嗎？我發現它埋在沙灘上。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "就是這樣。仙人掌夫人已經失去了它。讓我把它帶回她。";
+		next;
+		mes "[仙人掌女孩]";
+		mes "...";
+		mes "...我懂了。";
+		mes "您說仙人掌夫人已經失去了它。你是誰？";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "我是一個冒險家，我代表她在這裡。";
+		mes "如果您不相信我，那麼您可以去村莊與她交談。";
+		next;
+		mes "[仙人掌女孩]";
+		mes "* Snort*您認為我很愚蠢嗎？如果您是小偷，當我從村莊回來時，您就不會在這裡。";
+		mes "在這裡，請。";
+		emotion ET_HNG;
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "你只是要把它給我嗎？";
+		next;
+		mes "[仙人掌女孩]";
+		mes "您說仙人掌夫人寄給您，我相信她。為什麼，您要我給您一個艱難的時光？";
+		emotion ET_QUESTION;
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "不，謝謝您給我。";
+		next;
+		mes "- 我收到了仙人掌女孩的果汁混合包裝。 -";
+		getitem 25246,1;// Juice_Package
+		setquest 16087;// Discovered Cactus Girl
+		completequest 16087;// Discovered Cactus Girl
+		cloakonnpcself( "Cactus Girl#rremef02" );
+		if (countitem(25246) > 4) {
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "甚至仙人掌夫人也不認為她可以將所有七個套餐都收回。";
+			mes "這應該足夠了。我最好回到村莊並向她報告。";
+			if (checkquest(16078,HUNTING) < 2) {
+				next;
+				mes "[" + .@player_name$ + "]";
+				mes "哦，對嗎？我還需要狩獵30個土狼。";
+			}
+		}
+		close;
+	}
+	mes "[仙人掌女孩]";
+	mes "陌生人...";
+	mes "不要靠近我，否則。";
+	emotion ET_ANGER;
+	close;
+
+OnTouch:
+	if (isbegin_quest(16078) != 1 || countitem("Juice_Package") > 4 || isbegin_quest(16087) > 1)
+		cloakonnpcself( "Cactus Girl#rremef02" );
+	else
+		cloakoffnpcself( "Cactus Girl#rremef02" );
+	end;
+
+OnInit:
+	cloakonnpc();
+	end;
+}
+rockrdg1,305,200,3	duplicate(Cactus Girl#rremef02)	Cactus Girl#rrem04	4_F_CACTUSCHILD2
+
+rockrdg1,266,219,3	script	Absorbed Coyote#rremef04	4_ENERGY_RED,15,15,{
+	end;
+OnTouch:
+	if (isbegin_quest(16078) != 1 || countitem("Juice_Package") > 4 || isbegin_quest(16088) > 1)
+		cloakonnpcself( "Absorbed Coyote#rremef04" );
+	else
+		cloakoffnpcself( "Absorbed Coyote#rremef04" );
+	end;
+OnInit:
+	cloakonnpc();
+	end;
+}
+
+rockrdg1,266,219,3	script	Absorbed Coyote#rrem06	COYOTE,4,4,{
+	end;
+OnTouch:
+	if (isbegin_quest(16078) == 1 && isbegin_quest(16088) == 0 && countitem(25246) < 5) {
+		if (checkweight(1301,3) == 0) {
+			mes "- 土狼的嘴裡有些東西，它正在搖搖頭，玩東西。但是我攜帶太多了，無法檢查它的嘴裡。我最好先照亮我的書包。 -";
+			close;
+		}
+		.@player_name$ = strcharinfo(0);
+		mes "- 土狼在嘴裡玩一些東西，以至於我不知道我附近。也許它有仙人掌先生的果汁混合包裝。 -";
+		next;
+		mes "- 也許我應該大喊大叫並嚇到它。我應該大喊什麼？ -";
+		input .@string$;
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "*深度吸氣*" + .@string$ + "!";
+		next;
+		mes "[吸收的土狼]";
+		mes "是的！";
+		next;
+		mes "- 嚇了一跳，土狼向後傾斜。我靠近檢查它的掉落了。這是一個果汁混合包！ -";
+		getitem 25246,1;// Juice_Package
+		setquest 16088;// Discovered Coyote
+		completequest 16088;// Discovered Coyote
+		cloakonnpcself( "Absorbed Coyote#rremef04" );
+		if (countitem(25246) > 4) {
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "甚至仙人掌夫人也不認為她可以將所有七個套餐都收回。";
+			mes "這應該足夠了。我最好回到村莊並向她報告。";
+			if (checkquest(16078,HUNTING) < 2) {
+				next;
+				mes "[" + .@player_name$ + "]";
+				mes "哦，對嗎？我還需要狩獵30個土狼。";
+			}
+		}
+		close;
+	}
+}
+
+
+// Collecting Ore Fragments
+rockrdg1,262,90,7	script	Crouched Horse#rr	4_M_CACTUSMAN1,{
+	mes "[蹲伏馬]";
+	mes "你好。";
+	mes "願陽光和地球";
+	mes "祝福你。";
+	next;
+	mes "[蹲伏馬]";
+	if (rock_main_quest < 22) {
+		mes "您是遙遠土地的陌生人之一。";
+		mes "我蹲了馬，";
+		mes "仙人掌的勇敢戰士。";
+		next;
+		mes "[蹲伏馬]";
+		mes "並非您村里的一切";
+		mes "已經解決了。";
+		mes "一切都有時間。";
+		mes "回去";
+		mes "幫助您的村莊首先解決。";
+		close;
+	}
+	switch( checkquest(9461,PLAYTIME) ) {
+	case -1:
+		.@player_name$ = strcharinfo(0);
+		if (isbegin_quest(9460) == 0) {// first time
+			mes "您是遙遠土地的陌生人之一。";
+			mes "我蹲了馬，";
+			mes "仙人掌的勇敢戰士。";
+			next;
+			mes "[蹲伏馬]";
+			mes "您已經解決了";
+			mes "您的村莊面臨的最大挑戰之一。";
+			mes "我為您的英勇和智慧表示讚賞。";
+			next;
+			mes "[蹲伏馬]";
+			mes "如果你不忙，";
+			mes "你還能幫我村嗎？";
+			mes "這並不困難。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "- 我能為你做什麼？";
+			next;
+			mes "[蹲伏馬]";
+			mes "這個地方";
+			mes "一直是";
+			mes "我們的家";
+			mes "對於許多人";
+			mes "許多世代。";
+			next;
+			mes "[蹲伏馬]";
+			mes "很長一段時間";
+			mes "我們與自然和諧相處。";
+			mes "然後幾年前";
+			mes "你來自遙遠的土地。";
+			mes "你的生活方式";
+			mes "與我們不同。";
+			next;
+			mes "[蹲伏馬]";
+			mes "我們償還自然";
+			mes "為了她的禮物，";
+			mes "而且我們不接受";
+			mes "超出了我們的需要。";
+			next;
+			mes "[蹲伏馬]";
+			mes "但是你這樣做。";
+			mes "你喜歡";
+			mes "拿更多的東西";
+			mes "比你需要的。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "- 因為我們貪婪，";
+			mes "- 我為此感到羞恥。";
+			next;
+			mes "[蹲伏馬]";
+			mes "我不是要怪你。";
+			mes "就是這樣";
+			mes "你有那麼多";
+			mes "那是";
+			mes "什麼都沒有";
+			mes "給我們。";
+			next;
+			mes "[" + .@player_name$ + "]";
+			mes "- 您需要什麼？";
+			mes "- 我該如何幫助？";
+			next;
+			mes "[蹲伏馬]";
+			mes "如果您發現紫色礦石碎片";
+			mes "在探索這片土地時";
+			mes "我想你";
+			mes "把他們帶給我。";
+			next;
+			mes "[蹲伏馬]";
+			mes "由於您打開了地雷，";
+			mes "我們一直很艱難";
+			mes "尋找礦石。";
+			mes "說，你能做到嗎？";
+			next;
+			if (select( "Mm, not now.", "Sure thing. I'll be right back." ) == 1) {
+				mes "[蹲伏馬]";
+				mes "我懂了。";
+				mes "嗯...我明白。";
+				mes "當您不忙時，您可以回來。";
+				close;
+			}
+			mes "[蹲伏馬]";
+			mes "哦，謝謝！";
+			mes "你可以找到";
+			mes "紫色礦石碎片";
+			mes "在這個地區打獵時。";
+			mes "只需帶10個。這就是我所需要的。";
+			next;
+			mes "[蹲伏馬]";
+			mes "謝謝。";
+			mes "願陽光和大地祝福你！";
+			setquest 9460;// Collecting Ore Fragments
+			close;
+		}
+		mes "啊，你回來了。";
+		mes "你找到我問的礦石碎片了嗎？";
+		next;
+		if (countitem(25260) < 10) {
+			mes "[蹲伏馬]";
+			mes "嗯，你沒有";
+			mes "所有人。";
+			mes "你可以找到他們";
+			mes "來自土狼";
+			mes "和布法羅匪徒。";
+			close;
+		}
+		mes "[" + .@player_name$ + "]";
+		mes "- 是的，我做到了。";
+		next;
+		mes "[蹲伏馬]";
+		mes "我對";
+		mes "不得不犧牲";
+		mes "其他的";
+		mes "為了我自己。";
+		mes "謝謝你為我做這件事。";
+		next;
+		mes "[蹲伏馬]";
+		mes "請以我的讚賞為小標誌。";
+		mes "我已經從你的村莊收到了";
+		mes "而且我不需要。";
+		.@count = countitem(25260);
+		if (.@count > 10) {
+			next;
+			mes "[蹲伏馬]";
+			mes "嗯，你帶來了";
+			mes "多於";
+			mes "我問。";
+			mes "我知道你的意思很好，";
+			mes "但是我不需要那麼多。";
+		}
+		delitem 25260, .@count;// Violet_Stone_Chip
+		erasequest 9460;// Collecting Ore Fragments
+		setquest 9461;// Enough Ores
+		getexp 25000,20000;
+		getitem 25250,1;// Coin_Of_Rr
+		if (.@count > 10) {
+			next;
+			mes "[蹲伏馬]";
+			mes "下次，";
+			mes "請帶來";
+			mes "我問的很多。";
+			mes "但是謝謝。";
+		}
+		close;
+	case 0:
+	case 1:
+		mes "目前，";
+		mes "我不需要更多的礦石。";
+		mes "但是我會的";
+		mes "明天太陽升起時。";
+		close;
+	case 2:
+		mes "啊，是你。";
+		mes "我用完了";
+		mes "礦石。";
+		mes "說，你可以嗎";
+		mes "再次幫助我？";
+		next;
+		if (select( "Not this time.", "Sure thing. It'd be my pleasure." ) == 1) {
+			mes "[蹲伏馬]";
+			mes "我懂了。";
+			mes "嗯...我明白。";
+			mes "如果您改變主意，請隨時回來。";
+			close;
+		}
+		mes "[蹲伏馬]";
+		mes "哦，謝謝！";
+		mes "您就像我想的那樣可靠。";
+		erasequest 9461;// Enough Ores
+		setquest 9460;// Collecting Ore Fragments
+		close;
+	}
+}
+
+// Collect / hunt quests
+harboro1,231,254,3	script	Exotic Merchant	1_M_MERCHANT,{
+	disable_items;
+	if (checkweight(1201,1) == 0) {
+		mes "我攜帶太多類型的物品。我應該先減輕我的書包。";
+		close;
+	}
+	if ((MaxWeight - Weight) < 10000) {
+		mes "我超重。我最好先照亮我的書包。";
+		close;
+	}
+	switch( checkquest(12411,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes "[異國商人]";
+		mes "哦，我今天關閉。明天回來。";
+		close;
+	case 2:
+		erasequest 12411;// Come Back Tomorrow
+		break;
+	}
+	if (isbegin_quest(12410) == 0) {
+		mes "[異國商人]";
+		mes "很高興見到你。";
+		mes "我是亞伯拉罕·伊文·哈丁。我最初來自不同的國家。";
+		next;
+		mes "[異國商人]";
+		mes "因此，您有可能對購買我有興趣的東西？";
+		next;
+		if (select( "What kinds of things?", "I'm not selling anything!" ) == 2) {
+			mes "[異國商人]";
+			mes "哇，哇！冒險家是暴力的。我不與野蠻人開展業務。";
+			close;
+		}
+		mes "[異國商人]";
+		mes "我環遊世界，買了寶貴的東西。這次，我收集了這個新大陸的專業產品。";
+		next;
+		select("（我幾乎聽不懂他的英語。）");
+		mes "[異國商人]";
+		mes "毫米？你說了什麼？";
+		next;
+		if (select( "Nothing. Go on.", "I said I can't understand what you're saying." ) == 2) {
+			mes "[異國商人]";
+			mes "冒險家有一個冷心！";
+			close;
+		}
+		mes "[異國商人]";
+		mes "無論如何，我正在尋找只能在這個地方找到的東西。如果您找到了它們，請給他們。";
+		next;
+		mes "[異國商人]";
+		mes "我會付錢的。您一直都歡迎。";
+		setquest 12410;
+		completequest 12410;
+		close;
+	}
+	mes "[異國商人]";
+	mes "你今天帶了什麼？";
+	next;
+	setarray .@item_id[0],
+		25276,	// Clean Bones
+		25277,	// Deadly Poison Powders
+		25279,	// Crude Gunpowders
+		25278,	// Bandit's Scarves
+		25283,	// Brown Mufflers
+		25280,	// Broken Shotguns
+		25282,	// Worn Revolvers
+		25281,	// Crude Scimitars
+		25284,	// Swamp Bug Shells
+		25285;	// Brown Rat Tails"
+	.@size = getarraysize(.@item_id);
+	for ( .@i = 0; .@i < .@size; .@i++ ) {
+		.@item_name$ = getitemname(.@item_id[.@i]);
+		if (countitem(.@item_id[.@i]) < 5)
+			.@menu$ += "^777777Not enough " + .@item_name$ + "^000000:";
+		else
+			.@menu$ += "" + .@item_name$ + ":";
+	}
+
+	.@s = select( "Cancel:" + .@menu$ ) - 2;
+	if (.@s == -1) {
+		mes "[異國商人]";
+		mes "嗯，你想要你的東西嗎？";
+		close;
+	}
+	if (countitem(.@item_id[.@s]) < 5) {
+		mes "[異國商人]";
+		mes "毫米？他們在哪裡？你說的話會給我。";
+		close;
+	}
+	delitem .@item_id[.@s],5;
+	getitem 25250,2;// Coin_Of_Rr
+	getexp 20000,18000;
+	setquest 12411;// Come Back Tomorrow
+	mes "[異國商人]";
+	mes "好生意。這些我沒看到其他任何地方。我非常喜歡它們！";
+	close;
+}
+
+harboro1,357,163,3	script	Food Distributer	4_COOK,{
+	disable_items;
+	if (checkweight(1201,1) == 0) {
+		mes "我攜帶太多類型的物品。我應該先減輕我的書包。";
+		close;
+	}
+	if ((MaxWeight - Weight) < 10000) {
+		mes "我超重。我最好先照亮我的書包。";
+		close;
+	}
+	if (BaseLevel < 100) {
+		mes "[食品分銷商]";
+		mes "什麼？我沒有足夠的食物給你！";
+		close;
+	}
+	if (isbegin_quest(12381) == 0) {// first time
+		mes "[食品分銷商]";
+		mes "嘿，你不看到那邊的線嗎？我不在乎你是誰？如果您想吃飯，請排隊站立。";
+		next;
+		if (select( "I'm not here to eat.", "I'll stand in line." ) == 2) {
+			mes "[食品分銷商]";
+			mes "* snort*你會更好。";
+			close;
+		}
+		mes "[食品分銷商]";
+		mes "你不是在這裡吃飯。錯誤，是...嗎？啊，我很抱歉。";
+		next;
+		mes "[食品分銷商]";
+		mes "等等，那你為什麼要打擾我？您看不到我因缺貨而感到不高興嗎？";
+		next;
+		if (select( "What missing shipment?", "That's your business." ) == 2) {
+			mes "[食品分銷商]";
+			mes "grr，你是個混蛋。我沒有時間來。離開這裡！";
+			close;
+		}
+		mes "[食品分銷商]";
+		mes "看看那個。這些人一直在等待食物。我該如何告訴他們我沒有足夠的食材為他們做飯？";
+		next;
+		mes "[食品分銷商]";
+		mes "原本應該來自Midgard的食物成分沒有到達，我不能讓這些人在等待。";
+		next;
+		if (select( "Why don't you procure some ingredients from the outside?", "I'm sorry to hear that. Good luck." ) == 2) {
+			mes "[食品分銷商]";
+			mes "grr，你是個混蛋。我沒有時間來。離開這裡！";
+			close;
+		}
+		mes "[食品分銷商]";
+		mes "我想了。我很渴望嘗試任何事情。";
+		next;
+		mes "[食品分銷商]";
+		mes "但是那裡只有沙子和岩石，沒有什麼可食用的。我不敢相信我認為我可以在這樣的地方經營廚房。";
+		next;
+		mes "[飢餓的勞動者]";
+		mes "^990000 WAIT，您只是說您沒有食材嗎？你用完了嗎？ ^000000";
+		npctalk "Hungry Laborer: Wait, did you just say you have no ingredients? You ran out of food?", "Hungry Laborer#12";
+		next;
+		mes "[食品分銷商]";
+		mes "^990000no，我沒這麼說！今天要花更長的時間才能做飯。停止驚慌！ ^000000";
+		npctalk "Food Distributer: No, I didn't say that! It's just taking a little longer to cook today. Stop panicking!";
+		next;
+		if (select( "I can help.", "Good luck." ) == 2) {
+			mes "[食品分銷商]";
+			mes "grr，你是個混蛋。我沒有時間來。離開這裡！";
+			close;
+		}
+		mes "[食品分銷商]";
+		mes "您可以提供幫助。如何？";
+		next;
+		select( "You need food ingredients, don't you?", "That depends on you." );
+		mes "[食品分銷商]";
+		mes "好吧，然後讓我們這樣做。我會記下我需要的一切。您可以從Midgard帶它們嗎？";
+		next;
+		select( "Sure thing.", "It'd be a waste of my time if I say no now." );
+		mes "[食品分銷商]";
+		mes "好的！我們達成了協議。我需要一些時間來庫存。稍後再和我說話。";
+		setquest 12381;// New Continent's Food Supplier
+		completequest 12381;
+		close;
+	}
+	switch( checkquest(12382,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes "[食品分銷商]";
+		mes "今天應該足夠了。";
+		close;
+	case 2:
+		erasequest 12382;
+		break;
+	}
+	for ( .@quest_id = 12383; .@quest_id <= 12388 && isbegin_quest(.@quest_id) == 0; .@quest_id++ )
+		continue;
+	switch(.@quest_id) {// S_Food : give infos / completed
+	case 12383: callsub( S_Food, .@quest_id, 516,160 );	// Sweet Potatoes
+	case 12384: callsub( S_Food, .@quest_id, 517,50 );	// Meats
+	case 12385: callsub( S_Food, .@quest_id, 515,160 );	// Carrots
+	case 12386: callsub( S_Food, .@quest_id, 513,160 );	// Bananas
+	case 12387: callsub( S_Food, .@quest_id, 535,160 );	// Pumpkins
+	case 12388: callsub( S_Food, .@quest_id, 581,60 );	// Mushrooms
+	default:
+		break;
+	}
+	mes "[食品分銷商]";
+	mes "噢，這是我需要的成分列表。快速帶他們嗎？";
+	next;
+	if (select( "Sure thing.", "Sorry, I'm busy." ) == 2) {
+		mes "[食品分銷商]";
+		mes "哦，來吧。幫我在這裡。人們餓了。";
+		close;
+	}
+	switch( rand(12383,12388) ) {
+	case 12383:
+		setquest 12383;// Sweet Potato Delivery
+		mes "[食品分銷商]";
+		mes "今天的菜單上有紅薯炸丸子，我不能做它們，因為我沒有從大陸上獲得定期發貨。";
+		next;
+		mes "[食品分銷商]";
+		mes "帶我160" + mesitemlink( 516, false, "Sweet Potatoes" ) + " from Midgard. You can buy them from merchants in big cities.";
+		close;
+	case 12384:
+		setquest 12384;// Meat Delivery
+		mes "[食品分銷商]";
+		mes "有這麼多的嘴可以餵養，但是我沒有肉嗎？這是災難！";
+		next;
+		mes "[食品分銷商]";
+		mes "什麼？你說我總是可以餵蔬菜嗎？當然，但是他們想要的只是肉。";
+		next;
+		mes "[食品分銷商]";
+		mes "帶我50" + mesitemlink( 517, false, "Meats" ) + " from Midgard. You can buy them from merchants in big cities.";
+		close;
+	case 12385:
+		setquest 12385;// Carrot Delivery
+		mes "[食品分銷商]";
+		mes "您是否看到背面花園裡的胡蘿蔔生長？";
+		next;
+		mes "[食品分銷商]";
+		mes "它們像手指一樣瘦，一旦我幾乎將手指放入燉菜而不是它們。";
+		next;
+		mes "[食品分銷商]";
+		mes "帶我160" + mesitemlink( 515, false, "Carrots" ) + " from Midgard. You can buy them from merchants in big cities.";
+		close;
+	case 12386:
+		setquest 12386;// Banana Delivery
+		mes "[食品分銷商]";
+		mes "我不應該把香蕉麵包放在菜單上。誰知道他們不會及時到達？";
+		next;
+		mes "[食品分銷商]";
+		mes "帶我160" + mesitemlink( 513, false, "Bananas" ) + " from Midgard. You can buy them from merchants in big cities.";
+		close;
+	case 12387:
+		setquest 12387;// Pumpkin Delivery
+		mes "[食品分銷商]";
+		mes "我必須煮南瓜，但我沒有南瓜。這相當於沒有麵包的烤麵包。";
+		next;
+		mes "[食品分銷商]";
+		mes "帶我160" + mesitemlink( 535, false, "Pumpkins" ) + " from Midgard. You can buy them from merchants in big cities.";
+		close;
+	case 12388:
+		setquest 12388;// Mushroom Delivery
+		mes "[食品分銷商]";
+		mes "我唯一可以用我擁有的成分烹飪的是蘑菇湯，但我沒有主要成分：蘑菇。";
+		next;
+		mes "[食品分銷商]";
+		mes "帶我60" + mesitemlink( 581, false, "Mushrooms" ) + " from Midgard. You can buy them from merchants in big cities.";
+		close;
+	}
+	end;
+
+S_Food:
+	.@item_id = getarg(1);
+	.@amount = getarg(2);
+	if (countitem(.@item_id) < .@amount) {
+		mes "[食品分銷商]";
+		mes "帶我" + .@amount + " " + mesitemlink( .@item_id, false ) + " from Midgard. You can buy them from merchants in big cities.";
+		close;
+	}
+	delitem .@item_id, .@amount;
+	getitem 25250,1;// Coin_Of_Rr
+	getexp 16000,12800;
+	erasequest getarg(0);
+	setquest 12382;// Distributing Food
+	mes "[食品分銷商]";
+	mes "哇，謝謝。今天應該足夠了。";
+	close;
+}
+
+// note: official npcs have 5x5 trigger area but there is no event
+harboro1,352,196,5	duplicate(dummy_npc)	Hungry Laborer#2	4W_M_02
+harboro1,352,193,5	duplicate(dummy_npc)	Hungry Laborer#3	4_M_EINMAN
+harboro1,352,190,5	duplicate(dummy_npc)	Hungry Laborer#4	4W_SAILOR
+harboro1,352,184,5	duplicate(dummy_npc)	Hungry Laborer#6	4W_M_03
+harboro1,352,181,5	duplicate(dummy_npc)	Hungry Laborer#7	4_F_EINOLD
+harboro1,352,175,5	duplicate(dummy_npc)	Hungry Laborer#9	4W_M_03
+harboro1,352,172,5	duplicate(dummy_npc)	Hungry Laborer#10	4W_M_02
+harboro1,353,166,5	duplicate(dummy_npc)	Hungry Laborer#12	4W_M_03
+
+// note: official npcs have 2x2 trigger area but there is no event
+harboro1,354,149,7	duplicate(dummy_npc)	Enthusiastic Job Seeker#1	4_M_JOB_KNIGHT1
+harboro1,345,149,7	duplicate(dummy_npc)	Enthusiastic Job Seeker#2	4_M_JOB_KNIGHT2
+harboro1,350,149,7	duplicate(dummy_npc)	Enthusiastic Job Seeker#3	4_M_MONK
+harboro1,348,148,7	duplicate(dummy_npc)	Enthusiastic Job Seeker#4	4_M_MONK
+harboro1,346,157,6	duplicate(dummy_npc)	Enthusiastic Job Seeker#5	4_M_JOB_HUNTER
+harboro1,349,157,6	duplicate(dummy_npc)	Enthusiastic Job Seeker#6	4_M_JOB_KNIGHT2
+harboro1,353,156,6	duplicate(dummy_npc)	Enthusiastic Job Seeker#7	4_M_SAGE_C
+harboro1,347,155,6	duplicate(dummy_npc)	Enthusiastic Job Seeker#8	4_M_JOB_KNIGHT1
+harboro1,351,154,7	duplicate(dummy_npc)	Enthusiastic Job Seeker#9	4_M_JOB_WIZARD
+harboro1,354,153,7	duplicate(dummy_npc)	Enthusiastic Job Seeker#10	4_M_JOB_HUNTER
+harboro1,347,151,7	duplicate(dummy_npc)	Enthusiastic Job Seeker#11	4_M_JOB_HUNTER
+harboro1,352,150,7	duplicate(dummy_npc)	Enthusiastic Job Seeker#12	4_M_JOB_WIZARD
+
+harboro1,352,154,0	script	#r_q1	HIDDEN_WARP_NPC,5,5,{
+	end;
+OnTouch:
+	if (isbegin_quest(12389) == 2)
+		end;
+	.@r = rand(1,6);
+	if (.@r == 1)
+		npctalk "Enthusiastic Job Seeker: I'm ready to work right away. Why don't you hire me?", "Enthusiastic Job Seeker#1";
+	else if (.@r == 2)
+		npctalk "Enthusiastic Job Seeker: I didn't come here, just so I could nap. Give me work!", "Enthusiastic Job Seeker#3";
+	else if (.@r == 3)
+		npctalk "Hey, you're in my space. Move away, will you?", "Enthusiastic Job Seeker#5";
+	else if (.@r == 4)
+		npctalk "Enthusiastic Job Seeker: Did you just get here, fresh off the boat? Stop pacing around?you're getting on my nerves.", "Enthusiastic Job Seeker#7";
+	else if (.@r == 5)
+		npctalk "Enthusiastic Job Seeker: Why wouldn't you accept me? I'm strong enough to hunt coyotes out there!", "Enthusiastic Job Seeker#9";
+	else
+		npctalk "Enthusiastic Job Seeker: Join a Buffalo Bandit/Coyote subjugation party. Those who can finish them in 5 minutes are welcome.", "Enthusiastic Job Seeker#11";
+	end;
+
+OnEnable:
+	.@r = rand(1,4);
+	if (.@r == 1)
+		npctalk "Enthusiastic Job Seeker: Hey, what about us?!", "Enthusiastic Job Seeker#4";
+	else if (.@r == 2)
+		npctalk "Enthusiastic Job Seeker: I want to work, too!", "Enthusiastic Job Seeker#7";
+	else if (.@r == 3)
+		npctalk "Enthusiastic Job Seeker: You can't show favoritism!", "Enthusiastic Job Seeker#9";
+	else
+		npctalk "Enthusiastic Job Seeker: This is unfair!", "Enthusiastic Job Seeker#2";
+	end;
+}
+
+harboro1,357,155,3	script	Steel Vigilante#1	4_M_MASKMAN,{
+	disable_items;
+	if (checkweight(1201,1) == 0) {
+		mes "我攜帶太多類型的物品。我應該先減輕我的書包。";
+		close;
+	}
+	if ((MaxWeight - Weight) < 10000) {
+		mes "我超重。我最好先照亮我的書包。";
+		close;
+	}
+	if (BaseLevel < 100) {
+		mes "[鋼製守夜人]";
+		mes "抱歉，我們需要比您更強大的人。";
+		close;
+	}
+	if (isbegin_quest(12389) == 0) {// first time
+		mes "[鋼製守夜人]";
+		mes "嘿，哥們。你看起來很強壯。你在這里工作，對嗎？";
+		next;
+		select("不，我只是一個遊客。");
+		mes "[鋼製守夜人]";
+		mes "來吧，不要那麼無情。我試圖在這裡進行對話。我有一個您可能感興趣的主張。你怎麼說？";
+		next;
+		if (select( "Alright, let me hear it.", "No, thanks." ) == 2) {
+			mes "[鋼製守夜人]";
+			mes "哦，你不。 *打嘴唇*多麼令人失望！";
+			close;
+		}
+		mes "[鋼製守夜人]";
+		mes "啊，所以你不像我想的那樣勢利。";
+		next;
+		mes "[鋼製守夜人]";
+		mes "要使Rock Ridge成為運輸中心，生活在周圍的怪物必須走，但是我們找不到合適的人來工作。";
+		next;
+		select("那麼這些人呢？");
+		mes "[鋼製守夜人]";
+		mes "* Snort*這些？是的，我們認為它們足夠好，直到我們意識到那裡的怪物有多強大。";
+		next;
+		mes "[鋼製守夜人]";
+		mes "這些傢伙都沒有活著，更不用說賺錢了。然後，我們必須去那裡收集他們的遺體，這對我們來說是雙重不利的。";
+		next;
+		mes "[鋼製守夜人]";
+		mes "然後我看到了你，你像綿羊中的狼一樣脫穎而出。也就是說，您已經過去了！恭喜！";
+		next;
+		select("我從來沒有說過我想和你一起工作。");
+		mes "[鋼製守夜人]";
+		mes "啊，來吧，不要那樣。在這裡幫助這個可憐的人。";
+		next;
+		if (select( "Okay.", "Let me think." ) == 2) {
+			mes "[鋼製守夜人]";
+			mes "好吧，好吧，我知道你是否很忙。但是我為你們倆受益。";
+			next;
+		}
+		mes "[鋼製守夜人]";
+		mes "我向您展示您可以為我們做的事情列表呢？如果您有興趣，請稍後再回來。我保證我會慷慨地付錢。";
+		setquest 12389;// Guardian of Rock Ridge
+		completequest 12389;// Guardian of Rock Ridge
+		close;
+	}
+	switch( checkquest(12390,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes "[鋼製守夜人]";
+		mes "最糟糕的情況結束了。我會再次需要您的幫助。保存您的能量直到那時，好嗎？";
+		close;
+	case 2:
+		erasequest 12390;
+		break;
+	}
+	for ( .@quest_id = 12391; .@quest_id <= 12396 && isbegin_quest(.@quest_id) == 0; .@quest_id++ )
+		continue;
+	if (.@quest_id > 12396) {
+		.@quest_id = rand(12391,12396);
+		setquest .@quest_id;
+	}
+	else {
+		mes "[鋼製守夜人]";
+		mes "您忘記了要做什麼嗎？然後，我會再告訴你。";
+		next;
+	}
+	if (checkquest(.@quest_id,HUNTING) < 2) {
+		switch(.@quest_id) {
+		case 12391:// Buffaloes with Rifles
+			mes "[鋼製守夜人]";
+			mes "這裡周圍田地上最大的威脅是布法羅·匪徒。他們是聰明而無情的，他們不會聽理理性。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "他們經常侵入這個村莊，好像要測試我們可以持續多久。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "我們想設定一個榜樣，並保留它們。擺脫帶有步槍 ^000000的 ^0000FF15 Buffalo土匪。";
+			break;
+		case 12392:// Punishing the Red Masks
+			mes "[鋼製守夜人]";
+			mes "這裡周圍田地上最大的威脅是布法羅·匪徒。他們是聰明而無情的，他們不會聽理理性。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "他們經常侵入這個村莊，好像要測試我們可以持續多久。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "我們想設定一個榜樣，並保留它們。戴上 ^0000ff15戴著紅色面罩的水牛匪 ^000000。";
+			break;
+		case 12393:// Eye Patch Desperadoes
+			mes "[鋼製守夜人]";
+			mes "這裡周圍田地上最大的威脅是布法羅·匪徒。他們是聰明而無情的，他們不會聽理理性。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "他們經常侵入這個村莊，好像要測試我們可以持續多久。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "我們想設定一個榜樣，並保留它們。擺脫 ^0000ff15穿著眼貼 ^000000的水牛匪。";
+			break;
+		case 12394:// Exterminate Gray Four-legged Beasts
+			mes "[鋼製守夜人]";
+			mes "您忘記了要做什麼嗎？然後，我會再告訴你。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "仙人掌和該村莊的成員的條件很好，最近在通往他們村莊的道路上看到了更多的土狼。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "土狼並不是侵略性，但它們仍然使仙人掌自由地進出村莊。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "請狩獵 ^0000FF20土狼 ^000000，並幫助我們的朋友。";
+			break;
+		case 12395:// Exterminate Swamp Arclouzes
+			mes "[鋼製守夜人]";
+			mes "被送往村莊地下室的工人接一個地失了，所以我們調查了。我們相信它們被怪物殺死。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "沼澤芳香的速度很快，食肉昆蟲居住在那兒，它們的人數一直在以令人震驚的速度增加，以至於工人現在拒絕去那里工作。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "如果您在那裡有生意，請滅絕10 ^0000ffswamp arclouzes ^000000。";
+			break;
+		case 12396:// Exterminate Brown Rats
+			mes "[鋼製守夜人]";
+			mes "已經發現了在地下室失的工人的屍體。他們被如此嚴重地被困住，以至於他們的家人也很難認識到他們。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "我認為它們被地下室壯成長的棕色老鼠殺死。有傳言說他們甚至攻擊活著的人，如果成立，那是嚴重的。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "如果您在地下室有業務，請消除10 ^0000ffbrown Rats ^000000。";
+			break;
+		}
+		close2;
+		donpcevent "#r_q1::OnEnable";
+		end;
+	}
+	switch(.@quest_id) {
+	case 12391:// Buffaloes with Rifles
+		getexp 23745,22935;
+		.@mob_id = 3736;
+		break;
+	case 12392:// Punishing the Red Masks
+		getexp 21645,20595;
+		.@mob_id = 3737;
+		break;
+	case 12393:// Eye Patch Desperadoes
+		getexp 27105,25785;
+		.@mob_id = 3738;
+		break;
+	case 12394:// Exterminate Gray Four-legged Beasts
+		getexp 37040,35140;
+		.@mob_id = 3739;
+		break;
+	case 12395:// Exterminate Swamp Arclouzes
+		getexp 8640,9030;
+		.@mob_id = 3787;
+		break;
+	case 12396:// Exterminate Brown Rats
+		getexp 6810,7230;
+		.@mob_id = 3788;
+		break;
+	}
+	getitem 25250,2;// Coin_Of_Rr
+	erasequest .@quest_id;
+	setquest 12390;// Relieved for Now
+	mes "[鋼製守夜人]";
+	mes "你很棒嗎？我不知道你真的可以做到這一點！謝謝！";
+	close;
+}
+
+harboro1,357,152,3	script	Steel Vigilante#2	4_M_ACROSS,{
+	disable_items;
+	if (checkweight(1201,1) == 0) {
+		mes "我攜帶太多類型的物品。我應該先減輕我的書包。";
+		close;
+	}
+	if ((MaxWeight - Weight) < 10000) {
+		mes "我超重。我最好先照亮我的書包。";
+		close;
+	}
+	if (BaseLevel < 140) {
+		mes "[鋼製守夜人]";
+		mes "哈哈，謝謝您的興趣，但是我們不足以需要像您這樣的小孩子的幫助。";
+		next;
+		mes "^0000ffyou必須是140級或以上才能接收此任務。 ^000000";
+		close;
+	}
+	if (isbegin_quest(12389) != 2) {
+		mes "[鋼製守夜人]";
+		mes "毫米？你不是我們中的一個。如果您需要工作，那麼您應該在其他地方查看。";
+		close;
+	}
+	switch( checkquest(12398,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes "[鋼製守夜人]";
+		mes "你很厲害。我很想再次與您合作。";
+		close;
+	case 2:
+		erasequest 12398;
+		break;
+	}
+	for ( .@quest_id = 12399; .@quest_id <= 12402 && isbegin_quest(.@quest_id) == 0; .@quest_id++ )
+		continue;
+	if (.@quest_id > 12402) {
+		mes "[鋼製守夜人]";
+		mes "你很堅強。你能處理艱難的事情嗎？";
+		next;
+		if (select( "Sure, why not?", "Let me think." ) == 2) {
+			mes "[鋼製守夜人]";
+			mes "好吧，花點時間。";
+			close;
+		}
+		.@quest_id = rand(12399,12402);
+		setquest .@quest_id;
+	}
+	else {
+		.@no_npctalk = true;
+		mes "[鋼製守夜人]";
+		mes "您忘記了要做什麼嗎？然後，我會再告訴你。";
+		next;
+	}
+	if (checkquest(.@quest_id,HUNTING) < 2) {
+		switch(.@quest_id) {
+		case 12399:// Hunt Heinous Criminals
+			mes "[鋼製守夜人]";
+			mes "精英布法羅·匪徒是布法羅匪徒中的領導者，這與他們有關。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "您以前用步槍處理過水牛，不是嗎？然後，您一定已經看到那些有 ^0000富流藍眼睛的人 ^000000。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "他們是步槍水牛的中級軍官。我希望您擺脫帶有發光的藍眼睛的10 ^0000FFRIFE BUFFALO土匪 ^000000。";
+			close2;
+			if (!.@no_npctalk)
+				npctalk "Enthusiastic Job Seeker: Hunting rifle buffaloes? Please let me join you.", "Enthusiastic Job Seeker#11";
+			end;
+		case 12400:// Hunt Heinous Criminals
+			mes "[鋼製守夜人]";
+			mes "精英布法羅·匪徒是布法羅匪徒中的領導者，這與他們有關。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "您之前已經處理過蒙面的水牛，不是嗎？然後，您必須看到那些戴著 ^0000ffgreen面具 ^000000的人。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "他們是蒙面水牛的中級軍官。我希望您擺脫戴著綠色面具 ^000000的10 ^0000ffbuffalo土匪。";
+			close2;
+			if (!.@no_npctalk)
+				npctalk "Enthusiastic Job Seeker: Hunting masked buffaloes? Please let me join you.", "Enthusiastic Job Seeker#11";
+			end;
+		case 12401:// Hunt Heinous Criminals
+			mes "[鋼製守夜人]";
+			mes "精英布法羅·匪徒是布法羅匪徒中的領導者，這與他們有關。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "您之前已經用眼睛打了水牛，不是嗎？然後，您必須看到那些穿著 ^0000ffpale綠色背心 ^000000的人。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "他們是劍水牛的中級軍官。我想讓您擺脫10 ^0000FFBUFFALO土匪穿著眼貼和淺綠色背心 ^000000。";
+			close2;
+			if (!.@no_npctalk)
+				npctalk "Enthusiastic Job Seeker: Hunting eye patch buffaloes? Please let me join you.", "Enthusiastic Job Seeker#11";
+			end;
+		case 12402:// Eliminate Dangerous Gas
+			mes "[鋼製守夜人]";
+			mes "一些礦工向我們報告了傳播神經毒素的類似氣狀怪物。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "它們是紫色怪物，名為Gasters。除非受到挑釁，否則他們不會攻擊，但仍然構成威脅。";
+			next;
+			mes "[鋼製守夜人]";
+			mes "請在村外的礦山中狩獵10 ^0000ffgasters ^000000。";
+			close2;
+			if (!.@no_npctalk)
+				npctalk "Enthusiastic Job Seeker: Hunting Gasters? Please let me join you.", "Enthusiastic Job Seeker#11";
+			end;
+		}
+	}
+	switch(.@quest_id) {
+	case 12399:// Hunt Heinous Criminals
+		getexp 95630,4_M_CACTUSMAN20;
+		.@mob_id = 3747;
+		break;
+	case 12400:// Hunt Heinous Criminals
+		getexp 95970,90930;
+		.@mob_id = 3748;
+		break;
+	case 12401:// Hunt Heinous Criminals
+		getexp 76280,80770;
+		.@mob_id = 3749;
+		break;
+	case 12402:// Eliminate Dangerous Gas
+		getexp 50800,47160;
+		.@mob_id = 3740;
+		break;
+	}
+	getitem 25250,3;// Coin_Of_Rr
+	erasequest .@quest_id;
+	setquest 12398;// You're Good
+	mes "[鋼製守夜人]";
+	mes "你很厲害。我很想再次與您合作。";
+	close;
+}
+
+// note: official npcs have 2x2 trigger area but there is no event
+harboro1,347,133,2	duplicate(dummy_npc)	Scared Artificer#1	4_M_LGTPOOR
+harboro1,344,133,2	duplicate(dummy_npc)	Scared Artificer#2	4_M_03
+harboro1,340,137,3	duplicate(dummy_npc)	Scared Artificer#3	4_M_DWARF
+harboro1,338,132,2	duplicate(dummy_npc)	Scared Artificer#4	4_M_EINMAN2
+harboro1,343,137,3	duplicate(dummy_npc)	Scared Artificer#5	4_M_ORIENT01
+harboro1,342,135,2	duplicate(dummy_npc)	Scared Artificer#6	4_M_LGTPOOR
+harboro1,344,142,3	duplicate(dummy_npc)	Scared Artificer#7	4_M_SEAMAN
+harboro1,341,131,2	duplicate(dummy_npc)	Scared Artificer#8	4_M_DWARF
+harboro1,338,141,3	duplicate(dummy_npc)	Scared Artificer#9	4_M_EINMAN
+harboro1,347,137,3	duplicate(dummy_npc)	Scared Artificer#10	4_M_ORIENT01
+harboro1,341,141,3	duplicate(dummy_npc)	Scared Artificer#11	4_M_DWARF
+harboro1,338,136,3	duplicate(dummy_npc)	Scared Artificer#12	4_M_LGTPOOR
+
+harboro1,341,136,0	script	#r_q2	HIDDEN_WARP_NPC,5,5,{
+	end;
+OnTouch:
+	if (isbegin_quest(12389) == 2)
+		end;
+	.@r = rand(1,6);
+	if (.@r == 1)
+		npctalk "Scared Artificer: The place down here isn't safe to be.", "Scared Artificer#2";
+	else if (.@r == 2)
+		npctalk "Scared Artificer: Unless they promise me worker's compensation, I'm out!", "Scared Artificer#4";
+	else if (.@r == 3)
+		npctalk "Scared Artificer: I've never seen bugs so big before. I can't work here anymore.", "Scared Artificer#6";
+	else if (.@r == 4)
+		npctalk "Scared Artificer: A swarm of bugs crawled up and over my colleagues on the ground to get at me, and I was too scared to do anything. Why didn't anyone tell me about them?", "Scared Artificer#8";
+	else if (.@r == 5)
+		npctalk "Scared Artificer: If you want us to work for you, then make the workplace safe first!", "Scared Artificer#10";
+	else
+		npctalk "Scared Artificer: You haven't been down there, have you? You're lucky.", "Scared Artificer#12";
+	end;
+
+OnEnable:
+	.@r = rand(1,4);
+	if (.@r == 1)
+		npctalk "Scared Artificer: The place down there is beyond saving! It's not too late to stop now!", "Scared Artificer#7";
+	else if (.@r == 2)
+		npctalk "Scared Artificer: You're too young to die.", "Scared Artificer#5";
+	else if (.@r == 3)
+		npctalk "Scared Artificer: You'd better think this over. It's dangerous down there.", "Scared Artificer#3";
+	else
+		npctalk "Scared Artificer: Hey, your life is more important than money.", "Scared Artificer#1";
+	end;
+}
+
+harboro1,334,135,6	script	Desalination Facility Manager	4_M_YURI,{
+	disable_items;
+	if (checkweight(1201,1) == 0) {
+		mes "我攜帶太多類型的物品。我應該先減輕我的書包。";
+		close;
+	}
+	if ((MaxWeight - Weight) < 10000) {
+		mes "我超重。我最好先照亮我的書包。";
+		close;
+	}
+	if (BaseLevel < 100) {
+		mes "[淡化設施經理]";
+		mes "你在這裡做什麼？您還不夠好，無法贏得自己的保留。出去！";
+		close;
+	}
+	if (isbegin_quest(12403) == 0) {// first time
+		mes "[淡化設施經理]";
+		mes "我的辦公室裡到處都是小偷。每個人都希望得到報酬？不做他們的工作！";
+		next;
+		select("...？");
+		mes "[淡化設施經理]";
+		mes "你呢。你要問我多少？只是您知道，我們不允許薪資提高。";
+		next;
+		if (select( "I'm just a passersby.", "I want 100 million Zeny in advance." ) == 2) {
+			mes "[淡化設施經理]";
+			mes "...";
+			next;
+			mes "[淡化設施經理]";
+			mes "你不在腦海中。";
+			close;
+		}
+		mes "[淡化設施經理]";
+		mes "毫米？但是您看起來太強壯了，無法成為一個簡單的路人。";
+		next;
+		select("好吧，我在這裡沒有任何事。我該走了。");
+		mes "[淡化設施經理]";
+		mes "等待！";
+		next;
+		mes "[淡化設施經理]";
+		mes "等待。是的。";
+		next;
+		mes "[淡化設施經理]";
+		mes "嘿，傑米！您說我們在涵洞中還需要多少工人？";
+		npctalk "Job Agency Owner: Hey, Jamie! How many more workers did you say we need in the culvert?";
+		next;
+		mes "[傑米]";
+		mes "^000077SINCE 2昨天又消失了15歲。沒有人願意去那裡。 ^000000";
+		npctalk "Jamie: Since two more disappeared yesterday, 15. No one wants to go down there.", "Jamie";
+		next;
+		mes "[淡化設施經理]";
+		mes "聽到嗎？我們的辦公室人手不足。";
+		next;
+		if (select( "But what about all these people who are eager to work?", "Not my business." ) == 2) {
+			mes "[淡化設施經理]";
+			mes "嘿，來吧！我還沒有完成！";
+			close;
+		}
+		mes "[淡化設施經理]";
+		mes "他們渴望，好的，但是它們都沒有足夠的強大來有用。";
+		next;
+		mes "[淡化設施經理]";
+		mes "我們需要很多人在建築工地。這是...那裡有點危險，但是您看起來好像知道如何應對危險。";
+		next;
+		mes "[淡化設施經理]";
+		mes "說，你想如何為我工作？我會慷慨地付錢。";
+		next;
+		if (select( "Tell me what this job entails.", "Let me think." ) == 2) {
+			mes "[淡化設施經理]";
+			mes "您不必思考！這使我們兩個都受益！";
+			next;
+			mes "[淡化設施經理]";
+			mes "讓我告訴您有關這個村莊的一點點。它建在一個沉入大海的城市的遺跡上方。";
+			next;
+			mes "[淡化設施經理]";
+			mes "我們不能完全填滿地下室，因為這是我們的脫鹽系統所在。";
+		}
+		else {
+			mes "[淡化設施經理]";
+			mes "讓我告訴您有關這個村莊的一點點。它建在一個沉入大海的城市的遺跡上方。";
+			next;
+			mes "[淡化設施經理]";
+			mes "我們不能完全填滿地下室，因為這是我們的脫鹽系統所在。";
+		}
+		next;
+		select("不能去別的地方取水嗎？");
+		mes "[淡化設施經理]";
+		mes "這個區域是沙漠。脫鹽比進口水便宜。";
+		next;
+		mes "[淡化設施經理]";
+		mes "無論如何，淡化系統本身的序列良好，但是形成該系統的管道的蜘蛛網容易侵蝕和破裂。他們需要持續的維護。";
+		next;
+		mes "[淡化設施經理]";
+		mes "然後一段時間前，怪物開始出現在地下室，現在我們的工人太害怕了。這就是我們現在處於的情況。";
+		next;
+		select("如果我說不會怎樣？");
+		mes "[淡化設施經理]";
+		mes "這個村莊將用完飲用水。有人必須這樣做。信不信由你，我完全是為了利潤而這樣做。";
+		next;
+		mes "[淡化設施經理]";
+		mes "說，這對您來說足夠好嗎？如果您仍然不想幫助我們，我不會強迫您。";
+		next;
+		mes "[傑米]";
+		mes "^000077MR。主席，我剛接到地下室的電話。又有五個工人遭到怪物的攻擊。 ^000000";
+		npctalk "Jamie: Mr. Chairman, I've just got a call from the basement. Five more workers have been attacked by monsters.", "Jamie";
+		next;
+		mes "[淡化設施經理]";
+		mes "嗯，我最好照顧這種情況。如果您改變主意，請回來。";
+		setquest 12403;// Laborers of Rock Ridge
+		completequest 12403;
+		close;
+	}
+	switch( checkquest(12404,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes "[淡化設施經理]";
+		mes "你不是累嗎？目前，管道不需要清潔。您為什麼不去照顧您要做的其他事情呢？";
+		close;
+	case 2:
+		erasequest 12404;
+		break;
+	}
+	if (isbegin_quest(12405) == 0) {
+		mes "[淡化設施經理]";
+		mes "這是否意味著您願意下樓？";
+		next;
+		if (select( "Yes.", "Let me think." ) == 2) {
+			mes "[淡化設施經理]";
+			mes "好吧，花點時間。";
+			close;
+		}
+		mes "[淡化設施經理]";
+		mes "好的。讓我告訴你該怎麼辦。看一下我左側的水庫底部的門。它連接到地下室。";
+		next;
+		select("你是說那扇看起來像傳送門的門嗎？");
+		mes "[淡化設施經理]";
+		mes "是的。通常它是關閉的，只有那些在地下室有經商的人才能使用它，";
+		next;
+		mes "[淡化設施經理]";
+		mes "您知道，那些幫助警惕者，清理下水道並保持淡化管的人像您一樣。";
+		next;
+		mes "[淡化設施經理]";
+		mes "您的工作是找到四種不同類型的管道，並固定螺栓以防止洩漏。";
+		donpcevent "#r_q2::OnEnable";
+		next;
+		donpcevent "#r_q2::OnEnable";
+		mes "[淡化設施經理]";
+		mes "需要維護的管道以不同的方式進行著色，以方便識別。準備好後，進入左側的門。";
+		setquest 12405;// Maintain the Red Pipe
+		setquest 12406;// Maintain the Blue Pipe
+		setquest 12407;// Maintain the Yellow Pipe
+		setquest 12408;// Maintain the White Pipe
+		close;
+	}
+	if (isbegin_quest(12409) == 0) {
+		mes "[淡化設施經理]";
+		mes "您尚未完成清潔管道。我們很快就用完水。你能快點嗎？";
+		close;
+	}
+	getexp 35000,27000;
+	getitem 25250,2;// Coin_Of_Rr
+	for ( .@quest_id = 12405; .@quest_id <= 12409; .@quest_id++ )
+		erasequest .@quest_id;
+	setquest 12404;// Are You Not Tired?
+	mes "[淡化設施經理]";
+	mes "好工作。村民可以在一天的餘下時間裡享用乾淨的水，而這一切都是因為您。";
+	close;
+}
+
+harboro1,333,138,6	script	Jamie	4_F_KAFRA9,{
+	mes "[傑米]";
+	mes "你能停止撞我嗎？我是董事長的私人秘書。";
+	close;
+}
+
+harboro1,332,144,6	script	Underground Passage#1	PORTAL,{
+	if (BaseLevel < 100) {
+		mes "^0000FFRWARNING：這個地方不適合虛弱或膽小的人。 ^000000";
+		close;
+	}
+	mes "^0000ffo您想搬到地下村莊？ ^000000";
+	next;
+	if (select( "Move.", "Do it later." ) == 2) {
+		mes "您已決定不使用地下通道。";
+		close;
+	}
+	warp "harboro2",329,187;
+	end;
+}
+
+harboro2,333,187,6	script	Underground Passage#2	PORTAL,{
+	mes "^0000ffo您想在地面上方？ ^000000";
+	next;
+	if (select( "Move.", "Do it later." ) == 2) {
+		mes "您已決定不使用菜單。";// ?
+		close;
+	}
+	warp "harboro1",336,144;
+	end;
+}
+
+harboro2,52,261,3	script	Red Pipe#1	4_ENERGY_RED,{
+	.@npc_name$ = strnpcinfo(1);
+	if (.@npc_name$ == "Red Pipe")			.@quest_id = 12405;
+	else if (.@npc_name$ == "Blue Pipe")	.@quest_id = 12406;
+	else if (.@npc_name$ == "Yellow Pipe")	.@quest_id = 12407;
+	else if (.@npc_name$ == "White Pipe")	.@quest_id = 12408;
+
+	if (isbegin_quest(.@quest_id) == 1) {
+		specialeffect EF_REPAIRWEAPON;
+		progressbar "ffff00",3;
+		if (rand(100) < 50) {
+			specialeffect EF_PATTACK;
+			end;
+		}
+		specialeffect EF_STEAL;
+		completequest .@quest_id;
+		if (isbegin_quest(12405) == 2 && isbegin_quest(12406) == 2 && isbegin_quest(12407) == 2 && isbegin_quest(12408) == 2)
+			setquest 12409;// Pipes Maintained
+		disablenpc();
+		initnpctimer;
+	}
+	end;
+OnTimer30000:
+	enablenpc();
+	stopnpctimer;
+	end;
+}
+harboro2,54,216,3	duplicate(Red Pipe#1)	Blue Pipe#2	4_ENERGY_BLUE
+harboro2,59,243,3	duplicate(Red Pipe#1)	Yellow Pipe#3	4_ENERGY_YELLOW
+harboro2,71,200,3	duplicate(Red Pipe#1)	White Pipe#4	4_ENERGY_WHITE
+harboro2,73,102,3	duplicate(Red Pipe#1)	Red Pipe#5	4_ENERGY_RED
+harboro2,74,173,3	duplicate(Red Pipe#1)	Blue Pipe#6	4_ENERGY_BLUE
+harboro2,86,160,3	duplicate(Red Pipe#1)	Yellow Pipe#7	4_ENERGY_YELLOW
+harboro2,89,213,3	duplicate(Red Pipe#1)	White Pipe#8	4_ENERGY_WHITE
+harboro2,89,223,3	duplicate(Red Pipe#1)	Red Pipe#9	4_ENERGY_RED
+harboro2,89,234,3	duplicate(Red Pipe#1)	Blue Pipe#10	4_ENERGY_BLUE
+harboro2,92,124,3	duplicate(Red Pipe#1)	Yellow Pipe#11	4_ENERGY_YELLOW
+harboro2,94,106,3	duplicate(Red Pipe#1)	White Pipe#12	4_ENERGY_WHITE
+harboro2,97,209,3	duplicate(Red Pipe#1)	Red Pipe#13	4_ENERGY_RED
+harboro2,106,233,3	duplicate(Red Pipe#1)	Blue Pipe#14	4_ENERGY_BLUE
+harboro2,108,112,3	duplicate(Red Pipe#1)	Yellow Pipe#15	4_ENERGY_YELLOW
+harboro2,117,197,3	duplicate(Red Pipe#1)	White Pipe#16	4_ENERGY_WHITE
+harboro2,120,116,3	duplicate(Red Pipe#1)	Red Pipe#17	4_ENERGY_RED
+harboro2,121,157,3	duplicate(Red Pipe#1)	Blue Pipe#18	4_ENERGY_BLUE
+harboro2,140,115,3	duplicate(Red Pipe#1)	Yellow Pipe#19	4_ENERGY_YELLOW
+harboro2,146,95,3	duplicate(Red Pipe#1)	White Pipe#20	4_ENERGY_WHITE
+harboro2,148,128,3	duplicate(Red Pipe#1)	Red Pipe#21	4_ENERGY_RED
+harboro2,151,123,3	duplicate(Red Pipe#1)	Blue Pipe#22	4_ENERGY_BLUE
+harboro2,158,151,3	duplicate(Red Pipe#1)	Yellow Pipe#23	4_ENERGY_YELLOW
+harboro2,161,163,3	duplicate(Red Pipe#1)	White Pipe#24	4_ENERGY_WHITE
+harboro2,169,125,3	duplicate(Red Pipe#1)	Red Pipe#25	4_ENERGY_RED
+harboro2,170,224,3	duplicate(Red Pipe#1)	Blue Pipe#26	4_ENERGY_BLUE
+harboro2,177,134,3	duplicate(Red Pipe#1)	Yellow Pipe#27	4_ENERGY_YELLOW
+harboro2,180,114,3	duplicate(Red Pipe#1)	White Pipe#28	4_ENERGY_WHITE
+harboro2,181,155,3	duplicate(Red Pipe#1)	Red Pipe#29	4_ENERGY_RED
+harboro2,187,113,3	duplicate(Red Pipe#1)	Blue Pipe#30	4_ENERGY_BLUE
+harboro2,207,121,3	duplicate(Red Pipe#1)	Yellow Pipe#31	4_ENERGY_YELLOW
+harboro2,211,49,3	duplicate(Red Pipe#1)	White Pipe#32	4_ENERGY_WHITE
+harboro2,221,234,3	duplicate(Red Pipe#1)	Red Pipe#33	4_ENERGY_RED
+harboro2,224,199,3	duplicate(Red Pipe#1)	Blue Pipe#34	4_ENERGY_BLUE
+harboro2,226,69,3	duplicate(Red Pipe#1)	Yellow Pipe#35	4_ENERGY_YELLOW
+harboro2,230,102,3	duplicate(Red Pipe#1)	White Pipe#36	4_ENERGY_WHITE
+harboro2,240,83,3	duplicate(Red Pipe#1)	Red Pipe#37	4_ENERGY_RED
+harboro2,244,161,3	duplicate(Red Pipe#1)	Blue Pipe#38	4_ENERGY_BLUE
+harboro2,266,129,3	duplicate(Red Pipe#1)	Yellow Pipe#39	4_ENERGY_YELLOW
+harboro2,291,44,3	duplicate(Red Pipe#1)	White Pipe#40	4_ENERGY_WHITE
+
+
+// Pipe Cleaning
+harboro1,138,157,5	script	Donovan	4_M_EINMAN2,{
+	mes "[多諾萬]";
+	mes "你好。";
+	next;
+	mes "[多諾萬]";
+	if (rock_main_quest < 22) {
+		mes "您是大陸的冒險家之一，對嗎？";
+		mes "我叫多諾萬，";
+		mes "下水道系統經理。";
+		next;
+		mes "[多諾萬]";
+		mes "有很多問題";
+		mes "布法羅·匪徒，礦山，只是為了一對夫婦嗎？";
+		mes "現在沒有其他人關心自己的下水道系統。";
+		mes "布法羅匪徒";
+		mes "需要先照顧。";
+		close;
+	}
+	switch( checkquest(9459,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes "管道是";
+		mes "目前，遠離海葵。";
+		mes "你為什麼不";
+		mes "稍後再回來？";
+		close;
+	case 2:
+		mes "啊，歡迎回來！";
+		mes "我一直在想";
+		mes "是時候了";
+		mes "再次擺脫海葵。";
+		next;
+		if (select( "I can do that.", "Sorry, I'm busy." ) == 2) {
+			mes "[多諾萬]";
+			mes "我懂了。";
+			mes "我明白。";
+			mes "但是，如果您改變主意，請回來。";
+			close;
+		}
+		mes "[多諾萬]";
+		mes "您知道如何進入地下室，對嗎？";
+		mes "感謝您的幫助。";
+		erasequest 9459;// Too Early for Pipe Cleaning
+		setquest 9458;// Pipe Cleaning
+		close;
+	}
+	switch( checkquest(9458,HUNTING) ) {
+	case -1:
+		mes "哦，你";
+		mes "照顧布法羅土匪的冒險家！";
+		mes "很高興見到你！";
+		next;
+		mes "[多諾萬]";
+		mes "所以，你足夠強大";
+		mes "照顧好土匪。";
+		mes "你會這麼友善嗎";
+		mes "為了幫助我做些什麼？";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "- 好吧，我能為您做什麼？";
+		next;
+		mes "[多諾萬]";
+		mes "哦，我的舉止在哪裡？";
+		mes "我叫多諾萬，";
+		mes "下水道系統經理。";
+		mes "我管理地下水泵";
+		mes "和污水系統。";
+		next;
+		mes "[多諾萬]";
+		mes "地下水不斷湧入";
+		mes "從村莊的地下室";
+		mes "它必須將其抽入大海";
+		mes "防止洪水。";
+		next;
+		mes "[多諾萬]";
+		mes "我的工作是確保";
+		mes "泵和污水系統是";
+		mes "按照工作狀態";
+		mes "隨時，";
+		next;
+		mes "[多諾萬]";
+		mes "對於一個人來說，這不是一項工作。";
+		mes "有很多事情要做";
+		mes "我需要幫助。";
+		mes "作品本身並不復雜。";
+		mes "你能幫我嗎？";
+		next;
+		if (select( "Sure.", "Sorry, I'm busy." ) == 2) {
+			mes "[多諾萬]";
+			mes "我懂了。";
+			mes "我明白。";
+			mes "但是，如果您改變主意，請回來。";
+			close;
+		}
+		mes "[多諾萬]";
+		mes "哇，謝謝！";
+		mes "你要做的就是";
+		mes "去地下室";
+		mes "並擺脫海葵";
+		mes "在管道和水泵上。";
+		next;
+		mes "[多諾萬]";
+		mes "你可以去地下室";
+		mes "通過與之交談";
+		mes "喬，他在這裡有點以東。";
+		mes "他會讓你的";
+		mes "去地下室。";
+		next;
+		mes "[多諾萬]";
+		mes "我們稱他為安靜的喬。";
+		mes "感謝您的幫助。";
+		setquest 9458;// Pipe Cleaning
+		close;
+	case 0:
+	case 1:
+		mes "向東，";
+		mes "然後您會看到喬。";
+		mes "他會讓你的";
+		mes "去地下室";
+		mes "如果你告訴他我寄給你。";
+		close;
+	case 2:
+		mes "啊，冒險家，歡迎回來。";
+		mes "如何擺脫海葵？";
+		mes "這不是太困難了嗎？";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "- 不，不是。";
+		mes "- 不過，這很無聊。";
+		next;
+		mes "[多諾萬]";
+		mes "哈哈，當然，這是一項無聊的工作。";
+		mes "但這一定對那些海葵很無聊";
+		mes "因為他們每天都在";
+		mes "不管我有多努力";
+		mes "為了檢查它們。";
+		next;
+		mes "[多諾萬]";
+		mes "擺脫它們";
+		mes "佔用我很多時間。";
+		mes "感謝您的幫助。";
+		mes "我總是可以用幫助擺脫海葵。";
+		mes "請再來。";
+		erasequest 9458;// Pipe Cleaning
+		setquest 9459;// Too Early for Pipe Cleaning
+		getexp 25000,20000;
+		getitem 25250,1;// Coin_Of_Rr
+		close;
+	}
+}
+
+// Midnight quest
+harboro2,167,82,3	script	Midnight#srdg01	4_M_COWRAIDERS2,{
+	if (rock_main_quest < 22) {
+		mes "[午夜]";
+		mes "你在看什麼？在我把孔放在你的臉上之前！ git！";
+		close;
+	}
+	if (isbegin_quest(14672) == 1 || isbegin_quest(14673) == 1) {// Demon quest started
+		mes "[午夜]";
+		mes "我應該去。他只是固執。";
+		next;
+		mes "[午夜]";
+		mes "坦白說，我不明白他為什麼要這樣做，但我不想阻止他。";
+		next;
+		mes "[午夜]";
+		mes "感謝您幫助我們。";
+		close;
+	}
+	mes "[午夜]";
+	mes "...";
+	next;
+	mes "[午夜]";
+	mes "惡魔，一個奇怪的孩子只是在我們周圍閒逛。你認識他嗎？";
+	next;
+	mes "[惡魔]";
+	mes "WHO？在哪裡？我看不到他。送他給我。";
+	close;
+}
+
+harboro2,164,80,5	script	Demon#srdg01	4_M_NFMAN,{
+	if (checkweight(1304,3) == 0) {
+		mes "[惡魔]";
+		mes "您正在攜帶太多東西，我擔心您可能會摔斷肩膀。你為什麼不先將書包減輕？";
+		close;
+	}
+	if (BaseLevel < 130) {
+		mes "[惡魔]";
+		mes "你仍然在耳朵後面濕。這個地方對您來說太危險了。稍後再回來，好嗎？";
+		close;
+	}
+	if (rock_main_quest < 22) {
+		mes "[惡魔]";
+		mes "您不知道這個地方有多危險，對嗎？盡可能地離開這裡。";
+		close;
+	}
+	switch( checkquest(14673,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes "[惡魔]";
+		mes "你很快回來。啊，我想念年輕。";
+		next;
+		mes "[惡魔]";
+		mes "但是看，我仍然留下了你昨天帶我帶來的一些材料。我不能使用所有這些。";
+		next;
+		mes "[惡魔]";
+		mes "你為什麼不回家第二天早上回家？";
+		close;
+	case 2:
+		mes "[惡魔]";
+		mes "嘿，孩子！很高興再次見到你。我用您帶來的材料製造的炸彈是在老化過程中。您知道葡萄酒和炸彈年齡越大嗎？";
+		sleep2 1000;
+		npctalk "You said old bombs are bad bombs.", "Midnight#srdg01", bc_self;
+		sleep2 1000;
+		npctalk "That was just a figure of speech.", "", bc_self;
+		next;
+		mes "[惡魔]";
+		mes "現在，您今天能帶來更多材料嗎？我們要擁有所需的所有炸彈，我們還有很長的路要走。";
+		next;
+		mes "[惡魔]";
+		mes "像往常一樣，獲取 ^0000CD10致命的毒藥和1個爆炸粉 ^000000， ^0000CDHUNT 15 GASTER ^000000。知道了？";
+		next;
+		emotion ET_THROB;
+		mes "[惡魔]";
+		mes "我們將指望您，Kiddo！";
+		erasequest 14673;// Time to Make Bombs
+		setquest 14672;// Preparing for the Firework Festival
+		close;
+	}
+	switch( checkquest(14672,HUNTING) ) {
+	case -1:
+		.@account_id = getcharid(3);
+		.@player_name$ = strcharinfo(0);
+
+		setpcblock PCBLOCK_NPC, true;
+		donpcevent "Traces of Fire#srdg01::OnEffect";
+		sleep2 1500;
+		setpcblock PCBLOCK_NPC, false;
+		mes "[惡魔]";
+		mes "好吧，這應該做到。你知道我需要什麼，對嗎？您確定可以潛入嗎？也許我應該去。";
+		next;
+		emotion ET_ANGER, getnpcid(0, "Midnight#srdg01");
+		mes "[午夜]";
+		mes "每個人都在床上時，我會去。";
+		next;
+		mes "[惡魔]";
+		mes "但是噪音可能會喚醒他們。也會有警衛。";
+		next;
+		mes "[午夜]";
+		mes "我會沒事的。我們都看起來一樣嗎？他們不會知道我不是其中之一。";
+		emotion ET_HUK;
+		npctalk "What? I thought you guys would be able to tell each other apart.", "", bc_self;
+		select("先生，你在這裡做什麼？");
+		mes "[午夜]";
+		mes "*一眼*";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "你為什麼要在茫茫荒野中玩火？你是可疑的。";
+		next;
+		mes "[午夜]";
+		mes "...";
+		next;
+		mes "[惡魔]";
+		mes "嘿，一個孩子問你一個問題。他看起來很好奇，我擔心如果您不告訴他，他可能會死。";
+		next;
+		mes "[午夜]";
+		mes "...";
+		next;
+		emotion ET_HNG;
+		mes "[惡魔]";
+		mes "像他這樣的小孩子充滿了好奇。你最好在他開始哭泣之前告訴他。";
+		npctalk "Tsk, tsk. You're big and shy. How cute!", "", bc_self;
+		next;
+		mes "[午夜]";
+		mes "喲，告訴他。";
+		next;
+		emotion ET_HNG;
+		mes "[惡魔]";
+		mes "不，我為什麼？他問你。另外，孩子通常會給我胃灼熱。";
+		next;
+		emotion ET_BIGTHROB;
+		mes "[惡魔]";
+		mes "我今天吃了我最喜歡的豆菜。我不能失去它。我希望它成為我的一部分。";
+		next;
+		mes "[午夜]";
+		mes "其中一些必須最終出來。可憐的豆子。他們會生氣像你這樣的混蛋。";
+		emotion ET_HNG;
+		npctalk "Hey, that's not nice. I didn't save you, just so you could call me a jerk.", "", bc_self;
+		sleep2 1500;
+		npctalk "I'm sorry. I'm sorry. Happy now?", "Midnight#srdg01", bc_self;
+		sleep2 1500;
+		npctalk "You'd better be nicer than that. I'm a sensitive guy.", "", bc_self;
+		sleep2 1500;
+		npctalk "Be nicer, got it.", "Midnight#srdg01", bc_self;
+		next;
+		emotion ET_SURPRISE;
+		mes "[惡魔]";
+		mes "哦，對！我們為什麼不問這個孩子？";
+		next;
+		mes "[午夜]";
+		mes "什麼？但是我們不能相信他嗎？我們剛剛遇到了他！";
+		next;
+		emotion ET_OK;
+		mes "[惡魔]";
+		mes "是的，我們可以。人們應該互相信任。你不知道，對嗎？現在他在這裡，他現在是我們中的一員。我告訴你，每個人都天生好。";
+		npctalk "Yeah, right.", "Midnight#srdg01", bc_self;
+		next;
+		mes "[惡魔]";
+		mes "另外，他看起來不習慣於粗暴的事情嗎？他有一個跑步者的身體和敏銳的眼睛，什麼也沒想念。我喜歡像他這樣的孩子。";
+		sleep2 1000;
+		npctalk "He reminds me of myself when I was five. I think we could trust him.", "", bc_self;
+		next;
+		mes "[惡魔]";
+		mes "嘿，孩子。您想如何加入我們的業務？";
+		next;
+		if (select( "What business?", "No, thanks." ) == 2) {
+			mes "[" + .@player_name$ + "]";
+			mes "你看起來很危險。我不想做任何危險的事情。";
+			next;
+			mes "[惡魔]";
+			mes "你不是嗎？好吧，那我不會強迫你。現在小心。這個地方很危險。您最好離開這裡。";
+			next;
+			mes "[午夜]";
+			mes "您確定我們可以讓他走嗎？他見過我們。";
+			next;
+			mes "[惡魔]";
+			mes "你為什麼這麼偏執？沒關係，孩子。只是去。但是，如果您改變主意，請回來！";
+			close;
+		}
+		mes "[" + .@player_name$ + "]";
+		mes "什麼業務？";
+		next;
+		mes "[惡魔]";
+		mes "我們有一個很棒的計劃。";
+		npctalk "It's not great, but a plan, all right.", "Midnight#srdg01", bc_self;
+		sleep2 1000;
+		npctalk "Why are you doing this to me?", "", bc_self;
+		next;
+		emotion ET_STARE;
+		mes "[惡魔]";
+		mes "除非您要自己解釋，否則請閉嘴，讓我做！";
+		next;
+		mes "[午夜]";
+		mes "...";
+		next;
+		mes "[惡魔]";
+		mes "更像是這樣。無論如何，我們將搶劫 ^0000cdmine ^000000。";
+		next;
+		select("搶礦？");
+		mes "[午夜]";
+		mes "您不必告訴他。您本可以要求他為我們買東西。";
+		next;
+		mes "[惡魔]";
+		mes "沒有解釋，我們不能讓他為我們做事。他有權知道自己正在進入什麼。";
+		npctalk "I can't believe you're so heartless.", "", bc_self;
+		next;
+		mes "[午夜]";
+		mes "您想利用一個陌生人。";
+		next;
+		mes "[惡魔]";
+		mes "不，我要您加入我們的偉大計劃。無論如何，你知道這裡的地雷嗎？它曾經屬於金月亮嗎？";
+		sleep2 1000;
+		npctalk "You're going to go back that far? It's going to take all night.", "Midnight#srdg01", bc_self;
+		next;
+		mes "[惡魔]";
+		mes "因此，無論如何，布法羅·匪徒意識到該礦的利潤豐厚，並在那里居住。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "我聽說過。";
+		next;
+		mes "[惡魔]";
+		mes "你有嗎？從哪裡？";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "在警長辦公室。";
+		next;
+		emotion ET_BIGTHROB;
+		mes "[惡魔]";
+		mes "嘿，你剛被釋放了嗎？我們也是！實際上，我們已經在那裡見面了。當我們進入系統時，我遇到了大多數最好的朋友。";
+		next;
+		mes "[午夜]";
+		mes "我想念石板的氣味。和涼爽。";
+		next;
+		mes "[惡魔]";
+		mes "我也喜歡食物。我討厭豆子，直到我入獄。我吃的所有豆子都不是我在那裡吃的那些豆。";
+		sleep2 1000;
+		npctalk "You could always go back, you know.", "Midnight#srdg01", bc_self;
+		sleep2 1500;
+		npctalk "I do. You could come with me.", "", bc_self;
+		sleep2 1500;
+		npctalk "...", "Midnight#srdg01", bc_self;
+		next;
+		select("你為什麼進監獄？");
+		mes "[惡魔]";
+		mes "哦，那。";
+		next;
+		mes "[午夜]";
+		mes "你也要告訴他嗎？";
+		next;
+		mes "[惡魔]";
+		mes "為什麼不呢？我喜歡這個故事。你想听，不是嗎？";
+		sleep2 1000;
+		unittalk .@account_id, "" + .@player_name$ + " : Sure.", bc_self;
+		next;
+		mes "[惡魔]";
+		mes "我的手真的很好，我喜歡煙花。對於像我這樣的人來說，您認為最好的工作是什麼？";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "鞭炮製造商？";
+		sleep2 1000;
+		npctalk "He's cute.", "Midnight#srdg01", bc_self;
+		next;
+		mes "[惡魔]";
+		mes "關閉，但我做的更強大： ^0000CDBOMBS ^000000。地雷幾乎是像我這樣的人可能發生的最好的事情。";
+		next;
+		mes "[惡魔]";
+		mes "在礦山工作的人總是需要炸彈。我來這裡，希望我能在做自己喜歡的事情時賺錢。";
+		next;
+		mes "[午夜]";
+		mes "但這沒有解決。";
+		next;
+		emotion ET_HNG;
+		mes "[惡魔]";
+		mes "這是因為你！一天晚上，有些人來找我，說他們聽說我是炸彈專家。他們要求我向他們捐贈炸彈。";
+		next;
+		mes "[惡魔]";
+		mes "一看它們，我知道它們是臭名昭著的 ^0000cdbuffalo土匪 ^000000。很明顯，為什麼他們想要我的炸彈。";
+		next;
+		mes "[午夜]";
+		mes "您仍然把它們交給他們。";
+		next;
+		mes "[惡魔]";
+		mes "我還能做什麼？請注意，一群至少比我高的恐怖水牛，請注意嗎？要求我給他們炸彈。";
+		next;
+		mes "[午夜]";
+		mes "你可以站了嗎？";
+		next;
+		emotion ET_FRET;
+		mes "[惡魔]";
+		mes "不，我無法站起來。你不在那裡。無論如何，那些水牛用我的炸彈炸毀了礦石火車並接管了礦山。猜猜之後我發生了什麼。";
+		sleep2 1000;
+		unittalk .@account_id, "" + .@player_name$ + " : I can't.", bc_self;
+		next;
+		mes "[惡魔]";
+		mes "警長將炸彈追溯到我身邊，並把我拖了。";
+		next;
+		mes "[午夜]";
+		mes "然後你被扔進監獄。";
+		next;
+		mes "[惡魔]";
+		mes "猜猜我在那裡遇到了誰：這個傢伙。他被炸毀了火車的爆炸，那些無情的水牛讓他死了。";
+		unittalk .@account_id, "" + .@player_name$ + " : Holy crap.", bc_self;
+		sleep2 1000;
+		emotion ET_OK;
+		npctalk "Holy crap, yeah.", "", bc_self;
+		next;
+		mes "[惡魔]";
+		mes "警長並不比他們更好。他們只是讓他在整個牢房裡流血。我該怎麼辦？如果我能提供幫助，我就不能讓任何人死亡，所以我對待他。";
+		next;
+		mes "[惡魔]";
+		mes "從那以後，他一直在關注我。";
+		next;
+		mes "[午夜]";
+		mes "WHO？我？";
+		next;
+		mes "[惡魔]";
+		mes "是的。或者，當我來到礦山去和水牛去時，為什麼要救我？他們因為我而踢了你。";
+		emotion ET_KIK;
+		npctalk "That's how much he likes me.", "", bc_self;
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "被釋放後，您有報仇嗎？";
+		next;
+		mes "[惡魔]";
+		mes "我不想談論它。我犯了很多愚蠢的錯誤，這根本不像我。這就是為什麼我們躲在這個黑暗的潮濕的地方。";
+		npctalk "That was totally like you.", "Midnight#srdg01", bc_self;
+		sleep2 2000;
+		emotion ET_OK;
+		npctalk "Yeah, yeah. I love you, too.", "", bc_self;
+		sleep2 1500;
+		npctalk "One day, I'm just going to pull out all of your teeth.", "Midnight#srdg01", bc_self;
+		sleep2 1500;
+		emotion ET_KIK;
+		npctalk "Hear that? That's his way of saying he loves me.", "", bc_self;
+		next;
+		select("那麼，我能提供什麼幫助呢？");
+		mes "[惡魔]";
+		mes "您確定要提供幫助嗎？因為我不喜歡強迫別人或以危害方式發送他們。如果您真的想提供幫助，那麼您可以為我購買一些炸彈材料。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "為什麼，所以你可以搶劫我的？";
+		next;
+		mes "[惡魔]";
+		mes "否。從技術上講，我們將 ^0000Cdraim授予礦山 ^000000。你看過村里發生了什麼嗎？由於這些水牛接管了該礦，因此大多數人失去了工作。";
+		next;
+		mes "[惡魔]";
+		mes "沒有工作，他們就無法賺錢，沒有錢，他們就無法養活自己。這太可怕了。";
+		next;
+		emotion ET_SPARK;
+		mes "[惡魔]";
+		mes "我想在礦山 ^000000和 ^0000cdscare內舉行 ^0000CDFIREWORK派對，將土匪 ^000000扔掉。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "但是，午夜先生，他們曾經是你的...";
+		npctalk "My what?", "Midnight#srdg01", bc_self;
+		next;
+		mes "[惡魔]";
+		mes "不用擔心他。他很久以前就與他們建立了聯繫。他對那些拋棄他的水牛沒有愛。我對嗎？";
+		next;
+		mes "[午夜]";
+		mes "...";
+		next;
+		emotion ET_HUK;
+		mes "[惡魔]";
+		mes "好吧，我會浸入酪乳。";
+		next;
+		mes "[午夜]";
+		mes "不，我不擔心他們，但我擔心我們。如果這齣錯了？";
+		next;
+		mes "[惡魔]";
+		mes "如果土匪不殺死我們，警長將把我們送入監獄。但這沒關係。我喜歡那裡的豆子。";
+		npctalk "You really like beans, don't you?", "Midnight#srdg01", bc_self;
+		next;
+		mes "[惡魔]";
+		mes "如果情況順利，我們可以擺脫困境，我可以再次在礦山工作。你可以。";
+		npctalk "We have to try this to know if it works. We can worry about everything else later. Plus, we're not ready to do anything.", "", bc_self;
+		next;
+		mes "[惡魔]";
+		mes "無論如何，孩子，您確定可以幫助我們嗎？礦山內有一些怪物看起來像棉球。狩獵它們，他們將留下致命的有毒粉末和爆炸性粉末。";
+		next;
+		mes "[惡魔]";
+		mes "我需要10種致命的毒藥，..讓我看看.. 1個爆炸性粉末。";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "致命的有毒粉？你要殺死他們嗎？你說你只想把它們嚇倒。";
+		next;
+		mes "[惡魔]";
+		mes "這僅對人類和多拉姆人致命。對於那些牛牛，它只會引起過敏反應，例如瘙癢和打噴嚏。";
+		npctalk "This is why things need to be named carefully.", "", bc_self;
+		next;
+		mes "[午夜]";
+		mes "我可以去。";
+		next;
+		mes "[惡魔]";
+		mes "不。您將被抓住並破壞我們的計劃。";
+		next;
+		mes "[惡魔]";
+		mes "啊，孩子們，談到哪個，你能拿出一些潮流嗎？這將幫助我們以後設置炸彈。";
+		next;
+		mes "[惡魔]";
+		mes "煙火開始時，水牛將離開礦山，但是那些氣體會引發鏈條反應並炸毀整個礦山。暫時狩獵他們中的15個。你能做到嗎？";
+		next;
+		mes "[" + .@player_name$ + "]";
+		mes "當然。";
+		next;
+		mes "[惡魔]";
+		mes "我問是或否。哦，好吧，我將其視為是的。";
+		next;
+		mes "[惡魔]";
+		mes "現在，這是低點：GET ^0000CD10致命的毒藥和1個爆炸性粉末 ^000000， ^0000CDHUNT 15 GASTER ^000000。知道了？";
+		next;
+		emotion ET_GOODBOY, .@account_id;
+		mes "[惡魔]";
+		mes "我們將指望您，Kiddo！當您回來時，我會慷慨地償還您。我能夠在警長辦公室入獄時抓住幾件事。現在，你走了！";
+		setquest 14672;// Preparing for the Firework Festival
+		close;
+	case 0:
+	case 1:
+		mes "[惡魔]";
+		mes "讓我們看看... MM，Kiddo，您忘了狩獵所有的潮流。我們在工作時不能周圍有喘息。";
+		next;
+		mes "[惡魔]";
+		mes "狩獵只有15個潮流。沒有匆忙。你可以花點時間。只是在今天結束之前回來。我想再次見到你。";
+		close;
+	case 2:
+		if (countitem(25277) < 10) {
+			mes "[惡魔]";
+			mes "讓我們看看...嗯，您沒有帶10個致命的毒藥。那是我需要製造炸彈的最少數量。";
+			next;
+			mes "[惡魔]";
+			mes "孩子，你可以做到這一點，對嗎？從氣罐中獲取10個致命的毒藥和1種爆炸性粉末。";
+			close;
+		}
+		if (countitem(6213) < 1) {
+			mes "[惡魔]";
+			mes "讓我們看看...毫米，您沒有帶1個爆炸性粉末。那是我需要製造炸彈的最少數量。";
+			next;
+			mes "[惡魔]";
+			mes "孩子，你可以做到這一點，對嗎？從氣罐中獲得1個爆炸性粉末。";
+			close;
+		}
+		mes "[惡魔]";
+		mes "讓我們看看...哦，孩子，您已經完成了一切！您狩獵了喘氣，並帶來了我的要求。";
+		npctalk "What should I do? I think I'm in love with this kid.", "", bc_self;
+		next;
+		mes "[惡魔]";
+		mes "這足以讓我整夜保持清醒。";
+		npctalk "Midnight, you'd better catch some z's while I work.", "", bc_self;
+		sleep2 1000;
+		npctalk "Let me help. It'll be quicker.", "Midnight#srdg01", bc_self;
+		sleep2 1500;
+		npctalk "...Wow. You really like me, don't you?", "", bc_self;
+		next;
+		mes "[惡魔]";
+		mes "嘿，孩子，你明天介意再次幫助我嗎？我需要多個炸彈才能舉行煙火派對。";
+		next;
+		mes "[惡魔]";
+		mes "今天休息，明天早上回來。看！";
+		delitem 25277, countitem(25277);// DeadlyPoisonPowder
+		delitem 6213, countitem(6213);// Explosive_Powder
+		erasequest 14672;// Preparing for the Firework Festival
+		setquest 14673;// Time to Make Bombs
+		getitem 25250,3;// Coin_Of_Rr
+		getexp 76200,70740;
+		close;
+	}
+	end;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 22 && BaseLevel >= 140 && !isbegin_quest(14672) && checkquest(14673,PLAYTIME) == -1" );
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "checkquest(14672,HUNTING) == 2 && countitem(25277) > 9 && countitem(6213) > 0" );
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "checkquest(14673,PLAYTIME) == 2" );
+	end;
+}
+
+harboro2,166,80,5	script	Traces of Fire#srdg01	4_TRACE,{
+	end;
+OnEffect:
+	specialeffect EF_SPR_SOULE;
+	specialeffect EF_MAGMA_FLOW;
+	initnpctimer;
+	end;
+OnTimer1000:
+	specialeffect EF_SPR_LIGHTPRINT;
+	end;
+OnTimer10000:
+	specialeffect EF_M03;
+	specialeffect EF_FIREHIT2;
+	end;
+OnTimer18000:
+	specialeffect EF_FIREHIT2;
+	end;
+OnTimer24000:
+	specialeffect EF_M03;
+	end;
+OnTimer30000:
+	specialeffect EF_EL_HEATER;
+	stopnpctimer;
+	end;
+}
+
+harboro2,165,77,5	duplicate(dummy_npc)	Tool#srdg01	4_ROPEPILE
+harboro2,164,78,5	duplicate(dummy_npc)	Tool#srdg02	4_BRICKPILE
+harboro2,166,78,5	duplicate(dummy_npc)	Tool#srdg03	4_WOODPILE
+
+
+// Gas! Gas!
+rockrdg2,295,328,5	script	Frail Ghast#rockdaily	4_M_COWRAIDERS2,{
+	if (rock_main_quest < 22) {
+		mes "[脆弱的Ghast]";
+		mes "噢，只看他們，";
+		mes "我要做的就是打噴嚏...";
+		next;
+		mes "[脆弱的Ghast]";
+		mes "你在看什麼？你在竊聽我嗎？";
+		mes "在這裡讓你的屁股在這裡！ git！";
+		close;
+	}
+	switch( checkquest(1299,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes "[脆弱的Ghast]";
+		mes "哦，你想再次幫助我。";
+		mes "謝謝，但我只需要每天巡邏一次。你為什麼不明天凌晨4:00回來？";
+		close;
+	case 2:
+		mes "[脆弱的Ghast]";
+		mes "啊，陌生人！您再次提供幫助，對嗎？";
+		next;
+		if (select( "Help.", "Decline." ) == 2) {
+			mes "[脆弱的Ghast]";
+			mes "為什麼不呢？你今天太忙了嗎？";
+			close;
+		}
+		mes "[脆弱的Ghast]";
+		mes "不用擔心您的付款；我已經覆蓋了。只是去完成工作。";
+		erasequest 1299;// Patrol Once a Day
+		setquest 1298;// Gas! Gas!
+		close;
+	}
+	switch( checkquest(1298,HUNTING) ) {
+	case -1:
+		mes "[脆弱的Ghast]";
+		mes "*吟*我該怎麼辦？";
+		mes "也許我應該隨身攜帶一個巨大的粉絲。";
+		mes "不，不，那麼每個人都會發現。";
+		mes "誰在那裡？";
+		emotion ET_SURPRISE, playerattached();
+		next;
+		mes "[脆弱的Ghast]";
+		mes "毫米？我很確定我沒有見過你。";
+		mes "您不是警惕者之一。";
+		next;
+		mes "[脆弱的Ghast]";
+		mes "等等，你是陌生人";
+		mes "誰一直在干擾我們！";
+		next;
+		mes "[脆弱的Ghast]";
+		mes "...哦，是的！嘿，陌生人，";
+		mes "你看過怪物嗎";
+		mes "在礦山內叫喘氣？";
+		next;
+		select("Yes.","Gasters?");
+		mes "[脆弱的Ghast]";
+		mes "是的，那些氣體團塊。他們讓我打噴嚏，兇猛，";
+		mes "並變成哭泣，流口水，嗅探的混亂。 *不寒而栗*";
+		next;
+		mes "[脆弱的Ghast]";
+		mes "現在，我被指派在礦山內進行巡邏，因為它們，我做不到。";
+		mes "但是我們的金牛座以我們的身體優勢感到自豪。我該如何告訴其他人，因為我對某些汽油過敏，我不能做我的工作？";
+		next;
+		mes "[脆弱的Ghast]";
+		mes "所以我在想";
+		mes "也許你可以幫助我。";
+		next;
+		mes "[脆弱的Ghast]";
+		mes "在我進入那里之前，Hunt ^ff000020氣體 ^000000。";
+		mes "我會償還你。請？";
+		next;
+		if (select( "Help.", "Decline." ) == 2) {
+			mes "[脆弱的Ghast]";
+			mes "來吧，我說我會償還你。";
+			mes "呸!好吧，那我不會強迫你。";
+			mes "但是您最好不要告訴任何人。知道了？";
+			close;
+		}
+		mes "[脆弱的Ghast]";
+		mes "真的嗎？謝謝！我會指望你的！";
+		next;
+		mes "[脆弱的Ghast]";
+		mes "哦，確保沒有人知道這一點。";
+		mes "這對我們倆都不好。";
+		setquest 1298;// Gas! Gas!
+		close;
+	case 0:
+	case 1:
+		mes "[脆弱的Ghast]";
+		mes "你狩獵了多少個喘氣？";
+		mes "我準備去巡邏。讓我知道你完成後。";
+		mes "我會指望你的，陌生人。";
+		close;
+	case 2:
+		if (checkweight(1301,1) == 0) {
+			mes "[脆弱的Ghast]";
+			mes "你打獵了所有人嗎？順便說一句，你為什麼要攜帶這麼多東西？";
+			mes "go ^ff0000首先調出您的包 ^000000。";
+			close;
+		}
+		mes "[脆弱的Ghast]";
+		mes "你抓住了全部嗎？我最好完成我的回合，然後再出現。";
+		mes "謝謝！在這裡，拿這個。";
+		erasequest 1298;// Gas! Gas!
+		setquest 1299;// Patrol Once a Day
+		getitem 25250,3;// Coin_Of_Rr
+		getexp 101600,94320;
+		next;
+		mes "[脆弱的Ghast]";
+		mes "如果您不忙，明天來再次幫助我。我會償還你。";
+		mes "這對我們倆都有用，你不同意嗎？";
+		close;
+	}
+	end;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 22 && !isbegin_quest(1298) && checkquest(1299,PLAYTIME) == -1" );
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 22 && checkquest(1298,HUNTING) == 2" );
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "rock_main_quest == 22 && checkquest(1299,PLAYTIME) == 2" );
+	end;
+}
+
+
+// Mrs. McPhy
+harboro1,347,65,3	script	Mrs. McPhy#rockdaily	1_F_MERCHANT_02,{
+	if (BaseLevel < 100) {
+		mes "[太太。 MCPHY]";
+		mes "你好。您是這個地方的新手嗎？您應該是 ^ff0000，至少是100 ^000000，以舒適地留在這裡嗎？";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "等等，我丈夫在餵那隻狗是什麼？蜂蜜！那是我們的晚餐！";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "S-Sweartheart，當它大風時，您不應該在外面。讓我們進去。";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "grr，我簡直不敢相信你！今晚您只吃一半的晚餐！";
+		close;
+	}
+	switch( checkquest(1329,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes "[太太。 MCPHY]";
+		mes "入睡時他是一個天使，但是...嘆息...我已經頭疼了，只是想著他醒來時可能會做什麼， ^ff000000 a.m. ^000000 ^000000";
+		close;
+	case 2:
+		mes "[太太。 MCPHY]";
+		mes "冒險家，謝謝您回來。我們已經檢查了村子裡的所有漏洞，但是我們找不到想要的東西。他一定把它帶到了荒原。";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "正如我以前告訴您的那樣，這次我們有一些適合您的東西： ^0000CD1 Rock Ridge Coin ^000000。說，你能幫我們嗎？";
+		next;
+		if (select( "Help.", "Decline." ) == 2) {
+			mes "[太太。 MCPHY]";
+			mes "我們沒有其他人可以求助。如果您改變主意，請回來。";
+			close;
+		}
+		.@r = rand(1,8);
+		if (.@r == 1)
+			.@string$ = "slipper";
+		else if (.@r == 2)
+			.@string$ = "spoon";
+		else if (.@r == 3)
+			.@string$ = "work boot";
+		else if (.@r == 4)
+			.@string$ = "glove";
+		else if (.@r == 5)
+			.@string$ = "hat";
+		else if (.@r == 6)
+			.@string$ = "pillow cover";
+		else if (.@r == 7)
+			.@string$ = "alarm clock";
+		else
+			.@string$ = "flyswatter";
+		mes "[太太。 MCPHY]";
+		mes "今天有點" + .@string$ + ". Could you look for it? It may be easily replaceable, but I can't keep buying things every time Spotty takes something.";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "走到村莊外面和我丈夫交談。他會告訴你可能在哪裡。";
+		erasequest 1329;// Spotty in the Dreamland
+		setquest rand(1323,1327);// Spotty, No!
+		if (isbegin_quest(1330))	// debug
+			erasequest 1330;
+		if (isbegin_quest(1322) == 0) {	// debug
+			setquest 1322;
+			completequest 1322;
+		}
+		setquest 1330;// Spotty's Holes
+		close;
+	}
+	for ( .@quest_id = 1321; .@quest_id < 1329; .@quest_id++ ) {
+		if (isbegin_quest(.@quest_id) == 1)
+			break;
+	}
+
+	switch( .@quest_id ) {
+	case 1321:
+	case 1323:
+	case 1324:
+	case 1325:
+	case 1326:
+	case 1327:
+		mes "[太太。 MCPHY]";
+		mes "如果他不把東西帶出屋子，那麼Spotty將是一隻完美的狗。嘆...";
+		if (isbegin_quest(1330) == 0)	// debug
+			setquest 1330;// Spotty's Holes
+		close;
+
+	case 1322:// First time doing the quest
+		mes "[太太。 MCPHY]";
+		mes "冒險家，我們找到了戒指！";
+		mes "在我們花了很多時間搜索村莊之後，我們在他的房子裡找到了它。";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "順便說一句，您手中那閃亮的東西是什麼？";
+		next;
+		if (checkweight(1301,1) == 0) {
+			mes "[太太。 MCPHY]";
+			mes "哦，您想先 ^ff0000 ^ff0000首先將袋子 ^000000放在向我展示之前。當然！";
+			close;
+		}
+		select("展示你手上的東西。");
+		mes "[太太。 MCPHY]";
+		mes "這是岩石山脊硬幣。您可以在村子裡使用它。我不願意讓您免費幫助我們。我很高興您至少可以擁有這個。";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "那個岩石嶺硬幣是你的。感謝您幫助我們。";
+		erasequest 1330;// Spotty's Holes
+		completequest 1322;// Found Something
+		getitem 25250,1;// Coin_Of_Rr
+		setquest 1329;// Spotty in the Dreamland
+		next;
+		mes "[太太。 MCPHY]";
+		mes "而且，MM ...您明天是否介意再次幫助我們？ Spotty不斷將東西從房子帶到荒原，我們需要它們回來。";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "Spotty疲倦了自己，睡著了。您可以在凌晨4:00之後明天回來嗎？下次我們會給您一些東西。";
+		// 1329 is here on official but it can bring a potential bug
+		// setquest 1329;// Spotty in the Dreamland
+		close;
+
+	case 1328:
+		if (checkweight(1301,1) == 0) {
+			mes "[太太。 MCPHY]";
+			mes "你找到了我們問的東西嗎？我看不到它，因為您隨身攜帶太多東西。您能先 ^ff0000降低您的包 ^000000嗎？";
+			close;
+		}
+		mes "[太太。 MCPHY]";
+		mes "你找到了！太感謝了。我們一直在努力糾正Spotty的行為，這很困難。";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "這是我們答應的岩石嶺硬幣。感謝您為我們搜索荒原。";
+		erasequest 1328;// Found Missing Items
+		erasequest 1330;// Spotty's Holes
+		getitem 25250,1;// Coin_Of_Rr
+		setquest 1329;// Spotty in the Dreamland
+		next;
+		mes "[太太。 MCPHY]";
+		mes "你能再回來嗎？如果您不忙，每天上午4:00之後，您都歡迎您。";
+		close;
+
+	default:// first time
+		mes "[太太。 MCPHY]";
+		mes "我必須告訴您幾次讓您的狗遠離我們的東西？您真的要我將其送去船上嗎？";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "為什麼？他這次做了什麼？";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "我不能再這樣生活了！猜猜這次是什麼斑點？我的戒指！";
+		next;
+		if (select( "Check what's going on.", "Quit." ) == 2) {
+			mes "[太太。 MCPHY]";
+			mes "蜂蜜！你甚至在聽我嗎？";
+			close;
+		}
+		mes "[太太。 MCPHY]";
+		mes "我媽媽在我去這片異國之前給了我那枚戒指。我一直在下雨天，那句話從我身上偷走了！";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "你是說你喜歡的金戒指？嗯，Spotty遇到了很大的麻煩。";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "我試圖理解它何時拿我們的鞋子和洗衣服並將其埋在地上，但不是，不是我的戒指！";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "親愛的，請冷靜下來。您有可能把它留在他可以到達的地方嗎？";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "你在開玩笑吧？除了洗碗或洗衣外，我永遠不會脫掉它，";
+		mes "即使那樣，我也把它放在口袋裡。我只丟了一次，那個雜種就掌握了它！";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "自從您辭職已經兩個月了，而不是在房子周圍幫助，而是在寵壞那隻狗。您對其行為不當負責！";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "我看到它運到荒原上。去找我的戒指。沒有它，你最好不要回家！";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "什麼？我是礦工，不是戰鬥機嗎？我不能去那裡！您知道我不能呆在那裡足夠長的時間來找到我的帽子，當它朝那個方向飛走時。";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "我不知道，我不在乎！";
+		next;
+		if (select( "Join the conversation.", "Pass." ) == 2) {
+			mes "- 這與我無關。我只是要通過。 -";
+			close;
+		}
+		mes "[先生。 MCPHY]";
+		mes "哇！哎呀，你是誰？";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "啊，你是剛到這些部分的冒險家。哈哈，不要那麼驚訝。我知道是因為";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "您整天坐在碼頭旁，和狗一起玩。當然，我知道每個人都去。";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "*握緊牙齒*甜心，我們現在不要開始。";
+		mes "無論如何，我們能為您做什麼？";
+		next;
+		if (select( "Say you want to help them find the ring.", "Say hello." ) == 2) {
+			mes "[先生。 MCPHY]";
+			mes "為什麼，也要問你。";
+			mes "你很傻。";
+			close;
+		}
+		mes "[太太。 MCPHY]";
+		mes "嗯？您想幫助我們。謝謝，但是，謝謝。我們不能付錢給你。";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "我知道一個事實，沒有人再免費提供幫助。";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "等等，親愛的。你應該考慮一下。你和我太害怕布法羅土匪去荒地。";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "我們沒有其他人可以求助，我想不出比這更好的方法了。讓我們抓住這個冒險家的機會。";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "你是對的，但是...嘆息...";
+		emotion ET_THINK;
+		next;
+		mes "[太太。 MCPHY]";
+		mes "MM，冒險家，讓我收回我剛才說的話。請幫助我們。";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "斑點每天都在挖洞並埋在其中。如果您在荒原中發現孔，請查看其中。";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "我和我丈夫會環顧村莊，以防萬一。如果您發現了一些東西，請回到這裡。";
+		setquest 1321;// Spotty and Her Ring
+		next;
+		mes "[先生。 MCPHY]";
+		mes "我在荒原上拿起斑點。也許這就是為什麼他喜歡在那裡度過很多時間的原因。但是他從來沒有冒險過，以至於他在用餐時間之前無法回家。至少，還沒有。";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "去荒地，您會看到我在地圖上留下的痕跡。您不必搜索除它們以外的任何地方。";
+		next;
+		mes "[太太。 MCPHY]";
+		mes "親愛的，您至少應該跟隨冒險家到大門，所以您可以告訴他在哪裡看。";
+		setquest 1330;// Spotty's Holes
+		next;
+		mes "[先生。 MCPHY]";
+		mes "我應該嗎？嗯，嗯...好吧。";
+		close;
+	}
+	end;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW,
+		"BaseLevel > 99 && checkquest(1329,PLAYTIME) == -1 && !isbegin_quest(1321) && !isbegin_quest(1322) && !isbegin_quest(1323) && !isbegin_quest(1324) && !isbegin_quest(1325) && !isbegin_quest(1326) && !isbegin_quest(1327) && !isbegin_quest(1328)" );
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "BaseLevel > 99 && (isbegin_quest(1322) == 1 || isbegin_quest(1328) == 1)" );
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "BaseLevel > 99 && checkquest(1329,PLAYTIME) == 2" );
+	end;
+}
+
+rockrdg1,36,250,5	script	Mr. McPhy#rkdlout	4W_M_02,{
+	if (isbegin_quest(1330) == 1) {
+		if (isbegin_quest(1321) == 1) {
+			mes "[先生。 MCPHY]";
+			mes "我的妻子說，Spotty走出後門，直接經過鐵絲網柵欄。";
+			next;
+			mes "[先生。 MCPHY]";
+			mes "但是他再也不會走得太遠，因為他很快回到了我身邊。您為什麼不沿著柵欄走路，尋找周圍有白髮的孔？";
+			cloakoffnpcself( "#rkq1321" );
+			cloakoffnpcself( "#rkdqgd11" );
+			cloakoffnpcself( "#rkdqgd22" );
+			cloakoffnpcself( "#rkdqgd33" );
+			close;
+		}
+		if (isbegin_quest(1322) == 1 || isbegin_quest(1328) == 1) {
+			mes "[先生。 MCPHY]";
+			mes "你找到了什麼嗎？然後讓我們回去！";
+			cloakonnpcself( "Mr. McPhy#rkdlout" );
+			close;
+		}
+		mes "[先生。 MCPHY]";
+		mes "我的妻子把我送到這裡給你指示，但我不知道他可能在哪裡。";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "哦，對！最近，Spotty一直在散發出很多東西。也許您應該尋找周圍有白髮的孔。";
+		cloakoffnpcself( "#rkq1321" );
+		cloakoffnpcself( "#rkq1323" );
+		cloakoffnpcself( "#rkq1324" );
+		cloakoffnpcself( "#rkq1325" );
+		cloakoffnpcself( "#rkq1326" );
+		cloakoffnpcself( "#rkq1327" );
+		cloakoffnpcself( "#rkdqgd11" );
+		cloakoffnpcself( "#rkdqgd22" );
+		cloakoffnpcself( "#rkdqgd33" );
+		next;
+		mes "[先生。 MCPHY]";
+		mes "而且他似乎並沒有冒險太遠。可能是因為他還很年輕。我在地圖中間標記了三個可能的位置。您不必比這些位置更遠。";
+		close;
+	}
+	if (isbegin_quest(1322) == 2) {
+		mes "[先生。 MCPHY]";
+		mes "啊，冒險家。噓！請保持您的聲音：布法羅·匪徒可能會聽到我們的聲音。";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "每當我可以的時候，我一直來這裡，在他把更多東西帶到荒原上之前。";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "我的妻子說她會把他扔出去，但她並不是那樣。無論她對他有多生氣，她都不會舉手，她總是記得餵他維生素並為他接種疫苗。";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "當我辭職時，她什麼都沒說，因為我太害怕了布法羅土匪。她是個好女人。";
+		close;
+	}
+	mes "[先生。 MCPHY]";
+	mes "*喘著粗氣*布法羅·匪徒！";
+	cloakonnpcself( "Mr. McPhy#rkdlout" );
+	close;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "isbegin_quest(1330) == 1 && isbegin_quest(1322) == 0" );
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "isbegin_quest(1330) == 1 && isbegin_quest(1322) == 2 && isbegin_quest(1328) == 0 && isbegin_quest(1329) == 0" );
+	end;
+}
+
+rockrdg1,170,233,3	script	Hole#rkdqgd1	4_CRACK,{
+	setarray .@list[0],1321,1323,1324,1325,1326,1327;
+	.@size = getarraysize(.@list);
+	for ( .@i = 0; .@i < .@size; .@i++ ) {
+		if (isbegin_quest(.@list[.@i]))
+			break;
+	}
+	if (.@list[.@i] == 0) {
+		mes "- 地面上有一個洞。";
+		mes "它有一點白髮散落在其中。 -";
+		close;
+	}
+	mes "- 地面上有一個洞。";
+	if (strnpcinfo(2) == "rkdqgd3")
+		mes "它只有濕土。 -";
+	else
+		mes "它是空的。 -";
+	next;
+	mes "- 我不必搜索比這更遠。 -";
+	close;
+}
+rockrdg1,183,143,3	duplicate(Hole#rkdqgd1)	Hole#rkdqgd2	4_CRACK
+rockrdg1,215,72,3	duplicate(Hole#rkdqgd1)	Hole#rkdqgd3	4_CRACK
+
+rockrdg1,170,233,3	script	#rkdqgd11	4_ENERGY_WHITE,{
+	end;
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "isbegin_quest(1330) == 1" );
+	end;
+}
+rockrdg1,183,143,3	duplicate(#rkdqgd11)	#rkdqgd22	4_ENERGY_WHITE
+rockrdg1,215,72,3	duplicate(#rkdqgd11)	#rkdqgd33	4_ENERGY_WHITE
+
+
+rockrdg1,43,145,3	script	Hole#rkq1321	4_CRACK,{
+	.@quest_id_npc = atoi( replacestr(strnpcinfo(2), "rkq", "") ) ;
+	setarray .@list[0],1321,1323,1324,1325,1326,1327;
+	.@size = getarraysize(.@list);
+	for ( .@i = 0; .@i < .@size; .@i++ ) {
+		if (isbegin_quest(.@list[.@i]))
+			break;
+	}
+
+	mes "- 地面上有一個洞。";
+	if (.@list[.@i] == 0) {
+		mes "它有一點白髮散落在其中。 -";
+		close;
+	}
+	if (.@list[.@i] == .@quest_id_npc) {
+		if (.@list[.@i] == 1321) {
+			mes "它裡面有一些閃閃發光的東西，";
+			next;
+			mes "但這不是金戒指。";
+			mes "我現在應該隨身攜帶。 -";
+			completequest 1321;
+			setquest 1322;// Found Something
+			cloakonnpcself( "#rkq1321" );
+			cloakonnpcself( "#rkdqgd11" );
+			cloakonnpcself( "#rkdqgd22" );
+			cloakonnpcself( "#rkdqgd33" );
+			close;
+		}
+		mes "它裡面有一些東西。 -";
+		next;
+		mes "- 這一定是麥克菲先生正在尋找的東西。我應該把它帶給她。 -";
+		erasequest .@list[.@i];
+		setquest 1328;// Found Missing Items
+		cloakonnpcself( "#rkq1321" );
+		cloakonnpcself( "#rkq1323" );
+		cloakonnpcself( "#rkq1324" );
+		cloakonnpcself( "#rkq1325" );
+		cloakonnpcself( "#rkq1326" );
+		cloakonnpcself( "#rkq1327" );
+		cloakonnpcself( "#rkdqgd11" );
+		cloakonnpcself( "#rkdqgd22" );
+		cloakonnpcself( "#rkdqgd33" );
+		close;
+	}
+	switch( .@list[.@i] ) {
+	case 1321:
+		mes "它只有一塊石頭從地面上伸出。 -";
+		close;
+	case 1323:
+		mes "它裡面有一個小動物骨頭。 -";
+		close;
+	case 1324:
+		mes "它的內部有一張滾滾草的滾動。 -";
+		close;
+	case 1325:
+		mes "一隻小昆蟲在裡面散佈著。 -";
+		close;
+	case 1326:
+		mes "它只有雜草在其中生長。 -";
+		close;
+	case 1327:
+		mes "它只充滿灰塵。 -";
+		close;
+	}
+}
+rockrdg1,100,230,3	duplicate(Hole#rkq1321)	Hole#rkq1323	4_CRACK
+rockrdg1,58,195,3	duplicate(Hole#rkq1321)	Hole#rkq1324	4_CRACK
+rockrdg1,71,149,3	duplicate(Hole#rkq1321)	Hole#rkq1325	4_CRACK
+rockrdg1,109,60,3	duplicate(Hole#rkq1321)	Hole#rkq1326	4_CRACK
+rockrdg1,191,101,3	duplicate(Hole#rkq1321)	Hole#rkq1327	4_CRACK
+
+rockrdg1,43,145,3	duplicate(dummy_npc)	#rkq1321	4_ENERGY_WHITE
+rockrdg1,100,230,3	duplicate(dummy_npc)	#rkq1323	4_ENERGY_WHITE
+rockrdg1,58,195,3	duplicate(dummy_npc)	#rkq1324	4_ENERGY_WHITE
+rockrdg1,71,149,3	duplicate(dummy_npc)	#rkq1325	4_ENERGY_WHITE
+rockrdg1,109,60,3	duplicate(dummy_npc)	#rkq1326	4_ENERGY_WHITE
+rockrdg1,191,101,3	duplicate(dummy_npc)	#rkq1327	4_ENERGY_WHITE
+
+
+// Mr. McPhy quests
+harboro1,345,61,3	script	Spotty#rockdaily	4_DOG01,{
+	if (isbegin_quest(1329) == 1) {
+		mes "- 他看起來更像是土狼，而不是狗。 -";
+		next;
+		mes "- 他睡著了，被污垢覆蓋，好像他在裡面滾動。我不應該叫醒他。 -";
+		close;
+	}
+	mes "- 他看起來更像是土狼，而不是狗。 -";
+	next;
+	mes "- 他脫下了很多頭髮。無論他走到哪裡，他都必須在整個地方留下白髮。 -";
+	close;
+}
+
+harboro1,344,61,5	script	Mr. McPhy#rockdaily	4W_M_02,{
+	switch( isbegin_quest(1321) ) {
+	case 0:
+		mes "[先生。 MCPHY]";
+		mes "斑點，您想要享受嗎？唔？";
+		close;
+	case 1:
+		mes "[先生。 MCPHY]";
+		mes "我和我的妻子決定分別檢查這個村莊，但是我不確定在您回來之前我們是否已經完成。";
+		close;
+	case 2:
+		break;
+	}
+	if (isbegin_quest(1322) == 2 && isbegin_quest(1331) == 0 && isbegin_quest(1332) == 0) {
+		mes "[先生。 MCPHY]";
+		mes "冒險家，感謝您檢查我妻子的金戒指的危險區域。";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "我相信宇宙將您帶給我們作為普羅維登斯行為。您是否介意我再問一個忙？";
+		next;
+		if (select( "Listen to what he has to say.", "Decline." ) == 2) {
+			mes "[先生。 MCPHY]";
+			mes "這次我真的可以償還你。如果您改變主意，請告訴我。";
+			close;
+		}
+		mes "[先生。 MCPHY]";
+		mes "出於自衛目的，我們在房子裡放一支步槍，前幾天，我注意到當他看到葉子時像葉子一樣發抖。";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "我很高興我太害怕了。如果他聞到火藥的味道，Spotty就不會回到家。";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "我認為有人在Spotty附近開了槍，但這並沒有發生在村莊內。我們會聽到的。";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "我認為這發生在荒原上，而水牛匪是向我們的狗發射的。你能代表我報仇斑點嗎？";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "自從您帶回了我妻子的金戒指以來，我一直在從事零工來補充我們的收入。我們現在有能力償還您。";
+		next;
+		if (select( "Help him.", "Decline." ) == 2) {
+			mes "[先生。 MCPHY]";
+			mes "您不怕土匪，是嗎？";
+			mes "好的，我知道您是否無能為力。";
+			close;
+		}
+		mes "[先生。 MCPHY]";
+		mes "由於無法確切知道誰害怕斑點，我希望您想狩獵每種匪徒：黃色，黑色和白色鬃毛。";
+		next;
+		mes "[先生。 MCPHY]";
+		mes "我會等待。";
+		setquest 1331;
+		close;
+	}
+	if (isbegin_quest(1331) == 1) {
+		switch( checkquest(1331,HUNTING) ) {
+		case -1:
+			mes "[先生。 MCPHY]";
+			mes "斑點，你還好嗎？不要害怕。爸爸和你在一起。";
+			close;
+		case 0:
+		case 1:
+			mes "[先生。 MCPHY]";
+			mes "那些邪惡的土匪，他們怎麼能在幼犬附近射擊槍？";
+			next;
+			mes "[先生。 MCPHY]";
+			mes "啊，冒險家。您是否狩獵 ^ff00003每種土匪：黃色，黑色和白色鬃毛 ^000000？";
+			close;
+		case 2:
+			if (checkweight(1301,1) == 0) {
+				mes "[先生。 MCPHY]";
+				mes "啊，您一定已經忘記了您的付款。請訪問 ^ff0000 ff 0000在您的包中 ^000000。";
+				close;
+			}
+			mes "[先生。 MCPHY]";
+			mes "您是否照顧了所有的牛頭布法羅土匪？";
+			next;
+			mes "[先生。 MCPHY]";
+			mes "但是有很多人，甚至不會給它們留下凹痕。我想進一步。";
+			next;
+			mes "[先生。 MCPHY]";
+			mes "我們應該每天只做一次。如果我們一次擺脫了太多，他們會知道有些不對勁。請在上午4:00之後明天回來";
+			next;
+			mes "[先生。 MCPHY]";
+			mes "哦，對嗎？這是我答應的您的付款。謝謝。";
+			erasequest 1331;
+			setquest 1332;
+			getitem 25250,2;// Coin_Of_Rr
+			getexp 14499,13863;
+			close;
+		}
+	}
+	if (isbegin_quest(1332) == 1) {
+		switch( checkquest(1332,PLAYTIME) ) {
+		case -1:
+			mes "[先生。 MCPHY]";
+			mes "蜂蜜！ Spotty拿起我的手錶了嗎？";
+			close;
+		case 0:
+		case 1:
+			mes "[先生。 MCPHY]";
+			mes "讓我看看現在幾點了...還沒有過去的 ^ff00004：00上午 ^000000。你稍後再回來嗎？";
+			close;
+		case 2:
+			mes "[先生。 MCPHY]";
+			mes "冒險家，我一直在等你！您來到布法羅土匪的報仇斑點，對嗎？";
+			next;
+			mes "[先生。 MCPHY]";
+			mes "像往常一樣，請狩獵 ^ff00003每種土匪：黃色，黑色和白色鬃毛 ^000000。";
+			mes "我會指望你的！";
+			erasequest 1332;// Blood for Blood
+			setquest 1331;// Avenging Spotty
+			close;
+		}
+	}
+	mes "[先生。 MCPHY]";
+	mes "哦，可憐的地方。您會因失去太多的頭髮而發癢。你要你的爸爸刷你嗎？";
+	close;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW,
+		"isbegin_quest(1322) == 2 && (checkquest(1332,PLAYTIME) == 2 || checkquest(1332,PLAYTIME) == -1 && (checkquest(1331,HUNTING) == -1 || checkquest(1331,HUNTING) == 2))" );
+	end;
+}
+
+// Misc NPCs
+rockrdg1,330,104,3	script	Curt Snake#rockc05	4_M_CACTUSMAN2,{
+	mes "[簡短的蛇]";
+	mes "土狼最近經常攻擊我們的村莊，因此我們要求一些冒險家淘汰它們。";
+	next;
+	mes "[簡短的蛇]";
+	mes "令我擔心的是，我們的孩子認為狩獵只是為了好玩。";
+	mes "我們開始教我們的年輕人如何儘早狩獵，";
+	next;
+	mes "[簡短的蛇]";
+	mes "我知道他們希望變得像那些冒險家一樣強大。";
+	mes "但是我們仙人掌不追求快樂。向我們的孩子講授這一點是充滿挑戰的，而冒險家不斷地在周圍。";
+	close;
+}
+
+rockrdg1,299,82,3	script	Tagliatelle#rockc07	4_DR_M_02,{
+	mes "[麵條]";
+	mes "我喜歡旅行。我在PA-STA旅行很開心，我決心將餘生都在符文米達（Rune-Midgarts）以及其他我可以從王國傳來的城市和村莊旅行。";
+	next;
+	mes "[麵條]";
+	mes "我喜歡在新地方和居民交談。我可以從他們的生活方式中學到很多東西。";
+	next;
+	npctalk "*Gasp* Taneska, I told you not to beat it!", "", bc_self;
+	mes "[塔內斯卡]";
+	mes "我喜歡這些新樂器！";
+	close;
+}
+
+rockrdg1,297,84,7	script	Taneska#rockc08	4_CAT_MERMASTER,{
+	mes "[塔內斯卡]";
+	mes "該樂器本身是一件藝術品。";
+	mes "查看鼓皮膚上精美的飾面，以及槍管中均衡，濃郁的聲音。";
+	next;
+	emotion ET_THROB;
+	mes "[塔內斯卡]";
+	mes "啊，我想打敗這個鼓！我很想听聽它的聲音！";
+	next;
+	mes "[麵條]";
+	mes "* gasp* taneska，請不要觸摸它！您已經被警告過！";
+	close;
+}
+
+rockrdg1,285,96,3	script	Glaring Eagle#rockc01	4_M_CACTUSMAN3,{
+	mes "[眩光的鷹]";
+	mes "陌生人失去了與大海的戰鬥，放棄了自己的家。我以為他們會離開，但是它們和雜草一樣有韌性。他們在舊房屋的頂部建造了另一個村莊。";
+	next;
+	mes "[訴訟]";
+	mes "大自然母親允許雜草生長。她允許他們留在這裡。";
+	next;
+	npctalk "I'm too old now.", "", bc_self;
+	mes "[眩光的鷹]";
+	mes "我知道，Litis。我只是一個頑固的老ule子。";
+	mes "但是我仍然不禁認為一切都太快了。";
+	close;
+}
+
+rockrdg1,328,112,5	script	Karintas#rockc04	4_F_CACTUSCHILD2,{
+	mes "[電流]";
+	mes "我媽媽比任何冒險家都更好。我也可以狩獵它們！";
+	next;
+	mes "[簡短的蛇]";
+	mes "卡林塔斯（Karintas），你媽媽曾經為他們搜尋嗎？";
+	next;
+	mes "[電流]";
+	mes "嗯，不。她只有當我們需要它們的皮毛和肉時才會追捕它們。";
+	next;
+	mes "[簡短的蛇]";
+	mes "傷害自然絕不應該是一場比賽。這些冒險家只會狩獵足夠的土狼，以使我們免受他們的侵害。";
+	next;
+	mes "[簡短的蛇]";
+	mes "如果您足夠大以了解這一點，您的母親將教您如何狩獵。";
+	close;
+}
+
+rockrdg1,331,111,3	script	Juanitas#rockc02	4_M_CACTUSCHILD,5,5,{
+	mes "[胡安妮塔斯]";
+	mes "我是最好的土狼冒險家！我要狩獵一百個土狼！";
+	next;
+	mes "[敏捷蝎子]";
+	mes "我 - 我是上尉冒險家！我要狩獵一百千百郊狼！";
+	next;
+	mes "[簡短的蛇]";
+	mes "你是流氓，我告訴你不要扮演冒險家？他們沒有玩！";
+	close;
+
+OnTouch:
+	npctalk "I'm Captain Adventurer! I'm going to hunt a hundred coyotes!", "Karintas#rockc04", bc_self;
+	npctalk "Then I'm going to hunt a hundred-hundred-hundred coyotes!", "", bc_self;
+	npctalk "I'm a coyote-hunting adventurer!", "Swift Scorpion#rockc03", bc_self;
+	npctalk "You rascals, I told you not to play adventurer!", "Mrs. Cacturon#rrrem01", bc_self;
+	end;
+}
+
+rockrdg1,327,109,5	script	Swift Scorpion#rockc03	4_F_CACTUSCHILD2,{
+	mes "[敏捷蝎子]";
+	mes "*抱怨*但我們想狩獵像他們一樣的土狼。是的！是的，是的！ ho！";
+	next;
+	mes "[電流]";
+	mes "也許我們村里的成年人也應該出去狩獵土狼。";
+	next;
+	mes "[簡短的蛇]";
+	mes "你指關節頭，我們不想狩獵它們。";
+	mes "我們想和他們和平同住在這座奇瓦瓦沙漠中。";
+	next;
+	mes "[簡短的蛇]";
+	mes "對於我們來說，周圍有太多土狼對我們來說是不安全的。這就是為什麼我們向冒險家尋求幫助的原因。";
+	mes "但這並不意味著我們想擺脫所有這些。";
+	close;
+}
+
+rockrdg1,287,95,3	script	Litis#rockc10	4_F_CACTUSLADY2,{
+	mes "[訴訟]";
+	mes "我了解Glaring Eagle先生的意思以及他為什麼如此擔心。";
+	next;
+	mes "[訴訟]";
+	mes "但是今天的河流不是昨天的河流。事情不斷變化，這很自然。";
+	close;
+}
+
+rockrdg1,297,111,3	script	Roytanen#rockc10	4_F_RANGER,{
+	mes "[羅伊塔寧]";
+	mes "*喘著粗氣*我回到了仙人掌村。噢，我迷路了嗎？再次。";
+	next;
+	emotion ET_CRY;
+	mes "[羅伊塔寧]";
+	mes "奇瓦瓦沙漠巨大，只有污垢和岩石。迷失在其中很容易。";
+	next;
+	mes "[羅伊塔寧]";
+	mes "天哪，我真的沒有進行一次遊覽……我希望我在離開之前可以喝一杯涼水。";
+	close;
+}
+
+
+harboro1,91,211,3	script	#rockno01	HIDDEN_NPC,5,5,{
+	mes "[中央道路標誌]";
+	mes "沿著這條路向東前往旅館，警長辦公室，商店和廣場。";
+	next;
+	mes "[中央道路標誌]";
+	mes "這條路還走出村莊，到達奇瓦瓦沙漠。";
+	close;
+
+OnTouch:
+	npctalk "Central Road", "", bc_self;
+	end;
+}
+
+harboro1,299,211,3	script	#rockno02	HIDDEN_NPC,5,5,{
+	mes "[廣場標誌]";
+	mes "Kafra服務可在Rock Ridge Plaza內提供。";
+	next;
+	mes "[廣場標誌]";
+	mes "警長的辦公室和商店建築位於該廣場以西。旅館和港口較遠。";
+	close;
+
+OnTouch:
+	npctalk "Rock Ridge Plaza", "", bc_self;
+	end;
+}
+
+harboro1,260,211,3	script	#rockno03	HIDDEN_NPC,5,5,{
+	end;
+OnTouch:
+	npctalk "Sheriff's Office", "", bc_self;
+	end;
+}
+
+harboro1,215,212,3	script	#rockno04	HIDDEN_NPC,5,5,{
+	end;
+OnTouch:
+	npctalk "West: The Inn, East: The Sheriff's Office", "", bc_self;
+	end;
+}
+
+harboro1,134,211,3	script	#rockno05	HIDDEN_NPC,5,5,{
+	end;
+OnTouch:
+	npctalk "East: The Inn", "", bc_self;
+	end;
+}
+
+harboro1,310,201,3	script	#rockno06	HIDDEN_NPC,5,5,{
+	end;
+OnTouch:
+	npctalk "Tool Shop, Weapon/Armor Shop", "", bc_self;
+	end;
+}
+
+harboro1,60,215,5	script	Karam Pucci#harboro1	4_M_SEAMAN,{
+	mes "[卡拉姆·普基]";
+	mes "你想回艾伯塔省嗎？";
+	next;
+	if (select( "Yes.", "No." ) == 2) {
+		mes "[卡拉姆·普基]";
+		mes "沒問題。我不介意在這里呆了更長的時間。";
+		mes "實際上，我的公司也希望這樣做。";
+		close;
+	}
+	mes "[卡拉姆·普基]";
+	mes "然後走吧！";
+	close2;
+	warp "alberta",172,131;
+	end;
+}
+
+harboro1,321,237,5	script	Rubina Adler#rockn07	4_F_SITDOWN,{
+	emotion ET_DELIGHT;
+	mes "[魯賓娜·阿德勒]";
+	mes "毫米，毫米！龍舌蘭汁是我在洛克嶺（Rock Ridge）品嚐過的最好的東西。";
+	next;
+	mes "[魯賓娜·阿德勒]";
+	mes "我聽說這是仙人掌的傳統飲料。當我喝它時，感覺好像洗掉了所有的灰塵堵塞了我的喉嚨。";
+	next;
+	mes "[魯賓娜·阿德勒]";
+	mes "錯誤，等等。這不是真正的龍舌蘭汁。它說龍舌蘭味的果汁。";
+	next;
+	emotion ET_SWEAT;
+	mes "[魯賓娜·阿德勒]";
+	mes "ACK，它甚至有龍舌蘭嗎？";
+	close;
+}
+
+harboro1,75,211,1	script	Zebedee#rockwn13	4_KID01,5,5,{
+	mes "[西庇太]";
+	mes "歡迎來到岩石嶺！";
+	mes "希望您能在夢想之地找到機會。";
+	close;
+
+OnTouch:
+	specialeffect EF_SPHERE;
+	emotion ET_BIGTHROB;
+	npctalk "Welcome to Rock Ridge!", "", bc_self;
+	end;
+}
+
+harboro1,75,219,3	script	Irene#rockwn14	4W_KID,5,5,{
+	mes "[艾琳]";
+	mes "歡迎來到冒險家Rock Ridge！";
+	mes "希望您會喜歡探索這個美好的地方。";
+	close;
+
+OnTouch:
+	specialeffect EF_SPHERE;
+	emotion ET_BIGTHROB;
+	npctalk "Welcome, adventurer!", "", bc_self;
+	end;
+}
+
+
+harboro1,79,224,5	script	Miles Wiesner#rockwn12	4_M_SITDOWN,{
+	mes "[邁爾斯·威斯納]";
+	mes "我在等我姐姐。她應該在下一艘船上。";
+	mes "我首先來到這裡，邀請她到這裡。";
+	next;
+	mes "[邁爾斯·威斯納]";
+	mes "當我決定一年前去這個大陸時，她擔心生病。";
+	mes "她很高興看到我做得很好。";
+	next;
+	mes "[邁爾斯·威斯納]";
+	mes "機會之地，那是岩石山脊。";
+	close;
+}
+
+harboro1,82,221,3	script	Cheerful Leaf#rockwn16	4_F_CACTUSCHILD2,{
+	mes "[開朗的葉子]";
+	mes "我的魅力是我所知道的最好的仙人掌！";
+	mes "有時他說的話我聽不懂，但是沒關係。";
+	next;
+	emotion ET_DELIGHT;
+	mes "[開朗的葉子]";
+	mes "我希望我能像他一樣高時能更好地理解他。";
+	mes "我想快速長大，所以我可以請他告訴我他再次告訴我的事情。";
+	close;
+
+OnTouch:
+	emotion ET_SMILE;
+	end;
+}
+
+harboro1,83,221,3	script	Mahua Kaya#rockwn15	4_M_CACTUSCHIEF,{
+	mes "【麻花體】";
+	mes "有些仙人掌不喜歡開拓者，但是，葉子，請記住他們也是大自然的孩子。";
+	next;
+	mes "[開朗的葉子]";
+	mes "孩子們？他們像葉子一樣可愛嗎？";
+	next;
+	mes "【麻花體】";
+	mes "當然。每個人，這個老人在大自然的眼中都是一個孩子。";
+	next;
+	emotion ET_SMILE;
+	mes "[開朗的葉子]";
+	mes "哈哈，哈哈！那沒有意義。你很高，有小鬍子。嬰兒沒有鬍鬚。";
+	next;
+	mes "【麻花體】";
+	mes "我是說您應該像您對朋友一樣對他們很好。";
+	mes "你了解我嗎，葉子？";
+	next;
+	mes "[開朗的葉子]";
+	mes "是的。葉是一個很好的仙人掌，他喜歡他的魅力。";
+	close;
+}
+
+harboro1,86,218,3	script	Welch#rockwn01	4_M_ARCHER,5,5,{
+	mes "[韋爾奇]";
+	mes "你剛到嗎？我也是兩天前。這裡的風聽起來有所不同。我喜歡它！";
+	next;
+	mes "[韋爾奇]";
+	mes "所有的建築物都聞起來像新鮮的油漆，我聽到到處都有錘擊的聲音。這個村莊還活著！";
+	next;
+	emotion ET_SMILE;
+	mes "[韋爾奇]";
+	mes "只是站在這裡讓我很高興，我不能停止笑。哈哈，哈哈！";
+	close;
+
+OnTouch:
+	emotion ET_DELIGHT;
+	end;
+}
+
+harboro1,88,217,3	script	Edith Richie#rockwn02	4_F_KID2,{
+	emotion ET_PROFUSELY_SWEAT;
+	mes "[伊迪絲·里奇]";
+	mes "我父親在火車站工作。";
+	mes "是東方嗎？嗯，等等。西方是左側，...";
+	next;
+	mes "[伊迪絲·里奇]";
+	mes "只要看看您的地圖，然後直接向上。您將在火車站。";
+	mes "我父親很堅強，他可以一次攜帶許多盒子！";
+	close;
+}
+
+harboro1,86,210,4	script	Carmen O'Neil#rockwn06	8_F,{
+	mes "[卡門·奧尼爾]";
+	mes "*打ic*我可以整天喝啤酒！";
+	next;
+	mes "[利蘭·溫金斯]";
+	mes "讓我們賺錢，然後 - 嘿！ - 吃點美味！";
+	next;
+	npctalk "Geez, they're drinking again.", "Mortimer#rockwn07", bc_self;
+	mes "[醉酒的Doram]";
+	mes "我想要更多的雞肉，nya！雞肉真的很容易。";
+	close;
+}
+
+harboro1,85,208,7	script	Leland Wenkins#rockwn03	4_M_TWTEAMAN,5,5,{
+	mes "[利蘭·溫金斯]";
+	mes "為我們的偉大村莊歡呼！乾杯!";
+	next;
+	mes "[卡門·奧尼爾]";
+	mes "為了開創性的精神！乾杯!";
+	next;
+	unittalk getcharid(3), "" + strcharinfo(0) + " : They're drunk.", bc_self;
+	mes "[醉酒的Doram]";
+	mes "*打ic*歡呼！ nya-nya！";
+	close;
+
+OnTouch_:
+	if (.talk == 0) {
+		.talk = 1;
+		npctalk "For Rock Ridge!";
+		sleep 3000;
+		npctalk "Cheers!", "Carmen O'Neil#rockwn06";
+		npctalk "Cheers, nya!", "Drunk Doram#rockwn11";
+		sleep 9000;
+		npctalk "Mwah hah hah! Beer is the best!";
+		sleep 1000;
+		npctalk "I especially like drinking it in the daytime!", "Carmen O'Neil#rockwn06";
+		sleep 1000;
+		npctalk "Chicken! *Hiccups* You got to eat chicken with it!", "Drunk Doram#rockwn11";
+		sleep 9000;
+		npctalk "Who are we?";
+		sleep 1000;
+		npctalk "We're the pioneers of Rock Ridge!", "Carmen O'Neil#rockwn06";
+		sleep 1000;
+		npctalk "We're brave! We're gallant!", "Drunk Doram#rockwn11";
+		sleep 3000;
+		npctalk "We're the pioneers of Rock Ridge!";
+		npctalk "We're the pioneers of Rock Ridge!", "Carmen O'Neil#rockwn06";
+		npctalk "Nya, nya, nya! Teehee, nya!", "Drunk Doram#rockwn11";
+		sleep 9000;
+		.talk = 0;
+	}
+	end;
+}
+
+harboro1,100,77,4	script	Maybell#rockn02	8_F,{
+	mes "[梅貝爾]";
+	mes "巖嶺是一個海邊村莊。一開始？好吧，即使現在它正在與大海作鬥爭。";
+	next;
+	mes "[梅貝爾]";
+	mes "您知道這個村莊下面還有一個層次嗎？那是原始的岩石山脊，由於海水侵蝕和地下水淹沒而變得無人居住。";
+	next;
+	mes "[梅貝爾]";
+	mes "Costell市長的解決方案是埋葬第一層，並在其頂部建造一個新村莊。現在過去是一樓的是地下室。二樓實際上是第一層。";
+	next;
+	mes "[梅貝爾]";
+	mes "我們仍然必須每天抽水以防止洪水，但這只是一個小的挫折？我們向前邁出了一步，向前邁進了兩步。岩石嶺將繼續增長。";
+	close;
+}
+
+harboro1,229,64,3	script	Rosemary Weber#rockn03	4_F_EINWOMAN,{
+	mes "[迷迭香韋伯]";
+	mes "我厭倦了被這麼多的水包圍！這就是我們必須不斷修理地面和建築物的原因。";
+	mes "您是否知道我們必須掩埋曾經是村莊的地面？這是一個艱難的決定，但仍然沒有解決我們所有的問題。";
+	next;
+	mes "[迷迭香韋伯]";
+	mes "大多數建築物都是用木頭製成的，容易腐爛。徹底填補它們花了很多錢和精力，因此我們的新地面不會沉入。";
+	next;
+	mes "[迷迭香韋伯]";
+	emotion 54, getnpcid(0,"Rosemary Weber#rockn03");
+	mes "而且填充工作還沒有完成。嘆息，我不知道這是否是一個好的決定。";
+	close;
+}
+
+harboro1,87,207,1	script	Drunk Doram#rockwn11	4_CAT_SAILOR5,{
+	mes "[利蘭·溫金斯]";
+	mes "我們是Rock Ridge的偉大開拓者！嘿，霍！";
+	next;
+	mes "[卡門·奧尼爾]";
+	mes "我們挖礦，建造房屋！沒有海水或沙塵暴可以阻止我們！";
+	next;
+	npctalk "He's so loud.", "Edith Richie#rockwn02", bc_self;
+	mes "[醉酒的Doram]";
+	mes "恩！ nya-nya！ nya ha ha hah！ nya-nya！";
+	close;
+}
+
+
+harboro1,80,204,7	script	Elsie#rockwn05	4W_KID,5,5,{
+	mes "[埃爾西]";
+	mes "哇，真漂亮！";
+	next;
+	emotion ET_QUESTION;
+	mes "[埃爾西]";
+	mes "這是五百萬的Zeny。那是多少錢？";
+	next;
+	mes "[莫蒂默]";
+	mes "啊，這個價格僅適用於冒險家。";
+	mes "像您一樣的小女士可以在200個Zeny上擁有它。";
+	next;
+	mes "[" + strcharinfo(0) + "]";
+	mes "我也很漂亮。";
+	next;
+	emotion ET_SWEAT;
+	mes "[莫蒂默]";
+	mes "...你要么妄想";
+	mes "或無恥。";
+	next;
+	emotion ET_FRET, playerattached();
+	mes "[" + strcharinfo(0) + "]";
+	mes "你無恥！";
+	close;
+
+OnTouch:
+	emotion ET_SURPRISE;
+	end;
+}
+
+harboro1,81,205,1	script	Mortimer#rockwn07	4_M_ROGUE,5,5,{
+	mes "[莫蒂默]";
+	mes "紀念品！我有紀念品！";
+	mes "為您的家人，朋友，老師和重要的其他人買到紀念品！";
+	next;
+	mes "[莫蒂默]";
+	mes "啊，冒險家。您想買一些紀念品嗎？";
+	next;
+	npctalk "They're so cheap, you're getting them almost for free. I'm actually losing money doing this!", "", bc_self;
+	mes "[莫蒂默]";
+	mes "我給你特別的折扣。這裡的羽毛配件只有200萬Zeny。這個手帕是 - 哦，哇！ - 只有500萬！";
+	next;
+	emotion ET_HUK, playerattached();
+	mes "[" + strcharinfo(0) + "]";
+	mes "多麼高昂！";
+	close;
+
+OnTouch:
+	npctalk "Souvenirs! I've got souvenirs!", "", bc_self;
+	end;
+}
+
+harboro1,73,206,5	script	Walter Greenwald#rockwn	4_M_BARD,{
+	mes "[沃爾特·格林瓦爾德]";
+	mes "我認為您是出於某種原因從大陸來到這裡的。";
+	mes "當您完成它並且不確定該怎麼辦，好吧...";
+	next;
+	mes "[沃爾特·格林瓦爾德]";
+	mes "我建議您沿著通往村莊東門的中央道路，向南移動一點。";
+	mes "打開地圖時，它是在3點鐘的方向上。";
+	next;
+	mes "[沃爾特·格林瓦爾德]";
+	mes "在那裡，您可以遇到提供工作和用餐的人。";
+	mes "當然，他們被其他想要工作和用餐的人所包圍。";
+	close;
+}
+
+harboro1,84,200,5	script	Delbert Lake#rockwn04	4_M_EINMINER,{
+	mes "[德爾伯特湖]";
+	mes "直到我成為百萬富翁，我才回到家！";
+	mes "我很高興來到這裡，以至於我穿著完整的採礦裝備登上了這艘船！";
+	next;
+	mes "[德爾伯特湖]";
+	mes "有一塊漂亮的岩石！巷！";
+	mes "出來，黃金，銀，鑽石！你不能躲在德爾伯特！";
+	next;
+	emotion ET_FRET, getnpcid(0, "Constance#rockwn18");
+	mes "[康斯坦斯]";
+	mes "嘿，你瘋了嗎？";
+	mes "那不是礦物質，它是裝飾性的岩石！現在就把那個拾音器拿走了！";
+	close;
+}
+
+harboro1,85,195,1	script	Constance#rockwn18	4_F_EINWOMAN,5,5,{
+	mes "[康斯坦斯]";
+	mes "啊，你是冒險家嗎？請幫我停止那個瘋子！";
+	next;
+	mes "[康斯坦斯]";
+	mes "他穿著那個沉重的採礦裝備從大陸上下來的船，然後看著那塊岩石，變成了挑剔的瘋子。";
+	next;
+	emotion ET_ANGER;
+	mes "[康斯坦斯]";
+	mes "這不是礦物靜脈，而是我們村民一起移動的裝飾岩石。我告訴他，但他不在乎！";
+	mes "他穿著完整的採礦裝備，但他無法從礦物質靜脈內告訴普通岩石。那有多愚蠢？";
+	close;
+
+OnTouch:
+	npctalk "Mwa hah hah, I'm going to mine everything!", "Delbert Lake#rockwn04", bc_self;
+	npctalk "Hey, stop swinging that pickax!", "", bc_self;
+	end;
+}
+
+harboro1,93,201,1	script	Roland Burts#rockwn17	4_M_ILYA,{
+	mes "[羅蘭·伯特]";
+	mes "我們的村莊受到自己的警惕者的保護。";
+	mes "他們在警長扭曲的命令下保持警惕。";
+	next;
+	emotion ET_KEK;
+	mes "[羅蘭·伯特]";
+	mes "我們最大的威脅無疑是布法羅匪徒，但我們也有一些野生動物的問題。";
+	mes "在村莊的下面，有？ *顫抖*讓我們不要去那裡。";
+	close;
+}
+
+harboro1,98,211,3	script	Loretta#rockwn08	4_F_ACOLYTE,5,5,{
+	emotion ET_THROB;
+	mes "[洛麗塔]";
+	mes "歡迎來到自由城，洛克嶺。奧丁無論走到哪裡都與你同在！";
+	mes "如果您想听聽上帝的話，請來找我們。";
+	next;
+	mes "[洛麗塔]";
+	mes "我們不需要教堂。奧丁沒有來建築物，他來到了我們的心中。";
+	mes "讓我們向他祈禱，向他表示感謝。";
+	next;
+	emotion ET_KEK, getnpcid(0, "Dolores#rockwn09");
+	npctalk "I wish I could have a glass of cool lemonade somewhere under a nice shade.", "Dolores#rockwn09", bc_self;
+	mes "[多洛麗絲]";
+	mes "洛雷塔姐妹，我的腿受傷。 *抱怨*";
+	mes "他可能不會來建築物，但我想坐在其中。";
+	next;
+	mes "[多洛麗絲]";
+	mes "啊，就是這樣，莫里斯兄弟！";
+	next;
+	mes "[洛麗塔]";
+	mes "...嘆。當一天的最後一艘船進入碼頭時，無論您想要什麼，我都會給你買檸檬水，莉莉德。";
+	mes "因此，就目前而言，像上帝的僕人一樣行事。";
+	next;
+	emotion ET_BIGTHROB, getnpcid(0, "Dolores#rockwn09");
+	emotion ET_BIGTHROB, getnpcid(0, "Maurice#rockwn10");
+	npctalk "We believe in him!", "Dolores#rockwn09", bc_self;
+	npctalk "We believe in him!", "Maurice#rockwn10", bc_self;
+	mes "[莫里斯]";
+	mes "檸檬水！我的意思是，上帝與你同在！";
+	close;
+
+OnTouch:
+	npctalk "Odin", "", bc_self;;
+	npctalk "Is", "Dolores#rockwn09", bc_self;
+	npctalk "With you.", "Maurice#rockwn10", bc_self;
+	end;
+}
+
+harboro1,100,211,3	script	Dolores#rockwn09	1_F_PRIEST,{
+	mes "[多洛麗絲]";
+	mes "我同意我們的心是我們的教堂。";
+	mes "但是上帝可以來到舒適的臥室和一個漂亮的廚房。我們不必整天站在大風的港口中。";
+	next;
+	mes "[洛麗塔]";
+	mes "如果有人聽到您的聲音，他們會認為您沒有餵食或被允許入睡數天";
+	mes "實際上，您每天都比我們其他人晚了。";
+	next;
+	emotion ET_PROFUSELY_SWEAT;
+	mes "[多洛麗絲]";
+	mes "我該怎麼辦？上帝在我的夢中拜訪了我。";
+	mes "我不是要醒來！";
+	close;
+}
+
+harboro1,101,210,3	script	Maurice#rockwn10	1_M_PASTOR,{
+	mes "[莫里斯]";
+	mes "隨著年齡的增長，整天站在外面，傳播他的話變得越來越困難。";
+	mes "但是我決定完成任務，就像我到達這裡的第一天一樣。";
+	next;
+	emotion ET_DELIGHT;
+	mes "[莫里斯]";
+	mes "我不會讓我的身體疲憊陷入困境。";
+	mes "我將用我的每一盎司的能量將他的教義傳播給這個新土地的人們！";
+	close;
+}
+
+harboro1,94,237,3	script	Cordell#rockn01	4_M_MAYOR,{
+	mes "[科德爾]";
+	mes "只要看火車站，我就會感到高興。你知道這是我們村莊的象徵。";
+	next;
+	mes "[科德爾]";
+	mes "該礦離村莊很遠，因此一開始運輸礦石是一個大問題。";
+	next;
+	mes "[科德爾]";
+	mes "最終引入火車系統之後，岩石嶺的實際發展開始。";
+	mes "好的，這也加劇了布法羅土匪的問題，但一切總是有一個黑暗的一面。";
+	next;
+	emotion ET_BIGTHROB;
+	mes "[科德爾]";
+	mes "但是，我們的洛克山脊人民不是在這裡屈服，我們在這裡征服！";
+	close;
+}
+
+harboro1,74,259,3	script	Eloise McCurdy#rockn14	4_F_GUNSLINGER,{
+	mes "[埃洛伊絲·麥柯迪]";
+	mes "我為保護貨物而感到自豪。";
+	mes "我的工作是保護它免受雨水，風，當然還有小偷。";
+	next;
+	emotion ET_CRY;
+	mes "[埃洛伊絲·麥柯迪]";
+	mes "雖然最近... HMPF，我的驕傲被那些可惡的布法羅·匪徒所壓倒。";
+	close;
+}
+
+harboro1,130,237,3	script	Loading Dock Foreman#ro	4_M_05,{
+	mes "[加載碼頭工頭]";
+	mes "火車從礦山帶來礦石，並從該碼頭為礦工帶來了耗材。";
+	next;
+	mes "[加載碼頭工頭]";
+	mes "這就是為什麼這個地方總是很忙的原因。這裡的延遲導致岩石嶺的其他任何地方都有延遲。";
+	next;
+	npctalk "I'd be motivated to work harder if you raise my salary.", "Jader#rockn11", bc_self;
+	npctalk "Hah, hah, hah! Father's power!", "Rosco Richie#rockn12", bc_self;
+	npctalk "How did I end up here?", "Portnias#rockn13", bc_self;
+	mes "[加載碼頭工頭]";
+	mes "停止像煙灰石一樣發牢騷。為成為團隊的一員而感到自豪！";
+	close;
+}
+
+harboro1,126,236,7	script	Jader#rockn11	4_M_SITDOWN,{
+	mes "[核心]";
+	mes "啊，我不能動。我在酸痛。";
+	mes "火車是否經常出現並不重要。我們總是很忙。";
+	next;
+	mes "[加載碼頭工頭]";
+	mes "HMPF，您的努力不夠。 TSK，TSK。";
+	mes "您應該很高興自己有工作，而許多其他人則沒有工作！";
+	next;
+	emotion ET_OHNO;
+	npctalk "I'm tired, and it's not just physical fatigue. *Mumble Mumble*", "", bc_self;
+	mes "[核心]";
+	mes "* gasp* h-h-h-phow你長時間站在那裡？哦，當然，我很高興能找到一份工作！";
+	mes "我 - 我喜歡在這個裝載碼頭工作。這是我有史以來最好的工作！";
+	close;
+}
+
+harboro1,128,233,7	script	Rosco Richie#rockn12	4_M_NOV_HUNT,{
+	mes "[羅斯科·里奇]";
+	mes "現在，村里有更多的人，可用的工作更少。我很高興有一份足以養活家人的工作。";
+	next;
+	npctalk "Edith! Daddy is working hard for you!", "", bc_self;
+	mes "[羅斯科·里奇]";
+	mes "哈，哈！我可以為我的女兒做這個！";
+	close;
+}
+
+harboro1,130,232,7	script	Portnias#rockn13	4_CAT_SAILOR2,{
+	mes "[波尼亞斯]";
+	mes "我來這裡是因為我聽說我可以很快變得富有，nya。";
+	mes "一旦我從PA-STA下船，我就乘船去了Rock Ridge。";
+	next;
+	mes "[波尼亞斯]";
+	mes "現在，我不再在乎金錢了。我只想休息。 nya ...";
+	mes "自從我來這里以來，我每天都在移動貨物，我的背部正在殺死我。 *mewl*";
+	next;
+	emotion ET_OTL;
+	mes "[波尼亞斯]";
+	mes "以這種速度，我將所有我收入的Zeny花在支付醫院賬單上。 *mewl*";
+	close;
+}
+
+harboro1,144,262,7	script	Scrap Metal Collector#s1	4_M_CAVE1,{
+	mes "[廢金屬收集器]";
+	mes "我想回家。我們永遠不會在這裡賺很多錢。";
+	next;
+	mes "[廢金屬收集器]";
+	mes "不。我們只需要保持堅強，直到結束。之後我們會有機會。";
+	next;
+	mes "[廢金屬收集器]";
+	mes "但這太多了。我認為我不能再這樣做了。";
+	next;
+	mes "[廢金屬收集器]";
+	mes "來吧，讓我們耐心等待更長的時間。";
+	next;
+	mes "[廢金屬收集器]";
+	mes "嘆息...我想念我媽媽。";
+	close;
+}
+
+harboro1,146,264,3	script	Scrap Metal Collector#s2	4_M_HUBOY,{
+	mes "[廢金屬收集器]";
+	mes "為什麼這裡沒有金屬？火車襲擊時，有些人一定已經下降了。";
+	next;
+	mes "[廢金屬收集器]";
+	mes "如果有的話，到現在為止，其他人必須找到它。";
+	next;
+	mes "[廢金屬收集器]";
+	mes "嘆了口氣，然後我們什麼也沒出售。我們現在應該去哪裡？";
+	next;
+	mes "[廢金屬收集器]";
+	mes "也許我們應該回到大陸。";
+	next;
+	mes "[廢金屬收集器]";
+	mes "什麼？不！我不想成為騙子！我們告訴我們的家人，我們會回來有很多錢。";
+	close;
+}
+
+harboro1,182,241,5	script	Stray Dog#srdg02	4_DOG01,{
+	emotion ET_SEXY;
+	npctalk "I hope they'd leave some food for me.", "", bc_self;
+	end;
+}
+
+harboro1,183,241,5	script	Stray Dog#srdg01	4_DOG01,{
+	emotion ET_SEXY;
+	npctalk "I'd love to have a piece of that meat.", "", bc_self;
+	end;
+}
+
+harboro1,187,236,3	script	Customer#srdg01	4_TOWER_04,{
+	mes "[顧客]";
+	mes "這家餐廳裡的人不多。";
+	next;
+	emotion ET_FRET, getnpcid(0, "Customer#srdg02");
+	mes "[顧客]";
+	mes "誰想吃這麼可怕的食物？";
+	next;
+	mes "[顧客]";
+	mes "哦，您知道這個地方最好的餐館在哪裡嗎？";
+	next;
+	emotion ET_QUESTION, getnpcid(0, "Customer#srdg02");
+	mes "[顧客]";
+	mes "在哪裡？";
+	next;
+	mes "[顧客]";
+	mes "警長辦公室。地下監獄裡的人每天要餵三遍，食物是如此之大，以至於有些人實際上是為此犯下輕罪。";
+	next;
+	mes "[顧客]";
+	mes "這對您有意義嗎？我不相信有值得犯罪的監獄食品。";
+	close;
+}
+
+harboro1,182,236,5	script	Customer#srdg02	4_TOWER_02,{
+	mes "[顧客]";
+	mes "他們為什麼要盯著我們？";
+	next;
+	mes "[顧客]";
+	mes "他們在乞求。";
+	next;
+	emotion ET_SPARK, getnpcid(0, "Stray Dog#srdg01");
+	emotion ET_SPARK, getnpcid(0, "Stray Dog#srdg02");
+	mes "[顧客]";
+	mes "gh，他們凝視的眼睛使我感到太不舒服了。";
+	close;
+}
+
+harboro1,231,251,4	script	Merchant's Chest	4_TREASURE_BOX,{
+	npctalk "Exotic Merchant: Hudin's treasure chest! Don't touch it. Thank you!", "Exotic Merchant";
+	end;
+}
+
+harboro1,229,256,7	script	Charlotte	4_DST_CAMEL,{
+	npctalk "*Shriek*";
+	sleep 1000;
+	npctalk "Exotic Merchant: What's wrong, Charlotte?", "Exotic Merchant";
+	end;
+}
+
+harboro1,192,262,7	duplicate(dummy_npc)	Bulk Trader's Camel#1	4_DST_CAMEL
+harboro1,197,262,7	duplicate(dummy_npc)	Bulk Trader's Camel#2	4_DST_CAMEL
+harboro1,210,262,7	duplicate(dummy_npc)	Bulk Trader's Camel#7	4_DST_CAMEL
+harboro1,216,262,7	duplicate(dummy_npc)	Bulk Trader's Camel#8	4_DST_CAMEL
+harboro1,223,261,1	duplicate(dummy_npc)	Bulk Trader's Camel#9	4_DST_CAMEL
+harboro1,225,257,6	duplicate(dummy_npc)	Bulk Trader's Camel#10	4_DST_CAMEL
+harboro1,227,263,1	duplicate(dummy_npc)	Bulk Trader's Camel#11	4_DST_CAMEL
+harboro1,229,258,6	duplicate(dummy_npc)	Bulk Trader's Camel#12	4_DST_CAMEL
+harboro1,234,259,3	duplicate(dummy_npc)	Bulk Trader's Camel#13	4_DST_CAMEL
+harboro1,236,252,6	duplicate(dummy_npc)	Bulk Trader's Camel#14	4_DST_CAMEL
+harboro1,237,256,3	duplicate(dummy_npc)	Bulk Trader's Camel#15	4_DST_CAMEL
+harboro1,238,258,3	duplicate(dummy_npc)	Bulk Trader's Camel#16	4_DST_CAMEL
+
+harboro1,226,255,3	script	Bulk Trader's Camel#3	4_DST_CAMEL,{
+	mes "[駱駝]";
+	mes "嘎啊啊。";
+	close;
+}
+
+harboro1,227,260,3	script	Bulk Trader's Camel#4	4_DST_CAMEL,{
+	mes "[駱駝]";
+	mes "*哼哼*";
+	close;
+}
+harboro1,227,260,3	duplicate(Bulk Trader's Camel#4)	Bulk Trader's Camel#6	4_DST_CAMEL
+
+harboro1,232,258,6	script	Bulk Trader's Camel#5	4_DST_CAMEL,{
+	mes "[駱駝]";
+	mes "你為什麼繼續向我戳戳？";
+	next;
+	mes "[駱駝]";
+	mes "...糟糕。";
+	mes "忘了你聽到我的聲音。";
+	next;
+	mes "[駱駝]";
+	mes "嘎啊啊啊。";
+	close;
+}
+
+harboro1,210,219,5	script	Priest#srdg01	4_M_MINISTER,{
+	setpcblock PCBLOCK_NPC, true;
+	npctalk "Are you anguished or sad? Let me help you.", "", bc_self;
+	sleep2 1500;
+	npctalk "Every one of us is born to be loved.", "", bc_self;
+	setpcblock PCBLOCK_NPC, false;
+	end;
+}
+
+harboro1,229,212,7	script	Herman Farland#rockn19	4_M_TWTEAMAN,{
+	mes "[赫爾曼·法蘭]";
+	mes "啊，是的，這是警長辦公室。你問你必須排隊等候嗎？";
+	next;
+	mes "[赫爾曼·法蘭]";
+	mes "嗯，你是冒險家，對嗎？然後只要越過那扇門就直行。";
+	next;
+	mes "[赫爾曼·法蘭]";
+	mes "您是在這裡幫助警長，對嗎？我們在這裡向他尋求幫助，所以我知道您必須在我們其他人之前見到他。";
+	next;
+	npctalk "I understand. Aww, my legs!", "", bc_self;
+	mes "[赫爾曼·法蘭]";
+	mes "沒關係我。我完全理解。噢，我已經站在腳上了這麼久了，我幾乎無法移動腿！";
+	close;
+}
+
+harboro1,231,212,7	script	Edel Peppina#rockn16	4_F_CAPEGIRL,{
+	mes "[埃德爾·佩皮納]";
+	mes "警長辦公室人手不足。我整天都在排隊等候，這條線是我第一次到達的時候。我一直從地下室聽到奇怪的聲音，我真的需要有人來檢查它們。";
+	next;
+	mes "[埃德爾·佩皮納]";
+	mes "我們的警長沒有法律權威，但他的辦公室仍然是我們唯一可以為這種事情求助的地方。";
+	next;
+	mes "[埃德爾·佩皮納]";
+	mes "我希望村里的事情很快就會從這條線開始。";
+	close;
+}
+
+harboro1,233,215,3	script	Wilfred Sagan#rockn15	4_M_SITDOWN,{
+	mes "[威爾弗雷德·薩根]";
+	mes "警長一直在忙於與布法羅·匪徒打交道，以至於他沒有時間做其他事情。我一直在這裡等他幾個小時。";
+	close;
+}
+
+harboro1,168,216,3	script	Hilliard#rockn09	4_TOWER_12,{
+	mes "[希利亞德]";
+	mes "村里的許多人都失業，所有可用的工作都給冒險家提供。";
+	next;
+	npctalk "This is why it's important to be in the right place at the right time.", "", bc_self;
+	mes "[希利亞德]";
+	mes "由於冒險家的湧入，唯一蓬勃發展的是旅館。";
+	mes "也許我本人應該開設一家旅館。";
+	close;
+}
+
+harboro1,156,215,5	script	Innkeeper#rockridge	1_ETC_01,{
+	mes "[旅店老闆]";
+	mes "歡迎來到懶惰的貓頭鷹旅館。";
+	next;
+	mes "[旅店老闆]";
+	mes "尋找住宿地點？你來對地方！";
+	mes "你想要一個房間嗎？是5,000 Zeny。";
+	next;
+	switch( select( "Save.", "Get a room at 5,000 Zeny.", "Quit." ) ) {
+	case 1:
+		mes "[旅店老闆]";
+		mes "保存。請再來。";
+		savepoint "harboro1",156,211,2,2;
+		close;
+	case 2:
+		if (Zeny < 5000) {
+			mes "[旅店老闆]";
+			mes "對不起，但是有5,000個Zeny的房間。";
+			mes "如果您沒有足夠的錢，那麼我就不能讓您留下。";
+			close;
+		}
+		mes "[旅店老闆]";
+		mes "享受懶惰的貓頭鷹的住宿。";
+		close2;
+		Zeny = Zeny - 5000;
+		percentheal 100,100;
+		warp "harboro1",157,210;
+		end;
+	case 3:
+		mes "[旅店老闆]";
+		mes "請再來。";
+		close;
+	}
+}
+
+harboro1,228,170,3	script	Wanderer Doram#rkrgtwn	4_DR_STELO,{
+	mes "[流浪者Doram]";
+	mes "號泣！警長辦公室到底在哪裡？我的錢！ moneeyyy！";
+	next;
+	mes "[流浪者Doram]";
+	mes "每個人都說岩石嶺是機會之地！為什麼沒有人告訴我有關可怕的水牛匪徒？";
+	next;
+	mes "[流浪者Doram]";
+	mes "*打ic*他們搶了我乾淨。我什至沒有足夠的錢來喝一杯kahluna牛奶。";
+	emotion ET_CRY;
+	close;
+
+OnTouch:
+	npctalk "Wanderer Doram: Which way is east for the gods' sake?!", "", bc_self;
+	end;
+}
+
+harboro1,130,158,3	script	Akuha#rockn19	4_M_CACTUSCHILD,5,5,{
+	mes "[得到]";
+	mes "爺爺說，我們不應該跟隨陌生人，否則他們會抓住我們所有的荊棘。如果他告訴我真相怎麼辦？";
+	next;
+	emotion ET_CRY;
+	mes "[得到]";
+	mes "號泣！奶奶！號泣！";
+	next;
+	mes "[納哈里]";
+	mes "不用擔心。你的荊棘是如此鋒利，沒人敢觸摸他們。";
+	mes "我的頭上還有花嗎？";
+	next;
+	mes "[得到]";
+	mes "* sniffle*是的，就像我上次檢查的那樣漂亮。";
+	next;
+	mes "[納哈里]";
+	mes "那我們就沒關係了。讓我們繼續前進，我們很快會見奶奶。";
+	mes "讓我們檢查一下。";
+	next;
+	emotion ET_KEK;
+	mes "[得到]";
+	mes "我不能失去所有的荊棘，並有一張光滑的臉。我會很ham愧，我想把自己埋在地上。";
+	close;
+
+OnTouch:
+	npctalk "Grandma... Grandma... Boohoo!", "", bc_self;
+	end;
+}
+
+harboro1,132,157,3	script	Nahari#rockn19	4_F_CACTUSCHILD2,{
+	mes "[納哈里]";
+	mes "這個地方很棒。看看這些大型木製房屋。";
+	mes "海上有樹木，它們看起來都一樣。";
+	next;
+	mes "[得到]";
+	mes "*抱怨*納哈里（Nahari），奶奶不會對我們感到滿意。";
+	mes "讓我們回去，然後她擔心。";
+	next;
+	mes "[納哈里]";
+	mes "但是我們甚至都不知道我們在哪裡。";
+	mes "讓我們環顧四周。看，那裡有很多陌生人！";
+	next;
+	emotion ET_CRY, getnpcid(0, "Akuha#rockn19");
+	mes "[得到]";
+	mes "如果我們不能回家怎麼辦？";
+	close;
+}
+
+harboro1,99,127,7	script	Kid#srdg01	4_KID01,{
+	npctalk "Hey, did you guys fight?", "", bc_self;
+	end;
+}
+
+harboro1,96,130,3	duplicate(dummy_npc)	Thunder#srdg01	4_DONKEY
+harboro1,104,130,5	duplicate(dummy_npc)	Lightning#srdg01	4_DONKEY
+harboro1,102,133,7	duplicate(dummy_npc)	Speed Racer 2#srdg01	4_DONKEY
+harboro1,104,132,5	duplicate(dummy_npc)	Speed Racer 1#srdg01	4_DONKEY
+
+
+harboro1,174,125,3	script	Villager#srdg01	1_M_INNKEEPER,{
+	npctalk "It's pretty windy today. I'd better keep all the doors and windows closed.", "", bc_self;
+	end;
+}
+
+harboro1,184,123,5	script	Traveler#srdg02_1	4_M_SIT_NOVICE,{
+	mes "[遊客]";
+	mes "也許我們應該在礦山之外探索，並儘可能深入。";
+	next;
+	mes "[遊客]";
+	mes "如果太危險了怎麼辦？我說我們應該繞道去別的地方。";
+	next;
+	mes "[遊客]";
+	mes "或者我們可以成為一個未知世界的探索者！";
+	next;
+	mes "[遊客]";
+	mes "否。東側被水牛匪徒淹沒。我們應該等到他們的情況得到解決。";
+	next;
+	mes "[遊客]";
+	mes "那些笨拙的布法羅土匪！";
+	close;
+}
+
+harboro1,188,123,3	script	Traveler#srdg02_2	4_M_SITDOWN,{
+	mes "[遊客]";
+	mes "我決定！我將加入警惕！";
+	next;
+	mes "[遊客]";
+	mes "您確定他們會讓您進入嗎？";
+	next;
+	mes "[遊客]";
+	mes "我不知道，但我厭倦了扭曲我的拇指。這不是我們旅程的結局！";
+	close;
+}
+
+harboro1,211,115,5	script	Worker#srdg01	1_M_SIGNMONK2,{
+	mes "[工人]";
+	mes "我們已經好幾天了。你能相信嗎？";
+	next;
+	mes "[工人]";
+	mes "我們無法工作，但是我們不允許離開。那有多不公平？";
+	next;
+	mes "[工人]";
+	mes "如果明天沒有解決，那我要走了！";
+	close;
+}
+
+harboro1,213,117,3	script	Worker#srdg02	1_M_JOBGUIDER,{
+	mes "[工人]";
+	mes "似乎我們今天不會像昨天和前一天一樣工作。";
+	next;
+	mes "[工人]";
+	mes "我不想再次空手地回家。";
+	next;
+	mes "[工人]";
+	mes "也許我應該自己處理布法羅匪徒。";
+	close;
+}
+
+harboro1,211,113,7	script	Foreman#srdg01	4_F_EDEN_OFFICER,{
+	mes "[工人]";
+	mes "我們什麼時候可以重新開始工作？";
+	next;
+	mes "[工人]";
+	mes "我們必須等待多長時間？";
+	next;
+	mes "[領班]";
+	mes "啊，伙計們，請冷靜下來。";
+	next;
+	mes "[工人]";
+	mes "你冷靜下來。我們每小時就坐著賺錢。";
+	next;
+	mes "[領班]";
+	mes "在獲得耗材之前，我們無能為力。";
+	next;
+	mes "[工人]";
+	mes "那是什麼時候？";
+	next;
+	mes "[領班]";
+	mes "我們無能為力。布法羅匪徒偷走了我們的最後一貨物，這不會是他們最後一次這樣做。";
+	next;
+	mes "[工人]";
+	mes "我不在乎。如果我明天不能工作，那我會走出這裡！";
+	close;
+}
+
+harboro1,214,115,3	script	Worker#srdg03	1_M_HOF,{
+	mes "[工人]";
+	mes "警長甚至關心這種情況嗎？";
+	next;
+	mes "[工人]";
+	mes "他會更好。";
+	next;
+	mes "[工人]";
+	mes "也許我應該加入警惕。";
+	next;
+	mes "[工人]";
+	mes "忘了它。我嘗試了，被拒絕了。";
+	next;
+	mes "[工人]";
+	mes "嘆氣...我們必須等多久？";
+	close;
+}
+
+harboro1,290,104,5	script	Eznia#rockn04	4_DR_M_02,{
+	mes "[埃茲尼亞]";
+	mes "您是否知道第一層的岩石山脊上的大多數建築物都在他們面前有一個巨大的招牌板？";
+	next;
+	mes "[埃茲尼亞]";
+	mes "這是一個有趣的現象。我認為招牌應該使建築物看起來像是兩個故事，至少在正面。";
+	next;
+	mes "[埃茲尼亞]";
+	mes "實際上，在創建地下室之前，它們曾經是兩個故事。業主必須錯過兩個故事。";
+	close;
+}
+harboro1,273,259,4	script	Alain Morlein#dy	4_M_YURI,{
+	emotion ET_FRET;
+	mes "[阿蘭·莫萊因]";
+	mes "嘿，你為什麼不能給我貸款？";
+	next;
+	emotion ET_PROFUSELY_SWEAT, getnpcid(0, "Bank Clerk#dy");
+	emotion ET_SORRY, getnpcid(0, "Bank Clerk#dy");
+	mes "[銀行書記員]";
+	mes "我們很抱歉，但我們沒有為個人客戶提供服務。";
+	next;
+	mes "[阿蘭·莫萊因]";
+	mes "你在開玩笑吧？我昨天使用了您的服務。看，你不記得我嗎？";
+	next;
+	mes "[銀行書記員]";
+	mes "讓我看看你的身份證。如您所知，這裡很多人看起來都一樣。";
+	next;
+	mes "[銀行書記員]";
+	mes "我對錯誤識別引起的所有交易錯誤負責。拜託，你必須了解我。";
+	next;
+	emotion ET_THINK;
+	mes "[阿蘭·莫萊因]";
+	mes "*哼哼*";
+	next;
+	emotion ET_THANKS, getnpcid(0, "Bank Clerk#dy");
+	mes "[銀行書記員]";
+	mes "感謝您的理解。祝你有美好的一天。";
+	close;
+}
+
+harboro1,270,252,6	script	Bank Clerk#dy	4_M_MANAGER,{
+	emotion ET_BIGTHROB;
+	mes "[銀行書記員]";
+	mes "你好。";
+	mes "歡迎來到GC銀行的Rock Ridge Branch。我今天如何為您提供幫助？";
+	next;
+	switch( select( "Check my bank account.", "Buy an investment product.", "What's GC Bank?", "I'm just stopping by." ) ) {
+	case 1:
+		mes "[銀行書記員]";
+		mes "" + strcharinfo(0) + ", right?";
+		next;
+		mes "[銀行書記員]";
+		mes "您沒有我們的帳戶，但是您確實有一個帳戶" + strcharinfo(0) + ". Is there anything else I can do for you today?";
+		close2;
+		// todoUI bank
+		end;
+	case 2:
+		emotion ET_SORRY;
+		mes "[銀行書記員]";
+		mes "對不起，";
+		mes "但是我們的投資產品僅適用於企業。";
+		close;
+	case 3:
+		mes "[銀行書記員]";
+		mes "你是說這家銀行嗎？";
+		mes "沒有多少人知道這一點，因為它還沒有很多分支機構。";
+		next;
+		mes "[銀行書記員]";
+		mes "它的主要客戶是公司和其他業務。";
+		next;
+		mes "[銀行書記員]";
+		mes "當然，我們也為個人客戶提供服務，但是公司是使大多數銀行從事業務的原因。";
+		next;
+		mes "[銀行書記員]";
+		mes "這只是一個謠言，但GC銀行的創始人以他最喜歡的東西命名為他的銀行：黃金硬幣。";
+		next;
+		emotion ET_COOL;
+		mes "[銀行書記員]";
+		mes "您看不到這座建築物屋頂上的大美麗金幣嗎？";
+		close;
+	case 4:
+		mes "[銀行書記員]";
+		mes "哈哈，我明白了。";
+		mes "我們在沙漠中，我不能進入建築物，但我希望您會享受您的住宿。";
+		close;
+	}
+}
+
+harboro1,241,200,5	script	Gunslinger Posh#rockn05	4_M_HUMERCHANT,{
+	mes "[槍手posh]";
+	mes "您在尋找好武器嗎？您知道槍支是該地區的主要武器，對嗎？";
+	next;
+	npctalk "Some people, after selling guns for a while, started to think that they were also good at using one. I'm not one of them. I've always been good at it.", "", bc_self;
+	mes "[槍手posh]";
+	mes "啊，商店關閉了。主人桑德斯（Sanders）出去去沙漠，揮舞著槍，親自狩獵布法羅·匪徒。然後他摔倒了，傷了他的背。";
+	next;
+	mes "[槍手posh]";
+	mes "不用擔心。您仍然可以買槍。小桑德斯（Sanders Jr.";
+	next;
+	npctalk "You can get to the tool shop by following this road east.", "", bc_self;
+	mes "[槍手posh]";
+	mes "他沒有像父親那樣寬闊的產品，但是他有各種各樣的模型。";
+	close;
+}
+
+harboro1,274,214,5	script	White Twig#rockn19	4_F_CACTUSLADY3,5,5,{
+	mes "[白樹木]";
+	mes "akuha！納哈里！他們去了哪裡？";
+	next;
+	mes "[白樹木]";
+	mes "您是否見過幾個仙人掌孩子，一個男孩和一個女孩？";
+	mes "我把它們帶到這裡，向他們展示陌生人村，我在人群中失去了它們。";
+	next;
+	mes "[白樹木]";
+	mes "我應該怎麼辦？ akuha！納哈里！";
+	mes "如果您看到他們，請告訴他們他們的奶奶正在尋找他們。";
+	close;
+
+OnTouch:
+	npctalk "Akuha! Nahari! Oh gosh, where are they?", "", bc_self;
+	end;
+}
+
+harboro1,278,195,5	script	Carola Firth#rockn17	4_F_CAPEGIRL,{
+	mes "[卡羅拉·弗斯]";
+	mes "你聽到了嗎？地下室被鬧鬼了！";
+	next;
+	mes "[卡羅拉·弗斯]";
+	mes "有消息說，有些工人在地下室被埋葬之前無法及時離開。";
+	mes "這個地方有很多人進出，很難跟每個人。";
+	next;
+	npctalk "Boo!", "Lucas Richie#rockn08", bc_self;
+	mes "[卡羅拉·弗斯]";
+	mes "一些工人去地下室進行維修工作，聽到了奇怪的沙沙聲。";
+	mes "當他們發現噪音的來源時？ kyaaaahhh！";
+	next;
+	npctalk "Carola, you do things that scare most men, and yet you're scared of something that doesn't even exist.", "Lucas Richie#rockn08", bc_self;
+	npctalk "That's why I'm scared: I don't want to be haunted by the spirit of everyone I've wronged.", "", bc_self;
+	mes "[卡羅拉·弗斯]";
+	mes "盧卡斯！你要我殺了你嗎？停止這樣做！";
+	mes "噢，我太害怕了，不再談論這個。";
+	close;
+}
+
+harboro1,280,195,3	script	Lucas Richie#rockn08	4_M_ROGUE,{
+	mes "[盧卡斯·里奇]";
+	mes "地下室被鬧鬼了。您真的不相信，對嗎？";
+	mes "我認為那裡有寶藏。";
+	next;
+	mes "[盧卡斯·里奇]";
+	mes "無論誰傳播那個愚蠢的謠言，他都這樣做是為了阻止別人發現寶藏。";
+	next;
+	npctalk "Whatever. I'm still not going in there!", "Carola Firth#rockn17", bc_self;
+	npctalk "*Chuckle* Who knew Carola of all people would be so scared of ghosts?", "", bc_self;
+	mes "[盧卡斯·里奇]";
+	mes "嗯，我的意思是開玩笑，但也許她真的很害怕。";
+	mes "你說什麼，卡羅拉？你想和我一起去那裡嗎？";
+	mes "啊，冒險家。讓我們在你和我之間保持這一點，好嗎？";
+	close;
+}
+
+-	shop	bread_rockridge	-1,580:150
+
+harboro1,314,211,4	script	Bakery Owner#dy	4_COOK,3,3,{
+	npctalk "Welcome!", "", bc_self;
+	callshop "bread_rockridge",1;
+	end;
+
+OnTouch:
+	.@r = rand(1,10);
+	if (.@r == 3)
+		npctalk "I've baked this bread just this morning.", "", bc_self;
+	else if (.@r == 4)
+		npctalk "Bread! Buy bread freshly out of the oven!", "", bc_self;
+	else if (.@r == 5)
+		npctalk "I've got bread that's so delicious, it's to die for.", "", bc_self;
+	else if (.@r == 6)
+		npctalk "I've got the best bread under the sky! Buy my bread!", "", bc_self;
+	else if (.@r == 7)
+		npctalk "Bread! Bread, bread! BREAD!", "", bc_self;
+	else if (.@r == 8)
+		npctalk "Hey, how'd you like to buy some bread?", "", bc_self;
+	else if (.@r == 9)
+		npctalk "I sell bread, and nothing else.", "", bc_self;
+	end;
+}
+
+harboro1,282,201,3	script	Rock Ridge Tiger#srdg01	4_CAT_REST,{
+	emotion ET_SLEEPY;
+	end;
+}
+
+harboro1,302,175,7	script	Sammy#srdg01	4_DOG01,{
+	emotion ET_THROB;
+	npctalk "Woof, woof! Woof, woof!";
+	end;
+}
+
+harboro1,312,173,8	script	Bounty Hunter#rockn18	8_F_GIRL,{
+	mes "[賞金獵人]";
+	mes "我在看什麼？啊，那些水牛。他們的頭提供了大量資金。";
+	next;
+	mes "[賞金獵人]";
+	mes "既然他們開始搶劫火車，警惕者和警長已經受夠了。";
+	next;
+	mes "[賞金獵人]";
+	mes "但是感謝他們，我的工作有利可圖。";
+	close;
+}
+
+harboro1,301,175,7	script	Shepherd#srdg01	4_F_JOB_BLACKSMITH,{
+	emotion ET_CRY;
+	mes "[牧羊人]";
+	mes "對不起，伙計們。我永遠不應該把你帶到這裡...";
+	next;
+	mes "[牧羊人]";
+	mes "我不知道這裡沒有草。";
+	next;
+	mes "[牧羊人]";
+	mes "只是掛在那裡。我在那里為您種草。如果增長良好，您將不必再餓了。";
+	close;
+}
+
+harboro1,303,179,3	duplicate(dummy_npc)	Malnourished Sheep#srdg	4_LAM
+harboro1,299,179,7	duplicate(dummy_npc)	Frail Sheep#srdg01	4_LAM
+harboro1,305,178,5	duplicate(dummy_npc)	Coarse-haired Sheep#srd	4_LAM
+harboro1,297,178,5	duplicate(dummy_npc)	Dozing Sheep#srdg01	4_LAM
+
+harboro1,311,53,5	script	Joyce Leslie#rockn06	4_F_01,{
+	mes "[喬伊斯·萊斯利]";
+	mes "靠近海灘的房屋一直很容易沉沒，早在第一層被埋葬之前。";
+	mes "這所房子一點一點地沉沒，直到地面再也無法承受重量。";
+	next;
+	mes "[喬伊斯·萊斯利]";
+	mes "您問，居民怎麼了？您是一個冒險家，為什麼要關心？";
+	next;
+	emotion ET_OHNO;
+	mes "[喬伊斯·萊斯利]";
+	mes "對不起，我不是要生你的氣。";
+	mes "就是這樣...事情不好。";
+	next;
+	mes "[喬伊斯·萊斯利]";
+	mes "但是至少我有一些工作要做，要歸功於某些人。";
+	mes "我從哪裡開始工作和食物？前往東部大門。您會看到一路。";
+	close;
+}
+
+harboro1,324,124,7	script	Joe	4_MAL_CAPTAIN,{
+	if (BaseLevel < 100) {
+		mes "[喬]";
+		mes "...";
+		next;
+		mes "[喬]";
+		mes "你太虛弱了";
+		mes "進入地下室。";
+		mes "請離開。";
+		close;
+	}
+	mes "[喬]";
+	mes "...";
+	next;
+	mes "[喬]";
+	mes "你要去嗎？";
+	next;
+	if (select( "Yes.", "No." ) == 2) {
+		mes "[多諾萬]";
+		mes "...";
+		close;
+	}
+	mes "[喬]";
+	mes "你最好離開那裡";
+	mes "完成後。";
+	close2;
+	warp "harboro2",281,104;
+	end;
+}
+
+harboro1,352,199,5	script	Hungry Laborer#1	4W_M_03,5,5,{
+	end;
+OnTouch:
+	if (isbegin_quest(12381) == 2)
+		end;
+	.@num = atoi(strnpcinfo(2));
+	if (.@num == 1)
+		npctalk "Hungry Laborer: Aww, I'm starving. Why isn't the line getting any shorter?";
+	else if (.@num == 5)
+		npctalk "Curious Person: What's this line for? Are you waiting to get event prizes?";
+	else if (.@num == 8)
+		npctalk "Hungry Laborer: This is ridiculous. I've been waiting in line for 3 hours to eat.";
+	else if (.@num == 11)
+		npctalk "Hungry Laborer: Soon it'll be my turn!";
+	else if (.@num == 13)
+		npctalk "Hungry Laborer: Hey, don't you see the line here? Get to the end of the line!";
+	end;
+}
+harboro1,352,187,5	duplicate(Hungry Laborer#1)	Curious Person#5	4_M_LGTPOOR,5,5
+harboro1,352,178,5	duplicate(Hungry Laborer#1)	Hungry Laborer#8	4W_SAILOR,5,5
+harboro1,352,169,5	duplicate(Hungry Laborer#1)	Hungry Laborer#11	4_M_EINMAN,5,5
+harboro1,355,164,5	duplicate(Hungry Laborer#1)	Hungry Laborer#13	4W_SAILOR,5,5
+
+harboro2,67,191,5	script	Smell Maniac#srdg01	4_M_ALCHE_B,{
+	mes "[氣味瘋子]";
+	mes "* Sniff Sniff*這個地方對您的氣味不好嗎？我喜歡它的鹹，潮濕，發霉的氣味！我可以在餘生中住在這裡！";
+	next;
+	mes "[氣味瘋子]";
+	mes "...如果只有那麼多錯誤。我只是要裝瓶氣味並隨身攜帶。";
+	close;
+}
+harboro2,57,239,3	script	Unemployed Man#srdg01	4_M_03,{
+	mes "[失業者]";
+	mes "看到那些海葵嗎？他們不斷堵塞下水道，因此我們會定期擺脫它們。我喜歡坐在這裡看他們移動。當我這樣做時，時間流逝如此之快。";
+	next;
+	mes "[失業者]";
+	mes "至少在那段時間裡，我可能會忘記我的現實，關於我的事，沒有工作，這是這樣的事情。";
+	next;
+	mes "[失業者]";
+	mes "我在這裡，是因為我無處可去，但是一旦那些在礦井中居住的人消失了，我就會回去。";
+	close;
+}
+
+harboro2,118,264,5	script	Old Woman#srdg01	4_F_LGTGRAND,{
+	mes "[老婦]";
+	mes "這個地方根本沒有改變。";
+	next;
+	mes "[老人]";
+	mes "還記得我們第一次來這裡的時候嗎？";
+	next;
+	mes "[老婦]";
+	mes "我願意。";
+	next;
+	mes "[老人]";
+	mes "我們從頭開始建造了這所房子，從基礎石到屋頂。";
+	next;
+	mes "[老婦]";
+	mes "噢，這變得越來越冷。讓我們回去。";
+	next;
+	mes "[老人]";
+	mes "我可愛的克萊門汀...我在這裡向她求婚。";
+	next;
+	mes "[老婦]";
+	mes "我在這裡。";
+	next;
+	mes "[老人]";
+	mes "我的克萊門汀還不那麼老！";
+	next;
+	mes "[老婦]";
+	mes "grr，你老年傻瓜！";
+	close;
+}
+
+harboro2,120,265,3	script	Old Man#srdg01	4_M_DST_GRAND,{
+	mes "[老人]";
+	mes "毫米？誰在那裡？是你，查理嗎？";
+	next;
+	mes "[老婦]";
+	mes "查理不能來這裡。他住在大海。";
+	next;
+	mes "[老人]";
+	mes "他嗎？順便說一句，這個地方發生了很大變化。";
+	next;
+	mes "[老婦]";
+	mes "不，沒有。與我們離開時一樣。";
+	next;
+	mes "[老人]";
+	mes "是嗎？當我想念過去的時候，我來這裡，但是太黑了。順便說一句，為什麼它變得如此濕？";
+	next;
+	mes "[老婦]";
+	mes "它被淹沒了。這就是為什麼必須填寫它，我們必須上升。你去世了嗎？您是一個堅持認為這個地方太低而無法建造房屋的人。";
+	next;
+	mes "[老人]";
+	mes "我是嗎？";
+	close;
+}
+
+harboro2,125,196,3	script	Mom's Kid#srdg01	4_F_CHILD,{
+	mes "[孩子]";
+	mes "媽媽，我們什麼時候可以再次住在地上？";
+	next;
+	mes "[媽媽]";
+	mes "很快。當爸爸可以再次在礦山上班時。當媽媽和爸爸賺到足夠的錢來回購房子時。";
+	next;
+	mes "[孩子]";
+	mes "我想回家...";
+	close;
+}
+
+harboro2,123,195,5	script	Kid's Mom#srdg01	1_M_INNKEEPER,{
+	mes "[媽媽]";
+	mes "我無法很好地餵我的孩子。我不記得他上次吃一頓不錯的一頓飯。";
+	next;
+	mes "[孩子]";
+	mes "媽媽，我還好。";
+	next;
+	mes "[媽媽]";
+	mes "讓我們等待爸爸。他會帶著食物回來。";
+	close;
+}
+
+harboro2,142,155,7	script	Buffalo Bandit#srdg01	4_M_COWRAIDERS1,{
+	mes "[布法羅匪徒]";
+	mes "什麼，您以前沒看過布法羅強盜嗎？";
+	next;
+	mes "[布法羅匪徒]";
+	mes "不要給我那個骯髒的表情。我們現在沒有做任何不好的事情，現在是嗎？";
+	next;
+	mes "[布法羅匪徒]";
+	mes "你在我們的草皮上。不要造成麻煩，然後遠離這裡。";
+	next;
+	mes "[布法羅匪徒]";
+	mes "我會讓你來來去去，如果你保證我不要告訴地面上的任何人。承諾？";
+	close;
+}
+
+harboro2,144,156,1	script	Buffalo Bandit#srdg02	4_M_COWRAIDERS3,{
+	mes "[布法羅匪徒]";
+	mes "除了大門外，還有更多我們只知道的入口，我們會守護其中一個。";
+	next;
+	mes "[布法羅匪徒]";
+	mes "你為什麼告訴我這個？";
+	next;
+	mes "[布法羅匪徒]";
+	mes "因此，您會害怕並想遠離。";
+	close;
+}
+
+harboro2,258,117,3	script	Dispatched Nun#srdg02	1_F_PRIEST,{
+	mes "[派遣修女]";
+	mes "你能相信有些人真的住在這裡嗎？地面上方的人不在乎他們。正式地，即使不是，這個地方還是空置的。";
+	next;
+	mes "[派遣修女]";
+	mes "他們不想知道或關心。您必須處於一個非常糟糕的情況才能在這裡結束。";
+	close;
+}
+
+rockrdg1,310,48,3	script	Erekter#rockc06	4_M_CACTUSCHILD,{
+	mes "[直立]";
+	mes "Erekter長大後希望成為村里最好的網。";
+	next;
+	npctalk "Oh, wait.", "", bc_self;
+	emotion ET_THINK;
+	mes "[直立]";
+	mes "村莊最好的網是軟羽毛夫人。";
+	next;
+	emotion ET_DELIGHT;
+	mes "[直立]";
+	mes "MM ...然後我將成為村莊中第二好的網！";
+	close;
+}
+
+rockrdg1,308,49,5	script	Soft Feather#rockc09	4_F_CACTUSLADY3,{
+	mes "[軟羽毛]";
+	mes "Ho Ho Ho，村里沒有一個沒有由我處理的漁網。";
+	mes "還有其他人可以做出好的網，但是我是一個給網終點觸摸的人。";
+	next;
+	mes "[直立]";
+	mes "我也想向您學習！我想和你一樣擅長網絡！";
+	next;
+	mes "[軟羽毛]";
+	mes "您的手現在太軟了。出去玩。當您的手變得更加艱難時，我會教您的。";
+	next;
+	npctalk "Yay! I'm going to go tell my friends!", "Erekter#rockc06", bc_self;
+	mes "[軟羽毛]";
+	mes "是的，我會教你如何網絡。現在，讓我教您如何用草葉片打結。";
+	close;
+}
+
+// GM npc
+harboro1,1,1,3	script	Manager#1	CLEAR_NPC,3,0,{
+	.@equip_id = getequipid(EQI_ARMOR);
+	if (.@equip_id == -1)
+		end;
+
+	if (.@equip_id != getiteminfo("Amesha_Spenta", ITEMINFO_ID)) {
+		mes "^0000ff [攜帶極限助手]^000000";
+		mes "^0000ffo您想刪除該角色所戴的所有設備？ ^000000";
+		mes "^0000FFPPL刪除版本。 ^000000";
+		next;
+		switch( select( "Quit.", "Delete all." ) ) {
+		case 1:
+			mes "刪除中斷。";
+			close;
+		case 2:
+			mes "某些項目無法刪除。";
+			close;
+		}
+		end;
+	}
+
+	.@i = callfunc("F_GM_NPC",1854,0);
+	if (.@i == -1) {
+		mes "該命令已取消。";
+		close;
+	}
+	else if (.@i != 0) {
+		setarray .@quest_id[0],
+			12381,
+			12389,
+			12403,
+			12382,
+			12383,
+			12384,
+			12385,
+			12386,
+			12387,
+			12388,
+			12390,
+			12391,
+			12392,
+			12393,
+			12394,
+			12395,
+			12396,
+			12398,
+			12399,
+			12400,
+			12401,
+			12402,
+			12404,
+			12405,
+			12406,
+			12407,
+			12408,
+			12409;
+		.@size = getarraysize(.@quest_id);
+		for ( .@i = 0; .@i < .@size; ++.@i ) {
+			if (isbegin_quest(.@quest_id[.@i]) > 0)
+				erasequest .@quest_id[.@i];
+		}
+		mes "重置完成。";
+		close;
+	}
+	end;
+}

@@ -1,0 +1,130 @@
+﻿//===== rAthena Script ======================================= 
+//= Renewal Mage Job Quest
+//===== By: ================================================== 
+//= Kisuka
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Job Change to Mage Class
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. [Kisuka]
+//= 1.1 Added support for Baby classes. [Euphy]
+//============================================================ 
+geffen_in,164,124,4	script	Mage Guildsman#mage	123,{
+	if (Upper == 1) {
+		if (ADVJOB == Job_High_Wizard || ADVJOB == Job_Professor) {
+			if (Class == Job_Novice_High) {
+				mes "[法師公會]";
+				mes "哇，很久沒看！但是你不應該死嗎？";
+				next;
+				mes "[法師公會]";
+				mes "啊，你一定是重生。好吧，我很高興有你回來。";
+				next;
+				if (!callfunc("F_CanChangeJob")) {
+					mes "[法師公會]";
+					mes "對不起，但我認為您還沒有準備好學習魔術了。您為什麼不先完成學習基本技能？";
+					next;
+					mes "[法師公會]";
+					mes "慢慢來。您學到的越多，就越準備好再次學習魔術。";
+					close;
+				}
+				mes "[法師公會]";
+				mes "好吧，由於您已經通過了一次法師考試，因此我不會質疑您的資格。您想立即恢復魔術技能，不是嗎？";
+				next;
+				skill "NV_TRICKDEAD",0,SKILL_PERM;
+				jobchange Job_Mage_High;
+				skill "MG_ENERGYCOAT",1,SKILL_PERM;
+				mes "[法師公會]";
+				mes "哇，出於某種原因，您看起來比以前更好。無論如何，我相信您也會做得更好。";
+				close;
+			}else{
+				mes "[法師公會]";
+				mes "還有什麼可以幫助您的嗎？如果不是，為什麼不去測試自己的技能？世界在等你~！";
+				close;
+			}
+		}else{
+			mes "[法師公會]";
+			mes "什麼，您對法師協會感興趣？我不想告訴你這個，但是你不屬於這裡。";
+			next;
+			mes "[法師公會]";
+			mes "我不確定您為什麼仍然站在我面前，但我可以說您不是要成為法師。";
+			close;
+		}
+	}
+	mes "[法師公會]";
+	if(BaseJob != Job_Novice) {
+		if(BaseJob == Job_Mage) {
+			mes "嘿，你沒意識到嗎？你已經是法師，很傻！";
+			mes "這些日子之一，當您能想到自己的想法時，您會意識到內心的力量！";
+		} else
+			mes "嘿~C'mon。退出遊戲。您不能成為法師，因為您已經有另一個工作。";
+		close;
+	}else{
+		mes "嘿？";
+		next;
+		switch(select("我想要成為法師:成為法師的條件是什麼?:沒事，謝謝")) {
+		case 1:
+			mes "[法師公會]";
+			mes "想成為法師嗎？嗯...";
+			next;
+			mes "[法師公會]";
+			if (Sex == SEX_MALE) {
+				mes "嘿，看著你！你有點可愛~！不是我的類型...";
+			}else{
+				mes "哦，你真是個熱寶貝~！";
+				mes "我喜歡像你這樣的女孩~";
+			}
+			mes "是的，你說你想成為法師嗎？";
+			next;
+			if(select("我想要成為法師:沒事，謝謝") == 2) {
+				mes "[法師公會]";
+				mes "whaaaaat~？ ！在您告訴我您想成為法師之後，您改變了主意？有點決定性！";
+				close;
+			}
+			mes "[法師公會]";
+			if (!callfunc("F_CanChangeJob")) {
+				mes "哦，伙計，您的基本技能水平還不足以成為法師。";
+				mes "返回並提高您的基本技能。";
+				close;
+			}
+			mes "好吧..簽署申請表....哇~您的筆跡很好！啊，好的。就足夠了。";
+			mes "你是..."+strcharinfo(0)+".";
+			next;
+			mes "[法師公會]";
+			mes "嗯，我可以看到您以自己的方式努力。雖然這似乎有點笨拙，但我認為還可以！";
+			mes "好的！總是堅持基礎是最好的！我會馬上改變你。";
+			next;
+			mes "[法師公會]";
+			mes "哈..！您現在是法師，我們的一位同事！";
+			mes "我們歡迎您加入我們的新朋友法師協會！";
+			next;
+			mes "[法師公會]";
+			mes "“歡迎來到法師公會~”";
+			mes "恭喜成為法師協會的成員！大膽試試吧！";
+			callfunc "Job_Change",Job_Mage;
+			getitem 1639,1;	// N_Rod
+			close;
+		case 2:
+			mes "[法師公會]";
+			mes "想成為法師，是嗎？";
+			mes "我很樂意解釋像你這樣漂亮女孩的要求！";
+			next;
+			mes "[法師公會]";
+			mes "首先，您必須達到10級新手工作並學習所有基本技能。";
+			next;
+			mes "[法師公會]";
+			mes "過去，有一個複雜的藥水製作測試。因此，我們慢慢地失去了一個階級。";
+			mes "因此，我們決定接受滿足基本要求的所有適合學家。";
+			next;
+			mes "[法師公會]";
+			mes "不要猶豫。只是個魔術師！";
+			close;
+		case 3:
+			mes "[法師公會]";
+			mes "沒有什麼...？";
+			close;
+		}
+	}
+}

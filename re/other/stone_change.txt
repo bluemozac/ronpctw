@@ -1,0 +1,67 @@
+﻿//===== rAthena Script ======================================= 
+//= Stone Changer
+//===== By: ================================================== 
+//= Euphy
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Organizes ores in a player's inventory.
+//===== Additional Comments: ================================= 
+//= 1.0 First version.
+//= 1.1 Clean-up. [Capuche]
+//============================================================ 
+
+// Main NPC :: stonechange
+//============================================================
+geffen_in,99,174,5	script	Ore Tester#sorty	8_F_GIRL,{
+	mes "[礦石測試儀有點]";
+	mes "您的庫存中是否有相同類型的礦石 ^000000，您是否有相同的礦石？";
+	mes "我可以區分您的礦石並立即組織它們~！";
+	next;
+	switch(select("精煉我的礦石:取消。")) {
+	case 1:
+		mes "[礦石測試儀有點]";
+		mes "目前，我只能區分 ^ff0000Steel ^000000， ^ff0000ionr ^000000， ^ff000000 iron ore ^000000，和 ^ff00000000000000 rough oridecon ^000000並組織起來。";
+		mes "請注意， ^3131食品無法 ^000000！";
+		next;
+		mes "[礦石測試儀有點]";
+		mes "那麼，您要我組織您的礦石嗎？";
+		next;
+		.@i = select("鋼，請。 :鐵，請。 :鐵礦石，請。 :粗糙的 Oridecon，請。 :不，謝謝。");
+		if (.@i == 5) {
+			mes "[礦石測試儀有點]";
+			mes "嗯，我真的很討厭混亂的人！";
+			close;
+		}
+		setarray .@ores[0],999,998,1002,756;
+		.@item = .@ores[.@i-1];
+		if (countitem(.@item) == 0) {
+			mes "[礦石測試儀有點]";
+			mes "你沒有任何"+getitemname(.@item)+"...";
+			close;
+		}
+		// while(1) {
+			// if (countitem(.@item)) {
+				// set .@count, countitem(.@item);
+				// set .@total, .@total + .@count;
+				// delitem .@item, .@count;
+			// } else {
+				// getitem .@item, .@total;
+				// break;
+			// }
+		// }
+		.@count = countitem(.@item);
+		delitem .@item, .@count;
+		getitem .@item, .@count;
+		mes "[礦石測試儀有點]";
+		mes "完成了。看起來很棒！你不這麼認為嗎？";
+		close;
+	case 2:
+		mes "[礦石測試儀有點]";
+		mes "看來您的書包很乾淨？呵呵！您可能是清潔的主人！";
+		close;
+	}
+}

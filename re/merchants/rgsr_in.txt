@@ -1,0 +1,451 @@
+﻿//===== rAthena Script ======================================= 
+//= Reform NPCs in rgsr_in
+//===== Changelogs: ==========================================
+//= 1.0 First Version. [Capuche]
+//============================================================
+
+itemmall,14,50,3	script	Equipment Reform PR Agent#it01	4_F_ZONDAGIRL,{
+	mes "[設備改革PR代理]";
+	mes "你好，冒險家！";
+	mes "您現在對設備不滿意嗎？";
+	mes "您不想嘗試新的修改，而不僅僅是任何其他普通方法？";
+	mes "加入Regenschirm Institute！";
+	next;
+	switch( select( "Let's go.", "Listen to the explanation.", "Quit." ) ) {
+	case 1:
+		mes "[設備改革PR代理]";
+		mes "好的！研究所的其他設施是機密的，無法訪問，因此我們將指導您走上外部人可以進入的特殊路徑！";
+		close2;
+		warp "rgsr_in",125,170;
+		end;
+	case 2:
+		mes "[設備改革PR代理]";
+		mes "全球各地的研究都在雷貢督學研究所進行，以修改武器，裝甲，配件和其他設備物品...";
+		mes "我們仍在收集數據和研究修改，因此我們需要大量冒險家的設備來增加我們的修改研究。";
+		next;
+		mes "[設備改革PR代理]";
+		mes "研究正在進行中，因此，請期待一旦完成後，就可以添加多個新設備！";
+		close;
+	case 3:
+		mes "[設備改革PR代理]";
+		mes "如果您以後有興趣，請回來！";
+		close;
+	}
+}
+lighthalzen,99,156,3	duplicate(Equipment Reform PR Agent#it01)	Equipment Reform PR Agent#lh01	4_F_ZONDAGIRL
+
+rgsr_in,112,167,7	script	Enchant Researcher#rg02-1	MD_ED_M_SCIENCE,{
+	mes "[環面]";
+	mes "嗯？除了團隊負責人以外，您還有其他人可以看到我們的團隊嗎？";
+	mes "那就是我";
+	mes "我負責陳列者。";
+	mes "讓我們看看你得到了什麼？";
+	next;
+	if (select( "Modified OS Weapon Enchant", "Quit" ) == 2) {
+		mes "[環面]";
+		mes "每當需要時回來。";
+		mes "我們需要研究。";
+		close;
+	}
+	mes "[環面]";
+	mes "在哪裡...";
+	close2;
+	item_enchant(33);
+	end;
+
+OnInit:
+	setunittitle( getnpcid(0), "Team Atnad" );
+	end;
+}
+
+rgsr_in,115,169,5	script	Weapon Researcher#rg02	MD_ED_M_SCIENCE,{
+	mes "[短語]";
+	mes "讓我們看看...你是客人。";
+	mes "我喜歡那些確定自己想要什麼的人。";
+	mes "可修改的項目也可以讀為<tipbox> [列表] <info> 9163 </info> </tipbox>。";
+	mes "我將嘗試回答您的任何問題。";
+	next;
+	switch( select( "Thanos Weapons", "OS Weapons", "Quit" ) ) {
+	case 1:
+		mes "[短語]";
+		mes "^0000fthanos武器^000000 mod在修改方法中具有較低和中間的水平。";
+		next;
+		switch( select( "Lower mods", "Intermediate mods", "Quit" ) ) {
+		case 1:
+			mes "[短語]";
+			mes "Thanos武器較低的修改。";
+			mes "^ff0000 refine水平減少了5^000000，但材料消耗較少。";
+			mes "對於mod，該武器需要提煉水平+9或更高。";
+			close2;
+			item_reform("Thanos_W_Reform_1");
+			end;
+		case 2:
+			mes "[短語]";
+			mes "Thanos武器中間修改。";
+			mes "^ff0000 refine水平減少了1^000000，但消耗了更多的材料。";
+			mes "對於mod，該武器需要提煉水平+9或更高。";
+			close2;
+			item_reform("Thanos_W_Reform_2");
+			end;
+		case 3:
+			mes "[短語]";
+			mes "如果您需要mod，請回來。";
+			mes "隨時，您歡迎您幫助我們進行研究。";
+			close;
+		}
+		end;
+	case 2:
+		mes "[短語]";
+		mes "^0000FFOS武器^000000 ...";
+		mes "為了修改，改進水平必須為+7或更高。";
+		mes "精煉水平不會降低。";
+		mes "你帶了東西嗎？";
+		next;
+		if (select( "Convert", "Quit" ) == 2) {
+			mes "[短語]";
+			mes "如果您需要mod，請回來。";
+			mes "隨時，您歡迎您幫助我們進行研究。";
+			close;
+		}
+		mes "[短語]";
+		mes "讓我們看看你帶來了什麼。";
+		close2;
+		item_reform("OS_Weapon_Reform");
+		end;
+	case 3:
+		mes "[短語]";
+		mes "如果您需要mod，請回來。";
+		mes "隨時，您歡迎您幫助我們進行研究。";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle( getnpcid(0), "Team Atnad");
+	end;
+}
+
+rgsr_in,115,180,5	script	Armor Researcher#rg02	MD_ED_M_SCIENCE,{
+	mes "[代數]";
+	mes "啊，我們已經走了這麼遠，但是我們團隊的研究仍然缺乏實驗。";
+	mes "下次我會進行一些改進，並獲得船長的許可，然後繼續。";
+	mes "好的？";
+	npctalk "Grimace.", "", bc_self;
+	close;
+
+OnInit:
+	setunittitle( getnpcid(0), "Team Fresa" );
+	end;
+}
+
+rgsr_in,135,186, 7	script	Assistant#rg02	4_M_ALCHE_D,{
+	npctalk "Assistant: Don't touch it... It's dangerous...", "", bc_self;
+	sleep2 300;
+	npctalk "Assistant: ...Oh..............", "Assistant#rg04", bc_self;
+	npctalk "Assistant: Don't worry, it's nothing...", "Assistant#rg03", bc_self;
+	end;
+}
+
+rgsr_in,135,189,5	script	Assistant#rg03	4_M_REPAIR,{
+	npctalk "Assistant: ...Paycheck... Give it to me...? Then ask unnecessary questions...", "", bc_self;
+	npctalk "Assistant: Of course...", "Assistant#rg02", bc_self;
+	end;
+}
+
+rgsr_in,137,187,3	script	Assistant#rg04	4_F_HUWOMAN,{
+	npctalk "Assistant: No, not that.... That's it. That's it...", "", bc_self;
+	sleep2 300;
+	npctalk "Assistant: Hick... It was almost a big day... You didn't see him, did you?", "Assistant#rg02", bc_self;
+	npctalk "Grid: ?", "Ore Researcher#rg02", bc_self;
+	end;
+}
+
+rgsr_in,146,169,3	script	Assistant#rg05	4_M_REPAIR,{
+	npctalk "Assistant: Quiet... I'm...", "", bc_self;
+	end;
+
+OnInit:
+	setunittitle( getnpcid(0), "Team Licht");
+	end;
+}
+
+rgsr_in,146,167,3	script	Assistant#rg06	4_M_REPAIR,{
+	npctalk "Assistant: Our leader is a great guy. I'm still young...", "", bc_self;
+	end;
+
+OnInit:
+	setunittitle( getnpcid(0), "Team Licht");
+	end;
+}
+
+rgsr_in,144,170,5	script	Assistant#rg07	4_M_REPAIR,{
+	npctalk "Assistant: Hey, this data was really cool. I was wise to follow you.", "", bc_self;
+	end;
+
+OnInit:
+	setunittitle( getnpcid(0), "Team Licht");
+	end;
+}
+
+rgsr_in,106,167,5	script	Assistant#rg11	4_M_REPAIR,{
+	npctalk "Assistant: Can we move to a larger lab one day after we do more research?", "", bc_self;
+	sleep2 300;
+	npctalk "Assistant: ....Hang.", "Assistant#rg10", bc_self;
+	end;
+
+OnInit:
+	setunittitle( getnpcid(0), "Team Atnad" );
+	end;
+}
+
+rgsr_in,109,167,3	script	Assistant#rg10	4_M_REPAIR,{
+	npctalk "Assistant: ....I'm.", "", bc_self;
+	sleep2 300;
+	npctalk "Assistant: Adventurer, please walk carefully. The building is old and the floor is a little creaky.", "Assistant#rg11", bc_self;
+	end;
+
+OnInit:
+	setunittitle( getnpcid(0), "Team Atnad" );
+	end;
+}
+
+rgsr_in,146,178,3	script	Assistant#rg20	4_M_REPAIR,{
+	npctalk "Assistant: Ask our lead about any questions you have.", "", bc_self;
+	end;
+
+OnInit:
+	setunittitle( getnpcid(0), "Team Atnad" );
+	end;
+}
+
+rgsr_in,143,180,5	script	Assistant#rg21	4_M_REPAIR,{
+	npctalk "Assistant: Isn't it a little noisy outside?", "", bc_self;
+	sleep2 200;
+	npctalk "Assistant: I wish I could move to a good soundproofed place.", "Assistant#rg20", bc_self;
+	end;
+
+OnInit:
+	setunittitle( getnpcid(0), "Team Atnad" );
+	end;
+}
+
+rgsr_in,131,187,5	script	Ore Researcher#rg02	MD_ED_M_SCIENCE,{
+	mes "[網格]";
+	mes "快點。";
+	mes "這是一個低預算的實驗室，所以總是這樣。";
+	mes "我的助手和我完善了該實驗室中使用的寶石。收費。";
+	next;
+	switch( select( "View the exchange list", "What are you exchanging?", "Quit" ) ) {
+	case 1:
+		mes "[網格]";
+		mes "讓我們來看看...";
+		mes "現在有這些東西。";
+		next;
+		switch( select( "Gemstone refining", "Top ore exchange", "Buy additional ore", "Cancel" ) ) {
+		case 1:
+			mes "[網格]";
+			mes "寶石精煉。";
+			close2;
+			callshop("barter_rgsr_in_1");
+			end;
+		case 2:
+			mes "[網格]";
+			mes "頂級礦石交換。";
+			close2;
+			callshop("barter_rgsr_in_2");
+			end;
+		case 3:
+			mes "[網格]";
+			mes "沒有足夠的礦石？然後，我有專門收集的東西...";
+			mes "你有陰影decon嗎？";
+			close2;
+			callshop("barter_rgsr_in_3");
+			end;
+		case 4:
+			mes "[網格]";
+			mes "如果您需要任何東西，請再來。";
+			close;
+		}
+		end;
+	case 2:
+		mes "[網格]";
+		mes "正如我們在研究中看到的那樣，材料非常罕見。我們的團隊僱用了冒險家，但是材料與我們需要的數量不相同。";
+		mes "因此，當冒險家帶來材料時，他們決定提供相應的研究價值。";
+		next;
+		mes "[網格]";
+		mes "幸運的是，我們為我們提供的研究和冒險家提供了使用我們技術的材料。";
+		mes "如果您想修改一些東西，只需帶上呈現的材料即可。";
+		next;
+		mes "[網格]";
+		mes "您是冒險家，所以您知道這意味著什麼？";
+		close;
+	case 3:
+		mes "[網格]";
+		mes "如果您需要任何東西，請再來。";
+		close;
+	}
+}
+
+rgsr_in,137,178,3	script	Accessories Researcher#rg02	MD_ED_M_SCIENCE,{
+	mes "[冠軍]";
+	mes "最後，我與一個冒險家交談，要求他確認我的研究，那是你嗎？";
+	mes "不幸的是，我們的團隊還沒有做足夠的做法來出去那裡。";
+	next;
+	mes "[冠軍]";
+	mes "它仍然不完整。";
+	mes "下次我獲得船長許可時，我會見。";
+	close;
+
+OnInit:
+	setunittitle( getnpcid(0), "Team Zerter");
+	end;
+}
+
+rgsr_in,136,171,5	script	Special Equipment Researcher#rg02	MD_ED_M_SCIENCE,{
+	mes "[堆]";
+	mes "看到Licht團隊的表現？";
+	mes "我們為這個實驗室感到自豪。";
+	mes "您想修改哪一個？";
+	mes "可修改的項目位於<tipbox> [列表] <info> 9166 </info> </tipbox>中。";
+	next;
+	switch( select( "Non-standard armor", "Non-standard weapon", "Quit" ) ) {
+	case 1:
+		mes "[堆]";
+		mes "^0000FFNON標準裝甲^000000，修飾方法的較低，中間和上層。";
+		mes "不可固定的裝甲只能進行上部修飾。";
+		next;
+		switch( select( "Lower mods", "Intermediate mods", "Upper mods", "Quit" ) ) {
+		case 1:
+			mes "[堆]";
+			mes "裝甲較低的mod？好的。";
+			mes "^ff0000 refine水平減少了5^000000，但消耗材料較少。";
+			mes "為了修改，設備必須具有+9或更高水平。";
+			close2;
+			item_reform("C_Armor_Reform_1");
+			end;
+		case 2:
+			mes "[堆]";
+			mes "裝甲中間mods？好的。";
+			mes "^ff0000 refine水平減少了1^000000，但消耗了更多的材料。";
+			mes "為了修改，設備必須具有+9或更高水平。";
+			close2;
+			item_reform("C_Armor_Reform_2");
+			end;
+		case 3:
+			mes "[堆]";
+			mes "裝甲上部mods？好的。";
+			mes "^ff0000 refine水平增加了1^000000，但消耗了更多的材料。";
+			mes "為了修改，設備必須具有+9或更高水平。";
+			mes "^ff0000non-Refinable設備^000000也可以通過高級修改授予，但精煉水平不會增加。";
+			close2;
+			item_reform("C_Armor_Reform_3");
+			end;
+		case 4:
+			mes "[堆]";
+			mes "已經去了嗎？";
+			mes "您需要查看我們的出色表現！";
+			close;
+		}
+	case 2:
+		mes "[堆]";
+		mes "^0000FFNON標準武器^000000，修改方法有較低，中間和上層。";
+		next;
+		switch( select( "Lower mods", "Intermediate mods", "Upper mods", "Quit" ) ) {
+		case 1:
+			mes "[堆]";
+			mes "武器較低的mod？好的。";
+			mes "^ff0000 refine水平減少了5^000000，但消耗材料較少。";
+			mes "為了修改，設備必須具有+9或更高水平。";
+			close2;
+			item_reform("C_Weapon_Reform_1");
+			end;
+		case 2:
+			mes "[堆]";
+			mes "武器中間mods？好的。";
+			mes "^ff0000 refine水平減少了1^000000，但消耗了更多的材料。";
+			mes "為了修改，設備必須具有+9或更高水平。";
+			close2;
+			item_reform("C_Weapon_Reform_2");
+			end;
+		case 3:
+			mes "[堆]";
+			mes "武器高級mods？好的。";
+			mes "^ff0000 refine水平增加了1^000000，但消耗了更多的材料。";
+			mes "為了修改，設備必須具有+9或更高水平。";
+			close2;
+			item_reform("C_Weapon_Reform_3");
+			end;
+		case 4:
+			mes "[堆]";
+			mes "已經去了嗎？";
+			mes "您需要查看我們的出色表現！";
+			close;
+		}
+		end;
+	case 3:
+		mes "[堆]";
+		mes "已經去了嗎？";
+		mes "您需要查看我們的出色表現！";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle( getnpcid(0), "Team Licht");
+	end;
+}
+
+rgsr_in,128,174,5	script	Director#rg02	1_M_LIBRARYMASTER,{
+	mes "[導演]";
+	mes "...快點。";
+	mes "當您來的時候，您可能已經聽到了解釋，但是要簡要介紹您到這個地方，還有很長的路要走。我們正在努力將許多武器，裝甲，配件等轉換為不同的東西。";
+	next;
+	mes "[導演]";
+	mes "切割要轉換的設備的精煉至關重要，但這是提高力量的勞動。";
+	next;
+	mes "[導演]";
+	mes "研究正在進行中，因此尚不清楚什麼時候和何時會突然完成並提供給冒險家。";
+	mes "它是...一旦收集數據，就會以某種方式。";
+	next;
+	mes "[導演]";
+	mes "這次，Licht團隊實現了這一目標。";
+	mes "如果您有興趣，請檢查完成了什麼研究。";
+	next;
+	mes "[導演]";
+	mes "每個人都喜歡安靜，所以不要大聲說話。";
+	close;
+}
+
+rgsr_in,122,160,5	script	Exit Guard#rg01	4_M_LGTGUARD,{
+	mes "[退出後衛]";
+	mes "你完成了嗎？";
+	mes "^ff0000返回到Lighthalzen^000000？";
+	next;
+	if (select( "Return.", "Work remaining." ) == 2) {
+		mes "[退出後衛]";
+		mes "請隨時告訴我們您完成的時間。";
+		close;
+	}
+	mes "[退出後衛]";
+	mes "讓我指導您回去的路。";
+	close2;
+	warp "lighthalzen",101,156;
+	end;
+}
+
+rgsr_in,129,160,3	script	Exit Guard#rg02	4_M_LGTGUARD,{
+	mes "[退出後衛]";
+	mes "你完成了嗎？";
+	mes "^ff0000返回到項目購物中心^000000？";
+	next;
+	if (select( "Return.", "Work remaining." ) == 2) {
+		mes "[退出後衛]";
+		mes "請隨時告訴我們您完成的時間。";
+		close;
+	}
+	mes "[退出後衛]";
+	mes "讓我指導您回去的路。";
+	close2;
+	warp "itemmall",16,47;
+	end;
+}

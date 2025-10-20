@@ -1,0 +1,208 @@
+﻿//===== rAthena Script ======================================= 
+//= Custom Umbalian Language Quest
+//===== By: ================================================== 
+//= sabernet09
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= 1.1 Removed it from offical Umbala Quests [Lupus]
+//============================================================ 
+
+prontera,145,290,5	script	Mason	742,{
+	mes "[石匠]";
+	if(umb_lang==0) goto L_NOT_GOT_QUEST;
+	if(umb_lang==2 || umb_mason==1) goto L_AGAIN;
+
+	mes "嘿，我來到這裡去Prontera尋找一個可以從老虎機中刪除卡片的老太太。你知道我在哪裡可以找到她嗎？";
+	menu "Yes",-, "No",M_NO;
+
+	mes "哦，你能告訴我她在哪裡嗎？我真的很感激。";
+	menu "Swordsman Association",-, "Sanctuary",M_Boo1,"Prontera Chivalry",M_Boo2,"Trading Post",M_Boo3,"Kit Shop",M_Boo4,"Inn",M_Boo5,"Armory",M_DONE,"Library",M_Boo6,"Job Agency",M_Boo7,"Prontera Castle",M_Boo8,"City Hall",M_Boo9;
+
+	next;
+	mes "[石匠]";
+	mes "嗯...我不知道她為什麼會在那裡...猜猜我會看看。";
+	close;
+M_Boo1:
+	next;
+	mes "[石匠]";
+	mes "哇，我從來不知道她是一個宗教人士...我會看到它。";
+	close;
+M_Boo2:
+	next;
+	mes "[石匠]";
+	mes "嗯...。您確定嗎？";
+	close;
+M_Boo3:
+	next;
+	mes "[石匠]";
+	mes "她為什麼需要去那裡？我認為您可能會誤會。";
+	close;
+M_Boo4:
+	next;
+	mes "[石匠]";
+	mes "她在套件店裡唯一需要的是風濕病的藥物。她現在可能已經很早就去了。";
+	close;
+M_Boo5:
+	next;
+	mes "[石匠]";
+	mes "我認為她不需要在那裡，她住在Prontera。";
+	close;
+M_Boo6:
+	next;
+	mes "[石匠]";
+	mes "啊，我知道，如果她正在學習，那麼我不想打擾她。反正謝謝。";
+	close;
+M_Boo7:
+	next;
+	mes "[石匠]";
+	mes "工作代理？  我不這麼認為。  請不要帶我到Prontera周圍！她已經是這裡的老師。";
+	close;
+M_Boo8:
+	next;
+	mes "[石匠]";
+	mes "城堡嗯，我不想介入那裡……只是感覺不像我的風格。我不喜歡那種重要的事情的崇高感。";
+	close;
+M_Boo9:
+	next;
+	mes "[石匠]";
+	mes "哇，她成為普羅屬的重要組成部分嗎？我認為她太忙了，我無法參觀。我稍後再試。";
+	close;
+M_DONE:
+	next;
+	mes "[石匠]";
+	mes "啊，我聽說她的班級在那裡的某個地方...非常感謝！這是您的幫助。";
+	getitem 7117,1;//Items: Torn Spell Book,
+	set umb_mason,1;
+	close;
+
+L_AGAIN:
+	emotion ET_THANKS;
+	mes "是的，我找到了她！非常感謝您的幫助！";
+	close;
+
+L_NOT_GOT_QUEST:
+	mes "你好！我來到這裡去找一個老太太...但是...";
+	close;
+M_NO:
+	mes "哦..好的..謝謝。";
+	close;
+}
+
+aldebaran,153,212,1	script	Mojo	740,{
+	mes "[魔力]";
+	if(umb_lang!=1) goto L_NOT_GOT_QUEST;
+	mes "哦，不！  我失去了老師的 ^ff0000old魔術書 ^000000！";
+	mes "我要做什麼...那些愚蠢的浴缸...";
+	if(umb_lang==1) set umb_mojo,1;
+	close;
+L_NOT_GOT_QUEST:
+	emotion ET_QUESTION;
+	mes "我丟了老師的書！  我要做什麼...";
+	close;
+}
+
+amatsu,267,189,4	script	Marie	744,{
+	mes "[瑪麗]";
+	if(umb_lang==0) goto L_NOT_GOT_QUEST;
+	if(umb_lang==2 || umb_marie==1) goto L_AGAIN;
+	if(countitem(9001)>0 && countitem(643)>0) goto L_DONE;//Items: Poring Egg, Pet Incubator,
+	mes "您好，您需要什麼嗎？";
+	next;
+	menu "No nothing at all.",M_NO,"Your teacher sent me.",-;
+
+	mes "[瑪麗]";
+	mes "他想要我什麼？";
+	emotion ET_QUESTION;
+	next;
+	mes "[瑪麗]";
+	mes "哦，等等，我明白了...他想要他的參考捲軸，我對嗎？好吧，我有點不使用它……如果您可以將雞蛋和一個孵化器示給我，我會把它還給它。那些東西真可愛！";
+	close;
+
+L_NOT_GOT_QUEST:
+	emotion ET_QUESTION;
+	mes "你好！你想從我處得到些什麼？";
+	close;
+
+M_NO:
+	mes "[瑪麗]";
+	mes "hrrmm好嗎？ cya然後..";
+	close;
+
+L_DONE:
+	mes "嘿，在那裡，您有一個poring雞蛋和寵物孵化器可以搭配它！那些是給我的嗎？";
+	menu "Yep!",-, "Sorry, no.",M_DOH;
+
+	mes "[瑪麗]";
+	if(countitem(9001)==0 && countitem(643)==0) goto M_DOH;//Items: Poring Egg, Pet Incubator,
+	mes "Yatta！  這是一個回報。";
+	delitem 9001,1;//Items: Poring Egg,
+	delitem 643,1;//Items: Pet Incubator,
+	getitem 7118,1;//Items: Torn Scroll,
+	set umb_marie,1; //got Torn Scroll
+	close;
+
+M_DOH:
+	mes "哦.. POOO ...嘆息...";
+	close;
+
+L_AGAIN:
+	emotion ET_THANKS;
+	mes "耶！我愛波林斯！";
+	close;
+}
+
+yuno,157,366,2	script	Wise Man Fabius	743,{
+	mes "[法比尤斯]";
+	if(event_umbala >= 3) set umb_lang,2; //You already learned Umbalian language from Umbalian Chief. So this Quest is disabled
+	if(umb_lang<2) goto L_QUEST;
+	mes "您會流利地說umbalian！因此，您將永遠不會忘記Umbalians的語言！";
+	close;
+L_QUEST:
+	if((countitem(1006) < 1) || (countitem(7118) < 1) || (countitem(7117) < 1)) goto L_DONE;//Items: Old Magic Book, Torn Scroll, Torn Spell Book,
+	delitem 1006,1;	//Items: Old Magic Book,
+	delitem 7118,1;	//Items: Torn Scroll,
+	delitem 7117,1;//Items: Torn Spell Book,
+	emotion ET_THANKS;
+	mes "啊，您在檢索我的參考資料方面做得很好。這些文物擁有有關世界各地廢墟的信息，從岩漿地牢的燃燒地獄到Yggdrasil的奇怪怪異的隱藏森林。";
+	next;
+	mes "[法比尤斯]";
+	mes "但是足夠多的話題，您只是渴望獲得獎勵，不是嗎？  好吧，這聽起來並不多，但是我對您的回報是知識...";
+	next;
+	mes "[法比尤斯]";
+	mes "實際上，這是對Umbalian人民的知識。他們以某種特殊的方式與這個Midgard的世界聯繫在一起，我們還無法確認。有一種理論，即它們可能像精靈一樣，保護Yggdrasil的古老樹。";
+	next;
+	mes "[法比尤斯]";
+	mes "我是朱諾的偉大人，會教你他們的語言！";
+	next;
+	mes "^0000ff學習了Umbalians的語言！ ^000000";
+	set umb_lang,2;
+	//clear subquests
+	set umb_marie,0;
+	set umb_mason,0;
+	set umb_mojo,0;
+	//make you understand Umbalian people
+	//it's an alternative way to learn Umbalian Language
+	if(event_umbala < 3) set event_umbala,3;
+	close;
+L_DONE:
+	set umb_lang,1; //got Quest
+	mes "arg！我的三個學生跑了我的參考資料！嘿，你！你能為我找回來嗎？我很樂意獎勵你。";
+	next;
+	mes "[法比尤斯]";
+	mes "據我所知，他們在不同的單獨城鎮中做出自己的東西。";
+	if(umb_marie==0 && umb_mason==0 && umb_mojo==0) goto L_NOT_MET;
+	if(umb_marie==1) mes "哦...你在天松找到了瑪麗。";
+	if(umb_mojo==1) mes "你在畢宿五看到Mojo了嗎？";
+	if(umb_mason==1) mes "所以...梅森現在在普隆德拉...嗯...";
+	if(umb_marie==0) mes "我想知道我們的海女瑪麗在哪裡？";
+	if(umb_mojo==0) mes "Mojo應該在靠近水的地方......";
+	if(umb_mason==0) mes "那麼梅森去哪兒了……";
+	mes "哦，是的，告訴他們我寄給你";
+	close;
+L_NOT_MET:
+	mes "哦，是的，告訴他們我寄給你，他們的名字是瑪麗，梅森和莫霍。";
+	close;
+}

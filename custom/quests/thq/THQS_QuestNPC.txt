@@ -1,0 +1,554 @@
+﻿//===== rAthena Script =======================================
+//= Treasure Hunter Quests
+//===== By: ==================================================
+//= Fredzilla
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Start for Treasure hunter quests
+//===== Additional Comments: =================================
+//= Event_THQS - Used to check if you have already registered
+//= #Treasure_Token - used to keep track of tokens
+//= 1.0 - Straight conversionof Aegis NPC file
+//= 1.1 Added time penalty to prevent get quests to often [Lupus]
+//= 1.2 Fixed not working penalty, added anti-cheat [Lupus]
+//= 1.3 Changed some bad RGB Codes. (bugreport:211) [Samuray22]
+//= 1.4 Fixed typos. (bugreport:2607) [Kisuka]
+//============================================================
+
+yuno_in01,112,151,6	script	Quest Manager	62,{
+	mes "[蓋伊]";
+	mes "歡迎來到尋寶協會"+strcharinfo(0)+".";
+	next;
+	if (On_Quest == 0) goto N_NewQuest;
+	mes "[蓋伊]";
+	mes "看" +strcharinfo(0)+ ", you can only 1 quest at a time, you should finish the quest unless you have given up.";
+	mes "放棄將花費您 ^ff00002500z ^000000。";
+	next;
+	menu "No, never would I leave a quest!",-,"Yah I'm pathetic... Pay 2500z",N_PayZeny;
+	mes "[蓋伊]";
+	mes "很好，回到那裡。";
+	close;
+N_PayZeny:
+	if (Zeny < 2500) goto N_ZenyFail;
+	set one_qset, 0;
+	set two_qset, 0;
+	set three_qset, 0;
+	set four_qset, 0;
+	set five_qset, 0;
+	set six_qset, 0;
+	set seven_qset, 0;
+	set eight_qset, 0;
+	set nine_qset, 0;
+	set ten_qset, 0;
+	set On_Quest, 0;
+	set Zeny,Zeny-2500;
+	//add time delay penalty. You can get another quest after 2 - 3 hours. [Lupus]
+	set #THQ_DELAY, (GetTime(DT_YEAR)*12*31*24+GetTime(DT_MONTH)*31*24+GetTime(DT_DAYOFMONTH)*24+GetTime(DT_HOUR)+rand(2,3));
+	mes "[蓋伊]";
+	mes "看到某人做一個任務很遺憾...";
+	mes "你太無恥了。";
+	emotion ET_ANGER;
+	close;
+
+N_ZenyFail:
+	mes "[蓋伊]";
+	mes "那很可悲，您甚至沒有 ^ff00002500z ^000000。";
+	close;
+
+N_NewQuest:
+	if (Event_THQS == 0) goto N_Signup;
+	//checking if time penalty is over [Lupus]
+	if (#THQ_DELAY > (GetTime(DT_YEAR)*12*31*24 + GetTime(DT_MONTH)*31*24 + GetTime(DT_DAYOFMONTH)*24 + GetTime(DT_HOUR)) ) goto L_NoQuestsForYet;
+	mes "[蓋伊]";
+	mes "啊，歡迎同胞尋寶。";
+	mes "您目前有 ^ff0000"+#Treasure_Token+"^000000 treasure tokens!!!";
+	mes "您想讓我分配一個任務嗎？";
+	next;
+	menu "Yes I would like a Quest Please.",-,"Sorry Guy no time today.",N_NoTime;
+	
+	mes "[蓋伊]";
+	mes "好的，讓我們看看我們今天可以給您什麼任務。";
+	mes "^ff0000 this color ^000000中的任務名稱意味著它們比其餘的更具挑戰性，但具有更好的獎勵。";
+	next;
+	set #THQ_DELAY,(GetTime(DT_YEAR)*12*31*24+GetTime(DT_MONTH)*31*24+GetTime(DT_DAYOFMONTH)*24+GetTime(DT_HOUR) + 1); //you can get another quest after 1 hour [Lupus]
+	emotion ET_BEST;
+	if(@treasure_job==0) set @treasure_job,rand(1,10); //doesn't allow cheaters to pick any quest they want
+	if(@treasure_job==2) goto N_JobList2;
+	if(@treasure_job==3) goto N_JobList3;
+	if(@treasure_job==4) goto N_JobList4;
+	if(@treasure_job==5) goto N_JobList5;
+	if(@treasure_job==6) goto N_JobList6;
+	if(@treasure_job==7) goto N_JobList7;
+	if(@treasure_job==8) goto N_JobList8;
+	if(@treasure_job==9) goto N_JobList9;
+	if(@treasure_job==10) goto N_JobList10;
+	goto N_JobList1; //if(@treasure_job==1)
+
+N_NoTime:
+	mes "[蓋伊]";
+	mes "好吧，也許下一次"+strcharinfo(0)+".";
+	emotion ET_SCRATCH;
+	close;
+
+N_Signup:
+	mes "[蓋伊]";
+	mes "恐怕您必須在進行任務之前註冊公會！";
+	emotion ET_SORRY;
+	close;
+
+L_NoQuestsForYet:
+	mes "[蓋伊]";
+	mes "恐怕您還沒有任何任務。";
+	mes "打電話"+ (#THQ_DELAY - (GetTime(DT_YEAR)*12*31*24+GetTime(DT_MONTH)*31*24+GetTime(DT_DAYOFMONTH)*24+GetTime(DT_HOUR)) )+" hours later.";
+	emotion ET_SORRY;
+	close;
+
+L_QuestGiven:
+	set On_Quest,1;
+	set @treasure_job,0; //next time u get random quest
+	close;
+
+///////Job list 1///////
+N_JobList1:
+	mes "[蓋伊]";
+	mes "好的，您可以在這裡完成一些任務。";
+	next;
+	menu "Lost Old Man.",-,"Master needs his Bow.",N_MasterBow,"The Hit List.",N_HitList,"^FF0000The Sad Widow.^000000",N_SadWidow;
+	mes "[蓋伊]";
+	mes "^ff0000lost老人^000000";
+	mes "^ff0000 --------------^000000";
+	mes "這是一個簡單而低薪的任務。";
+	mes " ";
+	mes "一個妻子來要求我們找到他的丈夫，她似乎有很多要求我們一遍又一遍地找到他。";
+	next;
+	mes "[蓋伊]";
+	mes "但是他似乎總是在同一個地方，所以看上去沒有太多涉及，請檢查Prontera以北1西1和1的山。";
+	set one_qset,1;
+	goto L_QuestGiven;
+
+N_MasterBow:
+	mes "[蓋伊]";
+	mes "^ff0000master需要他的弓^000000";
+	mes "^ff0000 --------------------------^000000";
+	mes "這只是包裝運行，沒什麼大不了的。";
+	mes " ";
+	mes "將其帶到佩隆以外的弓箭手村莊的弓箭手。";
+	getitem 1072,1; //Delivery_Box
+	set one_qset,2;
+	goto L_QuestGiven;
+
+N_HitList:
+	mes "[蓋伊]";
+	mes "^ff0000命中列表^000000";
+	mes "^ff0000 --------------^000000";
+	mes "在此任務中，您可以看到一些動作。";
+	mes " ";
+	mes "有一個農民一直在 ^ff0000thief的蟲子，porings和瘋子 ^000000被所有農作物吃掉，這是我需要您做的事情的丟失。他在Prontera以東等待。";
+	next;
+	mes "[蓋伊]";
+	mes "好的，去東方，毆打那些小混蛋，就像沒有明天一樣。完成該列表後，您剛剛丟棄了它，但是您不會再丟棄！";
+	set one_qset,3;
+	goto L_QuestGiven;
+
+N_SadWidow:
+	mes "^ff0000 sad寡婦^000000";
+	mes "^ff0000 *************^000000";
+	mes "這只是另一個可能的薪水。";
+	mes " ";
+	mes "Prontera有一個老寡婦，由於怪物的襲擊，她最近失去了丈夫。她要求一名公會成員在Prontera墓地與她交談。";
+	set one_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 2///////
+N_JobList2:
+	mes "[蓋伊]";
+	mes "好的，您可以在這裡完成一些任務。";
+	next;
+	menu "The Strange Letter",-,"Jur for Jeramiah",N_JurJeramiah,"Bee Keepers Hunny",N_BeeHunny,"^FF0000The Wander Man^000000",N_WanderMan;
+
+	mes "^ff0000奇怪的字母^000000";
+	mes "^ff0000 -----------------------^000000";
+	mes "我對這個任務不太了解。";
+	mes " ";
+	mes "一個陌生的男人昨天來到這裡，要求我將這張 ^ff0000 strange信 ^000000交給摩洛哥的某些女人。知道我們我們不問問題，因此您必須照顧此交付。";
+	mes "女人位於摩洛哥，她的名字叫埃里卡（Erika）。";
+	getitem 1072,1; //Delivery_Message
+	set two_qset, 1;
+	goto L_QuestGiven;
+
+N_JurJeramiah:
+	mes "^ff0000jur 代表杰拉米^000000";
+	mes "^ff0000 ----------------------------------^000000";
+	mes "標準交付任務。";
+	mes " ";
+	mes "耶拉米亞（Jeramiah）從我們的武器商店命令一個特殊的法律。";
+	getitem 1998,1; //Jeramiah's_Jur
+	set two_qset,2;
+	goto L_QuestGiven;
+
+N_BeeHunny:
+	mes "^ff0000bee飼養員hunny^000000";
+	mes "^ff0000 ----------------------^000000";
+	mes "沼澤中的陌生人需要您的幫助。";
+	mes " ";
+	mes "在 ^ff00001南部的森林中有一個奇怪的人，而Prontera的1西 ^000000，他需要您的幫助。";
+	set two_qset,3;
+	goto L_QuestGiven;
+
+N_WanderMan:
+	mes "^ff0000徘徊的人^000000";
+	mes "^ff0000 **************^000000";
+	mes "佩恩有一個渴望援助的女人。";
+	mes " ";
+	mes "佩恩（Payon）有一個名叫莫莉（Molly）的女人，請盡快去找她，她在這裡發送的信聽起來像是有人在殺害她。";
+	set two_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 3///////
+N_JobList3:
+	mes "[蓋伊]";
+	mes "好的，您可以在這裡完成一些任務。";
+	next;
+	menu "Damn Pixies!",-,"Package Delivery",N_Delivery1,"Prontera Culvert",N_ProntCulvert,"^FF0000Trouble at the Coal Mine^000000",N_CoalMine;
+	mes "^ff0000該死的小精靈！ ^000000";
+	mes "^ff0000 --------------^000000";
+	mes "你去過地獄嗎？";
+	mes " ";
+	mes "^ff0000ant Hell ^000000之外的一個人要求您的觀眾，我建議您快點。";
+	set three_qset,1;
+	goto L_QuestGiven;
+
+N_Delivery1:
+	mes "^ff000000000000";
+	mes "^ff0000 ----------------------------------^000000";
+	mes "標準刪除任務。";
+	mes " ";
+	mes "在此任務中，您需要在Aldebaran和Juno ^000000之間的橋樑上向某人的神秘盒傳遞一個名字 ^ff0000flank。";
+	getitem 1082,1; //Delivery_Box_
+	set three_qset,2;
+	goto L_QuestGiven;
+
+N_ProntCulvert:
+	mes "^ff0000普隆德拉涵洞^000000";
+	mes "^ff0000 ----------------------------------^000000";
+	mes "蟲子，它們無處不在！";
+	mes " ";
+	mes "^ff0000prontera culvert ^000000失控了！作為志願者註冊以清理一些涵洞。";
+	next;
+	mes "我知道似乎沒有阻止它們，但是無論您殺死的許多人確實有所作為。註冊後，在涵洞內部會有一個騎士會為您帶來一個任務。";
+	set three_qset,3;
+	goto L_QuestGiven;
+
+N_CoalMine:
+	mes "^ff0000trouble在煤礦^000000";
+	mes "^ff0000 **********************^000000";
+	mes "有趣的...錯誤...麻煩永遠不會在符文中停止。";
+	mes " ";
+	mes "最近，煤礦發生了事故。有一個巨大的鴻溝釋放了一些不死的邪惡德魯伊。";
+	next;
+	mes "邪惡的德魯伊開始將所有工人變成亡靈。我們不知道為什麼，但是我們不想找出答案，請與一個在煤礦外的名叫Rudolfo的人聯繫。";
+	set three_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 4///////
+N_JobList4:
+	mes "[蓋伊]";
+	mes "好的，您可以在這裡完成一些任務。";
+	next;
+	menu "Zombie Attack",-,"Mystic Wizard",N_MWizard,"Aww shoot!",N_Shoot,"^FF0000Emperium^000000",N_Emp;
+	mes "^ff000000zombie攻擊^000000";
+	mes "^ff0000 -----------------^000000";
+	mes "亡靈入侵了佩恩洞穴！";
+	mes " ";
+	mes "我記得佩恩洞（Payon Cave）曾經是一個安全的參觀場所，但現在不死的殭屍已經侵擾了這個洞穴！請在Payon Cave ^000000的外面與 ^ff0000flora聯繫，並幫助她。";
+	set four_qset,1;
+	goto L_QuestGiven;
+
+N_MWizard:
+	mes "^ff0000mystic嚮導^000000";
+	mes "^ff0000 -----------------^000000";
+	mes "必須將工作人員的原型運送到Zed嚮導。";
+	mes " ";
+	mes "ZED巫師已要求嘗試新的未命名的原型員工。將其交給他將是您的工作。 Zed傾向於留在Juno的一般地區。";
+	getitem 1999,1; //Zed's_Staff
+	set four_qset,2;
+	goto L_QuestGiven;
+
+N_Shoot:
+	mes "^ff0000aww射擊！ ^000000";
+	mes "^ff0000 ------------^000000";
+	mes "一個小女孩陷入困境。";
+	mes " ";
+	mes "有一個遇到麻煩的小女孩，她的名字叫dassy，她是Prontera噴泉 ^000000的 ^ff0000。";
+	set four_qset,3;
+	goto L_QuestGiven;
+
+N_Emp:
+	mes "^ff0000 帝國^000000";
+	mes "^ff0000********^000000";
+	mes "這是我一無所知的一個奇怪的任務。";
+	mes " ";
+	mes "^ff0000prontera guild Hall ^000000中的某人已要求看到我們的一位成員，他的名字叫Czhore。";
+	set four_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 5///////
+N_JobList5:
+	mes "[蓋伊]";
+	mes "好的，您可以在這裡完成一些任務。";
+	next;
+	menu "Savage Land",-,"Pyramid's part 1",N_PyrPRT1,"Thinking first",N_Thinkfirst,"^FF0000The not so friendly ghost^000000",N_Ghost;
+	mes "^ff0000野蠻之地^000000";
+	mes "^ff0000 --------------^000000";
+	mes "對於其他人來說，很容易。";
+	mes " ";
+	mes "一個名叫Lithin的人希望給您一個任務，您可以在 ^ff0000 the Hidden Temple ^000000的內部找到他的Prontera以北";
+	set five_qset,1;
+	goto L_QuestGiven;
+
+N_PyrPRT1:
+	mes "^ff0000000000";
+	mes "^ff0000 ------------^000000";
+	mes "有趣的是，沒人知道這些是如何真正製作的。";
+	mes " ";
+	mes "顯然，金字塔已經開始受到不死活動的侵擾，一個人將在金字塔之外等待您。他沒有給我們他的名字，但他要你快點。";
+	set five_qset,2;
+	goto L_QuestGiven;
+
+N_Thinkfirst:
+	mes "^ff0000思考首先^000000";
+	mes "^ff0000 -----------------^000000";
+	mes "這聽起來像是那些昏昏欲睡的女孩任務中的另一個...";
+	mes " ";
+	mes "吉芬周圍的當地金發碧眼的當地金發碧眼的人要求您將這些花送給她。我不知道為什麼有人會給自己送花...";
+	getitem 744,1; //Bouquet
+	set five_qset,3;
+	goto L_QuestGiven;
+
+N_Ghost:
+	mes "^ff0000不是那麼友好的幽靈^000000";
+	mes "^ff0000 ******************************^000000";
+	mes "好吧，沒有人說卡斯珀在幕後很不錯。";
+	mes " ";
+	mes "格芬塔（Geffen Tower）三樓的一個嚮導想與您談論城市下面的古老廢墟。";
+	set five_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 6///////
+N_JobList6:
+	mes "[蓋伊]";
+	mes "好的，您可以在這裡完成一些任務。";
+	next;
+	menu "Package for thieves",-,"Pyramid's part 2",N_PyrPRT2,"Special delivery",N_Delivery2,"^FF0000Geffenia^000000",N_Gef;
+	mes "^盜賊的ff0000 package^000000";
+	mes "^ff0000 -----------------------^000000";
+	mes "多麼諷刺。";
+	mes " ";
+	mes "將這個盒子交付給盜賊行會。";
+	getitem 1083,1; //Delivery_Box__
+	set six_qset,1;
+	goto L_QuestGiven;
+
+N_PyrPRT2:
+	mes "^ff0000pyramid的第2部分^000000";
+	mes "^ff0000 ----------------------------------^000000";
+	mes "在這個三角形中更亡靈行動！";
+	mes " ";
+	mes "與金字塔入口外的一個男人交談，他似乎對您有另一個追求。";
+	set six_qset,2;
+	goto L_QuestGiven;
+
+N_Delivery2:
+	mes "^ff0000特性交付^000000";
+	mes "^ff0000 ----------------------------------^000000";
+	mes "我們要做的大部分都是運行軟件包，這與他人沒有什麼不同。";
+	mes " ";
+	mes "拿這個盒子，不要打開它！對於一個名叫Chirach的小女孩，她應該在聖誕老人附近。";
+	getitem 1083,1; //Delivery_Box__
+	set six_qset,3;
+	goto L_QuestGiven;
+
+N_Gef:
+	mes "^ff0000 格芬尼亞^000000";
+	mes "^ff0000********^000000";
+	mes "格芬的小孩子一直在做奇怪的噩夢。";
+	mes " ";
+	mes "我們認為，格芬下面的廢墟正在造成這個問題，與格芬塔內的一個名叫Zuuzuu的巫師交談，以執行您的任務。";
+	set six_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 7///////
+N_JobList7:
+	mes "[蓋伊]";
+	mes "好的，您可以在這裡完成一些任務。";
+	next;
+	menu "Apple Juice",-,"Delivery",N_Delivery3,"^FF0000Golden Thief Bug^000000",N_GTB,"^FF0000Evil Pirates^000000",N_EvilPirates;
+	mes "^ff0000蘋果汁^000000";
+	mes "^ff0000 --------------^000000";
+	mes "不能對一些好的蘋果汁說不。";
+	mes " ";
+	mes "在prontera廣場上有一個小女孩，距離噴泉向北一點，去和她說話。";
+	set seven_qset,1;
+	goto L_QuestGiven;
+
+N_Delivery3:
+	mes "^ff0000交貨^000000";
+	mes "^ff0000 ---------^000000";
+	mes "這麼多的包裹太少了。";
+	mes " ";
+	mes "把這個盒子帶給一個名叫查爾斯的男人。";
+	getitem 1082,1; //Delivery_Box_
+	set seven_qset,2;
+	goto L_QuestGiven;
+
+N_GTB:
+	mes "^ff000000golden小偷bug^000000";
+	mes "^ff0000 *****************^000000";
+	mes "Prontera Culvert從來都不一樣...";
+	mes " ";
+	mes "好吧，有報導稱，涵洞底部的一個金小偷蟲子跑了。與涵洞內的騎士交談。";
+	set seven_qset,3;
+	goto L_QuestGiven;
+
+N_EvilPirates:
+	mes "^ff0000 evil海盜^000000";
+	mes "^ff0000 **********^000000";
+	mes "一艘幽靈船在伊茲盧德（Izlude）外的一個島上的岸上被洗淨。";
+	mes " ";
+	mes "女性刺客對您有一個追求，她在鬼船外面等待。有報導稱邪惡的亡靈海盜在船內潛伏著。";
+	set seven_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 8///////
+N_JobList8:
+	mes "[蓋伊]";
+	mes "好的，您可以在這裡完成一些任務。";
+	next;
+	menu "Banana Juice",-,"Another Delivery",N_Delivery4,"My lost beeds",N_LostBeeds,"^FF0000Baphomet!^000000",N_Bapho;
+	mes "^ff0000banana果汁^000000";
+	mes "^ff0000 --------------^000000";
+	mes "聽起來對其他人有益。";
+	mes " ";
+	mes "在prontera廣場上有一個小女孩，距離噴泉向北一點，去和她說話。";
+	set eight_qset,1;
+	goto L_QuestGiven;
+
+N_Delivery4:
+	mes "^ff0000 Ananther交付^000000";
+	mes "^ff0000 ----------------------------------^000000";
+	mes "好吧，交付盒子的需求很高，很多懶惰的人。";
+	mes " ";
+	mes "將此包裹帶給一個名叫Klye的男人。";
+	getitem 1081,1; //Delivery_Box
+	set eight_qset,2;
+	goto L_QuestGiven;
+
+N_Bapho:
+	mes "^ff0000baphomet！ ^000000";
+	mes "^ff0000 *********^000000";
+	mes "他看著和守衛藏在聖殿中。";
+	mes " ";
+	mes "有傳言說，一個山羊人潛伏在隱藏的寺廟裡，隱藏的寺廟名稱扎克（Zack）中還有一個人，需要您幫助這個被稱為Baphomet的山羊男人。";
+	set eight_qset,3;
+	goto L_QuestGiven;
+
+N_LostBeeds:
+	mes "^ff0000my丟失的Beeds^000000";
+	mes "^ff0000 -----------------^000000";
+	mes "哦，太好了，我聞起來很愚蠢...";
+	mes " ";
+	mes "佩恩（Payon）的一個小女孩想和你說話，她的名字叫花，多麼愚蠢的名字，哈哈哈。";
+	set eight_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 9///////
+N_JobList9:
+	mes "[蓋伊]";
+	mes "好的，您可以在這裡完成一些任務。";
+	next;
+	menu "Smelly Box",-,"Payon Cave",N_PayonC,"^FF0000Sohee's Everywhere!^000000",N_Sohee,"^FF0000Moonlight Flower^000000",N_Moonlight;
+	mes "^ff0000臭盒子^000000";
+	mes "^ff0000 ------------^000000";
+	mes "哦，天哪，請快速把這個。";
+	mes " ";
+	mes "哦，男人聞起來就像在這裡死了。";
+	getitem 1082,1; //Delivery_Box_
+	set nine_qset,1;
+	goto L_QuestGiven;
+
+N_Sohee:
+	mes "^ff0000sohee無處不在！ ^000000";
+	mes "^ff0000 ******************^000000" ;
+	mes "嗯，似乎一個叫傑克的人想在阿切爾公會的房子裡與您交談。";
+	mes " ";
+	mes "好吧，我們對Payon的了解是，不久前，有一場怪異的大火燒毀了舊學校。";
+	next;
+	mes "關於發生的事情的奇怪之處在於，裡面的孩子們似乎並沒有死於火焰。";
+	mes "與Payon的某個地方的小學女孩交談。";
+	set nine_qset,2;
+	goto L_QuestGiven;
+
+N_Moonlight:
+	mes "^ff0000月光花^000000";
+	mes "^ff0000 *****************^000000" ;
+	mes "嗯，似乎一個叫傑克的人想在阿切爾公會的房子裡與您交談。";
+	mes " ";
+	mes "好吧，我對此一無所知，它與Payon Cave的最深區域有關，我們不知道太多，因為沒有人似乎使它恢復活力。";
+	set nine_qset,3;
+	goto L_QuestGiven;
+
+N_PayonC:
+	mes "^ff000000payon洞穴^000000";
+	mes "^ff0000 ------------^000000" ;
+	mes "嗯，似乎一個叫傑克的人想在阿切爾公會的房子裡與您交談。";
+	mes " ";
+	mes "我們進入山洞的距離越遠。";
+	set nine_qset,4;
+	goto L_QuestGiven;
+
+///////Job list 10///////
+N_JobList10:
+	mes "[蓋伊]";
+	mes "好的，您可以在這裡完成一些任務。";
+	next;
+	menu "The Blank Box",-,"^FF0000Eddga^000000",N_Eddga,"^FF0000Phreeoni^000000",N_Phreeoni,"^FF0000Maya^000000",N_Maya;
+
+	mes "^ff0000空白框^000000";
+	mes "^ff0000 -----------------^000000";
+	mes "摩洛哥包裝";
+	mes " ";
+	mes "這個盒子上沒有寫任何東西，只有將其傳遞給男人的通知。";
+	getitem 1082,1; //Delivery_Box_
+	set ten_qset,1;
+	goto L_QuestGiven;
+
+N_Eddga:
+	mes "^ff0000eddga^000000";
+	mes "^ff0000 *****^000000";
+	mes "老虎托尼（Tony）處於裂縫上並破壞了森林。";
+	mes " ";
+	mes "與“隱藏”獵人公會之外的一個人交談，他需要您的幫助。";
+	set ten_qset,2;
+	goto L_QuestGiven;
+
+N_Phreeoni:
+	mes "^ff0000 飛鳥^000000";
+	mes "^ff0000********^000000";
+	mes "他又大又粉紅色，你奔跑和躲藏！";
+	mes " ";
+	mes "有一天，這個傢伙剛剛進入一些洞，他看起來並不那麼艱難，但您會感到驚訝。與一個在螞蟻地獄之外的名叫Caral的人交談。";
+	set ten_qset,3;
+	goto L_QuestGiven;
+
+N_Maya:
+	mes "^ff0000瑪雅^000000";
+	mes "^ff0000 ****^000000";
+	mes "有些可怕的！";
+	mes " ";
+	mes "這個半裸的怪胎需要一支軍隊才能下車，現在您的工作，祝你好運。在螞蟻地獄的後門外面遇到一個名叫Jeni的女孩。";
+	set ten_qset,4;
+	goto L_QuestGiven;
+}

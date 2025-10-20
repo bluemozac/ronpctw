@@ -1,0 +1,1233 @@
+﻿//===== rAthena Script =======================================
+//= Eden Group Quests - Mission [100-111]
+//===== By: ==================================================
+//= Capuche
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Repeatable quests for players between BaseLevel 100 - 111.
+//===== Additional Comments: =================================
+//= 1.0 First version.
+//= 1.1 Added support to Para_Team_Mark_ in Eden Group. [Ragno]
+//= 1.2 Added use of F_HasEdenGroupMark function. [Ragno]
+//============================================================
+
+moc_para01,37,95,5	script	Gelkah#1	4_F_GELKA,{
+	cutin "gelca01",2;
+	if (checkweight(1201,1) == 0) {
+		mes "^ff0000-warning消息 -";
+		mes "- 等待一分鐘！ -";
+		mes "- 您的項目太多 -";
+		mes "- 無法接收物品。 -";
+		mes "- 減輕身體的重量 -";
+		mes "- 請重試。 - ^000000";
+		close2;
+		cutin "",255;
+		end;
+	}
+	mes "[格爾卡]";
+	if (!callfunc("F_HasEdenGroupMark")) {
+		mes "告訴我證明您是伊甸園的一部分，或者我與您沒有生意。";
+		mes "我向基本級別的請求 ^ff0000100-110 ^000000冒險家。";
+	}
+	else if (BaseLevel < 100) {
+		mes "您不是一個足夠成熟的冒險家。您應該至少是基本水平100。因此，基本上至少是第三類。";
+		next;
+		mes "[格爾卡]";
+		mes "該請求來自除Midgard以外的其他地方 ^000000。";
+	}
+	else if (BaseLevel < 111) {
+		if (para_100lv01 == 0) {
+			mes "冒險家！";
+			emotion ET_SMILE;
+			next;
+			cutin "gelca03",2;
+			mes "[格爾卡]";
+			mes "最近，我收到了一些客戶的要求，需要像您一樣的冒險家的幫助。";
+			next;
+			if (select("I like requests!", "A boring quest... No thanks!" ) == 2) {
+				mes "[格爾卡]";
+				mes "您知道更困難的請求會產生更好的獎勵嗎？";
+				next;
+			}
+			mes "[格爾卡]";
+			mes "實際上，我不能只接受街上的任何schmo。我的主人討厭優柔寡斷的人。";
+			next;
+			if (select("Who's your master?", "I am not indecisive!" ) == 1) {
+				cutin "gelca03",2;
+				mes "[格爾卡]";
+				mes "站在我旁邊的那個人是我的主人...他經過漫長的練習後回來。";
+				next;
+				mes "[格爾卡]";
+				mes "我了解您可能想知道為什麼Sura想要一名大主教作為老師...";
+			}
+			else {
+				cutin "gelca03",2;
+				mes "[格爾卡]";
+				if (BaseLevel < 110)
+					mes "您認為您是一名退伍軍人，只是因為您已經成為三等班...";
+				else
+					mes "我知道您並不完全是新手，但我的主人認為您與一個新手沒有什麼不同。我認為，您是一個很棒的冒險家！";
+			}
+			next;
+			mes "[格爾卡]";
+			mes "我們需要願意提供幫助的冒險家。你會幫我們嗎？";
+			next;
+			cutin "gelca01",2;
+			if (select("Ok, I'll help.", "I have no interest in helping you." ) == 2) {
+				mes "[格爾卡]";
+				mes "你怎麼知道不這樣做。";
+			}
+			else {
+				mes "[格爾卡]";
+				mes "那就是冒險家所做的！";
+				next;
+				mes "[格爾卡]";
+				mes "我想知道您是否有能力做出請求。讓我看看...";
+				next;
+				mes "[格爾卡]";
+				mes "收集50 ^ff0000brigan。 ^000000這是一個簡單而復雜的測試。";
+				next;
+				mes "[格爾卡]";
+				mes "從烏龜島或格拉斯海姆的怪物很容易找到。";
+				next;
+				mes "[格爾卡]";
+				mes "清除簡單的請求後，讓我們做真實的請求。";
+				setquest 13002;// Brigan collecting
+				para_100lv01 = 1;
+				para_100lv02 += 1;
+			}
+		}
+		else if (para_100lv01 == 1) {
+			if (countitem(7054) > 49) {// Brigan
+				mes "您是否帶來了我要的所有Brigans？";
+				next;
+				mes "[格爾卡]";
+				mes "我不需要一一進行計數。此請求是選擇最佳冒險家。";
+				next;
+				mes "[格爾卡]";
+				mes "不要沮喪，因為如果冒險家在要求期間受傷，主人最終是責任的。";
+				next;
+				mes "[格爾卡]";
+				mes "大師認為冒險家的安全很重要，因為許多新要求很危險。";
+				next;
+				cutin "rote01",2;
+				mes "[羅特]";
+				mes "唔...";
+				emotion ET_HNG, getnpcid(0, "Rohtert#12");
+				next;
+				cutin "gelca01",2;
+				mes "[格爾卡]";
+				mes "我希望你不要窺視。您對標準請求能力的評估幾乎已經完成。";
+				next;
+				mes "[格爾卡]";
+				mes "沒有時間製作 ^ff0000高級伊甸園的徽章。 ^000000";
+				next;
+				mes "[格爾卡]";
+				mes "^ff0000time是金錢新手！ ^000000";
+				mes "我認為那是真正的主人聽起來對嗎？";
+				next;
+				mes "[格爾卡]";
+				mes strcharinfo(0) +"將為您列出請求列表，因此請立即與我的主人交談並表達您的尊重。";
+				delitem 7054,50;// Brigan
+				completequest 13002;// Brigan collecting
+				para_100lv01 = 2;
+				getitem 6549,1;// Courtesy_Ticket
+			}
+			else {
+				cutin "gelca02",2;
+				mes "還沒有找到50個Brigan嗎？主人說這是一項簡單的任務...";
+				next;
+				mes "[格爾卡]";
+				mes "請快點！我們需要一個真正的冒險家來執行請求。";
+			}
+		}
+		else if (para_100lv01 == 2)
+			mes "等一下。我正在列出請求列表。我只是不知道我必須給你哪一個。我是一個好人。";
+		else if (para_100lv01 > 2) {
+			mes "請求列表已經準備就緒。你想開始嗎？";
+			next;
+			switch( select("Hunting Quests", "Inquire regards", "Show kindness pass" ) ) {
+				mes "[格爾卡]";
+			case 1:
+				mes "您無需立即接受所有請求。選擇一個適合您特定技能的請求區域。一個使您能夠執行請求並同時享受旅行的人。";
+				next;
+				switch( select("Glastheim related request", "Ash Vacuum related request", "Ice Dungeon related request", "Magma Dungeon related request", "Other requests" ) ) {
+					mes "[格爾卡]";
+				case 1:
+					mes "這是格拉斯海姆地區的請求。";
+					next;
+					switch( select("Carat Hunting", "Arclouse Hunting", "Anolian Hunting", "Sting Hunting", "Majoruros Hunting" ) ) {
+						mes "[格爾卡]";
+					case 1:
+						if (checkquest(13004,PLAYTIME) == 0)
+							mes "您剛剛完成了請求。重要的是要休息一會兒。總會有一個在等您的請求。";
+						else if (checkquest(13003,HUNTING) == 1) {
+							cutin "",3;  //carat_card
+							mes "此請求是清除 ^0000ff30 ^000000 ^ff00000000 carat ^000000在格拉斯海姆城堡的一樓。";
+							next;
+							cutin "gelca01",2;
+							mes "[格爾卡]";
+							mes "完成請求後，請通知我。";
+						}
+						else if (checkquest(13003,HUNTING) == 2) {
+							mes "參觀可怕的舊城堡一定很艱難。我敢肯定，有一天對我來說這將是一個很好的經歷。";
+							callsub S_Quest,13003,13004,106000,148000;
+						}
+						else {
+							cutin "",3;  //carat_card
+							mes "這個要求來自摩洛哥的商人，他以某種方式從格拉斯海姆的這些怪物中失去了業務。";
+							next;
+							mes "[格爾卡]";
+							mes "Eden Group知道這不是一個很好的原因，但請求是請求。因此，請清除格拉斯海姆城堡內部的怪物 ^000000怪物。";
+							callsub S_Quest,13004,13003;
+						}
+						break;
+					case 2:
+						if (checkquest(13006,PLAYTIME) == 0)
+							mes "您剛剛完成了請求。請休息。總會有您的要求。";
+						else if (checkquest(13005,HUNTING) == 1) {
+							cutin "",3;  //arclouse_card
+							mes "請清除 ^ff000022 arclouse ^000000。";
+							next;
+							cutin "gelca01",2;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13005,HUNTING) == 2) {
+							mes "你做得很好。";
+							emotion ET_BEST;
+							callsub S_Quest,13005,13006,106000,148000;
+						}
+						else {
+							cutin "",3;  //arclouse_card
+							mes "您知道Midgard這裡有豆類用作食物嗎？當arclouse滾動時，它類似於豆子。";
+							next;
+							mes "[格爾卡]";
+							mes "伊甸園集團總部希望將arclouse作為可能的吉祥物進行調查。";
+							next;
+							mes "[格爾卡]";
+							mes "請清除 ^ff000022 arclouse ^000000。";
+							if (callsub( S_Quest,13006,13005 ) == 0) {
+								mes "[格爾卡]";
+								mes "太糟糕了。這是一個有趣的要求。";
+							}
+						}
+						break;
+					case 3:
+						if (checkquest(13008,PLAYTIME) == 0)
+							mes "您剛剛完成了請求。冒險很重要，但休息也很重要。總會有一個請求等待。";
+						else if (checkquest(13007,HUNTING) == 1) {
+							cutin "",3;  //anolian_card
+							mes "僧侶正在朝聖，並尋求針對某些類似鱷魚的生物的保護。";
+							next;
+							mes "[格爾卡]";
+							mes "無論如何，此請求是要在地下水道上清理Anolians，以便為安全朝聖而鋪路。";
+							next;
+							cutin "gelca01",2;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13007,HUNTING) == 2) {
+							mes "您對這個請求很好。";
+							callsub S_Quest,13007,13008,112000,186500;
+						}
+						else {
+							cutin "",3;  //anolian_card
+							mes "格拉斯海姆（Glastheim）似乎不僅是冒險家，而且對僧侶來說都是一個好神聖的地方。我不知道是什麼真正吸引了他們。";
+							next;
+							mes "[格爾卡]";
+							mes "從修道院到地下水道的朝聖是一段旅程。該請求是在格拉斯海姆下水道中清除 ^ff000030 anolian ^000000，以進行安全的朝聖。";
+							callsub S_Quest,13008,13007;
+						}
+						break;
+					case 4:
+						if (checkquest(13010,PLAYTIME) == 0)
+							mes "您剛剛完成了請求。冒險很重要，但休息也很重要。總會有一個請求等待。";
+						else if (checkquest(13009,HUNTING) == 1) {
+							cutin "",3;  //sting_card
+							mes "地下水道和地下洞穴中有許多刺痛的怪物，因此很容易清除。";
+							next;
+							mes "[格爾卡]";
+							mes "該請求是在地下水道和地下洞穴中清除 ^ff000030刺激 ^000000，以進行安全的朝聖。";
+							next;
+							cutin "gelca01",2;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13009,HUNTING) == 2) {
+							mes "參觀骯髒和臭的地下必須很艱難。對您來說，這將是一個很好的經歷。";
+							callsub S_Quest,13009,13010,112000,186500;
+						}
+						else {
+							cutin "",3;  //sting_card
+							mes "您聽說過和尚的朝聖嗎？地下水路和洞穴中有很多刺痛，因此他們打擾了和平的僧侶。";
+							next;
+							mes "[格爾卡]";
+							mes "大師接受了這個請求，因為他尊重那些僧侶。該請求是清除地下水道上的 ^000000怪物 ^000000怪物以進行安全朝聖。";
+							callsub S_Quest,13010,13009;
+						}
+						break;
+					case 5:
+						if (checkquest(13012,PLAYTIME) == 0)
+							mes "您剛剛完成了請求。冒險很重要，但休息也很重要。將繼續朝聖，以便再次提出另一個請求。";
+						else if (checkquest(13011,HUNTING) == 1) {
+							cutin "",3;  //majoruros_card
+							mes "我想知道這些和尚朝聖背後的原因是什麼，以及為什麼他們繼續這樣做……一定有一個隱藏的原因。";
+							next;
+							mes "[格爾卡]";
+							mes "我曾經照顧好要求，但我很擔心。該請求是要從地下洞穴的2樓清除 ^ff000030 maporuros ^000000。";
+							next;
+							cutin "gelca01",2;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13011,HUNTING) == 2) {
+							mes "長時間的朝聖必須累人。";
+							mes "對您來說，這將是一個很好的經歷。";
+							callsub S_Quest,13011,13012,112000,252000;
+						}
+						else {
+							cutin "",3;  //majoruros_card
+							mes "僧侶的朝聖目的地位於格拉斯海姆城堡地下洞穴的2樓。這不是一段簡單的旅程，但會是一個很好的體驗。";
+							next;
+							mes "[格爾卡]";
+							mes "Majoururos並不容易狩獵，所以要小心。該請求是在地下洞穴二樓清除 ^ff000030 maporuros ^000000。";
+							callsub S_Quest,13012,13011;
+						}
+					}
+					break;
+				case 2:
+					mes "Midgard探險隊有許多要求。";
+					next;
+					if (select("Hunting Quests","Trauma" ) == 1) {
+						mes "[格爾卡]";
+						if (checkquest(13014,PLAYTIME) == 0)
+							mes "您剛剛完成了請求。冒險很重要，但休息也很重要。請休息。總會有您的要求。";
+						else if (checkquest(13013,HUNTING) == 1) {
+							cutin "",3;  //pinguicula_card
+							mes "出站空間是神秘的。怪物是獨一無二的。";
+							next;
+							mes "[格爾卡]";
+							mes "這是一個不尋常的請求。請清除 ^ff000030 pinguicula ^000000。";
+							next;
+							cutin "gelca01",2;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13013,HUNTING) == 2) {
+							mes "參觀煙灰真空必須很難。";
+							mes "對您來說，這將是一個很好的經歷。";
+							callsub S_Quest,13013,13014,106000,148000;
+						}
+						else {
+							cutin "",3;  //pinguicula_card
+							mes "Pinguicula是冒險家進入灰塵時遇到的最早怪物之一。他們希望我們減少探險隊周圍的怪物。";
+							next;
+							mes "[格爾卡]";
+							mes "有更多新怪物發生更多事故是很自然的。這是一個共同的請求。請清除 ^ff000030 pinguicula ^000000。";
+							callsub S_Quest,13014,13013;
+						}
+					}
+					else {
+						mes "[格爾卡]";
+						if (checkquest(13016,PLAYTIME) == 0)
+							mes "您剛剛完成了請求。冒險很重要，但休息也很重要。請休息。這個請求不值得努力工作。";
+						else if (checkquest(13015,HUNTING) == 1) {
+							cutin "",3;  //luciola_vespa_card
+							mes "這是一個奇怪的要求，也是一個奇怪的原因，但無論如何我們都應該接受。";
+							next;
+							mes "[格爾卡]";
+							mes "請清除 ^ff000030 luciola vespa ^000000。";
+							next;
+							cutin "gelca01",2;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13015,HUNTING) == 2) {
+							mes "做一個奇怪的要求一定很難。";
+							callsub S_Quest,13015,13016,112000,186500;
+						}
+						else {
+							cutin "",3;  //luciola_vespa_card
+							mes "這是一個非常個人的要求。這是不尋常的，但是這個要求來自與Rohtert友好的冒險家。他為什麼寫這個？";
+							next;
+							mes "[格爾卡]";
+							mes "他年輕的時候就被一隻蜜蜂stund了太個人化了。這使他受傷了，所以他不能去阿什真空吸塵器。";
+							next;
+							mes "蓋爾卡盯著羅特。";
+							next;
+							mes "[格爾卡]";
+							mes "這似乎是向新世界旅行者增加的要求。請清除 ^ff000030 luciola vespa ^000000。";
+							callsub S_Quest,13016,13015;
+						}
+					}
+					break;
+				case 3:
+					mes "雷切爾附近或冰地下城附近有許多要求。";
+					next;
+					switch( select("Desert Wolf Hunting", "Snowier Hunting", "Ice Titans..." ) ) {
+						mes "[格爾卡]";
+					case 1:
+						if (checkquest(13018,PLAYTIME) == 0)
+							mes "您剛剛完成了請求。冒險很重要，但休息也很重要。";
+						else if (checkquest(13017,HUNTING) == 1) {
+							cutin "",3;  //desert_wolf_card
+							mes "你讀過舊書嗎？那是關於一個冒險家，他正在與大狼隊作戰，最終達到了友誼。這就是狼的桑巴人。";
+							next;
+							mes "[格爾卡]";
+							mes "小說是小說。請清除 ^ff000033的沙漠狼 ^000000，附近雷切爾的冰地下城入口處。";
+							next;
+							cutin "gelca01",2;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13017,HUNTING) == 2) {
+							mes "那不是可愛嗎？";
+							mes "對您來說，這將是一個很好的經歷。";
+							callsub S_Quest,13017,13018,106000,148000;
+						}
+						else {
+							cutin "",3;  //desert_wolf_card
+							mes "冰洞直接位於雷切爾（Rachel）的北部。問題在於，狼在去看冰洞時會嚇take遊客。";
+							next;
+							mes "[格爾卡]";
+							mes "如果我們可以與狼交談和桑巴舞，那會很有趣！請清除 ^ff00000030沙漠狼 ^000000附近的冰地牢。";
+							callsub S_Quest,13018,13017;
+						}
+						break;
+					case 2:
+						if (checkquest(13020,PLAYTIME) == 0)
+							mes "您剛剛完成了請求。冒險很重要，但休息也很重要。";
+						else if (checkquest(13019,HUNTING) == 1) {
+							cutin "",3;  //snowier_card
+							mes "粗糙的呼吸，不安全的眼睛，冷凍冷..這不容易，請讓自己溫暖。";
+							next;
+							mes "[格爾卡]";
+							mes "請在冰地下城的二樓清理 ^ff000033s snowier ^000000。";
+							cutin "gelca01",2;
+							next;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13019,HUNTING) == 2) {
+							mes "參觀冷凍冰地下城一定很難。";
+							mes "對您來說，這將是一個很好的經歷。";
+							callsub S_Quest,13019,13020,106000,148000;
+						}
+						else {
+							cutin "",3;  //snowier_card
+							mes "去過Ice Dungeon的人說，有嘈雜的怪物在打擾他們的訪問。如果您可以忍受，請清除它們。";
+							next;
+							mes "[格爾卡]";
+							mes "請在冰地下城的二樓清理 ^ff000033s snowier ^000000。";
+							callsub S_Quest,13020,13019;
+						}
+						break;
+					case 3:
+						if (checkquest(13022,PLAYTIME) == 0)
+							mes "您剛剛完成了請求。冒險很重要，但休息也很重要。";
+						else if (checkquest(13021,HUNTING) == 1) {
+							cutin "",3;  //ice_titan_card
+							mes "請在冰洞清除 ^ff000033冰泰坦 ^000000。";
+							next;
+							cutin "gelca01",2;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13021,HUNTING) == 2) {
+							mes "參觀那個冷洞的洞穴一定很艱難。";
+							mes "對您來說，這將是一個很好的經歷。";
+							callsub S_Quest,13021,13022,112000,186500;
+						}
+						else {
+							cutin "",3;  //ice_titan_card
+							mes "您去過雷切爾以北的冰洞嗎？在地牢深處有怪物被稱為冰泰坦。學者想確定他們是否是魔像。";
+							next;
+							mes "[格爾卡]";
+							mes "請求是為了減少學者安全的數量。請在冰洞清除 ^ff000033冰泰坦 ^000000。";
+							callsub S_Quest,13022,13021;
+						}
+					}
+					break;
+				case 4:
+					mes "在岩漿地下城有一個怪物狩獵的要求。 ^da26dapretty女孩流浪者^000000向Comodo請求此。";
+					next;
+					if (select("Nightmare Terror Hunting","Deleter Hunting" ) == 1) {
+						mes "[格爾卡]";
+						if (checkquest(13024,PLAYTIME) == 0)
+							mes "您剛剛完成了請求。感謝您保留記憶。但是您應該休息一下。";
+						else if (checkquest(13023,HUNTING) == 1) {
+							cutin "",3;  //nightmare_terror_card
+							mes "一個女孩的記憶很重要！請清除 ^ff000030噩夢恐怖 ^000000。";
+							next;
+							cutin "gelca01",2;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13023,HUNTING) == 2) {
+							mes "考慮對他人的記憶。世界上有史蒂爾·阿布。對您來說，這將是一個很好的經歷。";
+							callsub S_Quest,13023,13024,106000,148000;
+						}
+						else {
+							cutin "",3;  //nightmare_terror_card
+							mes "這個要求來自一個可悲的客戶，因為岩漿地牢在與情人分手後回來時，她到處都是怪物。顯然，她在那裡度過了很多時間，想要和平。";
+							next;
+							mes "[格爾卡]";
+							mes "一個女孩的記憶很重要！請清除 ^ff000030噩夢恐怖 ^000000。";
+							callsub S_Quest,13024,13023;
+						}
+					}
+					else {
+						mes "[格爾卡]";
+						if (checkquest(13026,PLAYTIME) == 0)
+							mes "您剛剛完成了請求。您是否花了足夠的時間來冷卻？休息。";
+						else if (checkquest(13025,HUNTING) == 1) {
+							cutin "",3;  //flying_deleter_card
+							mes "客戶向情人展示了一場精彩的舞蹈。有一天，他們在岩漿地牢跳舞時受到了攻擊。";
+							next;
+							mes "[格爾卡]";
+							mes "這次襲擊毀了他們的舞蹈，並最終是他們的戀愛關係，因為那個傢伙責怪女孩被襲擊。";
+							next;
+							mes "[格爾卡]";
+							mes "現在，她將刪除器歸咎於刪除器，因此她提出了此要求。請清除 ^ff000030飛行deleter ^000000。";
+							next;
+							cutin "gelca03",2;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13025,HUNTING) == 2) {
+							cutin "gelca03",2;
+							mes "伊甸園（Eden Group）保護愛情，正義和Midgard！歡呼！";
+							mes "這將是一個很好的記憶。";
+							callsub S_Quest,13025,13026,106000,148000;
+						}
+						else {
+							cutin "",3;  //flying_deleter_card
+							mes "客戶向情人展示了一場精彩的舞蹈。有一天，他們在岩漿地牢跳舞時受到了攻擊。";
+							next;
+							mes "[格爾卡]";
+							mes "這次襲擊毀了他們的舞蹈，並最終是他們的戀愛關係，因為那個傢伙責怪女孩被襲擊。";
+							next;
+							mes "[格爾卡]";
+							mes "現在，她將刪除器歸咎於刪除器，因此她提出了此要求。請清除 ^ff000030飛行deleter ^000000。";
+							callsub S_Quest,13026,13025;
+						}
+					}
+					break;
+				case 5:
+					mes "這是Midgard各地的其他請求列表。";
+					next;
+					switch( select("Loli Ruri Hunting - Niflheim", "Medusa Hunting - Comodo", "Anubis Hunting - Sphinx" ) ) {
+						mes "[格爾卡]";
+					case 1:
+						if (checkquest(13041,PLAYTIME) == 0)
+							mes "我認為你應該休息一下。甚至冒險家都需要休息嗎？";
+						else if (checkquest(13040,HUNTING) == 1) {
+							cutin "",3;  //loli_ruri_card
+							mes "伊甸園集團（Eden Group）計劃發送通知，即由於太危險而不會發送到夜間請求。";
+							next;
+							mes "[格爾卡]";
+							mes "我想知道他們為什麼要策劃這種 ^ff0000nonsense ^000000 ...讓我想知道他們甚至對冒險都不了解。";
+							next;
+							mes "[格爾卡]";
+							mes "我們應該接受這個簡單的請求，然後才開始獲得更多的胡說八道。請清除Niflheim中的li ruri ^000000。";
+							next;
+							cutin "gelca02",2;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13040,HUNTING) == 2) {
+							mes "你在精神上受傷了嗎？我很高興您安全回來。";
+							mes "對您來說，這將是一個很好的經歷。";
+							callsub S_Quest,13040,13041,112000,186500;
+						}
+						else {
+							cutin "",3;  //loli_ruri_card
+							mes "一個秘密社會要求保護伊甸園免受蘿莉·魯里斯（Loli Ruris）的保護，因為他們認為自己具有精神力量。";
+							next;
+							mes "[格爾卡]";
+							mes "他們說，他們會治愈伊甸園的冒險家以換取要求，但我們不確定他們會跟隨。";
+							next;
+							mes "[格爾卡]";
+							mes "無論如何，我們應該接受簡單的請求。請清除Niflheim中的li ruri ^000000。";
+							callsub S_Quest,13041,13040;
+						}
+						break;
+					case 2:
+						if (checkquest(13043,PLAYTIME) == 0)
+							mes "冒險很重要，但休息也很重要。";
+						else if (checkquest(13042,HUNTING) == 1) {
+							cutin "",3;  //medusa_card
+							mes "我不知道為什麼大師喜歡這種請求。他還曾經說過任何請求是冒險家的好要求...";
+							next;
+							mes "[格爾卡]";
+							mes "請在科莫多西部洞穴中清除 ^ff00000030 medusa ^000000。";
+							next;
+							cutin "gelca01",2;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13042,HUNTING) == 2) {
+							mes "孔多海灘怎麼樣？環顧四周，而不是對請求過多關注。";
+							mes "當然，這將是一個很好的體驗。";
+							callsub S_Quest,13042,13043,106000,148000;
+						}
+						else {
+							cutin "",3;  //medusa_card
+							mes "這是艾伯塔省的一位頭髮設計師的要求。他想知道美杜莎（Medusa）頭上的蛇真的是蛇還是精美的頭髮...";
+							next;
+							mes "[格爾卡]";
+							mes "顯然是蛇，但是我們在這個瘋狂的人的夢想上蓋章是誰？";
+							next;
+							mes "[格爾卡]";
+							mes "我的主人僅僅因為瘋狂而接受了這個請求。請清除comodo西洞的Medusa ^000000怪物。";
+							callsub S_Quest,13043,13042;
+						}
+						break;
+					case 3:
+						if (checkquest(13045,PLAYTIME) == 0)
+							mes "Sphinx的請求完成了。請休息。";
+						else if (checkquest(13044,HUNTING) == 1) {
+							cutin "",3;  //anubis_card
+							mes "我獨自一人調查客戶，但現在請在獅身人面像地牢四樓清理 ^ff000020 anubis ^000000。";
+							next;
+							cutin "gelca01",2;
+							mes "[格爾卡]";
+							mes "當您清除此請求時，請通知我。";
+						}
+						else if (checkquest(13044,HUNTING) == 2) {
+							cutin "gelca02",2;
+							mes "獅身人里地牢是一個迷宮。";
+							mes "對您來說，這將是一個很好的經歷。";
+							callsub S_Quest,13044,13045,112000,186500;
+						}
+						else {
+							cutin "",3;  //anubis_card
+							mes "一個匿名客戶發送了一個請求，以幫助清除獅身人面像的怪物，因為冒險家幾乎不再訪問摩洛哥。怪物似乎在那裡猖ramp。";
+							next;
+							mes "[格爾卡]";
+							mes "請在獅身人面像地牢的四樓清除 ^ff000020 anubis ^000000。";
+							callsub S_Quest,13045,13044;
+						}
+					}
+				}
+				break;
+			case 2:
+				if (para_100lv02 < 20) {
+					.@ran = rand(1,3);
+					if (.@ran == 1)
+						mes "我們非常忙於需要照顧的請求。這是我第一次處理太大的壓力。";
+					else if (.@ran == 2)
+						mes "我以為伊甸園很忙，但我無法想像這麼多。我應該做更多的冒險家！";
+					else {
+						cutin "gelca02",2;
+						mes "我希望我可以喝一杯新鮮果汁...";
+					}
+				}
+				else if (para_100lv02 < 40) {
+					.@ran = rand(1,3);
+					if (.@ran == 1) {
+						cutin "gelca03",2;
+						mes "冒險家有時會從他們訪問的地方帶來特殊的東西或獎杯。很好！";
+					}
+					else if (.@ran == 2)
+						mes "如果有好事"+ strcharinfo(0) +" I will try to give you a couple things. I am not sure if there will be enough to give because of so many adventurers.";
+					else
+						mes "處理文件必須很困難。在現場外出要容易得多。";
+				}
+				else if (para_100lv02 < 60) {
+					if (para_100lv01 > 3) {
+						.@ran = rand(1,3);
+						if (.@ran == 1)
+							mes "我會讓你知道有什麼好處。";
+						else if (.@ran == 2)
+							mes "您習慣了請求嗎？我指導冒險家而不是自己接受請求，這很奇怪。";
+						else
+							mes "如果您在收到Glastheim的所有請求後一次清除一個，那將是一件好事。";
+					}
+					else {
+						cutin "gelca03",2;
+						mes "我很忙，但清除了很多要求"+ strcharinfo(0) +" I appreciate it. Lets see. I got some good food from an adventurer that he received during a request.";
+						next;
+						mes "[格爾卡]";
+						mes "哎呀，我全部吃了嗎？好吧，只剩一個。請稍後再放下！";
+						para_100lv01 = 4;
+						getitem 608,1;// Seed_Of_Yggdrasil
+					}
+				}
+				else if (para_100lv02 < 80) {
+					cutin "gelca03",2;
+					if (para_100lv01 > 4)
+						mes "開心點！"+ strcharinfo(0) +" I'm not sure if he thinks of you as his pupil. He is just out of control.";
+					else {
+						mes "每當請求有效完成時，都會有很多禮物。在這裡，將其作為獎品。";
+						para_100lv01 = 5;
+						getitem 607,1;// Yggdrasilberry
+					}
+				}
+				else if (para_100lv02 > 100) {
+					mes "這是艱苦的工作"+ strcharinfo(0) +"?";
+					next;
+					switch( select("I hate that hot-tempered fool.", "I want you to be the master.", "I would follow you to any battle." ) ) {
+						mes "[格爾卡]";
+					case 1:
+						mes "我理解你。當我第一次在莫拉村遇到碩士時，我開始戰鬥。";
+						next;
+						mes "[格爾卡]";
+						mes "當我第一次見到他時，他幾乎在哭。很難假裝輸給他。請保密。";
+						emotion ET_SMILE;
+						break;
+					case 2:
+						if (Sex == SEX_MALE)
+							mes "我不確定我是否從事這份工作。除了...";
+						else
+							mes "我很遺憾地這樣說，但是我現在和永遠是師父的唯一學生...他說 ^ff0000i不需要醜陋的女學生 ^000000，但我仍然堅持他。";
+						break;
+					case 3:
+						cutin "gelca04",2;
+						mes "哦，不...請不要那樣做。很抱歉，請將其保留為大師的秘密。我很粗心。";
+						emotion ET_SHY;
+						break;
+					}
+					next;
+					cutin "gelca03",2;
+					mes "[格爾卡]";
+					if (para_100lv01 > 5)
+						mes "祝您剩下的請求好運。";
+					else {
+						mes "剩下的請求祝您好運。 ^ff0000master說他有話要說。 ^000000";
+						para_100lv01 = 6;
+					}
+				}
+				else
+					mes "對不起，我有點忙。我們以後可以說話嗎？";
+				break;
+			case 3:
+				cutin "gelca03",2;
+				mes "你帶來了善良的通行證嗎？";
+				next;
+				if (countitem(6549) > 0) {// Courtesy_Ticket
+					if (select("The ^FF0000kindness pass^000000?", "Exchange pass for prizes." ) == 1) {
+						mes "[格爾卡]";
+						mes "我知道這聽起來很幼稚。正確的？形狀就像我們小時候曾經玩過的卡一樣。";
+						next;
+						if (select("A card? What is it?", "Uh, yeah those were fun..." ) == 1) {
+							cutin "gelca02",2;
+							mes "[格爾卡]";
+							mes "對不起...它只有在我們的村莊才受歡迎。扔，加熱，讓它飛。";
+							emotion ET_SORRY;
+							next;
+						}
+						cutin "gelca01",2;
+						mes "[格爾卡]";
+						mes "如您所見，大師自己做了，並將其照片放在上面。他曾經旅行過尋找製作卡片的紙質材料。";
+						next;
+						cutin "gelca02",2;
+						mes "[格爾卡]";
+						mes "如果未正確提交，則查找紙張的請求將包括在請求列表中。";
+						next;
+						mes "[格爾卡]";
+						mes "即使他看起來不像它，他也很友善。主人用它給冒險家的奉獻精神提供了一些東西。";
+						next;
+						cutin "gelca01",2;
+						mes "[格爾卡]";
+						mes "通過使用1,10,20和30張卡片來提供有關冒險或獎杯的故事。";
+						next;
+						mes "[格爾卡]";
+						mes "如果您聽冒險家的故事，那將是一種良好的經歷。我們從大師那裡聽到了很多冒險。";
+						next;
+						mes "[格爾卡]";
+						mes "如果您已經足夠成熟，不需要請求，請確保不允許使用通行證。";
+					}
+					else {
+						mes "[格爾卡]";
+						mes "您想如何使用此通行證？";
+						next;
+						if (select("Exchange for prizes", "Listen to a story and get EXP" ) == 1) {
+							cutin "gelca03",2;
+							mes "[格爾卡]";
+							mes "您可以在此袋中挑選獎杯。即使您拿起自己不想要的東西，也請不要失望。您想交換幾個？";
+							next;
+							.@amount = select("Exchange kindness ^FF00001^000000 pass", "Exchange kindness ^FF000010^000000 pass" ) == 1 ? 1 : 10;
+							mes "[格爾卡]";
+							mes "請給我通行證，然後將您的手放在袋子裡摘下。";
+							next;
+							if (countitem(6549) < .@amount) {// Courtesy_Ticket
+								mes "[格爾卡]";
+								mes "^ff0000kindness Pass^000000不足。";
+							}
+							else {
+								mes "瀏覽";
+								next;
+								.@ran = rand(1,1000);
+								if (.@amount == 1) {
+									if (.@ran <= 100)
+										setarray .@item[0],505,2;// Blue_Potion
+									else if (.@ran <= 200)
+										setarray .@item[0],547,10;// White_Slim_Potion
+									else if (.@ran == 333)
+										setarray .@item[0],603,1;// Old_Blue_Box
+									else if (.@ran == 777)
+										setarray .@item[0],617,1;// Old_Violet_Box
+									else
+										setarray .@item[0],547,5;// White_Slim_Potion
+								}
+								else {
+									if (.@ran <= 100)
+										setarray .@item[0],608,1;	// Seed_Of_Yggdrasil
+									else if (.@ran <= 200)
+										setarray .@item[0],547,100;	// White_Slim_Potion
+									else if (.@ran >= 300 && .@ran <= 399)
+										setarray .@item[0],603,1;	// Old_Blue_Box
+									else if (.@ran >= 600 && .@ran <= 650)
+										setarray .@item[0],616,1;	// Old_Card_Album
+									else if (.@ran >= 700 && .@ran <= 800)
+										setarray .@item[0],617,1;	// Old_Violet_Box
+									else
+										setarray .@item[0],547,60;	// White_Slim_Potion
+								}
+								delitem 6549,.@amount;// Courtesy_Ticket
+								getitem .@item[0], .@item[1];
+								mes "您伸到袋子裡抓住 ^0000ff"+ .@item[1] +" "+ getitemname(.@item[0]) +"^000000.";
+								next;
+								if (.@amount == 10)
+									cutin "gelca03",2;
+								mes "[格爾卡]";
+								mes "充分利用它。";
+							}
+						}
+						else {
+							mes "[格爾卡]";
+							mes "好的，我為您準備了一個故事，以換取善良的通行證。";
+							next;
+							switch( select("Give ^FF000010^000000 kindness pass", "Give ^FF000020^000000 kindness pass", "Give ^FF000030^000000 kindness pass" ) ) {
+								mes "[格爾卡]";
+							case 1:
+								if (countitem(6549) < 10)// Courtesy_Ticket
+									mes "您沒有足夠的友善通行證。";
+								else {
+									.@story = rand(1,3);
+									if (.@story == 1) {
+										cutin "gelca02",2;
+										mes "您見過艾伯塔省附近的沉沒船嗎？";
+										next;
+										mes "羅特大師和我深入船上，與一個名為 ^ff0000drake ^000000的怪物作戰。那天我確定我將成為最好的冒險家。";
+										.@exp = 200000;
+										.@jexp = 148000;
+									}
+									else if (.@story == 2) {
+										cutin "gelca03",2;
+										mes "有一次，我和主人去了科莫多以西的山洞，當我們看到美杜莎怪物...";
+										next;
+										mes "哦，男孩，他臉上的表情是無價的！";
+										emotion ET_BIGTHROB;
+										emotion ET_THINK, playerattached();
+										.@exp = 180000;
+										.@jexp = 168000;
+									}
+									else {
+										mes "我曾經迷失在Prontera以北的迷宮中。我以為我要永遠圈出，直到我終於做到了。";
+										next;
+										mes "有傳言說，如果您迷失在那個迷宮中，您將變成其中的一個怪物。";
+										.@exp = 220000;
+										.@jexp = 128000;
+									}
+									if (JobLevel < 6)
+										.@jexp = 106000;
+									getexp .@exp,.@jexp;
+									delitem 6549,10;
+									para_100lv02 += 1;
+								}
+								break;
+							case 2:
+								if (countitem(6549) < 20)// Courtesy_Ticket
+									mes "您沒有足夠的友善通行證。";
+								else {
+									.@story = rand(1,3);
+									if (.@story == 1) {
+										cutin "gelca04",2;
+										mes "一旦我找到了去賈瓦伊的秘密途徑……這僅適用於夫妻，但我們當中有些人知道如何到達那裡。";
+										next;
+										mes "沒有伴侶的地方有點沒用，但是很好。";
+										emotion ET_THROB;
+										.@exp = 550000;
+										.@jexp = 340000;
+									}
+									else if (.@story == 2) {
+										cutin "gelca03",2;
+										mes "所以有一次，師父是一個稱為翼的公會的一部分...雞翅...？";
+										next;
+										mes "這是一個有趣的公會，因為沒人認真對待事情，但大師厭倦了他們的懶惰，所以他離開了。";
+										.@exp = 400000;
+										.@jexp = 240000;
+									}
+									else {
+										mes "您去過 ^ff0000 dendless tower ^000000嗎？師父和我去了那裡，但只到達20樓，因為他的膝蓋在攀登時屈服了...";
+										next;
+										mes "^ff0000endless塔^000000在海裡某個地方。您必須在艾伯塔省找到一個名叫Jansor或Jans-sommuth的傢伙，他會在那裡航行。";
+										.@exp = 550000;
+										.@jexp = 290000;
+									}
+									if (JobLevel < 6)
+										.@jexp = 206000;
+									getexp .@exp, .@jexp;
+									delitem 6549,20;
+									para_100lv02 += 1;
+								}
+								break;
+							case 3:
+								if (countitem(6549) < 30)// Courtesy_Ticket
+									mes "您沒有足夠的友善通行證。";
+								else {
+									.@story = rand(1,2);
+									if (.@story == 1) {
+										cutin "gelca04",2;
+										mes "大師協會在Ash真空中被解僱，因為他們的公會大師與一些Cornus Monsters戰鬥後失了。";
+										next;
+										mes "[格爾卡]";
+										mes "從那以後，他開始對弱小的冒險家感到卑鄙...";
+										next;
+										mes "[格爾卡]";
+										mes "我認為那天之後他再也見不到那個公會大師。";
+										getexp 650000,488000;
+									}
+									else {
+										cutin "gelca03",2;
+										mes "[格爾卡]";
+										mes "大師最初是在Prontera修道院的流行支持和尚。";
+										next;
+										mes "[格爾卡]";
+										mes "但是由於他的競爭性質，他也被視為麻煩製造者，所以他離開了。";
+										getexp 700000,430000;
+									}
+									delitem 6549,30;
+									para_100lv02 += 1;
+								}
+								break;
+							}
+						}
+					}
+				}
+				else {
+					mes "[格爾卡]";
+					mes "如果您收到更多的友善通行證，請回到我身邊！";
+				}
+			}
+		}
+	}
+	else {
+		cutin "gelca03",2;
+		if (para_100lv02 > 100)
+			mes strcharinfo(0) +"呢你做得很好！還有更多要求，但為其他冒險家保留了他們。";
+		if (para_100lv02 < 101)
+			mes "我認為您不適合我可以提出的要求。請找到其他冒險。";
+		callsub S_Hunting,13003,106000,148000,"Carat";// <quest id>, <job exp if joblevel < 6>, <job exp>, <quest name>
+		callsub S_Hunting,13005,106000,148000,"Arclouse";
+		callsub S_Hunting,13007,112000,186500,"Anolian";
+		callsub S_Hunting,13009,112000,186500,"Sting";
+		callsub S_Hunting,13011,112000,252000,"Majoruros";
+		callsub S_Hunting,13013,106000,148000,"Pinguicula";
+		callsub S_Hunting,13015,112000,186500,"Luciola Vespa";
+		callsub S_Hunting,13017,106000,148000,"Desert Wolf";
+		callsub S_Hunting,13019,106000,148000,"Snowier";
+		callsub S_Hunting,13021,112000,186500,"Ice Titan";
+		callsub S_Hunting,13023,106000,148000,"Nightmare Terror";
+		callsub S_Hunting,13025,106000,148000,"Flying Deleter";
+		callsub S_Hunting,13040,112000,186500,"Loli Ruri";
+		callsub S_Hunting,13042,106000,148000,"Medusa";
+		callsub S_Hunting,13044,112000,186500,"Anubis";
+		setarray .@quest_id[0],13004,13006,13008,130010,13012,13014,13016,13018,13020,13022,13024,13026,13041,13043,13045;
+		for ( .@i = 0; .@i < 15; .@i++ ) {
+			if (checkquest(.@quest_id[.@i],PLAYTIME) == 2) {
+				erasequest .@quest_id[.@i];
+				break;
+			}
+		}
+	}
+	close2;
+	cutin "",255;
+	end;
+S_Quest:
+	if (getarg(2,0)) {
+		getitem 6549,1;// Courtesy_Ticket
+		para_100lv02 += 1;
+		if (JobLevel < 6)
+			getexp 550000,getarg(1);
+		else
+			getexp 550000,getarg(2);
+	}
+	else {
+		next;
+		cutin "gelca01",2;
+		if (select("Accept the request.","Decline." ) == 2)
+			return 0;
+		mes "[格爾卡]";
+		mes "清除請求時，請通知我。";
+		if (getarg(0) == 13012) {
+			next;
+			mes "[格爾卡]";
+			mes "前往格拉斯海姆最低層的旅程是一段漫長的旅程，但是如果您參加聚會，那可能會很有趣。";
+		}
+	}
+	if (isbegin_quest(getarg(0)))
+		erasequest getarg(0);
+	setquest getarg(1);
+	return 1;
+
+S_Hunting:
+	switch( checkquest(getarg(0),HUNTING) ) {
+	case -1:
+		return;
+	case 2:
+		next;
+		mes "[格爾卡]";
+		mes "您完成了請求";
+		mes "^ff0000"+ getarg(3) +" Hunting^000000.";
+		mes "我將在完成此請求後將您標記為失望。";
+		para_100lv02 += 1;
+		if (JobLevel < 6)
+			getexp 550000,getarg(1);
+		else
+			getexp 550000,getarg(2);
+		break;
+	case 0:
+	case 1:// untranslated these cases
+	}
+	erasequest getarg(0);
+	close2;
+	cutin "",255;
+	end;
+}
+
+moc_para01,41,95,5	script	Rohtert#12	4_M_ROTERT,{
+	mes "[羅特]";
+	if (!callfunc("F_HasEdenGroupMark")) {
+		cutin "rote01",2;
+		mes "您甚至都不是Eden Group的成員。你在這裡做什麼？";
+		mes "我只處理基本水平 ^ff0000100-110 ^000000冒險家。";
+	}
+	else {
+		cutin "rote03",2;
+		mes "......";
+		next;
+		mes "[羅特]";
+		if (BaseLevel < 100)
+			mes "這樣的新手...去訓練自己。什麼？不喜歡我說話的方式嗎？然後變得更強壯。";
+		else if (BaseLevel > 110) {
+			mes "您有點成熟，冒險家。你對我沒有生意。只是離開。我的業務是與110級的新三等探險家在一起。";
+			if (checkquest(13047,PLAYTIME) == 2)
+				erasequest 13047;
+			if (checkquest(13049,PLAYTIME) == 2)
+				erasequest 13049;
+			if (checkquest(13048,HUNTING) > -1)
+				erasequest 13048;
+			if (checkquest(13046,HUNTING) > -1)
+				erasequest 13046;
+		}
+		else if (para_100lv01 < 2) {
+			mes "是的，Waddya想要我的孩子嗎？您認為我會說好的，我會成為您的主人，並教您我所知道的一切？";
+			next;
+			mes "[羅特]";
+			mes "我不是慈善機構，所以迷路了。";
+		}
+		else if (para_100lv01 == 2) {
+			mes "你是一個新冒險家？";
+			next;
+			mes "[羅特]";
+			mes "有很多事情要做，您正在浪費我的時間。與蓋爾卡（Gelkah）交談，她比我對你更加健談。";
+			next;
+			mes "[羅特]";
+			mes "您似乎足夠勇敢地成為一名好冒險家，但您不過是我眼中的新手。";
+			para_100lv01 = 3;
+		}
+		else if (para_100lv01 == 3) {
+			mes "我曾經像您一樣的伊甸園冒險家，但我當然是最好的。";
+			next;
+			mes "[羅特]";
+			mes "我想我現在退休了，因為我的冒險技巧太好了，無法與所有孩子競爭。";
+		}
+		else if (para_100lv01 == 4) {
+			mes "無論如何，我對伊甸園團體有幫助。";
+			next;
+			mes "[羅特]";
+			mes "我正在尋找一個將友誼或忠誠像湯匙存根的人。";
+			next;
+			if (select("A Spoon what?", "You're a bad person." ) == 1) {
+				cutin "rote03",2;
+				mes "[羅特]";
+				mes "你知道？湯匙存根。殭屍囚犯將他們放下，他們似乎很有用，但實際上它們毫無價值。";
+				next;
+				mes "[羅特]";
+				mes "無論如何，我想你看起來像是忠誠的類型...有點...";
+			}
+			else {
+				mes "[羅特]";
+				mes "這讓我感到很奇怪。那還不錯，但我想我很糟糕，我不在乎。";
+			}
+			next;
+			cutin "rote04",2;
+			mes "[羅特]";
+			mes "請記住要保持勇敢的愚蠢冒險家。";
+		}
+		else if (para_100lv01 == 5) {
+			cutin "rote03",2;
+			mes "好的 ！您正在盡力而為。";
+			next;
+			mes "[羅特]";
+			mes "恐怕您會變得像Gelkah一樣。她就像一隻迷路的小狗。不要像她一樣。好的？";
+		}
+		else if (para_100lv01 == 6) {
+			cutin "rote03",2;
+			mes "您正忙著四處尋找。";
+			next;
+			mes "[羅特]";
+			if (checkquest(13046) == 2) {
+				if (checkquest(13047,PLAYTIME) == 0) {
+					mes "我已經完成了我的業務。";
+					mes "我負責清理文件。我討厭做這些事情。";
+					next;
+					mes "[羅特]";
+					mes "我想我應該再和他說話……明天回來！";
+				}
+				else if (checkquest(13047,PLAYTIME) == 2) {
+					mes "哦，已經多久了？";
+					erasequest 13047;// Tendrilion Request Timer
+				}
+				else if (checkquest(13049,PLAYTIME) == 0)
+					mes "白色是紙，黑色是一封信。我討厭公共文件。但是，我必須這樣做，所以我很忙一段時間了。";
+				else if (checkquest(13048,HUNTING) == 1)
+					mes "我知道狩獵Tens鑽探對您來說並不難。";
+				else if (checkquest(13048,HUNTING) == 2) {
+					cutin "rote02",2;
+					mes "好的 ！您正在成為一名好冒險家！盡力！";
+					erasequest 13048;// Tendrilion Request
+					setquest 13049;// Tendrilion Request Timer
+					getexp 352000,253000;
+				}
+				else {
+					cutin "rote02",2;
+					mes "我認為我們應該教它更多的教訓，以展示誰的老闆！";
+					next;
+					if (select("Lets give a good lesson for sure.", "I think once is enough." ) == 2) {
+						mes "[羅特]";
+						mes "很好，仍然有許多冒險家可以做到這一點。";
+					}
+					else {
+						cutin "rote04",2;
+						mes "[羅特]";
+						mes "這不是因為我膽小。";
+						next;
+						mes "[羅特]";
+						mes "祝你好運。確保這次完成。哈哈！";
+						if (checkquest(13049,PLAYTIME) == 2)
+							erasequest 13049;
+						setquest 13048;// Tendrilion Request
+					}
+				}
+			}
+			else if (checkquest(13046,HUNTING) == 1)
+				mes "你還在那裡嗎？如果您自己不能自己處理，請問您的朋友，因為這不是最簡單的事情。";
+			else if (checkquest(13046,HUNTING) == 2) {
+				mes "哦，你安全回來了！";
+				mes "我想你不是我想的磨砂膏。";
+				completequest 13046;// Tendrilion Request
+				setquest 13047;// Tendrilion Request Timer
+				getexp 352000,253000;
+			}
+			else {
+				cutin "rote04",2;
+				mes "您介意做一個簡單的差事嗎？";
+				next;
+				if (select("No I don't mind!", "Simple errands are for simpletons." ) == 2) {
+					mes "[羅特]";
+					mes "你是一個奇怪的冒險家...";
+				}
+				else {
+					mes "[羅特]";
+					mes "一個好大風的日子，我在Midgard Allied Forces Post以西的西部收集了鮮花，以滿足伊甸園的要求。";
+					next;
+					mes "[羅特]";
+					mes "然後那個突然出現了。";
+					next;
+					select("一個什麼？");
+					cutin "rote02",2;
+					mes "[羅特]";
+					mes "那是一個 ^ff0000tens鑽機。 ^000000";
+					next;
+					cutin "gelca03",2;
+					mes "[^ff0000gelkah^000000]";
+					mes "哎呀！它實際上是 ^ff0000 tendrilion ^000000 !!掌握！";
+					next;
+					cutin "rote04",2;
+					mes "[羅特]";
+					mes "是的，土豆po-tah-toh！";
+					emotion ET_HNG;
+					next;
+					cutin "gelca02",2;
+					mes "[^ff0000gelkah^000000]";
+					mes "......";
+					next;
+					cutin "rote04",2;
+					mes "[羅特]";
+					mes "當我們面對野獸的眼睛時，我們意識到它看起來像獅子，但不是任何普通的動物。";
+					emotion ET_HNG;
+					next;
+					mes "[羅特]";
+					mes "^8008f8i知道它被殺死或被殺死。 ^000000";
+					next;
+					mes "[羅特]";
+					mes "當然，我很容易擊敗那隻野獸！這比從波動中拿起糖果要容易。";
+					next;
+					mes "[羅特]";
+					mes "但令我驚訝的是，野獸重新起來。我被迫再擊倒12次，然後才靜止下來。這不是正常的鑽探。";
+					next;
+					mes "[羅特]";
+					mes "我聽說它仍然是帕爾斯的遊蕩場所，但我現在很忙。";
+					next;
+					mes "[羅特]";
+					mes "我要你照顧它。對我來說，一個人在那裡很好。但是給你..我建議您帶更多冒險家。";
+					next;
+					select("你確定這是你自己做的嗎？");
+					mes "[羅特]";
+					mes "我堅強的事實比數字更重要。只是去那裡，把野獸拿出來。";
+					next;
+					mes "[羅特]";
+					mes "您會在Midgard Allied部隊的灰塵上找到它。";
+					next;
+					select("我想我別無選擇。");
+					cutin "rote03",2;
+					mes "[羅特]";
+					mes "你還在那裡嗎？如果您無法自己處理，請向您的朋友詢問，因為這並不容易。";
+					next;
+					cutin "gelca02",2;
+					mes "[^ff0000gelkah^000000]";
+					mes "…………"+ strcharinfo(0) +" wait...";
+					next;
+					cutin "gelca01",2;
+					mes "[^ff0000gelkah^000000]";
+					mes "如果您發現它不要害怕。主人不必12次對抗卷鬚。";
+					next;
+					cutin "gelca03",2;
+					mes "[^ff0000gelkah^000000]";
+					mes "實際上，主人太醉了，幾乎沒有記得這件事。";
+					next;
+					cutin "gelca04",2;
+					mes "[^ff0000gelkah^000000]";
+					mes "我只是一個人留下來，因為主人正在用一個卷鬚打架有點可愛。現在它成為一個問題。";
+					next;
+					cutin "gelca01",2;
+					mes "[^ff0000gelkah^000000]";
+					mes "清除一個卷鬚後，請回來。哦，請保留大師的秘密。";
+					setquest 13046;// Tendrilion Request
+				}
+			}
+		}
+	}
+	close2;
+	cutin "",255;
+	end;
+}

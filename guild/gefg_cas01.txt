@@ -1,0 +1,131 @@
+﻿//===== rAthena Script =======================================
+//= War of Emperium (Geffen) - Repherion
+//===== By: ==================================================
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= NPCs that relate to Geffen Guild Castle 1
+//===== Additional Comments: =================================
+//= 1.0 First Version. No longer uses functions. [L0ne_W0lf]
+//= 1.1 Removed dialog from interior flags. [L0ne_W0lf]
+//= 1.2 Partially rewrote Script. [Masao]
+//============================================================
+
+// Guild Flag (Outside Castle)
+//============================================================
+-	script	Repherion#1::OutsideFlagsG1	722,{
+
+	set .@GID, GetCastleData("gefg_cas01",1);
+
+	if (.@GID == 0) {
+		mes "[神符文米加特王國的法令]";
+		mes " ";
+		mes "1。遵循神聖符文米加特斯王國的條例，";
+		mes "我們聲明了這一點";
+		mes "這座城堡沒有正式的主人。";
+		mes " ";
+		mes "2。";
+		mes "克服所有試驗";
+		mes "並摧毀皇帝，";
+		mes "國王將賦予那個";
+		mes "這座城堡的所有權。";
+		close;
+	}
+	if (getcharid(2) == .@GID) {
+		mes "[迴聲聲音]";
+		mes "勇敢的人...";
+		mes "您想回到光榮的地方嗎？";
+		next;
+		if(select("返回公會城堡:退出。") == 1) {
+			close2;
+			if (getcharid(2) == GetCastleData("gefg_cas01",1)) {
+				warp "gefg_cas01",197,36;
+				end;
+			}
+			end;
+		}
+		close;
+	}
+	mes "[神符文米加特王國的法令]";
+	mes " ";
+	mes "1。遵循神聖符文米加特斯王國的條例，";
+	mes "我們贊成這個地方在";
+	mes "^ff0000的私人prossession"+GetGuildName(.@GID)+"^000000 Guild.";
+	mes " ";
+	mes "2。 ^ff0000的公會大師"+GetGuildName(.@GID)+"^000000 Guild is";
+	mes "^ff0000"+GetGuildMaster(.@GID)+"^000000";
+	mes "如果有人反對這一點，";
+	mes "用手裡的鋼刀片證明自己的力量和榮譽。";
+	close;
+
+OnRecvCastleG01:
+	FlagEmblem GetCastleData("gefg_cas01",1);
+	end;
+}
+
+gef_fild13,148,51,5	duplicate(OutsideFlagsG1)	Repherion#1-2	722
+gef_fild13,155,54,5	duplicate(OutsideFlagsG1)	Repherion#2	722
+gef_fild13,212,79,6	duplicate(OutsideFlagsG1)	Repherion#3	722
+gef_fild13,211,71,6	duplicate(OutsideFlagsG1)	Repherion#4	722
+
+// Guild Flag (Inside Castle)
+//============================================================
+-	script	Repherion#5::InsideFlagsG1	722,{
+	end;
+
+OnRecvCastleG01:
+	FlagEmblem GetCastleData("gefg_cas01",1);
+	end;
+}
+
+gefg_cas01,28,157,4	duplicate(InsideFlagsG1)	Repherion#5-2	722
+gefg_cas01,22,156,5	duplicate(InsideFlagsG1)	Repherion#6	722
+gefg_cas01,68,185,3	duplicate(InsideFlagsG1)	Repherion#7	722
+gefg_cas01,17,171,5	duplicate(InsideFlagsG1)	Repherion#8	722
+gefg_cas01,59,16,4	duplicate(InsideFlagsG1)	Repherion#9	722
+gefg_cas01,64,16,4	duplicate(InsideFlagsG1)	Repherion#10	722
+
+// Guild Flag (Town)
+//============================================================
+geffen,109,123,2	duplicate(InsideFlagsG1)	Repherion#11	722
+
+// Kafra Employee
+//============================================================
+gefg_cas01,83,47,3	duplicate(guildkafra)	Kafra Staff#gefg_cas01	117
+
+// Steward
+//============================================================
+gefg_cas01,40,48,5	duplicate(cm)	Gnahcher#gefg_cas01	55
+
+// Treasure Room Exit
+//============================================================
+gefg_cas01,152,117,0	script	#lever_G01	111,{
+	mes " ";
+	mes "有一個小槓桿。你會拉嗎？";
+	next;
+	if(select("拉動:不要。") == 1) {
+		close2;
+		warp "gefg_cas01",40,49;
+		end;
+	}
+	close;
+}
+
+// Guild Dungeon Switch
+//============================================================
+gefg_cas01,78,84,0	duplicate(gdlever)	#gefg_cas01	111
+
+// Guild Treasure Spawns
+//============================================================
+gefg_cas01,154,112,0	duplicate(Gld_Trea_Spawn)	Treasure#gefg_cas01	-1
+
+// AGIT Manager
+//============================================================
+gefg_cas01,198,182,0	duplicate(Gld_Agit_Manager)	Agit#gefg_cas01	-1
+
+// Guardians
+//============================================================
+gefg_cas01,40,48,5	duplicate(Gld_Guard_Template)	Guardian#gefg_cas01	-1

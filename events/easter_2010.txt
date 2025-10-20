@@ -1,0 +1,620 @@
+﻿//===== rAthena Script =======================================
+//= Easter Event (2010)
+//===== By: ==================================================
+//= Euphy
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Lift Lina's curse for an Easter Egg Shell.
+//===== Additional Comments: =================================
+//= 1.0 First version. [Euphy]
+//============================================================
+
+prontera,202,297,3	script	Rina#Easter	727,{
+	disable_items;
+	if (BaseLevel < 40) {
+		mes "[莉娜]";
+		mes "嗨~！";
+		mes "你是像我這樣的冒險家。";
+		next;
+		mes "[莉娜]";
+		mes "我被詛咒。";
+		mes "我知道你想幫助我，";
+		mes "但是您的經驗還不夠。";
+		next;
+		consumeitem 607; //Yggdrasilberry
+		consumeitem 12068; //Luk_Dish03
+		consumeitem 12063; //Dex_Dish03
+		consumeitem 12053; //Vit_Dish03
+		npcskill "AL_INCAGI",1,0,0;
+		npcskill "AL_BLESSING",1,0,0;
+		mes "[莉娜]";
+		mes "我狀況不佳，";
+		mes "所以我能為你做什麼";
+		mes "就是這樣。";
+		mes "然後，再見。";
+		mes "保重~！";
+		close;
+	}
+	set .@quest1, checkquest(9117);
+	if (.@quest1 == -1) {
+		playbgm "30.mp3"; // One Step Closer
+		mes "[莉娜]";
+		mes "嗨~！";
+		mes "你是像我這樣的冒險家。";
+		mes "好吧...實際上，我是";
+		mes "放在一個奇怪的詛咒下。";
+		next;
+		mes "[莉娜]";
+		mes "要釋放這個詛咒，";
+		mes "有人需要做 ^800080oath Taking儀式 ^000000";
+		mes "與我一起，";
+		mes "然後需要解決";
+		mes "幾個問題，而不是我。";
+		next;
+		if (select("讓我們幫忙^800080Rina^000000.:跳過它。") == 2) {
+			emotion ET_OHNO;
+			mes "[莉娜]";
+			mes "為了幫助我";
+			mes "我需要一個稱職的冒險家。";
+			mes "如果你認識那些人，";
+			mes "希望您以後向我介紹。";
+			close;
+		}
+		emotion ET_COOL;
+		mes "[莉娜]";
+		mes "你真的要幫助我嗎？";
+		mes "謝謝。";
+		mes "你真勇敢。";
+		next;
+		playbgm "01.mp3"; // Title
+		mes "[莉娜]";
+		mes "然後，我將開始 ^800080oath Taking儀式 ^000000。";
+		mes " ";
+		mes "^787878（空中懸掛著一種神秘的氛圍。）^000000";
+		next;
+		specialeffect2 EF_COUPLECASTING;
+		next;
+		mes "[莉娜]";
+		mes "等等等等...";
+		mes " ";
+		mes "等等等等...";
+		mes " ";
+		mes "^787878（...這是一個奇怪的咒語。）^000000";
+		next;
+		specialeffect2 EF_SIGNUM;
+		mes "[莉娜]";
+		mes "哈哈哈~";
+		mes "^800080oath Taking儀式^000000現在已經完成了。";
+		mes "那不是那麼簡單嗎？";
+		next;
+		emotion ET_HUM;
+		mes "[莉娜]";
+		mes "好吧，從不開，";
+		mes "您需要進行 ^006400A真正的冒險";
+		mes "釋放我的詛咒^000000。";
+		mes "讓我知道你準備好時。";
+		setquest 9117;
+		close;
+	} else if (.@quest1 == 0 || .@quest1 == 1) {
+	L_HuntingInfo:
+		mes "[莉娜]";
+		mes "您需要做的是";
+		mes "選擇一個怪物";
+		mes "^ff0000deviruchi，^000000^ff00000000幽靈死了，^000000";
+		mes "^ff0000dullahan，^000000^ff0000 night mare恐怖^000000";
+		mes "然後殺死 ^0000ff50 ^000000怪物";
+		mes "回到我身邊。";
+		next;
+		mes "[莉娜]";
+		mes "這一定是一項艱鉅的任務，";
+		mes "但是你是合適的人";
+		mes "誰舉行了宣誓儀式。";
+		mes "我希望你成功。";
+		if (.@quest1 < 2) {
+			completequest 9117;
+			setquest 9118;
+			setquest 9119;
+			setquest 9120;
+			setquest 9121;
+		}
+		close2;
+		npcskill "AL_INCAGI",1,0,0;
+		npcskill "AL_BLESSING",1,0,0;
+		end;
+	} else if (.@quest1 == 2) {
+		if (checkquest(9118) < 2 || checkquest(9119) < 2 || checkquest(9120) < 2 || checkquest(9121) < 2) {
+			if (checkquest(9118,HUNTING) == 2 || checkquest(9119,HUNTING) == 2 || checkquest(9120,HUNTING) == 2 || checkquest(9121,HUNTING) == 2) {
+				mes "[莉娜]";
+				mes "你做到了。";
+				mes "我可以感覺到我的身體正在康復。";
+				mes "但這還不夠。";
+				next;
+				mes "[莉娜]";
+				mes "^006400您還有一件事情要做。 ^000000";
+				mes "讓我知道你準備好時。";
+				close2;
+				completequest 9118;
+				completequest 9119;
+				completequest 9120;
+				completequest 9121;
+				setquest 9122;
+			} else
+				goto L_HuntingInfo;
+			end;
+		}
+	}
+	set .@quest2, checkquest(9122);
+	if (.@quest2 == 0 || .@quest2 == 1) {
+		mes "[莉娜]";
+		mes "我會檢查一件事。";
+		mes "對於此任務，";
+		mes "您需要感受音樂。";
+		next;
+		mes "[莉娜]";
+		mes "您無法完成任務";
+		mes "沒有音樂。";
+		mes "你有問題嗎？";
+		next;
+		mes "- 查看！ -";
+		mes "^787878- BGM選項應打開 - ^000000";
+		mes "^787878-在遊戲選項菜單中。 - ^000000";
+		mes "^787878-請檢查 - ^000000";
+		mes "^787878-您是否可以聽 - ^000000";
+		mes "^787878-到音樂聲音。 - ^000000";
+		next;
+		if(select("[我準備好聽BGM了。 ]:[我不能聽BGM。 ]") == 2) {
+			mes "[莉娜]";
+			mes "我很震驚";
+			mes "你無法感覺到音樂。";
+			mes "我們現在該怎麼辦...";
+			close2;
+			emotion ET_CRY;
+			end;
+		}
+		mes "[莉娜]";
+		mes "仔細聽";
+		mes "它的感覺...";
+		mes "我聽不到";
+		mes "但是您可以聽到聲音。";
+		next;
+		if (oversea_event2 < 520 || oversea_event3 < 270 || oversea_event6 < 245 || oversea_event9 < 197) {
+			     if (oversea_event2 == 520) playbgm "13.mp3"; // Theme of Geffen
+			else if (oversea_event3 == 270) playbgm "59.mp3"; // Theme of Lutie
+			else if (oversea_event6 == 245) playbgm "70.mp3"; // Theme of Juno
+			else if (oversea_event9 == 197) playbgm "94.mp3"; // Theme of Rachel
+			else {
+				switch(rand(1,4)) {
+					case 1: playbgm "13.mp3"; set oversea_event2,520; break;
+					case 2: playbgm "59.mp3"; set oversea_event3,270; break;
+					case 3: playbgm "70.mp3"; set oversea_event6,245; break;
+					case 4: playbgm "94.mp3"; set oversea_event9,197; break;
+				}
+			}
+		}
+		mes "[莉娜]";
+		mes "^006400您現在聽到的音樂^000000";
+		mes "與一個特定的城市有關。";
+		mes "仔細考慮 ^006400哪種城市 ^000000";
+		mes "這種音樂有類似的感覺。";
+		next;
+		mes "[莉娜]";
+		mes "和...";
+		mes "轉到 ^006400這座城市";
+		mes "您可以在這裡提醒這種音樂^000000。";
+		next;
+		mes "[莉娜]";
+		mes "在那之後，";
+		mes "查找 ^ff0000奇怪的標記 ^000000";
+		mes "在城市的入口處。";
+		mes "然後，您可以釋放我的詛咒。";
+		next;
+		mes "[莉娜]";
+		mes "一定很難";
+		mes "但我希望你祝你好運。";
+		close2;
+		emotion ET_OHNO;
+		end;
+	} else {
+		set .@quest3, checkquest(9123);
+		if (.@quest3 == 0 || .@quest3 == 1) {
+			emotion ET_CHUP;
+			mes "[莉娜]";
+			mes "你回來了~！";
+			mes "我的詛咒已被釋放。";
+			mes "太感謝了。";
+			next;
+			if (checkweight(5852,1) == 0) {
+				mes "[莉娜]";
+				mes "您的包太飽了。";
+				mes "我有禮物給你";
+				mes "因此，讓您的袋子更輕。";
+				mes "我等你。";
+				close;
+			}
+			completequest 9123;
+			getitem 5852,1; //Easter_Egg_Shell
+			set .@BaseExp, (BaseLevel * (BaseLevel / 4)) * ((BaseLevel / 29) + (BaseLevel / 6)) + (5 * BaseLevel / 2);
+			if (ADVJOB == 0) {
+				     if (BaseLevel < 40) set .@nBaseExp, .@BaseExp;
+				else if (BaseLevel < 50) set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel);
+				else if (BaseLevel < 60) set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel * (BaseLevel / 20));
+				else if (BaseLevel < 70) set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel * (BaseLevel / 10));
+				else if (BaseLevel < 80) set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel * (BaseLevel / 5));
+				else if (BaseLevel < 90) set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel * (BaseLevel / 3));
+				else if (BaseLevel < 99) set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel * (BaseLevel / 2));
+				else set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel * (BaseLevel / 2) * 2);
+
+				set .@nJobExp, (JobLevel * (JobLevel - 3) * (JobLevel / 25 + 1) + (16 - (JobLevel * 2))) * 2;
+			} else {
+				     if (BaseLevel < 30) set .@nBaseExp, .@BaseExp;
+				else if (BaseLevel < 40) set .@nBaseExp, .@BaseExp + (BaseLevel * 10);
+				else if (BaseLevel < 50) set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel * 2);
+				else if (BaseLevel < 60) set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel * (BaseLevel / 10));
+				else if (BaseLevel < 70) set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel * (BaseLevel / 5));
+				else if (BaseLevel < 80) set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel * (BaseLevel / 3));
+				else if (BaseLevel < 90) set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel * (BaseLevel / 2));
+				else if (BaseLevel < 98) set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel * BaseLevel);
+				else set .@nBaseExp, .@BaseExp + (BaseLevel * BaseLevel * BaseLevel * 2);
+
+				set .@nJobExp, (JobLevel * JobLevel * (JobLevel / 5 + 2) + (20 - JobLevel)) * 3;
+			}
+			getexp .@nBaseExp,.@nJobExp;
+			mes "[莉娜]";
+			mes "這是您的禮物。";
+			mes "這不是一個大的";
+			mes "但是請接受";
+			mes "作為我的感激之情。";
+			next;
+			mes "[莉娜]";
+			mes "我休息幾天";
+			mes "然後我去冒險。";
+			mes "再見。";
+			close2;
+			consumeitem 607; //Yggdrasilberry
+			consumeitem 12068; //Luk_Dish03
+			consumeitem 12063; //Dex_Dish03
+			consumeitem 12053; //Vit_Dish03
+			npcskill "AL_INCAGI",1,0,0;
+			npcskill "AL_BLESSING",1,0,0;
+			end;
+		} else {
+			mes "[莉娜]";
+			mes "感謝您發布我的詛咒。";
+			mes "我休息幾天";
+			mes "然後再次冒險。";
+			mes "祝您有個快樂的一天~！";
+			close2;
+			consumeitem 607; //Yggdrasilberry
+			npcskill "AL_INCAGI",1,0,0;
+			npcskill "AL_BLESSING",1,0,0;
+			end;
+		}
+	}
+}
+
+geffen,207,114,4	script	#Hiddne01Easter	844,{
+	if (oversea_event2 > 519) {
+	OnRelease:
+		specialeffect EF_PATTACK;
+		mes "- 我發現 ^0000ff奇怪的標記 ^000000。 -";
+		next;
+		specialeffect2 EF_HOLYHIT;
+		mes "- 我絕對可以感覺到";
+		mes "-  ^0000ffrina ^000000已發布";
+		mes "- 來自詛咒。";
+		mes "-  ^006400的返回Rina！ ^000000";
+		if (checkquest(9122) < 2) {
+			completequest 9122;
+			setquest 9123;
+		}
+		close;
+	}
+	end;
+}
+
+xmas,144,52,4	script	#Hiddne02Easter	844,{
+	if (oversea_event3 > 269)
+		doevent "#Hiddne01Easter::OnRelease";
+	end;
+}
+
+yuno,164,46,4	script	#Hiddne03Easter	844,{
+	if (oversea_event6 > 244)
+		doevent "#Hiddne01Easter::OnRelease";
+	end;
+}
+
+rachel,36,132,4	script	#Hiddne04Easter	844,{
+	if (oversea_event9 > 196)
+		doevent "#Hiddne01Easter::OnRelease";
+	end;
+}
+
+prontera,204,297,3	script	Rina's Little Friend	463,{
+	disable_items;
+	if (checkquest(9117) == -1) {
+		emotion ET_PROFUSELY_SWEAT;
+		mes "[Rina的小朋友]";
+		mes "…………";
+		mes " ";
+		mes "^787878（無響應。）^000000";
+		close;
+	}
+	if (checkquest(9123) == 2) {
+		emotion ET_MERONG;
+		mes "[Rina的小朋友]";
+		mes "你好。";
+		mes "我想你是值得信賴的朋友。";
+		mes "你在這裡與我達成協議嗎？";
+		next;
+		switch(select("是.: 否.: 你什麼意思？")) {
+		case 1:
+			if (ADVJOB == 0) {
+				if (BaseLevel < 70)
+					set .@nCharge,400000;
+				else if (BaseLevel < 90)
+					set .@nCharge,450000;
+				else
+					set .@nCharge,480000;
+			} else
+				set .@nCharge,500000;
+			if (countitem(574) < 1 || countitem(1001) < 20 || Zeny < .@nCharge) {
+				mes "[Rina的小朋友]";
+				mes "唔。";
+				mes "材料還不夠。";
+				mes "請檢查您需要的東西。";
+				close;
+			}
+			mes "[Rina的小朋友]";
+			mes "酷...如果你給我材料";
+			mes "我現在將開始。";
+			mes "你準備好了嗎？";
+			next;
+			if(select("是的，讓我們開始吧:不，停止吧。") == 2) {
+				mes "[Rina的小朋友]";
+				mes "呵呵。很無聊。";
+				close;
+			}
+			mes "[Rina的小朋友]";
+			mes "好吧，我現在就開始。";
+			mes " ";
+			mes "^787878（空中懸掛著一種神秘的氛圍。）^000000";
+			next;
+			specialeffect EF_ASPERSIO;
+			delitem 574,1; //Egg
+			delitem 1001,20; //Sparkling_Dust
+			set Zeny, Zeny - .@nCharge;
+			set .@nPercentage, rand(1,100);
+			if (.@nPercentage <= 41) {
+				mes "[Rina的小朋友]";
+				mes "卵子賦予了生命。";
+				mes "aaaah~我必須休息一下。";
+				mes "再見~！";
+				if (.@nPercentage <= 12)
+					getitem 9003,1; //Poporing_Egg
+				else if (.@nPercentage <= 24)
+					getitem 9005,1; //Picky_Egg
+				else if (.@nPercentage <= 36)
+					getitem 9009,1; //Savage_Bebe_Egg
+				else
+					getitem 9023,1; //Deviruchi_Egg
+				close2;
+				emotion ET_SLEEPY;
+				end;
+			} else if (.@nPercentage <= 60) {
+				if (.@nPercentage >= 42 && .@nPercentage <= 45)
+					getitem 5852,1; //Easter_Egg_Shell
+				else
+					getitem 12019,5; //Holy_Egg
+				mes "[Rina的小朋友]";
+				mes "看來您有很有趣的事情。";
+				mes "我需要休息一下。";
+				mes "再見~！";
+				close2;
+				emotion ET_SLEEPY;
+				end;
+			} else if (.@nPercentage <= 85) {
+				if (.@nPercentage >= 61 && .@nPercentage <= 75) {
+					getitem 1001,20; //Sparkling_Dust
+					getitem 607,1; //Yggdrasilberry
+				} else {
+					getitem 574,1; //Egg
+					getitem 608,2; //Seed_Of_Yggdrasil
+				}
+				mes "[Rina的小朋友]";
+				mes "沒有變化。";
+				mes "我不是故意這樣做的，";
+				mes "但很抱歉...";
+				mes "我希望再次見到你，我的朋友。";
+				emotion ET_HUM;
+				close;
+			} else {
+				getitem 12093,2; //Dex_Dish08
+				mes "[Rina的小朋友]";
+				mes "唔。";
+				mes "它變成了菜。";
+				mes "看起來很美味。";
+				mes "然後，再見~！";
+				close2;
+				emotion ET_HUNGRY;
+				end;
+			}
+		case 2:
+			mes "[Rina的小朋友]";
+			mes "你在這裡只是為了看我可愛的外觀嗎？";
+			mes "你不是窺視里納";
+			mes "假裝見我？";
+			mes "這很有趣...哈哈~";
+			close2;
+			emotion ET_KIK;
+			end;
+		case 3:
+			playbgm "23.mp3"; // Travel
+			mes "[Rina的小朋友]";
+			mes "嗯？ ！";
+			mes "我從未告訴過你？";
+			mes "然後仔細聽。";
+			next;
+			mes "[Rina的小朋友]";
+			mes "我有一個";
+			mes "特殊能力。";
+			mes "這是給予特殊的力量";
+			mes "到 ^0000ffthe egg ^000000。";
+			next;
+			mes "[Rina的小朋友]";
+			mes "好吧，我不能無限地做到這一點。";
+			mes "沒有永遠做的魔法。";
+			mes "所以我需要一些額外的費用。";
+			next;
+			mes "[Rina的小朋友]";
+			mes "我不確定";
+			mes "將雞蛋更改為什麼。";
+			mes "可能以失敗結束";
+			mes "它可以像寵物雞蛋一樣。";
+			next;
+			if(select("詢問費用。 :別再聽了，因為感覺像是個騙局。") == 2) {
+				mes "[Rina的小朋友]";
+				mes "好吧...我真的不在乎。";
+				mes "再見。";
+				close2;
+				playbgm "08.mp3"; // Theme of Prontera
+				end;
+			}
+			mes "[Rina的小朋友]";
+			mes "你想達成交易嗎？";
+			mes "你需要";
+			mes "^0000ff1雞蛋^000000，^0000FF20輕顆粒^000000和";
+			if (ADVJOB == 0) {
+				if (BaseLevel < 70)
+					mes "^B8860B400,000 女性。";
+				else if (BaseLevel < 90)
+					mes "^B8860B450,000 女^000000。";
+				else
+					mes "^B8860B480,000 女^000000。";
+			} else
+				mes "^B8860B500,000 Zeny^000000。";
+			next;
+			mes "[Rina的小朋友]";
+			mes "如果您有興趣";
+			mes "讓那個zeny再來。";
+			mes "哈哈...";
+			mes "我會等你的。";
+			close2;
+			playbgm "08.mp3"; // Theme of Prontera
+			emotion ET_KIK;
+			end;
+		}
+	}
+	emotion ET_MERONG;
+	mes "[Rina的小朋友]";
+	mes "哎呀！";
+	mes "為什麼？看到我說話感到驚訝嗎？";
+	mes "好吧，我了解你。";
+	mes "只有這樣做的人";
+	mes "宣誓儀式可以與我交談。";
+	next;
+	mes "[Rina的小朋友]";
+	mes "如果Rina的詛咒被釋放，";
+	mes "我也可以";
+	mes "建議你";
+	mes "一件有趣的事情。";
+	next;
+	mes "[Rina的小朋友]";
+	mes "我會讓你知道";
+	mes "詳細的解釋後來。";
+	mes "然後再見，我的朋友。";
+	close;
+}
+
+prontera,116,82,5	script	Traveler#01Easter	85,{
+	mes "[遊客]";
+	mes "我是旅行者";
+	mes "我經常訪問 ^8B4513Prontera ^000000。";
+	mes "嗯，我想我可能";
+	mes "以前在這裡見。";
+	next;
+	if(select("再聽聽:忽略它。") == 2) {
+		mes "[遊客]";
+		mes "正如我所期望的，";
+		mes "你是一個沉默的人。哈哈。";
+		mes "再見。";
+		close;
+	}
+	mes "[遊客]";
+	mes "日前，";
+	mes "我看到了一個新的冒險家";
+	mes "誰站著";
+	mes "靠近 ^8B4513CATHEDRAL ^000000。";
+	next;
+	emotion ET_THROB;
+	mes "[遊客]";
+	mes "那個冒險家看起來很漂亮。";
+	mes "但...";
+	mes "我感到有些奇怪的能量";
+	mes "所以我不接近那個人。";
+	next;
+	mes "[遊客]";
+	mes "看起來像";
+	mes "您感興趣";
+	mes "那個新冒險家？";
+	mes "或者那隻是你的臉。哈哈。";
+	next;
+	if(select("我對此很感興趣:我一點也不關心。") == 2) {
+		mes "[遊客]";
+		mes "啊~我看到~！";
+		mes "然後，再見。";
+		close;
+	}
+	mes "[遊客]";
+	mes "正如我所期望的那樣！";
+	mes "你可以找到";
+	mes "那個新冒險家";
+	mes "在前往 ^8B4513的路上";
+	mes "在 ^8B4513Prontera ^000000的1o'Clock方向上。";
+	next;
+	mes "[遊客]";
+	mes "她正在攜帶";
+	mes "^800080a大雞蛋東西^000000。";
+	mes "那就是我所知道的。";
+	close;
+OnInit:
+	initnpctimer;
+	end;
+OnTimer5000:
+	emotion ET_SURPRISE;
+	stopnpctimer;
+	initnpctimer;
+	end;
+}
+
+prontera,163,194,5	script	Traveler#02Easter	92,{
+	mes "[遊客]";
+	mes "不久前，";
+	mes "我遇到了一個女士";
+	mes "她說她已經";
+	mes "在一個奇怪的詛咒下。";
+	next;
+	mes "[遊客]";
+	mes "我想幫助她";
+	mes "但是我的經驗還不夠。";
+	mes "所以我忍不住她。";
+	next;
+	mes "[遊客]";
+	mes "如果你超過";
+	mes "等級^0000FF40^000000，";
+	mes "轉到 ^8b4513 cateDral ^000000";
+	mes "在1'O時鐘的方向上。";
+	mes "我希望你能幫助她...";
+	close;
+OnInit:
+	initnpctimer;
+	end;
+OnTimer5000:
+	emotion ET_SURPRISE;
+	stopnpctimer;
+	initnpctimer;
+	end;
+}

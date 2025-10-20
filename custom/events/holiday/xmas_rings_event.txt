@@ -1,0 +1,194 @@
+﻿//===== rAthena Script =======================================
+//= Karachun Event (Xmas Rings Quest)
+//===== By: ==================================================
+//= Lupus (1.0)
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= rAthena Project; SVN r4880+
+//===== Description: =========================================
+//= Custom event: Karachun (from 8 Dec till 8 Jan), X-Mas, HNY
+//===== Additional Comments: =================================
+//= 1.0 Tested, fully working. 1.0a a few typos fix
+//= 1.1 Readded Mdef +1 and  Luk +1 to Santa's Hat [Lupus]
+//= 1.2 Fixed double quotes not being escaped [brianluau]
+//============================================================
+
+prontera,156,174,4	script	Snower	713,{
+	mes "[雪人]";
+	if (Q_XMSRINGS == 2) {
+		mes "哦...是真的嗎？你幫助了我的sis snewy？謝謝。";
+	} else if (Q_XMSRINGS == 3) {
+		mes "斯諾維（Snoowy）給我發了一隻鳥。她告訴我你的幫助...";
+		mes "我會告訴你魔術戒指的秘密。";
+		emotion ET_BEST;
+		next;
+		mes "[雪人]";
+		mes "他們只有從12月8日至1月8日才有魔法力量。";
+		next;
+		mes "[雪人]";
+		mes "順便說一句，只戴上聖誕老人的帽子來發現他們的真正力量。";
+		next;
+		mes "[雪人]";
+		mes "如果您戴上兩個戒指，他們的力量將翻了一番。";
+		mes "祝你今天過得愉快！";
+		close;
+	} else {
+		mes "你好！我和我的兩個姐妹都在準備整個三個假期的禮物！";
+	}
+	emotion ET_CRY;
+	next;
+	menu "Where are your sisters?",-, "What holidays?",M_PR,"What gifts?",M_WRAP,"May I help you?",M_QUEST;
+
+	mes "[雪人]";
+	mes "我年輕的Sis Sneewy留給了一些遙遠的土地，為他們的可憐的孩子準備禮物...我不知道在哪裡。你應該問我的姐姐和她的小鳥。";
+	next;
+	mes "[雪人]";
+	mes "我的姐姐？她的名字叫sn。她航行到了一個綠色島...她在談論一些為海豚或其他東西的禮物...";
+	close;
+
+M_PR:
+	mes "[雪人]";
+	mes "整個三個假期？好吧，他們接一個地來了！";
+	mes "^000080聖誕節^000000，^ff000000karachun^000000和^008000new Year eve^000000！";
+	next;
+	mes "[雪人]";
+	mes "^ff000000karachun^000000？嘿...這是一個古老的異教節。您知道，他們曾經在HNY和聖誕節的出現之前慶祝它。";
+	next;
+	goto M_QUEST;
+
+M_WRAP:
+	mes "[雪人]";
+	mes "我的姐妹們說，所有禮物都應該以同樣的方式。否則有些孩子可能會為幻想而戰！";
+	next;
+	mes "[雪人]";
+	mes "您要我用灰色紙包裹您的精美禮品盒嗎？";
+	next;
+	menu "Wrap them, please!",-, "No, thanks.",M_QUEST;
+
+	set @prizes, countitem(664)+countitem(665)+countitem(666)+countitem(667);
+	if (@prizes == 0) {
+		mes "[雪人]";
+		mes "我沒有在您身上看到任何物...";
+		if(countitem(644))mes "你只有灰色的盒子。";
+		close;
+	}
+	delitem 664,countitem(664);
+	delitem 665,countitem(665);
+	delitem 666,countitem(666);
+	delitem 667,countitem(667);
+	getitem 644,@prizes;
+
+	mes "[雪人]";
+	mes "*洗牌*你去了。";
+	next;
+
+M_QUEST:
+	mes "[雪人]";
+	mes "希望您能盡快找到我的姐妹...他們需要幫助。";
+	if (Q_XMSRINGS == 0) set Q_XMSRINGS,1;
+	close;
+
+OnInit:
+//Santa's Hat
+	setitemscript 2236,"{ bonus bMdef,1; bonus bLuk,1; if(isequipped(2636,2637)){if(@xmr == gettime(DT_MINUTE))end; set @xmr,gettime(DT_MINUTE); misceffect EF_RAINBOW; end;} if(isequipped(2636)){if(@xmr == gettime(DT_MINUTE))end; set @xmr,gettime(DT_MINUTE); misceffect EF_SPHERE;} if(isequipped(2637)){if(@xmr == gettime(DT_MINUTE))end; set @xmr,gettime(DT_MINUTE); misceffect EF_ANGEL2;}}";
+//Gold Xmas Ring
+	setitemscript 2636,"{ bonus bLoseSPWhenUnequip,30; if(isequipped(2236)==0)end; if(getskilllv(\"AL_HEAL\")){skill \"TF_HIDING\",4+isequipped(2637);}else{skill \"AL_HEAL\",1+4*isequipped(2637);} }";
+//Silver Xmas Ring
+	setitemscript 2637,"{ bonus bDamageWhenUnequip,40; if(isequipped(2236)==0)end; if(getskilllv(\"AL_TELEPORT\")){skill \"MC_IDENTIFY\",1;}else{skill \"AL_TELEPORT\",1+isequipped(2636);} }";
+	end;
+}
+
+louyang,224,249,4	script	Sneewy	717,{
+	mes "[打噴嚏]";
+	if (Q_XMSRINGS == 0) {
+		mes "你好！我在等我姐姐的birdy tail郵件...";
+		emotion ET_CRY;
+		close;
+	}
+	if (Q_XMSRINGS == 1) {
+		mes "我希望我還有4個灰色禮品盒給原住民...";
+		emotion ET_CRY;
+		next;
+		mes "[打噴嚏]";
+		mes "哦，你好。我的兄弟雪人告訴你一切嗎？";
+		next;
+		menu "Here are your 4 Gift Boxes",-, "I don't know any Snowhatevers...",M_END;
+
+		mes "[打噴嚏]";
+		if (countitem(644) < 4) {
+			mes "Gimme 4禮物給可憐的孩子...等等，您沒有4個禮物！";
+			emotion ET_SORRY;
+			close;
+		}
+		set Q_XMSRINGS,2;
+		delitem 644,4;
+		getnameditem 2637,strcharinfo(0);
+		emotion ET_CHUPCHUP;
+		mes "謝謝你！這是我的東西給你！";
+		next;
+		mes "[打噴嚏]";
+		mes "順便說一句，如果您戴上了2個不同的環，那麼假期的升級將更加容易！";
+		close;
+	}
+	emotion ET_THANKS;
+	mes "再次感謝！沒有禮物，沒有孩子會遇到假期！";
+	close;
+
+M_END:
+	mes "[打噴嚏]";
+	mes "可惜...我有一個魔術聖誕老人的戒指...我會把它換成4個禮品盒...";
+	emotion ET_SWEAT;
+	close;
+}
+
+izlu2dun,133,160,2	script	Snoowy	714,{
+	mes "[雪域]";
+	if (Q_XMSRINGS == 0) {
+		mes "helloooou！你知道我的兄弟和姐姐嗎？為何如此？我兄弟Snower在Prontera中眾所周知！只是問一個孩子。";
+		emotion ET_SCRATCH;
+		close;
+	}
+	if (Q_XMSRINGS == 1) {
+		mes "該死...窮人怎麼可能比海洋人更重要。我錯了嗎？";
+		next;
+		mes "[雪域]";
+		mes "errr。你好。我姐姐的妮維（Sneewy）給我發了一個小鳥訊息。這封信很濕，除了她的地址的一些結尾字母，我什麼也沒看...";
+		next;
+		mes "[雪域]";
+		mes "看，它的最後是“楊”……嗯...她一定被拼寫錯誤的“ al doo boryang” ...";
+		close;
+	}
+	if (Q_XMSRINGS == 2) {
+		mes "你幫了我的姐姐嗎？太好了！";
+		next;
+		mes "[雪域]";
+		mes "但是我也需要三個禮物給我的海洋民間朋友...";
+		next;
+		menu "Have these gifts!",-, "I need a li'l something in return",M_END;
+
+		mes "[雪域]";
+		if (countitem(644) < 3) {
+			mes "哎呀！您沒有3個灰色禮品盒。";
+			emotion ET_SORRY;
+			close;
+		}
+		set Q_XMSRINGS,3;
+		delitem 644,3;
+		getnameditem 2636,strcharinfo(0);
+		emotion ET_CHUP;
+		mes "thaank yoouu！有這個魔術戒指！";
+		close;
+	}
+	emotion ET_THANKS;
+	mes "哦...整個海軍陸戰隊的人都感謝他們的感謝！他們非常喜歡禮物！ ！ ！";
+	if (rand(2))
+		mes "您不知道聖誕老人的帽子揭示了戒指的真正力量嗎？";
+	close;
+
+M_END:
+	mes "[雪域]";
+	mes "我會換一個金色魔術戒指作為3個禮品盒...";
+	emotion ET_SWEAT;
+	close;
+}

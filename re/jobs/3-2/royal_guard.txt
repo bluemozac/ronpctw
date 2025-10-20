@@ -1,0 +1,550 @@
+﻿//===== rAthena Script ======================================= 
+//= Royal Guard Job Quest
+//===== By: ================================================== 
+//= Muad_Dib
+//===== Current Version: ===================================== 
+//= 1.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job change Quest from Crusader / Paladin -> Royal Guard.
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. [brAthena]
+//= 1.1 Updated script. [Euphy]
+//= 1.2 Added GM management function. [Euphy]
+//= 1.3 Added VIP features. [Euphy]
+//= 2.0 Prontera castle map changed in ep16.1 [Capuche]
+//============================================================
+
+// prt_castle,48,161,3	script	Middle-aged Gentleman#rg	57,{
+prt_cas,172,275,5	script	Middle-aged Gentleman#rg	1_M_LIBRARYMASTER,{
+	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 1000) {
+		mes "- 您的背包太重了。 -";
+		mes "- 首先減輕身體 -";
+		mes "- 請重試。 -";
+		close;
+	}
+	if (Class == Job_Royal_Guard || Class == Job_Royal_Guard_T || Class == Job_Baby_Royal_Guard) {
+		mes "[中年紳士]";
+		mes "嗯？我在做什麼？我來這裡是一個差事...";
+		next;
+		mes "^000099，我的感覺已經移至另一個身體。 ^000000";
+		close;
+	}
+	if (BaseLevel < 99 || JobLevel < 50 || SkillPoint != 0) {
+		mes "[中年紳士]";
+		mes "哦，你還很年輕。繼續努力。";
+		close;
+	}
+	if (checkriding() || checkcart() || checkfalcon()) {
+		mes "[中年紳士]";
+		mes "你在拖一些東西。如果您要騎東西，則最好在繼續前進。";
+		close;
+	}
+	if (BaseJob != Job_Crusader) {
+		mes "[中年紳士]";
+		mes "我無話可說。找到另一個人。";
+		close;
+	}
+	if (job_royal == 0) {
+		mes "[中年紳士]";
+		mes "我在說什麼...（喃喃自語）剩下的細分市場在13歲左右的Glast Heim中。";
+		next;
+		mes "[中年紳士]";
+		mes "嗯？";
+		mes "你需要什麼嗎？";
+		next;
+		select("我以前沒見過你。");
+		mes "[中年紳士]";
+		mes "呵呵，不用擔心我。";
+		next;
+		mes "[中年紳士]";
+		mes "如果您與我沒有生意，請繼續我的朋友。";
+		next;
+		select("你看起來不像騎士……");
+		mes "[中年紳士]";
+		mes "你是一個好奇的人。你是誰？你想要什麼？";
+		next;
+		select("環顧四周！ :這是我的辦公室！ :我是誰？你是誰？");
+		mes "[中年紳士]";
+		mes "你想和我爭論嗎？你知道我是誰嗎？";
+		next;
+		if(select("不是真的，你是誰？ :對不起，我不會傷害你的感情。") == 2) {
+			mes "["+strcharinfo(0)+"]";
+			mes "對不起。我必須確定。我不知道你來自皇宮。";
+			next;
+			mes "[中年紳士]";
+			mes "就足夠了。不要再犯這個錯誤。";
+			close;
+		}
+		mes "["+strcharinfo(0)+"]";
+		mes "我是這裡的會員，有權找出您的業務在這裡。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "您是一個陌生人，我不確定您是否屬於這裡。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "如果您告訴我您的身份，我會道歉的。";
+		next;
+		mes "[中年紳士]";
+		mes "你是如此持久。";
+		mes "如果您真的想要，我會自我介紹。";
+		next;
+		mes "[中年紳士]";
+		mes "我是海因里希。";
+		mes "我正在收集有關施密茲國王的痕蹟的信息，這些信息已經消失了。";
+		next;
+		select("施密茨的踪跡？難道是寶物？");
+		mes "[海因里希]";
+		mes "大多數考古學家渴望獲得寶藏。我正在尋找 ^000099Royal Guard ^000000的痕跡及其兒子屬於Schmidtz系列。";
+		next;
+		select("皇家衛隊？");
+		mes "[海因里希]";
+		mes "聽起來很有趣嗎？我真的不能說，但是他們的歷史和文件受到嚴格的安全性。";
+		next;
+		select("你不能告訴我嗎？");
+		mes "[海因里希]";
+		mes "我不能真正向任何詢問他們的人談論皇家衛隊。";
+		next;
+		mes "[海因里希]";
+		mes "但！ ！我想相信你...";
+		next;
+		switch(select("我想了解更多:別說話了。")) {
+		case 1:
+			if (VIP_SCRIPT) {
+				callfunc "VIP_Third_Class";
+				set job_royal,1;
+				setquest 12090;
+				next;
+			}
+			mes "[海因里希]";
+			mes "你很浮躁。";
+			next;
+			mes "[海因里希]";
+			mes "告訴像你這樣的人並不是一個簡單的故事。回去。";
+			set job_royal,1;
+			setquest 12090;
+			close;
+		case 2:
+			mes "[海因里希]";
+			mes "好主意。";
+			next;
+			mes "[海因里希]";
+			mes "只要忘記它，讓您的思想做更多值得的事情。";
+			close;
+		}
+	}
+	mes "[海因里希]";
+	if (job_royal == 1) {
+		mes "[海因里希]";
+		mes "你是持久的朋友。";
+		mes "您還有更多與我談論的事情嗎？";
+		next;
+		select("如果你不相信我，就考驗我吧朋友。");
+		mes "[海因里希]";
+		mes "測試？";
+		mes "你說測試了嗎？呵呵！";
+		next;
+		mes "[海因里希]";
+		mes "朋友，您對我的工作表現出了興趣，您確定嗎？還是你在跟我開玩笑？";
+		next;
+		select("我是認真的！");
+		mes "[海因里希]";
+		mes "真的嗎？";
+		mes "好的。您可能對什麼是皇家衛隊有錯誤的想法。因此，您認為，您認為成為皇家衛隊的關鍵是什麼？";
+		next;
+		select("決斷勇敢:冷靜判斷:敏銳智慧:仁慈精神");
+		mes "[海因里希]";
+		mes "不錯的選擇。";
+		mes "實際上，還需要其他3個才能擁有皇家衛隊精神，朋友。";
+		next;
+		mes "[海因里希]";
+		mes "但是，根據有關皇家衛隊的研究文件，最好的信念是“禁慾主義和耐力”。";
+		next;
+		mes "[海因里希]";
+		mes "你明白了嗎？";
+		mes "禁慾主義和耐力年輕人。這與您的回答有些不同。";
+		next;
+		mes "[海因里希]";
+		mes "您似乎對這個故事充滿了興趣，但我無法告訴您更多。";
+		next;
+		mes "[海因里希]";
+		mes "只有那些有資格的人才能聽到皇家衛隊的歷史。";
+		next;
+		select("我該怎麼做才能聽到這個故事？");
+		mes "^000099Heinrich的臉上有痛苦的表情。然後他看起來像睡著了。最後，他魯ck放棄了。 ^000000";
+		next;
+		mes "[海因里希]";
+		mes "你太固執了。";
+		mes "如果是這樣，我將測試您，以了解您的禁慾主義和耐力。";
+		next;
+		mes "[海因里希]";
+		mes "很久以前，施密茲國王為一名勇敢的士兵贏得了冠軍頭銜，後者以100個神聖的成績回來了。";
+		next;
+		mes "[海因里希]";
+		mes "如果您想听聽更多故事，則必須向我展示您的類似態度。";
+		next;
+		if(select("這是不公平的要求。 :我會嘗試。") == 1) {
+			mes "[海因里希]";
+			mes "好主意，最好找到更值得的東西。";
+			close;
+		}
+		mes "[海因里希]";
+		mes "好的，讓我們這樣做。實際上，收集100個神聖的標記太難了，只需通過收集100個燃燒的心來表現出您的野心。";
+		next;
+		mes "[海因里希]";
+		mes "如果您帶他們，我可以告訴您更多故事。這意味著您向我表現出耐力。";
+		next;
+		mes "[海因里希]";
+		mes "不要忘記帶來100個燃燒的心。";
+		set job_royal,2;
+		changequest 12090,12091;
+		close;
+	} else if (job_royal == 2) {
+		if (countitem(7097) < 100) {
+			mes "不要忘記帶來100個燃燒的心。";
+			close;
+		}
+		mes "你得到了所有的嗎？";
+		mes "大多數人只是忽略我或放棄任務。";
+		next;
+		mes "[海因里希]";
+		mes "等待我安排您帶來的東西。";
+		delitem 7097,100; //Burning_Heart
+		set job_royal,3;
+		changequest 12091,12092;
+		close;
+	} else if (job_royal == 3) {
+		mes "...";
+		mes "好的。我可以發自內心地感受到真相。現在我可以告訴你更多的故事。";
+		next;
+		select("好吧，告訴我更多。");
+		mes "[海因里希]";
+		mes "十字軍和聖騎士班的最好成員可以獲得皇家衛隊的資格。";
+		next;
+		mes "[海因里希]";
+		mes "他們是神聖秩序的代理人，並受到迅速的懲罰。";
+		next;
+		mes "[海因里希]";
+		mes "我們仍然對它們如何生存有很多意見。當然，有人必須相信他們的歷史不是錯誤的。";
+		next;
+		select("文件還有嗎？");
+		mes "[海因里希]";
+		mes "嗯，您說的文件...";
+		next;
+		mes "[海因里希]";
+		mes "不幸的是，施密茲國王消失後，皇家衛隊的痕跡消失了。";
+		next;
+		mes "[海因里希]";
+		mes "他們的歷史，信念，遠見和戰鬥技巧似乎消失了，而沒有任何文件被保存。";
+		next;
+		mes "[海因里希]";
+		mes "就像國王消失了一樣。";
+		next;
+		select("那麼找到他們踪蹟的原因是……");
+		mes "[海因里希]";
+		mes "我擔心過去的皇家衛隊可能無法傳承他們的歷史。";
+		next;
+		mes "[海因里希]";
+		mes "神秘的力量...不再出現在世界上。這是多麼令人失望~！";
+		next;
+		mes "[海因里希]";
+		mes "這就是為什麼我專注於恢復工作的原因。";
+		next;
+		select("你進步了多少？");
+		mes "[海因里希]";
+		mes "幸運的是，我挖掘了大多數寶藏並解釋了它們。我只剩下一條痕跡可以找到。";
+		next;
+		select("剩下的痕跡呢？");
+		mes "[海因里希]";
+		mes "皇家衛隊穿著衣服雕刻了施密茲國王的印記。此習俗的痕跡是最後一個線索。";
+		next;
+		mes "[海因里希]";
+		mes "根據其他城市的報導，最後一個痕跡可能存在於玻璃海姆內部的修道院中。";
+		next;
+		mes "[海因里希]";
+		mes "但這對我來說太危險了，所以我幾乎放棄了。";
+		next;
+		mes "[海因里希]";
+		mes "現在我無法告訴你為什麼痕跡在那裡。";
+		next;
+		if(select("有趣的。我可以去那裡嗎？ :看起來真的很危險。") == 2) {
+			mes "[海因里希]";
+			mes "好主意，這是無用的工作。";
+			close;
+		}
+		mes "[海因里希]";
+		mes "你在開玩笑吧？";
+		mes "您不應該像對待它只是一些普通的瑣事。";
+		next;
+		select("我不是在開玩笑。我是認真的。");
+		mes "[海因里希]";
+		mes "如果您這樣說，我再也沒有選擇了。";
+		next;
+		mes "[海因里希]";
+		mes "我不知道它是否會有所幫助。我將詳細寫出解釋。";
+		next;
+		mes "^000099這是皇家衛隊的最後痕跡。打開任務窗口並檢查位置。 ^000000";
+		set job_royal,4;
+		changequest 12092,12093;
+		close;
+	} else if (job_royal == 4) {
+		if (countitem(6274) == 0) {
+			mes "我們的員工已經離開了最後的跡，所以不要太努力。";
+			close;
+		}
+		mes "不，這不是我想要的正確的。";
+		next;
+		mes "[海因里希]";
+		mes "你讓我驚訝。你是怎麼得到的？到目前為止，沒人能得到它。";
+		next;
+		mes "[海因里希]";
+		mes "太感謝了。";
+		mes "多虧了您的努力，我可以找到最後的線索。多麼神奇~！";
+		next;
+		mes "^000099Heinrich猶豫不決，並從辦公室側面帶來了一個舊的盾牌。 ^000000";
+		next;
+		mes "[海因里希]";
+		mes "我們的員工挖掘了它。他們假設施密茲國王使用了它。但是他沒有使用他。";
+		next;
+		select("確定不是皇帝用的？");
+		mes "[海因里希]";
+		mes "我不能完全確定。";
+		mes "也許您是對的，但是，根據我們進行初始標識時，我們可以確定它沒有使用。";
+		next;
+		mes "[海因里希]";
+		mes "但這是一個古老的寶藏，所以以某種方式將有用。我可能知道如何使用它。";
+		next;
+		select("我可以保留它嗎？");
+		mes "[海因里希]";
+		mes "當然。";
+		mes "有一天，這可能對您有用。";
+		next;
+		mes "^000099您從海因里希（Heinrich）那裡得到盾牌。盾牌的內部有一些雕刻的字母。 ^000000";
+		next;
+		mes "^000099，如果您想查看信件，請檢查任務窗口。 ^000000";
+		next;
+		mes "[海因里希]";
+		mes "好~~現在。";
+		mes "我現在要破譯布，所以我會很忙！";
+		delitem 6274,1; //Saint_Cloth_Piece
+		getitem 6275,1; //King_Shield
+		set job_royal,5;
+		changequest 12093,12094;
+		close;
+	} else if (job_royal == 5) {
+		if (countitem(6275) == 0) {
+			mes "什麼？你失去了盾牌嗎？你背上的那個是什麼？";
+			getitem 6275,1; //King_Shield
+			close;
+		}
+		mes "多虧了您的幫助，我可以完成發掘工作。多謝。";
+		close;
+	}
+}
+
+glast_01,240,366,5	script	Memory of King Schmidtz	844,{
+	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 1000) {
+		mes "- 您的背包太重了。 -";
+		mes "- 首先減輕身體 -";
+		mes "- 請重試。 -";
+		close;
+	}
+	if (ismounting() || checkriding()) {
+		mes "請取消騎行寵物，然後重試！";
+		close;
+	}
+	if (BaseJob == Job_Crusader && job_royal == 5) {
+		if (countitem(6275) == 0) {
+			mes "^000099您似乎已經失去了盾牌。回到海因里希，尋求幫助^000000。";
+			close;
+		}
+		mes "[記憶施密茲國王]";
+		mes "你是誰？";
+		next;
+		select("我帶來了一件遺物...");
+		mes "[記憶施密茲國王]";
+		mes "我的遺物？";
+		next;
+		mes "[記憶施密茲國王]";
+		mes "太糟糕了。這是另一個被海因里希（Heinrich）欺騙的朋友。";
+		next;
+		select("你認識海因里希嗎？");
+		mes "[記憶施密茲國王]";
+		mes "他是我忠實的副官。而且他一直如此數百年。";
+		next;
+		select("他是怎麼活了幾百年的……");
+		mes "[記憶施密茲國王]";
+		mes "也許他的身體只是一個演員。他找到了一種從身體轉向身體以保持生命的方法。";
+		next;
+		mes "[記憶施密茲國王]";
+		mes "他不想接受我的死，徘徊世界，繼續尋找皇家衛隊。";
+		next;
+		select("這個盾有什麼意義呢？");
+		mes "[記憶施密茲國王]";
+		mes "我去世之前，海因里希的盾牌是我們的合同。";
+		next;
+		mes "[記憶施密茲國王]";
+		mes "海因里希（Heinrich）被控找到合適的人成為皇家衛隊，盾牌將成為合同。";
+		next;
+		mes "[記憶施密茲國王]";
+		mes "對他來說，這是我給他的最後一個命令。";
+		next;
+		mes "[記憶施密茲國王]";
+		mes "現在他不再需要做，但是將繼續成為一個傻瓜，不能忘記國王的最後命令。";
+		next;
+		select("那麼現在怎麼辦？我可以離開嗎？");
+		mes "[記憶施密茲國王]";
+		mes "抱歉，我現在無法寄給您。";
+		next;
+		mes "[記憶施密茲國王]";
+		mes "這是與海因里希（Heinrich）的合同，所以我必須保留它。你看起來忠實而勇敢。";
+		next;
+		mes "[記憶施密茲國王]";
+		mes "現在，是時候與海因里希保持諾言了。由你決定。";
+		next;
+		mes "[記憶施密茲國王]";
+		mes "我計劃接受您作為皇家衛隊的成員，以繼續他們失去的傳統。你準備好做了嗎？";
+		next;
+		if(select("當然，當然:還沒有") == 2) {
+			mes "[記憶施密茲國王]";
+			mes "嗯，也許海因里希有錯誤的判斷。";
+			close;
+		}
+		mes "[記憶施密茲國王]";
+		mes "如果是這樣，我將繼續讓您成為皇家衛隊。";
+		next;
+		if(select("太棒了:還沒有。") == 2) {
+			mes "[記憶施密茲國王]";
+			mes "也許海因里希（Heinrich）的形象錯誤。";
+			close;
+		}
+		mes "[記憶施密茲國王]";
+		if (BaseLevel < 99 || JobLevel < 50 || SkillPoint != 0) {
+			mes "在那之前看看你的身體！";
+			next;
+			mes "[記憶施密茲國王]";
+			mes "仍然對自己有情感依戀嗎？";
+			mes "您不能繼承皇家衛隊！";
+			close;
+		}
+		mes "恭喜！年輕的皇家衛隊。";
+		mes "成為榮譽的象徵，並繼續您的新名字的偉大傳統。";
+		close2;
+		specialeffect2 EF_MAPPILLAR;
+		progressbar "FFFF00",7;
+		specialeffect2 EF_LORD;
+		delitem 6275,1; //King_Shield
+		erasequest 12094;
+		jobchange roclass(eaclass()|EAJL_THIRD);
+		getitem 5757,1; //Schmidt_Helm
+		getitem 2795,1; //Green_Apple_Ring
+		end;
+	}
+	end;
+}
+
+gl_church,173,88,0	script	Delicate trace#01	844,{
+	if (job_royal == 4 && countitem(6274) == 0) {
+		progressbar "ffff00",5;
+		set .@roy_ran, rand(1,70);
+		if (.@roy_ran < 6)
+			getitem 6274,1; //Saint_Cloth_Piece
+		else if (.@roy_ran > 5 && .@roy_ran < 66)
+			getitem 7049,1; //Stone
+		else {
+			mes "在調查時，地形斷裂。最好挖一會兒。";
+			disablenpc();
+			initnpctimer;
+			close;
+		}
+	}
+	mes "有一個痕跡，有人已經挖了這裡。";
+	close;
+OnTimer60000:
+	enablenpc();
+	stopnpctimer;
+OnTimer1000:
+OnTimer20000:
+OnTimer40000:
+	specialeffect EF_MAPPILLAR;
+	end;
+	specialeffect EF_MAPPILLAR;
+	end;
+	specialeffect EF_MAPPILLAR;
+	end;
+}
+gl_church,158,103,0	duplicate(Delicate trace#01)	Delicate trace#02	844
+gl_church,139,90,0	duplicate(Delicate trace#01)	Delicate trace#03	844
+gl_church,126,62,0	duplicate(Delicate trace#01)	Delicate trace#04	844
+gl_church,148,5,0	duplicate(Delicate trace#01)	Delicate trace#05	844
+gl_church,185,72,0	duplicate(Delicate trace#01)	Delicate trace#06	844
+gl_church,185,72,0	duplicate(Delicate trace#01)	Delicate trace#07	844
+gl_church,211,94,0	duplicate(Delicate trace#01)	Delicate trace#08	844
+gl_church,185,125,0	duplicate(Delicate trace#01)	Delicate trace#09	844
+gl_church,143,125,0	duplicate(Delicate trace#01)	Delicate trace#10	844
+gl_church,105,115,0	duplicate(Delicate trace#01)	Delicate trace#11	844
+
+gl_church,158,100,0	script	#Clue of traces	111,4,4,{
+	end;
+OnTouch_:
+	if (job_royal == 4 && countitem(6274) == 0) {
+		specialeffect2 EF_FREEZE;
+		mes "我可以在這裡感受到強大的力量。最好在這裡探索。";
+		viewpoint 1,173,88 ,1, 0xFFFF00;
+		viewpoint 1,158,103,2, 0xFFFF00;
+		viewpoint 1,139,90 ,3, 0xFFFF00;
+		viewpoint 1,126,62 ,4, 0xFFFF00;
+		viewpoint 1,148,5  ,5, 0xFFFF00;
+		viewpoint 1,185,72 ,6, 0xFFFF00;
+		viewpoint 1,211,94 ,7, 0xFFFF00;
+		viewpoint 1,185,125,8, 0xFFFF00;
+		viewpoint 1,143,125,9, 0xFFFF00;
+		viewpoint 1,105,115,10,0xFFFF00;
+		close;
+	}
+	end;
+}
+
+sec_in02,12,43,3	script	sorcereryal	57,1,1,{
+	callfunc "F_GM_NPC";
+	switch(select("皇家衛隊:符文騎士:魔法師")) {
+	case 1:
+		mes "1~5";
+		input .@input;
+		next;
+		if (.@input < 1 || .@input > 5) {
+			mes "設置項目以調整皇家衛隊";
+			mes "您只能在1到5之間設置一個數字。";
+		} else {
+			set job_royal, .@input;
+			mes "完全的";
+		}
+		close;
+	case 2:
+		mes "1~24號";
+		input .@input;
+		next;
+		if (.@input < 1 || .@input > 24) {
+			mes "設置項目以調整符文騎士";
+			mes "您只能在1到24之間設置Nbumber。";
+		} else {
+			set job_rune_edq, .@input;
+			mes "完全的";
+		}
+		close;
+	case 3:
+		mes "1~5";
+		input .@input;
+		next;
+		if (.@input < 1 || .@input > 5) {
+			mes "設置項目以調整巫師";
+			mes "您只能在1到5之間設置一個數字。";
+		} else {
+			set job_soc, .@input;
+			mes "完全的";
+		}
+		close;
+	}
+}

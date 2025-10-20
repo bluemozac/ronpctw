@@ -1,0 +1,1217 @@
+﻿//===== rAthena Script =======================================
+//= Dynamic NPC: HelpMeShorty.
+//===== Description: =========================================
+//- [Walkthrough conversion]
+//= Short quest to allow the player to summon, via an item, a dynamic NPC that gives basic game information.
+//= After level 30, the player can get a costume in exchange for the item.
+//===== Changelogs: ==========================================
+//= 1.0 First version. [Capuche]
+//============================================================
+
+// Starter
+izlude,173,210,3	script	Black Shadow#fgtg01	4_CENERE,5,5,{
+	if (isbegin_quest(14688) == 0 && BaseLevel < 31) {
+		mes "[黑色陰影]";
+		mes "帶我去！您必須對我進行眼神交流負責！";
+		next;
+		mes "[黑色陰影]";
+		mes "如果您帶我， ^0000CDI'LL會幫助 ^000000。我會在許多方面為您提供幫助！我會教你 ^0000cda很多東西 ^000000！";
+		next;
+		mes "[簡短通知]";
+		mes "^ee0000如果您選擇伴隨近短，則該項目 ^0000CD <幫助我shorty> ^ee0000將自動放置在您的庫存中。";
+		next;
+		mes "[簡短通知]";
+		mes "如果您在您的 ^ee0000inventory中使用<help me shorty>項目，則可以召喚矮個子並從中獲取 ^0000cdhelp和建議 ^ee0000。";
+		next;
+		mes "[簡短通知]";
+		mes "^EE0000您達到31級或更高級時，您可以收到一個任務，將您帶到矮個子。完成此任務將使您同時獲得獎勵。";
+		next;
+		mes "[簡短通知]";
+		mes "^ee0000在達到31級之前，您可以隨時通過 ^0000CD <讓我們分解> ^ee0000菜單，但是在那之後您將永遠無法再次使您的Ally再次成為Shorty Ally。";
+		next;
+		if (select( "Well, let's go together.", "I don't want to go together." ) == 2) {
+			mes "[黑色陰影]";
+			mes "您可以在沒有我幫助的情況下這樣做嗎？您肯定不會走十個步驟並想到我。生活不是互相幫助嗎？不可能。";
+			close;
+		}
+		mes "[黑色陰影]";
+		mes "ph-我很高興。我們現在是朋友嗎？";
+		next;
+		mes "[黑色陰影]";
+		mes "順便說一句，那些眼睛是什麼...？你害怕我嗎？我正在這樣做是為了脫穎而出，等一下...";
+		next;
+		cloakonnpcself();
+		cloakoffnpcself("Mysterious Creature#fgtg01" );
+		mes "[黑色陰影]";
+		mes "這夠了嗎？";
+		next;
+		mes "[矮個子]";
+		mes "我叫矮人！";
+		next;
+		mes "[矮個子]";
+		mes "你叫什麼名字？";
+		next;
+		select( "My name is " + strcharinfo(0) + "." );
+		mes "[矮個子]";
+		mes "這是一個簡單的名字。你有袋子嗎？那是你腰間穿的那個。適合我的尺寸合適。";
+		next;
+		select("你想放進袋子裡嗎？");
+		mes "[矮個子]";
+		mes "我可以適合你的包。你對什麼感到驚訝？不會很長。我會盡快離開。";
+		next;
+		mes "[矮個子]";
+		mes "按 ^0000cdalt+e ^000000，要查看袋子的內部，請按“消耗”選項卡，我將就在那裡。";
+		next;
+		mes "[矮個子]";
+		mes "當您想打電話給我時，請按 ^0000CD <幫助我矮個子> ^000000迅速，我會從您的書包中出來幫助您。怎麼樣？不是很好嗎？";
+		next;
+		mes "[矮個子]";
+		mes "如果您不喜歡我的書包，請帶我去 ^0000cdsalty ^000000。那是我的目的地，所以當時間到來時，我將離開 ^0000cdyour袋 ^000000。";
+		next;
+		select("那人在哪裡？");
+		mes "[矮個子]";
+		mes "我待會兒告訴你。我想現在休息。";
+		next;
+		mes "[矮個子]";
+		mes "將來祝你好運！";
+		setquest 14688;
+		completequest 14688;
+		getitem 23278,1;	// HelpmeShorty
+		cloakonnpcself("Mysterious Creature#fgtg01" );
+		close;
+	}
+	end;
+
+OnTouch:
+	if (isbegin_quest(14688) == 0 && BaseLevel < 31)
+		npctalk "Save me! Hug me quickly! Save me!", "", bc_self;
+	end;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "isbegin_quest(14688) == 0 && BaseLevel < 31" );
+	cloakonnpc();
+	end;
+}
+
+//izlude,173,210,3	script	Mysterious Creature#fgtg01	4_GALAPAGO,5,5,{	// unknown OnTouch effect
+izlude,173,210,3	duplicate(dummy_cloaked_npc)	Mysterious Creature#fgtg01	4_GALAPAGO
+
+izlude,161,199,0	script	#fgtg01	HIDDEN_WARP_NPC,3,5,{
+	end;
+OnTouch:
+	if (isbegin_quest(14688) == 0 && BaseLevel < 31)
+		cloakoffnpcself( "Black Shadow#fgtg01" );
+	end;
+}
+izlude,194,209,0	duplicate(#fgtg01)	#fgtg02	HIDDEN_WARP_NPC,3,5
+izlude,173,210,0	duplicate(#fgtg01)	#fgtg03	HIDDEN_WARP_NPC,3,5
+
+
+// Exchange npc. Step 1 of 2
+payon_in01,193,23,3	script	Chanmo#fgtg01	1_F_ORIENT_01,{
+	if (isbegin_quest(14693) == 1) {
+		cloakoffnpcself( "Shorty#fgtg004" );
+		mes "[矮個子]";
+		mes "咸！咸~我在這裡~你在等嗎？你等了很長時間了嗎？";
+		next;
+		mes "[在旅館中]";
+		mes "......";
+		next;
+		mes "[矮個子]";
+		mes "咸，咸？咸？你在哪裡咸？";
+		next;
+		mes "[禪摩]";
+		mes "你在說誰？";
+		next;
+		mes "[矮個子]";
+		mes "我來找咸..我來了，但是沒有鹹味。";
+		next;
+		mes "[禪摩]";
+		mes "咸？啊，您說的是住在房間裡的女人。我把她送去了。";
+		next;
+		mes "[矮個子]";
+		mes "差事？為什麼？";
+		next;
+		mes "[禪摩]";
+		mes "我很無聊。我派她去拿果凍和橡子。";
+		next;
+		mes "[矮個子]";
+		mes "嘿！你來自哪裡？我們來看鹹的，你為什麼要把咸呢？";
+		next;
+		mes "[禪摩]";
+		mes "我沒有強迫任何人來，我拉了祖格的頭，把它翻了過去。所以我把他送出了。";
+		next;
+		mes "[矮個子]";
+		mes "那我可以在這裡等嗎？";
+		next;
+		mes "[禪摩]";
+		mes "如果您很著急，您可以提供幫助。你可以找到";
+		mes "<NAVI> [可可的巢] <info> prt_fild10,318,191,0,101,0 </info> </navi>在prontera的南部西部。您可以從可可獲得一堆橡子。";
+		next;
+		mes "[矮個子]";
+		mes "嗯..好吧。主人，也要去。到可可的巢。";
+		next;
+		select("你在這裡？");
+		mes "[矮個子]";
+		mes "我想念薩爾蒂。讓我們去看看咸。";
+		next;
+		select("那麼好吧。");
+		mes "[矮個子]";
+		mes "好吧，我們走吧！ ！ ！";
+		cloakonnpcself("Shorty#fgtg004");
+		completequest 14693;
+		setquest 14694;
+		close;
+	}
+	mes "[禪摩]";
+	mes "我今天需要選擇一些橡子和果凍。";
+	close;
+}
+
+payon_in01,190,24,5	duplicate(dummy_cloaked_npc)	Shorty#fgtg004	4_GALAPAGO
+
+
+// Exchange npc. Step 2 of 2
+prt_fild10,318,191,0	script	#salt01	HIDDEN_WARP_NPC,3,5,{
+	end;
+OnTouch:
+	if (isbegin_quest(14694) == 1)
+		cloakoffnpcself( "Salty#fgtg01" );
+	end;
+}
+prt_fild10,262,39,0	duplicate(#salt01)	#salt02	HIDDEN_WARP_NPC,3,5
+prt_fild10,332,128,0	duplicate(#salt01)	#salt03	HIDDEN_WARP_NPC,3,5
+prt_fild10,222,293,0	duplicate(#salt01)	#salt04	HIDDEN_WARP_NPC,3,5
+// 5?
+prt_fild10,26,196,0	duplicate(#salt01)	#salt06	HIDDEN_WARP_NPC,3,5
+prt_fild10,311,167,0	duplicate(#salt01)	#salt07	HIDDEN_WARP_NPC,3,5
+prt_fild10,298,212,0	duplicate(#salt01)	#salt08	HIDDEN_WARP_NPC,3,5
+
+
+prt_fild10,318,191,3	script	Salty#fgtg01	4_F_ALCHE_A,{
+	if (isbegin_quest(14694) == 1) {
+		mes "[咸]";
+		mes "唉!橡子！ Muk-Muk，橡子果凍！您如何處理橡子？你吃橡子果凍~";
+		next;
+		cloakoffnpcself( "Shorty#fgtg005" );
+		mes "[矮個子]";
+		mes "你看起來很興奮，咸。你沒有我開心嗎？";
+		next;
+		mes "[咸]";
+		mes "嗯？嗯？ ？ ？矮個子!!!!!!!!!!!";
+		next;
+		mes "[矮個子]";
+		mes "沒有我，你有開心嗎？沒有我，你玩得開心嗎？";
+		next;
+		mes "[咸]";
+		mes "矮個子，你為什麼在這裡？有一天，我收到一封信，說你要離開了！ ！ ！";
+		next;
+		mes "[矮個子]";
+		mes "有很多情況。這種情況將由我的主人在這裡解釋。";
+		next;
+		mes "[咸]";
+		mes "什麼？你綁架了我們的矮個子？";
+		next;
+		select("不，不是這樣的……");
+		mes "[咸]";
+		mes "哦，是嗎？但是矮個子！這是怎麼回事？";
+		next;
+		mes "[矮個子]";
+		mes "我去了佩恩（Payon），是因為做飯的祖母說你去了這裡。";
+		next;
+		mes "[咸]";
+		mes "好的！我也要走了，但是讓我們在Prontera停留一段時間，然後去Payon。讓我們去打包一些東西，旅行整個大陸吧！";
+		next;
+		mes "[矮個子]";
+		mes "是的！碩士，我們在一起的冒險很有趣！";
+		next;
+		mes "[咸]";
+		mes "我不得不說謝謝。看來您在那個小袋子裡攜帶矮個子。";
+		next;
+		mes "[矮個子]";
+		mes "師父，非常感謝。";
+		next;
+		select("你要離開嗎？");
+		mes "[矮個子]";
+		mes "我們的關係不會在這裡結束。記住你遇到了我。咸，還有其他嗎？要記住的東西。";
+		next;
+		mes "[咸]";
+		mes "嗯，類似的東西。";
+		next;
+		mes "[矮個子]";
+		mes "這全是嗎？企鵝？企鵝？你比我更喜歡企鵝嗎？";
+		next;
+		mes "[咸]";
+		mes "不，不是...最初，我在帕羅斯（Paros）買了它來記住你，但是現在我想了，你不是企鵝，所以我只是保留了它。不是可愛嗎？";
+		next;
+		mes "[矮個子]";
+		mes "可愛的。";
+		next;
+		mes "[咸]";
+		mes "我給你。感謝您照顧Shorty！矮個子，走吧吧！";
+		next;
+		specialeffect EF_TELEPORTATION2;
+		cloakonnpcself();
+		mes "[矮個子]";
+		mes "師父，即使很多時間過去了，也不要忘記我，成為一名偉大的冒險家，在大陸上為自己取名！";
+		specialeffect EF_TELEPORTATION2, AREA, "Shorty#fgtg005";
+		cloakonnpcself( "Shorty#fgtg005" );
+		erasequest 14694;
+		if (isbegin_quest(14695) > 0)
+			erasequest 14695;
+		delitem 23278,1;	// HelpmeShorty
+		getitem 20267,1;	// C_Penguin_Cap
+		getexp 4000,1000;
+		close;
+	}
+	end;
+
+OnInit:
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "isbegin_quest(14694) == 1" );
+	cloakonnpc();
+	end;
+}
+
+prt_fild10,315,189,7	duplicate(dummy_cloaked_npc)	Shorty#fgtg005	4_GALAPAGO
+
+
+// Base for the dynamic npc
+izlude,1,1,0	script	Shorty#fgtg01	4_GALAPAGO,{
+	if (isbegin_quest(14689) == 0) {
+		mes "[矮個子]";
+		mes "好工作。如果您將來需要我的幫助，可以這樣稱呼我。";
+		next;
+		select("你能幫我什麼忙？");
+		mes "[矮個子]";
+		mes "第一次到達這里後，您什麼都不知道，對嗎？我會教你我所知道的一切。 ^0000cdask我任何東西！ ^000000";
+		next;
+		mes "[矮個子]";
+		mes "我將為您提供各種好 ^0000CDServices ^000000，以幫助您進行狩獵。";
+		next;
+		mes "[矮個子]";
+		mes "我唯一能做的就是 ^0000cdincrease敏捷性 ^000000快速移動， ^0000CDBLESSING ^000000可以增加強度，靈活性和智力，但肯定會有所幫助，對嗎？";
+		next;
+		mes "[矮個子]";
+		mes "是的！如果您打電話給我，一分鐘什麼也不要說什麼，我會回到包裡。";
+		next;
+		mes "[矮個子]";
+		mes "當業務結束時，就讓我成為。我會環顧四周，然後走進袋子。我跟隨非常好。";
+		next;
+		select("你什麼時候才能找到一個叫鹹的人？");
+		mes "[矮個子]";
+		mes "現在，主人。加拉帕戈斯群島的這個矮個子知道恩典。當您可以脫下開胃菜T卹並自己開始冒險時，Shorty就消失了。";
+		next;
+		mes "[矮個子]";
+		mes "那時，即使您堅持我並哭泣，我也會離開您。在此之前，您必須將您的水平提高到大約 ^0000CDLEVEL 31 ^000000。在此之前，讓我們在將來盡力而為。";
+		setquest 14689;
+		completequest 14689;
+		next;
+	}
+	.@state = isbegin_quest(14693);
+	.@state = ((.@state == 2 && isbegin_quest(14694) == 1) ? 1 : .@state);
+
+	switch( .@state ) {
+	case 0:
+		if (BaseLevel < 31)
+			break;
+		mes "[矮個子]";
+		mes "你已經成長了。所以現在我想見薩爾蒂。她會擔心我。";
+		next;
+		select("現在你明白了嗎？");
+		mes "[矮個子]";
+		mes "Salty的最後一封信說是來自 ^0000CDPAYON的旅館 ^000000。";
+		next;
+		mes "[矮個子]";
+		mes "我們走吧";
+		mes "在Payon中查找<avi> [inn] <info> payon_in01,193,23,0,101,0 </info> </navi>。";
+		setquest 14693;
+		close;
+	case 1:
+		break;
+	case 2:
+		mes "[矮個子]";
+		mes "你是誰？你在跟我說話？我不喜歡我不認識與我交談或觸摸我的人。";
+		close;
+	}
+	if (BaseLevel < 31) {
+		switch( rand(4) ) {
+		case 0:
+			mes "[矮個子]";
+			mes "打開項目窗口，您將看到 ^0000cdfour選項卡 ^000000。你能看到嗎？";
+			next;
+			mes "[矮個子]";
+			mes "如果您拖放不經常使用或不應該出售給NPC的物品，請將它們放入 ^0000CD <個人選項卡>中，然後按下底部的交易鎖定按鈕 ^000000，您不會意外地出售這些物品。";
+			break;
+		case 1:
+			mes "[矮個子]";
+			mes "主人，您是否曾經按下 ^0000CDF12鍵 ^000000？小的白色正方形會漂浮。";
+			next;
+			mes "[矮個子]";
+			mes "在那裡拖動技能圖標或項目。如果釋放它，則可以通過簡單地按 ^0000CDSHORTCUT按鈕 ^000000快速輕鬆地使用技能和圖標。真的很方便。";
+			break;
+		case 2:
+			mes "[矮個子]";
+			mes "他說，如果您不需要在學院裡得到的帽子或衣服，則可以在換工作辦公室的 ^0000cdvending Machine上為每位工作 ^000000換成有用的東西。";
+			next;
+			mes "[矮個子]";
+			mes "薩爾蒂也很好地使用了它。如果可能的話，我想要蛤。";
+			break;
+		case 3:
+			mes "[矮個子]";
+			mes "讓我們在檢查狩獵的地方後離開。可能還有怪物卡。";
+			next;
+			mes "[矮個子]";
+			mes "這是一個有價值的技巧，鹹的教給了我~您有怪物卡嗎？";
+			break;
+		}
+		setarray .@menu$[0], "Give me strength!", "Where should I go?", "Isn't there anything good?", "How do I take skills and stats?", "Tell me how to operate." ;
+	}
+	else {
+		switch( rand(4) ) {
+		case 0:
+			mes "[矮個子]";
+			mes "主人，您知道，除了我們所知道的Midgard大陸外，您還可以乘船去新的神秘的地方嗎？主要是Al ... Al ... Allegro？";
+			next;
+			mes "[矮個子]";
+			mes "^0000CDAH！您可以從艾伯塔省乘船乘船^000000！讓我們稍後再！掌握！這是一次新冒險！";
+			break;
+		case 1:
+			mes "[矮個子]";
+			mes "我聽說有很多地下城，即使是像你這樣的年輕冒險家也可以走。";
+			next;
+			select("我怎麼這麼傻啊！");
+			mes "[矮個子]";
+			mes "主人，你在說什麼？無論如何，地下水道，佩隆的洞穴，螞蟻地下城和沈船。您不想成為地牢的統治者，主人嗎？";
+			next;
+			select("如果你為我而戰。");
+			mes "[矮個子]";
+			mes "主人，您應該挽救身體，因為您只有一種生命。";
+			break;
+		case 2:
+			mes "[矮個子]";
+			mes "主人準備好了嗎？我真的想去！";
+			next;
+			select("它是什麼？它在哪裡？");
+			mes "[矮個子]";
+			mes "您不認識ohiso，boiso，saiso， ^0000cdparamarket ^000000嗎？沒有我，主人會做什麼？";
+			next;
+			mes "[矮個子]";
+			mes "Paramarket是一個出售在市場或街道攤位中很難找到的物品的地方。這是一個非常好的做生意的好地方。";
+			next;
+			select("我怎樣才能到達那裡？");
+			mes "[矮個子]";
+			mes "與 ^0000CDParadise走廊 ^000000的Paramaract Windman交談，他將送您到那裡。";
+			break;
+		case 3:
+			mes "[矮個子]";
+			mes "主人，有時候，當您想從街頭供應商那裡購買東西時，您可能會想知道他們現在是否正在出售它以及誰在出售它。";
+			next;
+			select("這是正確的。我什至無法瀏覽所有的攤位。");
+			mes "[矮個子]";
+			mes "在這種情況下，您可以使用 ^0000cdcatalog ^000000。目前，據說天堂或艾伯塔省的商人 ^000000的 ^0000CDVEND機器正在出售它。";
+			next;
+			mes "[矮個子]";
+			mes "我也想今天去購物。";
+			break;
+		}
+		setarray .@menu$[5], "Anything good?";
+	}
+	next;
+	mes "[矮個子]";
+	mes "您需要我的更多幫助嗎？";
+	next;
+	switch( select( .@menu$[0], .@menu$[1], .@menu$[2], .@menu$[3], .@menu$[4], .@menu$[5 ], "Information guide", "I'm curious about what you're talking about.", "Break up now." ) ) {
+	case 1:
+		switch( checkquest(14695,PLAYTIME) ) {
+		case -1:
+			mes "[矮個子]";
+			mes "主人，我會給你我以前答應過的幫助。提高敏捷性和祝福。";
+			next;
+			mes "[矮個子]";
+			mes "但是我從肩膀上學到了這一點，一旦我這樣做，我的靈魂就會累，所以我不能無限期地給予它。儘管我可能需要半個小時的時間才能刷新自己。";
+			next;
+			mes "[矮個子]";
+			mes "如果您想知道何時可以再次獲得它，請使用Alt+U打開任務窗口，並檢查底部顯示的時間。";
+			next;
+			mes "[矮個子]";
+			mes "去！掌握！ ！";
+			npcskill "AL_INCAGI",10,99,60;
+			npcskill "AL_BLESSING",10,99,60;
+			setquest 14695;
+			close;
+		case 0:
+		case 1:
+			mes "[矮個子]";
+			mes "主人，甚至還沒有30分鐘。我還在掙扎。如果您起床，我會給您更多的力量，所以請等待。";
+			close;
+		case 2:
+			mes "[矮個子]";
+			mes "去！掌握！ ！";
+			npcskill "AL_INCAGI",10,99,60;
+			npcskill "AL_BLESSING",10,99,60;
+			erasequest 14695;
+			setquest 14695;
+			close;
+		}
+		end;
+	case 2:
+		mes "[矮個子]";
+		mes "您想了解師父什麼？";
+		next;
+		switch( select( "The path of a novice adventurer!", "I want to help people around me.", "I don't like the set path.", "There is no place I want to go." ) ) {
+		case 1:
+			mes "[矮個子]";
+			mes "我想我看到一個 ^0000CD <思考Archer> ^000000老師在Izlude入口附近，但他似乎有很多想法。你為什麼不去問發生了什麼事？走吧，走吧~";
+			close;
+		case 2:
+			mes "[矮個子]";
+			mes "您為什麼不在外部遇到保羅和安妮 ^0000cdprontera的西門 ^000000？當我經過時，我聽說他們需要幫助。";
+			next;
+			mes "[矮個子]";
+			mes "還是為什麼不聽 ^0000cdpayon ^000000中的焦慮中年男子？";
+			close;
+		case 3:
+			mes "[矮個子]";
+			mes "按 ^0000CDCTRL+` ^000000將打開地圖。";
+			next;
+			mes "[矮個子]";
+			mes "您看到一個用於在左上角選擇區域的框嗎？";
+			next;
+			mes "[矮個子]";
+			mes "選擇要查看的區域後，在右上角檢查 ^0000CDMonster Tab ^000000，或按 ^0000CDTAB鍵 ^000000，您將看到該區域中最分佈的怪物的名稱和級別。";
+			next;
+			mes "[矮個子]";
+			mes "最好去冒險到一個與主人水平相匹配的地方。如果與怪物 ^000000有很多級別的差異，則您將無法獲得100％的體驗。您還必須計算級別差異，對嗎？";
+			next;
+			mes "[矮個子]";
+			mes "如果您要按要去的城鎮，則會出現“導航”菜單。按下 ^0000CD <指南到底部 ^000000處的目標>按鈕，然後退出地圖以獲取指導。";
+			close;
+		case 4:
+			mes "[矮個子]";
+			mes "主人，你無聊嗎？然後，您可以與周圍的人聊天。";
+			next;
+			mes "[矮個子]";
+			mes "除此之外，可以嘗試 ^0000cdParadise的任務 ^000000。你想去天堂嗎？他們說，如果您走的話，他們會給您武器。";
+			next;
+			mes "[矮個子]";
+			mes "你想去哪裡？在聊天窗口中寫入 ^0000CD/place ^000000，並將您當前位置與按下 ^0000CDCTRL+'鍵 ^000000出現的地圖進行比較。";
+			next;
+			switch( select( "Prontera", "Geffen", "Payon", "Morroc", "Alberta", "Done" ) ) {
+			case 1:
+				mes "[矮個子]";
+				mes "單擊<avi> [prontera] <info> prontera，124,76,0,101,0 </info> </navi>查找它。";
+				break;
+			case 2:
+				mes "[矮個子]";
+				mes "單擊<avi> [geffen] <inefo> Geffen，132,66,0,101,0 </info> </navi>查找它。";
+				break;
+			case 3:
+				mes "[矮個子]";
+				mes "單擊<avi> [PAYON] <inefo> Payon，177,111,0,101,0 </info> </navi>查找它。";
+				break;
+			case 4:
+				mes "[矮個子]";
+				mes "單擊<avi> [Morroc：Paradise太空旅行者] <info> Morocc，161,97,0,101,0 </info> </navi>找到它。";
+				next;
+				mes "[矮個子]";
+				mes "莫羅克（Morroc）在天堂所在，所以走來走去嗎？";
+				next;
+				mes "[矮個子]";
+				mes "轉到<avi> [Morroc Paradise] <info> Morocc，206,285,0,101,0 </info> </navi>。";
+				break;
+			case 5:
+				mes "[矮個子]";
+				mes "單擊<avi> [Alberta] <info>艾伯塔省，124,67,0,101,0 </info> </navi>查找它。";
+				break;
+			case 6:
+				mes "[矮個子]";
+				mes "好的？然後，我會環顧四周，然後回到袋子裡。";
+				close;
+			}
+			next;
+			mes "[矮個子]";
+			mes "先去註冊Lime ivenor，然後檢查旁邊的公告板。";
+			next;
+			mes "[矮個子]";
+			mes "在城鎮和田野上尋找並幫助有需要的人會很高興。那些需要幫助的人會發現更容易在他們的頭頂上方找到<！ >標誌。";
+			close;
+		}
+		end;
+	case 3:
+		mes "[矮個子]";
+		mes "您沒有加入天堂俱樂部嗎？";
+		next;
+		mes "[矮個子]";
+		mes "您要去 ^0000cdparadise ^000000嗎？他們說，如果您去天堂，他們會給您武器。";
+		next;
+		mes "[矮個子]";
+		mes "你想去哪裡？在聊天窗口中寫入 /放置，並將您當前位置與按下^0000cdctrl+'鍵^^ 000000出現的地圖進行比較。最近在哪裡？";
+		next;
+		switch( select( "Prontera", "Geffen", "Payon", "Morroc", "Alberta", "Done" ) ) {
+		case 1:
+			mes "[矮個子]";
+			mes "單擊<avi> [prontera] <info> prontera，124,76,0,101,0 </info> </navi>查找它。";
+			break;
+		case 2:
+			mes "[矮個子]";
+			mes "單擊<avi> [geffen] <inefo> Geffen，132,66,0,101,0 </info> </navi>查找它。";
+			break;
+		case 3:
+			mes "[矮個子]";
+			mes "單擊<avi> [PAYON] <inefo> Payon，177,111,0,101,0 </info> </navi>查找它。";
+			break;
+		case 4:
+			mes "[矮個子]";
+			mes "單擊<avi> [Morroc：Paradise太空旅行者] <info> Morocc，161,97,0,101,0 </info> </navi>找到它。";
+			next;
+			mes "[矮個子]";
+			mes "莫羅克（Morroc）在天堂所在，所以走來走去嗎？";
+			next;
+			mes "[矮個子]";
+			mes "轉到<avi> [Morroc Paradise] <info> Morocc，206,285,0,101,0 </info> </navi>。";
+			break;
+		case 5:
+			mes "[矮個子]";
+			mes "單擊<avi> [Alberta] <info>艾伯塔省，124,67,0,101,0 </info> </navi>查找它。";
+			break;
+		case 6:
+			mes "[矮個子]";
+			mes "好的？然後，我會環顧四周，然後回到袋子裡。";
+			close;
+		}
+		next;
+		mes "[矮個子]";
+		mes "^0000CDGO並在Lime ivenor首次註冊^000000，然後與任何一邊的Boyana UR和Paradise Logistics員工交談。";
+		next;
+		mes "[矮個子]";
+		mes "經過一些任務和培訓，他們給了我設備。";
+		close;
+	case 4:
+		mes "[矮個子]";
+		mes "您對身份和技能有什麼好奇？";
+		next;
+		switch( select( "I'm curious about skills.", "I'm curious about statuses.", "I'm not interested anymore." ) ) {
+		case 1:
+			mes "[矮個子]";
+			mes "按 ^0000CDALT+S KEYS ^000000，以提高技能列表窗口。";
+			next;
+			mes "[矮個子]";
+			mes "如果您在右上角 ^000000中檢查項目 ^0000CD <查看技能描述>，當將鼠標懸停在技能圖標上時，可以查看技能的描述。";
+			next;
+			mes "[矮個子]";
+			mes "您可以通過消費 ^0000CD <技能點> ^000000來學習此技能，每當您的工作水平提高時。您可以檢查此窗口左下角的技能點。";
+			next;
+			mes "[矮個子]";
+			mes "主當前有" + SkillPoint + " skill point " + (SkillPoint > 1 ? "s" : "") + ".";
+			next;
+			mes "[矮個子]";
+			mes "大師知道技能樹嗎？如果大師將鼠標懸停在他們想學習的技能上，那麼首先要學習的技能和技能水平就會出現。";
+			next;
+			mes "[矮個子]";
+			mes "那是技能樹。但是，學習技能時所消耗的技能受到限制，因此您無法學習所有技能。";
+			next;
+			mes "[矮個子]";
+			mes "總共有49個技能點可以用於學習，然後才能更改更高的工作。這種情況稱為停滯。";
+			next;
+			mes "[矮個子]";
+			mes "^0000cdif您的工作級別為40，您可以將工作更改為輔助工作^000000，但是建議您在達到50級時更改工作。";
+			next;
+			mes "[矮個子]";
+			mes "因為它簡化了轉移過程。有什麼比這更大的理由？";
+			next;
+			mes "[矮個子]";
+			mes "如果您認為自己錯誤地提高了技能，請不要擔心太多。";
+			next;
+			mes "[矮個子]";
+			mes "您可以隨時將其重置，直到主人更改為更高的工作為止。";
+			next;
+			mes "[矮個子]";
+			mes "轉到<avi> [izlude：hypnotist] <info> izlude，127,175,0,101,0 </info> </navi>以獲取指導。";
+			close;
+		case 2:
+			mes "[矮個子]";
+			mes "讓我們看看，主人...";
+			next;
+			mes "[矮個子]";
+			mes "我聽說，對於跆拳道，您應該主要提高Str，Agi和Dex。有關更多信息，";
+			mes "請訪問<avi> [payon：ahri] <info> Payon，245,295,0,101,0 </info> </navi>。";
+			next;
+			mes "[矮個子]";
+			mes "如果您認為自己錯誤地提高了身份，請不要擔心太多。";
+			next;
+			mes "[矮個子]";
+			mes "您可以隨時將其重置，直到主人更改為更高的工作為止。";
+			mes "轉到<avi> [izlude：hypnotist] <info> izlude，127,175,0,101,0 </info> </navi>以獲取指導。";
+			close;
+		case 3:
+			mes "[矮個子]";
+			mes "如果您有任何疑問，請隨時致電我。我會環顧四周，然後回到袋子裡。";
+			close;
+		}
+		end;
+	case 5:
+		switch( select( "Basic Operation", "Shortcut Guide", "Cancel" ) ) {
+		case 1:
+			while(1) {
+				mes "[矮個子]";
+				mes "你對什麼好奇？";
+				next;
+				switch( select( "Move and Attack", "Talk with NPC", "Check Quest", "Check Status and Skills", "Unequip Equipment", "Trade" ) ) {
+				case 1:
+					mes "[矮個子]";
+					mes "^0000CD <move>^000000-單擊要去鼠標^000000的位置。";
+					mes "^0000CD <攻擊>^000000-使用鼠標^000000單擊目標^0000CDTO攻擊。";
+					next;
+					mes "[矮個子]";
+					mes "如何？簡單，對嗎？您還可以通過按住右鼠標按鈕並旋轉它來移動視點。";
+					break;
+				case 2:
+					mes "[矮個子]";
+					mes "<對話>  - 單擊目標 ^0000CDTO與鼠標 ^000000聊天。";
+					next;
+					mes "[矮個子]";
+					mes "有時，您必須接近與某人交談。";
+					break;
+				case 3:
+					mes "[矮個子]";
+					mes "單擊位於左上角的主菜單中的 ^0000cdQuest圖標。";
+					mes "快捷方式： ^0000CDALT+U ^000000";
+					next;
+					mes "[矮個子]";
+					mes "當Master收到任務時，任務信息將短暫顯示在屏幕的右側，因此您可以檢查。";
+					next;
+					mes "[矮個子]";
+					mes "如果您不想在任務列表中看到一個任務，請將鼠標指針放在標題上，然後按正確的鼠標按鈕將其發送到“待處理”選項卡。";
+					break;
+				case 4:
+					mes "[矮個子]";
+					mes "<檢查狀態>  - 單擊位於左上角 ^000000的主菜單中的 ^0000cdstatus圖標。";
+					mes "快捷方式： ^0000CDALT+A ^000000";
+					next;
+					mes "[矮個子]";
+					mes "<檢查技能>  - 單擊位於左上角 ^000000的主菜單中的 ^0000CDSKILL圖標。";
+					mes "快捷方式： ^0000CDALT+S ^000000";
+					next;
+					mes "[矮個子]";
+					mes "不要忘記！必須通過雙擊要使用的圖標來激活該技能，並通過按下左鼠標按鈕來施放！";
+					break;
+				case 5:
+					mes "[矮個子]";
+					mes "<設備和取消設備>  - 單擊位於左上角 ^000000的主菜單中的 ^0000CDEquipment圖標。";
+					mes "快捷方式： ^0000CDALT+Q ^000000";
+					next;
+					mes "[矮個子]";
+					mes "通常，您可以雙擊庫存或設備窗口中的左鼠標按鈕來裝備和解除武裝。";
+					next;
+					mes "[矮個子]";
+					mes "只能通過將箭頭從庫存拖到設備窗口中的字符來配備箭頭和子彈。";
+					next;
+					mes "[矮個子]";
+					mes "如果主人成為商人，您可以拉一輛購物車，可以從每個城鎮的Kafra員工那裡借用。";
+					break;
+				case 6:
+					mes "[矮個子]";
+					mes "<商店交易>  - 單擊商家NPC ^0000CDTO貿易 ^000000。";
+					mes "<用戶交易>  - 右鍵單擊要與您交易的播放器，然後選擇 ^0000CDTRADE ^000000。";
+					next;
+					mes "[矮個子]";
+					mes "<買賣攤位>  - 單擊“攤位”窗口上的鼠標。";
+					break;
+				}
+				next;
+			}
+			end;
+		case 2:
+			while(1) {
+				mes "[矮個子]";
+				mes "你對什麼好奇？";
+				next;
+				switch( select( "Tip of the Day", "Command List", "Skills and Items Shortcut Window", "Shortcut Key List and Registration", "Command List", "Emotion List" ) ) {
+				case 1:
+					mes "[矮個子]";
+					mes "在聊天窗口中鍵入 ^0000CD/TIP ^000000。";
+					next;
+					mes "[矮個子]";
+					mes "其中包含許多生活信息。每當我無聊時，我都會讀這些。";
+					break;
+				case 2:
+					mes "[矮個子]";
+					mes "在聊天窗口中鍵入 ^0000CD/H ^000000。";
+					next;
+					mes "[矮個子]";
+					mes "您可以看到新手冒險家的必要信息。";
+					break;
+				case 3:
+					mes "[矮個子]";
+					mes "按 ^0000CDF12鍵 ^000000，通過將它們拖到快捷窗口窗口來註冊消費項目，技能和設備。";
+					next;
+					mes "[矮個子]";
+					mes "您是否知道快速物品使用和設備更換對於有效戰鬥至關重要？";
+					break;
+				case 4:
+					mes "[矮個子]";
+					mes "按 ^0000CDALT+M KEYS ^000000註冊經常使用的快捷方式命令~";
+					next;
+					mes "[矮個子]";
+					mes "我使用此功能註冊經常使用的命令。";
+					break;
+				case 5:
+					mes "[矮個子]";
+					mes "按 ^0000CDALT+Y KEYS ^000000以檢查命令列表並打開/關閉。";
+					next;
+					mes "[矮個子]";
+					mes "您可以按照Master的選擇來檢查並打開/關閉各種選項。";
+					break;
+				case 6:
+					mes "[矮個子]";
+					mes "按 ^0000CDALT+L KEYS ^000000查看並使用情緒和快捷命令列表。";
+					next;
+					mes "[矮個子]";
+					mes "主人，您知道對話不僅僅是關於單詞嗎？適當使用情感會使對話變得更加豐富。";
+					break;
+				}
+				next;
+			}
+			end;
+		case 3:
+			mes "[矮個子]";
+			mes "是的。如果您需要我，請再次打電話給我。";
+			close;
+		}
+		end;
+	case 6:
+		mes "[矮個子]";
+		mes "主人不想成功嗎？薩爾蒂說她正在努力訓練，因為她想成功。";
+		next;
+		mes "[矮個子]";
+		mes "傳統是 ^0000CDBEING在瓦爾哈拉（Valhalla）重生，並返回新手 ^000000。但這不是普通的新手，它被稱為高級新手。";
+		next;
+		mes "[矮個子]";
+		mes "換句話說，這是進化。傳遞的人說，再次獲得過去的工作有很多優勢。";
+		next;
+		mes "[矮個子]";
+		mes "有很多狀態，最重要的是，如果您有輔助工作，則可以將 ^0000CDJOB級別提高到70 ^000000。您將能夠使用更多的技能。";
+		next;
+		mes "[矮個子]";
+		mes "如果您想成功，請找到一個名字的人";
+		mes "<NAVI> [Metheus sylph] <info> yuno_in02,88,164,0,101,0 </info> </navi> </navi> ^0000cdat Sage Academy in yuno ^000000，他將指導您。";
+		next;
+		mes "[矮個子]";
+		mes "如果您對超越的不感興趣，則可以更改工作。但是他說，當您考慮未來時，最好將其傳遞。";
+		next;
+		mes "[矮個子]";
+		mes "如果您對更換工作或超越工作不感興趣...";
+		next;
+		mes "[矮個子]";
+		mes "全年全年都充滿了節日。當大師也免費參加音樂節怎麼樣？";
+		next;
+		mes "[矮個子]";
+		mes "現在...";
+		next;
+		mes "[矮個子]";
+		mes "我聽說王室在皇宮舉行的冬季狩獵比賽！我想參加狩獵比賽！我想做！戰鬥怪物！ ！ ！讓我們去prontera !!!!";
+		next;
+		mes "[矮個子]";
+		mes "我一定會帶你和我一起去，好嗎？";
+		close;
+	case 7:
+		mes "[矮個子]";
+		mes "主人，我會告訴您基本知識，但實際上只是基礎知識。";
+		next;
+		mes "[矮個子]";
+		mes "有關更多信息";
+		mes "嘗試使用";
+		mes "<url> [符文米格特庫] <info> http://ro.gnjoy.com/guide/runemidgarts/,1024,768 </info> </url>";
+		next;
+		mes "[矮個子]";
+		mes "您對哪些信息感到好奇？";
+		next;
+		switch( select("Location Information", "Quest Information", "Hunting Field Information", "System Information", "Cancel" ) ) {
+		case 1:
+			while(1) {
+				mes "[矮個子]";
+				mes "你在哪裡好奇？";
+				next;
+				switch( select( "Midgard Continent", "Far-Star Continent", "Malangdo", "Local Area", "Otherworld", "I'm not interested" ) ) {
+				case 1:
+					mes "[矮個子]";
+					mes "據說^0000cdmidgard大陸^000000具有Arunafelts，Schwaldzwald和Rune-Midgarts的三個王國的最大影響。每個大陸都有一個可以隨時使用的飛艇。";
+					next;
+					mes "[矮個子]";
+					mes "^0000Crune-Midgarts^000000。一個由七個王室統治的王國，魔術的力量佔上風。";
+					next;
+					mes "[矮個子]";
+					mes "首都是Prontera，是衛星的衛星城市伊茲盧德（Izlude），奇芬（Geffen）聚集在那裡，帕佩恩（Payon）向東，艾伯塔省（Alberta），您可以前往不同地區，帶鐘樓的Aldebaran和Morroc。";
+					next;
+					mes "[矮個子]";
+					mes "我們在符文米加特王國的伊茲盧德見面。記住？還拿著鹹的Payon和我離開的地方的Paros。他們都在符文中。";
+					next;
+					mes "[矮個子]";
+					mes "^0000CDARUNAFELZ^000000。這是一個崇拜女神的教會。因此，有一個教皇。當然，您不能見到任何人，但是有可能嗎？也許我們至少可以見面一次。";
+					next;
+					mes "[矮個子]";
+					mes "Arunafelz擁有雷切爾（Rachel）的寺廟首都和一個峽谷小鎮。";
+					next;
+					mes "[矮個子]";
+					mes "^0000CDSCHWALDZWALD^000000共和國。顧名思義，有一位總統。首都尤諾（Yuno）漂浮在空中，因此值得一遊。它必須是壯觀的。";
+					next;
+					mes "[矮個子]";
+					mes "還有燈塔，雷肯伯格（Rekenberg）所在的總部位於埃因貝奇（Einbech）的礦山小鎮Einbroch，還有Hugel的鄉村村莊。";
+					next;
+					mes "[矮個子]";
+					mes "還有其他烏丹村莊，例如Umbala或Niflheim，是死者的土地。這是我一直想參觀的地方！";
+					break;
+				case 2:
+					mes "[矮個子]";
+					mes "許多人認為這片土地上只有Midgard大陸，但有一天，人們以 ^0000CDCATS ^000000的形式出現。沒有人知道他們來自哪裡。";
+					next;
+					mes "[矮個子]";
+					mes "這些稱為Doram的人來自遙遠的海洋， ^0000CDFAR-Star docontent ^000000。他們說，這條路才向他們開放。";
+					next;
+					mes "[矮個子]";
+					mes "在遠明星大陸，港口城市 ^0000cdlasagna ^000000是最著名的。我也想去那裡。";
+					next;
+					mes "[矮個子]";
+					mes "要到達這裡，請從Malangdo或Izlude乘船。你還記得我們下去的地方嗎？";
+					break;
+				case 3:
+					mes "[矮個子]";
+					mes "您已經看到人們以貓的形式，叫做Dorams，來來往往。他們沒有與這個Midgard大陸進行第一次接觸，但是現在他們紮根並在任何地方建立了自己。";
+					next;
+					mes "[矮個子]";
+					mes "事實證明，當在一個遙遠的地方航行時，他們遇到了一場風暴，跌落到了一個叫馬蘭多的地方。從字面上看，這艘船從天上掉下來。";
+					next;
+					mes "[矮個子]";
+					mes "Dorams有很多神奇的才能，因此，如果您去 ^0000CDMalangdo ^000000，您將度過愉快的時光。";
+					next;
+					mes "[矮個子]";
+					mes "^0000Cdyou可以從Izlude乘船^000000。如果您可以以特殊的方式獲得Malangdo罐頭，則可以使用它來到那裡。";
+					break;
+				case 4:
+					mes "[矮個子]";
+					mes "如果您想感受到外國的氣氛，應該去 ^0000CDLOCAL區域 ^000000。 ^0000cd，如果您去艾伯塔省的Dock^000000，您可以與將人們送往每個當地地區的水手見面。";
+					next;
+					mes "[矮個子]";
+					mes "Amatsu，Kunlun，Moscovia，Brasilis，Ayothaya，Dewata，Malaya港，Rock Ridge等。未知世界在等您。";
+					next;
+					mes "[矮個子]";
+					mes "這不僅是通過聽到這些話而使您的心顫抖嗎？稍後再見，主人。";
+					break;
+				case 5:
+					mes "[矮個子]";
+					mes "嗯，我知道，這裡。如果您經過莫羅克（Morroc）的東部，或者在天堂與特工卡特森（Catsson）交談，他們會將您送到那裡。";
+					next;
+					mes "[矮個子]";
+					mes "您可以結識從未見過的人。";
+					next;
+					mes "[矮個子]";
+					mes "從三個王國的遠征力量的基礎上，您可以去燦爛，eclage，manuk或el dicastes。";
+					break;
+				case 6:
+					mes "[矮個子]";
+					mes "好的？然後，我會環顧四周，然後回到袋子裡。";
+					close;
+				}
+				next;
+			}
+			end;
+		case 2:
+			while(1) {
+				mes "[矮個子]";
+				mes "您對什麼任務感到好奇？";
+				next;
+				switch( select( "General Quest", "Monthly Event", "Paradise", "I'm not interested" ) ) {
+				case 1:
+					mes "[矮個子]";
+					mes "^0000cd為什麼您不在^000000遇到Paul and Anne，外部Prontera的西門？當我經過時，我聽說他們需要幫助。";
+					next;
+					mes "[矮個子]";
+					mes "還是為什麼不聽 ^0000cdpayon ^000000的焦慮中年男子？";
+					next;
+					mes "[矮個子]";
+					mes "有關任務的更多信息";
+					mes "參見";
+					mes "<url> [符文米格特庫] <info> http://ro.gnjoy.com/guide/runemidgarts/questlist.asp，1024,768 </info> </url>";
+					next;
+					mes "[矮個子]";
+					mes "您將能夠了解這個世界的流程，並知道正在發生什麼重大事件。";
+					close;
+				case 2:
+					mes "[矮個子]";
+					mes "全年全年都充滿了節日。當大師也免費參加音樂節怎麼樣？";
+					next;
+					mes "[矮個子]";
+					mes "現在...";
+					next;
+					mes "[矮個子]";
+					mes "我聽說王室在皇宮舉行的冬季狩獵比賽！想參加狩獵比賽！我想做！戰鬥怪物！ ！ ！讓我們去prontera !!!!";
+					next;
+					mes "[矮個子]";
+					mes "我一定會帶你和我一起去，好嗎？";
+					break;
+				case 3:
+					mes "[矮個子]";
+					mes "^0000cdhave您去過天堂^000000？";
+					next;
+					mes "[矮個子]";
+					mes "有很多任務在等待主人。此外，它們還為初學者提供設備。";
+					next;
+					mes "[矮個子]";
+					mes "當然，它不是免費的，但是您必須從天堂中解決一個簡單的任務。此外，他們還出租了影子設備。";
+					next;
+					mes "[矮個子]";
+					mes "如果您有任何疑問，請前往天堂辦公室。";
+					break;
+				case 4:
+					mes "[矮個子]";
+					mes "好的？然後，我會環顧四周，然後回到袋子裡。";
+					close;
+				}
+				next;
+			}
+			end;
+		case 3:
+			while(1) {
+				mes "[矮個子]";
+				mes "我想在哪裡..";
+				next;
+				switch( select( "Field Hunting Guide", "Dungeon Guide", "Other Dungeon Guide", "Enough" ) ) {
+				case 1:
+					mes "[矮個子]";
+					mes "按 ^0000cdctrl+`鍵 ^000000打開地圖。";
+					next;
+					mes "[矮個子]";
+					mes "您是否看到一個可以在左上方選擇區域的框？選擇要查看的區域後，在右上角檢查 ^0000CDMonster Tab ^000000，或按 ^0000CDTAB鍵 ^000000，您將看到該區域中最分佈的怪物的名稱和級別。";
+					next;
+					mes "[矮個子]";
+					mes "最好去冒險到一個與主人水平相匹配的地方。 ^0000cd，如果與怪物有很大的差異，那麼您無法獲得100％的經驗^000000。您還必須計算級別差異，對嗎？";
+					next;
+					mes "[矮個子]";
+					mes "如果您要按要去的城鎮，則會出現“導航”菜單。按下 ^0000CD <指南到底部 ^000000處的目標>按鈕，然後退出地圖以獲取指導。";
+					break;
+				case 2:
+					mes "[矮個子]";
+					mes "按 ^0000cdctrl+`鍵 ^000000打開地圖。";
+					next;
+					mes "[矮個子]";
+					mes "^0000CDDO您看到一個框，可以在左上方選擇一個區域^000000？如果選擇要查看的區域，則將看到它標有紅色框標記，並用 ^0000CD編寫的Main Dungeon ^000000的名稱。" ;
+					next;
+					mes "[矮個子]";
+					mes "然後選中右上角的 ^0000CDMonster選項卡，或按Tab鍵 ^000000以顯示地牢的級別。";
+					next;
+					mes "[矮個子]";
+					mes "有時，只能通過特殊任務輸入某些地牢，所以您還需要收集信息，好嗎？";
+					next;
+					mes "[矮個子]";
+					mes "您為什麼不先嘗試地下水道？劍客協會總是在招募，但我聽說初學者的冒險家可以獲得經驗是有益的。";
+					break;
+				case 3:
+					mes "[矮個子]";
+					mes "有很多紀念地牢，噩夢地牢，幻覺地牢...等等。";
+					next;
+					mes "[矮個子]";
+					mes "^0000CDMEMERIAL DUNGEON^000000";
+					mes "除了常規的地牢外，還有特殊的地牢。通常，他們說這是這個世界上未知力量創造的特殊地方。";
+					next;
+					mes "[矮個子]";
+					mes "許多經驗豐富的冒險家通常會去，但他們說，可以通過一些訓練來到達一些低級的地方。在獸人村或雷切爾...";
+					next;
+					mes "[矮個子]";
+					mes "據說它位於村莊和一般田地，有許多地方稱為尺寸裂谷。";
+					next;
+					mes "[矮個子]";
+					mes "^0000cdnight Mare Dungeon^000000";
+					mes "據說這是一個地牢，比普通的地牢更加困難。甚至怪物也不喜歡我們所知道的怪物。當您找到地牢時，如果有人可疑地告訴您，它會將您送到一個更困難的地方，請嘗試一下。" ;
+					next;
+					mes "[矮個子]";
+					mes "^0000 幻境地下城^000000";
+					mes "沒有人知道這些地牢是什麼樣的地牢。我想這就像一個夢或幻想。有一塊特別的石頭，只有來自這裡，每個人都說他們的目標是為了石頭而戰。他們說，石頭可以換成強大的武器。";
+					break;
+				case 4:
+					mes "[矮個子]";
+					mes "好的？然後，我會環顧四周，然後回到袋子裡。";
+					close;
+				}
+				next;
+			}
+			end;
+		case 4:
+			while(1) {
+				mes "[矮個子]";
+				mes "那麼，您想知道什麼基本信息？";
+				mes "請參閱<URL> [指南] <info> http://ro.gnjoy.com/guide/systeminfo/,1024,768 </info> </url> for Basic。";
+				next;
+				switch( select( "Party", "Guilds and Clans", "Smelt", "Enchant", "Family", "Chat" ) ) {
+				case 1:
+					mes "[矮個子]";
+					mes "有時，如果他們在地下城打架，一起享受冒險，或者有時只是坐著聊天，您想和朋友在一起。";
+					next;
+					mes "[矮個子]";
+					mes "在這種情況下，舉行聚會並一起做。";
+					next;
+					mes "[矮個子]";
+					mes "派對窗口可以輕鬆打開，並使用 ^0000CDALT+Z鍵 ^000000。當均勻分發狩獵的經驗時，黨員之間的 ^0000CDELVEL差異 ^000000的差異可能等於或小於15。";
+					next;
+					mes "[矮個子]";
+					mes "如果單擊底部聊天窗口的左側圓圈，則可以指定聊天夥伴，並且只能向那裡的派對成員發送消息，因此很有用。";
+					break;
+				case 2:
+					mes "[矮個子]";
+					mes "有時您會想屬於某個地方，並與某人有聯繫。在這種情況下，您只需要屬於 ^0000cdguild或clan ^000000即可。";
+					next;
+					mes "[矮個子]";
+					mes "公會的最大特徵是在藏身處進行戰鬥。它也稱為攻城。";
+					next;
+					mes "[矮個子]";
+					mes "您可以輸入已由邀請成立的公會，也可以在辦公室購買以創建公會出售的Empelium。";
+					next;
+					mes "[矮個子]";
+					mes "除了歸屬感外，公會還可以享受各種好處，例如公會自己的技能和敬業的倉庫。";
+					next;
+					mes "[矮個子]";
+					mes "有關詳細信息";
+					mes "請參閱<URL> [Guild Guide] <info> http://ro.gnjoy.com/guide/systeminfo/systemguild1.asp，1024,768 </info> </url>";
+					next;
+					mes "[矮個子]";
+					mes "如果加入公會是繁重的，那麼 ^0000cdclan ^000000將很好。像公會中一樣，很難感覺到與其他人一樣，但是氏族也有各種好處。";
+					next;
+					mes "[矮個子]";
+					mes "^0000CD在Prontera Central Fountain Fountain^000000的左下角的建築物是氏族總部，因此請看一下。";
+					break;
+				case 3:
+					mes "[矮個子]";
+					mes "您想讓設備更強嗎？在這種情況下，您可以在每個城鎮找到 ^0000cdsmelter ^000000。";
+					next;
+					mes "[矮個子]";
+					mes "冶煉需要特殊物品和Zeny。這取決於設備的類型和水平。";
+					next;
+					mes "[矮個子]";
+					mes "要注意的一件事是，冶煉有一個安全的完善水平，如果您繼續提煉一定水平，則設備有機會被銷毀。你必須祝你好運。";
+					next;
+					mes "[矮個子]";
+					mes "哦，除了每個城鎮的冶煉廠外，我還聽說^0000CD <項目購物中心>^000000還提供了更高的成功機會。";
+					next;
+					mes "[矮個子]";
+					mes "如果您很好奇，請訪問 ^0000CD <現金銷售指南> ^000000在每個城鎮。他們會引導您在那裡。";
+					break;
+				case 4:
+					mes "[矮個子]";
+					mes "如果您想使設備更堅固或給它具有特殊的能力，為什麼不嘗試 ^0000cdenchant ^000000呢？";
+					next;
+					mes "[矮個子]";
+					mes "^0000CD <malangdo>，<項目購物中心>^000000，或^0000CD <Seyablem>和<Leyablem>^000000，可以在主要城鎮找到，主要是這樣做。";
+					next;
+					mes "[矮個子]";
+					mes "從特定地牢或特定區域獲得的設備只能是 ^0000CDENCHANTADED ^000000。";
+					next;
+					mes "[矮個子]";
+					mes "但是，並非所有設備都可以誘人，因此您應該仔細檢查條件。";
+					break;
+				case 5:
+					mes "[矮個子]";
+					mes "您確定要在餘生中與另一個人在一起嗎？然後，您可以啟動一個 ^0000CDFAMILY ^000000。";
+					next;
+					mes "[矮個子]";
+					mes "^0000cdyou可以嫁給您喜歡的人^000000，也可以採用^0000cdchild^000000。您也有可能被收養為另一對夫婦的孩子。";
+					next;
+					mes "[矮個子]";
+					mes "他們說，您可以獲得特殊的婚姻技能，以作為家庭使用。";
+					next;
+					mes "[矮個子]";
+					mes "如果您有興趣結婚，請前往Prontera教堂或烤寬麵條的婚禮廳。在結婚之前，您將需要一些物資。 Prontera教堂只能嫁給人類。";
+					next;
+					mes "[矮個子]";
+					mes "收養要求婚禮夫婦的水平為70或更高，而要收養的孩子是新手或一流。";
+					next;
+					mes "[矮個子]";
+					mes "Prontera區辦公室的家庭部門說，您可以購買婚禮所需的物品或與家庭有關的事務進行檢查，因此，如果需要，請檢查一下。";
+					next;
+					mes "[矮個子]";
+					mes "你可以參考";
+					mes "<URL> [family] <info> http://ro.gnjoy.com/guide/systeminfo/systemlovers1.asp，1024,768 </info> </url>有關更多詳細信息。";
+					break;
+				case 6:
+					mes "[矮個子]";
+					mes "您能在底部看到消息窗口嗎？您可以通過輸入您的消息與其他人聊天，也可以在此處發送其他消息類型。";
+					next;
+					mes "[矮個子]";
+					mes "如果您想與少數既不是聚會也不是公會成員的人聊天，則可以打開聊天窗口。";
+					next;
+					mes "[矮個子]";
+					mes "您只需使用 ^0000CDALT+C KEYS ^000000打開聊天窗口即可。您還可以設置最大數量的參與者和密碼。";
+					break;
+				}
+				next;
+			}
+			end;
+		case 5:
+			mes "[矮個子]";
+			mes "好的？然後，我會環顧四周，然後回到袋子裡。";
+			close;
+		}
+		end;
+	case 8:
+		mes "[矮個子]";
+		mes "噢！ ！ ！我很短！我主人的名字是什麼？";
+		next;
+		select("掌握？");
+		mes "[矮個子]";
+		mes "您遇到的第一人應該被稱為主人。";
+		next;
+		select("你說的是老師嗎？");
+		mes "[矮個子]";
+		mes "是的。就是這樣。我是加拉帕哥矮人，我是一個很好的聊天者。";
+		next;
+		select("你為什麼在這裡？");
+		mes "[矮個子]";
+		mes "咸！咸是我的朋友。我在這裡見咸。所以你必須帶我去咸。";
+		next;
+		mes "[矮個子]";
+		mes "好吧，那就走吧吧！";
+		close;
+	case 9:
+		mes "[矮個子]";
+		mes "什麼...？掌握...？什麼？讓我們分手嗎？這裡？現在？你是認真的？";
+		next;
+		mes "[矮個子]";
+		mes "有什麼你不喜歡的嗎？我的包裡不安靜嗎？哦，這就是您不喜歡的，是的...然後我無能為力。";
+		next;
+		mes "[矮個子]";
+		mes "那你不會帶我去 ^0000cdsalty ^000000？鹹的人將感謝您帶我去那裡。我要感謝，因為薩爾蒂知道恩典。";
+		next;
+		if (select( "Let's go our separate ways.", "Let's go together until then." ) == 2) {
+			mes "[矮個子]";
+			mes "好的。好，主人。即使我陷入了包裡，我也會很快擺脫它。";
+			next;
+			mes "[矮個子]";
+			mes "讓我們互相幫助。好的？";
+			close;
+		}
+		mes "[矮個子]";
+		mes "是的。師父有一顆石冷心。然後，沒有什麼可以做的。我認為我們的關係在這裡結束。";
+		next;
+		mes "[矮個子]";
+		mes "我不知道和你在一起，但是我很喜歡我們的時光。";
+		next;
+		mes "[矮個子]";
+		mes "保持健康，我要你好。我希望大師不會忘記加拉帕加在那裡。";
+		next;
+		mes "[矮個子]";
+		mes "好吧，大師，再見。再見！";
+		switch( isbegin_quest(14693) ) {
+		case 0:
+			setquest 14693;
+			completequest 14693;
+			break;
+		case 1:
+			completequest 14693;
+			break;
+		case 2:
+			break;
+		}
+		if (isbegin_quest(14694) > 0)
+			erasequest 14694;
+		delitem 23278,1;	// HelpmeShorty
+		close;
+	}
+}

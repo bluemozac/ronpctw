@@ -1,0 +1,110 @@
+﻿//===== rAthena Script =======================================
+//= Catalog Magician
+//===== By: ==================================================
+//= skyiing, Scriptor
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Catalogs allow players to easily search for items in-game,
+//= and to buy/sell directly from the catalog interface.
+//===== Additional Comments: =================================
+//= 1.0 Moved from root directory. [Euphy]
+//= 1.1 Updated dialogue. [Euphy]
+//============================================================ 
+
+// Main NPC :: catalog_merchant
+//============================================================
+moc_para01,22,16,5	script	Catalog Magician#catal01	704,{
+	if (!checkweight(1301,3)) {
+		mes "- 您的物品太多。請騰出空間。 -";
+		close;
+	}
+	set .@ticket_cost, 200;
+	mes "[目錄魔術師]";
+	mes "看...魔術學院";
+	mes "在蓋芬現在直接";
+	mes "出售全新";
+	mes "^007777777770000！";
+	next;
+	mes "他看著這些話";
+	mes "寫在他的手上。";
+	mes "他似乎太忙了";
+	mes "看你。";
+	next;
+	mes "[目錄魔術師]";
+	mes "全新的目錄";
+	mes "剛出來！";
+	mes "您可以檢查";
+	mes "您可以交易什麼商品";
+	mes "以及哪些物品正在銷售";
+	mes "來自供應商。";
+	next;
+	mes "[目錄魔術師]";
+	mes "^007777777770000";
+	mes "僅費用200z！";
+	mes "您可以一次購買多達50件！";
+	next;
+	switch(select("購買^007777通用目錄銀^000000:我不需要它！ :你看起來不像供應商！")) {
+	case 1:
+		mes "[目錄魔術師]";
+		mes "你...想要全部50件嗎？";
+		mes "或您需要幾個？";
+		next;
+		while (1) {
+			input .@input;
+			mes "[目錄魔術師]";
+			if (.@input == 0) {
+				mes "交易已停止！";
+				mes "我不知道下一步該怎麼做...";
+				mes "我應該怎麼辦？";
+				emotion ET_PROFUSELY_SWEAT, playerattached();
+				close;
+			} else if (.@input < 1 || .@input > 50) {
+				mes "它應該少於50件。";
+				next;
+			} else
+				break;
+		}
+		set .@sell, .@ticket_cost * .@input;
+		mes "您要購買的目錄的總數是" + .@input + " pieces.";
+		mes "它成本" + .@sell + " z.";
+		if (Zeny < .@sell) {
+			mes "看來您沒有足夠的錢。";
+			mes "您可以出售設備";
+			mes "賺更多的錢...如果您願意。";
+			close;
+		}
+		mes "好的，你去了。";
+		set Zeny, Zeny - .@sell;
+		getitem 12580,.@input; //Vending_Search_Scroll
+		close;
+	case 2:
+		mes "[目錄魔術師]";
+		mes "argh ...你真的需要這個";
+		mes "項目...你要我去嗎";
+		mes "再次解釋？我不知道";
+		mes "下一步該怎麼做...";
+		mes "我應該怎麼辦？";
+		emotion ET_PROFUSELY_SWEAT, playerattached();
+		close;
+	case 3:
+		mes "[目錄魔術師]";
+		mes "我真正的工作是魔術師。";
+		mes "我打算問商人";
+		mes "公會出售它們，但它們是";
+		mes "嘗試將它們用作附錄";
+		mes "進入掃帚銷售。這就是原因";
+		mes "我自己賣這些。";
+		next;
+		mes "[目錄魔術師]";
+		mes "有很多冒險家";
+		mes "來去去的人。";
+		mes "我很確定我很快就可以賣給所有人。";
+		mes "你不這麼認為嗎？";
+		mes "所以...讓我們開始！請購買更多！請...！";
+		close;
+	}
+}

@@ -1,0 +1,153 @@
+﻿//===== rAthena Script ======================================= 
+//= Bunny Band Quest
+//===== By: ================================================== 
+//= rAthena Dev Team
+//===== Current Version: ===================================== 
+//= 1.6
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Quest to obtain a Bunny Band headgear.
+//===== Additional Comments: ================================= 
+//= 1.5 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//	Changed @BUNYBAN back to BUNYBND, it should be this way.
+//	Removed duplicates. NPC is ALberta-only.
+//= 1.6 Cleaning. [Euphy]
+//============================================================ 
+
+alberta,26,229,0	script	Kafra Employee#bunny	83,{
+	if (BUNYBND == 1) {
+		mes "[KAFRA員工]";
+		mes "你好~！";
+		mes "你願意";
+		mes "參加Kafra";
+		mes "公司特別";
+		mes "^529dffbunny頻段事件^000000？";
+		next;
+		switch(select("是的，我帶來了物品。:活動資訊:取消")) {
+		case 1:
+			mes "[KAFRA員工]";
+			mes "好吧~";
+			mes "讓我檢查";
+			mes "看看你是否帶來";
+			mes "所有項目...";
+			next;
+			setarray .@Items[0],949,100,706,1,722,1,2213,1;
+			for(set .@i,0; .@i<8; set .@i,.@i+2)
+				if (countitem(.@Items[.@i]) < .@Items[.@i+1]) {
+					mes "[KAFRA員工]";
+					mes "哦，對不起";
+					mes "但是你需要";
+					mes "至少帶";
+					mes callfunc("f_insertplural",.@Items[.@i+1],getitemname(.@Items[.@i]))+".";
+					close;
+				}
+			mes "[KAFRA員工]";
+			mes "太好了，我看到";
+			mes "你已經聚集了";
+			mes "我需要的一切";
+			mes "製作兔子樂隊。";
+			mes "請等待片刻";
+			mes "當我把它放在一起...";
+			next;
+			for(set .@i,0; .@i<8; set .@i,.@i+2)
+				if (countitem(.@Items[.@i]) < .@Items[.@i+1]) {
+					mes "[KAFRA員工]";
+					mes "嗯？對不起，";
+					mes "但是我實際上不能";
+					mes "現在就做這個。你";
+					mes "需要"+callfunc("F_InsertPlural",.@Items[.@i+1],getitemname(.@Items[.@i]));
+					mes "為了我把這個";
+					mes "兔子樂隊在一起...";
+					close;
+				}
+			delitem 949,100; //Feather
+			delitem 706,1; //Four_Leaf_Clover
+			delitem 722,1; //Scarlet_Jewel
+			delitem 2213,1; //Cat_Hairband
+			mes "[KAFRA員工]";
+			mes "啊，你走了~";
+			mes "完美的兔子樂隊！";
+			mes "好吧，我希望你喜歡它。";
+			getitem 2214,1; //Bunny_Band
+			set BUNYBND,0;
+			next;
+			mes "[KAFRA員工]";
+			mes "謝謝你";
+			mes "參與其中";
+			mes "特別活動和您";
+			mes "繼續贊助";
+			mes "Kafra服務~";
+			close;
+		case 2:
+			goto L_Info;
+		case 3:
+			close;
+		}
+	}
+	mes "[KAFRA員工]";
+	mes "嗨~！你願意";
+	mes "加入我們的特別 ^529dffbunny";
+	mes "樂隊事件^000000由Kafra主持";
+	mes "公司和讚助";
+	mes "艾伯塔省商會？";
+	next;
+	switch(select("參加活動:活動資訊:取消")) {
+	case 1:
+		set BUNYBND,1;
+		mes "[KAFRA員工]";
+		mes "偉大的！謝謝";
+		mes "參與！如果你";
+		mes "尚未聽到，";
+		mes "您需要收集這些";
+		mes "如果您想讓我放一個物品";
+		mes "兔子帶為你...";
+		next;
+		mes "[KAFRA員工]";
+		mes "100羽毛，";
+		mes "1個四葉草，";
+		mes "1個小貓樂隊和";
+		mes "1珍珠。就是這樣！";
+		mes "祝你好運，我會";
+		mes "在這裡等你~";
+		close;
+	case 2:
+		break;
+	case 3:
+		close;
+	}
+L_Info:
+	mes "[KAFRA員工]";
+	mes "要感謝我們的價值";
+	mes "客戶，Kafra Corporation";
+	mes "已經準備了一個特別活動";
+	mes "Kafra員工將在哪裡組裝";
+	mes "冒險家的兔子樂隊";
+	mes "誰帶上了必需的物品。";
+	next;
+	mes "[KAFRA員工]";
+	mes "對於這個特別的";
+	mes "一種物品，";
+	mes "帶100只羽毛，";
+	mes "1個四葉草，";
+	mes "1個小貓樂隊和";
+	mes "1珍珠。";
+	next;
+	mes "[KAFRA員工]";
+	mes "準備好時，";
+	mes "回來帶";
+	mes "那些物品給我。";
+	mes "（由";
+	mes "艾伯塔省商會）。";
+	close;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.1 using duplicate command
+//= 1.2 Fixed NPC location, removed NPC dupes [Lupus]
+//= 1.3 RE-Fixed exploit V_V, also cleared used VAR [Lupus]
+//= 1.4 replaced BUNYBND with @BUNYBND [Lupus]
+//============================================================

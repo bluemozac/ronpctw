@@ -1,0 +1,1791 @@
+﻿//===== rAthena Script =======================================
+//= Acolyte Class Tutorial and Job Specific Quest
+//===== By: ==================================================
+//= Fix up by Jukka
+//===== Current Version: =====================================
+//= 2.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Acolyte training quest.
+//===== Additional Comments: =================================
+//= 1.0 Fully working
+//= 1.1 optimized [Lupus]
+//= 1.2 Fixed experience gains to match upcoming rate adjustments. [SinSloth]
+//= 1.3 Fixed bad NPC header data to comply with rev. 11603. [L0ne_W0lf]
+//= 1.4 Misc. updates. [L0ne_W0lf]
+//= 1.5 Adjusted EXP gains to Renewal values.
+//= 1.6 Fixed a wrong placed curly bracket. [Joseph]
+//= 1.6a Added 'npcskill' command. [Euphy]
+//= 1.7 Fixed exp, texts, and requirements in pre-renewal [Daegaladh]
+//= 1.8 Updated to match the official script. [Euphy]
+//= 1.9 Added GM management function. [Euphy]
+//= 2.0 Clean-up and little fix in Cleope Verce. [Capuche]
+//============================================================
+
+// Priest Praupin
+//============================================================
+prt_church,179,15,1	script	Priest Praupin	4_M_MINISTER,{
+	mes "[普勞潘神父]";
+	if(BaseJob != Job_Acolyte){
+		if(tu_acolyte01 == 25){
+			mes "哦...！";
+			mes "你"+strcharinfo(0)+" !";
+			mes "您已經成長了很多！";
+			mes "我真的為你感到驕傲。";
+		} else {
+			mes "願你";
+			mes "永遠被祝福...";
+		}
+		close;
+	}
+	switch(tu_acolyte01){
+	case 0:
+		mes "歡迎，小傢伙。";
+		mes "命運必須帶來";
+		mes "我們在一起，以便我們";
+		mes "今天見面。很高興認識你。";
+		next;
+		mes "[普勞潘神父]";
+		mes "但是我擔心";
+		mes "你可能不知道該怎麼辦";
+		mes "作為來自這裡...";
+		next;
+		switch(select("我不擔心。:我該怎麼做？")){
+		case 1:
+			mes "[普勞潘神父]";
+			mes "看到你的眼睛充滿了這樣的決心，可以為我保證。但是，如果您遇到任何麻煩，請隨時向我尋求幫助。現在再見，有福的孩子。";
+			close;
+		case 2:
+			mes "[普勞潘神父]";
+			mes "東北有一個修道院";
+			mes "Prontera稱為聖大廈修道院。去那裡尋找 ^3131ff姐妹為 ^000000。她是一個甜美溫柔的靈魂，有";
+			mes "教你很多。";
+			next;
+			mes "[普勞潘神父]";
+			mes "我期待著你";
+			mes "從姐姐那裡學習後，成為一個更好的侍從。如果您願意，我可以將您送往修道院。";
+			tu_acolyte01 = 1;
+			next;
+			if(select("前往修道院。:不要前往。")==1){
+				mes "[普勞潘神父]";
+				mes "請打個招呼";
+				mes "對我姐妹。";
+				mes "有一個安全的旅行，小的...";
+				close2;
+				warp "prt_monk",30,250;
+				end;
+			} else {
+				mes "[普勞潘神父]";
+				mes "如果你願意，";
+				mes "我可以寄你去";
+				mes "修道院隨時。";
+				mes "每當你覺得";
+				mes "您需要幫助，來找我。";
+				close;
+			}
+		}
+	case 7:
+		mes "您正在尋找某人";
+		mes "與弓箭手處理事情";
+		mes "在教堂？唔...";
+		next;
+		mes "[普勞潘神父]";
+		mes "啊，他現在不在修道院。如果您想在聖國會修道院與Maugins見面，請 ^3131ffnorth ^000000， ^3131ffeast ^000000， ^3131ffeast ^000000，然後 ^3131fffeast ^000000從Prontera中。";
+		close;
+	case 22:
+		if(countitem(7181) > 0){// Receipt_01
+			emotion ET_SURPRISE;
+			mes "哦，我，你似乎";
+			mes "快速成長";
+			mes "進入您作為侍從的角色。";
+			mes "訓練困難嗎？";
+			next;
+			mes "[普勞潘神父]";
+			mes "你有東西";
+			mes "給我？哦，是的，";
+			mes "收據！我想知道";
+			mes "發生了什麼。感謝";
+			mes "您所有的麻煩。";
+			next;
+			mes "[普勞潘神父]";
+			mes "哦，我的，哦，我的。";
+			mes "已經有一段時間了。";
+			mes "我想知道是否有";
+			mes "我能給你什麼嗎？";
+			next;
+			mes "[普勞潘神父]";
+			mes "其中之一呢？";
+			mes "我知道我沒有太多，";
+			mes "但是當我像你這樣的年輕侍從時，他們對我很有幫助。";
+			next;
+		if (select("魔杖:連枷") == 1)
+				getitem 1604,1; //Wand
+			else
+				getitem 1510,1; //Flail
+			delitem 7181,1; //Receipt_01
+			tu_acolyte01 = 23;
+			close;
+		} else {
+			mes "你是一個好人，";
+			mes "一個真正的光明孩子。我希望許多其他人將從您的內心和思想的純潔中受益。";
+			close;
+		}
+	case 25:
+		mes "您現在必須找到";
+		mes "您自己的道路並成為";
+		mes "使用更好的輔助物";
+		mes "你自己的力量。";
+		next;
+		mes "[普勞潘神父]";
+		mes "我很擔心，但我相信您的勇氣和感情。願你永遠受到保護，願";
+		mes "你總是很幸運。";
+		close;
+	}
+	mes "姐姐像聖基托利娜修道院一樣";
+	mes "真誠而充滿愛心的人。";
+	next;
+	mes "[普勞潘神父]";
+	mes "您想讓我送您去修道院，以便您可以向這位出色的老師學習嗎？";
+	next;
+		if(select("是的，請。:不用了，謝謝。")==1){
+		mes "[普勞潘神父]";
+		mes "請打個招呼";
+		mes "對我姐妹。";
+		mes "有一個安全的旅行，小的...";
+		close2;
+		warp "prt_monk",30,250;
+		end;
+	} else {
+		mes "[普勞潘神父]";
+		mes "如果你願意，";
+		mes "我可以寄你去";
+		mes "修道院隨時。";
+		mes "每當你覺得";
+		mes "您需要幫助，來找我。";
+	}
+	close;
+}
+
+// Asthe
+//============================================================
+prt_monk,230,106,3	script	Asthe#tu	1_F_PRIEST,{
+	mes "[作為]";
+	switch(tu_acolyte01){
+	case 1:
+		mes "哦，我的...";
+		mes "如何這樣做";
+		mes "一個年輕的侍從";
+		mes "設法到達";
+		mes "這個偏遠的地方？";
+		next;
+		if(select("我是來玩的。:普勞平祭司建議我來這裡。")==1){
+			mes "[作為]";
+			mes "這個修道院總是安靜而和平。坐在板凳上，感覺到周圍的全能人物是一種輕鬆，冥想的體驗。";
+		}
+		else {
+			mes "[作為]";
+			mes "祭司普勞平？";
+			mes "他是一個非常善良的人";
+			mes "誰一直在想";
+			mes "關於別人。所以他是";
+			mes "送你給我接受培訓嗎？";
+			next;
+			mes "[作為]";
+			mes "在我們開始之前，";
+			mes "你為什麼不休息";
+			mes "一點點？一直在這裡旅行後，您必須很累。準備就緒時，就來";
+			mes "看我，好嗎？";
+			tu_acolyte01 = 2;
+		}
+		close;
+	case 2:
+		mes "這座城堡，聖大隊修道院，是一個美麗而寧靜的地方";
+		mes "冷靜下來。";
+		next;
+		mes "[作為]";
+		mes "好吧...";
+		mes "我們可以開始";
+		mes "課程？";
+		next;
+		mes "[作為]";
+		mes ""+strcharinfo(0)+",";
+		mes "您是否想過要成為哪種侍從？為您準備想要的未來，這一點非常重要。";
+		next;
+		if(select("支持他人的類型。:懲罰邪惡的類型。")==1){
+			mes "[作為]";
+			mes "啊，你有這樣的";
+			mes "慷慨的心！";
+			mes "治愈他人的痛苦並在戰鬥中支持您的同志。您必須成為侍從才能成為 ^3131ffpriest ^000000。";
+			next;
+			mes "[作為]";
+			mes "牧師具有巨大的支持能力和與邪惡作鬥爭的力量。他們使用武器與其他戰鬥機一樣與怪物作戰，但使用刀片 ^000000而被 ^3131ffforbiddend。";
+		} else {
+			mes "[作為]";
+			mes "我們稱那些用拳頭作為神聖懲罰和尚的工具。他們傳達我們的信息";
+			mes "更加……豐富多彩的愛與和平。";
+			next;
+			mes "[作為]";
+			mes "但是成為";
+			mes "僧侶將需要良好的耐心和自我約束。您會經常看到僧侶在訓練他們的想法";
+			mes "和整個土地的屍體。";
+		}
+		next;
+		mes "[作為]";
+		mes "好吧，您還有很長的路要走。最好的辦法是花時間計劃並認真考慮您的未來。";
+		next;
+		mes "[作為]";
+		mes "現在，";
+		mes ""+strcharinfo(0)+"...";
+		mes "你怎麼認為";
+		mes "是最必要的";
+		mes "侍從的技能？";
+		next;
+		switch(select("治癒:聖水祈福:傳送")){
+		case 1:
+			mes "[作為]";
+			mes "啊，是的。";
+			mes "^3131ffheal ^000000對像我們這樣的人來說是一項基本但重要的技能。它可以恢復自己的健康";
+			mes "以及其他人。";
+			break;
+		case 2:
+			mes "[作為]";
+			mes "^3131ffaqua benedicta^000000祝福";
+			mes "普通水並將其變成聖水。這是一項重要技能，但不認為所有助手";
+			mes "應該知道。";
+			next;
+			mes "[作為]";
+			mes "在我看來，";
+			mes "^3131ffheal^000000是最重要的";
+			mes "輔助者可以學習的技能。這是一種特殊的能力，可以拯救他人並擊敗";
+			mes "黑暗的怪物。";
+			break;
+		case 3:
+			mes "[作為]";
+			mes "^3131ffteleport^000000允許您立即移動到另一個地方。這是一項偉大的技能，但是很難考慮所有助手的必要條件。";
+			next;
+			mes "[作為]";
+			mes "在我看來，";
+			mes "^3131ffheal^000000是助手可以學習的最重要技能。這是一種特殊的能力，可以拯救他人並擊敗";
+			mes "黑暗的怪物。";
+			break;
+		}
+		next;
+		mes "[作為]";
+		mes "你可以使用聖力";
+		mes "在攻擊亡靈怪物的治療技能中（^3131ffshift + Heal^000000）。真理的光保護正義並摧毀了惡人。";
+		next;
+		mes "[作為]";
+		mes "只需聚集";
+		mes "你內心的力量";
+		mes "心中的心...";
+		next;
+		mes "[作為]";
+		mes "治愈!!";
+		npcskill "AL_HEAL",11,99,60;
+		tu_acolyte01 = 3;
+		if(getskilllv("AL_HEAL") == 0){
+			getexp 0,100;
+			specialeffect2 EF_CONE;
+		}
+		close;
+	case 3:
+		mes "我想給你一個任務，但是你是什麼";
+		mes "思考？我相信學習基礎是您最重要的";
+		mes "現在的任務。";
+		next;
+		if(getskilllv("AL_HEAL") < 3){
+			mes "[作為]";
+			mes "好吧，學習";
+			mes "治愈技能";
+			mes "^3131fflevel 3 ^000000，然後";
+			mes "回到我身邊。";
+			next;
+			mes "[作為]";
+			mes "你的力量沒有開發，";
+			mes "因此，現在就與較弱的怪物戰鬥。";
+			mes "我會從教堂裡借給您一個狼牙棒，所以請很好地使用 ^3131 fffreturn ^000000，好吧，好嗎？";
+			next;
+			mes "[作為]";
+			mes "首先 ^0033ffstart在每個城鎮周圍與怪物進行戰鬥，例如prontera ^000000。在這裡與怪物打架會更方便，但是現在它們可能對您來說太強大了。";
+			next;
+			mes "[作為]";
+			mes "我會更改您的保存點，以便您將在修道院中重生。一旦學習了3級治愈，就可以使用蝴蝶翼返回這裡。";
+			next;
+			mes "[作為]";
+			mes "您也可以在Prontera教堂與 ^3131ffpriest praupin交談 ^000000";
+			mes "他會把你送回這裡。";
+			mes "他特別注意幫助年輕的助手。";
+			next;
+			mes "[作為]";
+			mes "好吧，那，";
+			mes "我希望你";
+			mes "安全旅行。";
+			tu_acolyte01 = 4;
+			getitem 1504,1; //Mace
+			getitem 602,1; //Wing_Of_Butterfly
+			savepoint "prt_monk",30,250,1,1;
+		}
+		else {
+			mes "[作為]";
+			mes "哦，我！";
+			mes "你已經";
+			mes "學會瞭如何";
+			mes "正確使用";
+			mes "治愈技能。非常好！";
+			next;
+			mes "[作為]";
+			mes "我相信你";
+			mes "準備我討論";
+			mes "下一個主題。現在，";
+			mes "讓我們看看...嗯...";
+			tu_acolyte01 = 5;
+		}
+		close;
+	case 4:
+		if(getskilllv("AL_HEAL") > 2){
+			if(countitem(1504) > 0){// Mace
+				mes "哦，我！";
+				mes "歡迎回來~";
+				mes "我知道你";
+				mes "完成了作業";
+				mes "已經。好工作！";
+				next;
+				mes "[作為]";
+				mes "現在，如果您不介意的話，我想回來。";
+				mes "任何機會，您是否攜帶任何具有元素屬性 ^000000的其他痕跡？";
+				mes "如果是這樣，請先將狼牙棒存儲在某個地方。";
+				mes "恐怕我的視線太糟糕了，無法區分差異... hoho。";
+				next;
+				mes "[作為]";
+				mes "您想讓我現在將狼牙棒從庫存中刪除？";
+				next;
+			if(select("當然。:讓我再檢查一下。") == 2) {
+					mes "[作為]";
+					mes "好吧，沒問題。";
+					mes "請確保您不會攜帶任何具有元素屬性 ^000000的ff0000mace。";
+					close;
+				}
+				mes "[作為]";
+				mes "太感謝了。";
+				mes "您已經返回了狼牙棒。";
+				emotion ET_SMILE;
+				tu_acolyte01 = 5;
+				delitem 1504,1; //Mace
+				if(Class == Job_Acolyte_High)
+					getexp 2000,1000;
+				else
+					getexp 1000,500;
+				specialeffect2 EF_CONE;
+			}
+			else {
+				mes "哦，我！";
+				mes "歡迎回來~";
+				mes "我知道你";
+				mes "完成了作業。";
+				next;
+				mes "[作為]";
+				mes "但是你一定已經忘記了我借給你的狼牙棒。您能把它帶回去，以便我可以將其歸還教堂嗎？";
+			}
+			close;
+		}
+		mes "你有";
+		mes "艱難的訓練";
+		mes "學習3級治愈？";
+		mes "請不要灰心。";
+		next;
+		mes "[作為]";
+		mes "基礎知識對於掌握以後您會學到的更先進的技能至關重要。請記住，您所有的努力和苦難都將成為榮耀";
+		mes "和幸福。";
+		close;
+	case 5:
+		mes "我想我可以告訴您有關侍從工作的更多信息。您已經知道，新手必須訓練並去Prontera教堂成為侍從，這是您的第一個工作班。";
+		next;
+		mes "[作為]";
+		mes "成為侍從後";
+		mes "在 ^3131ffjob級別40 ^000000，您將有機會更改為更專業的第二個工作類。";
+		next;
+		mes "[作為]";
+		mes "更改時";
+		mes "到第二個工作，";
+		mes "助手可以變成 ^3131ffpriests ^000000，";
+		mes "憐憫的使徒，或 ^3131ffmonks ^000000";
+		mes "執行上帝的憤怒的人。";
+		next;
+		mes "[作為]";
+		mes "牧師和僧侶可以";
+		mes "更改為超然類";
+		mes "通過參觀瓦爾哈拉的女武神。牧師可以成為 ^3131ffhigh祭司 ^000000，僧侶可以變成 ^3131ffchampions ^000000。";
+		next;
+		mes "[作為]";
+		mes "你承擔了所有這些嗎？";
+		mes "Ho Ho~現在無需嘗試記住一切。您會掌握它。";
+		tu_acolyte01 = 6;
+		close;
+	case 6:
+		mes ""+strcharinfo(0)+",";
+		mes "我剛收到這封信，但這似乎是一個錯誤。";
+		mes "它實際上是解決的";
+		mes "致牧師加德隆。";
+		next;
+		mes "[作為]";
+		mes "但是，我有點忙";
+		mes "我現在的工作，所以您可以將其交付給我下一個建築物的牧師Gardron嗎？";
+		tu_acolyte01 = 7;
+		getitem 7148,1; //Mother_Letter
+		close;
+	case 7:
+		mes "你拜託嗎";
+		mes "交付這封信";
+		mes "給我的牧師加德隆？";
+		mes "你可以在";
+		mes "附近的建築物。";
+		close;
+	case 9:
+		mes "你去了"+(checkre(0)?"Prontera":"Payon")+" on behalf of the convent for Priest Gardron? That must have been tough...";
+		next;
+		mes "[作為]";
+		mes "祝福！";
+		npcskill "AL_BLESSING",10,0,0;
+		next;
+		mes "[作為]";
+		mes "現在我要教你";
+		mes "大約 ^ff0000blessing ^000000。這是賦予上帝祝福的聖潔技能。祝福將暫時提高^3131ffstr^000000，^3131ffint^000000，^3131ffdex^000000並刪除^3131ffcurse^000000。";
+		next;
+		mes "[作為]";
+		mes "喜歡治愈，";
+		mes "可以使用祝福";
+		mes "反對亡靈怪物。";
+		mes "（^3131ffshift +祝福^000000）";
+		mes "祝福實際上";
+		mes "將詛咒放在亡靈上。";
+		next;
+		mes "[作為]";
+		mes "在學習5 ^3131ffdivine Protection ^000000級別後，可以學習祝福。這就是增加您對亡靈和惡魔怪物傷害的抵抗力的技能。";
+		next;
+		mes "[作為]";
+		mes "能夠為上帝服務";
+		mes "以他的榮耀祝福其他人是一個巨大的榮譽。好吧，這就是本課程的全部。";
+		next;
+		mes "[作為]";
+		mes "哦是的...！";
+		mes "在西北公墓";
+		mes "在這裡，我一直在照顧一隻迷路的狗。現在是時候餵他了。";
+		next;
+		mes "[作為]";
+		mes "對不起，麻煩了，";
+		mes "但是你會去嗎";
+		mes "為我餵狗？";
+		next;
+		mes "^3355ffsister作為給予";
+		mes "你一些狗食。 ^000000";
+		tu_acolyte01 = 10;
+		close;
+	case 11:
+	case 12:
+		mes "如何開除";
+		mes "邪惡的精神？";
+		mes "為什麼，是一樣的";
+		mes "你會的";
+		mes "刪除詛咒...";
+		next;
+		mes "[作為]";
+		mes "啊...";
+		mes "我相信";
+		mes "這是一個測試";
+		mes "上帝賜給你。";
+		next;
+		mes "[作為]";
+		mes "你已經";
+		mes "知道答案。";
+		mes "仔細考慮";
+		mes "它將到來。";
+		tu_acolyte01 = 12;
+		close;
+	case 13:
+		mes "你還記得那個";
+		mes "你可以學習神";
+		mes "學習後的保護";
+		mes "祝福，對吧？";
+		next;
+		mes "[作為]";
+		mes "當你打開";
+		mes "技能窗口，您會發現您還可以學習 ^3131ffdemon bane ^000000和 ^3131ffangelus ^000000，具體取決於您的神聖保護水平。";
+		next;
+		mes "[作為]";
+		mes "現在， ^3131ffdemon bane ^000000增加了您對亡靈和惡魔怪物的攻擊力量，因此對於那些通過驅除邪惡服務上帝的人來說，這對我們中的人很有用。";
+		next;
+		mes "[作為]";
+		mes "一旦學習了3級惡魔禍根，就可以學習 ^3131ffsignum crucis ^000000，從而減少了目標亡靈或幽靈怪物的防禦。";
+		specialeffect EF_SIGNUM;
+		next;
+		mes "[作為]";
+		mes "^3131ffangelus^000000增加了您的政黨的防禦，包括您自己。它受VIT統計數據的影響，因此您的VIT越高，其起作用越好。";
+		specialeffect EF_ANGELUS;
+		next;
+		mes "[作為]";
+		mes "就是這樣";
+		mes "用於神聖的保護。";
+		mes "讓我們休息一下";
+		mes "我們繼續下一課，";
+		mes "好吧？我會在這裡。";
+		tu_acolyte01 = 14;
+		close;
+	case 14:
+		mes "現在是時候了";
+		mes "下一課。";
+		mes "讓我們談談";
+		mes "^3131ffincrease agi^000000技能";
+		mes "治療技能樹的一部分。";
+		next;
+		mes "[作為]";
+		mes "學習3 ^3131ffheal ^000000級別後，您可以學習增加AGI。忠實於其名稱，增加AGI會暫時增加其目標的 ^3131ffagiality（agi） ^000000。";
+		next;
+		mes "[作為]";
+		mes "增加agi";
+		mes "也增加";
+		mes "^3131ffdodge速率^000000，";
+		mes "^3131FFATTACK速度^000000，";
+		mes "和 ^3131ffmovement速度 ^000000。";
+		next;
+		mes "[作為]";
+		mes "嘗試";
+		mes "你自己，好嗎？";
+		tu_acolyte01 = 15;
+		npcskill "AL_INCAGI",10,0,0;
+		close;
+	case 15:
+		mes "一旦學習";
+		mes "1級增加AGI，";
+		mes "你可以開始學習";
+		mes "^3131ff減少agi^000000。";
+		next;
+		mes "[作為]";
+		mes "如您所料，減少AGI會減慢敵人的速度，降低其敏捷性，運動速度，躲閃速度和攻擊速度。它的效果是增加AGI的確切逆轉。";
+		tu_acolyte01 = 15;
+		next;
+		mes "[作為]";
+		mes "治療技能樹的最後技能是 ^3131ffcure ^000000。學習2級治癒後，您可以學習治愈方法。";
+		next;
+		mes "[作為]";
+		mes "治愈可以消除不規則的";
+		mes "如 ^3131ffsilence ^000000， ^3131ffcurse ^000000，";
+		mes "和 ^3131ffstone詛咒 ^000000。當在不死怪物上使用時，治愈將";
+		mes "實際上詛咒他們。";
+		specialeffect EF_CURE;
+		next;
+		mes "[作為]";
+		mes "目前，別忘了增加AGI，減少AGI和";
+		mes "只能學習治療技能";
+		mes "通過學習治療技能。";
+		tu_acolyte01 = 16;
+		close;
+	case 16:
+		mes "你一直在學習";
+		mes "真的很快。我很高興";
+		mes "我們已經做到了";
+		mes "已經點了。";
+		next;
+		mes "[作為]";
+		mes "一旦你成為";
+		mes "侍從，你可以";
+		mes "了解 ^3131ffruwach ^000000技能。";
+		next;
+		mes "[作為]";
+		mes "Ruwach用於檢測 ^3131ffhidden敵人 ^000000。法師具有稱為視覺的類似技能，但只能檢測到敵人。 Ruwach將同時檢測到";
+		mes "損害隱藏的敵人。";
+		specialeffect EF_RUWACH;
+		next;
+		mes "[作為]";
+		mes "在學習魯瓦奇之後，";
+		mes "您可以學習 ^3131ffteleport ^000000。 Teleport會立即將您發送到地圖上的隨機位置或保存點。";
+		next;
+		mes "[作為]";
+		mes "在學習2級傳送後，您可以學習 ^3131ffwarp Portal ^000000，它可以通過消費 ^ff00001 blue blue寶石 ^000000來扭曲備忘點或保存的目的地。";
+		next;
+		mes "[作為]";
+		mes "一旦掌握了翹曲門戶，您就可以 ^3131FFREMERMERMERMENG三個備忘點 ^000000。您無法在大多數字段或地牢中保存備忘點，但是您可以在中使用 ^ff0000/memo ^000000命令";
+		mes "城鎮和某些領域。";
+		next;
+		mes "[作為]";
+		mes "那令人困惑嗎？";
+		mes "只是想那個傳送";
+		mes "和翹曲的門戶允許僕人";
+		mes "上帝迅速從地點移動";
+		mes "放置。";
+		next;
+		mes "[作為]";
+		mes "我有自己的家，修道院作為備忘錄保存，所以我只是在工作和家之間來回彎曲。";
+		next;
+		mes "[作為]";
+		mes "現在...";
+		mes "最後的技能";
+		mes "魯瓦奇樹";
+		mes "稱為 ^3131ffpneuma ^000000。";
+		next;
+		mes "[作為]";
+		mes "肺炎屏蔽角色";
+		mes "在3*3塊或9個單元區域內，來自 ^ff000000 long範圍攻擊 ^000000。如果您與弓箭手或其他弓用戶聚會，請小心，因為您可能會不小心阻止他們的攻擊。";
+		specialeffect2 EF_PNEUMA;
+		next;
+		mes "[作為]";
+		mes "有一些不死的怪物";
+		mes "那可以從遠處攻擊，因此用肺炎保護自己並用治愈攻擊將是一個很好的策略。";
+		next;
+		mes "[作為]";
+		mes "現在，我們已經介紹了一些";
+		mes "本課程中非常複雜的材料。您想再次聽到嗎？";
+		next;
+		if(select("再聽一次。:進入下一個主題。")==1){
+			mes "[作為]";
+			mes "好吧，";
+			mes "給我一點";
+			mes "呼吸~";
+		} else {
+			mes "[作為]";
+			mes "到！";
+			mes "多麼聰明的侍從~";
+			tu_acolyte01 = 17;
+		}
+		close;
+	case 17:
+		mes "哦親愛的...！";
+		mes "所有這些事情都是偶然地交付給我的！這些包裹中的一些應該";
+		mes "被送往Prontera保護區！";
+		next;
+		mes "[作為]";
+		mes "你會再次為我忙嗎？自從在這里分發給郵件以來";
+		mes "我根本沒有時間。";
+		next;
+		mes "[作為]";
+		mes "似乎其中一些比其他人更緊急，所以您能以一定的順序運送它們嗎？";
+		next;
+		mes "[作為]";
+		mes "第一個是給北部工人的包裹。他的名字是 ^3131FFVEINER ^000000。下一次交付是 ^3131ffhedrick ^000000，他在修道院入口附近。";
+		next;
+		mes "[作為]";
+		mes "第三個是從鐵匠將到 ^3131ffblacksmith ^000000，為僧侶製造武器和裝甲。第四次交付是在下一個建築物中 ^3131ffpriest karven ^000000。";
+		next;
+		mes "[作為]";
+		mes "哦，最後一次交貨是 ^3131ffpriest praupin ^000000的收據，講述了我的牧師。";
+		mes "在這裡，您要去的信件和包裝...";
+		if(MaxWeight - Weight < 2430){
+			next;
+			mes "[作為]";
+			mes "哦...！";
+			mes "你似乎沒有";
+			mes "有足夠的空間";
+			mes "攜帶一切。";
+			mes "為什麼不將一些東西放在Kafra存儲中？";
+		} else {
+			tu_acolyte01 = 18;
+			getitem 7183,1; //Sister_Letter
+			getitem 7181,1; //Receipt_01
+			getitem 1081,2; //Merchant_Box_1
+			getitem 7148,1; //Mother_Letter
+		}
+		close;
+	case 18:
+	case 19:
+	case 20:
+	case 21:
+	case 22:
+		mes "好吧，不要";
+		mes "忘了訂單";
+		mes "您需要的";
+		mes "傳送信件";
+		mes "和軟件包。就是這樣";
+		mes "非常重要。";
+		next;
+		mes "[作為]";
+		mes "第一個是給北部工人的包裹。他的名字是 ^3131FFVEINER ^000000。下一次交付是 ^3131ffhedrick ^000000，他在修道院入口附近。";
+		next;
+		mes "[作為]";
+		mes "第三個是從鐵匠將到 ^3131ffblacksmith ^000000，為僧侶製造武器和裝甲。第四次交付是在下一個建築物中 ^3131ffpriest karven ^000000。";
+		next;
+		mes "[作為]";
+		mes "哦，最後一次交貨是 ^3131ffpriest praupin ^000000的收據，講述了我的牧師。好吧，有一個安全的旅行~";
+		close;
+	case 23:
+		mes "啊，你正在完成";
+		mes "進行所有這些交付？非常感謝！之後，如何與Praupin遇到Priest";
+		mes "很長時間？";
+		next;
+		mes "[作為]";
+		mes "您知道，我們一生都與其他人建立關係，對他們的記憶生活在我們心中。";
+		next;
+		mes "[作為]";
+		mes "當您感到孤獨時，讓這些記憶從黑暗的陰暗中發光。僅僅考慮您關心的人就可以治愈您的情緒傷口。";
+		next;
+		mes "[作為]";
+		mes "那些可以珍惜當前的人可以形成持久的關係。他們是第一個將來會擁抱幸福的人。記住這一點。";
+		next;
+		mes "[作為]";
+		mes "我感覺到您已經成為Priest Praupin的好朋友。我希望Priest Praupin也能繼續成為您的好朋友。";
+		next;
+		mes "[作為]";
+		mes "好吧，那，";
+		mes "下次我們";
+		mes "見面，我會給";
+		mes "你我的最後一堂課。";
+		tu_acolyte01 = 24;
+		close;
+	case 24:
+		mes "最後的技能";
+		mes "我會教你";
+		mes "大約是 ^3131ffaqua benedicta ^000000。";
+		next;
+		mes "[作為]";
+		mes "水是如此普遍，以至於";
+		mes "我們忘記了這是自然的中心。這是非常基本的，但必不可少的。";
+		next;
+		mes "[作為]";
+		mes "將水放在這樣的杯子中，然後將所有聖潔的能量聚焦...然後...";
+		next;
+		specialeffect EF_AQUA;
+		mes "[作為]";
+		mes "水";
+		mes "本尼迪克塔！";
+		next;
+		mes "[作為]";
+		mes "這就是您創建 ^3131ffholy水 ^000000的方式。請記住，您的 ^3131fffeet必須接觸水 ^000000才能使用Aqua Benedicta技能。";
+		next;
+		mes "[作為]";
+		mes "嗬嗬~";
+		mes "好吧，僅此而已";
+		mes "我必須教你。";
+		mes "可能很粗糙，";
+		mes "但是你做得很好。";
+		next;
+		mes "[作為]";
+		mes "哦！如果您回到Prontera避難所，我相信您可以學習秘密技能。停下來檢查並沒有什麼傷害。";
+		next;
+		mes "[作為]";
+		mes "好吧，請不要忘記我教給你的東西。我希望您在這些美麗的花朵中一起回顧一下我們的時光。願上帝保佑你~";
+		tu_acolyte01 = 25;
+		if (checkre(3))
+			getexp 1000,1000;
+		else
+			getexp 5000,3000;
+		specialeffect2 EF_CONE;
+		close;
+	}
+	mes "如果您進入";
+	mes "與某人爭論";
+	mes "分享時談論";
+	mes "一頓美餐。";
+	next;
+	mes "[作為]";
+	mes "在您體內如此溫暖的美味食物中，所有憤怒的感覺都會像雪一樣融化。";
+	next;
+	mes "[作為]";
+	mes "我不是在開玩笑！";
+	mes "如果您碰巧與親近的人打架，這可能會有所幫助。我從人生經驗中說話，你知道。";
+	close;
+}
+
+
+// Priest Gardron
+//============================================================
+monk_in,18,38,6	script	Priest Gardron#tu	4_M_MINISTER,{
+	mes "[牧師加德隆]";
+	if(tu_acolyte01 == 7){
+		if(countitem(7148) >= 1){// Mother_Letter
+			mes "唔...？";
+			mes "那是什麼？";
+			mes "你有我的東西嗎？";
+			next;
+			emotion ET_SURPRISE;
+			mes "[牧師加德隆]";
+			mes "哦！這是我母親回到家的一封信。感謝您將其帶給我，年輕的侍從。";
+			next;
+			mes "[牧師加德隆]";
+			mes "我擔心";
+			mes "她，尤其是從那以後";
+			mes "她現在已經老了，但是我很高興聽到她的健康狀況";
+			mes "很好。我們真的很幸運...";
+			delitem 7148,1; //Mother_Letter
+			tu_acolyte01 = 8;
+		} else {
+			mes "唔...？";
+			mes "那是什麼？";
+			mes "你有東西";
+			mes "我？你說的一封信？";
+			next;
+			mes "[牧師加德隆]";
+			mes "好吧，看來";
+			mes "你一定已經忘記了";
+			mes "它或放錯了位置。";
+		}
+		close;
+	} else if(tu_acolyte01 == 8){
+		if(countitem((checkre(0)?939:957)) > 4){// Bee_Sting
+			mes "哦...！";
+			mes "你回來了！";
+			mes "讓我們看看...一個...";
+			mes "兩個...三...";
+			next;
+			mes "[牧師加德隆]";
+			mes "非常感謝！";
+			mes "你做得很好";
+			mes "代表修道院，";
+			mes "更不用說事實";
+			mes "您已經保護了公民";
+			mes "的"+(checkre(0)?"Prontera":"Payon")+" from danger.";
+			next;
+			mes "[牧師加德隆]";
+			mes "願你永遠";
+			mes "得到祝福。現在輪到你";
+			mes "應該回到姐姐";
+			mes "作為繼續你的";
+			mes "侍從訓練。";
+			tu_acolyte01 = 9;
+			percentheal 100,100;
+			if (checkre(3))
+				getexp 1000,1000;
+			else
+				getexp 2000,2000;
+			specialeffect2 EF_CONE;
+			//getitem 505,1; //Blue_Potion
+			close;
+		} else {
+			if (checkre(0)) {
+				mes "幾天前，一個姐姐在prontera";
+				mes "給我發電報，說公民受到了傷害";
+				mes "由黃蜂在西部領域，";
+				mes "因此，她要求修道院幫助他們。";
+				next;
+				mes "[牧師加德隆]";
+				mes "但是在這個時候，";
+				mes "我們也沒有手...";
+				mes "所以這是一個大問題。";
+				next;
+				mes "[牧師加德隆]";
+				mes "....！ ！ ！";
+				emotion ET_SURPRISE;
+				next;
+				mes "[牧師加德隆]";
+				mes "我可以委託你嗎，侍從"+strcharinfo(0)+",";
+				mes "這是緊迫的事？";
+				mes "請處置黃蜂";
+				mes "這在 ^ff0000上引起了麻煩。";
+				next;
+				mes "[牧師加德隆]";
+				mes "我知道您正在接受該學科，";
+				mes "所以我會給你一些幫助你的";
+				mes "如果您帶我 ^3131ff 5 ^000000 ^3131ffbee sting ^000000。";
+				next;
+				mes "[牧師加德隆]";
+				mes "你會去prontera嗎？";
+				next;
+				if(select("我們去普隆德拉吧！:我先準備一下再回來。") == 1) {
+					mes "[牧師加德隆]";
+					mes "好吧，我會把你送到prontera。";
+					mes "請處置黃蜂，並給我帶5個蜜蜂刺以確認。";
+					mes "我的主，請保護這種助手免受邪惡的怪物。";
+					close2;
+					warp "prontera",116,72;
+					end;
+				}
+			} else {
+				mes "不久前，Payon Elder給我發了一條消息。顯然，";
+				mes "Payon的居民正受到殭屍的攻擊。";
+				next;
+				mes "[牧師加德隆]";
+				mes "他已要求修道院尋求幫助，但我們有一個大問題。我們已經用盡了可以處理這種情況的人...";
+				next;
+				mes "[牧師加德隆]";
+				mes "....！ ！ ！";
+				emotion ET_SURPRISE;
+				next;
+				mes "[牧師加德隆]";
+				mes ""+strcharinfo(0)+",";
+				mes "我可以問";
+				mes "你要照顧";
+				mes "這個任務？消滅骨骼和殭屍";
+				mes "Payon地牢的一樓。";
+				next;
+				mes "[牧師加德隆]";
+				mes "由於您仍在接受基礎培訓，我會給您一些";
+				mes "如果您返回";
+				mes "^3131ff5腐爛的指甲^000000。";
+				next;
+				mes "[牧師加德隆]";
+				mes "現在...";
+				mes "你會去佩恩嗎？";
+				next;
+				if(select("我們去斐揚吧！:嗯，讓我先準備一下。")==1) {
+					mes "[牧師加德隆]";
+					mes "好，很好。";
+					mes "我會寄給你";
+					mes "在那裡與Payon Dungeon中的怪物作戰，以便您可以用5個腐爛的指甲返回。願上帝保佑你...";
+					close2;
+					warp "payon",161,58;
+					end;
+				}
+			}
+			close;
+		}
+	}
+	mes "可能總是點亮";
+	mes "來照亮";
+	mes "黑暗。時間";
+	mes "艱辛，提醒我們";
+	mes "沒有奇蹟";
+	mes "沒有希望...";
+	close;
+}
+
+// Dog
+//============================================================
+prt_monk,235,245,5	script	Dog#tu	4_DOG01,{
+	mes "[狗]";
+	mes "^cdb79ebark樹皮！";
+	mes "汪汪！ ^000000";
+	next;
+	if(tu_acolyte01 == 10){
+		while(1) {
+			switch(select("給零食。:撫摸狗狗。:結束動作。")){
+			case 1:
+				.@dog_food++;
+				if(.@dog_food > 4){
+					mes "[狗]";
+					mes "^cdb79egrrrrrr ...！ ^000000";
+					emotion ET_FRET;
+					next;
+					mes "^3355ff狗磨";
+					mes "它的牙齒和眩光";
+					mes "在你身上險惡。 ^000000";
+				} else {
+					mes "[狗]";
+					mes "^CDB79ROOF屋頂！ ^000000";
+					emotion ET_THROB;
+				}
+				break;
+			case 2:
+				mes "[狗]";
+				mes "^CDB79ROOF屋頂~^000000";
+				emotion ET_THROB;
+				break;
+			case 3:
+				mes "[狗]";
+				mes "^CDB79ROOF屋頂！ ^000000";
+				break;
+			}
+			next;
+		}
+	}
+	mes "["+strcharinfo(0)+"]";
+	mes "好可愛~！";
+	close;
+}
+
+// Boy
+//============================================================
+prt_monk,243,238,5	script	Boy#boy_voi	HIDDEN_WARP_NPC,5,5,{
+OnTouch_:
+	if(tu_acolyte01 != 10) end;
+	mes "[??]";
+	mes "^333333*嗅探*^000000";
+	mes "姐姐...";
+	close;
+}
+
+// Ill Girl
+//============================================================
+prt_monk,226,257,6	script	Ill Girl#tu	4_F_04,{
+	mes "[天使]";
+	if(tu_acolyte01 > 12){
+		mes "感謝您幫助我。";
+		mes "我很難過，我的姐姐不再和我在一起，但是我應該";
+		mes "振作起來，對吧？我會盡力的！";
+		emotion ET_SMILE;
+		close;
+	}
+	mes "姐姐，別走...";
+	mes "^333333*嗅**咳嗽！ *^000000";
+	mes "它是如此...太...！";
+	mes "姐姐...";
+	if(tu_acolyte01 == 10){
+		next;
+		mes "[天使]";
+		mes "^333333*嗅探...*^000000";
+		mes "你來自";
+		mes "修道院？";
+		next;
+		mes "[天使]";
+		mes "...";
+		mes "......";
+		next;
+		mes "[天使]";
+		mes "節省...";
+		mes "我的姐妹...";
+		next;
+		mes "[天使]";
+		mes "^333333*嗅探*";
+		mes "^333333*咳嗽*";
+		mes "H-傷害...";
+		next;
+		select("你還好嗎？");
+		mes "[天使]";
+		mes "我的姐妹...";
+		mes "她是如此美麗...";
+		mes "她真是個好女孩。";
+		mes "但是，有一天...";
+		next;
+		mes "[天使]";
+		mes "這個令人噁心的外觀";
+		mes "這個人被塗在這種怪異的東西上，襲擊了她。她被毒，身體變成了";
+		mes "冷和... ^333333*嗅* ^000000";
+		next;
+		mes "[天使]";
+		mes "我和她在一起，也生病了。我並沒有嚴重中毒，但是";
+		mes "我的整個身體都很沉重，我一直在做這些噩夢...";
+		next;
+		mes "[天使]";
+		mes "^333333*咳嗽！ *^000000";
+		mes "我會加入我的嗎";
+		mes "這樣的姐姐？";
+		next;
+		mes "^3355ff這個女孩看起來";
+		mes "真的病了。也許你";
+		mes "應該更好";
+		mes "看看怎麼了。 ^000000";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "你還好嗎？";
+		mes "................................................";
+		next;
+		specialeffect EF_CURSEATTACK;
+		soundeffectall "_curse.wav",0;
+		emotion ET_HUK;
+		mes "["+strcharinfo(0)+"]";
+		mes "這是....！";
+		mes "詛咒的精神";
+		mes "正在折磨這個";
+		mes "可憐的年輕女孩！";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "我會治愈你...";
+		mes "一定。";
+		tu_acolyte01 = 11;
+	}
+	else if(tu_acolyte01 == 11){
+		next;
+		mes "[天使]";
+		mes "好痛...！";
+		mes "我...我不能...！";
+	}
+	else if(tu_acolyte01 == 12){
+		next;
+		mes "^3355ffyou朝著";
+		mes "女孩，放手";
+		mes "在她的背上表演";
+		mes "神聖的咒語...^000000";
+		next;
+		switch(select("治癒！:祝福！:治癒術！:恢復！:十字驅魔！:聖禮！")){
+		case 1:
+			mes "["+strcharinfo(0)+"]";
+			mes "嗯...";
+			mes "治愈!!";
+			specialeffect EF_HEAL;
+			next;
+			mes "^3355 fffnothing發生了。";
+			mes "看起來不像";
+			mes "該技能將起作用。 ^000000";
+			close;
+		case 2:
+			if(getskilllv("AL_BLESSING") > 0){
+				mes "["+strcharinfo(0)+"]";
+				mes "乙...";
+				mes "祝福！";
+				next;
+				if(rand(100) < getskilllv("AL_BLESSING")*10){
+					specialeffect EF_BLESSING;
+					mes "["+strcharinfo(0)+"]";
+					mes "我...";
+					mes "我做到了！ ！";
+					next;
+					mes "^3355ff偉大的";
+					mes "你有機會";
+					mes "練習您的能力！";
+					mes "看來這很好";
+					mes "契據提高了您的技能。 ^000000";
+					tu_acolyte01 = 13;
+					if (checkre(3))
+						getexp 0,500;
+					else
+						getexp 0,1000;
+					specialeffect2 EF_CONE;
+					next;
+					break;
+				} else {
+					mes "["+strcharinfo(0)+"]";
+					mes "嗯...？";
+					mes "它不起作用...";
+					mes "也許是因為";
+					mes "我還在學習嗎？";
+					close;
+				}
+			} else {
+				mes "^3355ffyou不學習";
+				mes "這項技能，所以你";
+				mes "目前無法使用它。 ^000000";
+				close;
+			}
+		case 3:
+			if(getskilllv("AL_CURE") > 0){
+				mes "["+strcharinfo(0)+"]";
+				mes "C固定...！";
+				specialeffect EF_CURE;
+				next;
+				mes "^3355 fffnothing發生了。";
+				mes "看起來不像";
+				mes "該技能將起作用。 ^000000";
+			}
+			else {
+				mes "^3355ffyou不學習";
+				mes "這項技能，所以你";
+				mes "目前無法使用它。 ^000000";
+			}
+			close;
+		case 4:
+			mes "^3355ffthis不是一項技能";
+			mes "助手可以使用...^000000";
+			close;
+		case 5:
+			if(getskilllv("AL_CRUCIS") > 0){
+				mes "["+strcharinfo(0)+"]";
+				mes "S 標誌...";
+				mes "十字的標誌！";
+				specialeffect EF_SIGNUM;
+				next;
+				mes "^3355 fffnothing發生了。";
+				mes "看起來不像";
+				mes "該技能將起作用。 ^000000";
+			}
+			else {
+				mes "^3355ffyou不學習";
+				mes "這項技能，所以你";
+				mes "目前無法使用它。 ^000000";
+			}
+			close;
+		case 6:
+			mes "^3355ffthis不是一項技能";
+			mes "助手可以使用...^000000";
+			close;
+		}
+		mes "[天使]";
+		mes "啊...";
+		mes "我覺得...";
+		mes "如此放鬆。";
+		mes "這麼輕...";
+		next;
+		mes "[天使]";
+		mes "你了嗎？";
+		mes "這樣嗎？";
+		mes "這是";
+		mes "上帝的力量？";
+	}
+	close;
+}
+
+// Veiner
+//============================================================
+prt_monk,197,228,3	script	Veiner	4_M_ORIENT02,{
+	mes "[靜脈]";
+	if(countitem(1081) && tu_acolyte01 == 18){// Merchant_Box_1
+		mes "太累了...";
+		mes "我應該回家嗎？";
+		next;
+		mes "[靜脈]";
+		mes "那是什麼？";
+		mes "你有送貨";
+		mes "為我？為什麼，什麼";
+		mes "可以嗎？";
+		next;
+		mes "[靜脈]";
+		mes "這是...！";
+		mes "它是手工巧克力";
+		mes "從我的蜂蜜兔子那裡！";
+		mes "哦，比比！你是最好的！";
+		specialeffect EF_VALLENTINE;
+		specialeffect EF_HEARTCASTING;
+		next;
+		mes "[靜脈]";
+		mes "哦，對！";
+		mes "非常感謝您將其交付給我。抱歉，但是我總是很高興聽到我的可愛派~";
+		emotion ET_THANKS;
+		tu_acolyte01 = 19;
+		delitem 1081,1; //Merchant_Box_1
+	}
+	else if(tu_acolyte01 > 18){
+		mes "我等不及了";
+		mes "再次見到她！";
+		mes "bibi ...！我很高興你！";
+		emotion ET_CHUPCHUP;
+	}
+	else {
+		mes "所以非常";
+		mes "筋疲力盡的...";
+		mes "你會幫忙嗎？";
+		mes "我隨身攜帶我的東西？";
+		mes "p-請...";
+	}
+	close;
+}
+
+// Hedrick
+//============================================================
+prt_monk,28,260,5	script	Hedrick	1_M_04,{
+	mes "[赫德里克]";
+	mes "^333333*分機！ *^000000";
+	mes "男人，我今天努力工作！";
+	mes "而且也有效！";
+	mes "照常工作很棒";
+	mes "赫德里克。你是第一！";
+	if(countitem(7148)==0 || tu_acolyte01 != 19) close;// Mother_Letter
+	next;
+	mes "[赫德里克]";
+	mes "哦...？";
+	mes "這封信給我嗎？";
+	mes "我想知道它是誰。";
+	mes "啊，是我媽媽的！";
+	next;
+	mes "[赫德里克]";
+	mes "哇...！";
+	mes "聖牛！";
+	mes "這封信是";
+	mes "充滿能量";
+	mes "母愛！";
+	specialeffect EF_STEELBODY;
+	next;
+	mes "[赫德里克]";
+	mes "多謝！";
+	mes "在這裡，為什麼不";
+	mes "你有一個";
+	mes "她寄給我的餅乾？";
+	delitem 7148,1; //Mother_Letter
+	tu_acolyte01 = 20;
+	getitem 538,1; //Well_Baked_Cookie
+	close;
+}
+
+// Weapon Merchant
+//============================================================
+prt_monk,136,261,0	script	Weapon Merchant#tu	HIDDEN_WARP_NPC,9,9,{
+OnTouch_:
+	if(tu_acolyte01 != 20 || countitem(1081) == 0) end;// Merchant_Box_1
+	mes "[武器商人]";
+	mes "我從公會請求的東西終於來了！";
+	mes "由於這是一個偏僻的地方，因此很難將所有物品存放在庫存中。";
+	next;
+	mes "[武器商人]";
+	mes "嘿，非常感謝！";
+	mes "哦，如果";
+	mes "你需要什麼，好嗎？";
+	delitem 1081,1; //Merchant_Box_1
+	tu_acolyte01 = 21;
+	close;
+}
+
+// Karven
+//============================================================
+monk_in,103,176,7	script	Karven	1_M_PASTOR,{
+	mes "尖叫聲";
+	mes "願你休息";
+	if(tu_acolyte01 == 21 && countitem(7183)){
+		delitem 7183, 1;// Sister_Letter
+		tu_acolyte01 = 22;
+		mes "永遠和平...";
+		next;
+		mes "尖叫聲";
+		mes "我是說祈禱";
+		mes "對於最近離開的。";
+		mes "如果不緊急，請";
+		mes "再來一次。";
+		next;
+		mes "尖叫聲";
+		mes "一封信？";
+		mes "哦。它必須來自";
+		mes "我的妹妹。";
+		mes "她想要什麼";
+		mes "這次？";
+		next;
+		mes "尖叫聲";
+		mes "我希望她意識到";
+		mes "上帝的話並返回";
+		mes "過一次美好的生活";
+		mes "再次。非常感謝。";
+		close;
+	}
+	mes "安息...";
+	close;
+}
+
+// Gloria
+//============================================================
+prt_monk,219,164,3	script	Gloria#tu	4_F_SISTER,{
+	mes "[格洛麗亞]";
+	if(BaseJob != Job_Acolyte){
+		mes "嗨，嗨~";
+		mes "我是格洛里亞。";
+		mes "你想知道";
+		mes "有些整潔";
+		mes "關於我的名字？";
+		next;
+		mes "[格洛麗亞]";
+		mes "我父親是蓋芬（Geffen）的鐵匠，據說他當天完成了令人難以置信的武器";
+		mes "我出生了。他認為這是一個好運的跡象，所以他叫";
+		mes "我之後的武器！";
+		next;
+		mes "[格洛麗亞]";
+		mes "知道有一種以命名的武器，這有點奇怪";
+		mes "你，但我非常喜歡我的名字。我的意思是，這不像我的父母以那種武器的名字命名我，對嗎？";
+		close;
+	}
+	if(tu_acolyte01 > 0 && tu_acolyte01 < 25){
+		mes "我還在";
+		mes "一個年輕的侍從";
+		mes "在訓練中，我";
+		mes "總是犯錯！";
+		next;
+		mes "[格洛麗亞]";
+		mes "^333333*嗅探*^000000";
+		mes "我被責罵";
+		mes "幾乎所有時間...";
+		mes "但是有一件事";
+		mes "我真的可以做得很好！";
+		next;
+		mes "[格洛麗亞]";
+		mes "翹曲門戶！";
+		mes "我知道2級翹曲門戶！";
+		mes "我的備忘錄之一是在這裡";
+		mes "另一個在prontera中。";
+		next;
+		mes "[格洛麗亞]";
+		mes "無論如何，無論何時";
+		mes "你需要，我可以";
+		mes "將您發送到Prontera。";
+		mes "只是讓我知道，好嗎？";
+		next;
+		switch(select("我現在還好。:送我去普隆德拉。")){
+		case 1:
+			mes "[格洛麗亞]";
+			mes "為了使用";
+			mes "翹曲門戶，您需要";
+			mes "一個 ^3131ffblue寶石 ^000000。";
+			mes "這是為了幫助我嗎？";
+			mes "哇，我很感動！";
+			emotion ET_CRY;
+			close;
+		case 2:
+			mes "[格洛麗亞]";
+			mes "留給我！";
+			mes "我們走了~!!";
+			mes "W-扭曲傳送門！";
+			close2;
+			warp "prontera",116,72;
+			end;
+		}
+	}
+	mes "哇...";
+	mes "您是否從中學到了所有這些？太好了...";
+	mes "你一定比我好得多，以至於我什至無法吹噓";
+	mes "Prontera了。 ^333333*嗅探*^000000";
+	close;
+}
+
+// Cleope Verce
+//============================================================
+prt_monk,153,210,3	script	Cleope Verce	4_F_SISTER,{
+	mes "[克洛普·維塞]";
+	if(BaseJob == Job_Acolyte){
+		if (JobLevel < 40) {
+			if (BaseLevel < 26) {
+				mes "哦，我的..";
+				mes "新手侍從？";
+				mes "甚至沒有";
+				mes "就像您學到的一樣";
+				mes "這麼多技能？";
+				next;
+				mes "[克洛普·維塞]";
+				mes "嗬嗬~！";
+				mes "在我的日子裡";
+				mes "作為侍從，";
+				switch(rand(1,4)){
+				case 1:
+					mes "我通過進攻訓練";
+					mes "^3131ffgreen青蛙^000000直到我的指關節";
+					mes "從所有的拳頭中流血！";
+					break;
+				case 2:
+					mes "我毆打 ^3131ffwooden棍棒";
+					mes "即將崩潰^000000，這些";
+					mes "^3131F大蘑菇^000000！";
+					break;
+				case 3:
+					mes "我通過與那些 ^3131ffdisgusting蟑螂 ^000000進行訓練。";
+					next;
+					mes "[克洛普·維塞]";
+					mes "啊...";
+					mes "實際上，當我考慮時，這並不是一個好的記憶。";
+					break;
+				case 4:
+					mes "我通過與所有這些樹木的地牢在那個小鎮的地牢中戰鬥 ^3131ffzombies ^000000進行了訓練。";
+					break;
+				}
+				next;
+				mes "[克洛普·維塞]";
+				mes "您必須經歷很多事情，直到到達我現在的地步。何何！你還有很大的路要走~";
+				next;
+				emotion ET_KIK;
+				mes "[Cleope Verce]";
+				mes "祝你好運...";
+				mes "菜鳥。";
+				close;
+			} else if(BaseLevel < 36){
+				mes "哦，我的..";
+				mes "一個年輕的侍從？";
+				mes "你似乎只是";
+				mes "開始學習您的技能嗎？";
+				next;
+				mes "[克洛普·維塞]";
+				mes "嗬嗬~！";
+				mes "當我是什麼時候";
+				mes "大約在你的年齡，";
+				switch(rand(1,5)){
+				case 1:
+					mes "我會和那些 ^3131ffwhite戰鬥";
+					mes "小鼠^000000和^3131ffbig蟑螂^000000~";
+					break;
+				case 2:
+					mes "我會直接走進";
+					mes "^3131 fffdepths of Ocean^000000可以找到狩獵的怪物。";
+					break;
+				case 3:
+					mes "我曾經打架 ^3131ffcreepy";
+					mes "看的樹怪物^000000。";
+					break;
+				case 4:
+					mes "我曾經打過數百人";
+					mes "^3131ffuuuuuuug~獸人^000000。";
+					break;
+				case 5:
+					mes "我會戰鬥 ^3131ffmonkeys";
+					mes "在修道院的前面^000000。";
+					break;
+				}
+				next;
+				mes "[克洛普·維塞]";
+				mes "那是";
+				mes "不好的回憶。";
+				mes "如果有人告訴我";
+				mes "再次去那裡，";
+				mes "我會發瘋。";
+				next;
+				mes "[克洛普·維塞]";
+				mes "不過，看來你";
+				mes "還有很長的路要走";
+				mes "直到你成為井";
+				mes "經驗豐富的助劑。 ho ho~";
+				next;
+				emotion ET_KIK;
+				mes "[克洛普·維塞]";
+				mes "祝你好運，";
+				mes "年輕的朋友。";
+				close;
+			} else if(BaseLevel < 46){
+				mes "好吧，好吧~";
+				mes "你好，年輕的侍從。";
+				mes "你還是有點";
+				mes "綠色，但我想你";
+				mes "也不是初學者。";
+				next;
+				mes "[克洛普·維塞]";
+				mes "我記得那時";
+				mes "我是你的年齡，我曾經";
+				switch(rand(1,6)){
+				case 1:
+					mes "與這些 ^3131 fffearsome邪惡的邪惡 ^000000在那座城堡中一直 ^000000與geffen ^000000的3131ffwest。我想知道我是怎么生存的";
+					mes "所有嗎？";
+					break;
+				case 2:
+					mes "玩這些 ^3131ffcute";
+					mes "poporings^000000始終！";
+					next;
+					mes "[克洛普·維塞]";
+					mes "不過，我必須從他們的攻擊中小心。那時他們很堅強！";
+					break;
+				case 3:
+					mes "與 ^3131ffgun射擊鬼魂！";
+					break;
+				case 4:
+					mes "幾乎每天都在格芬西部的城堡中毆打 ^3131ffarrow射擊魔鬼 ^000000。男孩，那時有很多。";
+					break;
+				case 5:
+					mes "與這些確實 ^3131fffat Pig ^000000戰鬥。他們非常強大，所以他們總是給我一個艱難的時光。";
+					break;
+				case 6:
+					mes "毆打這些 ^3131 fffliving塊";
+					mes "沙漠中的沙子^000000。我發誓，他們還活著！";
+					break;
+				}
+				next;
+				mes "[克洛普·維塞]";
+				mes "^333333*嘆氣*^000000";
+				mes "啊，回憶~";
+				mes "當然，如果我有";
+				mes "做到這一切的機會";
+				mes "再說一次，我不知道";
+				mes "如果我願意...";
+				next;
+				mes "[克洛普·維塞]";
+				mes "無論如何，你有";
+				mes "很多冒險";
+				mes "等你。我希望";
+				mes "你會讓很多人喜歡";
+				mes "記憶時";
+				mes "仍然是助手。";
+				next;
+				emotion ET_KIK;
+				mes "[克洛普·維塞]";
+				mes "祝你好運，";
+				mes "年輕朋友~";
+				close;
+			}
+		}
+		mes "嗯？";
+		mes "看起來你";
+		mes "學到了很多";
+		mes "侍從！我討厭承認，";
+		mes "但是你對我來說太好了";
+		mes "再打給你新秀~";
+		close;
+	}
+	mes "你好，你好。";
+	mes "太陽非常";
+	mes "今天溫暖，不要";
+	mes "思考？非常愉快";
+	mes "今天的天氣...";
+	close;
+}
+// Range NPC
+//============================================================
+prt_monk,217,123,0	script	#tu_monk	HIDDEN_WARP_NPC,10,10,{
+OnTouch_:
+	if(BaseJob == Job_Acolyte){
+		switch(tu_acolyte01){
+		case 4:
+		case 10:
+		case 25:
+			mes "[窗戶聲音]";
+			mes "...";
+			next;
+			mes "^3355ffthere是某種";
+			mes "來自";
+			mes "yonder窗口...^000000";
+			close;
+		}
+	}
+	end;
+}
+
+// Eavesdrop
+//============================================================
+prt_monk,223,123,3	script	Eavesdrop#tu	HIDDEN_NPC,{
+	if(BaseJob != Job_Acolyte){
+		mes "^3355ffthere在這裡什麼都沒有。 ^000000";
+		close;
+	}
+	if(tu_acolyte01 > 3 && tu_acolyte01 < 10){
+		mes "[來自窗口的聲音]";
+		mes "^a68064先生...";
+		mes "沒有什麼";
+		mes "似乎在宮殿。 ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^CD6600有什麼錯？";
+		mes "發生了什麼事嗎？ ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^a68064i不確定。";
+		mes "我無法確切解釋它是什麼，但是官員們似乎對某件事感到恐懼。也許在那裡";
+		mes "是某種意外嗎？ ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^CD6600HMM，我不知道。";
+		mes "我們為什麼不拭目以待";
+		mes "會發生什麼？我敢肯定，事實會以一種或另一種方式出現。 ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^A68064好吧，先生。";
+		mes "不過，我無能為力";
+		mes "但是感到不安...^000000";
+	}
+	else if(tu_acolyte01 > 9 && tu_acolyte01 < 25){
+		mes "[來自窗口的聲音]";
+		mes "^a68064i聽到了";
+		mes "宮殿官員";
+		mes "他們要求";
+		mes "我們為驅魔。 ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^cd6600驅魔？";
+		mes "殭屍攻擊了嗎？";
+		mes "王國還是什麼？ ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^a68064no，我不認為";
+		mes "就是這樣，但是";
+		mes "他們要求";
+		mes "一個高技能的聖人...^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^CD6600HMM ...";
+		mes "我想知道什麼";
+		mes "正是正在進行...^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^A68064i會通知您";
+		mes "我聽到";
+		mes "東西。 ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^CD6600Thank您...^000000";
+	}
+	else if(tu_acolyte01 > 24){
+		mes "[來自窗口的聲音]";
+		mes "^a68064 ...先生，您對Gaebolg家族的^855e42Curse^a68064？ ^000000一無所知";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^CD6600蓋博格？";
+		mes "你在告訴我嗎";
+		mes "有詛咒";
+		mes "王室？ ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^a68064是的...";
+		mes "這就是為什麼他的";
+		mes "殿下，特里斯坦國王三世，";
+		mes "他的朝臣一直在";
+		mes "最近表演奇怪...^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^a68064你看...";
+		mes "Yormungard是";
+		mes "說詛咒了";
+		mes "Gaebolg家族首次建立符文時。 ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^CD6600yormungard？ ！";
+		mes "我們如何希望";
+		mes "打擊它的魔力？";
+		mes "甚至沒有阿斯加德人";
+		mes "可以處理";
+		mes "巨型蛇的力量！ ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^A68064太可怕了...";
+		mes "由於詛咒，";
+		mes "每一代Gaebolg家族的第一個孩子據說會死亡...^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^CD6600您說所有第一批王子和公主";
+		mes "到目前為止死了嗎？如果這是真的，如果單詞出來...^000000會導致麻煩";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^CD6600IS發生了什麼事";
+		mes "在宮殿？大王子最近去世了嗎？ ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^A68064不...";
+		mes "實際上，第二個";
+		mes "長子通過了";
+		mes "離開，不是第一個。 ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^CD6600什麼！ ？ ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^a68064l降低您的聲音！ ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^CD6600SO ...";
+		mes "它是怎麼發生的？";
+		mes "是事故嗎？ ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^A68064他們尚未確定";
+		mes "死亡的確切原因。但是法院官員希望我們看看我們是否可以一勞永逸地撤消Yormungard的詛咒。 ^000000";
+		next;
+		mes "[來自窗口的聲音]";
+		mes "^CD6600Yormungard的詛咒？";
+		mes "這麼多年後可以將其刪除嗎？如此古老";
+		mes "魔術可能太強大了";
+		mes "我們在教堂裡的任何人...^000000";
+		next;
+		mes "[窗戶的聲音]";
+		mes "^A68064這項任務在紀念上是巨大的！";
+		mes "如果我們應該失敗，我們將失去選民的信仰。教堂和皇家法院確實需要一個奇蹟...^000000";
+		next;
+		mes "[窗戶的聲音]";
+		mes "^CD6600Well，教會的回應是什麼？我們真的要派人舉起可以挑戰阿斯加德人的怪物的詛咒嗎？ ^000000";
+		next;
+		mes "[窗戶的聲音]";
+		mes "^a68064i不太確定。";
+		mes "那些可能有";
+		mes "必要的技能是";
+		mes "太老了。儘管如此，他們還是";
+		mes "不放棄希望...^000000";
+		next;
+		mes "[窗戶的聲音]";
+		mes "^A68064這種情況對王室的聲譽和王國的穩定非常重要，因此每個人都非常謹慎";
+		mes "關於保持安靜。 ^000000";
+		next;
+		mes "[窗戶的聲音]";
+		mes "^a68064現在，我將回到王國，如果我聽到任何其他消息，請告訴您。不過，由於每個人都需要如此小心，所以可能是";
+		mes "一段時間，直到我學習新的東西。 ^000000";
+		next;
+		mes "[窗戶的聲音]";
+		mes "^CD6600Thank您非常。";
+		mes "我會等待聽到";
+		mes "再次來自您。 ^000000";
+		next;
+		mes "[窗戶的聲音]";
+		mes "^CD6600哦，親愛的上帝。";
+		mes "請驅逐接近符文米加特王國的黑暗。請用您的輕巧和同情保護我們。 ^000000";
+	}
+	close;
+}
+
+sec_in02,17,156,3	script	1st Job Quest Reset	4_F_JOB_BLACKSMITH,{
+	callfunc "F_GM_NPC";
+	mes "[第一任務任務]";
+	mes "您想重置哪個？";
+	next;
+	switch(select("劍士:商人:弓箭手:侍僧:盜賊:法師")) {
+	case 1:
+		tu_swordman = 0;
+		break;
+	case 2:
+		tu_merchant = 0;
+		break;
+	case 3:
+		tu_archer01 = 0;
+		tu_archer02 = 0;
+		break;
+	case 4:
+		tu_acolyte01 = 0;
+		break;
+	case 5:
+		tu_thief01 = 0;
+		break;
+	case 6:
+		tu_magician01 = 0;
+		break;
+	}
+	mes "完全的。";
+	close;
+}

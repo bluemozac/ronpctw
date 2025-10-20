@@ -1,0 +1,161 @@
+﻿//===== rAthena Script ======================================= 
+//= Juno Airport Staff
+//===== By: ================================================== 
+//= L0ne_W0lf, Muad_Dib
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Juno Airport Staff
+//===== Additional Comments: ================================= 
+//= 1.0 First version.
+//============================================================ 
+
+y_airport,143,43,5	script	Airport Staff#y_air1a::y_airport1	90,{
+	mes "[機場工作人員]";
+	mes "歡迎來到朱諾機場，在那裡我們提供飛往Einbroch，Lighthalzen和Hugel的國內航班，";
+	mes "和國際飛往伊茲盧德（Izlude）和雷切爾（Rachel）的航班。";
+	mes "我該如何服務？";
+	next;
+	if (select("登上飛艇:取消。") == 1) {
+		mes "[機場工作人員]";
+		mes "所有人的登機費";
+		mes "航班是1,200 Zeny。如果你";
+		mes "使用免費的飛艇票，";
+		mes "登機費將被免除。您想離開嗎？";
+		next;
+		if (select("是:否") == 1) {
+			if (countitem(7311) > 0) {
+				delitem 7311,1; //Free_Flying_Ship_Ticket
+				warp "y_airport",148,51;
+				end;
+			}
+			if (Zeny >= 1200) {
+				set Zeny, Zeny - 1200;
+				warp "y_airport",148,51;
+				end;
+			}
+			mes "[機場工作人員]";
+			mes "對不起，但是你沒有";
+			mes "有1,200 Zeny付款";
+			mes "登機費。";
+			close;
+		}
+	}
+	mes "[機場工作人員]";
+	mes "謝謝，";
+	mes "祝你今天過得愉快。";
+	close;
+}
+
+y_airport,158,43,5	duplicate(y_airport1)	Airport Staff#y_air1b	90
+y_airport,126,43,5	duplicate(y_airport1)	Airport Staff#y_air1c	90
+
+y_airport,143,49,3	script	Arrival Staff#y_air2a::y_airport2	90,{
+	mes "[機場工作人員]";
+	mes "歡迎來到朱諾機場。如果您剛從您的";
+	mes "飛行，讓我引導您前往主碼頭。否則，請";
+	mes "登上出發的飛艇以到達您的預定目的地。";
+	next;
+	if (select("退出主終端:取消") == 1) {
+		mes "[機場工作人員]";
+		mes "一旦進入主要終端，您必須再次支付費用";
+		mes "登上一架飛艇。您只有在您的意圖時才退出";
+		mes "目的地是朱諾。繼續";
+		mes "退出主要終端？";
+		next;
+		if (select("是:否") == 1) {
+			warp "y_airport",142,40;
+			end;
+		}
+	}
+	mes "[機場工作人員]";
+	mes "好吧，謝謝";
+	mes "為了您的光顧";
+	mes "我希望你有";
+	mes "宜人的航班~";
+	close;
+}
+
+y_airport,126,51,3	duplicate(y_airport2)	Arrival Staff#y_air2b	90
+y_airport,158,50,3	duplicate(y_airport2)	Arrival Staff#y_air2c	90
+
+y_airport,145,63,5	script	Domestic Boarding	91,{
+	mes "[登機人員]";
+	mes "你想登機嗎";
+	mes "飛往Einbroch的飛艇，";
+	mes "Lighthalzen和Hugel？如果是這樣，";
+	mes "請讓我引導你";
+	mes "飛艇的登機區。";
+	next;
+	if (select("是:否") == 1) {
+		warp "yuno",59,244;
+		end;
+	}
+	mes "[登機人員]";
+	mes "很好，那麼。";
+	mes "謝謝你的";
+	mes "贊助，我希望";
+	mes "你喜歡旅行~";
+	close;
+}
+
+y_airport,140,63,5	script	International Boarding	91,{
+	mes "[登機人員]";
+	mes "你想登機嗎";
+	mes "飛往飛往的飛艇";
+	mes "Juno，Izlude和Rachel？";
+	mes "如果是這樣，讓我指導";
+	mes "您到寄宿區。";
+	next;
+	if (select("是:否") == 1) {
+		warp "yuno",47,244;
+		end;
+	}
+	mes "[登機人員]";
+	mes "好吧，那麼。";
+	mes "謝謝你的飛行";
+	mes "和我們在一起，希望你";
+	mes "享受您的旅行";
+	mes "最先進的飛艇。";
+	close;
+}
+
+yuno,14,262,5	script	Airship Staff#yuno01	91,{
+	mes "[飛艇工作人員]";
+	mes "歡迎來到朱諾機場。";
+	mes "請用這扇門";
+	mes "登上飛艇";
+	mes "一直飛往伊茲盧德";
+	mes "在符文米加特王國中，";
+	mes "和阿魯納菲爾茨的雷切爾";
+	mes "共和國。";
+	next;
+	mes "[飛艇工作人員]";
+	mes "否則，如果朱諾是";
+	mes "您的意圖目的地，";
+	mes "請走下樓梯";
+	mes "並要求到達的工作人員領導";
+	mes "您到主終端。感謝";
+	mes "你，喜歡旅行。";
+	close;
+}
+
+yuno,88,263,3	script	Airship Staff#yuno02	91,{
+	mes "[飛艇工作人員]";
+	mes "歡迎來到朱諾機場。";
+	mes "請用這扇門";
+	mes "登上停止的飛艇";
+	mes "超過Einbroch，Lighthalzen和";
+	mes "施瓦茨瓦爾德共和國的休格爾。";
+	next;
+	mes "[飛艇工作人員]";
+	mes "否則，如果朱諾是";
+	mes "您的意圖目的地，";
+	mes "請走下樓梯";
+	mes "並要求到達的工作人員領導";
+	mes "您到主終端。感謝";
+	mes "你，喜歡旅行。";
+	close;
+}

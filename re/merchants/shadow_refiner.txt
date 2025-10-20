@@ -1,0 +1,168 @@
+﻿//===== rAthena Script =======================================
+//= Shadow Blacksmith
+//===== Description: =========================================
+//= [Official Conversion]
+//= Shadow equipments refining NPC.
+//===== Changelog: ===========================================
+//= 1.0 First version [Aleos]
+//= 1.1 Removed re-roll behavior and fetch materials from db
+//=     [Secret]
+//= 1.2 Added Refine UI [Atemo, Lemongrass]
+//= 1.3 Moved to Cash Mall [Lemongrass]
+//============================================================
+-	script	::ShadowBlacksmith	-1,{
+	if( getbattleflag( "feature.refineui" ) ){
+		mes "[影子鐵匠]";
+		mes "現在，巴斯塔（Basta）負責陰影物品的完善。";
+		mes "如果您想完善影子物品，請訪問他。";
+		close;
+	}
+
+	.@zeny_cost = 200000; // Zeny cost is 200,000 according to official script [Secret]
+	disable_items;
+	mes "[影子鐵匠]";
+	mes "您想完善影子物品嗎？選擇你的毒藥！";
+	next;
+	setarray .@indices[1], EQI_SHADOW_ARMOR, EQI_SHADOW_WEAPON, EQI_SHADOW_SHIELD, EQI_SHADOW_SHOES, EQI_SHADOW_ACC_R, EQI_SHADOW_ACC_L;
+	.@indlen = getarraysize(.@indices) - 1;
+	for(.@i = 1; .@i <= .@indlen; .@i++)
+		.@menu$ = .@menu$ + (getequipisequiped(.@indices[.@i]) ? getequipname(.@indices[.@i]) : F_getpositionname(.@indices[.@i]) +"-[Not equipped]") +":";
+	.@menu$ = .@menu$ + "Refine info";
+	.@choice = select(.@menu$);
+	if (.@choice == .@indlen + 1) { // Refine info
+		mes "[影子鐵匠]";
+		mes "當精煉影子物品時，它會像普通物品一樣獲得額外的獎金。";
+		next;
+		mes "[影子鐵匠]";
+		mes "武器：ATK，MATK + 1增加+1的精煉成功。";
+		mes "等等：每個+1完善成功的HP + 10增加。";
+		next;
+		mes "[影子鐵匠]";
+		mes "所有類型的Oridecon和Elunium都可以用於完善影子項目。每次嘗試也將花費20,000 Zeny。";
+		next;
+		mes "[影子鐵匠]";
+		mes "高清礦石可用於至少提煉水平+7的齒輪，只要您與我交談，就可以防止破裂。";
+		close;
+	}
+
+	.@part = .@indices[.@choice];
+
+	if (!getequipisequiped(.@part)) {
+		mes "[影子鐵匠]";
+		mes "這裡什麼都沒有！";
+		close;
+	}
+	.@equip_id = getequipid(.@part);
+	setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+
+	while(1) {
+		.@equip_refine = getequiprefinerycnt(.@part);
+		mes "[影子鐵匠]";
+		mes "我需要" + callfunc("F_InsertComma", .@zeny_cost) + " zeny as a fee for EACH refine attempt.";
+		mes "選擇您的礦石並開始精煉。";
+		next;
+
+		.@material[0] = getequiprefinecost(.@part, REFINE_COST_NORMAL, REFINE_MATERIAL_ID);
+		.@material[1] = getequiprefinecost(.@part, REFINE_COST_ENRICHED, REFINE_MATERIAL_ID);
+		.@material[2] = getequiprefinecost(.@part, REFINE_COST_HD, REFINE_MATERIAL_ID);
+		.@is_enriched = false;
+
+		if (countitem(.@material[0]))
+			.@mate$[0] = getitemname(.@material[0]);
+		else
+			.@mate$[0] = "^8C8C8C"+ getitemname(.@material[0]) +"^000000";
+		if (countitem(.@material[1]))
+			.@mate$[1] = getitemname(.@material[1]);
+		else
+			.@mate$[1] = "^8C8C8C"+ getitemname(.@material[1]) +"^000000";
+		if (.@equip_refine > 6 && countitem(.@material[2]))
+			.@mate$[2] = getitemname(.@material[2]);
+		else
+			.@mate$[2] = "^8C8C8C"+ getitemname(.@material[2]) +"^000000";
+
+		switch( select( .@mate$[0], .@mate$[1], .@mate$[2], "Cancel" ) ) {
+		case 1:// NORMAL
+			.@choose = .@material[0];
+			break;
+		case 2:// ENRICHED
+			.@is_enriched = true;
+			.@choose = .@material[1];
+			break;
+		case 3:// HD
+			if (.@equip_refine < 7) {
+				mes "[影子鐵匠]";
+				mes "高清礦石只能用於+7或更高的完善水平項目。";
+				close;
+			}
+			.@hoihoi = 1;
+			.@choose = .@material[2];
+			break;
+		case 4:
+			mes "[影子鐵匠]";
+			mes "您已經取消了精煉。";
+			close;
+		}
+		if (!countitem(.@choose)) {
+			mes "[影子鐵匠]";
+			mes "你沒有足夠的"+ getitemname(.@choose) +".";
+			close;
+		}
+		if (Zeny < .@zeny_cost) {
+			mes "[影子鐵匠]";
+			mes "您沒有足夠的Zeny。";
+			close;
+		}
+		if (.@equip_refine > 9) {
+			mes "[影子鐵匠]";
+			mes "陰影設備可以完善至最多10 ...";
+			close;
+		}
+		if (!getequipisenableref(.@part)) {
+			mes "[影子鐵匠]";
+			mes "該項目無法完善。";
+			close;
+		}
+		if (getequippercentrefinery(.@part) < 100) {
+			mes "[影子鐵匠]";
+			mes "陰影設備的安全性級別為+4。";
+			if (!.@hoihoi)
+				mes "在隨後的改進中可能會破壞影子設備。想開始嗎？";
+			else
+				mes "下一個改進，如果失敗，將降低改進。你想完善嗎？";
+			next;
+			if (select("Proceed","Cancel") == 2) {
+				mes "[影子鐵匠]";
+				mes "嘿，我知道！";
+				close;
+			}
+		}
+		mes "[影子鐵匠]";
+		mes "好吧..這一切都沒有！";
+		next;
+		delitem .@choose,1;
+		Zeny -= .@zeny_cost;
+
+		// anti-hack
+		if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3]) || callfunc("F_IsEquipRefineHack", .@part, .@equip_refine))
+			close;
+
+		if (getequippercentrefinery(.@part, .@is_enriched) > rand(100)) {
+			successrefitem .@part;
+			mes "[影子鐵匠]";
+			mes "它奏效了！它奏效了！";
+			next;
+		} else {
+			if (.@hoihoi)
+				downrefitem .@part;
+			else
+				failedrefitem .@part;
+			mes "[影子鐵匠]";
+			mes "哦，奧丁不！";
+			close;
+		}
+	}
+}
+
+//moc_paraup,45,185,5	duplicate(ShadowBlacksmith)	Shadow Blacksmith#eden1	4_F_JOB_BLACKSMITH // Commented out until it's added to the map index
+//prt_in,61,54,3	duplicate(ShadowBlacksmith)	Shadow Blacksmith#itemmall	4_F_JOB_BLACKSMITH
+itemmall,31,76,3	duplicate(ShadowBlacksmith)	Shadow Blacksmith#itemmall	4_F_JOB_BLACKSMITH

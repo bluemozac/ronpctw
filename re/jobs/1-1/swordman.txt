@@ -1,0 +1,126 @@
+﻿//===== rAthena Script ======================================= 
+//= Renewal Swordman Job Quest
+//===== By: ================================================== 
+//= Kisuka
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Job Change to Swordman Class
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. [Kisuka]
+//= 1.1 Added support for Baby classes. [Euphy]
+//============================================================ 
+izlude_in,74,172,4	script	Swordman#swd	119,{
+	if (Upper == 1) {
+		if (Class == Job_Novice_High && (ADVJOB == Job_Lord_Knight || ADVJOB == Job_Paladin)) {
+			mes "[劍客]";
+			mes "它...";
+			mes "不能...";
+			mes "你是重生的，不是嗎？";
+			next;
+			mes "[劍客]";
+			mes "我看到您正在重讀劍客的道路！一旦您習慣了揮舞劍，就永遠無法回頭！ ！";
+			next;
+			if (!callfunc("F_CanChangeJob")) {
+				mes "[劍客]";
+				mes "唔？啊，您必須先掌握基本技能，然後才能成為劍客。";
+				next;
+				mes "[劍客]";
+				mes "當您完成學習基本的新手技能時，請回到我身邊。";
+				close;
+			}
+			mes "[劍客]";
+			mes "出色的！讓我立即將您提升為劍客！";
+			next;
+			skill "NV_TRICKDEAD",0,SKILL_PERM;
+			jobchange Job_Swordman_High;
+			skill "SM_MOVINGRECOVERY",1,SKILL_PERM;
+			skill "SM_FATALBLOW",1,SKILL_PERM;
+			skill "SM_AUTOBERSERK",1,SKILL_PERM;
+			mes "[劍客]";
+			mes "嗯...你看起來像是經驗豐富的劍客。不過，我確定您必須訓練以提高自己的技能並獲得力量！";
+			close;
+		}else{
+			mes "[劍客]";
+			mes "嗯...？";
+			mes "你是一個重生";
+			mes "戰士，不是嗎？";
+			next;
+			mes "[劍客]";
+			mes "嗯...";
+			mes "似乎是";
+			mes "劍客不是一部分";
+			mes "你的命運。對不起，";
+			mes "但是看來沒有什麼";
+			mes "我可以為你做。";
+			close;
+		}
+	}
+	mes "[劍士公會成員]";
+	mes "這是劍客公會。";
+	mes "你為什麼在這裡？";
+	next;
+	switch(select("告訴我關於成為劍士:我想要成為劍士:沒事")) {
+	case 1:
+		mes "[劍士公會成員]";
+		mes "所以您想進一步了解強大的劍客嗎？好的！";
+		next;
+		mes "[劍士公會成員]";
+		mes "劍客最獨特的特徵是，劍客可以向我們展示他/她的近距離戰鬥能力。";
+		mes "有三個原因！";
+		next;
+		mes "[劍士公會成員]";
+		mes "首先，Swordman的HP高於其他工作。";
+		mes "其次，除了弓箭和桿外，劍客還可以使用所有其他武器，以便他們可以以最佳的能力戰鬥。";
+		mes "第三，劍客的大多數技能都會引起強烈的身體攻擊。";
+		next;
+		mes "[劍士公會成員]";
+		mes "儘管我給了您一個簡單的解釋，但我相信您了解成為劍客的核心含義。";
+		mes "我認為，劍術是有史以來最好的工作！";
+		close;
+	case 2:
+		mes "[劍士公會成員]";
+		if(BaseJob != Job_Novice) {
+			if(BaseJob == Job_Swordman) {
+				mes "您已經是一位出色的劍客，不是嗎？";
+				mes "只是奉獻自己成為一把偉大的劍客。";
+			}else{
+				mes "您已經有其他工作之一，不是嗎？";
+				mes "那個笑話你走了太遠。";
+			}
+			close;
+		}else{
+			if (!callfunc("F_CanChangeJob")) {
+				mes "很抱歉告訴您這件事，但是要成為劍客，您必須至少達到 ^4a4affjob級別10 ^000000。";
+				mes "和 ^4A44Affbasic技能9 ^000000。";
+				next;
+				mes "[劍士公會成員]";
+				mes "想成為一名劍客而沒有最低要求？";
+				mes "您認為當劍客很容易嗎？";
+				close;
+			}
+			mes "嗯，您的工作水平和基本技能水平都可以結帳。";
+			mes "好的。您想馬上成為劍客嗎？";
+			next;
+			if(select("是的，我想要:我會再考慮一下") == 2) {
+				mes "[劍士公會成員]";
+				mes "是的。選擇工作需要審慎的決定。";
+				mes "但是我很抱歉...在克服所有困難之後，您再次考慮。";
+				close;
+			}
+			mes "[劍士公會成員]";
+			mes "恭喜！從現在開始，您將過劍客的生活！";
+			mes "讓我們現在就做吧！";
+			next;
+			mes "[劍士公會成員]";
+			mes "再次恭喜您成為劍客，我希望您能參加許多活動，以復興我們的行會。";
+			callfunc "Job_Change",Job_Swordman;
+			getitem 13415,1; // N_Falchion
+			close;
+		}
+	case 3:
+		close;
+	}
+}

@@ -1,0 +1,121 @@
+﻿//===== rAthena Script =======================================
+//= Acolyte Skill Quest
+//===== By: ==================================================
+//= kobra_k88
+//===== Current Version: =====================================
+//= 1.8
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Quest for skills: Holy Light
+//===== Additional Comments: ================================= 
+//= 1.5 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//= 1.6 Fixed a typo in job check. (Bugreport:1531) [L0ne_W0lf]
+//= 1.7 Updated to latest available official file. [Masao]
+//= 1.8 Fixed JobLevel requirements. [Euphy]
+//============================================================
+
+prt_church,173,23,4	script	Cleric	79,{
+	mes "[侍僧克利夫特]";
+	mes "啊。兄弟！做任務";
+	mes "關心失去的綿羊負擔";
+	mes "疲倦你嗎？";
+	mes "我在這里為您提供幫助。";
+	next;
+	switch (select("^3355FF' 關於服伺事的隱藏能力 '^000000 ..:^3355FF' 聖光 '^000000 訓練:結束對話")) {
+	case 1:
+		mes "[侍僧克利夫特]";
+		mes "我們的神職人員成員";
+		mes "自然地學習一項技能";
+		mes "隨著他們成熟。當他們接近時";
+		mes "他們作為侍從的高年級";
+		mes "這種特殊技能。";
+		next;
+		mes "[侍僧克利夫特]";
+		mes "面對極大的危險";
+		mes "與邪惡的無盡鬥爭，";
+		mes "我們的弟兄們非常需要幫助。";
+		mes "^3355ff'聖光'^000000就是那種技能。";
+		mes "為自己獲得這種能力，";
+		mes "需要一些工作。";
+		next;
+		mes "[侍僧克利夫特]";
+		mes "要獲得技能，您必須找到這些項目。";
+		mes "^ff33551 蛋白石^000000";
+		mes "^ff33551水晶藍^000000";
+		mes "^ff33551念珠^000000";
+		next;
+		mes "[侍僧克利夫特]";
+		mes "為了能夠使用此技能，";
+		mes "必須有足夠的經驗。";
+		mes "^ff3355作業級別30^000000";
+		mes "需要學習此技能。";
+		next;
+		mes "[侍僧克利夫特]";
+		mes "至於牧師，因為他們";
+		mes "已經大量的經驗，";
+		mes "他們能夠在任何";
+		mes "工作水平。";
+		close;
+	case 2:
+		if (getskilllv("AL_HOLYLIGHT") == 1) {
+			mes "[侍僧克利夫特]";
+			mes "兄弟，你已經擁有";
+			mes "“聖光”的技巧。";
+			mes "你無法獲得技巧";
+			mes "已經擁有..";
+			mes "我祈禱你正在使用";
+			mes "這項善良工作的技能。 。";
+			close;
+		}
+		if ((countitem(727) > 0) && (countitem(991) > 0) && (countitem(2608) > 0) && (JobLevel > 29 || (BaseJob == Job_Priest || BaseJob == Job_Monk)) && (BaseClass == Job_Acolyte)) {
+			mes "[侍僧克利夫特]";
+			mes "您的信仰已被證明值得";
+			mes "讓您獲得“聖光”技能。";
+			mes "您的技能足夠";
+			mes "使用此技能。";
+			mes "明智地使用它。 。 。";
+			next;
+			delitem 727,1; //White_Jewel
+			delitem 991,1; //Crystal_Blue
+			delitem 2608,1; //Rosary
+			skill "AL_HOLYLIGHT",1,SKILL_PERM;
+			mes "[侍僧克利夫特]";
+			mes "你現在知道“聖光”";
+			mes "願您僅在";
+			mes "最佳行為。 。 。 。 。";
+			close;
+		}
+		mes "[侍僧克利夫特]";
+		mes "哦，很清楚。 。 。";
+		mes "你還沒有準備好";
+		mes "獲得“聖光”技能。";
+		next;
+		mes "[侍僧克利夫特]";
+		mes "你應該仔細聽什麼";
+		mes "對於此技能是必要的。";
+		mes "如果您仔細聽，";
+		mes "您可能會學習缺乏的東西。";
+		mes "這樣您就可以改善自己。";
+		close;
+	case 3:
+		mes "[侍僧克利夫特]";
+		mes "……";
+		mes "我了解你的熱情。";
+		mes "你有很多時間";
+		mes "練習和獲得經驗。";
+		mes "祝福你。 。 。 。 。";
+		close;
+	}
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.0a Now using functions found in "Global_Functions.txt"
+//=     for class checks.
+//= 1.2 Added Baby Class Support [Lupus]
+//= 1.3 Removed callfunc Is_####_Class in favor of baseClass [Silentdragon]
+//= 1.4 Fixed an exploit [Lupus]
+//= 1.4a changed perm. variables to temp ones [Lupus]
+//============================================================

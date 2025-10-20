@@ -1,0 +1,1008 @@
+﻿//===== rAthena Script =======================================
+//= God Items Quest
+//===== Description: =========================================
+//= [Official Conversion]
+//= God Item Jormungand Creation script (WoE TE)
+//===== Changelogs: ==========================================
+//= 1.0 First Version. [Capuche]
+//============================================================
+
+te_aldecas1,226,34,3	script	Blacksmith Cano#tegod01	4_M_RACHMAN1,{
+	if (checkweight(1201,1) == 0) {
+		mes "您有太多的項目可以進行任務。";
+		mes "請減輕您的負載，然後重試。";
+		close;
+	}
+
+	.@guild_id = getcastledata("te_aldecas1",1);
+	.@economy  = getcastledata("te_aldecas1",2);
+	.@npc_name$ = "Cano";
+
+	mes "["+ .@npc_name$ +"]";
+	if (.@guild_id != getcharid(2)) {
+		mes "你...對我不熟悉...嗎？";
+		mes "你要威脅我嗎？";
+		mes "不，對吧？";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "我有我的理由。";
+		mes "請假裝不要見我。";
+		close;
+	}
+	if (WoeTETimeStart(14400) == 1 || agitcheck3() == 1) {// cannot start the quest 4 hours before and during WOE TE
+		mes "從現在開始，我將安靜地呆在這裡，直到攻城結束之前，我不會打擾任何人。";
+		mes "不用擔心我。";
+		close;
+	}
+	if (is_guild_leader() == false) {
+		mes "我一直對你讓我留在這裡感到非常感激。";
+		mes "這沒什麼特別的...但是，如果您願意，我會為您提供可能使用的工具。";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "我的意思是，如果公會大師想要它。";
+		mes "我也是一個追求最終方式的大師。";
+		mes "我希望我能在這裡找到這種方式。";
+		close;
+	}
+	if ($2012_tegod_kafra == 0) {// event status
+		mes "啊...主人。";
+		mes "我一直都很感激。";
+		mes "既然我欠您很長時間，我會隨時幫助您。";
+		next;
+		switch( select( "Make Jormungand.","Fuse materials.","Relax." ) ) {
+		case 1:
+			if (.@economy > 29) {
+				if (countitem(6603) > 3 && countitem(6599) > 0 && countitem(6598) > 0 && countitem(6601) > 3 && countitem(6600) > 0 && countitem(6605) > 0 && countitem(6604) > 0 && countitem(1473) > 0) {
+					mes "在製造Jormungand的過程中，需要 ^ff0000wizardry工作人員。";
+					mes "除了巫師工作人員以進行任務外，您不應該擁有其他任何物品。 ^ff0000";
+					next;
+					mes "^ff0000eeeven如果應用了改進水平和卡，則該過程需要您可能擁有的任何一個巫師工作人員。";
+					mes "組織財產後，請再試一次。 ^000000";
+					next;
+					if (select( "Organize possessions.","Continue as it is." ) == 1) {
+						mes "您決定僅保留巫師工作人員。";
+						close;
+					}
+					mes "["+ .@npc_name$ +"]";
+					mes "我看到您已經按照您的承諾開發了要塞。";
+					mes "此外，您已經找到了Trail的暮光...";
+					next;
+					mes "["+ .@npc_name$ +"]";
+					mes "...所以..讓我們完成工作。";
+					mes "在女孩找到我們之前...";
+					next;
+					mes "[" + strcharinfo(0) + "]";
+					mes "女孩...？";
+					next;
+					mes "["+ .@npc_name$ +"]";
+					mes "...是的，有一些女孩..";
+					mes "我不得不因為他們而逃跑...";
+					donpcevent "#tequest_master_alde01::OnCommandOn";
+					mapannounce "te_aldecas1","A girl's voice: Hey, were you talking about us? It's "+ .@npc_name$ +", right? I can't believe you ran away to a place like this.",bc_map,"0x00FF00",FW_BOLD,20,0,40;
+					next;
+					mes "["+ .@npc_name$ +"]";
+					mes "哦，不...！";
+					mes "他們在這裡.. !!";
+					next;
+					mes "[" + strcharinfo(0) + "]";
+					mes "把它留給我。";
+					next;
+					mes "^4d4dff！ - 指令 - ！";
+					mes "很快，有7個女孩"+ .@npc_name$ +" will try to invade the fortress.";
+					mes "你必須保護"+ .@npc_name$ +" for 1 hour.^000000";
+					next;
+					mes "^4d4dff！ - 指令 - ！";
+					mes "當實際攻擊開始時，皇帝區域的門將被封鎖以保護。 ^000000";
+					close;
+				}
+				mes "["+ .@npc_name$ +"]";
+				mes "Jormungand是一名以上帝的兒子Jormungand為仿真的員工，他擁抱了世界。";
+				mes "它也指眾神的暮色拉格納羅克。";
+				next;
+				mes "["+ .@npc_name$ +"]";
+				mes "但是，在這裡，我們有像徵著眾神暮光之城的物品...";
+				mes "我簡直不敢相信我會用他們自己的手來使他們自己……用自己的雙手！";
+				next;
+				mes "["+ .@npc_name$ +"]";
+				mes "但是，似乎我們需要更多的材料。";
+				mes "你能再次檢查嗎？我會給您我們需要的清單。";
+				callsub S_Material, .@npc_name$,1,"since Jormungand has a great power.";
+			}
+			mes "["+ .@npc_name$ +"]";
+			mes "但是，如果我說些什麼，沒關係嗎？";
+			mes "Jormungand是我製作的最強大的戰鬥之一，您應該從我這裡收到類似的東西。";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "但是我希望您至少擁有最低資格。";
+			mes "很好地管理這個要塞，並將 ^4d4dffits Commerce級別提高30或更多 ^000000。";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "強大的力量帶來了巨大的責任和責任。";
+			mes "我希望您先掌握基礎知識。";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "後來我要讓Jormungand。";
+			mes "如果您願意，讓我給您材料列表。";
+			callsub S_Material, .@npc_name$,0,"since Jormungand has a great power.";
+		case 2:
+			callsub S_Fuse, .@npc_name$, "Jormungand";
+		case 3:
+			mes "["+ .@npc_name$ +"]";
+			mes "這麼說真是太好了。";
+			mes "順便說一句，我想知道我的哥哥Kai的表現如何？";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "我敢肯定他就像我一樣很好。";
+			mes "...我希望事情和現在一樣和平。";
+			close;
+		}
+	}
+	if ($2012_tegod_kafra == 1) {// event started
+		mes "你聽到了消息嗎？";
+		mes "女孩們來了。";
+		mes "無情的女孩！ ！ ！";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "自從他們已經宣布戰爭以來，他們將在這裡到達這裡。";
+		mes "我敢肯定，他們要去Jormungand。";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "阻止他們。請！";
+		next;
+		switch( select( "Leave it to me.","What do you mean 'the girls?'" ) ) {
+		case 1:
+			mes "["+ .@npc_name$ +"]";
+			mes "謝謝...";
+			mes "對不起，我會給您帶來麻煩，但我的手是綁著的。";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "拜託，為我停下來！";
+			close;
+		case 2:
+			mes "["+ .@npc_name$ +"]";
+			mes "...他們是想成為女武神的女孩...";
+			mes "他們總是以七人一組的形式四處走動。";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "他們想要的是強大的戰鬥...";
+			mes "他們總是威脅我的哥哥凱和我。";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "他們最初對基本武器感到滿意，但是";
+			mes "很快，他們開始威脅我們說他們需要更強大的東西才能成為女武神。";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "我無法忍受，所以我逃走了...但是他們在這裡...";
+			mes "您必須小心，因為他們發現Jormungand的材料在這裡。";
+			close;
+		}
+	}
+	if ($2012_tegod_kafra == 2) {// after 10 minutes delay
+		mes "啊，別再跟著我了！";
+		mes "如果您能擺脫它們... Jormungand，那是的！我會讓你jormungand！";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "他們什麼時候會停止關注我...";
+		mes "現在我害怕女孩一般...而且我太害怕做任何事情...";
+		next;
+		mes "他現在正在bab褻。";
+		mes "等一下，他會冷靜下來。";
+		mes "您必須先擺脫那些女孩。";
+		close;
+	}
+	if ($2012_tegod_kafra == 3) {// event failed
+		mes "...儘管我設法再次逃脫了...";
+		mes "很難。";
+		mes "生活是如此艱難。";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "我很筋疲力盡，無法做任何事情。";
+		mes "...我認為我一段時間都無法做任何事情，無論是生產，污跡還是任何事物。";
+		mes "對不起。我休息一下。";
+		close;
+	}
+	if ($2012_tegod_kafra == 4) {
+		mes "我終於可以呼吸了。";
+		mes "我將開始按照承諾做Jormungand。";
+		next;
+		switch( select( "Make Jormungand.","Fuse materials.","Not now." ) ) {
+		case 1:
+			if (countitem(6603) > 3 && countitem(6599) > 0 && countitem(6598) > 0 && countitem(6601) > 3 && countitem(6600) > 0 && countitem(6605) > 0 && countitem(6604) > 0 && countitem(1473) > 0) {
+				mes "在製造Jormungand的過程中，需要 ^ff0000wizardry工作人員。";
+				mes "除了巫師工作人員以進行任務外，您不應該擁有其他任何物品。 ^ff0000";
+				next;
+				mes "^ff0000eeeven如果應用了改進水平和卡，則該過程需要您可能擁有的任何一個巫師工作人員。";
+				mes "組織財產後，請再試一次。 ^000000";
+				next;
+				if (select( "Organize possessions.","Continue as it is." ) == 1) {
+					mes "您決定僅保留巫師工作人員。";
+					close;
+				}
+				mes "["+ .@npc_name$ +"]";
+				mes "哦...謝謝。";
+				mes "我簡直不敢相信我終於自己碰到了這些材料...";
+				next;
+				mes "["+ .@npc_name$ +"]";
+				mes "這裡是。";
+				mes "儘管我們必須經過許多步驟，但這不是很快嗎？";
+				mes "我感到不知所措，感覺很短。";
+				next;
+				mes "Jormungand是一種強大的武器和神話中所有痕蹟的收集，終於製作了";
+				mes "在"+ .@npc_name$ +".";
+				delitem 6603,4;// Skin_Of_Hraesvelg
+				delitem 6599,1;// Spirit_Of_Hugin
+				delitem 6598,1;// Rib_Of_Jormungand
+				delitem 6601,4;// Chisel_Of_Giant
+				delitem 6600,1;// Spirit_Of_Munin
+				delitem 6605,1;// Muspellium
+				delitem 6604,1;// Essence_Of_Rune
+				delitem 1473,1;// Wizardy_Staff
+				$2012_tegod_kafra = 5;
+				getitem 2020,1;// Jormungand
+				announce "Twilight of trail [ Jormungand ] is introduced to this world by ["+ strcharinfo(0) +"] of ["+ getguildname(.@guild_id) +"] Guild.",bc_all,"0x70dbdb",FW_NORMAL,12;
+				if (.@economy > 20)
+					setcastledata "te_aldecas1",2,(.@economy -20);
+				else
+					setcastledata "te_aldecas1",2,1;// min is 1 for WOE TE
+				next;
+				mes "["+ .@npc_name$ +"]";
+				mes "哇..我認為我可以工作一段時間。";
+				mes "我都精疲力盡。哈哈哈...";
+				close;
+			}
+			mes "["+ .@npc_name$ +"]";
+			mes "但是，似乎我們需要更多的材料。";
+			mes "你能再次檢查嗎？我會給您我們需要的清單。";
+			callsub S_Material, .@npc_name$,1;
+		case 2:
+			callsub S_Fuse, .@npc_name$, "Jormungand";
+		case 3:
+			mes "["+ .@npc_name$ +"]";
+			mes "現在實際上是做到這一點的合適時機。";
+			mes "到下一個皇帝出現時，不會剩下任何機會。";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "另外，請記住一個事實，我每週只能這樣做一次。";
+			close;
+		}
+	}
+	if ($2012_tegod_kafra == 5) {
+		mes "我有點累。";
+		mes "我想我應該休息幾天。";
+		mes "我看起來還不錯，但是我在精神上很累。";
+		close;
+	}
+	mes "很奇怪。";
+	mes "我無法說出我的感受。";
+	mes "我有某種健康問題嗎？";
+	mes "這是不可覺的嗎？";
+	close;
+
+S_Material:
+	.@npc_name$ = getarg(0);
+	next;
+	mes "["+ .@npc_name$ +"]";
+	mes "^4D4DFF4 Presberk的皮革";
+	mes "1個休金的精神";
+	mes "1穆寧精神";
+	mes "4巨人的鑿子";
+	mes "1 Jormungand的肋骨";
+	mes "1名巫師工作人員";
+	mes "1符文的肌肉和本質分別^000000";
+	next;
+	mes "["+ .@npc_name$ +"]";
+	mes "我們需要盡可能多的材料";
+	mes getarg(2,"");
+	mes "順便說一句，需要用其他材料分別製作符文的肌肉和本質。";
+	next;
+	mes "["+ .@npc_name$ +"]";
+	mes "為了製作Muspellium，您需要 ^4d4dfffcombine 50 Eluniums和50個Oridecons ^000000。";
+	mes "對於符文的本質，您需要 ^4d4dfffcombine 200古老的粗runestones和100個神秘的粗runestones ^000000。";
+	next;
+	mes "["+ .@npc_name$ +"]";
+	mes "我會根據您的要求隨時隨地製作符文的本質，";
+	mes "當然，一旦我們收集所需的所有材料，我就會立即製作Jormungand。";
+	next;
+	mes "["+ .@npc_name$ +"]";
+	if (getarg(1))
+		mes "與您為我所做的事情相比，我所做的不夠。";
+	else {
+		mes "但是，您將無法找到軌道的暮光之城。";
+		mes "...但是人們說這絕對是那些真正想要它的人。祝你一切順利。";
+	}
+	close;
+
+S_Fuse:
+	.@npc_name$ = getarg(0);
+	mes "["+ .@npc_name$ +"]";
+	mes "您想製作哪種材料？";
+	next;
+	switch( select( "Muspellium","Essence of Rune","Forget it." ) ) {
+	case 1:
+		mes "["+ .@npc_name$ +"]";
+		if (countitem(985) > 49 && countitem(984) > 49) {
+			mes "我將用您準備的材料製作Muspellium。";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "不應該花很長時間。";
+			mes "這裡是。";
+			mes "這是製作赫爾沃爾和喬爾蒙德的重要材料。";
+			delitem 985,50;// Elunium
+			delitem 984,50;// Oridecon
+			getitem 6605,1;// Muspellium
+			close;
+		}
+		mes "為了製作muspellium，";
+		mes "^4d4dffyou需要50個Eluniums和50個Oridecons。 ^000000";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "我們應該準備好所有材料，對嗎？";
+		close;
+	case 2:
+		mes "["+ .@npc_name$ +"]";
+		if (countitem(12735) > 199 && countitem(12736) > 99) {
+			mes "我將用您準備的材料使符文的本質。";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "不應該花很長時間。";
+			mes "這裡是。";
+			mes "這是製作赫爾沃爾和喬爾蒙德的重要材料。";
+			delitem 12735,200;// Runstone_Ancient
+			delitem 12736,100;// Runstone_Mystic
+			getitem 6604,1;// Essence_Of_Rune
+			close;
+		}
+		mes "對於符文的本質，";
+		mes "^4d4dffyou需要200個古老的runestones和100個神秘的粗runestones。 ^000000";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "當然，這需要很多...";
+		close;
+	case 3:
+		mes "["+ .@npc_name$ +"]";
+		mes "每當您需要時告訴我。";
+		mes "我很高興至少可以為您做這個。";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "另外，您可以找到可以找到材料的地方"+ getarg(1) +"...";
+		mes "對我來說，這也就像一個夢想的地方。";
+		close;
+	}
+
+OnInit:
+	if ($2012_tegod_kafra == 3 || agitcheck3())// 3 -> quest failed
+		disablenpc();
+	else
+		enablenpc();
+	end;
+}
+
+te_aldecas1,3,2,0	script	#tequest_master_alde01	CLEAR_NPC,{
+	mes "密碼？";
+	next;
+	if ( callfunc( "F_GM_NPC", 1854,0, 0,9999 ) < 1 ) {
+		mes "離開";
+		close;
+	}
+	.@map$ = "te_aldecas1";
+	mes "當前狀態：" + $2012_tegod_kafra;
+	mes "0：能夠進行任務";
+	mes "1：繼續任務。等待10分鐘";
+	mes "2：正在進行的任務";
+	mes "3：任務失敗";
+	mes "4：能夠生產物品，5：成功生產的項目。";
+	next;
+	mes "公主身份：" + $@2012_tegirls_alde01;
+	mes "當前的堡壘商業水平：" + getcastledata(.@map$,2);
+	next;
+	switch( select( "Do not proceed","Initialization","Raise Commerce Level","Lower Commerce Level" ) ) {
+	case 1:
+		end;
+	case 2:
+		mes "初始化";
+		donpcevent "#tequest_master_alde01::OnReset";
+		close;
+	case 3:
+		.@economy = getcastledata(.@map$,2) +30;
+		.@economy = .@economy > 100 ? 100 : .@economy;
+		setcastledata .@map$,2,.@economy;
+		mes "將商業水平提高30";
+		mes "修改的商業級別：" + .@economy;
+		close;
+	case 4:
+		.@economy1 = getcastledata(.@map$,2);
+		.@economy2 = .@economy1 > 30 ? (.@economy1 -30) : 1;
+		if (.@economy1 > 30) {
+			mes "降低商業水平30";
+			setcastledata .@map$,2,.@economy2;
+		}
+		else {
+			mes "由於當前水平低於30，因此商業水平下降到0。";
+			setcastledata .@map$,2,1;// min is 1 for WOE TE
+		}
+		mes "修改的商業級別：" + .@economy2;
+		close;
+	}
+
+OnReset:// gm Initialization
+	callsub S_EventReset;// kill all quests mobs and stop timer of others npcs
+	callsub S_EventOff;// clear setnpcdisplay
+	$2012_tegod_kafra = 0;
+	$@2012_tegirls_alde01 = 0;
+	.npc_name$ = "";
+	enablenpc "aldeg-1-11_aldeg-1-15#te";
+	enablenpc "Blacksmith Cano#tegod01";
+	stopnpctimer;
+	end;
+
+OnCommandOn:
+	$2012_tegod_kafra = 1;
+	.npc_name$ = strnpcinfo(0);// for script readability
+	initnpctimer;
+	end;
+
+OnTimer10000:
+	announce "Girls' voices: Cano~ We already know where you are. It's over!",bc_all,"0xFF0000",FW_NORMAL,10;
+	end;
+OnTimer15000:
+	announce "Girls' Voices: We'll wait just 10 minutes. If you don't show up in the meantime, we'll storm the fortress!",bc_all,"0xFF0000",FW_NORMAL,10;
+	end;
+OnTimer595000:
+	mapannounce "te_aldecas1","A girl's voice: Cano! How dare you ignore our warning! So, you have company there, huh? But how long do you think they'll stay with you?!",bc_map,"0x00ff00",FW_NORMAL,12;
+	end;
+OnTimer598000:
+	mapannounce "te_aldecas1","You are forced out of the fortress by unknown power.",bc_map,"0x00ff00",FW_NORMAL,12;
+	end;
+
+OnTimer600000:
+	$2012_tegod_kafra = 2;
+	mapwarp "te_aldecas1", "te_alde_gld",130,264;
+	donpcevent "Aira#fake01_alde01::OnCommandOn";
+	donpcevent "Kuluna#fake01_alde01::OnCommandOn";
+	donpcevent "Mallina#fake01_alde01::OnCommandOn";
+	donpcevent "Ezella#fake01_alde01::OnCommandOn";
+	donpcevent "Lune#fake01_alde01::OnCommandOn";
+	donpcevent "Morin#fake01_alde01::OnCommandOn";
+	donpcevent "Nasarin#fake01_alde01::OnCommandOn";
+
+	disablenpc "aldeg-1-11_aldeg-1-15#te";// warp to emperium room
+	end;
+
+OnTimer602000:
+	announce "Glaris in Kafragarten region is being attacked by a group of unidentified beings.",bc_all,"0xFF0000",FW_NORMAL,10;
+	monster "te_aldecas1",0,0,"Raydric",1163,15, .npc_name$ +"::OnMyMobDead";
+	monster "te_aldecas1",0,0,"Khalitzburg",1132,10, .npc_name$ +"::OnMyMobDead";
+	monster "te_aldecas1",0,0,"Abysmal Knight",1219,5, .npc_name$ +"::OnMyMobDead";
+
+	monster "te_aldecas1",207,34,"Dalongee",1272,1, .npc_name$ +"::OnMyMobDead";// DARK_LORD
+	monster "te_aldecas1",213,46,"Summoned Reindeer",1251,1, .npc_name$ +"::OnMyMobDead";// KNIGHT_OF_WINDSTORM
+	monster "te_aldecas1",218,46,"Summoned Wolf",1252,1, .npc_name$ +"::OnMyMobDead";// GARM
+
+	monster "te_aldecas1",26,224,"Dalongee",1272,1, .npc_name$ +"::OnMyMobDead";// DARK_LORD
+	monster "te_aldecas1",24,199,"Summoned Reindeer",1251,1, .npc_name$ +"::OnMyMobDead";// KNIGHT_OF_WINDSTORM
+	monster "te_aldecas1",113,93,"Summoned Wolf",1252,1, .npc_name$ +"::OnMyMobDead";// GARM
+	end;
+
+OnTimer610000:
+	monster "te_aldecas1",0,0,"Raydric",1163,15, .npc_name$ +"::OnMyMobDead";
+	monster "te_aldecas1",0,0,"Khalitzburg",1132,10, .npc_name$ +"::OnMyMobDead";
+	monster "te_aldecas1",0,0,"Abysmal Knight",1219,5, .npc_name$ +"::OnMyMobDead";
+	monster "te_aldecas1",0,0,"Bloody Knight",1268,5, .npc_name$ +"::OnMyMobDead";
+	end;
+
+OnTimer1000000:
+OnTimer1300000:
+OnTimer1900000:
+OnTimer2500000:
+OnTimer3100000:
+	callsub S_MobRedondant;
+	end;
+S_MobRedondant:
+	monster "te_aldecas1",0,0,"Raydric",1163,10, .npc_name$ +"::OnMyMobDead";
+	monster "te_aldecas1",0,0,"Khalitzburg",1132,10, .npc_name$ +"::OnMyMobDead";
+	monster "te_aldecas1",0,0,"Abysmal Knight",1219,10, .npc_name$ +"::OnMyMobDead";
+	monster "te_aldecas1",0,0,"High Orc",1213,10, .npc_name$ +"::OnMyMobDead";
+	monster "te_aldecas1",0,0,"Bloody Knight",1268,5, .npc_name$ +"::OnMyMobDead";
+	end;
+
+OnTimer4200000:
+	mapannounce "te_aldecas1","Girls: ... how long do we have to wait?",bc_map,"0x00ff00",FW_NORMAL,12;
+	end;
+OnTimer4205000:
+	mapannounce "te_aldecas1","Girls: Jormungand should be made for us!",bc_map,"0x00ff00",FW_NORMAL,12;
+	end;
+OnTimer4210000:
+	mapannounce "te_aldecas1","Girls: Come on, cut if off! You guys are so persistent!!",bc_map,"0x00ff00",FW_NORMAL,12;
+	end;
+OnTimer4220000:
+	mapannounce "te_aldecas1","Aira: Ah! I can't take it anymore! Girls, come here!",bc_map,"0x00ff00",FW_NORMAL,12;
+
+	$2012_tegod_kafra = 3;// quest off until someone break the emp
+	callsub S_EventReset;
+	enablenpc "aldeg-1-11_aldeg-1-15#te";
+	end;
+
+OnTimer4225000:
+	donpcevent "#eproom_girls_alde01::OnReset";
+	donpcevent "#end_aira_alde01::OnCommandOn";
+	donpcevent "#end_kuluna_alde01::OnCommandOn";
+	donpcevent "#end_mallina_alde01::OnCommandOn";
+	donpcevent "#end_ezella_alde01::OnCommandOn";
+	donpcevent "#end_lune_alde01::OnCommandOn";
+	donpcevent "#end_morin_alde01::OnCommandOn";
+	donpcevent "#end_nasarin_alde01::OnCommandOn";
+	end;
+
+OnTimer4227000:
+	npctalk "Cano: Oh... no! What are you going to do to me?!", "Blacksmith Cano#tegod01";
+	end;
+OnTimer4230000:
+	npctalk "Aira: Mm? Hey Cano. You're going home.", "#end_aira_alde01";
+	end;
+OnTimer4233000:
+	npctalk "Kuluna: Yup~ You have to fix my broken wand and make powerful weapons for me once you get back!", "#end_kuluna_alde01";
+	end;
+OnTimer4236000:
+	npctalk "Ezella: Try to run away again. You'll be sorry, understand?", "#end_ezella_alde01";
+	end;
+OnTimer4237000:
+	npctalk "Nasarin: ... Just take him. Why are you guys talking to him so much?", "#end_nasarin_alde01";
+	end;
+OnTimer4240000:
+	npctalk "Aira: You're right! Alright then!", "#end_aira_alde01";
+	npctalk "Cano: Oh... No... Noooo!!!!!", "Blacksmith Cano#tegod01";
+	end;
+
+OnTimer4243000:
+	mapannounce "te_aldecas1","You've failed to recapture the fortress. Cano is now gone.",bc_map,"0x00ff00",FW_NORMAL,12;
+	disablenpc "Blacksmith Cano#tegod01";
+	callsub S_EventOff;// clear setnpcdisplay
+	.npc_name$ = "";
+	stopnpctimer;
+	end;
+
+S_EventOff:
+	donpcevent "#end_aira_alde01::OnCommandOff";
+	donpcevent "#end_kuluna_alde01::OnCommandOff";
+	donpcevent "#end_mallina_alde01::OnCommandOff";
+	donpcevent "#end_ezella_alde01::OnCommandOff";
+	donpcevent "#end_lune_alde01::OnCommandOff";
+	donpcevent "#end_morin_alde01::OnCommandOff";
+	donpcevent "#end_nasarin_alde01::OnCommandOff";
+	return;
+
+OnStop:// all girls have been defeated, kill remaining mobs and stop timer
+	callsub S_EventReset;
+	$@2012_tegirls_alde01 = 0;
+	.npc_name$ = "";
+	stopnpctimer;
+	end;
+
+S_EventReset:
+	killmonster "te_aldecas1", .npc_name$ +"::OnMyMobDead";
+	donpcevent "#eproom_girls_alde01::OnReset";
+	donpcevent "Aira#fake01_alde01::OnReset";
+	donpcevent "Kuluna#fake01_alde01::OnReset";
+	donpcevent "Mallina#fake01_alde01::OnReset";
+	donpcevent "Ezella#fake01_alde01::OnReset";
+	donpcevent "Lune#fake01_alde01::OnReset";
+	donpcevent "Morin#fake01_alde01::OnReset";
+	donpcevent "Nasarin#fake01_alde01::OnReset";
+
+	donpcevent "#aira_real_alde01::OnReset";
+	donpcevent "#kuluna_real_alde01::OnReset";
+	donpcevent "#mallina_real_alde01::OnReset";
+	donpcevent "#ezella_real_alde01::OnReset";
+	donpcevent "#lune_real_alde01::OnReset";
+	donpcevent "#morin_real_alde01::OnReset";
+	donpcevent "#nasarin_real_alde01::OnReset";
+	return;
+
+OnMyMobDead:
+	end;
+
+OnInit:
+	$@2012_tegirls_alde01 = 0;// girls mobs killed count
+	if ($2012_tegod_kafra < 3)
+		$2012_tegod_kafra = 0;
+	end;
+}
+
+
+te_aldecas1,40,226,3	script	Aira#fake01_alde01	CLEAR_NPC,{
+	end;
+OnCommandOn:
+	enablenpc "Aira#fake01_alde01";
+	setnpcdisplay "Aira#fake01_alde01",2443;// AIRA
+	initnpctimer;
+	end;
+
+OnMyMobDead:
+	if (mobcount( "te_aldecas1","Aira#fake01_alde01::OnMyMobDead" )) end;
+	donpcevent "#aira_real_alde01::OnCommandOn";
+	npctalk "Aira: My summon water balls! I'll get you! With my own hands!!";
+OnReset:
+	stopnpctimer;
+	killmonster "te_aldecas1", "Aira#fake01_alde01::OnMyMobDead";
+	setnpcdisplay "Aira#fake01_alde01",CLEAR_NPC;
+OnInit:
+	disablenpc "Aira#fake01_alde01";
+	end;
+
+OnTimer1000:
+	monster "te_aldecas1",26,224,"Bodyguard",1213,5, "Aira#fake01_alde01::OnMyMobDead";// HIGH_ORC
+	monster "te_aldecas1",26,224,"Bodyguard",1309,5, "Aira#fake01_alde01::OnMyMobDead";// GAJOMART
+	end;
+OnTimer2000:
+	monster "te_aldecas1",26,224,"Bodyguard",1367,5, "Aira#fake01_alde01::OnMyMobDead";// BLAZZER
+	monster "te_aldecas1",26,223,"Bodyguard",1837,5, "Aira#fake01_alde01::OnMyMobDead";// IMP
+	end;
+OnTimer3000:
+	monster "te_aldecas1",26,223,"Bodyguard",1949,1, "Aira#fake01_alde01::OnMyMobDead";// B_S_GUARDIAN
+	monster "te_aldecas1",26,224,"Bodyguard",1833,2, "Aira#fake01_alde01::OnMyMobDead";// KASA
+	monster "te_aldecas1",26,224,"Bodyguard",1831,2, "Aira#fake01_alde01::OnMyMobDead";// SALAMANDER
+	stopnpctimer;
+	end;
+}
+
+te_aldecas1,33,197,3	script	Kuluna#fake01_alde01	CLEAR_NPC,{
+	end;
+OnCommandOn:
+	enablenpc "Kuluna#fake01_alde01";
+	setnpcdisplay "Kuluna#fake01_alde01",2444;// KULUNA
+	initnpctimer;
+	end;
+
+OnMyMobDead:
+	if (mobcount( "te_aldecas1","Kuluna#fake01_alde01::OnMyMobDead" )) end;
+	donpcevent "#kuluna_real_alde01::OnCommandOn";
+	npctalk "Kuluna: Hmm? So you're going to be that way? You'd better be ready!";
+OnReset:
+	stopnpctimer;
+	killmonster "te_aldecas1", "Kuluna#fake01_alde01::OnMyMobDead";
+	setnpcdisplay "Kuluna#fake01_alde01",CLEAR_NPC;
+OnInit:
+	disablenpc "Kuluna#fake01_alde01";
+	end;
+
+OnTimer1000:
+	monster "te_aldecas1",24,199,"Guardian",1143,10, "Kuluna#fake01_alde01::OnMyMobDead";// MARIONETTE
+	end;
+OnTimer2000:
+	monster "te_aldecas1",24,199,"Guardian",1693,10, "Kuluna#fake01_alde01::OnMyMobDead";// PLASMA_Y
+	end;
+OnTimer3000:
+	monster "te_aldecas1",24,199,"Guardian",1869,5, "Kuluna#fake01_alde01::OnMyMobDead";// FLAME_SKULL
+	monster "te_aldecas1",24,199,"Guardian",1704,1, "Kuluna#fake01_alde01::OnMyMobDead";// THA_ODIUM
+	monster "te_aldecas1",24,199,"Guardian",1705,1, "Kuluna#fake01_alde01::OnMyMobDead";// THA_DESPERO
+	monster "te_aldecas1",24,199,"Guardian",1706,1, "Kuluna#fake01_alde01::OnMyMobDead";// THA_MAERO
+	monster "te_aldecas1",24,199,"Guardian",1707,1, "Kuluna#fake01_alde01::OnMyMobDead";// THA_DOLOR
+	stopnpctimer;
+	end;
+}
+
+te_aldecas1,90,69,3	script	Mallina#fake01_alde01	CLEAR_NPC,{
+	end;
+OnCommandOn:
+	enablenpc "Mallina#fake01_alde01";
+	setnpcdisplay "Mallina#fake01_alde01",2445;// MALLINA
+	initnpctimer;
+	end;
+
+OnMyMobDead:
+	if (mobcount( "te_aldecas1","Mallina#fake01_alde01::OnMyMobDead" )) end;
+	donpcevent "#mallina_real_alde01::OnCommandOn";
+	npctalk "Mallina: Stop it!! Stop bothering me!!";
+OnReset:
+	stopnpctimer;
+	killmonster "te_aldecas1", "Mallina#fake01_alde01::OnMyMobDead";
+	setnpcdisplay "Mallina#fake01_alde01",CLEAR_NPC;
+OnInit:
+	disablenpc "Mallina#fake01_alde01";
+	end;
+
+OnTimer1000:
+	monster "te_aldecas1",83,70,"The Absolute",1993,10, "Mallina#fake01_alde01::OnMyMobDead";// NAGA
+	end;
+OnTimer3000:
+	monster "te_aldecas1",83,70,"The Absolute",1695,10, "Mallina#fake01_alde01::OnMyMobDead";// PLASMA_G
+	end;
+OnTimer5000:
+	monster "te_aldecas1",83,71,"The Absolute",1717,1, "Mallina#fake01_alde01::OnMyMobDead";// FERUS_
+	monster "te_aldecas1",82,71,"The Absolute",1717,1, "Mallina#fake01_alde01::OnMyMobDead";// FERUS_
+	monster "te_aldecas1",81,71,"The Absolute",1717,1, "Mallina#fake01_alde01::OnMyMobDead";// FERUS_
+	monster "te_aldecas1",80,71,"The Absolute",1717,1, "Mallina#fake01_alde01::OnMyMobDead";// FERUS_
+	monster "te_aldecas1",79,71,"The Absolute",1717,1, "Mallina#fake01_alde01::OnMyMobDead";// FERUS_
+
+	monster "te_aldecas1",83,70,"The Absolute",1991,2, "Mallina#fake01_alde01::OnMyMobDead";// TENDRILRION
+	monster "te_aldecas1",83,70,"The Absolute",1989,2, "Mallina#fake01_alde01::OnMyMobDead";// HILLSRION
+	stopnpctimer;
+	end;
+}
+
+te_aldecas1,109,91,3	script	Ezella#fake01_alde01	CLEAR_NPC,{
+	end;
+OnCommandOn:
+	enablenpc "Ezella#fake01_alde01";
+	setnpcdisplay "Ezella#fake01_alde01",2446;// EZELLA
+	initnpctimer;
+	end;
+
+OnMyMobDead:
+	if (mobcount( "te_aldecas1","Ezella#fake01_alde01::OnMyMobDead" )) end;
+	donpcevent "#ezella_real_alde01::OnCommandOn";
+	npctalk "Ezella: Ahh... This only makes both of us more tired...";
+OnReset:
+	stopnpctimer;
+	killmonster "te_aldecas1", "Ezella#fake01_alde01::OnMyMobDead";
+	setnpcdisplay "Ezella#fake01_alde01",CLEAR_NPC;
+OnInit:
+	disablenpc "Ezella#fake01_alde01";
+	end;
+
+OnTimer1000:
+	monster "te_aldecas1",113,93,"Convoy",1692,10, "Ezella#fake01_alde01::OnMyMobDead";// BREEZE
+	end;
+OnTimer2000:
+	monster "te_aldecas1",113,93,"Convoy",1627,2, "Ezella#fake01_alde01::OnMyMobDead";// ANOPHELES
+	monster "te_aldecas1",113,93,"Convoy",1656,2, "Ezella#fake01_alde01::OnMyMobDead";// KAVAC
+	monster "te_aldecas1",113,93,"Convoy",1315,6, "Ezella#fake01_alde01::OnMyMobDead";// ASSULTER
+	end;
+OnTimer3000:
+	monster "te_aldecas1",113,93,"Convoy",1669,5, "Ezella#fake01_alde01::OnMyMobDead";// DIMIK
+	monster "te_aldecas1",113,93,"Convoy",1259,2, "Ezella#fake01_alde01::OnMyMobDead";// GRYPHON
+	monster "te_aldecas1",113,93,"Convoy",1783,1, "Ezella#fake01_alde01::OnMyMobDead";// GALION
+	monster "te_aldecas1",113,93,"Convoy",1950,1, "Ezella#fake01_alde01::OnMyMobDead";// B_B_GUARDIAN
+	stopnpctimer;
+	end;
+}
+
+te_aldecas1,85,108,3	script	Lune#fake01_alde01	CLEAR_NPC,{
+	end;
+OnCommandOn:
+	enablenpc "Lune#fake01_alde01";
+	setnpcdisplay "Lune#fake01_alde01",2447;// LUNE
+	initnpctimer;
+	end;
+
+OnMyMobDead:
+	if (mobcount( "te_aldecas1","Lune#fake01_alde01::OnMyMobDead" )) end;
+	donpcevent "#lune_real_alde01::OnCommandOn";
+	npctalk "Lune: ..you want to be drowned in the deep sea? Huh?";
+OnReset:
+	stopnpctimer;
+	killmonster "te_aldecas1", "Lune#fake01_alde01::OnMyMobDead";
+	setnpcdisplay "Lune#fake01_alde01",CLEAR_NPC;
+OnInit:
+	disablenpc "Lune#fake01_alde01";
+	end;
+
+OnTimer1000:
+	monster "te_aldecas1",74,83,"Bodyguard",1778,1, "Lune#fake01_alde01::OnMyMobDead";// GAZETI
+	monster "te_aldecas1",75,83,"Bodyguard",1778,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",76,83,"Bodyguard",1778,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",77,83,"Bodyguard",1778,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",78,83,"Bodyguard",1778,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",79,83,"Bodyguard",1778,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",80,83,"Bodyguard",1778,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",81,83,"Bodyguard",1778,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",82,83,"Bodyguard",1778,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",83,83,"Bodyguard",1778,1, "Lune#fake01_alde01::OnMyMobDead";
+	end;
+OnTimer2000:
+	monster "te_aldecas1",84,83,"Bodyguard",2016,1, "Lune#fake01_alde01::OnMyMobDead";// AQUA_ELEMENTAL
+	monster "te_aldecas1",85,83,"Bodyguard",2016,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",86,83,"Bodyguard",2016,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",87,83,"Bodyguard",2016,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",88,83,"Bodyguard",2016,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",89,83,"Bodyguard",2016,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",90,83,"Bodyguard",2016,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",91,83,"Bodyguard",2016,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",92,83,"Bodyguard",2016,1, "Lune#fake01_alde01::OnMyMobDead";
+	monster "te_aldecas1",93,83,"Bodyguard",2016,1, "Lune#fake01_alde01::OnMyMobDead";
+	end;
+OnTimer3000:
+	monster "te_aldecas1",82,95,"Bodyguard",1777,5, "Lune#fake01_alde01::OnMyMobDead";// ICE_TITAN
+	monster "te_aldecas1",82,95,"Bodyguard",1681,1, "Lune#fake01_alde01::OnMyMobDead";// GEMINI
+	monster "te_aldecas1",82,95,"Bodyguard",2021,1, "Lune#fake01_alde01::OnMyMobDead";// PHYLLA
+	monster "te_aldecas1",82,95,"Bodyguard",2020,2, "Lune#fake01_alde01::OnMyMobDead";// RHYNCHO
+	stopnpctimer;
+	end;
+}
+
+te_aldecas1,207,156,3	script	Morin#fake01_alde01	CLEAR_NPC,{
+	end;
+OnCommandOn:
+	enablenpc "Morin#fake01_alde01";
+	setnpcdisplay "Morin#fake01_alde01",2448;// MORIN
+	initnpctimer;
+	end;
+
+OnMyMobDead:
+	if (mobcount( "te_aldecas1","Morin#fake01_alde01::OnMyMobDead" )) end;
+	donpcevent "#morin_real_alde01::OnCommandOn";
+	npctalk "Morin: ... . ...";
+OnReset:
+	stopnpctimer;
+	killmonster "te_aldecas1", "Morin#fake01_alde01::OnMyMobDead";
+	setnpcdisplay "Morin#fake01_alde01",CLEAR_NPC;
+OnInit:
+	disablenpc "Morin#fake01_alde01";
+	end;
+
+OnTimer1000:
+	monster "te_aldecas1",207,148,"Nightmare Gang",1379,10, "Morin#fake01_alde01::OnMyMobDead";// NIGHTMARE_TERROR
+	end;
+OnTimer2000:
+	monster "te_aldecas1",207,148,"Nightmare Gang",1701,5, "Morin#fake01_alde01::OnMyMobDead";// SHELTER
+	monster "te_aldecas1",207,148,"Nightmare Gang",1753,5, "Morin#fake01_alde01::OnMyMobDead";// FRUS
+	end;
+OnTimer3000:
+	monster "te_aldecas1",207,148,"Nightmare Gang",1752,5, "Morin#fake01_alde01::OnMyMobDead";// SKOGUL
+	monster "te_aldecas1",207,148,"Nightmare Gang",1733,1, "Morin#fake01_alde01::OnMyMobDead";// KIEL
+	monster "te_aldecas1",207,148,"Nightmare Gang",1205,1, "Morin#fake01_alde01::OnMyMobDead";// EXECUTIONER
+	monster "te_aldecas1",207,148,"Nightmare Gang",2040,1, "Morin#fake01_alde01::OnMyMobDead";// TIRFING_R
+	monster "te_aldecas1",207,148,"Nightmare Gang",1203,1, "Morin#fake01_alde01::OnMyMobDead";// MYSTELTAINN
+	stopnpctimer;
+	end;
+}
+
+te_aldecas1,214,176,3	script	Nasarin#fake01_alde01	CLEAR_NPC,{
+	end;
+OnCommandOn:
+	enablenpc "Nasarin#fake01_alde01";
+	setnpcdisplay "Nasarin#fake01_alde01",2449;// NASARIN
+	initnpctimer;
+	end;
+
+OnMyMobDead:
+	if (mobcount( "te_aldecas1","Nasarin#fake01_alde01::OnMyMobDead" )) end;
+	donpcevent "#nasarin_real_alde01::OnCommandOn";
+	npctalk "Nasarin: ..Ahh.. It's so hard to become a Valkyrie!";
+OnReset:
+	stopnpctimer;
+	killmonster "te_aldecas1", "Nasarin#fake01_alde01::OnMyMobDead";
+	setnpcdisplay "Nasarin#fake01_alde01",CLEAR_NPC;
+OnInit:
+	disablenpc "Nasarin#fake01_alde01";
+	end;
+
+OnTimer1000:
+	monster "te_aldecas1",212,170,"Gang of Poison",1987,10, "Nasarin#fake01_alde01::OnMyMobDead";// CENTIPEDE
+	end;
+OnTimer2000:
+	monster "te_aldecas1",212,170,"Gang of Poison",2015,10, "Nasarin#fake01_alde01::OnMyMobDead";// PINGUICULA_D
+	end;
+OnTimer3000:
+	monster "te_aldecas1",212,170,"Gang of Poison",1618,3, "Nasarin#fake01_alde01::OnMyMobDead";// UNGOLIANT
+	monster "te_aldecas1",212,170,"Khalitz",1949,1, "Nasarin#fake01_alde01::OnMyMobDead";// B_S_GUARDIAN
+	stopnpctimer;
+	end;
+}
+
+-	script	real_alde01	-1,{
+	end;
+OnCommandOn:
+	.@npc_name$ = strnpcinfo(0);
+	if (.@npc_name$ == "#aira_real_alde01")
+		monster "te_aldecas1",26,224,"Aira in a blaze",2443,1, .@npc_name$ +"::OnMyMobDead";
+	else if (.@npc_name$ == "#kuluna_real_alde01")
+		monster "te_aldecas1",24,199,"Passionate Kuluna",2444,1, .@npc_name$ +"::OnMyMobDead";
+	else if (.@npc_name$ == "#mallina_real_alde01")
+		monster "te_aldecas1",83,70,"Mallina of the Earth",2445,1, .@npc_name$ +"::OnMyMobDead";
+	else if (.@npc_name$ == "#ezella_real_alde01")
+		monster "te_aldecas1",113,93,"Ezella of Verdure",2446,1, .@npc_name$ +"::OnMyMobDead";
+	else if (.@npc_name$ == "#lune_real_alde01")
+		monster "te_aldecas1",82,95,"Lune of the Eternal Glacier",2447,1, .@npc_name$ +"::OnMyMobDead";
+	else if (.@npc_name$ == "#morin_real_alde01")
+		monster "te_aldecas1",207,148,"Morin of the Abyss",2448,1, .@npc_name$ +"::OnMyMobDead";
+	else if (.@npc_name$ == "#nasarin_real_alde01")
+		monster "te_aldecas1",212,170,"Fatal Nasarin",2449,1, .@npc_name$ +"::OnMyMobDead";
+	end;
+
+OnReset:
+	stopnpctimer;
+	killmonster "te_aldecas1", strnpcinfo(0)+"::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	if (mobcount( "te_aldecas1",strnpcinfo(0) +"::OnMyMobDead" ) == 0)
+		initnpctimer;
+	end;
+
+OnTimer1000:
+	if (mobcount( "te_aldecas1",strnpcinfo(0) +"::OnMyMobDead" ) == 0) {
+		$@2012_tegirls_alde01++;
+		if ($@2012_tegirls_alde01 == 7) {
+			mapannounce "te_aldecas1","Cano: aaahh!! The girls broke the shields and made their way into where Emperium is!!!!",bc_map,"0x00ff00",FW_NORMAL,12;
+			donpcevent "#eproom_girls_alde01::OnCommandOn";
+		}
+		else {
+			.@npc_name$ = strnpcinfo(0);
+			if (.@npc_name$ == "#aira_real_alde01")
+				mapannounce "te_aldecas1","Aira: You think I lost? You're wrong! We force our way to where Cano is!!",bc_map,"0x00ff00",FW_NORMAL,12;
+			else if (.@npc_name$ == "#kuluna_real_alde01")
+				mapannounce "te_aldecas1","Kuluna: ... This is called a strategic retreat.",bc_map,"0x00ff00",FW_NORMAL,12;
+			else if (.@npc_name$ == "#mallina_real_alde01")
+				mapannounce "te_aldecas1","Mallina: ... Why are you disturbing us so much? But victory will be ours in the end!!",bc_map,"0x00ff00",FW_NORMAL,12;
+			else if (.@npc_name$ == "#ezella_real_alde01")
+				mapannounce "te_aldecas1","Ezella: Oh you, a weakling that would just disappear like the wind... !!!",bc_map,"0x00ff00",FW_NORMAL,12;
+			else if (.@npc_name$ == "#lune_real_alde01")
+				mapannounce "te_aldecas1","Lune: ..Alright. Let the battle begin!",bc_map,"0x00ff00",FW_NORMAL,12;
+			else if (.@npc_name$ == "#morin_real_alde01")
+				mapannounce "te_aldecas1","Morin: It's not... interesting anymore.",bc_map,"0x00ff00",FW_NORMAL,12;
+			else if (.@npc_name$ == "#nasarin_real_alde01")
+				mapannounce "te_aldecas1","Nasarin: .. I wasted my time. Cano is in the center of this fortress?",bc_map,"0x00ff00",FW_NORMAL,12;
+		}
+	}
+	stopnpctimer;
+	end;
+}
+te_aldecas1,4,2,0	duplicate(real_alde01)	#aira_real_alde01	CLEAR_NPC
+te_aldecas1,5,2,0	duplicate(real_alde01)	#kuluna_real_alde01	CLEAR_NPC
+te_aldecas1,6,2,0	duplicate(real_alde01)	#mallina_real_alde01	CLEAR_NPC
+te_aldecas1,7,2,0	duplicate(real_alde01)	#ezella_real_alde01	CLEAR_NPC
+te_aldecas1,8,2,0	duplicate(real_alde01)	#lune_real_alde01	CLEAR_NPC
+te_aldecas1,9,2,0	duplicate(real_alde01)	#morin_real_alde01	CLEAR_NPC
+te_aldecas1,10,2,0	duplicate(real_alde01)	#nasarin_real_alde01	CLEAR_NPC
+
+
+te_aldecas1,11,2,0	script	#eproom_girls_alde01	CLEAR_NPC,{
+	end;
+OnCommandOn:
+	enablenpc "aldeg-1-11_aldeg-1-15#te";
+	monster "te_aldecas1",207,34,"Fatal Nasarin",2449,1, "#eproom_girls_alde01::OnMyMobDead";
+	monster "te_aldecas1",216,26,"Morin of the Abyss",2448,1, "#eproom_girls_alde01::OnMyMobDead";
+	monster "te_aldecas1",205,21,"Lune of the Eternal Glacier",2447,1, "#eproom_girls_alde01::OnMyMobDead";
+	monster "te_aldecas1",215,34,"Ezella of Verdure",2446,1, "#eproom_girls_alde01::OnMyMobDead";
+	monster "te_aldecas1",226,24,"Mallina of the Earth",2445,1, "#eproom_girls_alde01::OnMyMobDead";
+	monster "te_aldecas1",213,46,"Passionate Kuluna",2444,1, "#eproom_girls_alde01::OnMyMobDead";
+	monster "te_aldecas1",218,46,"Aira in a blaze",2443,1, "#eproom_girls_alde01::OnMyMobDead";
+	end;
+
+OnReset:
+	stopnpctimer;
+	killmonster "te_aldecas1", "#eproom_girls_alde01::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	if (mobcount( "te_aldecas1","#eproom_girls_alde01::OnMyMobDead" ) == 0)
+		initnpctimer;
+	end;
+
+OnTimer3000:
+	if (mobcount( "te_aldecas1","#eproom_girls_alde01::OnMyMobDead" ) == 0) {
+		donpcevent "#tequest_master_alde01::OnStop";
+		$2012_tegod_kafra = 4;
+		mapannounce "te_aldecas1","You have defeated the girls and recaptured the fortress successfully.",bc_map,"0x00ff00",FW_NORMAL,12;
+	}
+	stopnpctimer;
+	end;
+}
+
+te_aldecas1,225,34,5	script	#end_aira_alde01	CLEAR_NPC,{
+	end;
+OnCommandOn:
+	.@npc_name$ = strnpcinfo(0);
+	enablenpc .@npc_name$;
+	if (compare(.@npc_name$,"aira")) setnpcdisplay .@npc_name$,2443;
+	else if (compare(.@npc_name$,"kuluna")) setnpcdisplay .@npc_name$,2444;
+	else if (compare(.@npc_name$,"mallina")) setnpcdisplay .@npc_name$,2445;
+	else if (compare(.@npc_name$,"ezella")) setnpcdisplay .@npc_name$,2446;
+	else if (compare(.@npc_name$,"lune")) setnpcdisplay .@npc_name$,2447;
+	else if (compare(.@npc_name$,"morin")) setnpcdisplay .@npc_name$,2448;
+	else if (compare(.@npc_name$,"nasarin")) setnpcdisplay .@npc_name$,2449;
+	end;
+
+OnCommandOff:
+	setnpcdisplay strnpcinfo(0),CLEAR_NPC;
+OnInit:
+	disablenpc();
+	end;
+}
+te_aldecas1,227,35,3	duplicate(#end_aira_alde01)	#end_kuluna_alde01	CLEAR_NPC
+te_aldecas1,226,33,7	duplicate(#end_aira_alde01)	#end_mallina_alde01	CLEAR_NPC
+te_aldecas1,225,35,5	duplicate(#end_aira_alde01)	#end_ezella_alde01	CLEAR_NPC
+te_aldecas1,227,34,3	duplicate(#end_aira_alde01)	#end_lune_alde01	CLEAR_NPC
+te_aldecas1,226,35,4	duplicate(#end_aira_alde01)	#end_morin_alde01	CLEAR_NPC
+te_aldecas1,227,33,1	duplicate(#end_aira_alde01)	#end_nasarin_alde01	CLEAR_NPC

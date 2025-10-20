@@ -1,0 +1,1711 @@
+﻿//===== rAthena Script =======================================
+//= iRO/kRO 2013 Christmas Event
+//===== By: ==================================================
+//= Euphy
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Join the Singles Union Army to break up couples and hunt
+//= raccoons for rewards.
+//===== Additional Comments: =================================
+//= 1.0 First version. [Euphy]
+//============================================================
+
+// Main Quest :: 2013_xmas_en
+//============================================================
+xmas,10,1,5	script	2013questreset2#xmas	10086,{
+	if (callfunc("F_GM_NPC",1854,0) == 1) {
+		setarray .@quests[0], 15055,15056,15057,15059,15060,15061,15062,15063,15064;
+		for (set .@i,0; .@i<=getarraysize(.@quests); set .@i,.@i+1)
+			if (isbegin_quest(.@i)) erasequest .@i;
+	}
+	end;
+}
+
+xmas,150,134,3	script	Union Commander Cliff	10086,{
+	if (BaseLevel < 40) {
+		mes "[工會指揮官懸崖]";
+		mes "沒有詞的話！下面的40級不能加入單打聯盟軍！";
+		close;
+	}
+	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 1) {
+		mes "^ff0000you超重。檢查您的庫存並稍後與我交談。 ^000000";
+		close;
+	}
+	set .@playtime, checkquest(15059,PLAYTIME);
+	if (.@playtime == 0 || .@playtime == 1) {
+		mes "- 您可以在24小時後重複此任務。";
+		close;
+	} else if (checkquest(15059,PLAYTIME) > 1) {
+		erasequest 15059;
+		set xmas2013_01,0;
+	}
+	set .@que_allmem, isbegin_quest(15060) + isbegin_quest(15061) + isbegin_quest(15062) + isbegin_quest(15063) + isbegin_quest(15064);
+	if (isbegin_quest(15057) == 1) {
+		if (countitem(7909) < 10 || countitem(7910) < 10 || countitem(6682) < 10) {
+			mes "[工會指揮官懸崖]";
+			mes "我們需要更多材料來舉行聖誕節聚會為聯合軍隊舉行！";
+			next;
+			mes "[工會指揮官懸崖]";
+			mes "從那些該死的浣熊那裡帶來 ^ff000010被盜的餅乾，10個被盜的糖果和10袋銷售商品 ^000000！";
+			close;
+		}
+		mes "[工會指揮官懸崖]";
+		mes "您是否踢了浣熊Hooray隊的屁股？哦！您帶來了我們需要的所有物品。我們將能夠感受到聖誕節的心情！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "我將帶您帶來的所有物品。為此，我將僅為單身聯盟軍隊提供獨家獎勵。您固有開放的人！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "抓住假期！";
+		mes "榮耀與單打聯合軍！ HIHIHI HAHAHAHA！";
+		delitem 7909, countitem(7909); //Stolen_Cookie
+		delitem 7910, countitem(7910); //Stolen_Candy
+		delitem 6682, countitem(6682); //Bag_Of_Selling_Goods
+		erasequest 15057;
+		setquest 15059;
+		getitem 22685,1; //Solo_Christmas_Gift
+		specialeffect2 EF_MAGICALATTHIT;
+		specialeffect2 EF_POTION2;
+		specialeffect2 EF_ANGEL2;
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 < 5) {
+		mes "[工會指揮官懸崖]";
+		mes "你總共有" + xmas2013_01 + " couple breaking points.";
+		mes "分手至少5對夫婦，回到我身邊！";
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 > 4) {
+		mes "[工會指揮官懸崖]";
+		mes "是的！你做到了！越來越多的人加入了單打聯盟軍！ HIHIHI HAHAHA-HAK！勝利是我們的！";
+		erasequest 15056;
+		setquest 15057;
+		getitem 22686,5; //Solo_Cookie
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "但！ ！ ！當我們忙於分解夫婦時，那個該死的浣熊hooray brats偷走了我們的大部分物品。沒有它，我們將無法獲得聖誕節的感覺。";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "是時候懲罰他們並為單身聯盟軍隊收回物品了！ ！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "^ff0000> 10個被盜的餅乾，10個被盜的糖果和10袋銷售商品^000000應該足以容納聚會。在現場地圖和地牢上找到浣熊！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "無論您帶來更多，我都會把它們全部帶走！";
+		close;
+	} else if (isbegin_quest(15055) == 0) {
+		mes "[工會指揮官懸崖]";
+		mes "嘿，你！ ！是的！你在那裡！你！ ！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "讓我直截了當地問你。";
+		mes "你必須單身。我有一種感覺。正確的？ ！ ？ ？";
+		next;
+		if(select("- ...也許...？ :什麼！我有戀愛關係了！ ！") == 2) {
+			mes "[工會指揮官懸崖]";
+			mes "什麼？ ...在一個（戀愛）關係中？ ！ ！";
+			mes "...不是單身，而是一對...";
+			mes "......";
+			mes "該死的你！品嚐單身聯盟軍隊的憤怒！ ！ ！";
+			close2;
+			specialeffect2 EF_MAGICALATTHIT;
+			specialeffect2 EF_POTION2;
+			specialeffect2 EF_CRASHEARTH;
+			specialeffect2 EF_COIN;
+			end;
+		}
+		mes "[工會指揮官懸崖]";
+		mes "HIHIHI 哈哈哈哈！";
+		mes "我就知道！乍一看，我可以告訴！";
+		mes "不要低估我，我一生都是單身！ HIHIHI HAHAHA-HAK！";
+		mes "我叫工會指揮官克里夫！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "無論如何，今年12月，一天即將到來。";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "到處都是聖誕節歌曲，鮮豔的燈光，傾倒白雪，夫妻在臉上露出微笑...夫妻... coupppleees ...！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "一開始是慶祝我們主的誕生！然後，為什麼...如何...何時成為夫妻的一天？";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "我受不了...";
+		mes "我不會原諒他們為自己帶來的幸福！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "夫妻的聖誕節？";
+		mes "決不！這個聖誕節將是單身的一天！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "但是，我將需要成員反對他們。它的名字是，單身聯盟軍！ ！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "你怎麼認為？您會加入我的單身聯盟軍隊並為單身人士做聖誕節嗎？";
+		next;
+		select("算我一個！ :我會幫忙。 :我不能拒絕，可以嗎？");
+		mes "[工會指揮官懸崖]";
+		mes "是的！就是這樣！但是我們需要更多的成員來與夫妻抗衡。";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "這是您的第一個任務！";
+		mes "去找路易（Lutie），讓他們加入我們。 5單打應該足夠了，現在gogogo~！";
+		mes "HIHIHI 哈哈哈哈！";
+		close2;
+		setquest 15055;
+		end;
+	} else if (isbegin_quest(15055) == 1 && .@que_allmem < 10) {
+		mes "[工會指揮官懸崖]";
+		mes "沒有時間浪費！";
+		mes "去Lutie找到5張單曲，讓他們加入！";
+		close;
+	} else if (isbegin_quest(15055) == 1 && .@que_allmem > 9) {
+		mes "[工會指揮官懸崖]";
+		mes "好工作！我遇到了他們！他們值得加入我們的事業Hihihi Hahaha-Hak！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "當您收集更多單身聯盟軍隊成員時，我做了徽章。";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "它可能沒有用，但是這種小的令牌可以使我們的紐帶堅固而牢固！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "好吧，拿這個！現在，您是單身聯盟軍隊的驕傲成員！ ！";
+		set xmas2013_01,0;
+		completequest 15055;
+		getitem 6821,1; //Solo_Troops_Badge
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "現在是時候向情侶展示我們的力量了，因為我們有足夠的成員！ ！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "執行第二個任務！";
+		mes "前往路易（Lutie），讓夫妻分開。沒關係，只是他們分手了！";
+		mes "HIHIHI 哈哈哈哈！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "好吧，還有一件事...";
+		mes "當您打擾夫婦時，如果他們分手，您將獲得2分，如果只是簡單的論點，就會給您1分。";
+		mes "但是，如果他們彼此之間更多地吸引了彼此，那麼您的分數將減去1分。因此，當您獲得5分並來這里報告時，這意味著完成任務。";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "當然，您不會有負分數，所以不用擔心。";
+		setquest 15056;
+		close;
+	} else if (isbegin_quest(15055) == 2) {
+		mes "[工會指揮官懸崖]";
+		mes "現在是時候向情侶展示我們的力量了，因為我們有足夠的部隊！ ！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "讓我們去第二次任務吧！";
+		mes "去路易（Lutie），讓夫妻分開。無論他們是什麼，都會讓他們分手！";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "好吧，還有一件事...";
+		mes "當您打擾夫婦時，如果他們分手，您將獲得2分，如果只是簡單的論點，就會給您1分。";
+		mes "但是，如果他們彼此之間更多地吸引了彼此，那麼您的分數將減去1分。因此，當您獲得5分並來這里報告時，這意味著完成任務。";
+		next;
+		mes "[工會指揮官懸崖]";
+		mes "當然，您不會有負分數，所以不用擔心。";
+		setquest 15056;
+		close;
+	}
+	end;
+}
+
+xmas,172,126,3	script	Lonely Kwami#xmas	10089,{
+	if (isbegin_quest(15055) == 0) {
+		mes "[大部頭書]";
+		mes "haa .....聖誕節前就分手了....我一個人...一個！ ...我是嗎？ !!";
+		close;
+	} else if (isbegin_quest(15055) == 1 && isbegin_quest(15060) == 0) {
+		mes "[大部頭書]";
+		mes "haa .....聖誕節前就分手了....我一個人...一個！ ...我是嗎？ !!";
+		next;
+		mes "[大部頭書]";
+		mes "你是誰！ ？";
+		mes "你和我一起做什麼？";
+		next;
+		select("- 單身聯盟軍隊來找你了。-");
+		mes "[大部頭書]";
+		mes "犯錯？單身聯盟軍隊？那是什麼？";
+		next;
+		select("- 解釋一下俱樂部 -");
+		mes "[大部頭書]";
+		mes "...是的。你說得對！";
+		next;
+		mes "[大部頭書]";
+		mes "就像我單身一樣！我永遠不會讓夫妻在這個聖誕節享受！";
+		next;
+		mes "[大部頭書]";
+		mes "我將加入單身聯盟軍隊！ ！";
+		next;
+		mes "- 誇米（Kwami）已成為單身聯盟軍隊的成員。 -";
+		setquest 15060;
+		completequest 15060;
+		close;
+	} else {
+		mes "[單身聯盟誇米]";
+		mes "首先，我必須對我的前任報仇...不？";
+		close;
+	}
+}
+
+xmas,113,161,5	script	Lonely Willer#xmas	10090,{
+	if (isbegin_quest(15055) == 0) {
+		mes "[威勒]";
+		mes "hoooooo ...一個人玩太無聊了。";
+		close;
+	} else if (isbegin_quest(15055) == 1 && isbegin_quest(15061) == 0) {
+		mes "[威勒]";
+		mes "hoooooo ...一個人玩太無聊了。";
+		next;
+		mes "[威勒]";
+		mes "沒有什麼令人興奮的嗎？";
+		mes "...嘿，你會和我一起玩嗎？";
+		next;
+		select("- 單身聯盟軍隊來找你了。-");
+		mes "[威勒]";
+		mes "單身聯盟什麼？為什麼來找我？";
+		next;
+		select("- 解釋一下俱樂部 -");
+		mes "[威勒]";
+		mes "太...";
+		mes "分手夫婦並僅參加單身派對？";
+		next;
+		mes "[威勒]";
+		mes "那一定很有趣！我完全不明白，但我會加入，我在裡面！";
+		next;
+		mes "- 威勒已成為單打聯盟軍的成員。 -";
+		setquest 15061;
+		completequest 15061;
+		close;
+	} else {
+		mes "[單打聯盟威勒]";
+		mes "分手夫婦...這應該很有趣！";
+		close;
+	}
+}
+
+xmas,131,97,5	script	Lonely Rinka#xmas	10091,{
+	if (isbegin_quest(15055) == 0) {
+		mes "[市場]";
+		mes "ewww！該死的...什麼樣的朋友只會吹噓她的男朋友，令人作嘔！她真的認為我不能有一個嗎？ ！ ？";
+		close;
+	} else if (isbegin_quest(15055) == 1 && isbegin_quest(15062) == 0) {
+		mes "[市場]";
+		mes "ewww！該死的...什麼樣的朋友只會吹噓她的男朋友，令人作嘔！她真的認為我不能有一個嗎？ ！ ？";
+		next;
+		mes "[市場]";
+		mes "- 抽泣 -";
+		next;
+		mes "[市場]";
+		mes "我不能...實際上，沒有人...我沒有人！";
+		next;
+		select("- 單身聯盟軍隊來找你了。-");
+		mes "[市場]";
+		mes "EEEEP！哇！ ！";
+		mes "你讓我驚訝。你在說什麼，那是什麼？";
+		next;
+		select("- 解釋一下俱樂部 -");
+		mes "[市場]";
+		mes "hoho ...有這樣的東西嗎？";
+		mes "分手...";
+		mes "好的！讓我加入！";
+		next;
+		mes "[市場]";
+		mes "還有其他成員的空間嗎？";
+		mes "...很快另一個成員將加入！";
+		mes "等待~我的朋友！ ...";
+		next;
+		mes "- 林卡（Rinka）已成為單身聯盟軍隊的成員。 -";
+		setquest 15062;
+		completequest 15062;
+		close;
+	} else {
+		mes "[單打聯盟林卡]";
+		mes "等待~我的朋友！你會...盡快加入！";
+		close;
+	}
+}
+
+xmas,121,127,5	script	Lonely Jee#xmas	10088,{
+	if (isbegin_quest(15055) == 0) {
+		mes "[傑伊]";
+		mes "單身多麼美麗...";
+		close;
+	} else if ((isbegin_quest(15055) == 1) && (isbegin_quest(15063) == 0)) {
+		mes "[傑伊]";
+		mes "單身多麼美麗...";
+		next;
+		mes "[傑伊]";
+		mes "沒有人打擾你。沒有人要照顧。別人再也沒有額外的工作了。更多的時間獨自度過。";
+		next;
+		mes "[傑伊]";
+		mes "人們為什麼放棄這一優勢並想成為夫妻？";
+		next;
+		select("- 單身聯盟軍隊來找你了。-");
+		mes "[傑伊]";
+		mes "是的，我最近聽說過。我知道你會來找我。";
+		next;
+		mes "[傑伊]";
+		mes "無需單詞。我將傳播單身的優勢！";
+		next;
+		mes "-JEE已成為單打聯盟軍的成員。 -";
+		setquest 15063;
+		completequest 15063;
+		close;
+	} else {
+		mes "[單身聯盟jee]";
+		mes "我將傳播單身的優勢！";
+		close;
+	}
+}
+
+xmas,150,169,3	script	Lonely Marty#xmas	10087,{
+	if (isbegin_quest(15055) == 0) {
+		mes "[馬蒂]";
+		mes "嗯... zzz ... nyam-nyam ...";
+		close;
+	} else if (isbegin_quest(15055) == 1 && isbegin_quest(15064) == 0) {
+		mes "[馬蒂]";
+		mes "嗯... zzz ... nyamnyam ...";
+		next;
+		select("- 單身聯盟軍隊來找你了。-");
+		mes "[馬蒂]";
+		mes "尼姆....尼姆尼姆...grrr...zzzz";
+		next;
+		select("- 解釋一下俱樂部 -");
+		mes "[馬蒂]";
+		mes "法律……它……zzz";
+		next;
+		mes "-  ...您可能會認為他同意加入。 -";
+		next;
+		mes "- 馬蒂（Marty）已成為單打聯盟軍隊的成員。 -";
+		setquest 15064;
+		completequest 15064;
+		close;
+	} else {
+		mes "[單身聯盟馬蒂]";
+		mes "尼姆....尼姆尼姆...grrr...zzzz";
+		close;
+	}
+}
+
+xmas,108,149,5	script	Drop Machine#xmas	562,{
+	if (isbegin_quest(15056) == 0) {
+		mes "[掉落機]";
+		mes "丁丁丁！ ~";
+		emotion ET_THROB;
+		next;
+		mes "[老虎機]";
+		mes "！ ~";
+		emotion ET_THROB, getnpcid(0, "Slot Machine#xmas");
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 < 5) {
+		mes "[掉落機]";
+		mes "丁丁丁！ ~";
+		emotion ET_THROB;
+		next;
+		mes "[老虎機]";
+		mes "charrrrr sharrrrrrrr 叮！ 〜";
+		emotion ET_THROB, getnpcid(0, "Slot Machine#xmas");
+		next;
+		mes "- 哦，不，另一對夫婦！";
+		mes "- 即使他們只是機器...";
+		mes "- 我忍不住看到這個！";
+		next;
+		select("- 以全功率運行機器。-");
+		mes "[掉落機]";
+		mes "叮叮叮冬頂頂頂頂頂頂頂頂頂頂頂東東";
+		next;
+		mes "[老虎機]";
+		mes "叮叮叮叮叮叮叮叮叮叮叮叮叮叮";
+		next;
+		set .@cu_bre, rand(1,10);
+		if (.@cu_bre < 3) {
+			mes "- 我...";
+			mes "- 我想我倆都打破了他們！";
+			mes "- 成功分解了一對夫婦！";
+			mes "-2分，出色！";
+			set xmas2013_01, xmas2013_01 + 2;
+		} else if (.@cu_bre > 7) {
+			mes "- 我跑了一段時間";
+			mes "- 但是機器的聲音";
+			mes "- 似乎越來越大。";
+			mes "- 未能打破它們，負1分！";
+			if (xmas2013_01 > 0)
+				set xmas2013_01, xmas2013_01 - 1;
+		} else {
+			mes "- 運行機器一段時間後";
+			mes "- 我想我終於打破了其中一個！";
+			mes "- 這是1分的好工作！";
+			set xmas2013_01, xmas2013_01 + 1;
+		}
+		mes "- 當前的夫婦斷點是" + xmas2013_01 + ".";
+		hideonnpc "Drop Machine#xmas";
+		hideonnpc "Slot Machine#xmas";
+		initnpctimer;
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 > 4) {
+		mes "- 夫婦斷點";
+		mes "- 現在超過5。";
+		mes "- 我應該回到工會指揮官克里夫。";
+		close;
+	}
+	end;
+OnTimer100000:
+	hideoffnpc "Drop Machine#xmas";
+	hideoffnpc "Slot Machine#xmas";
+	stopnpctimer;
+	end;
+}
+xmas,111,149,3	script	Slot Machine#xmas	563,{ end; }
+
+xmas,181,150,5	script	Frightened Man#xmas	711,{
+	if (isbegin_quest(15056) == 0) {
+		mes "[受驚的人]";
+		mes "這是我的錯，對不起。請不要生氣。";
+		emotion ET_SORRY;
+		next;
+		mes "[憤怒的女人]";
+		mes "對不起？你知道你做了什麼嗎？你知道我為什么生氣嗎？";
+		emotion ET_FRET, getnpcid(0, "Angry Woman#xmas");
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 < 5) {
+		mes "[受驚的人]";
+		mes "我很糟糕，對不起。請不要生氣";
+		emotion ET_SORRY;
+		next;
+		mes "[憤怒的女人]";
+		mes "對不起？你知道你做了什麼嗎？你知道我為什么生氣嗎？";
+		emotion ET_FRET, getnpcid(0, "Angry Woman#xmas");
+		next;
+		mes "[受驚的人]";
+		mes "好吧，我只是覺得一切都是我的錯";
+		next;
+		mes "[憤怒的女人]";
+		mes "你總是這樣！";
+		mes "你永遠不知道你應該道歉！";
+		next;
+		mes "[受驚的人]";
+		mes "啊...我該怎麼辦？";
+		mes "嘿，您認為我應該對我的女朋友說什麼？";
+		next;
+		select("- 告訴她“我們應該停止見面”！");
+		mes "[受驚的人]";
+		mes "也許我們..應該停止見面？";
+		mes "哦，不，我只是大聲說出來！";
+		next;
+		set .@cu_bre, rand(1,10);
+		if (.@cu_bre < 3) {
+			mes "[憤怒的女人]";
+			mes "什麼？你剛剛說了什麼？我們應該停止見面嗎？你怎麼對我說？你是做錯了一切的人！好吧，你知道嗎？讓我們分手！我厭倦了這一切！";
+			set xmas2013_01, xmas2013_01 + 2;
+			hideonnpc "Frightened Man#xmas";
+			hideonnpc "Angry Woman#xmas";
+			initnpctimer;
+			next;
+			mes "[受驚的人]";
+			mes "不，那不是我...好吧，就是這樣！我也討厭這一點，一直懷著你一直在抱怨！讓我們今天結束！";
+			next;
+			mes "- 成功分手了！";
+			mes "-2分！";
+		} else if (.@cu_bre > 7) {
+			mes "[憤怒的女人]";
+			mes "什麼？ ...你剛剛說了什麼？我們應該停止見面嗎？";
+			if (xmas2013_01 > 0)
+				set xmas2013_01, xmas2013_01 - 1;
+			hideonnpc "Frightened Man#xmas";
+			hideonnpc "Angry Woman#xmas";
+			initnpctimer;
+			next;
+			mes "[憤怒的女人]";
+			mes "我簡直不敢相信你會成為一個如此炙手可熱的硬漢！就像我再次墜入愛河！";
+			next;
+			mes "[憤怒的女人]";
+			mes "親愛的，你能再說一遍嗎？";
+			next;
+			mes "[受驚的人]";
+			mes "嗯？當然...讓我們...讓我們結束！ ！ ！";
+			next;
+			mes "[憤怒的女人]";
+			mes "哈哈哈！你很棒！驚人的！再說一遍！說吧！";
+			next;
+			mes "[受驚的人]";
+			mes "讓我們分手！我要離開你！";
+			next;
+			mes "[憤怒的女人]";
+			mes "哈哈哈哈哈哈！耶！你是最好的！";
+			next;
+			mes "-  ...這些人不正常。";
+			mes "- 為失敗減去1分！";
+		} else {
+			set xmas2013_01, xmas2013_01 + 1;
+			hideonnpc "Frightened Man#xmas";
+			hideonnpc "Angry Woman#xmas";
+			initnpctimer;
+			mes "[憤怒的女人]";
+			mes "什麼？ ...你剛剛說了什麼？我們應該停止見面嗎？";
+			next;
+			mes "[憤怒的女人]";
+			mes "...我認為我們現在都太沮喪了。讓我們稍後再談談...";
+			next;
+			mes "[受驚的人]";
+			mes "嗯？ ...啊，是的，你是對的...再見，安全回家...";
+			next;
+			mes "- 這是破壞約會的1分！";
+		}
+		mes "- 當前的夫婦斷點是" + xmas2013_01 + ".";
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 > 4) {
+		mes "- 夫婦斷點";
+		mes "- 現在超過5。";
+		mes "- 我應該回到工會指揮官克里夫。";
+		close;
+	}
+	end;
+OnTimer100000:
+	hideoffnpc "Frightened Man#xmas";
+	hideoffnpc "Angry Woman#xmas";
+	stopnpctimer;
+	end;
+}
+xmas,183,150,3	script	Angry Woman#xmas	714,{ end; }
+
+xmas_in,32,99,5	script	Singles Union Kwami	10089,{
+	if (isbegin_quest(15056) == 0) {
+		mes "[單身聯盟誇米]";
+		mes "Rinka。像你這樣的漂亮女孩怎麼在這支單身聯盟軍隊中成為一個巨大的謎。";
+		emotion ET_THROB;
+		next;
+		mes "[單打聯盟林卡]";
+		mes "你覺得我很漂亮嗎？ Hoho ...對我來說也很謎，一個像您這樣的英俊男人加入了單身聯盟軍隊。";
+		emotion ET_THROB, getnpcid(0, "Singles Union Rinka");
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 < 5) {
+		mes "[單身聯盟誇米]";
+		mes "Rinka。像你這樣的漂亮女孩怎麼在這支單身聯盟軍隊中成為一個巨大的謎。";
+		emotion ET_THROB;
+		next;
+		mes "[單打聯盟林卡]";
+		mes "你覺得我很漂亮嗎？ Hoho ...對我來說也很謎，一個像您這樣的英俊男人加入了單身聯盟軍隊。";
+		emotion ET_THROB, getnpcid(0, "Singles Union Rinka");
+		next;
+		mes "[單身聯盟誇米]";
+		mes "好吧，我們應該獨自度過聖誕節嗎？你說什麼，林卡，你和我...";
+		next;
+		select("- 成為情侶就是背叛！你背叛我們，你就死定了！ ！ ！");
+		set xmas2013_01, xmas2013_01 + 1;
+		hideonnpc "Singles Union Kwami";
+		hideonnpc "Singles Union Rinka";
+		initnpctimer;
+		mes "[單打聯盟林卡]";
+		mes "argh !!!!!這是誰？";
+		mes "這不是把我們拖到單身聯盟軍隊的人嗎？";
+		next;
+		mes "[單身聯盟誇米]";
+		mes "你是..竊聽嗎？";
+		mes "我只是想說我們應該為俱樂部找到更多成員！哈哈哈哈哈！";
+		next;
+		mes "[單身聯盟誇米]";
+		mes "林卡，我稍後再見。我要去尋找更多的夫妻。不要告訴老闆！";
+		next;
+		mes "[單打聯盟林卡]";
+		mes "嗯，我想我應該去。稍後再見，誇米，也向你告別~";
+		next;
+		mes "- 成功阻止了一對夫婦形成！";
+		mes "- 好工作1分！";
+		mes "- 當前的夫婦斷點是" + xmas2013_01 + ".";
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 > 4) {
+		mes "- 夫婦斷點";
+		mes "- 現在超過5。";
+		mes "- 我應該回到工會指揮官克里夫。";
+		close;
+	}
+	end;
+OnTimer300000:
+	hideoffnpc "Singles Union Kwami";
+	hideoffnpc "Singles Union Rinka";
+	stopnpctimer;
+	end;
+}
+xmas_in,34,99,3	script	Singles Union Rinka	10091,{ end; }
+
+xmas,156,109,5	script	Poor Alchemist#xmas	749,{
+	if (isbegin_quest(15056) == 0) {
+		mes "[可憐的煉金術士]";
+		mes "哦，你好。";
+		emotion ET_PROFUSELY_SWEAT;
+		next;
+		mes "[花店]";
+		mes "您好，煉金術士先生。";
+		mes "你今天也在工作嗎？";
+		emotion ET_DELIGHT, getnpcid(0, "Florist#xmas");
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 < 5) {
+		mes "[可憐的煉金術士]";
+		mes "哦，你好。";
+		emotion ET_PROFUSELY_SWEAT;
+		next;
+		mes "[花店]";
+		mes "您好，煉金術士先生。";
+		mes "你今天也在工作嗎？";
+		emotion ET_DELIGHT, getnpcid(0, "Florist#xmas");
+		next;
+		mes "[可憐的煉金術士]";
+		mes "實際上，我有東西告訴你。";
+		mes "這非常重要，所以請仔細聽。";
+		next;
+		mes "[花店]";
+		mes "哦，當然，請自由說話。";
+		next;
+		mes "[可憐的煉金術士]";
+		mes "從生物學上講，大腦中的邊緣系統使我們能夠社交，與人交流，娛樂等。";
+		next;
+		mes "[可憐的煉金術士]";
+		mes "因此，當您看到一個美麗的女人時，她的外表，氣味，聲音的語氣等信息都進入了邊緣區域。";
+		next;
+		mes "[可憐的煉金術士]";
+		mes "然後，邊緣系統評估信息，以查看這位女士是否友好，敏捷或迷人等。";
+		next;
+		mes "[可憐的煉金術士]";
+		mes "評估完成後，邊緣系統立即開始分泌化學物質。";
+		next;
+		mes "[可憐的煉金術士]";
+		mes "因此，如果您被這位女士所吸引，則分泌多巴胺的激素稱呼，這會讓您感到有些快樂。";
+		next;
+		mes "[可憐的煉金術士]";
+		mes "當那個階段結束時，您會得到腎上腺素的泵送，然後您將變得更加直接和熱情。";
+		next;
+		mes "[可憐的煉金術士]";
+		mes "我現在正對著你！換句話說，我非常...！";
+		next;
+		select("- 很餓吧？ ！");
+		mes "[花店]";
+		mes "嗯？那對嗎？";
+		mes "煉金術士先生，你現在餓了嗎？";
+		next;
+		mes "[可憐的煉金術士]";
+		mes "啊..是的..我想我是...";
+		mes "...非常餓..";
+		next;
+		set .@cu_bre, rand(1,10);
+		if (.@cu_bre < 3) {
+			mes "[花店]";
+			mes "附近有一家不錯的餐廳。你為什麼不去那裡吃飯？";
+			set xmas2013_01, xmas2013_01 + 2;
+			hideonnpc "Poor Alchemist#xmas";
+			hideonnpc "Florist#xmas";
+			initnpctimer;
+			next;
+			mes "[可憐的煉金術士]";
+			mes "...當然，謝謝。祝你有美好的一天...";
+			next;
+			mes "- 成功阻止了一對夫婦形成！";
+			mes "- 出色工作2分！";
+		} else if (.@cu_bre > 7) {
+			mes "[花店]";
+			mes "我懂了。我明白你的意思。";
+			if (xmas2013_01 > 0)
+				set xmas2013_01, xmas2013_01 - 1;
+			hideonnpc "Poor Alchemist#xmas";
+			hideonnpc "Florist#xmas";
+			initnpctimer;
+			next;
+			mes "[花店]";
+			mes "那我可以為你做些不錯的飯嗎？";
+			next;
+			mes "[花店]";
+			mes "...在我的餘生中，如果你願意的話...";
+			next;
+			mes "[可憐的煉金術士]";
+			mes "好的...";
+			mes "......";
+			mes "等等，什麼？ ？ ？ ？";
+			next;
+			mes "[可憐的煉金術士]";
+			mes "......";
+			mes "...... 是的！我想！ ！ ！ ！ ！ ！ ！ ！";
+			next;
+			mes "- 未能分解一對";
+			mes "- 為失敗減去1分！";
+		} else {
+			set xmas2013_01, xmas2013_01 + 1;
+			hideonnpc "Poor Alchemist#xmas";
+			hideonnpc "Florist#xmas";
+			initnpctimer;
+			mes "[花店]";
+			mes "商店裡有一些食物，請進來。";
+			next;
+			mes "[可憐的煉金術士]";
+			mes "啊...是的，謝謝。";
+			next;
+			mes "- 您確實以某種方式打斷了這對夫婦。這是你的1分！";
+		}
+		mes "- 當前的夫婦斷點是" + xmas2013_01 + ".";
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 > 4) {
+		mes "- 夫婦斷點";
+		mes "- 現在超過5。";
+		mes "- 我應該回到工會指揮官克里夫。";
+		close;
+	}
+	end;
+OnTimer100000:
+	hideoffnpc "Poor Alchemist#xmas";
+	hideoffnpc "Florist#xmas";
+	stopnpctimer;
+	end;
+}
+xmas,158,109,3	script	Florist#xmas	91,{ end; }
+
+xmas,166,164,5	script	Raffini Boy#xmas	443,{
+	if (isbegin_quest(15056) == 0) {
+		mes "[拉菲尼男孩]";
+		mes "這是路易村...";
+		emotion ET_STARE_ABOUT;
+		next;
+		mes "[拉菲尼女孩]";
+		mes "如此美麗的白雪片。";
+		mes "但是這裡太冷了...";
+		emotion ET_CRY, getnpcid(0, "Raffini Girl#xmas");
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 < 5) {
+		mes "[拉菲尼男孩]";
+		mes "這是路易村...";
+		emotion ET_STARE_ABOUT;
+		next;
+		mes "[拉菲尼女孩]";
+		mes "如此美麗的白雪片。";
+		mes "但是這裡太冷了...";
+		emotion ET_CRY, getnpcid(0, "Raffini Girl#xmas");
+		next;
+		mes "[拉菲尼男孩]";
+		mes "但是是你想在這個聖誕節看到雪。";
+		next;
+		mes "[拉菲尼女孩]";
+		mes "哦，但是我不知道這有多冷...哎呀...";
+		next;
+		mes "[拉菲尼男孩]";
+		mes "好吧，好吧，我看到...靠近我。";
+		next;
+		mes "[拉菲尼女孩]";
+		mes "什麼？我聽不到您的聲音。你在說什麼？";
+		next;
+		mes "[拉菲尼男孩]";
+		mes "...離我更近。在我身邊。";
+		next;
+		mes "[拉菲尼女孩]";
+		mes "哦，好...";
+		next;
+		mes "- 嗯...根本沒有空間";
+		mes "- 讓我打擾...";
+		next;
+		hideonnpc "Raffini Boy#xmas";
+		hideonnpc "Raffini Girl#xmas";
+		initnpctimer;
+		set .@cu_bre, rand(1,10);
+		if (.@cu_bre < 6) {
+			set xmas2013_01, xmas2013_01 + 1;
+			mes "[拉菲尼女孩]";
+			mes "....但是仍然太冷了！我不想再在這裡了。";
+			next;
+			mes "[拉菲尼女孩]";
+			mes "我想回去！";
+			next;
+			mes "[拉菲尼男孩]";
+			mes "哦？嘿...我們終於剛到這裡了，但是您現在會回去嗎？";
+			next;
+			mes "[拉菲尼男孩]";
+			mes "嘿！讓我們一起去！";
+			next;
+			mes "- 根本沒有汗水，但是一切都很好。";
+			mes "- 獲得1分！";
+		} else {
+			if (xmas2013_01 > 0)
+				set xmas2013_01, xmas2013_01 - 1;
+			mes "[拉菲尼女孩]";
+			mes "哦！比以前要溫暖得多...呵呵";
+			next;
+			mes "[拉菲尼男孩]";
+			mes "d ..不要離我太近！";
+			next;
+			mes "[拉菲尼女孩]";
+			mes "為什麼不呢？誰在乎。讓我們去抓一些美味的東西。";
+			next;
+			mes "[拉菲尼男孩]";
+			mes "你也太近了！我，我能感覺到你的.. um ..嘿！";
+			next;
+			mes "- 糟糕，即使沒有做任何事情，我也受到了那對夫妻的攻擊。";
+			mes "- 失敗，得到-1得分點！";
+		}
+		mes "- 當前的夫婦斷點是" + xmas2013_01 + ".";
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 > 4) {
+		mes "- 夫婦斷點";
+		mes "- 現在超過5。";
+		mes "- 我應該回到工會指揮官克里夫。";
+		close;
+	}
+	end;
+OnTimer100000:
+	hideoffnpc "Raffini Boy#xmas";
+	hideoffnpc "Raffini Girl#xmas";
+	stopnpctimer;
+	end;
+}
+xmas,168,164,3	script	Raffini Girl#xmas	438,{ end; }
+
+xmas,147,123,5	script	Angeling#xmas	948,{
+	if (isbegin_quest(15056) == 0) {
+		mes "[天使]";
+		mes "咕咕~";
+		emotion ET_THROB;
+		next;
+		mes "[弧天使]";
+		mes "咕咕咕~";
+		emotion ET_THROB, getnpcid(0, "Arc Angeling#xmas");
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 < 5) {
+		mes "[天使]";
+		mes "咕咕~";
+		emotion ET_THROB;
+		next;
+		mes "[弧天使]";
+		mes "咕咕咕~";
+		emotion ET_THROB, getnpcid(0, "Arc Angeling#xmas");
+		next;
+		mes "- 我不能打擾他們。";
+		mes "- 甚至無法與他們交談，";
+		mes "- 那好吧。";
+		next;
+		mes "- 狩獵他們？";
+		mes "- ......決不。";
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 > 4) {
+		mes "- 夫婦斷點";
+		mes "- 現在超過5。";
+		mes "- 我應該回到工會指揮官克里夫。";
+		close;
+	}
+	end;
+}
+xmas,149,123,3	script	Arc Angeling#xmas	949,{ end; }
+
+xmas,129,115,5	script	Prenetan#xmas	783,{
+	if (isbegin_quest(15056) == 0) {
+		mes "[已轉]";
+		mes "烏姆巴~烏姆巴烏姆巴！";
+		mes "一個常見問題！";
+		next;
+		mes "[已轉]";
+		mes "終於得到了你，是嗎？您一直在欺騙我，直到現在，甚至讓我追趕你？我會殺了你男孩！";
+		emotion ET_FRET;
+		next;
+		mes "[姆普科里奧坦]";
+		mes "哦，我的妻子太暴力了。哦...很痛！";
+		emotion ET_CRY, getnpcid(0, "Umpoucoriotan#xmas");
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 < 5) {
+		mes "[已轉]";
+		mes "烏姆巴~烏姆巴烏姆巴！";
+		mes "一個常見問題！";
+		next;
+		mes "[已轉]";
+		mes "終於得到了你，是嗎？您一直在欺騙我，直到現在，甚至讓我追趕你？我會殺了你男孩！";
+		emotion ET_FRET;
+		next;
+		mes "[姆普科里奧坦]";
+		mes "哦，我的妻子太暴力了。哦...很痛！";
+		emotion ET_CRY, getnpcid(0, "Umpoucoriotan#xmas");
+		next;
+		mes "[姆普科里奧坦]";
+		mes "瓦納坦、巴賈坦、恰比馬坦";
+		mes "哦... Umbala的女孩在這裡...他們現在在等我.... arg！不要碰我！";
+		next;
+		mes "[已轉]";
+		mes "你有多愚蠢！";
+		mes "那些女孩從不想見你，那隻是他們來這裡的謊言！";
+		next;
+		select("- 不，他們都在這裡！");
+		hideonnpc "Prenetan#xmas";
+		hideonnpc "Umpoucoriotan#xmas";
+		initnpctimer;
+		set .@cu_bre, rand(1,10);
+		if (.@cu_bre < 6) {
+			set xmas2013_01, xmas2013_01 + 1;
+			mes "[姆普科里奧坦]";
+			mes "嗯...是的，我知道..那些女孩在這裡嗎？";
+			next;
+			mes "[姆普科里奧坦]";
+			mes "...哦，我有胃痛...我有什麼問題...親愛的，一秒鐘。我很快就會回到洗手間！只是在這裡等一會兒！";
+			next;
+			mes "[已轉]";
+			mes "嘿，你這個白痴！停在那裡！停止！ ...停止！ ！ ！";
+			next;
+			mes "- 嗯，事情很容易。得到1分！";
+		} else {
+			set xmas2013_01, xmas2013_01 + 1;
+			mes "[已轉]";
+			mes "誰在那裡？你也想被殺死嗎？";
+			next;
+			mes "- 糟糕";
+			next;
+			mes "[已轉]";
+			mes "你仍然什麼都不了解。來這裡，我帶您回到Umbala！";
+			next;
+			mes "[姆普科里奧坦]";
+			mes "arg！ .... arrrrrrrg！好痛！不，！ ！ ！他們在等我！ ！ ！";
+			next;
+			mes "- 好吧，他只是為自己而言更加困難。得到1分！";
+		}
+		mes "- 當前的夫婦斷點是" + xmas2013_01 + ".";
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 > 4) {
+		mes "- 夫婦斷點";
+		mes "- 現在超過5。";
+		mes "- 我應該回到工會指揮官克里夫。";
+		close;
+	}
+	end;
+OnTimer100000:
+	hideoffnpc "Prenetan#xmas";
+	hideoffnpc "Umpoucoriotan#xmas";
+	stopnpctimer;
+	end;
+}
+xmas,131,115,3	script	Umpoucoriotan#xmas	789,{ end; }
+
+xmas,138,174,5	script	Dark Lord#xmas	737,{
+	if (isbegin_quest(15056) == 0) {
+		mes "[黑暗主]";
+		mes "瓦哈哈哈哈（Whahahaha）世界將很快變成黑暗，每個人都會跪在我面前！";
+		emotion ET_SURPRISE;
+		next;
+		mes "[魅魔]";
+		mes "我的主人。所有世界都會遵循您的意志。";
+		emotion ET_THROB, getnpcid(0, "Succubus#xmas");
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 < 5) {
+		mes "[黑暗主]";
+		mes "瓦哈哈哈哈（Whahahaha）世界將很快變成黑暗，每個人都會跪在我面前！";
+		emotion ET_SURPRISE;
+		next;
+		mes "[魅魔]";
+		mes "我的主人。所有世界都會遵循您的意志。";
+		emotion ET_THROB, getnpcid(0, "Succubus#xmas");
+		next;
+		mes "[黑暗主]";
+		mes "即使我一直在下達艱難的訂單，您也一直忠於我。你應該得到獎勵。您現在想要什麼？我一定會為你做。我什至可以給你更多的力量！";
+		next;
+		mes "[魅魔]";
+		mes "......";
+		mes "你真的可以給我任何我想要的...嗎？";
+		next;
+		mes "[魅魔]";
+		mes "我真正需要的是...";
+		mes "......";
+		mes "只有你，我的主人。";
+		next;
+		mes "[黑暗主]";
+		mes "......";
+		mes "？ ！ ！ ！ ！";
+		next;
+		mes "[魅魔]";
+		mes "我愛上了你...";
+		mes "很長一段時間...";
+		next;
+		mes "[黑暗主]";
+		mes "......";
+		next;
+		mes "[黑暗主]";
+		mes "不是我不知道。";
+		next;
+		mes "[黑暗主]";
+		mes "我也...";
+		next;
+		mes "[黑暗主]";
+		mes "...但是我們是惡魔。惡魔選擇了通往愛的道路？荒謬，黑暗的世界永遠不會原諒我們！我們將躲藏餘生！";
+		next;
+		mes "[魅魔]";
+		mes "只要我和你在一起，我的主人...";
+		next;
+		select("- 很抱歉打擾你...但是你們不是在討論征服世界嗎？");
+		hideonnpc "Dark Lord#xmas";
+		hideonnpc "Succubus#xmas";
+		initnpctimer;
+		set .@cu_bre, rand(1,10);
+		if (.@cu_bre < 5) {
+			set xmas2013_01, xmas2013_01 + 2;
+			mes "[黑暗主]";
+			mes "是的。是的，魅魔！我們已經實現瞭如此高的目標！";
+			next;
+			mes "[黑暗主]";
+			mes "我很感激這個想法，但知道你的位置！只要像現在這樣成為我的下屬。";
+			next;
+			mes "[魅魔]";
+			mes "哦，是的...我的主人，請原諒我。我會盡力使您的世界成為您的世界。";
+			next;
+			mes "[黑暗主]";
+			mes "是的！沒有什麼比將這個世界變成黑暗更好的了。每個人都會跪在我面前。哈哈哈哈哈哈哈！";
+			next;
+			mes "- 即使世界將會";
+			mes "- 很快就會陷入黑暗...";
+			mes "- 我取得了巨大的成功分手！";
+			mes "-2分！";
+		} else {
+			if (xmas2013_01 > 0)
+				set xmas2013_01, xmas2013_01 - 1;
+			mes "[黑暗主]";
+			mes "征服世界...與我們現在的感覺相比，這是沒有用的。";
+			mes "親愛的魅魔，如果您和我在一起，您真的可以克服任何痛苦嗎？";
+			next;
+			mes "[魅魔]";
+			mes "...掌握！";
+			next;
+			mes "[魅魔]";
+			mes "當然，我已經準備好了……即使我會以任何形式的痛苦，我也會永遠跟隨你。";
+			next;
+			mes "[魅魔]";
+			mes "我將永遠成為你的！";
+			next;
+			mes "[黑暗主]";
+			mes "我看到...我現在可以感覺到你的心。好吧，讓我們一起去...無論它會多麼困難！ ！";
+			next;
+			mes "- 我從黑暗中拯救了這個世界。";
+			mes "- 雖然成立了一對夫婦！";
+			mes "- 非常難過...";
+			mes "- 失敗，-1得分點！";
+		}
+		mes "- 當前的夫婦斷點是" + xmas2013_01 + ".";
+		close;
+	} else if (isbegin_quest(15056) == 1 && xmas2013_01 > 4) {
+		mes "- 夫婦斷點";
+		mes "- 現在超過5。";
+		mes "- 我應該回到工會指揮官克里夫。";
+		close;
+	}
+	end;
+OnTimer100000:
+	hideoffnpc "Dark Lord#xmas";
+	hideoffnpc "Succubus#xmas";
+	stopnpctimer;
+	end;
+}
+xmas,141,174,3	script	Succubus#xmas	1370,{ end; }
+
+// Monster Spawns :: EventMonster-131209_xmas
+//============================================================
+gld_dun01_2,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gld_dun02_2,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gld_dun03_2,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gld_dun04_2,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gld2_ald,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gld2_gef,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gld2_pay,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gld2_prt,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+lhz_dun04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+iz_dun05,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mal_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+dic_dun03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+dew_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+dew_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+dew_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mal_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+iz_dun05,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+man_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+man_fild03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+spl_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+spl_fild03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+man_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+spl_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+nyd_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+bra_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+bra_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+bra_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+dic_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+dic_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+dic_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+dic_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+bif_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+bif_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+abbey01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+abbey02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+abbey03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+abyss_01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+abyss_02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+abyss_03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+alde_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+alde_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+alde_dun03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+alde_dun04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ama_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ama_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ama_dun03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ama_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+anthell01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+anthell02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ayo_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ayo_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ayo_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ayo_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+beach_dun,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+beach_dun2,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+beach_dun3,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+c_tower1,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+c_tower2,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+c_tower3,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+c_tower4,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+cmd_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+cmd_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+cmd_fild03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+cmd_fild04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+cmd_fild06,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+cmd_fild07,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+cmd_fild08,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+cmd_fild09,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ein_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ein_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ein_fild03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ein_fild04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ein_fild05,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ein_fild06,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ein_fild07,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ein_fild08,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ein_fild09,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_dun00,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_fild00,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_fild03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_fild04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_fild05,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_fild06,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_fild07,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_fild08,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_fild09,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_fild10,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_fild11,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gef_fild13,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gefenia01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gefenia02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gefenia03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gefenia04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_cas01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_cas02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_church,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_chyard,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_in01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_knt01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_knt02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_prison,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_prison1,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_sew01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_sew02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_sew03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_sew04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_step,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+glast_01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gon_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gon_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gon_dun03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gon_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+hu_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+hu_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+hu_fild04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+hu_fild05,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+hu_fild06,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ice_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ice_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ice_dun03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+in_sphinx1,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+in_sphinx2,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+in_sphinx3,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+in_sphinx4,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+in_sphinx5,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+iz_dun00,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+iz_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+iz_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+iz_dun03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+iz_dun04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+jupe_core,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+juperos_01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+juperos_02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+kh_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+kh_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+lhz_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+lhz_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+lhz_dun03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+lhz_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+lhz_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+lhz_fild03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+lou_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+lou_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+lou_dun03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+lou_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mag_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mag_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+man_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjo_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjo_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjo_dun03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjolnir_01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjolnir_02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjolnir_03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjolnir_04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjolnir_05,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjolnir_06,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjolnir_07,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjolnir_08,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjolnir_09,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjolnir_10,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjolnir_11,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+mjolnir_12,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild05,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild06,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild07,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild08,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild09,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild10,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild11,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild12,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild13,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild14,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild15,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild16,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild17,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_fild18,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_pryd01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_pryd02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_pryd03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_pryd04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_pryd05,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_pryd06,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+nameless_n,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+nif_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+nif_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+nyd_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+odin_tem01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+odin_tem02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+odin_tem03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+orcsdun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+orcsdun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_dun00,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_dun03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_dun04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_fild03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_fild04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_fild06,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_fild07,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_fild08,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_fild09,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+pay_fild10,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild00,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild05,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild06,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild07,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild08,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild09,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild10,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild11,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_maze01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_maze02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_maze03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_sewb1,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_sewb2,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_sewb3,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ra_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ra_fild03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ra_fild04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ra_fild05,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ra_fild06,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ra_fild08,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ra_fild12,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ra_san01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ra_san02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ra_san03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ra_san04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ra_san05,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+spl_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tha_t01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tha_t02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tha_t03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tha_t04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tha_t05,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tha_t06,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tha_t07,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tha_t08,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tha_t09,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tha_t10,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tha_t11,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tha_t12,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+thor_v01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+thor_v02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+thor_v03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+treasure01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+treasure02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tur_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tur_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tur_dun03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+tur_dun04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+um_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+um_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+um_fild03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+um_fild04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ve_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ve_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ve_fild03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ve_fild04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ve_fild05,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ve_fild07,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+xmas_dun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+xmas_dun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+xmas_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+yuno_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+yuno_fild02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+yuno_fild03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+yuno_fild04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+yuno_fild06,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+yuno_fild07,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+yuno_fild08,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+yuno_fild09,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+yuno_fild10,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+yuno_fild12,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gld_dun01_2,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gld_dun02_2,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gld_dun03_2,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gld_dun04_2,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gld2_ald,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gld2_gef,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gld2_pay,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gld2_prt,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+lhz_dun04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+iz_dun05,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mal_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+dic_dun03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+dew_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+dew_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+dew_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mal_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+iz_dun05,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+man_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+man_fild03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+spl_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+spl_fild03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+man_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+spl_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+nyd_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+bra_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+bra_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+bra_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+dic_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+dic_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+dic_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+dic_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+bif_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+bif_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+abbey01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+abbey02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+abbey03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+abyss_01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+abyss_02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+abyss_03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+alde_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+alde_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+alde_dun03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+alde_dun04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ama_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ama_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ama_dun03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ama_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+anthell01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+anthell02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ayo_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ayo_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ayo_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ayo_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+beach_dun,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+beach_dun2,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+beach_dun3,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+c_tower1,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+c_tower2,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+c_tower3,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+c_tower4,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+cmd_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+cmd_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+cmd_fild03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+cmd_fild04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+cmd_fild06,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+cmd_fild07,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+cmd_fild08,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+cmd_fild09,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ein_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ein_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ein_fild03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ein_fild04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ein_fild05,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ein_fild06,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ein_fild07,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ein_fild08,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ein_fild09,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_dun00,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_fild00,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_fild03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_fild04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_fild05,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_fild06,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_fild07,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_fild08,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_fild09,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_fild10,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_fild11,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gef_fild13,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gefenia01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gefenia02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gefenia03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gefenia04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_cas01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_cas02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_church,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_chyard,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_in01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_knt01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_knt02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_prison,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_prison1,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_sew01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_sew02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_sew03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_sew04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_step,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+glast_01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gon_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gon_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gon_dun03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gon_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+hu_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+hu_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+hu_fild04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+hu_fild05,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+hu_fild06,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ice_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ice_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ice_dun03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+in_sphinx1,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+in_sphinx2,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+in_sphinx3,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+in_sphinx4,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+in_sphinx5,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+iz_dun00,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+iz_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+iz_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+iz_dun03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+iz_dun04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+jupe_core,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+juperos_01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+juperos_02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+kh_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+kh_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+lhz_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+lhz_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+lhz_dun03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+lhz_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+lhz_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+lhz_fild03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+lou_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+lou_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+lou_dun03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+lou_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mag_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mag_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+man_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjo_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjo_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjo_dun03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjolnir_01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjolnir_02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjolnir_03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjolnir_04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjolnir_05,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjolnir_06,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjolnir_07,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjolnir_08,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjolnir_09,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjolnir_10,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjolnir_11,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+mjolnir_12,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild05,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild06,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild07,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild08,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild09,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild10,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild11,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild12,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild13,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild14,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild15,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild16,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild17,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_fild18,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_pryd01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_pryd02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_pryd03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_pryd04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_pryd05,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_pryd06,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+nameless_n,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+nif_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+nif_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+nyd_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+odin_tem01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+odin_tem02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+odin_tem03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+orcsdun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+orcsdun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_dun00,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_dun03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_dun04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_fild03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_fild04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_fild06,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_fild07,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_fild08,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_fild09,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+pay_fild10,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild00,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild05,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild06,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild07,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild08,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild09,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild10,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild11,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_maze01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_maze02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_maze03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_sewb1,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_sewb2,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_sewb3,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ra_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ra_fild03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ra_fild04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ra_fild05,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ra_fild06,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ra_fild08,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ra_fild12,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ra_san01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ra_san02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ra_san03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ra_san04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ra_san05,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+spl_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tha_t01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tha_t02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tha_t03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tha_t04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tha_t05,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tha_t06,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tha_t07,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tha_t08,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tha_t09,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tha_t10,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tha_t11,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tha_t12,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+thor_v01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+thor_v02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+thor_v03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+treasure01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+treasure02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tur_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tur_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tur_dun03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+tur_dun04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+um_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+um_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+um_fild03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+um_fild04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ve_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ve_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ve_fild03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ve_fild04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ve_fild05,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ve_fild07,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+xmas_dun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+xmas_dun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+xmas_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+yuno_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+yuno_fild02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+yuno_fild03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+yuno_fild04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+yuno_fild06,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+yuno_fild07,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+yuno_fild08,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+yuno_fild09,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+yuno_fild10,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+yuno_fild12,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ecl_fild01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ecl_fild01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ecl_tdun01,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ecl_tdun01,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ecl_tdun02,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ecl_tdun02,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+ecl_tdun03,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+ecl_tdun03,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+//ecl_tdun04,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+//ecl_tdun04,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_prydn1,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_prydn1,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+moc_prydn2,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+moc_prydn2,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild08a,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild08a,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild08b,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild08b,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild08c,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild08c,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+prt_fild08d,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+prt_fild08d,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_chyard_,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_chyard_,0,0	monster	Sock Stealing Raccoon	2379,5,5000
+gl_cas02_,0,0	monster	Gift Stealing Raccoon	2380,5,5000
+gl_cas02_,0,0	monster	Sock Stealing Raccoon	2379,5,5000

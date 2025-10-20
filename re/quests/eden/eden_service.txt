@@ -1,0 +1,67 @@
+﻿//===== rAthena Script =======================================
+//= Eden Group Quests - Service NPCs
+//===== By: ==================================================
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.3
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Paradise Group storage access.
+//===== Additional Comments: =================================
+//= 1.0 First Version.
+//= 1.1 Replaced 2nd NPC with duplicate function. [Masao]
+//= 1.2 Added support to Para_Team_Mark_ in Eden Group. [Ragno]
+//= 1.3 Added use of F_HasEdenGroupMark function. [Ragno]
+//============================================================
+
+// Goods Cabinets :: pare_service
+//============================================================
+-	script	Goods Cabinet#00::pggc	-1,{
+	mes "這是一個貨物儲藏櫃。";
+	mes "一條消息寫在一張紙上。";
+	next;
+	mes "+機櫃是專門的 +";
+	mes "+對於伊甸園 +";
+	mes "如果您想使用此";
+	mes "機櫃請檢查";
+	mes "下列：";
+	next;
+	mes "1.你是會員";
+	mes "伊甸園集團？";
+	mes "2.你學到了";
+	mes "足夠的基本技能？";
+	mes "3.小費是";
+	mes "^4d4dff500澤尼^000000！";
+	next;
+	if (callfunc("F_HasEdenGroupMark")) {
+		mes "您需要插入Zeny來使用櫥櫃。";
+		mes "費用：500 Zeny";
+		mes "您想使用它嗎？";
+		next;
+		switch(select("使用內閣。 :取消。")) {
+			case 1:
+				if (Zeny > 499) {
+					if(!callfunc("F_CanOpenStorage")){
+						mes "內閣對我不起作用。";
+						mes "也許我還沒有資格使用櫥櫃。";
+						close;
+					}
+					set Zeny, Zeny - 500;
+					close2;
+					openstorage;
+					end;
+				}
+				mes "我沒有足夠的Zeny。";
+				mes "我至少需要500 Zeny來使用櫥櫃。";
+				close;
+			case 2:
+				mes "下次我將使用它。";
+				close;
+		}
+	}
+	mes "我需要一個伊甸園的標記來使用此機櫃。";
+	close;
+}
+moc_para01,173,120,0	duplicate(pggc)	Goods Cabinet#01	111
+moc_para01,170,120,0	duplicate(pggc)	Goods Cabinet#02	111

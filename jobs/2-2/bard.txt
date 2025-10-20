@@ -1,0 +1,953 @@
+﻿//===== rAthena Script ======================================= 
+//= Bard Job Quest
+//===== By: ==================================================
+//= Muad_Dib(The Prometheus Project), Lupus, Samuray22
+//===== Current Version: ===================================== 
+//= 2.6
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job quest for Bard class
+//===== Additional Comments: =================================
+//= 2.1b Updated to the Official One. [Samuray22]
+//= 2.2 Fixed BUG when baby classes weren't able to get a job,
+//=	- fixed bug with final prize [Lupus] HAVE TO CHANE ALL ITEMS to numeric IDs
+//= 2.3 Updated NPC dialogs and cutins using Aegis 10.3 files. [L0ne_W0lf]
+//=	- Fixed error with the present checking. (Lupus beat me to committing)
+//=	- Changed the reward checking to use callsub (fixed the flow of the script)
+//=	- Optimized and changed the flow of things slightly.
+//=	- Temporary character variables "@" are now ".@"
+//=	- Fixed some indentation.
+//=	- Changed item names to item IDs
+//= 2.4 Fixed hang up on bard quest. ($kiN.) [L0ne_W0lf]
+//= 2.5 Added Quest Log commands. [Kisuka]
+//= 2.6 Removed the need for use of 'goto.' [L0ne_W0lf]
+//============================================================
+
+// Ayealo
+//============================================================
+comodo,226,123,5	script	Wandering Bard	741,{
+	if(Upper == 1) {
+		mes "[尤其]";
+		mes "被選為註定要成為神靈的人";
+		mes "在這個時代有很多";
+		mes "但是他們從來沒有在活著的時候意識到自己的命運。";
+		mes "他們最終成為普通人...";
+		next;
+		mes "[尤其]";
+		mes "風和雲，請將此消息發送給他們，";
+		mes "追求食物，衣服，庇護所和財富的人。";
+		mes "告訴他們他們正在浪費時間...";
+		mes "告訴他們他們忘記了生活中最重要的目標...";
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	else if(BaseJob != Job_Archer) {
+		if(BaseJob == Job_Bard) {
+			mes "[尤其]";
+			mes "哦，嘿！這些天你唱歌怎麼樣？";
+			mes "我想知道你的聲音是否更好。";
+			next;
+			mes "[尤其]";
+			mes "您不會忘記在每個城鎮傳播好消息，對嗎？";
+			mes "而且不要忘記學習新歌...";
+			next;
+			mes "[尤其]";
+			mes "永遠不要忘記擁有積極的態度和喜悅的含義。";
+			mes "我們的歌曲應該為所有人帶來幸福和喜悅。";
+		}
+		else if(Class == Job_Novice) {
+			cutin "job_bard_aiolo01",2;
+			mes "[尤其]";
+			mes "克服了我心的悲傷。";
+			mes "它不會居住..";
+			mes "這是我麻煩背後的原因嗎？";
+			mes "這就是為什麼我虛弱，";
+			mes "這一定是為什麼我似乎不能忘記你...";
+			next;
+			mes "[尤其]";
+			mes "哦，對不起。我沒有看到你，因為我專注於寫一些歌詞。";
+			mes "你想听我的歌嗎？我可以為你唱歌嗎？";
+			next;
+			mes "[尤其]";
+			mes "呵呵...嘗試問別人。";
+			mes "我正在嘗試撰寫一首新歌。";
+		}
+		else {
+			cutin "job_bard_aiolo01",2;
+			mes "[尤其]";
+			mes "拉拉拉，拉拉拉。美麗的科莫多。";
+			mes "總是充滿快樂的時刻~";
+			next;
+			mes "[尤其]";
+			if (Sex == SEX_MALE) {
+				mes "忘記您的擔心~";
+				mes "享受一切~";
+			}
+			else mes "可愛的小姐姐，我們來跳舞吧~";
+			mes "青年從不重複自己~";
+		}
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	else if(BARD_Q == 0) {
+		cutin "job_bard_aiolo01",2;
+		mes "[尤其]";
+		if (Sex == SEX_MALE) mes "你好！令人愉快的弓箭手。";
+		else mes "你好！美麗的弓箭手女士。";
+		mes "像我這樣的流浪者如何幫助您？";
+		next;
+		switch(select("你的聲音很好聽。:請你為我唱歌好嗎？:沒有。")) {
+		case 1:
+			mes "[尤其]";
+			mes "哈哈哈！當然！";
+			mes "如果您以快樂的心唱歌，您的聲音總是會變得更好。";
+			next;
+			mes "[尤其]";
+			mes "但是，譴責你的聲音就是你的生活。";
+			mes "有時您的聲音會發揮作用，但您必須小心。";
+			break;
+
+		case 2:
+			mes "[尤其]";
+			mes "一首歌...讓我們看看。";
+			mes "好，我有一個...";
+			next;
+			mes "[尤其]";
+			mes "我會唱歌..戰爭鼓。";
+			mes "*ehem ...*咳嗽...插科打..mememememememememememememe";
+			mes "1、2、3、4 ...";
+			next;
+			mes "^000088馬匹在地平線上疾馳的聲音";
+			mes "覆蓋遙遠陽光的灰塵";
+			mes "當夜空中成千上萬的眼睛睜開";
+			mes "城堡的大火將用力量燃燒。 ^000000";
+			next;
+			mes "^000088i可以聽到..我心中的跳動。";
+			mes "我能感覺到..鮮血從我的血管中湧出。";
+			mes "..和我的盔甲的重量。";
+			mes "我可以看到..我的敵人。 ^000000";
+			next;
+			mes "^000088Louder，大聲。";
+			mes "賦予戰士的力量！";
+			mes "更高，更高，更高..";
+			mes "這一天將永遠不會再來！ ^000000";
+			next;
+			mes "^000088將天空和咆哮穿過土地。";
+			mes "讓我的心再次磅！";
+			mes "讓小號響起，城堡牆響起。";
+			mes "這一刻將永遠不會再來！ ^000000";
+			next;
+			mes "[尤其]";
+			mes "嗯...這總是一首好歌。";
+			mes "它怎麼樣？您不認為這是一首好歌嗎？";
+			next;
+			if (select("是的，非常好。 :不，不是真的......") == 1) {
+				mes "[尤其]";
+				mes "謝謝！如果您喜歡我的歌，那也讓我開心。";
+				next;
+				if (Sex == SEX_MALE && JobLevel > 39) {
+					mes "[尤其]";
+					mes "如果有更多的人四處唱歌...";
+					mes "好吧，現在還可以...嗯。";
+					set BARD_Q,1;
+					setquest 3000;
+					close2;
+					cutin "job_bard_aiolo01",255;
+					end;
+				}
+				mes "[尤其]";
+				mes "如果您想再次聽到我的歌，請問。";
+				close2;
+				cutin "job_bard_aiolo01",255;
+				end;
+			}
+			cutin "job_bard_aiolo02",2;
+			mes "[尤其]";
+			mes "嗯...我失去了感官，我必須更加努力。";
+			mes "無論如何..謝謝您的收聽。";
+			break;
+
+		case 3:
+			cutin "job_bard_aiolo02",2;
+			mes "[尤其]";
+			mes "OY，當您遇到吟遊詩人時，不要求歌曲並不是很有禮貌。";
+			mes "好吧...無濟於事，因為無論如何您看起來都很著急。";
+			next;
+			mes "[尤其]";
+			mes "狩獵很好...但是您不能忘記偶爾放鬆。";
+			mes "年輕人很短，一旦過去就不會再來。";
+			break;
+		}
+		close2;
+		cutin "job_bard_aiolo02",255;
+		end;
+	}
+	else if(BARD_Q == 1) {
+		cutin "job_bard_aiolo01",2;
+		mes "[尤其]";
+		mes "嘿，弓箭手。";
+		mes "像我這樣的流浪者如何幫助您？";
+		next;
+		switch(select("你的聲音很好聽。:請你為我唱歌好嗎？:沒有。")) {
+		case 1:
+			mes "[尤其]";
+			mes "Hoho，您的聲音也很不錯嗎？";
+			mes "有沒有想過唱歌？";
+			next;
+			if (select("當然！ :我不太可能...") == 1) {
+				mes "[尤其]";
+				mes "哈哈，態度很好。您必須像這樣成為吟遊詩人。";
+				mes "那我會幫助你成為吟遊詩人。";
+				next;
+				mes "[尤其]";
+				mes "但是在那之前...您認為您可以帶我一朵花嗎？";
+				mes "我需要聞到一朵花的氣味才能感覺到教學。";
+				next;
+				mes "[尤其]";
+				mes "哪種花並不重要，但是嘗試帶我喜歡的花。";
+				mes "而且不只是購買隨機的花，好嗎？";
+				set BARD_Q,2;
+				changequest 3000,3001;
+				close2;
+				cutin "job_bard_aiolo01",255;
+				end;
+			}
+			mes "[尤其]";
+			mes "哈哈，真是個膽小的人。";
+			mes "不要那麼想自己。";
+			next;
+			mes "[尤其]";
+			mes "你有很多才華。";
+			mes "如果您改變主意，請再來。";
+			break;
+
+		case 2:
+			mes "[尤其]";
+			mes "嗯...好像您有一些唱歌的才華嗎？";
+			mes "不要只是要求歌曲。向別人唱歌也很有趣。";
+			next;
+			mes "[尤其]";
+			mes "嘗試享受吟遊詩人的生活。";
+			mes "您從城鎮到城鎮，向人們唱歌。聽起來不錯嗎？";
+			break;
+
+		case 3:
+			mes "[尤其]";
+			mes "嗯...我不確定是什麼，但是享受生活。";
+			mes "你看起來太緊張了。";
+			next;
+			mes "[尤其]";
+			mes "好吧~度過美好的時光~";
+			break;
+		}
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	else if(BARD_Q == 2) {
+		cutin "job_bard_aiolo01",2;
+		mes "[尤其]";
+		mes "歡迎！阿切爾朋友。";
+		mes "你帶上花了嗎？讓我看看。";
+		next;
+		mes "[尤其]";
+		//Good Flowers
+		if (countitem(629) > 0) {
+			mes "哦！這是一朵唱歌！";
+			mes "充滿了我的回憶...";
+			next;
+			delitem 629,1; //Singing Flower
+			mes "[尤其]";
+			mes "我的朋友Tchaikovsky曾經喜歡它。";
+			mes "我想知道他現在在做什麼...";
+		}
+		else if(countitem(703) > 0) {
+			mes "啊...可愛的Hinelle ...";
+			mes "它沒有氣味，但它是一朵非常溫和的可愛花。";
+			next;
+			delitem 703,1; //Hinalle
+			mes "[尤其]";
+			mes "我曾經跌倒時葉子給了我力量。";
+			mes "我真的很喜歡這朵花，謝謝。";
+		}
+		else if(countitem(704) > 0) {
+			mes "蘆薈...這是一朵稀有的花。";
+			mes "你怎麼得到的？相當熟練，是嗎？";
+			next;
+			delitem 704,1; //Aloe
+			mes "[尤其]";
+			mes "葉子很好，蘆薈也很美味。";
+			mes "但是，當它是一朵花時，它絕對是最美麗的。";
+		}
+		else if(countitem(708) > 0) {
+			mes "精神...您可以忘記其中之一的所有困難。";
+			mes "很高興在這麼長的時間內看到它！";
+			next;
+			delitem 708,1; //Ment
+			mes "[尤其]";
+			mes "我聽說你可以用它做腳步...";
+			mes "但這將有點浪費。謝謝！";
+		}
+		else if(countitem(709) > 0) {
+			mes "哦，這不是Izidor嗎？";
+			mes "這是一朵危險而美麗的花...";
+			next;
+			delitem 709,1; //Izidor
+			mes "[尤其]";
+			mes "深紫色魅力一個人。";
+			mes "謝謝你，我真的很喜歡這朵花。";
+		}
+		else if(countitem(748) > 0) {
+			mes "哦，一朵無玫瑰。堅固的花沒有枯萎。";
+			mes "很高興給女友。";
+			next;
+			delitem 748,1; //Witherless_Rose
+			mes "[尤其]";
+			mes "我想知道像我這樣的流浪者接受它是否可以。";
+			mes "哈哈，應該沒事..對嗎？";
+		}
+		else if(countitem(749) > 0 ) {
+			mes "冷凍玫瑰...你不能真正稱這花，";
+			mes "但這仍然很漂亮...一朵透明的玫瑰。";
+			next;
+			delitem 749,1; //Frozen_Rose
+			mes "[尤其]";
+			mes "即使沒有氣味，您也可以稱其為花。";
+			mes "那我將大力接受。";
+		}
+		else if(countitem(710) > 0) {
+			mes "哦，這不是幻覺花！ ？";
+			mes "哇，你是怎麼得到如此稀有的花的！";
+			next;
+			delitem 710,1; //Illusion_Flower
+			mes "[尤其]";
+			mes "比你非常，啊...我覺得天堂在我眼前。";
+			mes "多麼美妙的感覺！我真的很高興！";
+		}
+		//Bad Flowers
+		else if(countitem(712) > 0) {
+			cutin "job_bard_aiolo02",2;
+			mes "嗯？這只是一朵普通的花。";
+			mes "我喜歡...但是還不夠。";
+			next;
+			mes "[尤其]";
+			mes "您可以從Prontera的女孩那裡得到這朵花。";
+			mes "請給我帶來不同的花。";
+			close2;
+			cutin "job_bard_aiolo02",255;
+			end;
+		}
+		else if(countitem(744) > 0) {
+			mes "哦，不，你帶了一束花束嗎？";
+			mes "你不能帶我這樣的東西。";
+			next;
+			mes "[尤其]";
+			mes "將其送給即將畢業的聖人或其他東西。";
+			mes "因為那種禮物很棒，所以帶來了另一朵花。";
+			close2;
+			cutin "job_bard_aiolo01",255;
+			end;
+		}
+		else if(countitem(745) > 0) {
+			cutin "job_bard_aiolo02",2;
+			mes "OY OY ...您去參加婚禮還是什麼？";
+			mes "您期望一個男人與婚禮花束做什麼？";
+			next;
+			mes "[尤其]";
+			mes "不是我。去給女士或其他東西。";
+			mes "這不是我想要的花。";
+			close2;
+			cutin "job_bard_aiolo02",255;
+			end;
+		}
+		else if(countitem(2207) > 0) {
+			mes "嗯...花哨的花。";
+			mes "很好...但這還不夠好。";
+			next;
+			mes "[尤其]";
+			mes "我喜歡有香氣和美麗的花朵。";
+			mes "我不喜歡假在頭頂上的假花。";
+			close2;
+			cutin "job_bard_aiolo01",255;
+			end;
+		}
+		else if(countitem(1032) > 0) {
+			cutin "job_bard_aiolo02",2;
+			mes "... agh，你為什麼帶來如此可怕的東西？";
+			mes "你在想嗎？";
+			next;
+			mes "[尤其]";
+			mes "如果您想變得有趣，那是一個很好的嘗試...";
+			mes "但是現在帶上普通的花。";
+			close2;
+			cutin "job_bard_aiolo02",255;
+			end;
+		}
+		else {
+			cutin "job_bard_aiolo02",2;
+			mes "唔？什麼...你什麼都沒有帶任何東西。";
+			mes "我不是要你帶一朵花嗎？";
+			next;
+			mes "[尤其]";
+			mes "好吧...如果您想自己學習，那就這樣吧。";
+			mes "任何人都可以出去唱歌。";
+			close2;
+			cutin "job_bard_aiolo02",255;
+			end;
+		}
+		next;
+		cutin "job_bard_aiolo01",2;
+		mes "[尤其]";
+		mes "正如我所承諾的，我會幫助您成為吟遊詩人。";
+		mes "但這並不容易，我的朋友。哈哈！";
+		next;
+		mes "[尤其]";
+		mes "重要的是要認識很多人學習如何唱歌。";
+		mes "您還必須跟上不同村莊的所有事情...";
+		next;
+		mes "[尤其]";
+		mes "一個叫路易（Lutie）的小鎮上有一個會說話的雪人。";
+		mes "去那裡，帶回禮物。";
+		next;
+		set BARD_Q,3;
+		changequest 3001,3002;
+		set xmas_npc,1;
+		mes "[尤其]";
+		mes "如果您與 ^008800 Jack Frost ^000000成為朋友，您將收到一些東西。";
+		mes "而且，當您參加時，還要與城鎮居民交談...";
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	else if ((BARD_Q >= 3) || (BARD_Q <= 5)) {
+		if (BARD_Q == 3) {
+			if(xmas_npc > 10) { //this var is set in LUTIE.TXT
+				cutin "job_bard_aiolo01",2;
+				mes "[尤其]";
+				mes "旅行怎麼樣？你遇到了很多人嗎？";
+				mes "您應該能夠學到比禮物更重要的東西。";
+				next;
+				mes "[尤其]";
+				mes "那你想嘗試唱歌嗎？";
+				mes "我會唱簡短的旋律...";
+				mes "然後您嘗試。";
+				if(checkquest(3003) == -1) {
+					changequest 3002,3003;
+				}
+				next;
+				mes "[尤其]";
+				mes "我去。";
+				mes "ehem *清除喉嚨 *";
+				mes "1、2、3、4";
+				next;
+			}
+			else {
+				cutin "job_bard_aiolo01",2;
+				set xmas_npc,1;
+				mes "[尤其]";
+				mes "嗯，你還沒有成為他的朋友嗎？";
+				mes "說話還不夠。";
+				next;
+				mes "[尤其]";
+				mes "如果您與 ^008800 Jack Frost ^000000成為朋友，您將收到一些東西。";
+				mes "並與鄉村人交談...";
+				close2;
+				cutin "job_bard_aiolo01",255;
+				end;
+			}
+		}
+		else if (BARD_Q == 4) {
+			cutin "job_bard_aiolo01",2;
+			mes "[尤其]";
+			mes "嗯...這次你可以做得更好，對嗎？";
+			mes "讓我們再試一次，您可以做到。";
+			next;
+			mes "[尤其]";
+			mes "我會唱一部分...";
+			mes "然後您嘗試。";
+			next;
+			mes "[尤其]";
+			mes "開始了。";
+			mes "*咳咳*";
+			mes "1、2、3、4";
+			next;
+		}
+		if (BARD_Q != 5) {
+			set .@bard_s, rand(1,5);
+			if (.@bard_s == 1) {
+				mes "^3377ffthere是一個男人^000000";
+				mes "據說他是不朽的。";
+				mes "他的名字Jichfreid，";
+				mes "英雄Jichmunt的兒子。";
+				mes "邪惡的巨型紙，";
+				mes "變成了一條龍，吃了他。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "There was a man") 
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ffthere是一個男人";
+				mes "據說是不朽的。 ^000000";
+				mes "他的名字Jichfreid，";
+				mes "英雄Jichmunt的兒子。";
+				mes "邪惡的巨型紙，";
+				mes "變成了一條龍，吃了他。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "who was said to be immortal.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ffthere是一個男人";
+				mes "據說他是不朽的。";
+				mes "他的名字Jichfreid，^000000";
+				mes "英雄Jichmunt的兒子。";
+				mes "邪惡的巨型紙，";
+				mes "變成了一條龍，吃了他。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "His name Jichfreid,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ffthere是一個男人";
+				mes "據說他是不朽的。";
+				mes "他的名字Jichfreid，";
+				mes "英雄的兒子Jichmunt。 ^000000";
+				mes "邪惡的巨型紙，";
+				mes "變成了一條龍，吃了他。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Son of the hero Jichmunt.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ffthere是一個男人";
+				mes "據說他是不朽的。";
+				mes "他的名字Jichfreid，";
+				mes "英雄Jichmunt的兒子。";
+				mes "邪惡的巨型紙，^000000";
+				mes "變成了一條龍，吃了他。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "The evil giant Papner,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ffthere是一個男人";
+				mes "據說他是不朽的。";
+				mes "他的名字Jichfreid，";
+				mes "英雄Jichmunt的兒子。";
+				mes "邪惡的巨型紙，";
+				mes "變成一條龍並吃掉了他。 ^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Turned into a dragon and ate him.")
+					set .@w_point,.@w_point+1;
+			}
+			else if (.@bard_s == 2) {
+				mes "^3377ffa商人無錢或設備，^000000";
+				mes "一個什麼都不賣任何東西的商人。";
+				mes "但是他為乞求而感到自豪。";
+				mes "因此，他收集了一些銷售商品的錢。";
+				mes "起初，他只賣紅藥水。";
+				mes "有人說他也出售了地瓜。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "A Merchant without money or equipment,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ffa商人沒有錢或設備，";
+				mes "一個什麼都沒賣的商人。 ^000000";
+				mes "但是他為乞求而感到自豪。";
+				mes "因此，他收集了一些銷售商品的錢。";
+				mes "起初，他只賣紅藥水。";
+				mes "有人說他也出售了地瓜。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "a Merchant that couldn't sell anything.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ffa商人沒有錢或設備，";
+				mes "一個什麼都不賣任何東西的商人。";
+				mes "但是他為乞求而感到自豪。 ^000000";
+				mes "因此，他收集了一些銷售商品的錢。";
+				mes "起初，他只賣紅藥水。";
+				mes "有人說他也出售了地瓜。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "But he was too proud to beg.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ffa商人沒有錢或設備，";
+				mes "一個什麼都不賣任何東西的商人。";
+				mes "但是他為乞求而感到自豪。";
+				mes "所以他收集了一些銷售商品的錢。 ^000000";
+				mes "起初，他只賣紅藥水。";
+				mes "有人說他也出售了地瓜。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "So he gathered some money selling items.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ffa商人沒有錢或設備，";
+				mes "一個什麼都不賣任何東西的商人。";
+				mes "但是他為乞求而感到自豪。";
+				mes "因此，他收集了一些銷售商品的錢。";
+				mes "起初他只賣紅藥水。 ^000000";
+				mes "有人說他也出售了地瓜。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "At first he only sold Red Potions.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ffa商人沒有錢或設備，";
+				mes "一個什麼都不賣任何東西的商人。";
+				mes "但是他為乞求而感到自豪。";
+				mes "因此，他收集了一些銷售商品的錢。";
+				mes "起初，他只賣紅藥水。";
+				mes "有人說他也出售了地瓜。 ^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Some say he sold Sweet Potatoes, too.")
+					set .@w_point,.@w_point+1;
+			}
+			else if (.@bard_s == 3) {
+				mes "^3377ffall God永遠不會老化。 ^000000";
+				mes "曾經如此美麗的女神伊甸園，";
+				mes "美麗而優雅的女神伊甸園，";
+				mes "奧丁的daughter婦和布拉吉的妻子。";
+				mes "她甜美的蘋果在她的籃子裡，";
+				mes "全都感謝她甜美的蘋果。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "All Gods never age.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377 fffall神從不衰老。";
+				mes "曾經美麗的女神伊甸園，^000000";
+				mes "美麗而優雅的女神伊甸園，";
+				mes "奧丁的daughter婦和布拉吉的妻子。";
+				mes "她甜美的蘋果在她的籃子裡，";
+				mes "全都感謝她甜美的蘋果。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "The ever so Beautiful Goddess Eden,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377 fffall神從不衰老。";
+				mes "曾經如此美麗的女神伊甸園，";
+				mes "美麗而優雅的女神伊甸園，^000000";
+				mes "奧丁的daughter婦和布拉吉的妻子。";
+				mes "她甜美的蘋果在她的籃子裡，";
+				mes "全都感謝她甜美的蘋果。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Beautiful and graceful Goddess Eden,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377 fffall神從不衰老。";
+				mes "曾經如此美麗的女神伊甸園，";
+				mes "美麗而優雅的女神伊甸園，";
+				mes "奧丁的daughter婦和布拉吉的妻子。 ^000000";
+				mes "她甜美的蘋果在她的籃子裡，";
+				mes "全都感謝她甜美的蘋果。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Odin's daughter-in-law and Bragi's wife.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377 fffall神從不衰老。";
+				mes "曾經如此美麗的女神伊甸園，";
+				mes "美麗而優雅的女神伊甸園，";
+				mes "奧丁的daughter婦和布拉吉的妻子。";
+				mes "她的甜蘋果在她的籃子裡，^000000";
+				mes "全都感謝她甜美的蘋果。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Her sweet apples in her basket,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377 fffall神從不衰老。";
+				mes "曾經如此美麗的女神伊甸園，";
+				mes "美麗而優雅的女神伊甸園，";
+				mes "奧丁的daughter婦和布拉吉的妻子。";
+				mes "她甜美的蘋果在她的籃子裡，";
+				mes "全都感謝她的甜蘋果。 ^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "All thanks to her sweet apples.")
+					set .@w_point,.@w_point+1;
+			}
+			else if (.@bard_s == 4) {
+				mes "^3377ff布拉吉，布拉吉，^000000";
+				mes "永遠叫詩人的名字。";
+				mes "我的歌是他的呼吸，";
+				mes "我的想法是他的意志，";
+				mes "所有流浪的詩人都是他的人民，";
+				mes "所有的讚美都會給他。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Bragi, Bragi,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ff布拉吉，布拉吉，";
+				mes "永遠叫詩人的名字。 ^000000";
+				mes "我的歌是他的呼吸，";
+				mes "我的想法是他的意志，";
+				mes "所有流浪的詩人都是他的人民，";
+				mes "所有的讚美都會給他。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Forever call the poets name.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ff布拉吉，布拉吉，";
+				mes "永遠叫詩人的名字。";
+				mes "我的歌是他的呼吸，^000000";
+				mes "我的想法是他的意志，";
+				mes "所有流浪的詩人都是他的人民，";
+				mes "所有的讚美都會給他。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "My songs are his breath,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ff布拉吉，布拉吉，";
+				mes "永遠叫詩人的名字。";
+				mes "我的歌是他的呼吸，";
+				mes "我的想法是他的意志，^000000";
+				mes "所有流浪的詩人都是他的人民，";
+				mes "所有的讚美都會給他。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "My mind is his will,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ff布拉吉，布拉吉，";
+				mes "永遠叫詩人的名字。";
+				mes "我的歌是他的呼吸，";
+				mes "我的想法是他的意志，";
+				mes "所有流浪的詩人都是他的人，^000000";
+				mes "所有的讚美都會給他。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "All wandering poets are his people,")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377ff布拉吉，布拉吉，";
+				mes "永遠叫詩人的名字。";
+				mes "我的歌是他的呼吸，";
+				mes "我的想法是他的意志，";
+				mes "所有流浪的詩人都是他的人民，";
+				mes "所有的讚美都將歸他。 ^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "And all praise shall go to him.")
+					set .@w_point,.@w_point+1;
+			}
+			else {
+				mes "^3377fflouder，大聲，大聲。 ^000000";
+				mes "賦予戰士的力量！";
+				mes "搖晃天空，咆哮穿過土地。";
+				mes "讓我的心再次磅！";
+				mes "讓城堡牆響起。";
+				mes "這一天將永遠不會再來！";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Louder, louder, louder.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377fflouder，大聲，更大。";
+				mes "賦予戰士的力量！ ^000000";
+				mes "搖晃天空，咆哮穿過土地。";
+				mes "讓我的心再次磅！";
+				mes "讓城堡牆響起。";
+				mes "這一天將永遠不會再來！";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Give strength to the warriors!")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377fflouder，大聲，更大。";
+				mes "賦予戰士的力量！";
+				mes "搖晃天空，咆哮穿過土地。 ^000000";
+				mes "讓我的心再次磅！";
+				mes "讓城堡牆響起。";
+				mes "這一天將永遠不會再來！";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Shake the sky and roar through the land.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377fflouder，大聲，更大。";
+				mes "賦予戰士的力量！";
+				mes "搖晃天空，咆哮穿過土地。";
+				mes "再次讓我的心英鎊！ ^000000";
+				mes "讓城堡牆響起。";
+				mes "這一天將永遠不會再來！";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Make my heart pound again!")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377fflouder，大聲，更大。";
+				mes "賦予戰士的力量！";
+				mes "搖晃天空，咆哮穿過土地。";
+				mes "讓我的心再次磅！";
+				mes "讓城堡牆響起。 ^000000";
+				mes "這一天將永遠不會再來！";
+				next;
+				input .@Song$;
+				if (.@Song$ != "Let the castle walls ring.")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377fflouder，大聲，更大。";
+				mes "賦予戰士的力量！";
+				mes "搖晃天空，咆哮穿過土地。";
+				mes "讓我的心再次磅！";
+				mes "讓城堡牆響起。";
+				mes "這一天將永遠不會再來！ ^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "This day will never come again!")
+					set .@w_point,.@w_point+1;
+			}
+
+			if (.@w_point) {
+				cutin "job_bard_aiolo02",2;
+				mes "[尤其]";
+				mes "哦，你弄錯了歌詞！";
+				mes "你甚至不能一起唱歌..嗎？";
+				next;
+				mes "[尤其]";
+				mes "您的發音還不清楚。";
+				mes "下次做得更好。";
+				close2;
+				cutin "job_bard_aiolo02",255;
+				end;
+			}
+			mes "[尤其]";
+			mes "…………";
+			next;
+			set BARD_Q,5;
+			mes "[尤其]";
+			mes "精彩的！一嚐試完成！";
+			mes "您可以成為一個偉大的吟遊詩人。";
+			next;
+			mes "[尤其]";
+			mes "嗯...所以你不會成為吟遊詩人。";
+			mes "但是我想給你一個紀念品...";
+			next;
+			mes "[尤其]";
+			mes "您現在想更換工作嗎？";
+			mes "還是您想要禮物。";
+			next;
+			set .@selection,select("請改變我的工作。 :如果有禮物我會很感激。");
+		}
+		if ((.@selection == 1) || (BARD_Q == 5)) {
+			if(SkillPoint) {
+				cutin "job_bard_aiolo01",2;
+				mes "[尤其]";
+				mes "啊...一切都很好，但是您還有一些技能點。";
+				mes "去學習其餘的技能，然後回來。";
+				next;
+				mes "[尤其]";
+				mes "我要給你一個小禮物...";
+				mes "所以帶一些樹幹。";
+				mes "只要它們是同一種類的，什麼都沒關係...";
+				close2;
+				cutin "job_bard_aiolo01",255;
+				end;
+			}
+			else {
+				switch(BARD_Q) {
+				case 5:
+					if(countitem(1019) > 59) callsub S_ChangeJob,1019,1901;
+					else if(countitem(1068) > 59) callsub S_ChangeJob,1068,1903;
+					else if(countitem(1067) > 59) callsub S_ChangeJob,1067,1903;
+					else if(countitem(1066) > 59) {
+						if(JobLevel > 49) callsub S_ChangeJob,1066,1910;
+						else callsub S_ChangeJob,1066,1905;
+					}
+					cutin "job_bard_aiolo01",2;
+					mes "[尤其]";
+					mes "嗯？好像您還沒有準備好所有的樹幹嗎？";
+					mes "您是否想更換工作？";
+					next;
+					if (select("是的，就換工作吧。 :不，我去準備一下。") == 2)
+						break;
+				default:
+					completequest 3003;
+					callfunc "Job_Change",Job_Bard;
+					callfunc "F_ClearJobVar";		//clears all job variables for the current player
+					mes "[尤其]";
+					mes "很好！希望你唱快樂的歌曲。";
+					mes "像風和雲一樣生活！";
+					next;
+					mes "[尤其]";
+					mes "下次再見！";
+					close2;
+					cutin "job_bard_aiolo01",255;
+					end;
+				}
+			}
+		}
+		changequest 3003,3004;
+		mes "[尤其]";
+		mes "嗯...很好，帶一些樹幹。";
+		mes "只要它們是同一種類的，什麼都沒關係...";
+		next;
+		mes "[尤其]";
+		mes "一旦您帶來禮物，我會給你一份禮物。";
+		mes "安全旅行。";
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	cutin "job_bard_aiolo01",2;
+	mes "[尤其]";
+	mes "～呼～呼～";
+	close2;
+	cutin "job_bard_aiolo01",255;
+	end;
+
+S_ChangeJob:
+	completequest 3004;
+	callfunc "Job_Change",Job_Bard;
+	callfunc "F_ClearJobVar";
+	mes "[尤其]";
+	mes "好工作。我會讓您更換工作。";
+	mes "等一下。";
+	next;
+	mes "[尤其]";
+	mes "^3355ff刮刮唐唐^000000";
+	mes "^3355ffsqueak尖叫刮擦^000000";
+	delitem getarg(0),60;
+	getitem getarg(1),1;
+	next;
+	mes "[尤其]";
+	mes "你去的，紀念品。唱歌時它很有用。";
+	mes "希望你唱快樂的歌。";
+	next;
+	mes "[尤其]";
+	mes "下次見！";
+	close2;
+	cutin "job_bard_aiolo01",255;
+	end;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 07/06/05 : Added 1st Version. [Muad_Dib]
+//= Converted to rAthena format by Dr.Evil
+//= Info about gifts and other info --> http://www.ragnainfo.net/forums/viewtopic.php?t=51467&start=0 
+//= 1.1 Optimized, changed some stuff, fixed some bugs [Lupus]
+//= 1.1a minor song test fix [Lupus]
+//= 1.2 Fixed wrong item ID, added missing commands [Lupus]
+//= 1.3 Updated flower sub-quest according to official [Lupus]
+//= 1.4 Changed priority for the gifts. Now you can win the 1st
+//=     prize, too. Added Izidor flower [Lupus]
+//= 2.0 Changed numbers to constants. [Vicious]
+//============================================================

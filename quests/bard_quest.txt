@@ -1,0 +1,2954 @@
+﻿//===== rAthena Script ======================================= 
+//= Wandering Minstrel Quest
+//===== By: ================================================== 
+//= Riotblade and L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 1.5
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Help the bard remember how his song goes.
+//===== Comments: ============================================
+//= [Official Conversion]
+//= Needs optimizing.
+//= Reconverted with iRO Dialogs.
+//= Possible NPC conflict with "Representative"
+//===== Additional Comments: ================================= 
+//= 1.0 First version, needs testing. [L0ne_W0lf]
+//= 1.1 Fixed bug, optimized. Not yet final version [Lupus]
+//=
+//= Variables:
+//=		.@random : temp var 
+//=		.@inputstr$ : temp var 
+//=
+//= This Quest has relation with brisingamen_seal.txt (Seals)
+//= 1.2 Changed variable to "gef_bards_q" to avoid job quest conflict. [L0ne_W0lf]
+//=     Progress prior to the 5th+ step will be lost. Job quest takes priority.
+//= 1.3 Fixed experience gains to match upcoming rate adjustments. [SinSloth]
+//= 1.4 Replaced effect numerics with constants. [L0ne_W0lf]
+//= 1.5 Updated RE/Pre-RE EXP. [Euphy]
+//============================================================ 
+
+geffen,132,38,3	script	Bard#2	51,{
+	if (bard_q > 5) set gef_bard_q,bard_q;
+	set @name$,strcharinfo(0);
+	if (gef_bard_q > 29) {
+		cutin "bard_eland02",2;
+		mes "[字符串]";
+		mes "為什麼，你好~";
+		mes "不是天氣";
+		mes "今天特別愉快？";
+		next;
+		mes "[字符串]";
+		mes "啊~只有兩件事可以使這個風景如畫的時刻變得更加美麗：故事和歌曲。現在，您想听哪個？";
+		callsub S_StorySong,1;
+
+	} else if (gef_bard_q == 14 || gef_bard_q == 15) {
+		if (gef_bard_q == 14) {
+			cutin "bard_eland04",2;
+			mes "[字符串]";
+			mes "嗯？";
+			mes "那是黑色的印章嗎？嗯。基諾·凱蒂（Kino Kitty）刪除了他給我的那個沒有痕蹟的人，所以我推測他非常喜歡你。否則...";
+			next;
+			mes "^3355ffyou給我的信";
+			mes "您已經從Kino Kitty那裡收到。 ^000000";
+			next;
+			cutin "bard_eland01",2;
+			mes "[字符串]";
+			mes "嗯，他已經知道一切了嗎？從這個鮮血的地方，我認為他仍然有健康問題。他應該停止折磨自己...";
+			next;
+			mes "[字符串]";
+			mes "謝謝，我非常感謝您為我所做的一切。但是，向像您這樣的冒險家表示感謝是一種合適的方式呢？";
+		} else {
+			cutin "bard_eland01",2;
+			mes "[字符串]";
+			mes "啊，那怎麼樣？";
+			mes "等等，你已經找到了嗎？";
+			mes "是的，就是這樣！偉大的！";
+			mes "這真是太神奇了！";
+			mes "啊，是的，對。";
+			mes "正確的。";
+			next;
+			mes "[字符串]";
+			mes "我想表達我的感謝。但是，對於冒險家來說是適當的";
+			mes "喜歡你嗎？";
+		}
+		next;
+		mes "[字符串]";
+		mes "哦~！我只有東西。好吧，請讓自己舒服，聽我的歌。";
+		next;
+		cutin "bard_eland03",2;
+		mes "^483d8bevery上帝從來沒有變老";
+		mes "因為美麗";
+		mes "女神，idun。";
+		mes "青年蘋果的守護者";
+		mes "永生女神。 ^000000";
+		specialeffect2 EF_STEAL;
+		next;
+		mes "^483d8bevery上帝永遠不會變老。";
+		mes "布拉吉（Bragi）的妻子idun，";
+		mes "奧丁的女兒idun~";
+		mes "她保留的蘋果";
+		mes "在她的籃子裡。 ^000000";
+		next;
+		mes "^483d8b沒有idun，";
+		mes "每個神都會";
+		mes "屈服於年齡。";
+		mes "甚至雷神，最強大的神，";
+		mes "會變得虛弱，Megingjard會";
+		mes "從他的腰上滑落";
+		mes "永遠不會再飛。 ^000000";
+		next;
+		mes "^483d8b沒有idun，";
+		mes "每個神都會";
+		mes "屈服於年齡。";
+		mes "Loki曾經很粗心，";
+		mes "使她迷失了眾神。";
+		mes "他被迫找回她。 ^000000";
+		specialeffect2 EF_STEAL;
+		next;
+		mes "^483d8bmy女神站立";
+		mes "在阿斯加德領域";
+		mes "她從天上遞給我果實。";
+		mes "你們將被每個上帝所愛...";
+		mes "你會有福";
+		mes "每個上帝...^000000";
+		next;
+		specialeffect EF_BEGINSPELL6;
+		mes "^483d8bif您分享";
+		mes "我的青年蘋果";
+		mes "甚至一口";
+		mes "這個可憐的詩人。";
+		mes "你們將被每個上帝所愛...";
+		mes "你會有福";
+		mes "每個上帝...^000000";
+		next;
+		specialeffect2 EF_RESURRECTION;
+		mes "^3355ff同時聽他的歌時，您會感到輕鬆自在，您的想法變得更加清晰。您相信您會看到天使的願景，並且獲得了一些經驗點。 ^000000";
+		set gef_bard_q, gef_bard_q + 16; //30,31
+		if (checkre(3)) {
+			if (BaseLevel < 56) getexp 450,0;
+			else if ((BaseLevel > 55) && (BaseLevel < 61)) getexp 550,0;
+			else if ((BaseLevel > 60) && (BaseLevel < 66)) getexp 968,0;
+			else if ((BaseLevel > 65) && (BaseLevel < 71)) getexp 1341,0;
+			else if ((BaseLevel > 70) && (BaseLevel < 76)) getexp 3575,0;
+			else if ((BaseLevel > 75) && (BaseLevel < 81)) getexp 6024,0;
+			else if ((BaseLevel > 80) && (BaseLevel < 86)) getexp 7034,0;
+			else if ((BaseLevel > 85) && (BaseLevel < 91)) getexp 9205,0;
+			else getexp 15678,0;
+		} else {
+			if (BaseLevel < 56) getexp 4500,0;
+			else if ((BaseLevel > 55) && (BaseLevel < 61)) getexp 5500,0;
+			else if ((BaseLevel > 60) && (BaseLevel < 66)) getexp 9684,0;
+			else if ((BaseLevel > 65) && (BaseLevel < 71)) getexp 13411,0;
+			else if ((BaseLevel > 70) && (BaseLevel < 76)) getexp 35757,0;
+			else if ((BaseLevel > 75) && (BaseLevel < 81)) getexp 60246,0;
+			else if ((BaseLevel > 80) && (BaseLevel < 86)) getexp 70340,0;
+			else if ((BaseLevel > 85) && (BaseLevel < 91)) getexp 92052,0;
+			else getexp 156786,0;
+		}
+		next;
+		cutin "bard_eland02",2;
+		mes "[字符串]";
+		mes "那麼，您現在感覺如何？我希望我的歌能使您煥然一新。恐怕這可能不足以償還您，但請理解，這是我表達感激之情的最佳方式。";
+		next;
+		mes "[字符串]";
+		mes "此外，我現在一直在想你是我的朋友，我可能會坦率地說話而不必擔心。而且我認為你有一個美麗的笑容。我錯了嗎？ ~？哈哈哈~";
+		next;
+		mes "[字符串]";
+		mes "我希望您永遠對他人保持誠實和尊重，並且您繼續忽略貪婪的財富或權力。";
+		goto L_End;
+
+	} else if (gef_bard_q > 11 && gef_bard_q < 14) {
+		cutin "bard_eland02",2;
+		mes "[字符串]";
+		mes "看來您還沒有找到它。好吧，花點時間，我可以等待您想要的時間。這並沒有真正讓我感到無聊，因為等待似乎是我職業的一部分。";
+		goto L_End;
+
+	} else if (gef_bard_q == 11) {
+		cutin "bard_eland01",2;
+		mes "[字符串]";
+		mes "Skezti先生在Juno Mineta右側的書街上有一家小書店。如果您向他展示印章，他會幫助您。";
+		goto L_End;
+
+	} else if (gef_bard_q == 10) {
+		cutin "bard_eland01",2;
+		mes "[字符串]";
+		mes "那麼，您遇到了Kitty先生嗎？";
+		mes "啊，在摩洛哥？他患有慢性疾病，但顯然沒有";
+		mes "似乎關心它。";
+		mes "那他說了什麼？";
+		next;
+		mes "[字符串]";
+		mes "嗯？在朱諾？";
+		mes "那一定是這樣。";
+		mes "如果您想去Sketzi先生的書店，這將不是一件容易的事。在這裡，讓我標記你";
+		mes "^483d8b友誼的印章^000000。";
+		next;
+		cutin "bard_eland03",2;
+		mes "[字符串]";
+		mes "給我你的左手。";
+		mes "現在，讓我施放咒語...";
+		mes "*喃喃自語...*";
+		next;
+		specialeffect2 EF_CONE;
+		mes "^3355ffon您的左手腕，出現了帶有銀光的新月形標記。只有當您專注於找到它時，它才是顯而易見的，但是它可能顯然出現在月光下。 ^000000";
+		next;
+		mes "[字符串]";
+		mes "你去。現在，您可以去Sketzi先生。記住，你必須";
+		mes "向他展示友誼的印記。";
+		mes "祝你好運，現在~";
+		set gef_bard_q,11;
+		goto L_End;
+
+	} else if (gef_bard_q == 20) {
+		cutin "bard_eland03",2;
+		mes "[詩人]";
+		mes "^483d8b 沃斯沃斯路";
+		mes "最適合喝酒？";
+		mes "拉拉~";
+		mes "今天是";
+		mes "大地，太陽";
+		mes "和月亮~";
+		mes "啦~^000000";
+		next;
+		mes "^483d8bla啦啦~";
+		mes "我只會";
+		mes "一天喝酒~";
+		mes "所以如果你告訴我";
+		mes "當你喝的時候";
+		mes "我會告訴你什麼時候";
+		mes "我和你一起喝~^000000";
+		next;
+		mes "^483D8BLET的聚會";
+		mes "是的，是的 - ^000000 hmmmmm ...？";
+		next;
+		mes "[詩人]";
+		mes "為什麼，你好。哦，你來聽我的歌，忘了你的煩惱嗎？";
+		next;
+
+        if(select("你是誰?:無視他.")==1) {
+			cutin "bard_eland04",2;
+			mes "[" + @name$ + "]";
+			mes "你似乎是";
+			mes "這裡的新事物...";
+			mes "你是誰？";
+			next;
+			cutin "bard_eland02",2;
+			mes "[字符串]";
+			mes "毫米？啊，是的。我只是另一個流浪的詩人，他去了風的地方。請給我打電話 ^483d8berrende ^000000，希望取悅您的吟遊詩人。";
+			next;
+			mes "[字符串]";
+			mes "如果你願意讓我，我會告訴你我的旅行。在您的休假中，";
+			mes "我將播放一首歌，可以幫助您忘記自己的麻煩。";
+			set gef_bard_q,21;
+			callsub S_StorySong,2;
+
+		} else {
+			cutin "bard_eland01",2;
+			mes "[字符串]";
+			mes "哇，哇~";
+			mes "你不能只是那樣忽略我！您的歡樂感在哪裡，您的浪漫感在哪裡？";
+			goto L_End;
+		}
+
+	} else if (gef_bard_q == 27) {
+		cutin "bard_eland01",2;
+		mes "[字符串]";
+		mes "我怎麼能忘記這首歌？";
+		mes "我是吟遊詩人毫無價值的~！";
+		mes "請...只是...";
+		mes "請離開";
+		mes "我一個人。";
+		next;
+
+        if(select("沒問題~:有什麼我能幫忙的嗎?")==1) {
+			cutin "bard_eland04",2;
+			mes "[字符串]";
+			mes "waaaah~！你真卑鄙！";
+			mes "你應該說，'edrende，怎麼了？也許我可以幫忙？";
+			next;
+			mes "[字符串]";
+			mes "我的意思是，我們認為";
+			mes "更好地了解彼此";
+			mes "比那。但...";
+			mes "也許我錯了！";
+			next;
+			mes "[字符串]";
+			mes "*哭泣...*";
+			mes "誰忽略了他，這使這個可憐的吟遊詩人哭了？ *嗅探*我確實相信是你！";
+		} else {
+			mes "[字符串]";
+			mes "幫我？";
+			mes "嗯...";
+			mes "就是這樣！";
+			mes "岡瑟！";
+			next;
+			mes "[字符串]";
+			mes "讓我問你一個忙。";
+			mes "如果您碰巧遇到 ^483d8bgunther doubleharmony ^000000，請告知他我的困境。";
+			next;
+			mes "[字符串]";
+			mes "告訴他， ^483d8bminty errende ^000000恰好忘記了一首歌， ^483d8bat One，我墜入愛河 ^000000。該線稱為 ^483d8b8th Love ^000000。";
+			next;
+			mes "[字符串]";
+			mes "我懇求你，如果你遇到他，請向他詢問第八個愛，並立即通知我抒情詩~";
+			set gef_bard_q,22;
+		}
+		goto L_End;
+
+	} else if (gef_bard_q == 26) {
+		cutin "bard_eland01",2;
+		mes "[字符串]";
+		mes "哎呀……！";
+		mes "誰來改變這首歌的話？這真的很難理解。我希望我可以問改變單詞的人。";
+		next;
+		mes "[字符串]";
+		mes "這太令人沮喪了！";
+		mes "現在，我失去了激情";
+		mes "唱歌或玩...";
+		next;
+		mes "[" + @name$ + "]";
+		mes "你不覺得...";
+		mes "這個人會...";
+		input .@inputstr$;
+		mes .@inputstr$ + "？";
+		next;
+
+		if (.@inputstr$ == "Kino Kitty") {
+			cutin "bard_eland04",2;
+			mes "[字符串]";
+			mes "啊!當然！";
+			mes "我認為你是對的！";
+			mes "我怎麼會想不到呢？";
+			next;
+			mes "[字符串]";
+			mes "現在一切都很有意義。畢竟，他曾經是無敵的一支軍隊的成員。他的變化可能有點卑鄙，因為這首歌曾經是關於一對幸福的夫妻。";
+			next;
+			cutin "bard_eland01",2;
+			mes "[字符串]";
+			mes "嗯...";
+			mes "很抱歉再次問您一個忙，但是在您的旅行中，您認為您可以找到這首歌的原始歌詞嗎？我可以等待...";
+			next;
+
+            if(select("不用了，謝謝.:我可以，別再哭了.")==1) {
+				mes "[字符串]";
+				mes "啊，我想問你太多了。我很抱歉。不用擔心，我會發現其他方式。";
+				set gef_bard_q,25;
+
+			} else {
+				mes "[字符串]";
+				mes "你是認真的？";
+				mes "哦，非常感謝！";
+				mes "你一定是天使！";
+				mes "真正了解詩人心臟的天使！";
+				next;
+				mes "[字符串]";
+				mes "我會以某種方式付給你！";
+				mes "謝謝您的照顧";
+				mes "提前~";
+				set gef_bard_q,24;
+			}
+			goto L_End;
+
+		} else if (.@inputstr$ == "Gunther") {
+			mes "[字符串]";
+			mes "岡瑟？我不認為他會這樣做。他總是在歌曲中寫下諸如“雙重武器為您”之類的歌曲。另外，他太愚蠢了。";
+			goto L_End;
+
+		} else if (.@inputstr$ == "Gunther Doubleharmony") {
+			mes "[字符串]";
+			mes "岡瑟？我不認為他會這樣做。他總是在歌曲中寫下諸如“雙重武器為您”之類的歌曲。另外，他太愚蠢了。";
+			goto L_End;
+
+		} else if (.@inputstr$ == "Errende") {
+			cutin "bard_eland04",2;
+			mes "[字符串]";
+			mes "當然，你開玩笑！";
+			mes "如果我這樣做了，為什麼會";
+			mes "我不知道什麼";
+			mes "這首歌是關於的？";
+			goto L_End;
+
+		} else {
+			mes "[字符串]";
+			mes "" + .@inputstr$ +"...?";
+			mes "我認為我不認識那個人。也許你誤會了";
+			mes "某物？ *嘆...*";
+			next;
+			mes "[字符串]";
+			mes "什麼是...？";
+			mes "我怎麼會忘記";
+			mes "第八愛？";
+			set gef_bard_q,26;
+			goto L_End;
+		}
+
+	} else if (gef_bard_q == 25) {
+		cutin "bard_eland04",2;
+		mes "[字符串]";
+		mes "哦...！";
+		mes "這些眼淚不會停止！";
+		mes "為什麼人們必須總是這樣對待吟遊詩人？";
+		next;
+		mes "^483d8b製造的";
+		mes "這個可憐的吟遊詩人？";
+		mes "誰打破了他";
+		mes "玻璃的溫柔心臟？";
+		mes "打破他的夢想...^000000";
+		next;
+		mes "^483d8bno夢想，";
+		mes "沒有心，";
+		mes "沒有愛，";
+		mes "沒有希望";
+		mes "否....^000000";
+		set .@random,rand(1,50);
+		next;
+
+		if (.@random > 27  && .@random < 37 ) {
+			mes "^3355fferrende繼續唱歌他的個人絕望。他似乎對您拒絕幫助他感到失望。當然，您開始為他感到難過。 ^000000";
+			next;
+
+            if(select("嗯，那我該幫幫他了...:那就無視他吧.")==1) {
+				mes "[" + @name$ + "]";
+				mes "嘿。嘿，編號。停止唱這首歌。很尷尬，好嗎？好吧，我會去找你找到原始歌曲。";
+				next;
+				mes "[字符串]";
+				mes "* gasp！ *真的！你確定嗎？謝謝你！太感謝了！";
+				mes "你真的在乎";
+				mes "吟遊詩人的悲傷！";
+				next;
+				mes "[字符串]";
+				mes "我保證會盡我所能償還您！我在這裡等你，直到你返回！";
+				set gef_bard_q,24;
+			} else {
+				cutin "bard_eland04",2;
+				mes "^3355ffyou忽略他的";
+				mes "令人心碎的歌。";
+				mes "但是您的靈魂花費是多少？ ^000000";
+			}
+			goto L_End;
+
+		} else {
+			cutin "bard_eland01",2;
+			mes "[字符串]";
+			mes "您沒有任何想問我的東西，對嗎？如果沒有，您想听我的歌嗎？";
+			next;
+			mes "^483d8bmiiiiisable ...";
+			mes "noboooody 就是那個 looo whoee";
+			mes "朋友永遠不會...";
+			mes "哇哦！ ^000000";
+			goto L_End;
+		}
+
+	} else if (gef_bard_q == 24) {
+		cutin "bard_eland02",2;
+		mes "[字符串]";
+		mes "嗯...";
+		mes "我不確定凱蒂先生在哪裡。也許您可能可以在Juno的Monster博物館找到答案？我認為他是怪物研究組織的成員。";
+		next;
+		mes "[字符串]";
+		mes "如果您從事探索方面的經驗，那麼您將了解怪物研究組織。最近，許多學者因研究怪物而受傷。";
+		next;
+		cutin "bard_eland01",2;
+		mes "[字符串]";
+		mes "由於怪物研究的危險，需要冒險家為研究人員收集信息。";
+		next;
+		mes "[字符串]";
+		mes "對於像我這樣的流浪者來說，這是賺錢的好方法。我們為他們提供他們需要的信息，並為我們提供財政支持，以按照我們的意願來實現。";
+		next;
+		mes "[字符串]";
+		mes "無論如何，您應該參觀朱諾的怪物博物館，以了解凱蒂先生。它離這裡很遠，但是當您到達朱諾時，博物館位於中央廣場的西部。";
+		next;
+		mes "[字符串]";
+		mes "再次，";
+		mes "太感謝了";
+		mes "為了您的幫助。";
+		goto L_End;
+
+	} else if (gef_bard_q == 22) {
+		mes "[字符串]";
+		mes "*嘆...*";
+		mes "在哪裡可以";
+		mes "我發現第八個愛...？";
+		mes "你遇到了岡瑟嗎？";
+		mes "啊，也許還沒有。";
+		next;
+		cutin "bard_eland04",2;
+		mes "[字符串]";
+		mes "*嘆**自從我忘記了這首歌的那條線以來，我就失去了唱歌。我只是...不能。我的精神不動。沒有靈感。";
+		next;
+		mes "[字符串]";
+		mes "請詢問 ^483d8bgunther ^000000關於 ^483d8b8th love ^000000 in ^483d8bat One，我墜入愛河 ^000000。先感謝您。";
+		goto L_End;
+
+	} else if (gef_bard_q == 23) {
+		cutin "bard_eland02",2;
+		mes "[字符串]";
+		mes "所以...";
+		mes "你";
+		mes "看到岡瑟嗎？";
+		next;
+		mes "^3355ffyou轉身";
+		mes "給他看你的背。 ^000000";
+		next;
+		mes "[字符串]";
+		mes "嗯...？ ！";
+		mes "不是嗎？";
+		mes "那是寫在你背上的歌曲的句子嗎？等等，不要動！第八愛是...";
+		mes "現在我明白了！";
+		next;
+		mes "[字符串]";
+		mes "一方面，我墜入愛河。";
+		mes "兩個時，你給我你的微笑。";
+		mes "三分之一，我喜歡你的觸摸。";
+		mes "四點，一個溫柔的吻。";
+		next;
+		mes "[字符串]";
+		mes "五歲時，我們改變了主意。";
+		mes "花瓣在空中散射。";
+		mes "六點，我墜入愛河~";
+		mes "七點，你墜入愛河~";
+		next;
+		mes "[字符串]";
+		mes "我們八點轉了...";
+		mes "九點，愛是重生。";
+		mes "十點鐘，我的愛消失了。";
+		mes "十一點，我發現原因。";
+		if (Sex == SEX_MALE)
+			mes "在十二歲時，我看到他的新女友？";
+		else
+			mes "在十二歲時，我看到她的新男朋友？";
+		next;
+		mes "[字符串]";
+		mes "...";
+		next;
+		mes "[字符串]";
+		mes "...";
+		mes "......";
+		next;
+		cutin "bard_eland04",2;
+		mes "[字符串]";
+		mes "這...";
+		mes "這是不可能的。";
+		mes "這首歌應該是關於愛情的，而不是浪漫的悲慘！";
+		next;
+		mes "[字符串]";
+		mes "歌詞。他們一定已經改變了。 Gunther對此有什麼意見嗎？嗯，但是誰會改變歌詞...？";
+		next;
+		cutin "bard_eland01",2;
+		input .@inputstr$;
+
+		if (.@inputstr$ == "Kino Kitty") {
+			mes "[字符串]";
+			mes "啊!當然！";
+			mes "我認為你是對的！";
+			mes "我怎麼會想不到呢？";
+			next;
+			mes "[字符串]";
+			mes "現在一切都很有意義。畢竟，他曾經是無敵的一支軍隊的成員。他的變化可能有點卑鄙，因為這首歌曾經是關於一對幸福的夫妻。";
+			next;
+			mes "[字符串]";
+			mes "嗯...";
+			mes "很抱歉再次問您一個忙，但是在您的旅行中，您認為您可以找到這首歌的原始歌詞嗎？我可以等待...";
+			next;
+
+            if(select("不用了，謝謝.:我可以，別再哭了.")==1) {
+				mes "[字符串]";
+				mes "啊，我想問你太多了。我很抱歉。不用擔心，我會發現其他方式。";
+				set gef_bard_q,25;
+			} else {
+				mes "[字符串]";
+				mes "你是認真的？";
+				mes "哦，非常感謝！";
+				mes "你一定是天使！";
+				mes "真正了解詩人心臟的天使！";
+				next;
+				mes "[字符串]";
+				mes "我會以某種方式付給你！";
+				mes "謝謝您的照顧";
+				mes "提前~";
+				set gef_bard_q,24;
+			}
+			goto L_End;
+
+		} else if (.@inputstr$ == "Gunther") {
+			mes "[字符串]";
+			mes "岡瑟？我不認為他會這樣做。他總是在歌曲中寫下諸如“雙重武器為您”之類的歌曲。另外，他太愚蠢了。";
+			set gef_bard_q,26;
+			goto L_End;
+
+		} else if (.@inputstr$ == "Gunther Doubleharmony") {
+			mes "[字符串]";
+			mes "岡瑟？我不認為他會這樣做。他總是在歌曲中寫下諸如“雙重武器為您”之類的歌曲。另外，他太愚蠢了。";
+			set gef_bard_q,26;
+			goto L_End;
+
+		} else if (.@inputstr$ == "Errende") {
+			cutin "bard_eland04",2;
+			mes "[字符串]";
+			mes "當然，你開玩笑！";
+			mes "如果我這樣做了，為什麼會";
+			mes "我不知道這是什麼";
+			mes "歌是關於的？";
+			set gef_bard_q,26;
+			goto L_End;
+
+		} else {
+			mes "[字符串]";
+			mes "" + .@inputstr$ +"...?";
+			mes "我認為我不認識那個人。也許你誤會了";
+			mes "某物？ *嘆...*";
+			next;
+			mes "[字符串]";
+			mes "什麼是...？";
+			mes "我怎麼會忘記";
+			mes "第八愛？";
+			set gef_bard_q,26;
+			goto L_End;
+		}
+
+	} else if (gef_bard_q == 21) {
+		cutin "bard_eland01",2;
+		mes "[字符串]";
+		mes "歡迎回來，";
+		mes "" + @name$ + "~";
+		mes "你要什麼";
+		mes "我為你做嗎？";
+		mes "你想听嗎";
+		mes "一個故事還是聽歌？";
+		callsub S_StorySong,3;
+
+	} else if (gef_bard_q == 7) {
+		cutin "bard_eland04",2;
+		mes "[字符串]";
+		mes "我怎麼能忘記這首歌？";
+		mes "我是吟遊詩人毫無價值的~！請...只是...請讓我一個人呆著。";
+		next;
+
+        if(select("沒問題.:有什麼我能幫忙的嗎?")==1){
+			mes "[字符串]";
+			mes "waaaah~！你真卑鄙！";
+			mes "你應該說，'edrende，怎麼了？也許我可以幫忙？";
+			next;
+			mes "[字符串]";
+			mes "我的意思是，我們應該比這更好地了解彼此。但是，但是也許我錯了！";
+			next;
+			mes "[字符串]";
+			mes "*哭泣...*";
+			mes "誰忽略了他，這使這個可憐的吟遊詩人哭了？ *嗅探*我確實相信是你！";
+		} else {
+			cutin "bard_eland01",2;
+			mes "[字符串]";
+			mes "幫我？";
+			mes "嗯...";
+			mes "就是這樣！";
+			mes "岡瑟！";
+			next;
+			mes "[字符串]";
+			mes "讓我問你一個忙。如果您碰巧遇到 ^3355ffgunther doubleharmony ^000000，請告知他我的困境。";
+			next;
+			mes "[字符串]";
+			mes "告訴他， ^483d8bminty errende ^000000恰好忘記了一首歌， ^483d8bat One，我墜入愛河 ^000000。該線稱為 ^483d8b8th Love ^000000。";
+			next;
+			mes "[字符串]";
+			mes "我懇求你，如果你遇到他，請向他詢問第八個愛，並立即通知我抒情詩~";
+			set gef_bard_q,2;
+		}
+		goto L_End;
+
+	} else if (gef_bard_q == 6) {
+		cutin "bard_eland04",2;
+		mes "[字符串]";
+		mes "誰可以將歌詞更改為歌曲？我不明白為什麼會發生這樣的事情。我真的希望我能問一下改變單詞的人...";
+		next;
+		mes "[字符串]";
+		mes "*嘆**我很沮喪，我什至無法唱歌。我只是...不能。我的精神不動。沒有靈感。";
+		next;
+		mes "[" + @name$ + "]";
+		mes "可能是";
+		mes "誰";
+		mes "改變這首歌是...";
+		input .@inputstr$;
+		mes "" + .@inputstr$ + "?";
+		next;
+
+		if (.@inputstr$ == "Kino Kitty") {
+			cutin "bard_eland01",2;
+			mes "[字符串]";
+			mes "啊!當然！";
+			mes "我認為你是對的！";
+			mes "我怎麼會想不到呢？";
+			next;
+			mes "[字符串]";
+			mes "現在一切都很有意義。畢竟，他曾經是無敵的一支軍隊的成員。他的變化可能有點卑鄙，因為這首歌曾經是關於一對幸福的夫妻。";
+			next;
+			mes "[字符串]";
+			mes "嗯...";
+			mes "很抱歉再次問您一個忙，但是在您的旅行中，您認為您可以找到這首歌的原始歌詞嗎？我可以等待...";
+			next;
+            if(select("不用了，謝謝.:我可以，別再哭了.")==1) {
+				mes "[字符串]";
+				mes "啊，我想問你太多了。我很抱歉。不用擔心，我會發現其他方式。";
+				set gef_bard_q,5;
+			} else {
+				mes "[字符串]";
+				mes "你是認真的？哦，非常感謝！你一定是天使！真正了解詩人心臟的天使！";
+				next;
+				mes "[字符串]";
+				mes "我會以某種方式付給你！謝謝您提前的麻煩~";
+				set gef_bard_q,4;
+			}
+			goto L_End;
+
+		} else if (.@inputstr$ == "Gunther") {
+			mes "[字符串]";
+			mes "岡瑟？我不認為他會這樣做。他總是在歌曲中寫下諸如“雙重武器為您”之類的歌曲。另外，他太愚蠢了。";
+			goto L_End;
+
+		} else if (.@inputstr$ == "Gunther Doubleharmony") {
+			mes "[字符串]";
+			mes "岡瑟？我不認為他會這樣做。他總是在歌曲中寫下諸如“雙重武器為您”之類的歌曲。另外，他太愚蠢了。";
+			goto L_End;
+
+		} else if (.@inputstr$ == "Errende") {
+			cutin "bard_eland04",2;
+			mes "[字符串]";
+			mes "當然，你開玩笑！如果我這樣做了，為什麼我不知道這首歌是關於什麼的？";
+			goto L_End;
+
+		} else {
+			mes "[字符串]";
+			mes "" + .@inputstr$ +"...?";
+			mes "我認為我不認識那個人。也許您誤解了一些東西？ *嘆...*";
+			next;
+			mes "[字符串]";
+			mes "什麼是...？";
+			mes "我怎麼會忘記";
+			mes "第八愛？";
+			set gef_bard_q,6;
+			goto L_End;
+		}
+
+	} else if (gef_bard_q == 5) {
+		cutin "bard_eland04",2;
+		mes "[字符串]";
+		mes "哦...！";
+		mes "這些眼淚不會停止！";
+		mes "為什麼人們必須總是這樣對待吟遊詩人？";
+		next;
+		mes "^483d8b誰使這個可憐的吟遊詩人哭泣？";
+		mes "誰打破了他溫柔的玻璃心？";
+		mes "打破他的夢想...";
+		mes "沒有夢，沒有心，沒有愛，沒有希望，沒有...^000000";
+		next;
+		set .@random,rand(1,50);
+
+		if (.@random > 27 && .@random < 37) {
+			mes "^3355fferrende繼續唱歌他的個人絕望。他似乎對您拒絕幫助他感到失望。當然，您開始為他感到難過。 ^000000";
+			next;
+
+            if(select("嗯，那我該幫幫他了...:那就無視他吧.")==1) {
+				mes "[" + @name$ + "]";
+				mes "嘿。嘿，編號。停止唱這首歌。很尷尬，好嗎？好吧，我會去找你找到原始歌曲。";
+				next;
+				cutin "bard_eland01",2;
+				mes "[字符串]";
+				mes "* gasp！ *真的！你確定嗎？謝謝你！太感謝了！您確實在乎吟遊詩人的悲傷！";
+				next;
+				mes "[字符串]";
+				mes "我保證會盡我所能償還您！我在這裡等你，直到你返回！";
+				set gef_bard_q,4;
+			} else {
+				mes "^3355ffyou忽略他的";
+				mes "令人心碎的歌。";
+				mes "但是您的靈魂花費是多少？ ^000000";
+			}
+			goto L_End;
+
+		} else {
+			cutin "bard_eland01",2;
+			mes "[字符串]";
+			mes "您沒有任何想問我的東西，對嗎？如果沒有，您想听我的歌嗎？";
+			next;
+			mes "^483d8bmiiiiisable ...";
+			mes "noboooody 就是那個 looo whoee";
+			mes "朋友永遠不會...";
+			mes "哇哦！ ^000000";
+			goto L_End;
+		}
+
+	} else if (gef_bard_q == 4) {
+		cutin "bard_eland01",2;
+		mes "[字符串]";
+		mes "嗯...";
+		mes "我不確定凱蒂先生在哪裡。也許您可能可以在Juno的Monster博物館找到答案？我認為他是怪物研究組織的成員。";
+		next;
+		mes "[字符串]";
+		mes "如果您從事探索方面的經驗，那麼您將了解怪物研究組織。最近，許多學者因研究怪物而受傷。";
+		next;
+		mes "[字符串]";
+		mes "由於怪物研究的危險，需要冒險家為研究人員收集信息。";
+		next;
+		mes "[字符串]";
+		mes "對於像我這樣的流浪者來說，這是賺錢的好方法。我們為他們提供他們需要的信息，並為我們提供財政支持，以按照我們的意願來實現。";
+		next;
+		mes "[字符串]";
+		mes "無論如何，您應該參觀朱諾的怪物博物館，以了解凱蒂先生。它離這裡很遠，但是當您到達朱諾時，博物館位於中央廣場的西部。";
+		next;
+		mes "[字符串]";
+		mes "再次，";
+		mes "太感謝了";
+		mes "為了您的幫助。";
+		goto L_End;
+
+	} else if (gef_bard_q == 2) {
+		cutin "bard_eland04",2;
+		mes "[字符串]";
+		mes "*嘆息...*我在哪裡可以找到第八個愛...？你遇到了岡瑟嗎？";
+		mes "啊，也許還沒有。";
+		next;
+		mes "[字符串]";
+		mes "*嘆氣*自從我忘記這首歌的那條線以來，我就失去了唱歌。我只是...不能。我的精神不動。沒有靈感。";
+		next;
+		mes "[字符串]";
+		mes "請詢問 ^483d8bgunther ^000000關於 ^483d8b8th love ^000000 in ^483d8bat One，我墜入愛河 ^000000。先感謝您。";
+		goto L_End;
+
+	} else if (gef_bard_q == 3) {
+		cutin "bard_eland02",2;
+		mes "[字符串]";
+		mes "所以...";
+		mes "你";
+		mes "看到岡瑟嗎？";
+		next;
+		mes "^3355ffyou轉身";
+		mes "給他看你的背。 ^000000";
+		next;
+		cutin "bard_eland03",2;
+		mes "[字符串]";
+		mes "嗯...？ ！";
+		mes "不是嗎？";
+		mes "那是寫在你背上的歌曲的句子嗎？等等，不要動！第八愛是...";
+		mes "現在我明白了！";
+		next;
+		mes "[字符串]";
+		mes "一方面，我墜入愛河。";
+		mes "兩個時，你給我你的微笑。";
+		mes "三分之一，我喜歡你的觸摸。";
+		mes "四點，一個溫柔的吻。";
+		next;
+		mes "[字符串]";
+		mes "五歲時，我們改變了主意。";
+		mes "花瓣在空中散射。";
+		mes "六點，我墜入愛河~";
+		mes "七點，你墜入愛河~";
+		next;
+		mes "[字符串]";
+		mes "我們八點轉了...";
+		mes "九點，愛是重生。";
+		mes "十點鐘，我的愛消失了。";
+		mes "十一點，我發現原因。";
+		if (Sex == SEX_MALE)
+			mes "在十二歲時，我看到她的新男朋友？";
+		else
+			mes "在十二歲時，我看到他的新女友？";
+		next;
+		mes "[字符串]";
+		mes "...";
+		next;
+		mes "[字符串]";
+		mes "...";
+		mes "......";
+		next;
+		cutin "bard_eland04",2;
+		mes "[字符串]";
+		mes "這...";
+		mes "這是不可能的。";
+		mes "這首歌應該是關於愛情的，而不是浪漫的悲慘！";
+		next;
+		mes "[字符串]";
+		mes "歌詞。他們一定已經改變了。 Gunther對此有什麼意見嗎？嗯，但是誰會改變歌詞...？";
+		next;
+		input .@inputstr$;
+		if (.@inputstr$ == "Kino Kitty") {
+			cutin "bard_eland01",2;
+			mes "[字符串]";
+			mes "啊!當然！";
+			mes "我認為你是對的！";
+			mes "我怎麼會想不到呢？";
+			next;
+			mes "[字符串]";
+			mes "現在一切都很有意義。畢竟，他曾經是無敵的一支軍隊的成員。他的變化可能有點卑鄙，因為這首歌曾經是關於一對幸福的夫妻。";
+			next;
+			mes "[字符串]";
+			mes "嗯...";
+			mes "很抱歉再次問您一個忙，但是在您的旅行中，您認為您可以找到這首歌的原始歌詞嗎？我可以等待...";
+			next;
+
+            if(select("不用了，謝謝.:我可以，別再哭了.")==1) {
+				mes "[字符串]";
+				mes "啊，我想問你太多了。我很抱歉。不用擔心，我會發現其他方式。";
+				set gef_bard_q,5;
+			} else {
+				mes "[字符串]";
+				mes "你是認真的？哦，非常感謝！你一定是天使！真正了解詩人心臟的天使！";
+				next;
+				mes "[字符串]";
+				mes "我會以某種方式付給你！謝謝您提前的麻煩~";
+				set gef_bard_q,4;
+			}
+			goto L_End;
+
+		} else if (.@inputstr$ == "Gunther") {
+			mes "[字符串]";
+			mes "岡瑟？我不認為他會這樣做。他總是在歌曲中寫下諸如“雙重武器為您”之類的歌曲。另外，他太愚蠢了。";
+			set gef_bard_q,6;
+			goto L_End;
+		}
+
+		else if (.@inputstr$ == "Gunther Doubleharmony") {
+			mes "[字符串]";
+			mes "岡瑟？我不認為他會這樣做。他總是在歌曲中寫下諸如“雙重武器為您”之類的歌曲。另外，他太愚蠢了。";
+			set gef_bard_q,6;
+			goto L_End;
+
+		} else if (.@inputstr$ == "Errende") {
+			cutin "bard_eland04",2;
+			mes "[字符串]";
+			mes "當然，你開玩笑！如果我這樣做了，為什麼我不知道這首歌是關於什麼的？";
+			set gef_bard_q,6;
+			goto L_End;
+
+		} else {
+			mes "[字符串]";
+			mes "" + .@inputstr$ +"...?";
+			mes "我認為我不認識那個人。也許您誤解了一些東西？ *嘆...*";
+			next;
+			mes "[字符串]";
+			mes "什麼是...？";
+			mes "我怎麼會忘記";
+			mes "第八愛？";
+			set gef_bard_q,6;
+			goto L_End;
+		}
+
+	} else if (gef_bard_q == 1) {
+		cutin "bard_eland01",2;
+		mes "[字符串]";
+		mes "歡迎回來，";
+		mes "" + @name$ + "~";
+		mes "你要什麼";
+		mes "我為你做嗎？";
+		mes "你想听嗎";
+		mes "一個故事還是聽歌？";
+		callsub S_StorySong,4;
+
+	} else {
+		cutin "bard_eland03",2;
+		mes "^483d8b 沃斯沃斯路";
+		mes "最適合喝酒？";
+		mes "拉拉~";
+		mes "今天是";
+		mes "大地，太陽";
+		mes "和月亮~";
+		mes "啦~^000000";
+		next;
+		mes "^483d8bla啦啦~";
+		mes "我只會";
+		mes "一天喝酒~";
+		mes "所以如果你告訴我";
+		mes "當你喝的時候";
+		mes "我會告訴你什麼時候";
+		mes "我和你一起喝~^000000";
+		next;
+		mes "^483D8BLET的聚會";
+		mes "是的，是的 - ^000000 hmmmmm ...？";
+		next;
+		mes "[詩人]";
+		mes "為什麼，你好。哦，你來聽我的歌，忘了你的煩惱嗎？";
+		next;
+
+        if(select("你是誰?:無視他.")==1) {
+			cutin "bard_eland04",2;
+			mes "[" + @name$ + "]";
+			mes "你似乎是";
+			mes "這裡的新事物...";
+			mes "你是誰？";
+			next;
+			cutin "bard_eland02",2;
+			mes "[字符串]";
+			mes "毫米？啊，是的。我只是另一個流浪的詩人，他去了風的地方。請給我打電話 ^483d8berrende ^000000，希望取悅您的吟遊詩人。";
+			next;
+			mes "[字符串]";
+			mes "如果你願意讓我，我會告訴你我的旅行。在您的休假中，";
+			mes "我將播放一首歌，可以幫助您忘記自己的麻煩。";
+			set gef_bard_q,1;
+			callsub S_StorySong,5;
+
+		} else {
+			mes "[字符串]";
+			mes "哇，哇~";
+			mes "你不能只是那樣忽略我！您的歡樂感在哪裡，您的浪漫感在哪裡？";
+		}
+
+	}
+
+L_End:
+	close2;
+	cutin "",255;
+	end;
+
+// SubRoutine for 5 similiar dialogues of the quest
+
+S_StorySong:
+	next;
+    switch(select("講個故事吧.:能幫我彈一首歌嗎?:呃，改天吧.")) {
+	case 1:
+		mes "[字符串]";
+		mes "你喜歡故事，是嗎？您希望我講什麼樣的故事？我知道我知道的...當然，我只是為您服務。 *笑*";
+		next;
+
+        if(select("新聞與傳聞~:取消.")==1) {
+			cutin "bard_eland01",2;
+			mes "[字符串]";
+			set .@random,rand(1,3);
+			if (.@random == 1) {
+				mes "嗯。那我們應該談論這個小鎮，格芬嗎？您去過這裡的酒吧或旅館嗎？";
+				next;
+				mes "[字符串]";
+				mes "如果我不說在酒吧和旅館工作的姐妹是... ^ff6699巧妙地吸引 ^000000，我會撒謊。";
+				next;
+				mes "[字符串]";
+				mes "這位長者很漂亮，優美，並帶有她的精緻氣氛。年輕的人是如此開朗，充滿活力，所以... ^ff6699nubile ^000000。";
+				next;
+				mes "[字符串]";
+				mes "但是我離題了。";
+				mes "不過有時候，";
+				mes "有時候你，";
+				mes "他們不像往常那樣性感。";
+				next;
+				mes "[字符串]";
+				mes "看來他們已故父親的精神，上帝保佑他的靈魂，因為他們不時擁有這樣的炙手可熱的女人。";
+				next;
+				cutin "bard_eland02",2;
+				mes "[字符串]";
+				mes "我想什麼時候有人行動";
+				mes "對那些女孩有些卑鄙，父親的精神接管了。我應該知道。";
+				next;
+				mes "[字符串]";
+				mes "我猜父親的愛永遠持久，甚至來到來世。當然，我不知道。";
+				next;
+				mes "[字符串]";
+				cutin "bard_eland01",2;
+				mes "讓我們來看看...";
+				mes "尋找這個非常陰暗的商人，在後面閒逛";
+				mes "Geffen的酒吧。";
+				next;
+				mes "[字符串]";
+				mes "從他的衣服來看，他必須來自摩洛哥，這要溫暖得多。這就是為什麼他有一個引擎蓋的原因，即使沒有束帶，這裡的天氣涼爽。";
+				next;
+				mes "[字符串]";
+				mes "我必須警告您，不要讓他說話，因為他以令人毛骨悚然的價格出售它，因為他以令人毛骨悚然的價格出售它。他絕對不值得信賴。";
+				next;
+				mes "[字符串]";
+				mes "最後，我想提到隱藏在蓋芬塔下的蓋芬尼亞市。我聽說進入Geffenia需要某種條件，但我不確定。";
+				next;
+				mes "[字符串]";
+				mes "Geffenia與我之前提到的兩位有吸引力的女士有關。似乎他們的父親威廉（William）和一個聚會一起滅絕怪物，但他從未回來。";
+				next;
+				mes "[字符串]";
+				mes "他以這種方式將家人拋在後面是悲慘的。但是也許，他的精神嚇跑了對那些女孩感興趣的任何人，這更加悲慘。";
+
+			} else if (.@random == 2) {
+				mes "好吧，讓我告訴你一個關於沙漠之城摩洛哥的故事。值得鹽的冒險家預計將探索這座城市及其周圍沙漠。";
+				next;
+				mes "[字符串]";
+				mes "獅身人面像和金字塔是冒險家特別受歡迎的探索領域。你以前去過那裡嗎？我還沒有，但也許有一天我會去。";
+				next;
+				mes "[字符串]";
+				mes "當我在摩洛哥時，我發現了一個商人，將劍錘出售給牧師和女祭司。除此之外，禁止牧師使用任何刀片的武器。";
+				next;
+				mes "[字符串]";
+				mes "我還看到了一個充滿活力的小男孩，他一直懇求父親為他馴服蒙克。我聽說父親說話有點，看來他來自摩洛哥的一個朋友在艾伯塔省迷失了。";
+				next;
+				cutin "bard_eland02",2;
+				mes "[字符串]";
+				mes "無論如何，我為父親提供了差事，他給了我一個神秘的盒子。當我打開那個盒子時，我發現了一個奇怪的羽毛。我不知道它是如何工作的...";
+				next;
+				mes "[字符串]";
+				mes "我想知道那個男人的朋友潘德·梅耶（Pandger Mayer）是否有發現";
+				mes "他回家...";
+
+			} else if (.@random == 3) {
+				mes "我們為什麼不談論艾伯塔省？活動機構開發了一艘沉沒的船，作為冒險家可能會進行探險的地方。看來他們賺了很多錢。";
+				next;
+				mes "[字符串]";
+				mes "當這艘沉沒的船首次在艾伯塔省附近漂移時，艾伯塔省的一位安全騎士立即發現了它。";
+				next;
+				mes "[字符串]";
+				mes "那個安全騎士冒險在裡面冒險，發現一個房間內的一個嬰兒。嬰兒旁邊是一個音樂盒。";
+				next;
+				mes "[字符串]";
+				mes "這個嬰兒是沉沒船的唯一倖存者。他在艾伯塔省長大，儘管他小時候受到蔑視。他現在很好，但是我離題了。";
+				next;
+				mes "[字符串]";
+				mes "至於沉沒的船，我不確定這是否是海盜船。據說，穿著海盜服裝的骨骼怪物漫遊其遺體。";
+				next;
+				mes "[字符串]";
+				mes "艾伯塔省的其他謎團之一是難以捉摸的烏龜島。似乎一名海員找到了通往那個地方的可靠途徑，並正在向冒險家提供通道。";
+				next;
+				mes "[字符串]";
+				mes "儘管如此，似乎烏龜島並不是很安全。艾伯塔省安全騎士隊已經出現了兩個小隊，但尚未返回。確實，這是引起關注的原因。";
+				next;
+				mes "[字符串]";
+				mes "儘管如此，這並沒有阻止我參觀那個地方。出於純粹的意外，我找到了已經去過那裡的冒險家雜誌。看來他現在是一位著名的學者。";
+				next;
+				cutin "bard_eland02",2;
+				mes "[字符串]";
+				mes "在該期刊中，有關終極劍客和烏龜島的探索的細節。我敢肯定，任何在那個地方尋求寶藏的人都會發現令人興奮的冒險。";
+			}
+
+		} else {
+			cutin "bard_eland01",2;
+			mes "[字符串]";
+			mes "哦，多麼令人失望。但是，請保證您以後會下去，以便我們可以分享故事和歡樂。";
+		}
+		goto L_End;
+
+	case 2:
+		.@num = getarg(0);
+		mes "[字符串]";
+		if (.@num < 3)
+			mes "您認識到我的才華，所以您應該聽我的歌！現在，您想听什麼？我可以玩你想要的任何東西，你知道。";
+		else
+			mes "最後，我遇到了一個認識我才華的人！你應該聽我的歌！現在，您想听什麼？我可以玩你想要的任何東西，你知道。";
+		next;
+
+		switch(select("嗯，隨便一首歌就行.:來一首輕快的歌~!:算了...")) {
+
+		case 1:
+			mes "[字符串]";
+			if (Zeny > 499) {
+				set Zeny, Zeny-500;
+				cutin "bard_eland03",2;
+				mes "好吧。";
+				mes "我們走了~";
+
+				set .@random,rand(1,3);
+				if (.@random == 1)
+					soundeffect "ring_of_nibelungen.wav",0;
+				else if (.@random == 2)
+					soundeffect "dont_forget_me_not.wav",0;
+				else
+					soundeffect "in_to_the_abyss.wav",0;
+
+			} else {
+				cutin "bard_eland04",2;
+				mes "啊哈哈~";
+				mes "我很抱歉，";
+				mes "但是我無法免費提供服務。即使是吟遊詩人也需要Zeny生活，您是否同意？";
+			}
+			goto L_End;
+
+		case 2:
+			cutin "bard_eland03",2;
+			mes "[字符串]";
+			mes "一首樂觀的歌...？";
+			mes "嗯...讓我們看看。";
+			mes "一首樂觀的歌，";
+			mes "樂觀的歌...";
+			mes "好吧，我們走了~";
+			next;
+			//for 3 and 4 variants, we need higher chance
+			if (.@num == 3 || .@num == 4)
+				set .@random,rand(1,5);
+			else
+				set .@random,rand(1,3);
+			if (.@random == 1) {
+				mes "^483d8bvalhalla在黃金中眼花";
+				mes "我們知道的第五";
+				mes "是古老的Heim！";
+				mes "光榮的戰士回答";
+				mes "奧丁的傳票。 ^000000";
+				next;
+				mes "^483D8BPALACE的死者";
+				mes "帶有銀屋頂~";
+				mes "我們知道的第三";
+				mes "選擇顫抖！";
+				mes "光榮的戰士回答";
+				mes "奧丁的傳票。 ^000000";
+				next;
+				mes "^483d8bfive一百四十扇門";
+				mes "在瓦爾哈拉大廳";
+				mes "向英雄的心臟開放。";
+				mes "八百名戰士聚集";
+				mes "在上帝的旨意下，";
+				mes "按照一個人的費用";
+				mes "那些門。 ^000000";
+				next;
+				mes "^483d8bgodly戰士";
+				mes "進入Yggdrassil";
+				mes "走向他們的命運。";
+				mes "以驕傲和榮譽，";
+				mes "他們接受瓦利裡的";
+				mes "歡迎。 ^000000";
+				next;
+				mes "^483d8bwarriors陷入戰鬥";
+				mes "在紅色的光榮衝突中";
+				mes "死亡可能來了，";
+				mes "但是你的名聲依然存在";
+				mes "而你的精神將是";
+				mes "導致瓦爾哈拉。 ^000000";
+				//Expanded version for 2nd variant
+				if (.@num == 2){
+					next;
+					mes "[字符串]";
+					mes "...";
+					next;
+					mes "[字符串]";
+					mes "...";
+					mes "......";
+					next;
+					mes "[字符串]";
+					mes "您知道這首歌是關於瓦爾哈拉的傳奇嗎？據說，多個地方被用作神聖的榮譽大廳。";
+					next;
+					mes "[字符串]";
+					mes "但是只有眾神才會知道這是否是真的。像Glast Heim這樣的地方真的是第五瓦爾哈拉嗎？我們人類";
+					mes "可能永遠不會知道";
+					mes "可以肯定。";
+				}
+				goto L_End;
+
+			} else if (.@random == 2) {
+
+				mes "^483d8b疾馳的聲音";
+				mes "在遠處迴聲。";
+				mes "一片朦朧的灰塵";
+				mes "充滿夕陽。";
+				mes "數千隻眼睛睜開";
+				mes "城堡上的火把";
+				mes "像成千上萬的ifrits一樣耀斑。";
+				next;
+				mes "^483d8bhear我的心的th動，";
+				mes "我的靜脈流動的血液。";
+				mes "感覺到我的盔甲的沉重。";
+				mes "敵人已經出現在我們面前。 ^000000";
+				next;
+				mes "^483d8beat鼓，更硬！";
+				mes "勇氣，士兵，前進！";
+				mes "大聲喊叫，士兵，大聲！";
+				mes "今天永遠不會回來！ ^000000";
+				next;
+				mes "^483d8bstun天空";
+				mes "挑釁地球。";
+				mes "我再次感到心跳。";
+				mes "將號角吹到";
+				mes "搖擺要塞。";
+				mes "今天永遠不會回來！ ^000000";
+				next;
+				mes "[字符串]";
+				mes "啊，這被稱為“戰場上的鼓聲”，這是由Iolo先生撰寫的。是的，我更喜歡這首歌。";
+
+			} else {
+				// For 3 and 4 cases we set more chance earlier on .@random
+				if (.@num == 3 || .@num == 4){
+					mes "[字符串]";
+					if (Sex == SEX_MALE)
+						mes "英勇的戰士，";
+					else
+						mes "我的夫婦，";
+					mes "請聽我的歌。如果您手中有一朵花並且戀愛了，那麼讓我們算上花瓣。";
+					next;
+					mes "^483d8bat One，我墜入愛河。";
+					mes "兩個時，你給我你的微笑。";
+					mes "三分之一，我喜歡你的觸摸。";
+					mes "四點，一個溫柔的吻。";
+					mes "五歲時，我們改變了主意。";
+					mes "花瓣在空中散射。 ^000000";
+					next;
+					cutin "bard_eland04",2;
+					mes "^483d8bat六，我墜入愛河~";
+					mes "七點，你墜入愛河~";
+					mes "在八~^000000";
+					next;
+					mes "[字符串]";
+					mes "八點";
+					mes "在...八...";
+					mes "接下來是什麼...？";
+					next;
+					mes "[字符串]";
+					mes "哦，我的...！";
+					mes "下一部分是什麼？";
+					mes "第八愛是什麼？";
+					mes "吟遊詩人多麼可恥";
+					mes "忘記單詞";
+					mes "一首歌！";
+					next;
+					mes "[字符串]";
+					mes "我...";
+					mes "我不能屈辱！";
+					mes "或什麼";
+					mes "接下來發生...！";
+					next;
+					mes "[字符串]";
+					mes "你是一個冒險家，不是嗎？所以你必須旅行很多嗎？我要問的很尷尬，";
+					mes "但是我有一個忙問...！";
+					next;
+
+                    if(select("好，沒問題.:我才不幫你.")==1) {
+						cutin "bard_eland01",2;
+						mes "[字符串]";
+						mes "太感謝了！";
+						mes "讓我們看看，誰會知道？";
+						mes "我知道了！岡瑟！";
+						next;
+						mes "[字符串]";
+						mes "如果您碰巧遇到 ^483d8bgunther doubleharmony ^000000，請告知他我的困境。";
+						next;
+						mes "[字符串]";
+						mes "告訴他， ^483d8bminty errende ^000000恰好忘記了一首歌， ^483d8bat One，我墜入愛河 ^000000。該線稱為 ^483d8b8th Love ^000000。";
+						next;
+						mes "[字符串]";
+						mes "我懇求你，如果你遇到他，請向他詢問第八個愛，並立即通知我抒情詩~";
+						if(gef_bard_q==1) set gef_bard_q,2;
+						if(gef_bard_q==21) set gef_bard_q,22;
+
+					} else {
+						mes "[字符串]";
+						mes "*嘆...*";
+						mes "如果我的生活取決於這首歌，我不記得這首歌的第八部分。而且確實~！ *wahhhh~*";
+						if(gef_bard_q==1) set gef_bard_q,7;
+						if(gef_bard_q==21) set gef_bard_q,27;
+					}
+					goto L_End;
+
+				}
+				mes "^483D8BA好吟遊詩人";
+				mes "取悅他的聽眾。";
+				mes "所以不要期待一首悲傷的歌";
+				mes "加深您的痛苦。 ^000000";
+				next;
+				mes "^483D8BA好舞者舞";
+				mes "取悅她的聽眾。";
+				mes "我們可以一起跳舞嗎？";
+				mes "只是握住我的手。";
+				mes "啦啦~啦啦~^000000";
+				next;
+				mes "[" + @name$ + "]";
+				mes "順便一提...";
+				mes "你們為什麼玩";
+				mes "有時不和諧？";
+				mes "聽起來很奇怪";
+				mes "當你這樣做的時候。";
+				next;
+				mes "[字符串]";
+				mes "h  - 你怎麼說這樣的話，"+ @name$ +"? Have you ever been a Bard before? It's difficult to come up with fresh, original melodies!";
+			}
+			goto L_End;
+
+		case 3:
+			cutin "bard_eland01",2;
+			mes "[字符串]";
+			mes "但是當然。";
+			mes "歡樂是最好的";
+			mes "當你享受";
+			mes "有心情。";
+			mes "請再來。";
+			goto L_End;
+
+		}
+
+	case 3:
+		cutin "bard_eland01",2;
+		mes "[字符串]";
+		mes "嗯~？";
+		mes "好吧，好吧。不過，聽一個好故事或開朗的歌確實可以為您帶來一些好處。好吧，稍後再見。";
+		goto L_End;
+	}
+}
+
+morocc,134,111,3	script	Bard#3	741,{
+	set @name$,strcharinfo(0);
+	if (gef_bard_q == 31) {
+		mes "[奇諾小貓]";
+		mes "一切都會";
+		mes "最終很好，對嗎？";
+		mes "我會沒事的，朱蒂會沒事的，她會...哦。";
+		next;
+		mes "[奇諾小貓]";
+		mes "對不起，我只是";
+		mes "向自己喃喃自語。";
+		mes "有什麼";
+		mes "你要我嗎？";
+		next;
+
+		switch(select("講個故事吧...:你的聲音是...:不用了，謝謝，不過我很感激.")) {
+		case 1:
+			set .@random,rand(1,3);
+			if (.@random == 1) {
+				mes "[奇諾小貓]";
+				mes "許多傳奇人被宣傳為歌曲。勇敢的戰士的眾神故事和故事都被寫成歌曲。";
+				next;
+				mes "[奇諾小貓]";
+				mes "許多人喜歡聽那些歌曲，因為他們夢到了浪漫的過去。唱歌的歌曲是像我這樣的人們存在的原因。";
+				next;
+				mes "^3355ffkino kitty調整了吉他上的琴弦，並開始低聲唱歌。 ^000000";
+				next;
+				mes "^d43d1arheingold ...";
+				mes "隱藏在萊茵河。";
+				mes "如果成了戒指，";
+				mes "可以統治世界~^000000";
+				next;
+				mes "^d43d1aprotabrota";
+				mes "詛咒它的小偷";
+				mes "永遠找不到愛。";
+				mes "Alberich知道";
+				mes "儘管如此，它還是偷了它。";
+				mes "愛被拋棄了。 ^000000";
+				next;
+				mes "^d43d1agiants建造了美麗的瓦爾哈拉";
+				mes "與弗雷亞的婚姻";
+				mes "美麗的女神";
+				mes "他們假設的付款。";
+				mes "不接受";
+				mes "他們強行帶她去。 ^000000";
+				next;
+				mes "^d43d1athe神會";
+				mes "給阿爾貝里希的寶藏";
+				mes "向弗雷亞返回的巨人隊。";
+				mes "Loki欺騙了Alberich，";
+				mes "竊取他的戒指或力量。 ^000000";
+				next;
+				mes "^d43d1abut alberich詛咒他的戒指";
+				mes "在回到他之前，";
+				mes "嫉妒和死亡會";
+				mes "成為其穿著者。 ^000000";
+				next;
+				mes "^d43d1athe戒指被送給了巨人隊";
+				mes "弗雷亞被送回眾神";
+				mes "巨人自殺了";
+				mes "爭奪Rheingold，";
+				mes "受害者";
+				mes "Alberich的詛咒~^000000";
+				next;
+				mes "[奇諾小貓]";
+				mes "唔...";
+				mes "^333333*咳嗽*^000000";
+				mes "這首老歌";
+				mes "關於戒指";
+				mes "尼貝隆。";
+				next;
+				mes "[奇諾小貓]";
+				mes "^333333*咳嗽*^000000";
+				mes "哈哈...如今我不能唱超過一首歌。但是你喜歡嗎？ ^333333*咳嗽*^000000";
+				close;
+
+			} else if (.@random == 2) {
+				mes "[奇諾小貓]";
+				mes "啊...";
+				mes "我確實想唱歌。你知道，每首歌都有自己的故事。 ^333333*咳嗽*^000000";
+				next;
+				mes "^3355ffkino kitty咳嗽了幾次，用袖子擦了擦嘴。當他調整吉他弦時，您會注意到袖子上的血跡小。然後，他開始唱歌。 ^000000";
+				next;
+				mes "^d43d1abrave 英雄齊格弗里德";
+				mes "擊敗了一個強大的龍";
+				mes "它的鮮血覆蓋了他的皮膚";
+				mes "使其無法穿透";
+				mes "節省一個招標位置";
+				mes "被一片葉子阻塞";
+				mes "來自林登樹。 ^000000";
+				next;
+				mes "^d43d1asiegfried很強大";
+				mes "顯然是無敵的，除了";
+				mes "那些知道他的秘密的人。";
+				mes "最後，他被";
+				mes "長矛扔到他的背上";
+				mes "憤怒開始運動";
+				mes "嫉妒女人。 ^000000";
+				next;
+				mes "[若拉蒂]";
+				mes "幹得好，棒棒噠~！";
+				mes "基諾叔叔是世界上最好的吟遊詩人~！喬蒂喜歡基諾叔叔的唱歌！";
+				next;
+				mes "[奇諾小貓]";
+				mes "謝謝，jorti。";
+				mes "隨時隨地";
+				mes "小公主。";
+				next;
+				mes "[奇諾小貓]";
+				mes "這首歌是關於西格弗里德（Sigfried），他是無敵的，除了背上一個地方。只是唱歌讓我想起了婦女對世界的影響。";
+				close;
+
+			} else {
+				mes "[奇諾小貓]";
+				mes "你想要";
+				mes "聽故事嗎？";
+				mes "嗯，讓我想...";
+				next;
+				mes "[奇諾小貓]";
+				mes "當您從Morocc向西南冒險時，您將到達山堡堡。您是否知道要塞是在一種自然防禦的沙丘上建造的？";
+				next;
+				mes "[奇諾小貓]";
+				mes "當您前往桑達曼（Sandarman）以南時，您會看到帕羅斯（Paros）燈塔。從燈塔東部，您會看到科科莫海灘。海灘以北是帕普奇卡森林。";
+				next;
+				mes "[奇諾小貓]";
+				mes "我不是很無聊，是嗎？我只是想告訴您有關Umbala村莊的信息，Umbala村高於我告訴您的最後一個地方。你去過那裡嗎？";
+				next;
+				mes "[奇諾小貓]";
+				mes "烏姆巴拉本身是一個非常有趣的地方。但是我對Umbala的這棵巨樹真的很感興趣。我聽說這導致了Niffheim ...";
+				next;
+				mes "[奇諾小貓]";
+				mes "我想知道...";
+				mes "那棵樹可以是yggdrasil嗎？我有可能在死者的尼菲姆（Niffheim）與她見面嗎？";
+				close;
+			}
+		
+		case 2:
+			mes "[奇諾小貓]";
+			mes "哦...好吧，我患有慢性疾病，所以我不能大聲說出來。我，嗯，甚至咳嗽一點血。但是除此之外，我完全健康。";
+			next;
+			mes "^3355ffa的苦味外觀瞬間閃爍在基諾·凱蒂（Kino Kitty）的臉上。然後，他調整了吉他弦並開始彈奏，嗡嗡作響。 ^000000";
+			soundeffect "humming.wav",0;
+			close;
+		
+		case 3:
+			mes "[奇諾小貓]";
+			mes "唔...？";
+			mes "我希望世界上的每個人都像你一樣友善和誠實。如果是這樣，就不會有自私的戰鬥。哈哈哈哈哈~";
+			close;
+		}
+
+	} else if (gef_bard_q == 30) {
+		mes "[奇諾小貓]";
+		mes "一切都會";
+		mes "最終很好，對嗎？";
+		mes "我會沒事的，朱蒂會沒事的，她會...哦。";
+		next;
+		mes "[奇諾小貓]";
+		mes "對不起，我只是";
+		mes "向自己喃喃自語。";
+		mes "有什麼";
+		mes "你要我嗎？";
+		next;
+
+		switch(select("講個故事或唱首歌吧~:你的聲音是...:不用了，謝謝，不過我很感激.")) {
+		case 1:
+			set .@random,rand(1,3);
+			if (.@random == 1) {
+				mes "[奇諾小貓]";
+				mes "啊...";
+				mes "我確實想唱歌。你知道，每首歌都有自己的故事。 ^333333*咳嗽*^000000";
+				next;
+				mes "^3355ffkino kitty咳嗽了幾次，用袖子擦了擦嘴。當他調整吉他弦時，您會注意到袖子上的血跡小。然後，他開始唱歌。 ^000000";
+				next;
+				mes "^d43d1abrave 英雄齊格弗里德";
+				mes "擊敗了一個強大的龍";
+				mes "它的鮮血覆蓋了他的皮膚";
+				mes "使其無法穿透";
+				mes "節省一個招標位置";
+				mes "被一片葉子阻塞";
+				mes "來自林登樹。 ^000000";
+				next;
+				mes "^d43d1asiegfried很強大";
+				mes "顯然是無敵的，除了";
+				mes "那些知道他的秘密的人。";
+				mes "最後，他被";
+				mes "長矛扔到他的背上";
+				mes "憤怒開始運動";
+				mes "嫉妒女人。 ^000000";
+				next;
+				mes "[喬蒂]";
+				mes "幹得好，棒棒噠~！";
+				mes "基諾叔叔是世界上最好的吟遊詩人~！喬蒂喜歡基諾叔叔的唱歌！";
+				next;
+				mes "[奇諾小貓]";
+				mes "謝謝，jorti。";
+				mes "隨時隨地";
+				mes "小公主。";
+				next;
+				mes "[奇諾小貓]";
+				mes "這首歌是關於西格弗里德（Sigfried），他是無敵的，除了背上一個地方。只是唱歌讓我想起了婦女對世界的影響。";
+				close;
+
+			} else if (.@random == 2) {
+				mes "[奇諾小貓]";
+				mes "啊...";
+				mes "我確實想唱歌。你知道，每首歌都有自己的故事。 ^333333*咳嗽*^000000";
+				next;
+				mes "^3355ffkino kitty咳嗽了幾次，用袖子擦了擦嘴。當他調整吉他弦時，您會注意到袖子上的血跡小。然後，他開始唱歌。 ^000000";
+				next;
+				mes "^d43d1ai仍然記得感覺";
+				mes "你的肩膀溫暖";
+				mes "當我傾斜時。";
+				mes "你握住我的手";
+				mes "直到最後一刻。 ^000000";
+				next;
+				mes "^d43d1Acrying在內部，";
+				mes "我帶著微笑看見你。";
+				mes "事情永遠不會一樣，";
+				mes "但我記得每一";
+				mes "我們共享的時刻。 ^000000";
+				next;
+				mes "^d43d1ai仍然記得清晰的鈴聲";
+				mes "Prontera教堂的鐘聲";
+				mes "我們在Morocc分享的冰淇淋，";
+				mes "被蝙蝠追趕";
+				mes "在Payon Dungeon中。 ^000000";
+				next;
+				mes "^d43d1一起在";
+				mes "科莫多的煙花";
+				mes "在下面依ugg";
+				mes "輕輕跌倒路蒂";
+				mes "雪花...^000000";
+				next;
+				mes "^d43d1ayour美麗的靈魂";
+				mes "將與奧丁在一起。";
+				mes "一天的時間";
+				mes "黃昏的來了，";
+				mes "一個全新的地方";
+				mes "會在你眼前。 ^000000";
+				next;
+				mes "^d43d1ai會永遠記住你。";
+				mes "忘了我，叫我的名字。";
+				mes "我會聽到你的聲音，看看天空。 ^000000";
+				next;
+				mes "[若拉蒂]";
+				mes "啊，基諾叔叔，這是我媽媽總是唱歌的這首歌嗎？請唱更多歌曲！請~！";
+				next;
+				mes "[奇諾小貓]";
+				mes "你說得對...";
+				mes "她總是曾經唱這首歌... ^333333*咳嗽* ^000000總是有人在等待他們的摯愛回來...";
+				next;
+				mes "[奇諾小貓]";
+				mes "如果您有一個您留下的人，正在等待您的人，請確保您回到那個人。如果不這樣做，您會後悔的。";
+				close;
+
+			} else {
+				mes "[奇諾小貓]";
+				mes "你想要";
+				mes "聽故事嗎？";
+				mes "嗯，讓我想...";
+				next;
+				mes "[奇諾小貓]";
+				mes "當您從Morocc向西南冒險時，您將到達山堡堡。您是否知道要塞是在一種自然防禦的沙丘上建造的？";
+				next;
+				mes "[奇諾小貓]";
+				mes "當您前往桑達曼（Sandarman）以南時，您會看到帕羅斯（Paros）燈塔。從燈塔東部，您會看到科科莫海灘。海灘以北是帕普奇卡森林。";
+				next;
+				mes "[奇諾小貓]";
+				mes "我不是很無聊，是嗎？我只是想告訴您有關Umbala村莊的信息，Umbala村高於我告訴您的最後一個地方。你去過那裡嗎？";
+				next;
+				mes "[奇諾小貓]";
+				mes "烏姆巴拉本身是一個非常有趣的地方。但是我對Umbala的這棵巨樹真的很感興趣。我聽說這導致了Niffheim ...";
+				next;
+				mes "[奇諾小貓]";
+				mes "我想知道...";
+				mes "那棵樹可以是yggdrasil嗎？我有可能在死者的尼菲姆（Niffheim）與她見面嗎？";
+				close;
+			}
+		
+		case 2:
+			mes "[奇諾小貓]";
+			mes "哦...好吧，我患有慢性疾病，所以我不能大聲說出來。我，嗯，甚至咳嗽一點血。但是除此之外，我完全健康。";
+			next;
+			mes "^3355ffa的苦味外觀瞬間閃爍在基諾·凱蒂（Kino Kitty）的臉上。然後，他調整了吉他弦並開始彈奏，嗡嗡作響。 ^000000";
+			soundeffect "humming.wav",0;
+			close;
+		
+		case 3:
+			mes "[奇諾小貓]";
+			mes "唔...？";
+			mes "我希望世界上的每個人都像你一樣友善和誠實。如果是這樣，就不會有自私的戰鬥。哈哈哈哈哈~";
+			close;
+		}
+
+	} else if (gef_bard_q > 12 && gef_bard_q < 16) {
+		mes "[奇諾小貓]";
+		mes "編號必須在等你。儘管如果其他人被迫等待，那麼其他人會感到痛苦，而像我和我這樣的人都不介意，但在可能的情況下，匆忙更有禮貌。";
+		close;
+
+	} else if (gef_bard_q == 12) {
+		mes "[奇諾小貓]";
+		mes "我猜你遇到了斯凱茲先生。";
+		mes "順便說一句，為什麼你的臉上有那個臉？找不到您想要的東西嗎？哈哈，你能告訴我你的左手嗎？";
+		next;
+
+		if(select("給你.:嗯...不要!")==1) {
+			mes "[奇諾小貓]";
+			mes "好吧，當你走了，";
+			mes "我記得這首歌的原始歌詞。我想他們真的很重要。";
+			next;
+			mes "[奇諾小貓]";
+			mes "在這裡，讓我給您一封信，上面寫著Errende的歌詞。我還應該給你我的印章，以便errende知道是我。你不介意，對嗎？";
+			next;
+
+			switch(select("是的，我介意!:不，我不介意.")) {
+
+			case 1:
+				mes "[奇諾小貓]";
+				mes "啊，對。";
+				mes "您已經有一個由Errende標記的印章。哦，好吧，如果您不想要它，我該怎麼辦？";
+				set gef_bard_q,13;
+				close;
+			
+			case 2:
+				mes "[奇諾小貓]";
+				mes "現在，讓我們看看...";
+				mes "應該怎麼做？";
+				mes "... 露露 l U ...";
+				mes "……啦啦啦……";
+				next;
+				mes "^d43d1aat，我墜入愛河。";
+				mes "兩個時，你給我你的微笑。";
+				mes "三分之一，我喜歡你的觸摸。";
+				mes "四點，一個溫柔的吻。";
+				mes "五歲時，我們改變了主意。";
+				mes "花瓣在空中散射。 ^000000";
+				next;
+				mes "^d43d1aat六，我墜入愛河~";
+				mes "七點，你墜入愛河~";
+				mes "八點時，我們倆都戀愛了。";
+				mes "九點，你知道我的心。";
+				mes "十點，我知道你";
+				mes "一直在等我。 ^000000";
+				next;
+				mes "^d43d1aat十一，珍貴";
+				mes "耳語：“你會嫁給我嗎？”";
+				mes "十二歲，我們的兩個心";
+				mes "是一個。 12花瓣，我們的";
+				mes "愛終於開花。 ^000000";
+				next;
+				specialeffect2 EF_POISONREACT2;
+				mes "^3355ffter這首歌，基諾對你微笑。您的手腕上會感到劇烈的疼痛。在白銀新月形的位置，您會看到一個小的黑色十字。 ^000000";
+				next;
+				mes "[奇諾小貓]";
+				mes "那麼，你喜歡它呢？好吧，我敢肯定，Risrende肯定會喜歡它。哈哈哈哈哈~ ^333333*咳嗽* ^000000";
+				next;
+				mes "[奇諾小貓]";
+				mes "我要道歉。";
+				mes "我並不是要讓你等待，但我只是想起了這首歌的舊歌詞。現在，趕緊要恢復，我確定他在等。";
+				next;
+				mes "^3355ffkino kitty遞給您一封標記為“親愛的edrende”的信";
+				mes "在前面。 ^000000";
+				set gef_bard_q,14;
+				close;
+			}
+		
+		} else {
+			mes "[奇諾小貓]";
+			mes "嗯...？";
+			mes "沒有理由害怕。";
+			mes "我的意思是，我不會咬人或任何東西。";
+			close;
+		}
+
+	} else if (gef_bard_q == 10) {
+		mes "[奇諾小貓]";
+		mes "你還沒有離開嗎？";
+		mes "我敢肯定，您可以在Juno的一家書店中找到歌詞。";
+		next;
+		mes "[奇諾小貓]";
+		mes "好吧，我敢肯定，Ristrende對書店有了更多的了解，因此他可以告訴您在Juno的位置。你為什麼不問抹黑？";
+		next;
+		mes "[奇諾小貓]";
+		mes "如果您不介意，請再次來聽這首可憐的吟遊詩人的歌。我會為你準備一首歌。";
+		next;
+		mes "[奇諾小貓]";
+		mes "不用擔心我的健康。我是一個內心的吟遊詩人，我不禁為聽眾唱歌。";
+		next;
+		mes "[奇諾小貓]";
+		mes "另外，我要感謝您的幫助。他可能有點抱怨，但他是一個好人。";
+		close;
+
+	} else if (gef_bard_q == 11) {
+		mes "[奇諾小貓]";
+		mes "銀封...？";
+		mes "好吧，歡迎來到流浪者俱樂部。我必須說，銀月適合您。";
+		next;
+		mes "[奇諾小貓]";
+		mes "如果您有那個印章，Sketzi先生將允許您閱讀他的書中充滿北歐歌曲的書。";
+		close;
+
+	} else if (gef_bard_q > 19 && gef_bard_q < 28) {
+		mes "[奇諾小貓]";
+		mes "什麼業務";
+		mes "你和我在一起嗎";
+		mes "我的朋友？";
+		next;
+		if (gef_bard_q == 24) {
+			mes "^3355ffyou將糖果送給了哭泣的小女孩，並將問題與Kino Kitty聯繫起來。 ^000000";
+			next;
+			mes "[奇諾小貓]";
+			mes "唔...";
+			mes "我侮辱了Risrende不喜歡我寫的單詞“我墜入愛河”。但是，我想他是一個浪漫的內心。";
+			next;
+			mes "[" + @name$ + "]";
+			mes "所以...";
+			mes "你知道嗎";
+			mes "原始單詞";
+			mes "為歌曲？";
+			next;
+			mes "[奇諾小貓]";
+			mes "原始歌詞太可怕了。我腦海中沒有足夠的空間記得如此浪漫的胡說八道。 ^333333*哭泣*...^000000";
+			next;
+			mes "[奇諾小貓]";
+			mes "浪漫是為愚蠢的夢想家！";
+			mes "我拒絕唱歌，甚至還記得這樣的Vapid歌詞！";
+			next;
+			mes "[若拉蒂]";
+			mes "U-奇諾叔叔";
+			mes "你在嚇我。";
+			mes "請不要大喊！";
+			mes "它讓我想要";
+			mes "哭...";
+			next;
+			mes "[奇諾小貓]";
+			mes "哦...";
+			mes "對不起，公主。";
+			mes "它不會再次發生。";
+			mes "您的Unclde Kino會";
+			mes "嘗試做好";
+			mes "今後。";
+			next;
+			mes "[奇諾小貓]";
+			mes "*嘆...*";
+			mes "好吧，聽著。";
+			next;
+			mes "[奇諾小貓]";
+			mes "您需要一本舊書的Edda歌詞，以便歌曲的原始單詞。所有新書不再包含原始版本。";
+			next;
+			mes "[奇諾小貓]";
+			mes "我想知道...";
+			mes "Ristrende是怎麼知道原始歌詞的？無論如何，我對此感到抱歉。我想我有點疲倦。";
+			next;
+			mes "[奇諾小貓]";
+			mes "你知道，也許你應該去朱諾。書街上有一家小書店，您可能可以在那家商店中找到這首歌。";
+			next;
+			mes "[奇諾小貓]";
+			mes "^333333^333333*咳嗽咳嗽*^000000^000000";
+			mes "我為什麼要受苦？我作為地球上吟遊詩人的最後幾天很快即將來臨？我感到很可悲...";
+			set gef_bard_q,10;
+			close;
+
+		} else {
+            switch(select("講個故事吧.:唱一首歌.:沒有.")) {
+
+			case 1:
+				mes "[奇諾小貓]";
+				mes "一個故事？嗯...";
+				mes "我的喉嚨很痛，";
+				mes "但是如果你聽，";
+				mes "我會盡力而為";
+				mes "講一個故事。";
+				next;
+				mes "[奇諾小貓]";
+				mes "你知道奧丁的兒子鮑德爾如何去世嗎？有一個故事，涉及他的痴迷母親";
+				mes "還有邪惡的上帝，洛基。";
+				next;
+				mes "[奇諾小貓]";
+				mes "有一天晚上，鮑德爾（Baldur）做了一場噩夢，他被扔進了地獄坑中。聽到此消息後，鮑德爾的母親弗里格（Frigg）驚慌失措。";
+				next;
+				mes "[奇諾小貓]";
+				mes "為了防止悲劇降臨她的兒子，她製作了地球上的每個物體，同意他們不會傷害鮑德爾的誓言。";
+				next;
+				mes "[奇諾小貓]";
+				mes "^333333*咳嗽咳嗽*^000000，它們都聚在一起^333333*wheeeeze*^000000慶祝活動 - ^3333333^3333333*";
+				next;
+				mes "[喬蒂]";
+				mes "基諾叔叔...？";
+				mes "你還好嗎？ ....？";
+				next;
+				mes "[奇諾小貓]";
+				mes "...哈哈...";
+				mes "...哈哈...";
+				mes "對不起，但我認為我不會說更長的時間。";
+				close;
+			
+			case 2:
+				mes "[奇諾小貓]";
+				mes "抱歉，但目前我不想唱歌。我希望你明白。我想為jorti演唱我一生的最後一首歌...";
+				close;
+			
+			case 3:
+				mes "[奇諾小貓]";
+				mes "你沒有";
+				mes "和我一起生意嗎？";
+				mes "真丟臉。";
+				close;
+			}
+		}
+
+	} else {
+		mes "^d43d1aeven在沙質風中，";
+		mes "即使在傾盆大雨中，";
+		mes "即使在下雪中，";
+		mes "我知道是你~^000000";
+		next;
+		mes "[神秘的吟遊詩人]";
+		mes "...";
+		next;
+		mes "[神秘的吟遊詩人]";
+		mes "...";
+		mes "......";
+		next;
+		mes "[神秘的吟遊詩人]";
+		mes "我很抱歉，";
+		mes "^333333*咳嗽*^000000，但這是";
+		mes "私人表演";
+		mes "我的小";
+		mes "公主。";
+		next;
+
+        if(select("嗯，那是情歌嗎?:抱歉打擾你.")==1) {
+			mes "[神秘的吟遊詩人]";
+			mes "一個...";
+			mes "情歌？ ！";
+			next;
+			mes "[神秘的吟遊詩人]";
+			mes "情歌是為那些從來不認識真正的愛或從未傷心的傻瓜。快樂的歌曲很好，但我拒絕唱歌！";
+			next;
+			mes "[喬蒂]";
+			mes "哇~！";
+			mes "基諾叔叔，";
+			mes "我很害怕！";
+			mes "我想看看";
+			mes "我媽媽...！";
+			mes "*哭泣*";
+			next;
+			mes "[神秘的吟遊詩人]";
+			mes "在那裡，";
+			mes "公主。不要哭。";
+			mes "一切都還好。";
+			next;
+			mes "[神秘的吟遊詩人]";
+			if (BaseClass == Job_Swordman) {
+				mes "沒有理由害怕。有劍的恐怖人只在怪物上使用它們，好嗎？";
+			} else if (BaseClass == Job_Acolyte) {
+				mes "您不需要害怕，那個人是上帝的僕人，好嗎？";
+			} else if (Class == Job_Thief || Class == Job_Rogue) {
+				mes "沒有理由害怕這種步槍夫，您的基諾叔叔在這裡，好嗎？";
+			} else if (BaseClass == Job_Assassin) {
+				mes "沒有理由害怕。我知道那個人看起來很恐怖，但是你是一個好女孩，所以你會沒事的。";
+			} else if (BaseClass == Job_Blacksmith) {
+				mes "親愛的，沒有理由害怕。這只是一個鐵匠。";
+			} else {
+				mes "沒有理由害怕。看...？那個人不會傷害你。";
+			}
+			next;
+			mes "[" + @name$ + "]";
+			mes "嗯...";
+			mes "^333333（不是小女孩";
+			mes "爆發恐懼...？ ）^000000";
+			close;
+		
+		} else {
+			if (gef_bard_q == 2) {
+				mes "[神秘的吟遊詩人]";
+				mes "你真是個年輕人。我會記得你的名字。如果您還記得我的話，我會很感激。";
+				next;
+				mes "[神秘的吟遊詩人]";
+				mes "我被稱為基諾·凱蒂（Kino Kitty）。我是一個徘徊的詩人，希望重新發現願望和夢想。";
+				next;
+				mes "[奇諾小貓]";
+				mes "接下來我們見面時，我會告訴您我聽到的和經歷了什麼。也就是說，我願意與您共度時光。";
+				set gef_bard_q,22;
+				close;
+
+			} else if (gef_bard_q == 3) {
+				mes "[神秘的吟遊詩人]";
+				mes "你真是個年輕人。我會記得你的名字。如果您還記得我的話，我會很感激。";
+				next;
+				mes "[神秘的吟遊詩人]";
+				mes "我被稱為基諾·凱蒂（Kino Kitty）。我是一個徘徊的詩人，希望重新發現願望和夢想。";
+				next;
+				mes "[奇諾小貓]";
+				mes "接下來我們見面時，我會告訴您我聽到的和經歷了什麼。也就是說，我願意與您共度時光。";
+				set gef_bard_q,23;
+				close;
+
+			} else if (gef_bard_q == 4) {
+				mes "[神秘的吟遊詩人]";
+				mes "哦，你最令人欽佩。您確實尊重吟遊詩人，不是嗎？";
+				next;
+				mes "[神秘的吟遊詩人]";
+				mes "現在我想了，您是在尋找任何東西，還是您想和我說話的原因？";
+				next;
+
+                if(select("我在找 Kino Kitty...:沒什麼，真的.")==1) {
+					mes "[奇諾小貓]";
+					mes "你怎麼樣";
+					mes "知道我的名字嗎？";
+					mes "啊，我很受寵若驚";
+					mes "我的聲譽";
+					mes "我先於我。";
+					next;
+					mes "^3355ffyou給哭泣的女孩提供一些糖果，並與您的故事有關歌詞的歌詞'at on，我墜入愛河。 '^000000";
+					next;
+					mes "[奇諾小貓]";
+					mes "唔...";
+					mes "我侮辱了Risrende不喜歡我寫的單詞“我墜入愛河”。但是，我想他是一個浪漫的內心。";
+					next;
+					mes "[" + @name$ + "]";
+					mes "所以...";
+					mes "你知道嗎";
+					mes "原始單詞";
+					mes "為歌曲？";
+					next;
+					mes "[奇諾小貓]";
+					mes "原始歌詞太可怕了。我腦海中沒有足夠的空間記得如此浪漫的胡說八道。 ^333333*哭泣*...^000000";
+					next;
+					mes "[奇諾小貓]";
+					mes "浪漫是為愚蠢的夢想家！我拒絕唱歌，甚至還記得這樣的Vapid歌詞！";
+					next;
+					mes "[喬蒂]";
+					mes "U-奇諾叔叔";
+					mes "你在嚇我。";
+					mes "請不要大喊！";
+					mes "它讓我想要";
+					mes "哭...";
+					next;
+					mes "[奇諾小貓]";
+					mes "哦...";
+					mes "對不起，公主。它不會再次發生。從現在開始，您的Unclde Kino將盡力保持良好。";
+					next;
+					mes "[奇諾小貓]";
+					mes "*嘆...*";
+					mes "好吧，聽著。";
+					next;
+					mes "[奇諾小貓]";
+					mes "您需要一本舊書的Edda歌詞，以便歌曲的原始單詞。所有新書不再包含原始版本。";
+					next;
+					mes "[奇諾小貓]";
+					mes "我想知道...";
+					mes "Ristrende是怎麼知道原始歌詞的？無論如何，我對此感到抱歉。我以為我有點疲倦。";
+					next;
+					mes "[奇諾小貓]";
+					mes "你知道，也許你應該去朱諾。書街上有一家小書店，您可能可以在那家商店中找到這首歌。";
+					next;
+					mes "[奇諾小貓]";
+					mes "^333333^333333*咳嗽咳嗽*^000000^000000";
+					mes "我為什麼要受苦？我作為地球上吟遊詩人的最後幾天很快即將來臨？我感到很可悲...";
+					set gef_bard_q,10;
+					close;
+
+				} else {
+					mes "[神秘的吟遊詩人]";
+					mes "真的現在了嗎？";
+					mes "那很奇怪。";
+					mes "您的冒險家一直是一種冒險，不是嗎？我的意思是，這就是這個詞的定義。";
+					close;
+				}
+
+			} else {
+				if (Sex == SEX_MALE) {
+					mes "[奇諾小貓]";
+					mes "你真是個好年輕人。我會記得你的名字。如果您還記得我的話，我會很感激。";
+					next;
+					mes "[神秘的吟遊詩人]";
+					mes "我被稱為基諾·凱蒂（Kino Kitty）。我是一個徘徊的詩人，希望重新發現願望和夢想。";
+					next;
+					mes "[奇諾小貓]";
+					mes "接下來我們見面時，我會告訴您我聽到的和經歷了什麼。也就是說，我願意與您共度時光。";
+					set gef_bard_q,20;
+					close;
+
+				} else {
+					mes "[神秘的吟遊詩人]";
+					mes "啊，遇到像你這樣的貴族女人是一種榮幸。請假，我會給你我的名字。";
+					next;
+					mes "[神秘的吟遊詩人]";
+					mes "我的夫人，公平的紫藤，其美麗與女神弗雷亞（Freya）的美麗相媲美，讓我介紹自己是徘徊地球的可憐詩人，基諾·凱蒂（Kino Kitty）。我希望你還記得我。";
+					set gef_bard_q,20;
+					close;
+				}
+			}
+		}
+	}
+}
+
+morocc,132,111,3	script	Little Girl#Jorti	703,{
+	if (gef_bard_q > 9 && gef_bard_q < 30) {
+		mes "[若拉蒂]";
+		mes "喬爾蒂（Jorti）試圖不再哭泣，因為它傷害了基諾叔叔，然後他咳嗽了更多的血。";
+		next;
+		mes "[若拉蒂]";
+		mes "我非常想念我的媽媽，但我擔心，這也使Kino叔叔也很擔心。";
+		next;
+		mes "[若拉蒂]";
+		mes "我看不到我的媽媽和爸爸已經不在了，我也不想讓喬蒂叔叔離開。";
+		next;
+		mes "[喬蒂]";
+		mes "嗯，我不記得我的爸爸，但是媽媽住在遙遠的天空附近。這就是基諾叔叔所說的。";
+		next;
+		mes "[喬蒂]";
+		mes "U-Uncle Kino說我們還不能去見她，因為還沒有飛船...";
+		close;
+
+	} else if (gef_bard_q == 30) {
+		mes "[喬蒂]";
+		mes "啦啦啦...";
+		mes "啦啦啦...";
+		mes "jorti不再哭了！";
+		mes "喬爾蒂（Jorti）將盡可能地欣賞基諾叔叔的歌曲和故事！";
+		next;
+		mes "[喬蒂]";
+		mes "歌曲叔叔唱歌是我媽媽曾經唱歌的歌曲。她不在這裡，但也許我們有一天可以拜訪她！";
+		next;
+		mes "[喬蒂]";
+		mes "嘿...手上的閃亮的黑色十字架意味著您是基諾叔叔的朋友。這意味著，你也是我的朋友！";
+		close;
+
+	} else if (gef_bard_q > 30) {
+		mes "[若拉蒂]";
+		mes "喬爾蒂（Jorti）試圖不再哭泣，因為它傷害了基諾叔叔，然後他咳嗽了更多的血。";
+		mes "我非常想念我的媽媽，但是當我擔心時，這也使Kino叔叔也很擔心。";
+		next;
+		mes "[喬蒂]";
+		mes "我媽媽和爸爸不再在這裡，我也不想讓喬蒂叔叔離開。";
+		next;
+		mes "[喬蒂]";
+		mes "嗯，我不記得我的爸爸，但是媽媽住在遙遠的天空附近。這就是基諾叔叔所說的。";
+		next;
+		mes "[喬蒂]";
+		mes "U-Uncle Kino說我們還不能去見她，因為還沒有飛船...";
+		close;
+
+	} else {
+		mes "[神秘的吟遊詩人]";
+		mes "即使在沙質風中，";
+		mes "即使在傾盆大雨中，";
+		mes "即使在下雪中，";
+		mes "我知道是";
+		mes "…………";
+		next;
+		mes "[若拉蒂]";
+		mes "叔叔...？";
+		mes "你還好嗎？";
+		next;
+		mes "[神秘的吟遊詩人]";
+		mes "嗯...";
+		mes "對不起，這是一場私人表演。這首歌僅用於我的小jorti。";
+		close;
+	}
+}
+
+yuno_in01,172,100,3	script	Old Man#bq1	712,{
+	if (gef_bard_q > 11 && gef_bard_q < 20) {
+		mes "[束縛斯凱茲]";
+		mes "好吧，您找到了想要的東西嗎？儘管我們只有古老的塵土飛揚的書，但我希望您能來參觀。請給出我對您的吟遊詩人的問候。";
+		close;
+
+	} else if (gef_bard_q == 30) {
+		mes "[束縛斯凱茲]";
+		mes "有趣的...";
+		mes "您的手上有一個黑色的十字密封。小貓還在嗎？我很高興看到他還活著。如果您是他的朋友，那麼歡迎您在這裡。";
+		close;
+
+	} else if (gef_bard_q == 31) {
+		mes "[束縛斯凱茲]";
+		mes "好吧，好吧。你又來了。那麼，您今天要尋找什麼樣的書？當然，我們所擁有的都是古老的，塵土飛揚的東西，裡面充滿了Eddas。哈哈哈~";
+		close;
+
+	} else if (gef_bard_q == 11) {
+		mes "[束縛斯凱茲]";
+		mes "歡迎。";
+		mes "您必須尋找一些特別的東西。好吧，我們幾乎擁有每首北歐詩或“埃達”。這是您唯一可以找到這些舊歌的地方。";
+		next;
+		mes "[束縛斯凱茲]";
+		mes "但是，我不能向任何人展示這些脆弱的書。為了保存，我只能向偏好的客戶展示這些作品。";
+		next;
+
+        if(select("把你的左手給他看.:把你的右手給他看.")==1) {
+			mes "[束縛斯凱茲]";
+			mes "啊~！您必須是高級吟遊詩人的朋友！我明白了，我明白了。您必須是Minty Erdende的朋友。";
+			next;
+			mes "[束縛斯凱茲]";
+			mes "那麼，您要尋找什麼？好吧，我想我真的不需要問這個。哈哈哈~";
+			next;
+			mes "[束縛斯凱茲]";
+			mes "請...";
+			mes "慢慢來。";
+			mes "我希望你能找到";
+			mes "你什麼";
+			mes "尋找。";
+			set gef_bard_q,12;
+			close;
+
+		} else {
+			mes "[束縛斯凱茲]";
+			mes "讓我們看看...好吧。";
+			mes "好吧，您的心跳比平常快一些。您可能想研究一下。您知道，為了您的健康嗎？";
+			next;
+			mes "[束縛斯凱茲]";
+			mes "您不是在尋找任何與醫療或健康有關的書籍，是嗎？對不起，但是我們沒有任何一個。";
+			close;
+		}
+	
+	} else {
+		mes "[束縛斯凱茲]";
+		mes "歡迎。";
+		mes "您必須尋找特殊和罕見的東西。但是我們只攜帶一本書。";
+		next;
+		mes "[束縛斯凱茲]";
+		mes "如果您正在尋找怪物信息，為什麼不查看朱諾的Pronrera圖書館或怪物博物館？";
+		close;
+	}
+}
+
+yuno_in01,163,101,0	script	Old Book#bq	111,{
+	set @name$,strcharinfo(0);
+	if ((gef_bard_q > 11) && (gef_bard_q < 14)) {
+		if (!rand(5)) {
+			mes "^3355ffyou打開了這本書。頁面上有清晰的脆弱性，字母褪色且幾乎是可讀的。您甚至無法識別作者的名字。 ^000000";
+			next;
+			mes "[EDDAS的收藏]";
+			mes "這是一首情歌。每個人在一生中至少有一次單相思。";
+			next;
+			mes "[EDDAS的收藏]";
+			mes "一方面，我墜入愛河。";
+			mes "兩個時，你給我你的微笑。";
+			mes "三分之一，我喜歡你的觸摸。";
+			mes "四歲時，一個溫柔的吻...";
+			next;
+			mes "[EDDAS的收藏]";
+			mes "五歲時，我們改變了主意。";
+			mes "花瓣在空中散射。";
+			mes "六點，我墜入愛河~";
+			mes "七點鐘，你墜入愛河...";
+			next;
+			mes "[" + @name$ + "]";
+			mes "我認為這就是...！";
+			mes "我最好寫下來。";
+			next;
+			mes "[EDDAS的收藏]";
+			mes "八點時，我們倆都戀愛了。";
+			mes "九點，你知道我的心。";
+			mes "十點，我知道你";
+			mes "一直在等我。";
+			next;
+			mes "[EDDAS的收藏]";
+			mes "十一歲，一個珍貴";
+			mes "耳語：“你會嫁給我嗎？”";
+			mes "十二歲，我們的兩個心";
+			mes "是一個。 12花瓣，我們的";
+			mes "愛終於開花。";
+			next;
+			mes "^3355ffyou將最後一行複制，然後將其放在口袋內的音符中。";
+			set gef_bard_q,15;
+			close;
+
+		} else {
+			mes "[" + @name$ + "]";
+			mes "*嘆*我幾乎不能讀這本書。也許我應該嘗試翻閱另一個。";
+			close;
+		}
+
+	} else {
+		mes "[束縛斯凱茲]";
+		mes "很抱歉，那本書太脆弱了，無法處理。只有特殊客戶才能仔細閱讀這些書。";
+		close;
+	}
+}
+
+
+yuno_in01,173,96,0	script	Luke's Songs Vol.1	111,{
+	if (gef_bard_q > 11) {
+		mes "[前言]";
+		mes "我，伊茲盧德（Izlude）的盧克（Luke），在我那個時代最偉大的吟遊詩人，留下了我的基本歌曲的歌詞。";
+		mes " ";
+		mes "內容";
+		next;
+
+		switch(select("婚禮歌曲:人生是一座水磨坊:我們")) {
+
+		case 1:
+			mes "[婚禮歌]";
+			mes "Prontera庇護所";
+			mes "都是所有人前進的地方";
+			mes "慶祝你的聯盟";
+			mes "在你最快樂的婚禮上。";
+			next;
+			mes "[婚禮歌]";
+			mes "我很高興我伸出我的琵琶";
+			mes "那是我的交易";
+			mes "帶來歡快的歌";
+			mes "參加您的婚禮遊行。";
+			next;
+			mes "[婚禮歌]";
+			mes "為我的歌付我的歌";
+			mes "不是Zeny或Gold，";
+			mes "但是";
+			mes "新娘，如果我可能";
+			mes "如此大膽。";
+			next;
+			mes "[婚禮歌]";
+			mes "閃閃發光的眼睛";
+			mes "美麗的午後";
+			mes "那些有光澤的鎖";
+			mes "那家公司柔軟 -";
+			next;
+			mes "[婚禮歌]";
+			mes "原諒我，新郎！";
+			mes "但是她真漂亮！";
+			mes "願你的工會得到祝福！";
+			mes "嗯，願你的妻子盡職盡責。";
+			next;
+			mes "[盧克筆記]";
+			mes "這首歌是關於被邀請參加婚禮的某個吟遊詩人，無法抵抗新娘的美麗。他最終演唱了一首誘惑之歌。";
+			next;
+			mes "[盧克筆記]";
+			mes "歌詞當然是虛構的，絕不是軼事。";
+			close;
+		
+		case 2:
+			mes "[生命是水廠]";
+			mes "我追趕成名。";
+			mes "它躲過了我。";
+			mes "我追求幸福";
+			mes "但是從來沒有抓住它。";
+			next;
+			mes "[生命是水廠]";
+			mes "但是明天仍然會";
+			mes "在那裡，我敢肯定。";
+			mes "像水廠一樣";
+			mes "在Al de Baran";
+			mes "變成";
+			mes "生活仍在繼續。";
+			next;
+			mes "[生命是水廠]";
+			mes "開心點！生活仍在繼續。";
+			mes "肯定和水一樣";
+			mes "米爾轉，明天";
+			mes "會來的。";
+			next;
+			mes "[盧克筆記]";
+			mes "這首歌是";
+			mes "給予安慰";
+			mes "給絕望的人。";
+			close;
+		
+		case 3:
+			mes "[我們]";
+			mes "一個好吟遊詩人唱歌";
+			mes "取悅他的聽眾。";
+			mes "所以不要期待一首悲傷的歌";
+			mes "這加深了你的痛苦。";
+			next;
+			mes "[我們]";
+			mes "好舞者舞";
+			mes "取悅她的聽眾。";
+			mes "我們可以一起跳舞嗎？";
+			mes "只是握住我的手。";
+			mes "啦啦啦啦啦啦";
+			next;
+			mes "[我們]";
+			mes "湯納：“那你為什麼有時會使不和諧呢？！”";
+			mes "巴德：“好吧...沒人是完美的！";
+			next;
+			mes "[盧克筆記]";
+			mes "這首歌很高興在節日期間演唱，因為故意的不和諧鼓勵觀眾參加。除此之外，這首歌毫無意義。";
+			close;
+		}
+
+	} else {
+		mes "[束縛斯凱茲]";
+		mes "很抱歉，那本書不可用於公開展覽。";
+		close;
+	}
+}
+
+yuno_in01,173,94,0	script	Battle Songs	111,{
+	if (gef_bard_q > 11) {
+		mes "[戰場上的鼓聲]";
+		mes "這首歌的寫作是為了使戰場上的士兵們勇氣。";
+		next;
+		mes "[戰場上的鼓聲]";
+		mes "疾馳的聲音";
+		mes "在遠處迴聲。";
+		mes "一片朦朧的灰塵";
+		next;
+		mes "[戰場上的鼓聲]";
+		mes "充滿夕陽。";
+		mes "數千隻眼睛睜開";
+		mes "城堡上的火把";
+		mes "像成千上萬的ifrits一樣耀斑。";
+		next;
+		mes "[戰場上的鼓聲]";
+		mes "聽到我心的th動，";
+		mes "我的靜脈流動的血液。";
+		mes "感覺到我的盔甲的沉重。";
+		mes "敵人出現在我們面前。";
+		next;
+		mes "[戰場上的鼓聲]";
+		mes "用力擊打鼓！";
+		mes "勇氣，士兵，前進！";
+		mes "大聲喊叫，士兵，大聲！";
+		mes "今天永遠不會回來！";
+		next;
+		mes "[戰場上的鼓聲]";
+		mes "震驚了天空";
+		mes "挑釁地球，";
+		mes "我再次感到心跳。";
+		mes "將號角吹到";
+		mes "搖擺要塞。";
+		mes "今天永遠不會回來！";
+		close;
+
+	} else {
+		mes "[束縛斯凱茲]";
+		mes "很抱歉，那本書不可用於公開展覽。";
+		close;
+	}
+}
+
+
+yuno_in01,173,92,0	script	Apple of Idun	111,{
+	if (gef_bard_q > 11) {
+		mes "[iDun的蘋果]";
+		mes "這首歌讚揚女神idun的金蘋果。這些是上帝的力量的根源，因為它阻止了他們變老。";
+		next;
+		mes "[iDun的蘋果]";
+		mes "每個上帝永遠不會變老";
+		mes "因為美麗";
+		mes "女神，idun。";
+		mes "青年蘋果的守護者";
+		mes "永生女神。";
+		next;
+		mes "[iDun的蘋果]";
+		mes "每個上帝永遠不會變老。";
+		mes "布拉吉（Bragi）的妻子idun，";
+		mes "奧丁的女兒idun~";
+		mes "她保留的蘋果";
+		mes "在她的籃子裡。";
+		next;
+		mes "[iDun的蘋果]";
+		mes "沒有idun，";
+		mes "每個神都會";
+		mes "屈服於年齡。";
+		next;
+		mes "[iDun的蘋果]";
+		mes "甚至雷神，最強大的神，";
+		mes "會變得虛弱，Megingjard會";
+		mes "從他的腰上滑落";
+		mes "永遠不會再飛。";
+		next;
+		mes "[iDun的蘋果]";
+		mes "沒有idun，";
+		mes "每個神都會";
+		mes "屈服於年齡。";
+		mes "Loki曾經很粗心，";
+		mes "使她迷失了眾神。";
+		mes "洛基被迫讓她回來。";
+		next;
+		mes "[iDun的蘋果]";
+		mes "我的女神站著";
+		mes "在阿斯加德領域";
+		mes "她從天上遞給我果實。";
+		mes "你們將被每個上帝所愛...";
+		mes "你會有福";
+		mes "每個上帝...";
+		next;
+		mes "[iDun的蘋果]";
+		mes "如果您分享";
+		mes "我的青年蘋果";
+		mes "甚至一口";
+		mes "這個可憐的詩人。";
+		next;
+		mes "[iDun的蘋果]";
+		mes "你們將被每個上帝所愛...";
+		mes "你會有福";
+		mes "每個上帝...";
+		close;
+
+	} else {
+		mes "[束縛斯凱茲]";
+		mes "很抱歉，那本書不可用於公開展覽。";
+		close;
+	}
+}
+
+payon,181,172,3	script	Bard#4	51,{
+	set @name$,strcharinfo(0);
+	if (gef_bard_q == 2 || gef_bard_q == 22) {
+		mes "[岡瑟雙重和諧]";
+		mes "哈哈哈~！";
+		mes "聽著，聽！";
+		next;
+		mes "[岡瑟雙重和諧]";
+		mes "我的一位朋友告訴我這首歌，講述了這位住在佩恩（Payon）的商人，每個人都喜歡這首歌，尤其是因為我在唱歌，你知道...";
+		next;
+		mes "[" + @name$ + "]";
+		mes "打擾一下。";
+		mes "你是...";
+		mes "Gunther DoubleHarmony？";
+		next;
+		mes "[岡瑟雙重和諧]";
+		mes "...商人是如此貧窮，他甚至沒有 - 嗯？哦，是的，對。這就是我。這是怎麼回事？";
+		next;
+		mes "^3355ffyou解釋您已經來找他，尋找丟失的歌詞。 ^000000";
+		next;
+		mes "[岡瑟雙重和諧]";
+		mes "啊，我明白了。";
+		mes "現在，什麼是";
+		mes "這首歌的名字？";
+		next;
+		input .@inputstr$;
+		if (.@inputstr$ == "At One, I Fall in Love") {
+			mes "[岡瑟雙重和諧]";
+			mes "啊~那首歌...？";
+			mes "順便問一下，誰問你";
+			mes "了解這首歌？";
+			next;
+			input .@inputstr$;
+			if (.@inputstr$ == "Minty Errende") {
+				mes "[岡瑟雙重和諧]";
+				mes "是的，那是我的朋友！ minty strende！我們曾經彼此之間如此近，所以我為我的朋友Minty Erdende寫下了這首歌的每個單詞，所以請轉身！";
+				next;
+				mes "^3355fffgunther瘋狂地塗在您的背上。 ^000000";
+				next;
+				mes "[岡瑟雙重和諧]";
+				mes "你去！現在，您可以回到Minty Erdende，向他展示您的背，他會看到我寫的內容，然後記住歌詞！";
+				if (gef_bard_q == 2) set gef_bard_q,3;
+				if (gef_bard_q == 22) set gef_bard_q,23;
+				close;
+
+			} else {
+				mes "[岡瑟雙重和諧]";
+				mes "不，不，我不認識這個名字的人，所以您最好去檢查一個人的名字再次問，好嗎？";
+				close;
+			}
+
+		} else {
+			mes "[岡瑟雙重和諧]";
+			mes "不，不，不，我不知道那個標題的歌，它甚至可能都不存在，所以您應該去再次檢查歌曲的名稱並告訴我，好嗎？";
+			close;
+		}
+
+	} else if (gef_bard_q == 6 || gef_bard_q == 26) {
+		mes "[岡瑟雙重和諧]";
+		mes "你又回來了！";
+		mes "嗯，我在你的背上寫的那首歌？堅持下去，請讓我想讓我 - 啊，對，我明白了！";
+		next;
+		mes "[岡瑟雙重和諧]";
+		mes "我寫下的話是由我的偶像，我的英雄凱蒂先生寫的！那首歌是 ^228b22kino kitty ^000000的藝術！";
+		next;
+		mes "[岡瑟雙重和諧]";
+		mes "我希望有一天我能和他一樣偉大！";
+		close;
+
+	} else {
+		mes "[岡瑟雙重和諧]";
+		mes "哈哈哈~！";
+		mes "聽著，聽！";
+		next;
+		mes "[岡瑟雙重和諧]";
+		mes "我的一位朋友告訴我這首歌，講述了這位住在佩恩（Payon）的商人，每個人都喜歡這首歌，尤其是因為我在唱歌，你知道...";
+		next;
+		mes "[岡瑟雙重和諧]";
+		mes "哦，對...！";
+		mes "你想听嗎";
+		mes "我的歌還是故事？";
+		mes "我知道你想！";
+		mes "對，對嗎？";
+		next;
+
+        if(select("稍微表現出興趣.:無視他.")==1) {
+			mes "[岡瑟雙重和諧]";
+			mes "是的~！我就知道！";
+			mes "所以你想听";
+			mes "一首歌還是故事？";
+			next;
+            switch(select("一首歌:一個故事:改天再說")) {
+			case 1:
+				switch(rand(1,3)) {
+				case 1:
+					mes "[岡瑟雙重和諧]";
+					mes "岡瑟唱歌！";
+					mes "岡瑟舞！";
+					mes "這首歌的瓷磚是~";
+					mes "“有錢的金先生！”";
+					next;
+					mes "^228B22 Payon的Merchant";
+					mes "所以poooooooor~";
+					mes "盔甲沒有錢";
+					mes "沒有錢。";
+					next;
+					mes "^228b22已售出";
+					mes "棉襯衫";
+					mes "從他的背上";
+					mes "他不會遺憾的是。 ^000000";
+					next;
+					mes "^228b22first他只賣了紅鍋";
+					mes "起初，他只賣紅鍋。";
+					mes "然後他搬到胡蘿蔔，哇~";
+					mes "他負擔得起新的盔甲";
+					mes "甚至穿它，";
+					mes "呼呼~^000000";
+					next;
+					mes "^228B22，但有一天，他被騙了";
+					mes "被一個邪惡的行會騙了。";
+					mes "再次使窮人變得貧窮。";
+					mes "他決定去螞蟻地獄";
+					mes "就在那裡";
+					mes "就在那時。";
+					next;
+					mes "^228b2222bats，矮人，雞蛋，螞蟻！";
+					mes "他與他們戰鬥~";
+					mes "蠕蟲剝皮，果凍！";
+					mes "他收集了大而小的戰利品。";
+					next;
+					mes "^228B22在光榮的一天到來";
+					mes "當他找到有價值的卡片時";
+					mes "那將為他的Naaaame帶來巨大的財富~^000000";
+					next;
+					mes "^228B22但他對他保持珍愛";
+					mes "記住他的時代";
+					mes "努力工作。";
+					mes "他從不賣掉，從未賣掉";
+					mes "他的珍貴卡~^000000";
+					next;
+					mes "[岡瑟雙重和諧]";
+					mes "這是一個關於里奇·金先生的古老故事，他從破佈到財富，再到抹佈到財富。是真的還是小說？哦，請不要問我！我不知道！";
+					close;
+
+				case 2:
+					mes "[岡瑟雙重和諧]";
+					mes "*咳咳*";
+					mes "岡瑟唱歌";
+					mes "世界樹~";
+					next;
+					mes "^228b22常綠yggdrasil~";
+					mes "巨型灰樹";
+					mes "伸出天空。";
+					mes "水晶，早晨露水";
+					mes "從它的葉子";
+					mes "形成烏爾德的池塘。 ^000000";
+					next;
+					mes "^228b22three明智的女孩。";
+					mes "坐在樹枝下。";
+					mes "過去的烏爾德";
+					mes "現在的貝爾丹迪";
+					mes "債務未來。 ^000000";
+					next;
+					mes "^228b22旋轉，編織";
+					mes "命運的線。";
+					mes "常綠Yggdrasil~";
+					mes "巨型灰樹";
+					mes "伸出天空。";
+					mes "它的根部流淚。 ^000000";
+					next;
+					mes "^hvergelmir中的228b22death。";
+					mes "一條邪惡的龍";
+					mes "燃燒它的根";
+					mes "帶有永恆的火焰。";
+					mes "邪惡的龍Nidhogg";
+					mes "生活在Yggdrasil之間";
+					mes "和Niffheim。 ^000000";
+					next;
+					mes "^228b22常綠yggdrasil~";
+					mes "巨型灰樹";
+					mes "伸出天空。";
+					mes "根源";
+					mes "根到達";
+					mes "米米爾的池塘。 ^000000";
+					next;
+					mes "^228b22由一個明智的巨人守衛。";
+					mes "奧丁犧牲了一個";
+					mes "他的眼睛是智慧。";
+					mes "海姆達爾的號角隱藏了";
+					mes "在Yggdrasil的根源中";
+					mes "最後一次聽起來";
+					mes "信號ragnarok。 ^000000";
+					next;
+					mes "[岡瑟雙重和諧]";
+					mes "這是一個非常古老的故事...";
+					mes "是真理還是虛構？但是請不要問我，我不知道~！";
+					close;
+
+				case 3:
+					mes "[岡瑟雙重和諧]";
+					mes "我會唱著盧克（Luke）的一首歌，你知道，盧克（Luke）是他那個時代最偉大的吟遊詩人之一嗎？但是我改變了一些單詞。";
+					next;
+					mes "^228b22i在抽屜中找到了它。";
+					mes "舊的，破舊的字母";
+					mes "形成精心的單詞。";
+					mes "真誠的反思";
+					mes "真誠的頭腦。 ^000000";
+					next;
+					mes "^228b22i在抽屜中找到了它。";
+					mes "我真的很喜歡嗎？";
+					mes "我真的那麼幼稚嗎？";
+					mes "我的記憶很失望。";
+					next;
+					mes "^228b22i在抽屜中找到了它。";
+					mes "我忘記了愛。";
+					mes "她從來沒有得到這封信。";
+					mes "但是我們倆都太害羞了。";
+					next;
+					mes "^228b22i在抽屜中找到了它。";
+					mes "我忘記了愛。";
+					mes "我從來沒有給她這封信。";
+					mes "但是我們倆都太驕傲了。";
+					next;
+					mes "[岡瑟雙重和諧]";
+					mes "你有任何人嗎？你？如果您寫一封情書，則必鬚髮送並表達自己。";
+					next;
+					mes "[岡瑟雙重和諧]";
+					mes "如果您寫了永遠不會發送的情書，請扔掉。把你的該死的驕傲扔掉。";
+					close;
+				}
+
+			case 2:
+				switch(rand(1,3)) {
+				case 1:
+					mes "[岡瑟雙重和諧]";
+					mes "嗯，你曾經";
+					mes "品嚐的comodo奶酪？";
+					next;
+					mes "[岡瑟雙重和諧]";
+					mes "您只能在Comodo中品嚐它，但是您需要有一個很好的胃才能消化它。哦！奶酪有一個秘密！";
+					next;
+					mes "[岡瑟雙重和諧]";
+					mes "您 ^228b22Might ^000000將不受注定劍的力量，如果您吃的話，它來自另一個世界！";
+					next;
+					mes "[岡瑟雙重和諧]";
+					mes "如果還沒有，為什麼不去品嚐它？我試圖品嚐一次。有點美味，但後來我暈倒了。哈哈哈~！";
+					close;
+
+				case 2:
+					mes "[岡瑟雙重和諧]";
+					mes "前幾天，我在曾經是Swordman訓練場的地方經過Prontera。";
+					next;
+					mes "[岡瑟雙重和諧]";
+					mes "我看到一些孩子的訓練真的很努力，他沒有註意到我看著他，所以我想他真的很認真！";
+					next;
+					mes "[岡瑟雙重和諧]";
+					mes "他看起來好像想成為一名專業劍客，但他也把裝備送給了其他新手。";
+					next;
+					mes "[岡瑟雙重和諧]";
+					mes "我無聊地看著他一遍又一遍地做同樣的事情，但是我認為，如果我介紹了他，怪物研究組織會喜歡他。";
+					close;
+
+				case 3:
+					mes "[岡瑟雙重和諧]";
+					mes "你曾經去過路易嗎？";
+					mes "全年降雪？";
+					next;
+					mes "[岡瑟雙重和諧]";
+					mes "有一個雪人叫";
+					mes "雪諾（Snowysnow），如果您遇到了他，您會知道他可以說話的各種事情！這是如此奇怪和神秘~！";
+					next;
+					mes "[岡瑟雙重和諧]";
+					mes "他有一個神秘的袋子，有無盡的禮物出來，他有一個神秘的過去，涉及一些寒冷的小鎮和一個討厭的女巫。";
+					next;
+					mes "[岡瑟雙重和諧]";
+					mes "但這沒關係，因為他被一些煉金術士救出並重生，但是如果您想進一步了解他，您應該去盧蒂，好嗎？";
+					close;
+				}
+			
+			case 3:
+				mes "[岡瑟雙重和諧]";
+				mes "您現在要離開，甚至不聽我的話嗎？好的，我很酷，但是保證您會回來聽我的一首歌，好嗎？";
+				close;
+			
+			}
+
+		} else {
+			mes "[" + @name$ + "]";
+			mes "...";
+			next;
+			mes "[岡瑟雙重和諧]";
+			mes "哇，你無視我，是嗎？好吧，我很好！除非您有某種無法說話的問題，否則我真的很抱歉。";
+			close;
+		}
+
+	}
+
+}
+
+yuno_in04,20,123,7	script	Representative#bq	95,{
+//set @check = GetGlobalVar "040708_god2"
+	mes "[馬林·普蒂爾]";
+	if (god_brising == 3) {
+		mes "歡迎來到";
+		mes "怪物研究";
+		mes "組織。";
+		next;
+		mes "[馬林·普蒂爾]";
+		mes "我們正在根據冒險家的信息研究怪物，以便有效地應對野外的怪物。";
+		next;
+		mes "[馬林·普蒂爾]";
+		mes "我們正在接受與怪物有關的任何類型的信息，";
+		mes "因此，如果您有任何新聞或信息，請隨時提交給我。";
+		next;
+		mes "[馬林·普蒂爾]";
+		mes "您可以在";
+		mes "這個房間很方便。";
+		next;
+		mes "[馬林·普蒂爾]";
+		mes "嗯...？";
+		mes "你只是說嗎";
+		mes "您正在尋找";
+		mes "有人？出色地...";
+		next;
+		mes "[馬林·普蒂爾]";
+		mes "好吧，如果他是註冊的";
+		mes "該組織的成員";
+		mes "我可以幫你。";
+		next;
+		mes "[馬林·普蒂爾]";
+		mes "叫什麼名字？";
+		mes "查爾斯隱士……？";
+		next;
+		mes "[馬林·普蒂爾]";
+		mes "哦，我找到了他。";
+		mes "errr，但他申請會員資格時沒有提交所有必需的信息...";
+		next;
+		mes "[馬林·普蒂爾]";
+		mes "哦。他是一個流氓。";
+		mes "好吧，這解釋了一切。無論如何，你想看一切";
+		mes "我們擁有的信息？";
+		next;
+		mes "^3355ffmarlin向您展示";
+		mes "會員資格";
+		mes "申請卡。 ^000000";
+		next;
+		mes "[會員卡]";
+		mes "名稱：Hermite Charles";
+		mes "工作：流氓";
+		mes "性：流氓";
+		mes "地址：Printera媽媽街";
+		next;
+		mes "[馬林·普蒂爾]";
+		mes "不幸的是，我們沒有更多的信息。但是我希望這對您有所幫助。";
+		next;
+		mes "[馬林·普蒂爾]";
+		mes "不過，訪問流氓公會可能是個好主意。也許";
+		mes "他們可以幫助您。";
+		close;
+	}
+
+	mes "歡迎來到";
+	mes "怪物研究";
+	mes "組織。";
+	next;
+	mes "[馬林·普蒂爾]";
+	mes "我們正在根據冒險家的信息研究怪物，以便有效地應對野外的怪物。";
+	next;
+	mes "[馬林·普蒂爾]";
+	mes "我們正在接受與怪物有關的任何類型的信息，因此，如果您有任何新聞或信息，請隨時提交給我。";
+	next;
+	mes "[馬林·普蒂爾]";
+	mes "您可以在您的方便下在此房間中使用報告文檔表格。";
+	if (gef_bard_q == 4 || gef_bard_q == 24) {
+		next;
+		mes "[馬林·普蒂爾]";
+		mes "嗯？";
+		mes "這個組織的冒險家？啊，你說你正在尋找吟遊詩人嗎？";
+		next;
+		mes "[馬林·普圖爾]";
+		mes "是的，我們有一些吟遊詩人的成員定期向我們發送與怪物有關的信息。";
+		next;
+		mes "[馬林·普蒂爾]";
+		mes "我還聽說，這些吟遊詩人一直在幫助學者在田野中灌輸公告板，這表明了新冒險家的位置。您能讓我知道您要尋找的人的全名嗎？";
+		next;
+		input .@inputstr$;
+		if (.@inputstr$ == "Minty Errende") {
+			mes "[馬林·普蒂爾]";
+			mes "薄荷味消解...";
+			mes "哦，是的，我記得他。他前一段時間告訴我，他正向南行駛，現在他住在蓋芬（Geffen）。";
+			next;
+			mes "[馬林·普蒂爾]";
+			mes "他是一個非常友善的人。 Errende一直在竭盡全力為我們提供所需的信息。當您有機會時，請給他我的問候嗎？";
+			close;
+
+		} else if (.@inputstr$ == "Kino Kitty") {
+			mes "[馬林·普蒂爾]";
+			mes "基諾·凱蒂（Kino Kitty），基諾·凱蒂（Kino Kitty）...哦，我們在這裡。他給我們發了一封信，上面寫著：“我將留在沙漠中，直到我找到真正的自我。”";
+			next;
+			mes "[馬林·普蒂爾]";
+			mes "他看起來不健康，但我想他還在旅行。試圖在摩洛哥尋找他，如果有機會，請對他表示敬意。";
+			close;
+
+		} else if (.@inputstr$ == "Gunther Doubleharmony") {
+			mes "[馬林·普蒂爾]";
+			mes "啊，您是Gunther的朋友嗎？哈哈，如果有點興奮，他是一個非常有趣的人。讓我們看看，Gunther，Gunther ...";
+			next;
+			mes "[馬林·普蒂爾]";
+			mes "啊，這裡說他想環顧佩恩和艾伯塔省。因此，他將在其中一個地方之一。對不起，我不能更具體。";
+			close;
+
+		} else {
+			mes "[馬林·普蒂爾]";
+			mes " " + .@inputstr$ + "...?";
+			mes "嗯，嗯...";
+			mes "對不起，但是我們沒有任何記錄。";
+			close;
+		}
+
+	} else {
+		next;
+		mes "[馬林·普蒂爾]";
+		mes "我們正在努力研究這個世界上的怪物，目的是幫助每個冒險家的旅程。";
+		close;
+	}
+}
+
+yuno_in04,33,119,3	script	Adventurer#1	828,{
+	mes "...";
+	next;
+	mes "...";
+	mes "…………";
+	next;
+	mes "^3355ff*塗鴉塗鴉*^000000";
+	next;
+	mes "[充滿活力的年輕人]";
+	mes "犯錯...？";
+	mes "這是什麼？";
+	next;
+	if (Sex == SEX_FEMALE) {
+		emotion ET_SMILE;
+		mes "[充滿活力的年輕人]";
+		mes "哦...！";
+		mes "美麗，";
+		mes "年輕女士~！";
+		next;
+		mes "[充滿活力的年輕人]";
+		mes "你好~";
+		mes "我叫窗格。";
+		mes "我可以問你嗎？";
+		set @name$,strcharinfo(0);
+		input .@inputstr$;
+		next;
+		mes "[充滿活力的年輕人]";
+		mes "哦...";
+		mes "" +.@inputstr$+ "...";
+		if (@name$ == .@inputstr$) {
+			next;
+			mes "[充滿活力的年輕人]";
+			mes "^自由貿易協定"+.@inputstr$+"!";
+			mes "這麼好的名字！";
+			next;
+			mes "[充滿活力的年輕人]";
+			mes "我會記得你的名字，我的女士。哦，但是我很抱歉。我現在有點忙。你待會兒再回來嗎？下次我會盡力取悅你。";
+			emotion ET_CHUP;
+			close;
+
+		} else {
+			mes "那是你的名字嗎？";
+			next;
+			mes "[充滿活力的年輕人]";
+			mes "嗯，隨便。哦，但是我很抱歉。我現在有點忙。你待會兒再回來嗎？下次我會盡力取悅你。";
+			emotion ET_SMILE;
+			close;
+		}
+
+	} else {
+		mes "[充滿活力的年輕人]";
+		mes "什麼，伙計...！";
+		mes "請別打擾我。";
+		mes "你看不到我很忙嗎？";
+		close;
+	}
+}

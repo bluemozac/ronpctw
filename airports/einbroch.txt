@@ -1,0 +1,110 @@
+﻿//===== rAthena Script ======================================= 
+//= Einbroch Airport Staff
+//===== By: ================================================== 
+//= L0ne_W0lf, Muad_Dib
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Einbroch Airport Staff
+//===== Additional Comments: ================================= 
+//= 1.0 First version.
+//============================================================ 
+
+airport,143,43,5	script	Airport Staff#airport1a::airport1	90,{
+	mes "[機場工作人員]";
+	mes "歡迎來到";
+	mes "Einbroch機場，";
+	mes "我們不停地提供的地方";
+	mes "飛往城市的航班";
+	mes "Juno，Lighthalzen和Hugel。";
+	next;
+	if (select("登上飛艇:取消") == 1) {
+		mes "[機場工作人員]";
+		mes "飛艇登機費";
+		mes "是1200 Zeny，但如果您";
+		mes "獲得了飛艇的免費門票，";
+		mes "費用將免除。將要";
+		mes "你登上飛艇？";
+		next;
+		if (select("是:否") == 1) {
+			if (countitem(7311) > 0) {
+				delitem 7311,1; //Free_Flying_Ship_Ticket
+				warp "airport",148,51;
+				end;
+			}
+			if (Zeny >= 1200) {
+				set Zeny, Zeny - 1200;
+				warp "airport",148,51;
+				end;
+			}
+			mes "[機場工作人員]";
+			mes "對不起，但是你沒有";
+			mes "有免費門票";
+			mes "飛艇，你沒有";
+			mes "足夠的Zeny登機";
+			mes "飛艇。記住，";
+			mes "登機費為1200 Zeny。";
+			close;
+		}
+	}
+	mes "[機場工作人員]";
+	mes "謝謝，";
+	mes "祝你今天過得愉快。";
+	close;
+}
+
+airport,158,43,5	duplicate(airport1)	Airport Staff#airport1b	90
+airport,126,43,5	duplicate(airport1)	Airport Staff#airport1c	90
+
+airport,143,49,3	script	Arrival Staff#airport2a::airport2	90,{
+	mes "[到達人員]";
+	mes "歡迎來到Einbroch機場。";
+	mes "如果您從您的";
+	mes "飛行，讓我引導你到";
+	mes "主終端。否則，請登上飛艇以離開";
+	mes "Juno，Lighthalzen和Hugel。";
+	next;
+	if (select("退出到主終端。 :取消。") == 1) {
+		mes "[到達人員]";
+		mes "進入主要終端后，您將需要再次支付費用";
+		mes "登上飛艇。你應該";
+		mes "僅在Einbroch市退出";
+		mes "是您的目的地。";
+		mes "繼續前往主碼頭？";
+		next;
+		if (select("是:否") == 1) {
+			warp "airport",142,40;
+			end;
+		}
+	}
+	mes "[到達人員]";
+	mes "好吧，謝謝";
+	mes "為了您的光顧";
+	mes "我希望你有";
+	mes "宜人的航班~";
+	close;
+}
+
+airport,126,51,3	duplicate(airport2)	Arrival Staff#airport2b	90
+airport,158,50,3	duplicate(airport2)	Arrival Staff#airport2c	90
+
+einbroch,94,267,3	script	Airship Staff#ein01	91,{
+	mes "[飛艇工作人員]";
+	mes "歡迎來到";
+	mes "Einbroch機場。";
+	mes "請用這扇門";
+	mes "登上停止的飛艇";
+	mes "在Juno，Lighthalzen和";
+	mes "施瓦茨瓦爾德共和國的休格爾。";
+	next;
+	mes "[飛艇工作人員]";
+	mes "否則，如果Einbroch是";
+	mes "您的意圖目的地，";
+	mes "請走下樓梯";
+	mes "並要求到達的工作人員領導";
+	mes "您到主終端。感謝";
+	mes "你，喜歡旅行。";
+	close;
+}

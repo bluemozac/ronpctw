@@ -1,0 +1,3695 @@
+﻿//===== rAthena Script =======================================
+//= Quest NPCs related to Prontera
+//===== Description: =========================================
+//= Collection of Prontera-based quests.
+//= * Culvert Access
+//= * Ph.D Hat Quest
+//= * Geoborg Family Curse
+//===== Comments: ============================================
+//= Culvert Access:
+//= - [Official Conversion]
+//= - Variable in use: MISC_QUEST (bit 8)
+//= Ph.D Hat Quest:
+//= - [Official Conversion]
+//= - n/a
+//= Geoborg Family Curse:
+//= - [Official Conversion]
+//= - Variable in use: prt_curse (max 61)
+//===== Changelog: ===========================================
+//= 1.0 First Version. [kobra_k88] [L0ne_W0lf]
+//= Fixed flower name Dreamy -> Illusion
+//= 1.2 Fixed exploit [Lupus]
+//= 1.3 Removed Duplicates [Silent]
+//= 1.4 Moved Culvert from cities/prontera.txt [Evera]
+//= 1.5 Culvert has been rescripted from the ground up. [L0ne_W0lf]
+//= 1.6 Added Geoborg Family Curse quest. [L0ne_W0lf]
+//= 1.6a Fixed a couple spelling mistakes. [L0ne_W0lf]
+//= 1.7 Updated "Ph.D Quest" Dialogs. [Samuray22]
+//= 1.7b Fixed some minor typos. [SinSloth]
+//= 1.7c replaced item "names" with item id. [Lupus]
+//= 1.8 Fixed experience gains to match upcoming rate adjustments. [SinSloth]
+//= 1.9 Fixed "him" -> "her" in Ph.D hat quest. THansk to yyCC. [L0ne_W0lf]
+//= 2.0 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 2.0a Corrected a Typo error ";;". [Samuray22]
+//= 2.0b Corrected a Typo error. (bugreport:950) [Samuray22]
+//= 2.1 Added missing checkweights. [L0ne_W0lf]
+//= 2.2 Added Nameless Island quest addition. [L0ne_W0lf]
+//= 2.3 Bamph will now talk to those who failed the Geoborg quest. [L0ne_W0lf]
+//= 2.3a Touch up to Bamph fo other fail-points. [L0ne_W0lf]
+//= 2.3b Hopefully the last change needed for Nameless quest. [L0ne_W0lf]
+//= 2.4 Updated Headgear Quest. [L0ne_W0lf]
+//= 2.5 Fixed requirements for PH D. Hat. [L0ne_W0lf]
+//= 2.5a Fixed requirements for PH D. Hat agian lol. [L0ne_W0lf]
+//= 2.6 Replaced effect numerics with constants. [L0ne_W0lf]
+//= 2.7 Corrected 'IProntera' typo. (bugreport:4522) [L0ne_W0lf]
+//= 2.8 Updated RE/Pre-RE EXP. [Euphy]
+//= 2.9 Updated Nameless Island addition and added questlog support. [Euphy]
+//= 3.0 Commented custom quest log support for Geoborg Family Curse Quest [Everade]
+//============================================================
+
+// Prontera Culvert :: prt_npc
+//============================================================
+prt_in,88,105,2	script	Recruiter	105,{
+	if (MISC_QUEST & 8) {
+		mes "[招聘人員]";
+		mes "啊...";
+		mes "我知道那些眼睛。";
+		mes "充滿同情心";
+		mes "...和勇氣。";
+		next;
+		mes "[招聘人員]";
+		mes "當然，您是一名志願者，以收回Prontera涵洞。你能讓我在那裡扭動你嗎？";
+		next;
+		if (select("傳送到涵洞入口。 :退出。") == 1) {
+			warp "prt_fild05",274,208;
+			end;
+		}
+		close;
+	}
+	mes "[招聘人員]";
+	mes "啊，讓我通知您，由於Prontera Culvert的處境，符文米加特王國的資本防禦總部現在決定招募一支懲罰力量。";
+	next;
+	switch(select("志願者:情況...？ :退出。")) {
+	case 1:
+		callsub S_Volunteer;
+		mes "[招聘人員]";
+		mes "你準備好了嗎，英雄？";
+		mes "我現在會扭曲你";
+		mes "到涵洞。";
+		next;
+		warp "prt_fild05",274,208;
+		end;
+	case 2:
+		mes "[招聘人員]";
+		mes "你沒有聽到...嗎？";
+		mes "Prontera Culvert上有各種骯髒的害蟲！";
+		next;
+		mes "[招聘人員]";
+		mes "由於嚴重的水污染風險以及符文米加爾斯人的安全性，涵洞已由皇家法令隔離。";
+		next;
+		mes "[招聘人員]";
+		mes "不用說，這導致了我們王國的供水短缺。確實，在這些黑暗時期的危機...";
+		next;
+		mes "[招聘人員]";
+		mes "我們的人民";
+		mes "渴望水...";
+		mes "但是他們渴了";
+		mes "更...";
+		mes "對於英雄！";
+		next;
+		mes "[招聘人員]";
+		mes "當符文米加特人的孩子們遭受干燥的喉嚨和乾燥的眼淚時，您會袖手旁觀嗎？你會埋葬我們的孩子嗎？";
+		next;
+		mes "[招聘人員]";
+		mes "戰士！符文米加特人打電話給你！清潔這片土地的瘟疫，並在涵洞中拋棄害蟲！只有你...可以有所作為。";
+		next;
+		if (select("志願者:退出。") == 1) {
+			callsub S_Volunteer;
+			mes "[招聘人員]";
+			mes "冒險家...";
+			mes "我現在會扭曲你";
+			mes "到Prontera涵洞。";
+			next;
+			warp "prt_fild05",274,208;
+			end;
+		}
+		mes "[招聘人員]";
+		mes "HMPF。出色地。下次您喝水時，請記住，平均有9個半孩子剛剛死了... ^990000渴望渴望 ^000000。";
+		close;
+
+	case 3:
+		close;
+	}
+
+S_Volunteer:
+	set MISC_QUEST,MISC_QUEST | 8;
+	mes "[招聘人員]";
+	mes "您的註冊...";
+	mes "現在完成。";
+	next;
+	mes "[招聘人員]";
+	mes "我要感謝您自願為我們的偉大王國發揮自己的作用。在這裡，為您與黑暗力量的戰鬥採取這些規定。";
+	next;
+	mes "[招聘人員]";
+	mes "3個紅色藥水，1個牛奶，";
+	mes "和1個橙色藥水";
+	mes "...給你希望。";
+	getitem 501,3; //Red_Potion
+	getitem 519,1; //Milk
+	getitem 502,1; //Orange_Potion
+	next;
+	return;
+}
+
+prt_fild05,270,212,5	script	Culvert Guardian	105,{
+	if (MISC_QUEST & 8) {
+		mes "【涵洞守護者】";
+		mes "啊，你是我們的志願者之一。這是Prontera Culvert的入口。";
+		mes "你想";
+		mes "進去？";
+		next;
+		if (select("當然。 :退出。") == 1) {
+			warp "prt_sewb1",131,247;
+			end;
+		}
+		close;
+	}
+	mes "【涵洞守護者】";
+	mes "很抱歉，我們只能允許志願者參加涵洞運動。";
+	next;
+	mes "【涵洞守護者】";
+	mes "如果您想志願服務，請訪問位於Prontera的11點鐘方向的 ^000077Culvert註冊商 ^000000。";
+	close;
+}
+
+// Ph.D Hat Quest :: npc_6cript
+//============================================================
+prt_in,38,108,4	script	Teacher	53,{
+	if ((countitem(710) > 0) && (countitem(703) > 0) && (countitem(704) > 0) && (countitem(708) > 0)) {
+		mes "[老師]";
+		mes "哦...";
+		mes "那些手中的花在...";
+		next;
+		switch(select("顯示鮮花:贈送鮮花:取消")) {
+		case 1:
+			mes "[老師]";
+			mes "啊...";
+			mes "這些絕對是我想要的四種花！你會給我嗎？";
+			next;
+			mes "[老師]";
+			mes "如果你願意...";
+			mes "我給你我的寶貴物品。";
+			close;
+		case 2:
+			if ((countitem(710) > 0) && (countitem(703) > 0) && (countitem(704) > 0) && (countitem(708) > 0)) {
+				delitem 710,1;  //Illusion_Flower
+				delitem 703,1;  //Hinalle
+				delitem 704,1;  //Aloe
+				delitem 708,1;  //Ment
+				getitem 5012,1;	//Ph.D_Hat
+				mes "[老師]";
+				mes "我真的很感謝您為我所做的事情。我真的很感激。我會按照承諾將我的寶貴物品交給您。";
+				next;
+				mes "[老師]";
+				mes "這是我從大學畢業時戴的帽子。這讓我想起了我的上學日子。請接受這個...";
+				close;
+			}
+			else {
+				mes "[老師]";
+				mes "...哦，對不起。";
+				mes "但這不是我想要的。也許您需要學習一點點？";
+				close;
+			}
+		}
+	}
+	else {
+		mes "[老師]";
+		mes "你不覺得...";
+		mes "花很漂亮嗎？";
+		next;
+		switch(select("談話:退出")) {
+		case 1:
+			mes "[老師]";
+			mes "我年輕的時候";
+			mes "我沒有朋友";
+			mes "一直學習。";
+			next;
+			mes "[老師]";
+			mes "有時我很後悔我年輕時所做的事情，但現在沒什麼大不了的。通過努力學習，我比所有其他學生都早就完成了整個教育課程。";
+			next;
+			mes "[老師]";
+			mes "然而...";
+			mes "我很難過，有時孤獨。每當學習太難時，我都需要一個會聽我的人。最後，有一天，我遇到了我最好的朋友。";
+			next;
+			mes "[老師]";
+			mes "當我看到一朵漂亮的花朵在廢棄的花園裡開花時，我意識到是我的朋友分享了我的命運。";
+			next;
+			mes "[老師]";
+			mes "儘管這對他人來說是普通的花朵，但她給了我再次學習的理由。我可以因為她而實現我的目標。";
+			next;
+			mes "[老師]";
+			mes "最近...";
+			mes "我試圖償還她。現在，我正在學習鮮花，併計劃與它們一起在整個世界上。";
+			next;
+			mes "[老師]";
+			mes "完成我的工作...";
+			mes "我需要一束鮮花。但是對於一個很少出門的人來說，很難找到我需要的所有花。";
+			next;
+			mes "[老師]";
+			mes "我需要1 ^3355fflusion flower ^000000，1 ^3355ffhinalle ^000000,1 ^3355ffaloe ^000000和1 ^3355ffment ^000000。如果你能把它們帶給我，我會給你我的寶藏...";
+			close;
+		case 2:
+			mes "[老師]";
+			mes "這些日子之一，我將用鮮花覆蓋整個世界。";
+			close;
+		}
+	}
+}
+
+// Geoborg Family Curse :: prt_curse
+//============================================================
+prontera,248,212,3	script	Busy Boy#prt	706,3,3,{
+	callsub S_CheckWeight; //Check Player's weight
+	if (BaseLevel > 59) {
+		if (prt_curse == 0) {
+			mes "[忙碌的男孩]";
+			mes "噢，堅果...";
+			mes "我該怎麼辦？";
+			mes "我必須交付這些";
+			mes "書，但是...我...哦，伙計，";
+			mes "我現在不害怕！";
+			close;
+		}
+		else if (prt_curse == 1) {
+			mes "[忙碌的男孩]";
+			mes "噢，堅果...";
+			mes "我該怎麼辦？";
+			mes "我必須交付這些";
+			mes "書，但是...我...哦，伙計，";
+			mes "我現在不害怕！";
+			next;
+			if (select("和他說話:不理他") == 1) {
+				mes "["+strcharinfo(0)+"]";
+				mes "說，似乎";
+				mes "是問題？";
+				next;
+				mes "[忙碌的男孩]";
+				mes "……？";
+				next;
+				mes "[忙碌的男孩]";
+				if (Sex == SEX_MALE) {
+					mes "阿克！你那個笨拙";
+					mes "讓我跌倒的伙計";
+				}
+				else {
+					mes "阿克！你那個笨蛋";
+					mes "讓我下降的小雞";
+				}
+				mes "所有這些書早些時候！";
+				mes "等等，你以前拋棄我，";
+				mes "那麼，為什麼現在所有人都關心呢？";
+				emotion ET_SURPRISE;
+			}
+			else {
+				mes "[忙碌的男孩]";
+				mes "好吧，好吧...";
+				mes "甚至不要想";
+				mes "關於漂浮";
+				mes "天空。你想，";
+				mes "如此穩定。不要以為...";
+				mes "只是...登上那艘船...";
+				close;
+			}
+			next;
+			select("嗯，我，嗯...");
+			mes "[忙碌的男孩]";
+			if (Sex == SEX_MALE) {
+				mes "是的...真實";
+				mes "男人不會";
+				mes "那時拋棄了";
+				mes "沒有幫助我。";
+				mes "你是一個真正的creepo，";
+				mes "你知道嗎？";
+			}
+			else {
+				mes "是的...如果你是";
+				mes "優雅而體貼";
+				mes "女士，你會幫助我";
+				mes "以前出去。我是對的，是嗎？";
+			}
+			next;
+			mes "^3355fffyou本能";
+			mes "踢一個";
+			mes "下一個書籍";
+			mes "給小男孩。";
+			mes "你忍不住了：";
+			mes "這是自然的反射！ ^000000";
+			next;
+			Specialeffect EF_HITDARK;
+			emotion ET_HUK;
+			mes "^3355ff*嘭！ *^000000";
+			next;
+			emotion ET_HUK;
+			mes "[忙碌的男孩]";
+			mes "阿克！那些書...！";
+			mes "我花了很長時間才";
+			mes "堆疊所有這些！";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "哦，不，真是一團糟！";
+			mes "在這裡，讓我幫你";
+			mes "很好地安排這些";
+			mes "從底部";
+			mes "我的心。";
+			emotion ET_THROB, playerattached();
+			next;
+			mes "[忙碌的男孩]";
+			mes "...";
+			mes "......";
+			mes "…………";
+			emotion ET_THINK;
+			next;
+			mes "[忙碌的男孩]";
+			mes "嗯...？";
+			mes "哦，謝謝你";
+			mes "幫助我在這裡。";
+			mes "我真的很感激。";
+			next;
+			select("這些都是你的嗎？");
+			mes "[忙碌的男孩]";
+			mes "這些？哦，我想";
+			mes "為我的工作提供這些。";
+			mes "我需要把這些帶到朱諾";
+			mes "從prontera庫";
+			mes "對於客戶。但是，嗯...";
+			next;
+			mes "[忙碌的男孩]";
+			mes "出色地...";
+			mes "我真的生病了";
+			mes "容易，所以讓我害怕";
+			mes "乘坐飛艇的死亡";
+			mes "一直到朱諾。";
+			emotion ET_THINK;
+			next;
+			mes "[忙碌的男孩]";
+			mes "現在我有麻煩了！";
+			mes "我從不遲到，但是";
+			mes "時間我只是無能為力。";
+			mes "我無能為力！";
+			mes "哦，我會失去這份工作！";
+			emotion ET_CRY;
+			next;
+			mes "[忙碌的男孩]";
+			mes "等等...您的冒險家";
+			mes "有很多旅行嗎？";
+			mes "如果您要去Juno，";
+			mes "你能交付這個嗎";
+			mes "為我？我會遇到麻煩";
+			mes "如果我不發送這些書...";
+			next;
+			callsub S_GetBooks;
+			mes "[忙碌的男孩]";
+			mes "我 - 我明白。";
+			mes "這不是你的";
+			mes "我知道，但是";
+			mes "我真絕望...";
+			emotion ET_CRY;
+			set prt_curse,2;
+			close;
+		}
+		else if (prt_curse == 2) {
+			mes "[忙碌的男孩]";
+			mes "哦，再次你好。";
+			mes "對不起，但是我想";
+			mes "在這裡集中精力。會...";
+			mes "召喚我所有的勇氣...";
+			mes "和B-Board那個飛艇！";
+			mes "arg！不，我做不到！";
+			emotion ET_THINK;
+			next;
+			callsub S_GetBooks;
+			mes "[忙碌的男孩]";
+			mes "^333333*嗚嗚...*^000000";
+			mes "我該怎麼辦？";
+			mes "那個傢伙一直在等待";
+			mes "讓我送他的書";
+			mes "已經有一段時間了...";
+			emotion ET_CRY;
+			close;
+		}
+		else if (prt_curse == 3) {
+			mes "[忙碌的男孩]";
+			mes "哦，請交付";
+			mes "我給的那些書";
+			mes "您到 ^ff0000mr。 Karlomoff^000000，誰";
+			mes "應該在等待";
+			mes "朱諾圖書館。謝謝";
+			mes "再次為您的幫助~";
+			close;
+		}
+		mes "[忙碌的男孩]";
+		mes "阿克！你會離開嗎";
+		mes "我一個人，讓我工作？";
+		mes "我有重要的東西";
+		mes "做！當我完成安排時";
+		mes "這些書，需要...我需要做一些準備！";
+		close;
+	}
+	mes "[忙碌的男孩]";
+	mes "阿克！你會離開嗎";
+	mes "我一個人，讓我工作？";
+	mes "我有重要的東西";
+	mes "做！當我完成安排時";
+	mes "這些書，我需要...我需要做一些準備！";
+	close;
+
+OnTouch:
+	callsub S_CheckWeight; //Check Player's weight
+	if (BaseLevel > 59) {
+		if (prt_curse == 0) {
+			Specialeffect EF_HITDARK;
+			mes "^3355ff*嘭！ *^000000";
+			next;
+			mes "[忙碌的男孩]";
+			mes "嘿，小心！";
+			mes "你不能更多";
+			mes "小心？ ！ geeeeez！";
+			emotion ET_ANGER;
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "糟糕，我很抱歉。";
+			mes "你還好嗎？";
+			next;
+			mes "[忙碌的男孩]";
+			mes "是的，不，謝謝你！";
+			mes "哦...不用擔心，我很好。";
+			next;
+			mes "^3355ffyou注意到男孩";
+			mes "放下了許多精裝";
+			mes "可能是關於";
+			mes "廢墟及其傳說，基於";
+			mes "在他們的頭銜上。男孩塵土飛揚";
+			mes "他自己開始";
+			mes "小心地堆積書籍。 ^000000";
+			next;
+			if (select("離開:幫他堆書") == 1) {
+				mes "[忙碌的男孩]";
+				mes "下次，看";
+				mes "你要去哪裡";
+				mes "好吧？我的意思是，你";
+				mes "可能真的打破";
+				mes "如果你是什麼";
+				mes "總是那麼粗心！";
+				set prt_curse,1;
+				close;
+			}
+			mes "[忙碌的男孩]";
+			mes "嗯...？";
+			mes "哦，謝謝你";
+			mes "幫助我在這裡。";
+			mes "我真的很感激。";
+			next;
+			select("這些都是你的嗎？");
+			mes "[忙碌的男孩]";
+			mes "這些？哦，我想";
+			mes "為我的工作提供這些。";
+			mes "我需要把這些帶到朱諾";
+			mes "從prontera庫";
+			mes "對於客戶。但是，嗯...";
+			next;
+			mes "[忙碌的男孩]";
+			mes "出色地...";
+			mes "我真的生病了";
+			mes "容易，所以讓我害怕";
+			mes "乘坐飛艇的死亡";
+			mes "一直到朱諾。";
+			emotion ET_THINK;
+			next;
+			mes "[忙碌的男孩]";
+			mes "現在我有麻煩了！";
+			mes "我從不遲到，但是";
+			mes "時間我只是無能為力。";
+			mes "我無能為力！";
+			mes "哦，我會失去這份工作！";
+			emotion ET_CRY;
+			next;
+			mes "[忙碌的男孩]";
+			mes "等等...您的冒險家";
+			mes "有很多旅行嗎？";
+			mes "如果您要去Juno，";
+			mes "你能交付這個嗎";
+			mes "為我？我會遇到麻煩";
+			mes "如果我不發送這些書...";
+			next;
+			callsub S_GetBooks;
+			mes "[忙碌的男孩]";
+			mes "我 - 我明白。";
+			mes "這不是你的";
+			mes "我知道，但是";
+			mes "我真絕望...";
+			emotion ET_CRY;
+			set prt_curse,2;
+			close;
+		}
+		else if (prt_curse == 3) {
+			mes "[忙碌的男孩]";
+			mes "哦，請交付";
+			mes "我給的那些書";
+			mes "您到 ^ff0000mr。 Karlomoff^000000，誰";
+			mes "應該在等待";
+			mes "朱諾圖書館。謝謝";
+			mes "再次為您的幫助~";
+			close;
+		}
+	}
+	end;
+
+S_GetBooks:
+	if (select("幫助他:別幫助他") == 1) {
+		mes "[忙碌的男孩]";
+		mes "哦，非常感謝！";
+		mes "你不明白如何";
+		mes "我很害怕那些飛艇。";
+		mes "現在，請您交付";
+		mes "這些書到 ^ff0000mr。 Karlomoff^000000";
+		mes "在朱諾圖書館附近？";
+		next;
+		mes "[忙碌的男孩]";
+		mes "我知道這些書是";
+		mes "很重，但是真的";
+		mes "小心他們！反正，";
+		mes "感謝您為我做這件事。";
+		mes "我真的處於智慧...";
+		set prt_curse,3;
+		//setquest 18030;// custom addition to make the script consistent
+		getitem 7431,1; //Books
+		close;
+	}
+	return;
+
+S_CheckWeight:
+	if ((MaxWeight-Weight) < 2000 || checkweight(1201,1) == 0) {
+		mes "^3355FFWAIT第二秒！";
+		mes "現在，您正在攜帶";
+		mes "你和你在一起太多。";
+		mes "請在";
+		mes "使用KAFRA服務";
+		mes "存儲您的一些物品。 ^000000";
+		close;
+	}
+	return;
+}
+
+yuno,311,195,3	script	Historian#prt01	754,{
+	if ((MaxWeight-Weight) < 2000 || checkweight(1201,1) == 0) {
+		mes "^3355FFWAIT第二秒！";
+		mes "現在，您正在攜帶";
+		mes "你和你在一起太多。";
+		mes "請在";
+		mes "使用KAFRA服務";
+		mes "存儲您的一些物品。 ^000000";
+		close;
+	}
+	if (prt_curse < 3) {
+		mes "[歷史學家]";
+		mes "朱諾的神秘過去";
+		mes "有一些大秘密。";
+		mes "我確定！它使我興奮";
+		mes "知道我的研究";
+		mes "帶我那麼近";
+		mes "終於揭開它！";
+		next;
+		mes "[歷史學家]";
+		mes "但是我會承認，即使我不知道我會挖多少";
+		mes "要學習我想要的東西。作為歷史學家是我們的職責";
+		mes "找出過去的真相，但這絕對不會容易。";
+		next;
+		mes "[歷史學家]";
+		mes "了解，看到";
+		mes "我過去的真相";
+		mes "自己的眼睛...我什至賣";
+		mes "我的靈魂尋求機會。";
+		close;
+	}
+	else if (prt_curse == 3) {
+		mes "^3355ffas您接近，這個";
+		mes "歷史學家突然關閉";
+		mes "他正在讀的書，";
+		mes "看著天堂";
+		mes "徒勞地深吸一口氣";
+		mes "試圖緩解他的緊張。 ^000000";
+		next;
+		mes "[歷史學家]";
+		mes "嗚嗚嗚！";
+		mes "我的書在哪裡？";
+		emotion ET_ANGER;
+		next;
+		select("你還好嗎？");
+		mes "[歷史學家]";
+		mes "嗯？哦。對不起，你";
+		mes "必須看到。我只是";
+		mes "非常沮喪。你看，";
+		mes "我期望交付";
+		mes "Prontera的研究書，";
+		mes "但是他們還沒有到達。";
+		next;
+		mes "[歷史學家]";
+		mes "實際上，送貨員是";
+		mes "很晚。這會延遲我的";
+		mes "從那以後大量研究";
+		mes "我不能沒有更多";
+		mes "學習的新材料。";
+		next;
+		if (countitem(7431) > 0) {
+			select("對不起，你叫什麼名字？");
+			mes "[歷史學家]";
+			mes "嗯？我是Karlomoff，";
+			mes "Rekenber的第一學者";
+			mes "歷史研究小組。";
+			mes "你需要什麼嗎，還是";
+			mes "你在這裡環顧四周嗎";
+			mes "特別是某人？";
+			next;
+		}
+		else {
+			select("哦，我正在幫他送書。");
+			emotion ET_QUESTION;
+			mes "[歷史學家]";
+			mes "啊，真的嗎？";
+			mes "太好了，你在這裡！";
+			mes "那麼，書籍在哪裡？";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "我...";
+			mes "我沒有";
+			mes "他們現在。";
+			next;
+			mes "[歷史學家]";
+			mes "什麼...？";
+			mes "不要告訴我";
+			mes "你失去了他們！那些";
+			mes "書籍無價！";
+			mes "你來了";
+			mes "只是告訴我嗎？";
+			next;
+			mes "[歷史學家]";
+			mes "好吧，我想你會";
+			mes "必須報告損失";
+			mes "這些書並得到一些新的";
+			mes "這些書的副本";
+			mes "你應該交付。";
+			mes "現在快點，我需要研究！";
+			close;
+		}
+		select("對了，我把你的書帶來了。");
+		mes "[歷史學家]";
+		mes "什麼？但是你不是";
+		mes "送貨男孩。好吧，讓我看看";
+		mes "您帶來的書。嗯...";
+		mes "就像我想的那樣：符文 -";
+		mes "Midgarts王國有很棒的";
+		mes "豐富的古老信息。";
+		next;
+		mes "[歷史學家]";
+		mes "啊，非常感謝";
+		mes "帶來這些。但是，通過";
+		mes "你的著裝方式，我可以告訴";
+		mes "你是冒險家。";
+		mes "應該帶來這些的送貨員怎麼了？";
+		next;
+		mes "[歷史學家]";
+		mes "…………？";
+		mes "害怕乘坐飛艇嗎？";
+		mes "暈車？好吧，那是";
+		mes "非常可以理解。窮人";
+		mes "男孩應該聯繫我";
+		mes "事先。";
+		next;
+		mes "[歷史學家]";
+		mes "天哪，過去";
+		mes "自從我有一段時間以來";
+		mes "訪客。你願意";
+		mes "留下來聊天？";
+		mes "只是給我一分鐘";
+		mes "首先喝一杯水~";
+		set prt_curse,4;
+		delitem 7431,1; //Books
+		close;
+	}
+	else if (prt_curse == 4) {
+		mes "[歷史學家]";
+		mes "啊，那杯";
+		mes "水就是什麼";
+		mes "我需要刷新";
+		mes "我。讓我告訴你";
+		mes "關於我的工作有點。";
+		next;
+		mes "[歷史學家]";
+		mes "我之前可能提到過，但是我叫Karlomoff，";
+		mes "我從事Rekenber歷史研究的工作，是其第一學者。我們";
+		mes "最近完成了我們在Schwarzwald共和國的項目。";
+		next;
+		mes "[歷史學家]";
+		mes "現在，我們正在嘗試學習";
+		mes "有關符文中的更多信息";
+		mes "王國的歷史。我們相信";
+		mes "它鏈接到我們的施瓦茨瓦爾德";
+		mes "共和國，因為他們共享";
+		mes "大陸。有道理，對嗎？";
+		next;
+		mes "[歷史學家]";
+		mes "最終，我們希望";
+		mes "來自我們的新信息";
+		mes "符文中的研究將";
+		mes "在我們的";
+		mes "當前對";
+		mes "施瓦茨瓦爾共和國的過去。";
+		next;
+		mes "[歷史學家]";
+		mes "包括我自己，有";
+		mes "^3131FF3 Rekenber的成員";
+		mes "歷史研究小組^000000";
+		mes "正在研究符文";
+		mes "Midgarts王國的歷史。";
+		next;
+		select("雷肯伯歷史研究小組？");
+		mes "[歷史學家]";
+		mes "您來自符文的冒險家 -";
+		mes "midgarts可能不知道，但是";
+		mes "Rekenber Corporation擁有";
+		mes "對我們的非正式控制";
+		mes "施瓦茨瓦爾共和國。一些";
+		mes "討厭它，其他人不在乎。";
+		next;
+		mes "[歷史學家]";
+		mes "無論如何，雷肯伯有自己的";
+		mes "歷史研究小組以來";
+		mes "重新發現古代技術一直是其成功的關鍵，很好，";
+		mes "據我所知。就個人而言，我喜歡追求知識。";
+		next;
+		mes "[歷史學家]";
+		mes "哦，這是一個有趣的";
+		mes "事實！你知道嗎";
+		mes "符文統治者的頭銜";
+		mes "並非總是傳遞";
+		mes "通過同一個家庭？";
+		next;
+		mes "[歷史學家]";
+		mes "實際上，有幾個";
+		mes "持有的王室";
+		mes "決定的特殊比賽";
+		mes "哪個王子成為";
+		mes "下一個國王。迷人...";
+		next;
+		select("幾個皇室？");
+		mes "[歷史學家]";
+		mes "是的，我會嘗試解釋";
+		mes "簡要地。總共有一個";
+		mes "7個王室。每個";
+		mes "一家是從一個人來的";
+		mes "在建立的7個戰士中";
+		mes "符文米加特王國。";
+		next;
+		mes "[歷史學家]";
+		mes "根據記錄，";
+		mes "Jormungand，蛇";
+		mes "地球，出現並帶來";
+		mes "混亂到整個大陸。";
+		mes "7個戰士出現並驅趕蛇，拯救了世界。";
+		next;
+		mes "[歷史學家]";
+		mes "隨著和平的回歸，";
+		mes "建立了7個勇士";
+		mes "符文米加特王國，";
+		mes "選擇Tristram Geoborg III";
+		mes "作為王國的第一位統治者。";
+		next;
+		mes "[歷史學家]";
+		mes "知道他們的後代";
+		mes "可能並不總是應得的";
+		mes "裁定王國，7名戰士同意舉行一場比賽";
+		mes "他們的家人每一代都可以防止皇家腐敗。";
+		next;
+		emotion ET_PROFUSELY_SWEAT;
+		mes "[歷史學家]";
+		mes "哦...不太興奮";
+		mes "關於歷史，是嗎？出色地，";
+		mes "也許如果我唱古代";
+		mes "這個神話的歌，你會";
+		mes "更好地理解...";
+		next;
+		mes "[歷史學家]";
+		mes "^ff0000*大蛇*^000000";
+		mes "^ff0000*吞下了大海。 *^000000";
+		mes "^ff0000*彩虹的鷹*^000000";
+		mes "^ff0000*吞下了蛇。 *^000000";
+		mes "^ff0000*然後鷹建立了巢。 *^000000";
+		mes "^ff0000*吞嚥的海巢。 *^000000";
+		next;
+		mes "[歷史學家]";
+		mes "^333333*ahem*^000000如您所見，我是";
+		mes "語調聾。但是";
+		mes "重點是人們還在";
+		mes "讚美7個勇士的漏洞";
+		mes "通過這首歌。不是";
+		mes "有趣的是嗎？";
+		set prt_curse,5;
+		close;
+	}
+	else if (prt_curse == 5) {
+		mes "[歷史學家]";
+		mes "對不起，我讓我";
+		mes "在說話時說話";
+		mes "關於符文的長度很長";
+		mes "Midgart的歷史。仍然，";
+		mes "我希望你發現這個故事";
+		mes "至少有點愉快。";
+		next;
+		mes "[歷史學家]";
+		mes "哦！你會回到嗎";
+		mes "符文米加特王國？";
+		mes "如果是這樣，那我很喜歡";
+		mes "問你。你拜託嗎";
+		mes "將這份報告寫給了我在Morocc的同事寫的報告嗎？";
+		next;
+		mes "[歷史學家]";
+		mes "這將是一個很好的幫助";
+		mes "對我來說，如果你能得到這個";
+		mes "馬上向她報告。";
+		mes "啊，她的名字叫Rodafrian。";
+		mes "我確定你可以找到她";
+		mes "在那個沙漠小鎮的某個地方。";
+		set prt_curse,6;
+		getitem 7342,1; //File01
+		//changequest 18030,18031;// custom addition to make the script consistent
+		close;
+	}
+	else if (prt_curse == 6) {
+		mes "[歷史學家]";
+		mes "請找到我的同事，";
+		mes "Rodafrian，在摩洛哥和";
+		mes "將我的報告交給她。";
+		mes "你應該能夠找到";
+		mes "她在那裡進行研究。";
+		next;
+		if (select("我會:我可以再聽一遍那首歌嗎？") == 1) {
+			mes "[歷史學家]";
+			mes "再一次，謝謝";
+			mes "您尋求幫助。";
+			mes "它確實會加快";
+			mes "我的研究進展，";
+			mes "特別是因為那些書";
+			mes "交付得很晚...";
+		}
+		else {
+			mes "[歷史學家]";
+			mes "歌曲？哦，你的意思是";
+			mes "一個讚美7誰";
+			mes "建立了符文米達";
+			mes "王國？當然，讓我們現在看看...";
+			next;
+			mes "[歷史學家]";
+			mes "^ff0000*大蛇*^000000";
+			mes "^ff0000*吞下了大海。 *^000000";
+			mes "^ff0000*彩虹的鷹*^000000";
+			mes "^ff0000*吞下了蛇。 *^000000";
+			mes "^ff0000*然後鷹建立了巢。 *^000000";
+			mes "^ff0000*吞嚥的海巢。 *^000000";
+			next;
+			mes "[歷史學家]";
+			mes "你必須更感興趣";
+			mes "在歷史上比我想像的。";
+			mes "如果您願意，我給你寫信";
+			mes "信件或建議";
+			mes "對於Rekenber歷史";
+			mes "研究小組。哈哈哈~";
+		}
+		close;
+	}
+	else if (prt_curse > 55) {
+		mes "[歷史學家]";
+		mes "啊，已經有一段時間了";
+		mes "自從我上次看到以來";
+		mes "你。 Rodafrian實際上來了";
+		mes "幾天前拜訪我。";
+		mes "我相信她來這裡";
+		mes "要幸福或威脅我...";
+		next;
+		mes "[歷史學家]";
+		mes "這是非常超現實的。";
+		mes "她一直在狂歡";
+		mes "一些令人難以置信的啟示，";
+		mes "最後把我放在";
+		mes "代替我。我不知道她";
+		mes "可能是如此有競爭力！";
+		close;
+	}
+	else {
+		mes "[歷史學家]";
+		mes "嗚嗚嗚……";
+		mes "嗚嗚嗚……嗚嗚嗚……";
+		close;
+	}
+}
+
+morocc_in,45,126,3	script	Historian#prt02	702,{
+	if ((MaxWeight-Weight) < 2000 || checkweight(1201,1) == 0) {
+		mes "^3355FFWAIT第二秒！";
+		mes "現在，您正在攜帶";
+		mes "你和你在一起太多。";
+		mes "請在";
+		mes "使用KAFRA服務";
+		mes "存儲您的一些物品。 ^000000";
+		close;
+	}
+	if (prt_curse == 6) {
+		if (countitem(7342) < 0) {
+			mes "^3355ffyou似乎已經丟失了";
+			mes "Karlomoff的報告。你";
+			mes "需要在這裡運送到";
+			mes "他的同事之一...";
+			close;
+		}
+		mes "[歷史學家Rodafrian]";
+		mes "哦，這個地方怎麼樣";
+		mes "一定很熱嗎？這";
+		mes "對我的皮膚不好...";
+		mes "哦，我希望我回到家";
+		mes "在施瓦茨瓦爾德共和國~";
+		emotion ET_CRY;
+		next;
+		mes "[歷史學家Rodafrian]";
+		mes "你好呀。";
+		mes "e-excuse我，但是，";
+		mes "嗯，我可以幫你嗎？";
+		next;
+		select("死。卡洛莫夫·哈斯在聖。");
+		mes "[歷史學家Rodafrian]";
+		mes "卡洛莫夫...？";
+		mes "他？好吧...";
+		mes "他寄了什麼";
+		mes "你要我嗎？";
+		next;
+		mes "^3355ffyou手卡洛莫夫";
+		mes "向Rodafrian報告。 ^000000";
+		next;
+		mes "[歷史學家Rodafrian]";
+		mes "報告？他是什麼";
+		mes "想這次炫耀嗎？";
+		mes "^333333*嘆氣*^000000嗯，謝謝";
+		mes "麻煩。我會看，";
+		mes "雖然我沒想到";
+		mes "如果Karlomoff寫了這一點。";
+		next;
+		if (select("詢問她的研究情況:結束對話") == 1) {
+			mes "[歷史學家Rodafrian]";
+			mes "哦，你知道";
+			mes "Rekenber歷史研究";
+			mes "團體？啊，對。 Karlomoff";
+			mes "一定已經告訴過你。";
+			mes "目前我們正在研究";
+			mes "符文米加特王國。";
+			next;
+			mes "[歷史學家Rodafrian]";
+			mes "現在，雖然我了解";
+			mes "古代書籍的價值和";
+			mes "記錄，我認為Karlomoff";
+			mes "太依賴它們了。";
+			mes "我更喜歡積極的研究";
+			mes "在考古學的靜脈下。";
+			next;
+			mes "[歷史學家Rodafrian]";
+			mes "現在，我在花費";
+			mes "摩洛哥的時間參觀";
+			mes "獅身人面像和金字塔";
+			mes "如果我可以挖掘一些文物。";
+			mes "希望我能以這種方式發現一些新的歷史證據。";
+			next;
+			mes "[歷史學家Rodafrian]";
+			mes "如果你對";
+			mes "了解有關摩洛哥的更多信息";
+			mes "歷史，請繼續";
+			mes "與我的協助交談。他非常熱衷於研究這個";
+			mes "城鎮的文化和背景。";
+			next;
+			mes "[歷史學家Rodafrian]";
+			mes "實際上，";
+			mes "摩洛哥也感謝他們";
+			mes "城鎮的歷史，然後走下去";
+			mes "關於古代的歌曲";
+			mes "通過幾代人。讓我們";
+			mes "看，那是怎麼走的？";
+			next;
+			mes "[歷史學家Rodafrian]";
+			mes "^ff0000*大蛇*^000000";
+			mes "^ff0000*吞下了大海。 *^000000";
+			mes "^ff0000*彩虹的鷹*^000000";
+			mes "^ff0000*吞下了蛇，*^000000";
+			mes "而且...嗯。哦親愛的。";
+			next;
+			mes "[歷史學家Rodafrian]";
+			mes "我不記得下一個";
+			mes "線！實際上，有你";
+			mes "以前聽過這首歌嗎？";
+			next;
+			switch(select("是的，我有。 :是的，但不一樣。 :不，抱歉。")) {
+			case 1:
+				mes "[歷史學家Rodafrian]";
+				mes "哦，太好了！";
+				mes "您會提供嗎？";
+				mes "我用那條線";
+				mes "跟隨這些歌詞？";
+				next;
+				mes "^ff0000*大蛇*^000000";
+				mes "^ff0000*吞下了大海。 *^000000";
+				mes "^ff0000*彩虹的鷹*^000000";
+				mes "^ff0000*吞下了蛇。 *^000000";
+				mes "......................................";
+				next;
+				input .@answer$;
+				if (.@answer$ == "Then the eagle built its nest.") {
+					mes "[歷史學家Rodafrian]";
+					mes "真的嗎？這使得";
+					mes "有感覺，但是那些歌詞";
+					mes "聲音與";
+					mes "我聽到的。嗯...";
+					mes "如果你不介意，你會嗎";
+					mes "請告訴我你的名字？";
+					callsub S_GiveName,1;
+				}
+				else {
+					mes "[歷史學家Rodafrian]";
+					mes "嗯...？";
+					mes "聽起來不";
+					mes "完全是。你確定嗎";
+					mes "那是您聽到的歌詞嗎？";
+					delitem 7342,1; //File01
+					set prt_curse,7;
+					close;
+				}
+
+			case 2:
+				mes "[歷史學家Rodafrian]";
+				mes "那是什麼？";
+				mes "這首歌與眾不同嗎？";
+				mes "唔。那你會嗎？";
+				mes "請唱歌";
+				mes "你知道我嗎？";
+				next;
+				mes "^3355ffyou清除你的喉嚨";
+				mes "並開始唱歌";
+				mes "您從Karlomoff聽到的。 ^000000";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				input .@line$;
+				if (.@line$ == "The great serpent swallowed the sea.") {
+					set .@total,.@total+1;
+					mes "*偉大的蛇*";
+					mes "*吞下大海。 *";
+				}
+				else mes "*"+.@line$+"*";
+
+				input .@line$;
+				if (.@line$ == "The eagle of the rainbow swallowed the serpent.") {
+					set .@total,.@total+1;
+					mes "*彩虹的鷹*";
+					mes "*吞下蛇。 *";
+				}
+				else mes "*"+.@line$+"*";
+
+				input .@line$;
+				if (.@line$ == "Then the eagle built its nest.") {
+					set .@total,.@total+1;
+					mes "*然後鷹建立了巢。 *";
+				}
+				else mes "*"+.@line$+"*";
+
+				input .@line$;
+				if (.@line$ == "A nest upon the swallowed sea.") {
+					set .@total,.@total+1;
+					mes "*在吞嚥的大海上築巢。 *";
+				}
+				else mes "*"+.@line$+"*";
+				next;
+				if (.@total == 4) {
+					mes "[歷史學家Rodafrian]";
+					mes "真的嗎？這使得";
+					mes "有感覺，但是那些歌詞";
+					mes "聲音與";
+					mes "我聽到的。嗯...";
+					mes "如果你不介意，你會嗎";
+					mes "請告訴我你的名字？";
+					callsub S_GiveName,1;
+				}
+				else {
+					mes "[歷史學家Rodafrian]";
+					mes "嗯...？";
+					mes "聽起來不正確";
+					mes "根本。你確定那些";
+					mes "您聽到的歌詞嗎？";
+					delitem 7342,1; //File01
+					set prt_curse,7;
+					close;
+				}
+
+			case 3:
+				mes "[歷史學家Rodafrian]";
+				mes "…………";
+				mes "......................................";
+				mes "好吧。你會嗎";
+				mes "介意我要你";
+				mes "您的名字，冒險家？";
+				callsub S_GiveName,1;
+			}
+		}
+		mes "[歷史學家]";
+		mes "雖然我喜歡做我的";
+		mes "研究和發現";
+		mes "有關的新信息";
+		mes "歷史，我有點寂寞";
+		mes "有時。沒有多少人";
+		mes "分享我的興趣，你知道...";
+		close;
+	}
+	else if (prt_curse == 7) {
+		mes "^3355折疊，Rodafrian";
+		mes "似乎深深地思想。";
+		mes "然後，好像在做";
+		mes "一個重要的決定，她";
+		mes "直接看著你的眼睛";
+		mes "並開始講話。 ^000000";
+		next;
+		mes "[歷史學家Rodafrian]";
+		mes "冒險家...";
+		mes "我想知道你的名字。";
+		callsub S_GiveName,0;
+	}
+	else if (prt_curse > 7 && prt_curse < 30) {
+		mes "[歷史學家Rodafrian]";
+		mes "我記得，蒙多應該";
+		mes "位於姆約尼爾山（Mount Mjolnir）";
+		mes "在北部地區";
+		mes "符文米加特斯王國。問";
+		mes "他似乎不記得那首歌的歌詞...";
+		close;
+	}
+	else if (prt_curse == 30 || prt_curse == 55) {
+		mes "[歷史學家Rodafrian]";
+		mes "哦，你回來了。";
+		mes "你見面了蒙多嗎";
+		mes "並弄清楚歌詞";
+		mes "我正在尋找的那首歌？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "^ff0000*大蛇*^000000";
+		mes "^ff0000*吞下了大海。 *^000000";
+		mes "^ff0000*彩虹的鷹*^000000";
+		mes "^ff0000*吞下了蛇。 *^000000";
+		mes "^ff0000*然後，蛇秤在*^000000上生長";
+		mes "^ff0000*鷹，它慢慢死亡。 *^000000";
+		next;
+		mes "[歷史學家Rodafrian]";
+		mes "哦是的！";
+		mes "是的，就是這樣！現在";
+		mes "我記得，謝謝";
+		mes "這麼多！啊，回去工作...";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "^333333（作為歷史學家，Rodafrian";
+		mes "也許可以幫助我";
+		mes "調查詛咒";
+		mes "Geoborgs。牧師告訴我";
+		mes "不過，不要告訴任何人。";
+		mes "我應該冒險嗎？ ）^000000";
+		next;
+		if (select("告訴她耶夢加德的詛咒:別告訴她") == 1) {
+			mes "^3355ffyou解釋一切";
+			mes "你學會了";
+			mes "Rodafrian，選擇不選擇";
+			mes "保留任何秘密。 ^000000";
+			emotion ET_AHA;
+			next;
+			mes "[歷史學家Rodafrian]";
+			mes "................................................";
+			emotion ET_SURPRISE;
+			next;
+			mes "[歷史學家Rodafrian]";
+			mes "謝謝你分享";
+			mes "與我一起。我希望你意識到";
+			mes "這些信息有多寶貴";
+			mes "是。我不知道王室";
+			mes "一家人一直保持那種";
+			mes "秘密。天哪，我...";
+			next;
+			mes "[歷史學家Rodafrian]";
+			mes "你知道，我不是真的";
+			mes "對毒藥了解很多，但是";
+			mes "我確實知道，除了我們";
+			mes "自己的刺客，有毒藥";
+			mes "生活在一些奇怪的專家";
+			mes "位於西部的土地。";
+			next;
+			mes "[歷史學家Rodafrian]";
+			mes "無論如何，您的報告";
+			mes "Geoborg家族將";
+			mes "非常感謝";
+			mes "Rekenber歷史研究";
+			mes "團體。但是首先，我需要";
+			mes "完成這個Morocc項目...";
+			next;
+			mes "[歷史學家Rodafrian]";
+			mes "無論如何，請保留此信息";
+			mes "我和你之間的秘密";
+			mes "目前。然後，當我透露Geoborg Royal的秘密詛咒時";
+			mes "一家人，我終於要勝過那個卡洛莫夫！ bwahahahahaha！";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "^333333（Drat，她沒有給我";
+			mes "任何幫助...我所做的只是";
+			mes "向她揭示一個巨大的秘密";
+			mes "她可能會散佈！";
+			mes "哦，好吧，我想我更好";
+			mes "回到牧師...）^000000";
+			if (prt_curse == 30)  {
+				set prt_curse,31;
+				//changequest 18042,18044;
+			} else {
+				set prt_curse,60;
+				//changequest 18051,18052;
+			}
+			close;
+		}
+
+		mes "[歷史學家Rodafrian]";
+		mes "哦，讓我謝謝你";
+		mes "再次去";
+		mes "通過麻煩";
+		mes "為我獲得那個歌詞~";
+		mes "我把我的助手通過";
+		mes "已經足夠麻煩了...";
+		next;
+		mes "[歷史學家Rodafrian]";
+		mes "我也最好不要忘記";
+		mes "通過Karlomoff的";
+		mes "報告。我必須有一個";
+		mes "早點與他辯論";
+		mes "後來，我真的很想";
+		mes "把那個傢伙放在他的位置！";
+		next;
+		mes "^3355ffrodafrian似乎非常";
+		mes "快樂並開始閱讀";
+		mes "通過Karlomoff的報告。";
+		mes "現在，最好";
+		mes "返回父親。 ^000000";
+		if (prt_curse == 30) {
+			set prt_curse,40;
+			//changequest 18042,18045;
+		} else {
+			set prt_curse,56;
+			//completequest 18051;
+		}
+		close;
+	}
+	else if (prt_curse == 31 || prt_curse == 40) {
+		mes "^3355ffrodafrian似乎非常";
+		mes "快樂並開始閱讀";
+		mes "通過Karlomoff的報告。";
+		mes "現在，最好";
+		mes "返回父親。 ^000000";
+		close;
+	}
+	else if (prt_curse == 56) {
+		emotion ET_FRET;
+		mes "[歷史學家Rodafrian]";
+		mes "我剛訪問";
+		mes "卡洛莫夫（Karlomoff）給了他";
+		mes "我的想法！我認為...";
+		mes "我想我把他放在他的位置。";
+		mes "但是我永遠無法真正告訴";
+		mes "和那個偷偷摸摸的傢伙...";
+		close;
+	}
+	else if (prt_curse == 60) {
+		emotion ET_FRET;
+		mes "[歷史學家Rodafrian]";
+		mes "我只是幫助參觀";
+		mes "卡洛莫夫（Karlomoff）給了他";
+		mes "我的想法！我認為...";
+		mes "我想我把他放在他的位置。";
+		mes "但是我永遠無法真正告訴";
+		mes "和那個偷偷摸摸的傢伙...";
+		next;
+		mes "看起來不像";
+		mes "Rodafrian可以為您提供";
+		mes "更多信息。為了";
+		mes "現在，最好";
+		mes "轉到 ^3355ffprontera教堂。 ^000000";
+		close;
+	}
+	else {
+		mes "[歷史學家Rodafrian]";
+		mes "對不起，但是我";
+		mes "真的很忙";
+		mes "目前的研究。";
+		mes "也許我們以後可以說話";
+		mes "一旦我完成了這個？";
+		close;
+	}
+
+S_GiveName:
+	next;
+	select("My name is "+strcharinfo(0)+".");
+	mes "[歷史學家Rodafrian]";
+	mes "啊"+strcharinfo(0)+", eh?";
+	mes "你介意我問你一個忙嗎？我真的需要驗證真實";
+	mes "這首歌的歌詞。然而，";
+	mes "我需要呆在摩洛哥";
+	mes "完成我的研究。";
+	next;
+	mes "[歷史學家Rodafrian]";
+	mes "你能找到我的嗎";
+	mes "同事蒙多（Mondo）問他";
+	mes "對於這首歌的歌詞？你可以";
+	mes "在古老的廢墟中找到他";
+	mes "在米爾尼爾山，北";
+	mes "符文米加特斯王國。";
+	next;
+	mes "[歷史學家Rodafrian]";
+	mes "我為詢問而道歉";
+	mes "你做聽起來像";
+	mes "愚蠢的差事，但我實際上";
+	mes "需要知道這首歌的歌詞";
+	mes "為了我的研究...";
+	if (getarg(0) == 1) delitem 7342,1; //File01
+	set prt_curse,8;
+	//changequest 18031,18032;
+	close;
+}
+
+mjolnir_01,135,168,3	script	Historian#prt03	754,{
+	if ((MaxWeight-Weight) < 2000 || checkweight(1201,1) == 0) {
+		mes "^3355FFWAIT第二秒！";
+		mes "現在，您正在攜帶";
+		mes "你和你在一起太多。";
+		mes "請在";
+		mes "使用KAFRA服務";
+		mes "存儲您的一些物品。 ^000000";
+		close;
+	}
+	if (prt_curse == 8) {
+		mes "[歷史學家蒙多]";
+		mes "打擾一下...";
+		mes "但是如果你沒有";
+		mes "任何重要的事情";
+		mes "我，那你會";
+		mes "請離開嗎？我有";
+		mes "研究...";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "對不起，但是Rodafrian女士";
+		mes "要我問你";
+		mes "某些歌曲的歌詞描述";
+		mes "符文米加特王國的王國";
+		mes "成立。你會告訴嗎";
+		mes "他們給我嗎？";
+		next;
+		mes "[歷史學家蒙多]";
+		mes "Rodafrian？哦，她必須";
+		mes "意味著那個老孩子的";
+		mes "歌曲。現在怎麼樣？";
+		mes "啊，現在我記得...";
+		next;
+		mes "[歷史學家蒙多]";
+		mes "^ff0000*大蛇*^000000";
+		mes "^ff0000*吞下了大海。 *^000000";
+		mes "^ff0000*彩虹的鷹*^000000";
+		mes "^ff0000*吞下了蛇。 *^000000";
+		mes "^ff0000*然後，蛇秤在*^000000上生長";
+		mes "^ff0000*鷹，它慢慢死亡。 *^000000";
+		next;
+		select("…………？");
+		mes "[歷史學家蒙多]";
+		mes "是的，我知道：這首歌";
+		mes "儘管病態相當病態，儘管";
+		mes "它像唱歌一樣";
+		mes "如此快樂的歌。有時";
+		mes "這些小歌是應該的";
+		mes "嚇thiss孩子做好。";
+		next;
+		select("打擾一下...");
+		mes "[歷史學家蒙多]";
+		mes "嗯？你看起來很困惑。";
+		mes "你有問題嗎";
+		mes "問我這首歌嗎？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "實際上，我聽到了";
+		mes "一個不同的版本";
+		mes "這首歌，所以我是";
+		mes "想知道為什麼歌詞";
+		mes "會有所不同...";
+		next;
+		mes "[歷史學家蒙多]";
+		mes "真的現在了嗎？";
+		mes "好吧，讓我";
+		mes "聽到版本";
+		mes "您已經聽說過，開始了";
+		mes "從一開始。";
+		next;
+		callsub S_Song;
+	}
+	else if (prt_curse == 9) {
+		mes "[歷史學家蒙多]" ;
+		mes "啊，你會告訴我嗎";
+		mes "版本的歌詞";
+		mes "符文米加特王國";
+		mes "創立神話歌曲";
+		mes "你碰巧聽到了嗎？";
+		next;
+		callsub S_Song;
+	}
+	else if (prt_curse == 10) {
+		mes "[歷史學家蒙多]";
+		mes "有趣的...";
+		mes "您聽到的版本";
+		mes "來自Karlomoff不同";
+		mes "比我認識的那個。它是";
+		mes "他的版本可能";
+		mes "是最真實的。";
+		next;
+		mes "[歷史學家蒙多]";
+		mes "畢竟，我學會了";
+		mes "我知道的版本";
+		mes "通過聽";
+		mes "小孩子唱歌。";
+		next;
+		select("一個孩子？");
+		mes "[歷史學家蒙多]";
+		mes "是的。我的猜測？版本";
+		mes "孩子唱歌可能有";
+		mes "隨著傳輸的變化";
+		mes "在幾代人的嘴裡。如果您想了解更多，您";
+		mes "應該找到那個孩子。";
+		next;
+		mes "[歷史學家蒙多]";
+		mes "無論如何，Karlomoff可能有";
+		mes "最準確的版本";
+		mes "這首歌既然他很好";
+		mes "在採購和認證";
+		mes "歷史書面記錄和";
+		mes "文件。這是他的專長。";
+		next;
+		mes "[歷史學家蒙多]";
+		mes "啊，如果您想了解更多，";
+		mes "然後，您應該嘗試找到";
+		mes "唱歌的孩子。";
+		mes "嗯，他可能在 ^3131ddther左右";
+		mes "附近的河流^000000。希望它";
+		mes "不會太難找到他。";
+		next;
+		mes "[歷史學家蒙多]";
+		mes "一旦你能說話";
+		mes "對那個孩子，繼續";
+		mes "向Rodafrian報告。";
+		mes "她可能需要知道";
+		mes "很快，我就可以談談";
+		mes "我閒暇時的小孩子，所以...";
+		next;
+		mes "[歷史學家蒙多]";
+		mes "那好，我希望你";
+		mes "找到您正在尋找的東西";
+		mes "為了。祝你好運";
+		mes "旅行，冒險家。";
+		set prt_curse,11;
+		//changequest 18032,18033;
+		close;
+	}
+	else {
+		mes "[歷史學家蒙多]";
+		mes "不是這樣";
+		mes "一個美麗的地方？";
+		mes "難怪";
+		mes "古代人選擇";
+		mes "住在這裡...";
+		close;
+	}
+
+
+S_Song:
+	mes "["+strcharinfo(0)+"]";
+	input .@line$;
+	if (.@line$ == "The great serpent swallowed the sea.") {
+		set .@total,.@total+1;
+		mes "*偉大的蛇*";
+		mes "*吞下大海。 *";
+	}
+	else mes "*"+.@line$+"*";
+
+	input .@line$;
+	if (.@line$ == "The eagle of the rainbow swallowed the serpent.") {
+		set .@total,.@total+1;
+		mes "*彩虹的鷹*";
+		mes "*吞下蛇。 *";
+	}
+	else mes "*"+.@line$+"*";
+
+	input .@line$;
+	if (.@line$ == "Then the eagle built its nest.") set .@total,.@total+1;
+	mes "*"+.@line$+"*";
+
+	input .@line$;
+	if (.@line$ == "A nest upon the swallowed sea.") set .@total,.@total+1;
+	mes "*"+.@line$+"*";
+
+	if (.@total == 4) set prt_curse,10;
+	else {
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "等待，等等...";
+		mes "我想我搞砸了！";
+		mes "（這些不是";
+		mes "正確的歌詞...）";
+		set prt_curse,9;
+	}
+	close;
+}
+
+mjolnir_01,298,302,0	script	#prt_poem01	-1,2,2,{
+OnTouch:
+	if (prt_curse == 11) {
+		mes "^ff0000*大蛇*^000000";
+		mes "^ff0000*吞下了大海。 *^000000";
+		close;
+	}
+	end;
+}
+
+mjolnir_01,300,297,0	script	#prt_poem02	-1,2,2,{
+OnTouch:
+	if (prt_curse == 11) {
+		mes "^ff0000*大蛇*^000000";
+		mes "^ff0000*吞下了大海。 *^000000";
+		close;
+	}
+	end;
+}
+
+mjolnir_01,292,288,0	script	#prt_poem03	-1,2,2,{
+OnTouch:
+	if (prt_curse == 11) {
+		mes "^ff0000*彩虹的鷹*^000000";
+		mes "^ff0000*吞下了蛇。 *^000000";
+		close;
+	}
+	end;
+}
+
+mjolnir_01,302,286,0	script	#prt_poem04	-1,2,2,{
+OnTouch:
+	if (prt_curse == 11) {
+		mes "^ff0000*然後蛇秤*^000000";
+		mes "^ff0000*在鷹上生長...*^000000";
+		close;
+	}
+	end;
+}
+
+mjolnir_01,313,279,0	script	#prt_poem05	-1,2,2,{
+OnTouch:
+	if (prt_curse == 11) {
+		mes "^ff0000*，它慢慢死亡...*^000000";
+		close;
+	}
+	end;
+}
+
+mjolnir_01,312,269,5	script	Dog#prt	81,{
+	mes "[狗]";
+	mes "弓哇！";
+	close;
+}
+
+mjolnir_01,313,269,5	script	Dazed Boy#prt	706,{
+	if (prt_curse == 11) {
+		mes "[缺席的男孩]";
+		mes "偉大的蛇";
+		mes "吞下了大海。";
+		mes "彩虹的鷹";
+		mes "吞下了蛇。";
+		mes "然後蛇的鱗片增長";
+		mes "鷹，它慢慢死了。";
+		next;
+		mes "[疲憊的女人]";
+		mes "天哪...！";
+		mes "你能停下來嗎";
+		mes "唱那首歌？";
+		next;
+		mes "[缺席的男孩]";
+		mes "................................................";
+		next;
+		mes "^3355ff小男孩悄悄地";
+		mes "凝視著那個女人";
+		mes "一點，然後蹲下";
+		mes "下來開始撫摸";
+		mes "坐在他旁邊的狗。 ^000000";
+		next;
+		if (select("你剛剛唱了什麼？ :無視他們") == 1) {
+			mes "[缺席的男孩]";
+			mes "...";
+			mes "......";
+			mes "…………";
+			next;
+			mes "[缺席的男孩]";
+			mes "woof-woof，有你";
+			mes "聽到這首歌嗎？媽媽";
+			mes "教我唱歌，你";
+			mes "知道。她說那是唱的";
+			mes "由人們長期以來~";
+			next;
+			mes "^3355ff男孩繼續講話";
+			mes "像老朋友一樣給狗";
+			mes "忽略你的存在，";
+			mes "好像您不存在。 ^000000";
+			next;
+			mes "[疲憊的女人]";
+			mes "在哪裡...";
+			mes "我告訴了什麼";
+			mes "您要忽略";
+			mes "人們的問題！";
+			next;
+			mes "[這是怎麼回事]";
+			mes "…………";
+			mes "................................................";
+			mes "嗯，woof-woof。";
+			mes "媽媽似乎很沮喪";
+			mes "由於某種原因。";
+			next;
+			mes "[疲憊的女人]";
+			mes "對不起，我的孩子是...";
+			mes "看，你想知道嗎";
+			mes "關於那首歌的更多信息？嘗試";
+			mes "不用擔心：這只是一個古老的孩子的曲調。";
+			next;
+			if (select("你為什麼在這裡？ :我可以再聽一遍這首歌嗎？") == 1) {
+				mes "[疲憊的女人]";
+				mes "……………………";
+				next;
+				mes "^3355ff婦女的嘴唇收緊";
+				mes "可恥。很明顯";
+				mes "這個話題使她";
+				mes "感到非常不舒服。 ^000000";
+				next;
+				mes "[這是怎麼回事]";
+				mes "...";
+				mes "......";
+				mes "…………";
+				next;
+				mes "[這是怎麼回事]";
+				mes "woof-woof，你知道嗎";
+				mes "為什麼媽媽總是";
+				mes "好難過？我希望我知道";
+				mes "為什麼媽媽從不微笑...";
+				next;
+				mes "[疲憊的女人]";
+				mes "…………";
+				set prt_curse,12;
+				close;
+			}
+			mes "[疲憊的女人]";
+			mes "................................................";
+			next;
+			mes "[疲憊的女人]";
+			mes "好的。我可以做到這一點";
+			mes "對你來說簡單的事情。";
+			mes "讓我背誦這首歌...";
+			next;
+			mes "[疲憊的女人]";
+			mes "偉大的蛇";
+			mes "吞下了大海。";
+			mes "彩虹的鷹";
+			mes "吞下了蛇。";
+			mes "然後蛇的鱗片增長";
+			mes "鷹，它慢慢死了。";
+			set prt_curse,12;
+			close;
+		}
+		mes "[缺席的男孩]";
+		mes "...";
+		mes "......";
+		mes "…………";
+		close;
+	}
+	else if (prt_curse == 36) {
+		mes "^3355ff小男孩看";
+		mes "非常疲倦";
+		mes "生活，看起來非常";
+		mes "令人不安的臉";
+		mes "一個小孩。 ^000000";
+		close;
+	}
+	else if (prt_curse == 45) {
+		mes "^3355ff小男孩仍然";
+		mes "不會和你說話";
+		mes "他承認你";
+		mes "通過注視";
+		mes "接觸和微笑。 ^000000";
+		close;
+	}
+	else if (prt_curse > 54) {
+		mes "^3355ff小男孩仍然";
+		mes "不會和你說話，但是他";
+		mes "讓你感到歡迎";
+		mes "通過給你溫暖的微笑。 ^000000";
+		close;
+	}
+	else {
+		mes "[缺席的男孩]";
+		mes "...";
+		mes "......";
+		mes "…………";
+		next;
+		mes "^3355ffyou發現這很困難";
+		mes "忽略小男孩的";
+		mes "探測，警惕的眼睛指向";
+		mes "在你身上。很明顯";
+		mes "他不信任你。 ^000000";
+		close;
+	}
+}
+
+mjolnir_01,316,268,3	script	Exhausted-Looking Woman	879,{
+	if ((MaxWeight-Weight) < 2000 || checkweight(1201,1) == 0) {
+		mes "^3355FFWAIT第二秒！";
+		mes "現在，您正在攜帶";
+		mes "你和你在一起太多。";
+		mes "請在";
+		mes "使用KAFRA服務";
+		mes "存儲您的一些物品。 ^000000";
+		close;
+	}
+	if (prt_curse == 11) {
+		mes "[缺席的男孩]";
+		mes "偉大的蛇";
+		mes "吞下了大海。";
+		mes "彩虹的鷹";
+		mes "吞下了蛇。";
+		mes "然後蛇的鱗片增長";
+		mes "鷹，它慢慢死了。";
+		next;
+		mes "[疲憊的女人]";
+		mes "天哪...！";
+		mes "你能停下來嗎";
+		mes "唱那首歌？";
+		next;
+		mes "[缺席的男孩]";
+		mes "................................................";
+		next;
+		mes "^3355ff小男孩悄悄地";
+		mes "凝視著那個女人";
+		mes "一點，然後蹲下";
+		mes "下來開始撫摸";
+		mes "坐在他旁邊的狗。 ^000000";
+		next;
+		if (select("你剛剛唱了什麼？ :無視他們") == 1) {
+			mes "[缺席的男孩]";
+			mes "...";
+			mes "......";
+			mes "…………";
+			next;
+			mes "[缺席的男孩]";
+			mes "woof-woof，有你";
+			mes "聽到這首歌嗎？媽媽";
+			mes "教我唱歌，你";
+			mes "知道。她說那是唱的";
+			mes "由人們長期以來~";
+			next;
+			mes "^3355ff男孩繼續講話";
+			mes "像老朋友一樣給狗";
+			mes "忽略你的存在，";
+			mes "好像您不存在。 ^000000";
+			next;
+			mes "[疲憊的女人]";
+			mes "在哪裡...";
+			mes "我告訴了什麼";
+			mes "您要忽略";
+			mes "人們的問題！";
+			next;
+			mes "[這是怎麼回事]";
+			mes "…………";
+			mes "................................................";
+			mes "嗯，woof-woof。";
+			mes "媽媽似乎很沮喪";
+			mes "由於某種原因。";
+			next;
+			mes "[疲憊的女人]";
+			mes "對不起，我的孩子是...";
+			mes "看，你想知道嗎";
+			mes "關於那首歌的更多信息？嘗試";
+			mes "不用擔心：這只是一個古老的孩子的曲調。";
+			next;
+			if (select("你為什麼在這裡？ :我可以再聽一遍這首歌嗎？") == 1) {
+				mes "[疲憊的女人]";
+				mes "……………………";
+				next;
+				mes "^3355ff婦女的嘴唇收緊";
+				mes "可恥。很明顯";
+				mes "這個話題使她";
+				mes "感到非常不舒服。 ^000000";
+				next;
+				mes "[這是怎麼回事]";
+				mes "...";
+				mes "......";
+				mes "…………";
+				next;
+				mes "[這是怎麼回事]";
+				mes "woof-woof，你知道嗎";
+				mes "為什麼媽媽總是";
+				mes "好難過？我希望我知道";
+				mes "為什麼媽媽從不微笑...";
+				next;
+				mes "[疲憊的女人]";
+				mes "…………";
+				set prt_curse,12;
+				close;
+			}
+			mes "[疲憊的女人]";
+			mes "................................................";
+			next;
+			mes "[疲憊的女人]";
+			mes "好的。我可以做到這一點";
+			mes "對你來說簡單的事情。";
+			mes "讓我背誦這首歌...";
+			next;
+			mes "[疲憊的女人]";
+			mes "偉大的蛇";
+			mes "吞下了大海。";
+			mes "彩虹的鷹";
+			mes "吞下了蛇。";
+			mes "然後蛇的鱗片增長";
+			mes "鷹，它慢慢死了。";
+			set prt_curse,12;
+			close;
+		}
+		mes "[疲憊的女人]";
+		mes "......................";
+		close;
+	}
+	else if (prt_curse == 12) {
+		mes "[疲憊的女人]";
+		mes "人不多";
+		mes "來到這個偏遠地區。";
+		mes "是什麼帶給你所有";
+		mes "在這裡，我想知道嗎？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "實際上，我只是";
+		mes "試圖學習";
+		mes "真實的歌詞";
+		mes "那首小男孩的歌";
+		mes "一直在唱歌。";
+		next;
+		mes "[疲憊的女人]";
+		mes "…………";
+		next;
+		mes "[疲憊的女人]";
+		mes "那首歌的歌詞，";
+		mes "它的含義可以改變";
+		mes "從一個人到一個人";
+		mes "時間繼續。我想一部分";
+		mes "原因是因為它是";
+		mes "被口服...";
+		next;
+		mes "[疲憊的女人]";
+		mes "聽起來很快樂";
+		mes "歌曲，但這是意義";
+		mes "從那以後為我改變了";
+		mes "事故發生了...";
+		mes "已經很久了，但是我沒有";
+		mes "認為疼痛會治愈。";
+		next;
+		select("事故？");
+		mes "[疲憊的女人]";
+		mes "我...對不起。";
+		mes "我認為我不能說話";
+		mes "關於它。如果我嘗試，我知道我會";
+		mes "重溫恐怖。每天";
+		mes "已經是應付的鬥爭";
+		mes "與我犯下的罪過。";
+		next;
+		mes "[疲憊的女人]";
+		mes "我知道這很自私，但是";
+		mes "我有一個忙問你。";
+		mes "我真的不能離開這個區域，";
+		mes "我很少會收到訪客。你友善地交付嗎";
+		mes "對我來說有什麼東西？";
+		next;
+		mes "[疲憊的女人]";
+		mes "我曾經住在prontera，";
+		mes "自事故以來，";
+		mes "班普神父非常";
+		mes "支持我。還不足以償還他的好意，但是請";
+		mes "把這些草藥給我。";
+		next;
+		mes "[疲憊的女人]";
+		mes "您可以找到 ^3131fffathath bamph ^000000";
+		mes "在 ^3131ffprontera教堂 ^000000。當你";
+		mes "見他，請給他我";
+		mes "最熱烈的問候。我會做的";
+		mes "我自己，但是由於我所做的，我無法回到prontera ...";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "^333333（好吧。我猜";
+		mes "我應該交付這些";
+		mes "草藥到Prontera教堂";
+		mes "在與Rodafrian交談之前。 ）^000000";
+		getitem 7432,1; //Leather_Pouch
+		set prt_curse,13;
+		//changequest 18033,18034;
+		close;
+	}
+	else if (prt_curse > 12 && prt_curse < 16) {
+		mes "[疲憊的女人]";
+		mes "班普神父曾幫助";
+		mes "我這麼多。請帶";
+		mes "那個草藥袋給他";
+		mes "Prontera教堂，並給予";
+		mes "他是我最熱烈的問候。";
+		close;
+	}
+	else if (prt_curse == 16) {
+		mes "[邦妮·因布利亞]";
+		mes "哦，你回來了嗎？";
+		mes "你能交付嗎";
+		mes "那個草藥的小袋";
+		mes "我把你交給了班普神父？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "是的，我做到了。實際上，";
+		mes "班普神父送我";
+		mes "在這裡問你幾個";
+		mes "事物。你看，他告訴";
+		mes "我所有關於皇家秘密";
+		mes "而且，您的驅魔。";
+		next;
+		mes "[邦妮·因布利亞]";
+		mes "哦。我懂了。";
+		mes "你必須思考";
+		mes "我一個怪物...";
+		mes "那些貧窮的孩子";
+		mes "因為我而死了...";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "n-no！一點也不！";
+		mes "我只是想問那裡是否";
+		mes "是";
+		mes "Kaanu一直是";
+		mes "唱歌和Jormungand的詛咒。";
+		next;
+		mes "[邦妮·因布利亞]";
+		mes "...";
+		mes "......";
+		mes "…………";
+		next;
+		mes "[邦妮·因布利亞]";
+		mes "驅魔失敗後，";
+		mes "我應該受到懲罰";
+		mes "死亡。但是王室和普通教會接受了";
+		mes "憐憫我，允許";
+		mes "我住在流放。";
+		emotion ET_THINK;
+		next;
+		mes "[邦妮·因布利亞]";
+		mes "我開始唱這首歌";
+		mes "為了讓自己分心，";
+		mes "即使與";
+		mes "Jormungand詛咒。";
+		next;
+		mes "[邦妮·因布利亞]";
+		mes "你知道，現在我想";
+		mes "關於它，我確實記得聽到";
+		mes "驅魔失敗後，";
+		mes "女僕發現了一個碎片";
+		mes "清潔時紅色寶石";
+		mes "秘密的禮儀理由。";
+		emotion ET_SURPRISE, playerattached();
+		next;
+		mes "[邦妮·因布利亞]";
+		mes "我一直以為";
+		mes "有點奇怪。";
+		mes "我想調查";
+		mes "它，但後來我出院了";
+		mes "來自Prontera教堂";
+		mes "失敗後...";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "來自";
+		mes "紅色寶石？";
+		mes "也許...也許是";
+		mes "證據表明有人";
+		mes "破壞了驅魔！";
+		next;
+		mes "[邦妮·因布利亞]";
+		mes "發生的事情是悲慘的，";
+		mes "但這會讓我感到";
+		mes "如果那是好多了";
+		mes "真的是事實。即使是";
+		mes "驅魔被破壞了，";
+		mes "我們不能轉回時間...";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "^333333（嗯...";
+		mes "我最好回頭";
+		mes "去Prontera教堂";
+		mes "讓貝姆神父";
+		mes "了解此信息。 ）^000000";
+		set prt_curse,17;
+		//changequest 18035,18036;
+		close;
+	}
+	else if (prt_curse == 17) {
+		mes "[邦妮·因布利亞]";
+		mes "真的很非常";
+		mes "難以生存";
+		mes "有罪惡感。";
+		mes "我受過訓練的幫助";
+		mes "人們，不要殺死他們！";
+		next;
+		mes "^3355ffyou試圖安慰";
+		mes "邦妮·因布雷亞";
+		mes "在你之前的一段時間";
+		mes "返回Prontera教堂。";
+		close;
+	}
+	else if (prt_curse == 35 || prt_curse == 44 || prt_curse == 54) {
+		mes "^3355ffyou告訴Bonnie Imbullea";
+		mes "王子的死亡";
+		mes "不是她的錯，驅魔可能被破壞了。";
+		mes "但是，您將自己的具體內容（例如使用毒藥）保留給自己。 ^000000";
+		next;
+		mes "[邦妮·因布利亞]";
+		mes "那真的是真的...嗎？";
+		mes "哦，我很高興！我真的";
+		mes "以為我必須活著";
+		mes "我的剩下的與";
+		mes "這個可怕的恥辱。哦，謝謝";
+		mes "您這麼多幫助您！";
+		next;
+		mes "[邦妮·因布利亞]";
+		mes "Kaanu將能夠";
+		mes "遇到自己的孩子";
+		mes "年齡...我們終於可以生活";
+		mes "正常的生活。多麼美妙...";
+		next;
+		mes "[邦妮·因布利亞]";
+		mes "但是等等...";
+		mes "到底如何";
+		mes "王子死了嗎？";
+		mes "沒有";
+		mes "屍體的傷口";
+		mes "從我記得的...";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "好吧，嗯，我不知道";
+		mes "任何事情，但是";
+		mes "班普神父和父親";
+		mes "餅乾正在處理";
+		mes "調查，他們是";
+		mes "盡力找出答案。";
+		next;
+		mes "[邦妮·因布利亞]";
+		mes "我懂了。好吧，我相信";
+		mes "他們：他們是偉大的牧師，";
+		mes "畢竟。雖然我可能是";
+		mes "寬恕了我的失敗，我仍然擔心王室...";
+		mes "我現在所能做的就是祈禱。";
+		next;
+		mes "[邦妮·因布利亞]";
+		mes "無論如何，我保證";
+		mes "我不會透露我知道的";
+		mes "關於這一事件";
+		mes "民眾。如果你來";
+		mes "我希望再次在山上";
+		mes "你停下來拜訪我們。";
+		next;
+		mes "[邦妮·因布利亞]";
+		mes "你不明白";
+		mes "你有多少新聞";
+		mes "帶來了真正的意思。";
+		mes "我終於可以釋放自己";
+		mes "這個繁重的內gui ...";
+		mes "謝謝你，善良的冒險家~";
+		if (prt_curse == 35) {
+			set prt_curse,36;
+			//completequest 18050;
+		} else if (prt_curse == 44) {
+			set prt_curse,45;
+			//completequest 18049;
+		} else {
+			next;
+			mes "^3355ffnow，您可以返回";
+			mes "歷史學家Rodafrian";
+			mes "駐紮在摩洛哥。 ^000000";
+			set prt_curse,55;
+			//changequest 18049,18051;
+		}
+
+		close;
+	}
+	else if (prt_curse == 36) {
+		mes "[邦妮·因布利亞]";
+		mes "憑著你的恩典和憐憫，";
+		mes "請憐憫可憐的靈魂";
+		mes "並保護王室...";
+		mes "祝福我們用你的光和";
+		mes "願您的智慧指導我們...";
+		close;
+	}
+	else if (prt_curse == 45) {
+		mes "[邦妮·因布利亞]";
+		mes "我想我們已經得到了";
+		mes "太習慣了和平";
+		mes "和坐騎的寧靜";
+		mes "Mjolnir。這不會容易";
+		mes "離開，即使我們歡迎我們返回Prontera ...";
+		close;
+	}
+	else if (prt_curse > 54) {
+		mes "[邦妮·因布利亞]";
+		mes "太感謝了";
+		mes "為了幫助";
+		mes "調查";
+		mes "王子。我永遠不會知道";
+		mes "再次幸福";
+		mes "不是為了您的努力。";
+		close;
+	}
+	else {
+		mes "[邦妮·因布利亞]";
+		mes "^333333*嘆氣...*^000000";
+		close;
+	}
+}
+
+
+prt_church,115,122,0	warp	#sazekan	1,1,prt_church,168,106
+prt_church,166,106,0	warp	#prtchhall	1,1,prt_church,112,122
+
+prt_church,185,106,3	script	Father Bamph	60,{
+	if (prt_curse == 13) {
+		mes "[Bamph神父]";
+		mes "歡迎來";
+		mes "Prontera教堂。";
+		mes "請放鬆，然後";
+		mes "讓你的思想和";
+		mes "精神找到休息";
+		mes "這些神聖的大廳。";
+		next;
+		select("把藥草袋給他。");
+		if (countitem(7432) < 1) {
+			mes "["+strcharinfo(0)+"]";
+			mes "阿克！";
+			mes "現在，我放在哪裡";
+			mes "用草藥袋嗎？";
+			close;
+		}
+		mes "[Bamph神父]";
+		mes "我可以問...";
+		mes "你為什麼要給";
+		mes "我這個草藥小袋？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "好吧，有這個";
+		mes "住在山上的女士";
+		mes "想要我的Mjolnir";
+		mes "給你這個。嗯，她";
+		mes "有一個兒子叫Kaanu嗎？";
+		next;
+		mes "[Bamph神父]";
+		mes "哦，你一定已經見面了";
+		mes "Bonnie Imbullea。它是";
+		mes "自從很長一段時間以來";
+		mes "我見過她。怎麼了";
+		mes "她做，我可以問嗎？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "哦...";
+		mes "我想她很好。";
+		mes "但是她似乎真的...";
+		mes "我不知道，折磨...";
+		next;
+		mes "[餅乾父親]";
+		mes "好的！如果她開心";
+		mes "並在她的身後放鬆";
+		mes "做過，甚至上帝都會原諒";
+		mes "她！她應該活著";
+		mes "她的餘生痛苦！";
+		next;
+		mes "[Bamph神父]";
+		mes "餅乾父親，怎麼會";
+		mes "你說這樣的話嗎？";
+		mes "她盡力阻止什麼";
+		mes "發生了！我們應該可惜";
+		mes "她為痛苦而感到痛苦。你的同情心在哪裡？";
+		next;
+		mes "[餅乾父親]";
+		mes "呸!不要跟我說話";
+		mes "關於同情心！不是";
+		mes "你是推薦的人";
+		mes "她在";
+		mes "第一個？你沒有";
+		mes "忘了，是嗎？";
+		next;
+		mes "[父親bampf]";
+		mes "......";
+		mes "…………";
+		mes "…………";
+		next;
+		mes "[餅乾父親]";
+		mes "啊！";
+		next;
+		select("關於邦妮·因布利亞");
+		mes "[Bamph神父]";
+		mes "出色地...";
+		mes "我不...";
+		mes "我不知道是否";
+		mes "我應該告訴";
+		mes "你關於那個事件...";
+		next;
+		mes "[餅乾父親]";
+		mes "你知道嗎？如果邦妮";
+		mes "將這個冒險家發送到這裡";
+		mes "為了一個忙，這可能意味著";
+		mes "她相信這個人。此外，我們需要有人進行";
+		if (Sex == SEX_MALE)
+			mes "這項任務給我們。為什麼不呢？";
+		else
+			mes "這項任務給我們。為什麼不她？";
+		next;
+		mes "[Bamph神父]";
+		mes "你的話有戒指";
+		mes "事實，父親餅乾。";
+		mes "那麼，冒險家，給";
+		mes "我有機會告訴你";
+		mes "非常重要的事情。但是，你不能告訴其他人...";
+		set prt_curse,14;
+		delitem 7432,1; //Leather_Pouch
+		close;
+	}
+	else if (prt_curse == 14) {
+		mes "[Bamph神父]";
+		mes "我要告訴什麼";
+		mes "您必須保密。";
+		mes "現在，你知道嗎";
+		mes "Jormungand，偉大的蛇";
+		mes "來自洛基神和";
+		mes "巨人，angrboda？";
+		next;
+		mes "[Bamph神父]";
+		mes "喬爾蒙德是一個邪惡";
+		mes "野獸，一千之後";
+		mes "眾神與";
+		mes "惡魔，開始攻擊人類。";
+		mes "它帶來了巨大的混亂和很多";
+		mes "世界各地苦難...";
+		next;
+		mes "[Bamph神父]";
+		mes "最後，第一個tristram";
+		mes "Geoborg一家擊敗了";
+		mes "Jormungand和6";
+		mes "其他戰士，但只有之後";
+		mes "它殺死了他心愛的父親。";
+		next;
+		mes "[Bamph神父]";
+		mes "Tristram將成為";
+		mes "符文中的第一王";
+		mes "王國，但他的家人會";
+		mes "遭受詛咒";
+		mes "Jormungand在失敗之前。";
+		next;
+		mes "[Bamph神父]";
+		mes "直到今天...";
+		mes "^ff0000第一王子的everevery";
+		mes "Geoborg家庭死亡";
+		mes "年輕時^000000。那是";
+		mes "Jormungand的詛咒和";
+		mes "王室的秘密。";
+		emotion ET_HUK, playerattached();
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "什麼...？ ！";
+		mes "這真的是真的嗎？";
+		mes "沒有什麼辦法";
+		mes "反擊這個可怕的詛咒？";
+		next;
+		mes "[Bamph神父]";
+		mes "請降低您的聲音。";
+		mes "是的，可惜的是";
+		mes "王室必須像";
+		mes "這。但是所有的驅魔";
+		mes "試圖";
+		mes "多年來，失敗了...";
+		next;
+		mes "[Bamph神父]";
+		mes "雖然情況";
+		mes "國王似乎沒有希望";
+		mes "Tristram III再次嘗試驅除詛咒。下列的";
+		mes "他的命令，最偉大的牧師和驅魔人都被召喚。";
+		next;
+		mes "[Bamph神父]";
+		mes "一系列測試是";
+		mes "執行以選擇";
+		mes "最好的牧師和驅魔人";
+		mes "刪除此詛咒。最後， ^3131ffbonnie Imbullea ^000000被選為";
+		mes "主持驅魔儀式。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "等等，但是你提到";
+		mes "涉及事故。";
+		mes "這是否意味著她失敗了";
+		mes "在執行驅魔？";
+		next;
+		mes "[Bamph神父]";
+		mes "是的，不幸的是。";
+		mes "在牧師之後";
+		mes "驅魔人聚集在";
+		mes "秘密儀式，";
+		mes "三個王子被殺";
+		mes "而不僅僅是第一個。";
+		next;
+		mes "[餅乾父親]";
+		mes "雖然我們都發誓";
+		mes "將事件保密，";
+		mes "邦妮·伊姆布利（Bonnie Imbullea）";
+		mes "對死亡的責任。";
+		mes "這就是為什麼她在自我";
+		mes "從王國施加流放。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "什麼...？";
+		mes "那是...";
+		mes "太瘋狂了！";
+		next;
+		mes "[餅乾父親]";
+		mes "我知道這個";
+		mes "是一個很長的故事，";
+		mes "而且有點";
+		mes "複雜的。請";
+		mes "聽我們擁有的";
+		mes "從這裡問...";
+		emotion ET_THINK;
+		set prt_curse,15;
+		close;
+	}
+	else if (prt_curse == 15) {
+		mes "[Bamph神父]";
+		mes "現在，你應該知道";
+		mes "所有的王子";
+		mes "那天被殺了奇怪的";
+		mes "在他們的身體上看痕跡。";
+		mes "看上去好像他們";
+		mes "正在成長蛇量表。";
+		emotion ET_SURPRISE, playerattached();
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "等等，他們長了蛇";
+		mes "秤？聽起來只是";
+		mes "就像一個版本之一";
+		mes "我正在調查這首歌。";
+		mes "我認為這是關於符文中王國王國的起源的歌曲。";
+		next;
+		mes "[Bamph神父]";
+		mes "等等，那首歌？";
+		mes "嗯，我看不到如何";
+		mes "這是相關的。讓我們來看看";
+		mes "現在，怎麼了？";
+		mes "彩虹...老鷹...";
+		mes "啊!現在我記得！";
+		next;
+		mes "[Bamph神父]";
+		mes "偉大的蛇";
+		mes "吞下了大海。";
+		mes "彩虹的鷹";
+		mes "吞下了蛇。";
+		mes "然後，鷹建立了巢。";
+		mes "吞嚥的大海築巢。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "唔...";
+		mes "好吧，我聽到了";
+		mes "不同的版本";
+		mes "同一首歌。";
+		mes "就像...";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "偉大的蛇";
+		mes "吞下了大海。";
+		mes "彩虹的鷹";
+		mes "吞下了蛇。";
+		mes "然後蛇的鱗片增長";
+		mes "鷹，它慢慢死了。";
+		next;
+		mes "[Bamph神父]";
+		mes "哦，我的。我學到了這首歌";
+		mes "當我還是個小男孩";
+		mes "我的父親。但是，您的版本似乎揭示了秘密詛咒";
+		mes "Geoborgs。請告訴我，您在哪裡聽到那首歌？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "好吧，我第一次聽到了";
+		mes "歷史學家的版本，";
+		mes "然後我發現";
+		mes "Bonnie Imbullea知道";
+		mes "出色地。嗯，有問題嗎？";
+		next;
+		mes "[Bamph神父]";
+		mes "如果那些歌詞是";
+		mes "傳播，秘密";
+		mes "王室詛咒可能是";
+		mes "向公眾透露。會";
+		mes "您可以通過講話來幫助我們";
+		mes "再次向Bonnie Imbullea？";
+		next;
+		mes "[Bamph神父]";
+		mes "如果可以的話，請嘗試";
+		mes "看看您是否可以了解任何";
+		mes "詛咒之間的聯繫";
+		mes "和這首歌，或者如果她可以";
+		mes "記住任何發生的事情";
+		mes "驅魔失敗後...";
+		set prt_curse,16;
+		//changequest 18034,18035;
+		close;
+	}
+	else if (prt_curse == 16) {
+		mes "[Bamph神父]";
+		mes "請訪問邦妮";
+		mes "Mjolnir山的Imbullea";
+		mes "看看您是否可以了解更多";
+		mes "關於那首歌或關於什麼";
+		mes "發生在Jormungand詛咒的驅魔之後發生。";
+		close;
+	}
+	else if (prt_curse == 17) {
+		mes "[Bamph神父]";
+		mes "啊，你說話了嗎";
+		mes "致邦妮·伊姆布利亞？";
+		mes "請告訴我你是否";
+		mes "學到了新的東西。";
+		next;
+		mes "^3355ffyou關聯了一切";
+		mes "那個邦妮·伊姆布利亞講話";
+		mes "關於，包括發現";
+		mes "紅色寶石的碎片";
+		mes "在秘密的儀式上。";
+		next;
+		mes "[Bamph神父]";
+		mes "紅色寶石？有";
+		mes "沒有理由";
+		mes "神聖的地方。唔。有";
+		mes "這種情況不僅僅是見面";
+		mes "眼睛。我們更好地調查";
+		mes "事實，從現在開始。";
+		next;
+		mes "[Bamph神父]";
+		mes "和我來，冒險家，";
+		mes "秘密禮儀";
+		mes "王室的理由。";
+		mes "只需隱藏開關";
+		mes "在書架中，";
+		mes "我會在那裡見你。";
+		set prt_curse,18;
+		//changequest 18036,18037;
+		close;
+	}
+	else if (prt_curse > 17 && prt_curse < 22) {
+		mes "[Bamph神父]";
+		mes "和我一起去";
+		mes "秘密儀式";
+		mes "以便我們可以調查";
+		mes "破壞的可能性";
+		mes "與驅魔";
+		mes "Bonnie Imbullea表演了。";
+		next;
+		mes "[Bamph神父]";
+		mes "有一個隱藏的開關";
+		mes "在你的書架上";
+		mes "可以用來運輸自己";
+		mes "那裡。去，我會見面";
+		mes "您在禮儀的理由。";
+		close;
+	}
+	else if (prt_curse == 22) {
+		mes "[Bamph神父]";
+		mes "這是一個嚴重的問題";
+		mes "很重要，但我們不能";
+		mes "提醒王室，";
+		mes "引起恐慌。這將是";
+		mes "最好對此充分調查";
+		mes "首先並收集證明。";
+		next;
+		mes "[Bamph神父]";
+		mes "勇敢的冒險家會";
+		mes "你請訪問刺客";
+		mes "摩洛哥公會，看看你是否";
+		mes "可以了解如何";
+		mes "我們可以驗證是否有毒";
+		mes "被用來殺死王子嗎？";
+		set prt_curse,23;
+		//changequest 18039,18040;
+		close;
+	}
+	else if (prt_curse == 23) {
+		mes "[Bamph神父]";
+		mes "請看看是否可以";
+		mes "了解有關測試的任何信息";
+		mes "用於使用毒藥";
+		mes "刺客的成員";
+		mes "摩洛哥公會。";
+		close;
+	}
+	else if (prt_curse == 31) {
+		mes "[Bamph神父]";
+		mes "啊，你回來了~";
+		mes "你設法學習了嗎";
+		mes "關於毒藥的任何事情";
+		mes "刺客公會？我知道";
+		mes "他們的成員必須是";
+		mes "很難找到...";
+		next;
+		mes "^3355ffyou關聯所有";
+		mes "您學到的信息";
+		mes "關於Bamph神父的毒藥，";
+		mes "包括測試方法";
+		mes "用於在謀殺中使用毒藥。";
+		next;
+		mes "[Bamph神父]";
+		mes "啊，我明白了。然後，會";
+		mes "你請帶1個黃色";
+		mes "寶石和1個綠色藥水";
+		mes "盡快到達秘密的禮儀理由？我將等待";
+		mes "在那兒再次為您服務。";
+		set prt_curse,32;
+		//changequest 18044,18046;
+		close;
+	}
+	else if (prt_curse == 32 || prt_curse == 33 || prt_curse == 41 || prt_curse == 42 || prt_curse == 51 || prt_curse == 52) {
+		mes "[Bamph神父]";
+		mes "您可以使用隱藏";
+		mes "將書架切換到";
+		mes "進入秘密禮儀";
+		mes "理由。不要忘記我們";
+		mes "需要^3131ff 1黃色寶石^000000和^3131ff1綠藥^000000用於測試毒藥。";
+		close;
+	}
+	else if (prt_curse == 34) {
+		mes "[Bamph神父]";
+		mes "我簡直不敢相信！";
+		mes "如果使用毒藥，那就";
+		mes "第二和第三王子";
+		mes "被謀殺了！難以置信...";
+		mes "誰能殺死孩子？";
+		next;
+		mes "[Bamph神父]";
+		mes "至少，我們現在";
+		mes "知道他們的死亡是";
+		mes "不是Bonnie Imbullea的錯。";
+		mes "現在我必須與父親討論";
+		mes "餅乾並決定如何告訴";
+		mes "王室關於這個...";
+		next;
+		mes "[Bamph神父]";
+		mes "再一次，讓我提醒";
+		mes "你那一切";
+		mes "在這裡進行的次數必須保留";
+		mes "秘密。公眾不知道";
+		mes "喬爾蒙德的詛咒！這會導致政治動盪和混亂！";
+		next;
+		mes "[Bamph神父]";
+		mes "不過，這並不意味著";
+		mes "我個人不能感謝";
+		mes "您提供的所有幫助。我非常感謝您所做的事情，";
+		mes "冒險家。可以安全陪伴您進行所有旅行。";
+		set prt_curse,35;
+		//changequest 18047,18050;
+		close;
+	}
+	else if (prt_curse > 34 && prt_curse < 40 && !aru_monas) {
+		mes "[Bamph神父]";
+		mes "我不知所措";
+		mes "做。有時，甚至";
+		mes "我有疑問，相信";
+		mes "奧丁拋棄了我們...";
+		close;
+	}
+	else if (prt_curse == 40) {
+		mes "[Bamph神父]";
+		mes "啊，你回來了~";
+		mes "你設法學習了嗎";
+		mes "關於毒藥的任何事情";
+		mes "刺客公會？我知道";
+		mes "他們的成員必須是";
+		mes "很難找到...";
+		next;
+		mes "^3355ffyou關聯所有";
+		mes "您學到的信息";
+		mes "關於Bamph神父的毒藥，";
+		mes "包括測試方法";
+		mes "用於在謀殺中使用毒藥。";
+		next;
+		mes "[Bamph神父]";
+		mes "啊，我明白了。然後，會";
+		mes "你請帶^3131ff 1黃色";
+		mes "寶石^000000和^3131ff1綠藥^000000";
+		mes "盡快到達秘密的禮儀理由？我將等待";
+		mes "在那兒再次為您服務。";
+		set prt_curse,41;
+		//changequest 18045,18046;
+		close;
+	}
+	else if (prt_curse == 43 || prt_curse == 53) {
+		mes "[Bamph神父]";
+		mes "我簡直不敢相信！";
+		mes "如果使用毒藥，那就";
+		mes "第二和第三王子";
+		mes "被謀殺了！難以置信...";
+		mes "誰能殺死孩子？";
+		next;
+		mes "[Bamph神父]";
+		mes "至少，我們現在";
+		mes "知道他們的死亡是";
+		mes "不是Bonnie Imbullea的錯。";
+		mes "現在我必須與父親討論";
+		mes "餅乾並決定如何告訴";
+		mes "王室關於這個...";
+		next;
+		mes "[Bamph神父]";
+		mes "哦，你能";
+		mes "告知 ^3131FFBONNIE IMBULLEA ^000000";
+		mes "王子的死亡是";
+		mes "不是她的錯嗎？我敢肯定，這個消息會給她帶來極大的解脫";
+		mes "從她的罪惡負擔...";
+		next;
+		mes "[Bamph神父]";
+		mes "再一次，讓我提醒";
+		mes "你那一切";
+		mes "在這裡進行的次數必須保留";
+		mes "秘密。公眾不知道";
+		mes "喬爾蒙德的詛咒！這會導致政治動盪和混亂！";
+		next;
+		mes "[Bamph神父]";
+		mes "不過，這並不意味著";
+		mes "我個人不能感謝";
+		mes "您提供的所有幫助。我非常感謝您所做的事情，";
+		mes "冒險家。可以安全陪伴您進行所有旅行。";
+		if (prt_curse == 43)
+			set prt_curse,44;
+		else
+			set prt_curse,54;
+		//changequest 18047,18049;
+		getexp (checkre(3))?90000:1600000,0;
+		close;
+	}
+	else if (prt_curse > 43 && prt_curse < 50 && !aru_monas) {
+		mes "[Bamph神父]";
+		mes "你和嗎";
+		mes "Bonnie Imbullea了嗎？";
+		mes "盡量不要擔心";
+		mes "有關王子的新聞";
+		mes "謀殺。父親餅乾";
+		mes "我會處理的。";
+		close;
+	}
+	else if (prt_curse == 50) {
+		mes "[Bamph神父]";
+		mes "啊，你回來了~";
+		mes "你設法學習了嗎";
+		mes "關於毒藥的任何事情";
+		mes "刺客公會？我知道";
+		mes "他們的成員必須是";
+		mes "很難找到...";
+		next;
+		mes "您將所有的";
+		mes "您學到的信息";
+		mes "關於Bamph神父的毒藥，";
+		mes "包括測試方法";
+		mes "用於在謀殺中使用毒藥。";
+		next;
+		mes "[Bamph神父]";
+		mes "啊，我明白了。然後，會";
+		mes "你請帶 ^3131ff1黃色";
+		mes "寶石^000000和^3131ff1綠藥^000000";
+		mes "盡快到達秘密的禮儀理由？我將等待";
+		mes "在那兒再次為您服務。";
+		set prt_curse,51;
+		//changequest 18043,18046;
+		close;
+	}
+	else if (prt_curse == 60) {
+		mes "[Bamph神父]";
+		mes "哦，"+strcharinfo(0)+"~";
+		mes "長時間，看不到。";
+		mes "你和嗎";
+		mes "邦妮嗎？啊，然後";
+		mes "今天我該如何幫助您？";
+		next;
+		mes "^3355ffyou告訴父親Bamph父親";
+		mes "那種罕見的草藥長在";
+		mes "西部的一塊土地";
+		mes "你沒有提到你";
+		mes "告訴Rodafrian關於詛咒。 ^000000";
+		next;
+		mes "[餅乾父親]";
+		mes "向西登陸？";
+		mes "有傳聞的地方";
+		mes "富有狂熱者。";
+		mes "父親Bamph，我想他們";
+		mes "可能是主要嫌疑人";
+		mes "王子的謀殺...";
+		next;
+		mes "[Bamph神父]";
+		mes "好吧，我承認是";
+		mes "可能，但我們還沒有";
+		mes "與來自";
+		mes "向西著陸了這麼長時間...";
+		mes "做出這些假設還為時過早。";
+		next;
+		select("陸地向西？");
+		mes "[Bamph神父]";
+		mes "對";
+		mes "西部的土地。我們";
+		mes "確實派了幾個牧師";
+		mes "曾經在那里傳播我們的";
+		mes "信仰。但是，他們失敗了...";
+		next;
+		mes "[Bamph神父]";
+		mes "從我能告訴的，";
+		mes "幾乎每個人都在那裡";
+		mes "是強大的堅持";
+		mes "該地區的土著宗教。";
+		mes "無論如何，謝謝您的通知";
+		mes "我們。我們將從這里處理。";
+		next;
+		mes "[Bamph神父]";
+		mes "啊，保存秘密";
+		mes "王室，我要求";
+		mes "你避免進入";
+		mes "秘密儀式";
+		mes "今後。再次感謝您的幫助，"+strcharinfo(0)+".";
+		set prt_curse,61;
+		//completequest 18052;
+		close;
+	}
+	else {
+		if (prt_curse == 36 || prt_curse == 45 || prt_curse == 56 || prt_curse == 61) {
+// Begin Nameless Island Access Quest Addition
+			if (aru_monas == 0) {
+				mes "[Bamph神父]";
+				mes "對不起，但是會嗎";
+				mes "如果我們說話";
+				mes "之後？我必須處理";
+				mes "現在一個非常重要的任務...";
+				close;
+			} else if (aru_monas == 1) {
+				mes "[Bamph神父]";
+				mes "哦，我一直在等待";
+				mes "你，冒險家。對不起";
+				mes "給你這麼短的";
+				mes "注意，但似乎";
+				mes "你變得更強大了";
+				mes "自從我們上次見面以來。";
+				next;
+				mes "[Bamph神父]";
+				mes "教會收到了";
+				mes "Prontera的請求";
+				mes "宮殿，但我們沒有";
+				mes "處理它的資源。";
+				mes "我相信你會非常適合";
+				mes "如果您可以幫助我們，請執行此任務。";
+				next;
+				mes "[Bamph神父]";
+				mes "一個高級的人突然";
+				mes "不久前消失了。";
+				mes "雖然Prontera Palace";
+				mes "要求我們找到他，我可以";
+				mes "只告訴你他後來是誰。";
+				next;
+				mes "[Bamph神父]";
+				mes "我們只知道他是";
+				mes "最後一次出現在科莫多。請";
+				mes "與我們的線人交談， ^6b8e23larjes ^000000，";
+				mes "他會協助你";
+				mes "尋找失落的官員。";
+				set aru_monas,2;
+				//changequest 17000,17001;
+				close;
+			}
+			else if (aru_monas == 2 || aru_monas == 3) {
+				mes "[Bamph神父]";
+				mes "請去comodo和";
+				mes "找到我們的線人， ^6b8e23larjes ^000000，";
+				mes "在賭場。他會幫忙的";
+				mes "您在尋找";
+				mes "失的官員。";
+				close;
+			}
+			else if (aru_monas == 4) {
+				mes "[Bamph神父]";
+				mes "啊，你找到了拉傑斯嗎？";
+				mes "您如何調查";
+				mes "那個官員的失";
+				mes "進展？我希望他";
+				mes "仍然很安全";
+				mes "當你找到他時。";
+				next;
+				select("告訴他拉傑斯說的話。");
+				mes "[Bamph神父]";
+				mes "我懂了。我們已經檢測到了一些";
+				mes "令人不安的活動";
+				mes "最近Arunafeltz，但我沒有";
+				mes "認為他們會做";
+				mes "他們這麼快的舉動。唔...";
+				mes "給我一點思考。";
+				set aru_monas,5;
+				close;
+			}
+			else if (aru_monas == 5) {
+				if (rand(1,5) == 4) {
+					mes "[Bamph神父]";
+					mes "好吧，我考慮了所有";
+					mes "可能的情況。我認為";
+					mes "如果您";
+					mes "繼續調查";
+					mes "代表我們。也就是說，如果";
+					mes "您願意這樣做。";
+					next;
+					mes "[Bamph神父]";
+					mes "我們不想挑釁";
+					mes "國際衝突";
+					mes "在我們的正式參與下，";
+					mes "但是我也不能強迫你";
+					mes "為我們工作。是否";
+					mes "可以幫助您的選擇。";
+					next;
+					if (select("讓我想想:當然，我會幫忙的。") == 1) {
+						mes "[Bamph神父]";
+						mes "我希望你決定";
+						mes "幫助我們。安全";
+						mes "我們的國家取決於";
+						mes "這項調查的成功。";
+						mes "我們真的可以使用您的幫助。";
+						close;
+					}
+					mes "[Bamph神父]";
+					mes "謝謝。我很高興聽到";
+					mes "你會幫助我們的。您可以";
+					mes "將伊茲盧德的飛艇帶到";
+					mes "前往阿魯納菲爾茨（Arunafeltz）";
+					mes "必須繼續您的調查。";
+					next;
+					mes "[Bamph神父]";
+					mes "我相信你應該";
+					mes "如果您能夠學習更多";
+					mes "調查 ^9370dbrachel ^000000的城市。";
+					mes "請接受這筆錢";
+					mes "支付您的飛艇費。";
+					mes "謝謝你，祝你好運。";
+					set aru_monas,6;
+					set Zeny, Zeny + (checkre(0)?5000:1500);
+					//changequest 17002,17003;
+					close;
+				}
+				else {
+					mes "[Bamph神父]";
+					mes "嗯...最好的方法是什麼";
+					mes "我們要處理這個？讓";
+					mes "我考慮我們的選擇。";
+					mes "我們可以 - 不。那不會";
+					mes "工作。這將很困難。";
+					close;
+				}
+			}
+			else if (aru_monas == 6) {
+				// Anyone else see the irony in this?
+				mes "[Bamph神父]";
+				mes "你可能有問題";
+				mes "自從文化以來，在雷切爾";
+				mes "有大不相同";
+				mes "我們自己的。他們做的方式";
+				mes "事情，他們的政府...";
+				mes "一切都與宗教有關。";
+				close;
+			}
+			else if (aru_monas > 6 && aru_monas < 25) {
+				mes "[Bamph神父]";
+				mes "非常感謝您的一切";
+				mes "你的辛勤工作。我們的代理商";
+				mes "他們會在他們的時候與您聯繫";
+				mes "發現任何新信息。";
+				mes "記住沒有人能";
+				mes "知道我們一直在做什麼。";
+				close;
+			}
+			else if (aru_monas == 25 || aru_monas == 26) {
+				mes "[Bamph神父]";
+				mes "謝謝你帶我們這樣";
+				mes "重要信息。和";
+				mes "您的幫助，我們能夠";
+				mes "清除一些未解決的案件。";
+				mes "我們期望像";
+				mes "這個，但不是很快。";
+				next;
+				mes "[Bamph神父]";
+				mes "我擔心皇家法院";
+				mes "一直在爭吵他們";
+				mes "自己的自私需求。我祈禱";
+				mes "它不會變得更糟，下放";
+				mes "變成混亂。 ^666666*嘆氣*^000000我們會看到...";
+				close;
+			}
+			else {
+				mes "[Bamph神父]";
+				mes "讓我不高興";
+				mes "Arunafeltz如此安靜";
+				mes "最近。你知道表達";
+				mes "大約有一個安靜的休息";
+				mes "在暴風雨前，對嗎？";
+				close;
+			}
+// End Nameless Island Access Quest Addition
+		}
+	}
+}
+
+prt_church,184,110,3	script	Father Biscuss	60,{
+	if (prt_curse == 54) {
+		mes "[餅乾父親]";
+		mes "嗯，我仍然懷疑";
+		mes "刺客的人";
+		mes "公會可能已經殺死了";
+		mes "王子。以防萬一我";
+		mes "要發送間諜。保持";
+		mes "該信息秘密。";
+		next;
+		mes "[餅乾父親]";
+		mes "是的。你沒有學";
+		mes "或聽到我們的任何聲音，";
+		mes "而且你什麼都不知道";
+		mes "關於王室的詛咒。";
+		mes "從這裡，班普神父";
+		mes "我將處理這個問題。";
+		close;
+	}
+	else if (prt_curse == 35) {
+		mes "[餅乾父親]";
+		mes "我從未見過父親";
+		mes "以前這樣的bamph，但是";
+		mes "我能理解他的感覺。";
+		mes "作為其中的領導者之一";
+		mes "教堂，他感到負責";
+		mes "對於這些王子的死亡。";
+		next;
+		mes "[餅乾父親]";
+		mes "我確定他會感覺到";
+		mes "幾天后更好";
+		mes "但是現在，他沒有";
+		mes "彙編的條件";
+		mes "您的寶貴信息";
+		mes "提供的，所以我要這樣做。";
+		next;
+		mes "[餅乾父親]";
+		mes "就個人而言，我覺得";
+		mes "發生的事情是悲慘的，";
+		mes "但應該報仇。";
+		mes "也許我為什麼";
+		mes "對Imbullea的怨恨";
+		mes "一直以來。反正...";
+		next;
+		mes "[餅乾父親]";
+		mes "雖然我們不能";
+		mes "公開承認";
+		mes "代表Prontera";
+		mes "教堂，我要感謝";
+		mes "您提供的所有幫助。";
+		set prt_curse,36;
+		//completequest 18050;
+		getexp (checkre(3))?90000:1600000,0;
+		close;
+	}
+	else if (prt_curse == 36) {
+		mes "[餅乾父親]";
+		mes "沒有人能知道光";
+		mes "沒有經歷";
+		mes "黑暗。和平有";
+		mes "直到它是";
+		mes "與混亂形成對比。";
+		next;
+		mes "[餅乾父親]";
+		mes "宗教變得平均";
+		mes "在時間更重要";
+		mes "混亂和需要的時間。";
+		mes "我必須保持冷靜，尤其是";
+		mes "當班普神父對整個事件感到非常難過時...";
+		close;
+	}
+	else {
+		mes "[餅乾父親]";
+		mes "請觀察";
+		mes "沉默";
+		mes "牧師室。感謝";
+		mes "您合作。";
+		close;
+	}
+}
+
+prt_church,177,113,3	script	#gototomb	111,{
+	if (prt_curse > 17 && prt_curse < 23 || prt_curse > 31 && prt_curse < 35 || prt_curse == 41 || prt_curse == 42 || prt_curse == 44 || prt_curse == 51 || prt_curse == 52) {
+		warp "prt_church",21,91;
+	}
+	end;
+}
+
+prt_church,23,89,3	script	Father Biscuss#tomb	60,{
+	mes "[餅乾父親]";
+	mes "嗯...？";
+	mes "你準備好了嗎";
+	mes "回到樓上？";
+	next;
+	if (select("是:否") == 1) {
+		mes "[餅乾父親]";
+		mes "請跟隨我。";
+		next;
+		warp "prt_church",178,111;
+		end;
+	}
+	mes "[餅乾父親]";
+	mes "請花點時間";
+	mes "並將其調查為";
+	mes "盡可能徹底。";
+	close;
+}
+
+prt_church,16,114,4	script	Father Bamph#tomb	60,{
+	if (prt_curse == 18) {
+		mes "[Bamph神父]";
+		mes "有身體";
+		mes "蓋博格王子";
+		mes "在";
+		mes "驅魔。請服用";
+		mes "看一下左側的身體。";
+		set prt_curse,19;
+		close;
+	}
+	else if (prt_curse == 19) {
+		mes "[Bamph神父]";
+		mes "請看看";
+		mes "在身體";
+		mes "最左邊，第一位王子。";
+		close;
+	}
+	else if (prt_curse == 20) {
+		mes "["+strcharinfo(0)+"]";
+		mes "那個怪異的標記看上去";
+		mes "就像蛇秤一樣。";
+		mes "是...那是留下的標記";
+		mes "Jormungand的詛咒後面？";
+		next;
+		mes "[Bamph神父]";
+		mes "這是正確的。";
+		mes "現在，讓我們檢查一下";
+		mes "第二王子的屍體";
+		mes "位於中間。";
+		close;
+	}
+	else if (prt_curse == 21) {
+		mes "[Bamph神父]";
+		mes "現在...";
+		mes "現在我們應該";
+		mes "檢查第三王子。";
+		close;
+	}
+	else if (prt_curse == 22) {
+		mes "[Bamph神父]";
+		mes "讓我們上樓";
+		mes "可以繼續這次對話。";
+		mes "啊，你可能想問";
+		mes "父親餅乾帶領你。";
+		close;
+	}
+	else if (prt_curse == 32 || prt_curse == 41 || prt_curse == 51) {
+		mes "[Bamph神父]";
+		mes "你有一個 ^3131ffyellow";
+		mes "寶石^000000和^3131ffgreen藥水^000000";
+		mes "準備好？如果是這樣，你應該開始";
+		mes "對其他王子的身體進行測試。";
+		close;
+	}
+	else if (prt_curse == 33 || prt_curse == 42 || prt_curse == 52) {
+		mes "[Bamph神父]";
+		mes "商標消失了嗎？";
+		mes "哦，這太可怕了！";
+		mes "那意味著毒藥";
+		mes "被用來謀殺對方";
+		mes "王子！我幾乎...不能...";
+		next;
+		mes "[Bamph神父]";
+		mes "我...我需要一些時間";
+		mes "從衝擊中恢復";
+		mes "並考慮所有";
+		mes "仔細。目前，";
+		mes "讓我們回到樓上。";
+		if (prt_curse == 33) set prt_curse,34;
+		else if (prt_curse == 42) set prt_curse,43;
+		else set prt_curse,53;
+		close;
+	}
+	else if (prt_curse == 43 || prt_curse == 53) {
+		mes "[Bamph神父]";
+		mes "我們打擾了";
+		mes "這些貧窮的身體";
+		mes "靈魂足夠。我們應該";
+		mes "現在回到樓上...";
+		close;
+	}
+	end;
+}
+
+prt_church,19,111,5	script	#prince1	887,{
+	if (prt_curse == 19) {
+		mes "[Bamph神父]";
+		mes "這是";
+		mes "國王的第一個兒子，";
+		mes "太子。就像它";
+		mes "發生了幾代人";
+		mes "詛咒奪走了生命";
+		mes "第一個出生的王子...";
+		next;
+		mes "^Afqfb";
+		mes "王子的袖子，你";
+		mes "注意一個黑暗的標記。之上";
+		mes "拉起袖子，你";
+		mes "請注意，標記類似於";
+		mes "蛇的尺度。 ^000000";
+		set prt_curse,20;
+		//changequest 18037,18038;
+		close;
+	}
+	else if (prt_curse == 33 || prt_curse > 41 && prt_curse < 51 || prt_curse == 52) {
+		mes "^3355fffyou倒了一點";
+		mes "由";
+		mes "黃寶石和綠色";
+		mes "皮膚上的劑量上的藥水。";
+		mes "您等了一會兒，但是解決方案沒有反應。 ^000000";
+		close;
+	}
+	else {
+		mes "^3355ffit的男性身體";
+		mes "穿著豪華的長袍。";
+		mes "雖然已故，但顏色";
+		mes "生活尚未離開身體。";
+		close;
+	}
+}
+
+prt_church,21,111,5	script	#prince2	887,{
+	if (prt_curse == 20) {
+		mes "[Bamph神父]";
+		mes "這是";
+		mes "第二王子。詛咒";
+		mes "只應該殺死";
+		mes "長子王子，但";
+		mes "這三個王子";
+		mes "一代被殺...";
+		next;
+		mes "[Bamph神父]";
+		mes "儘管我們付出了巨大的努力";
+		mes "驅除這種強大的";
+		mes "詛咒，我們都失敗了。那些";
+		mes "涉及開始相信";
+		mes "奧丁可能拋棄了我們...";
+		emotion ET_HUK, playerattached();
+		next;
+		mes "^3355ffyou檢查身體";
+		mes "第二個王子並註意";
+		mes "他的比例標記在他身上";
+		mes "皮膚很虛弱，略微";
+		mes "顏色不同，與";
+		mes "第一個王子上的標記。 ^000000";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "父親Bamph ...！";
+		mes "看，這些標記是";
+		mes "第二個不同";
+		mes "王子比第一個";
+		mes "王子！看？他們與眾不同";
+		mes "在黑暗和著色中。";
+		next;
+		mes "[Bamph神父]";
+		mes "天哪，你是對的！";
+		mes "我們是如何忽略這個的？";
+		mes "嗯，這支持了這個主意";
+		mes "陰謀可能是";
+		mes "涉及。讓我們去檢查";
+		mes "第三王子的屍體。";
+		set prt_curse,21;
+		//changequest 18038,18039;
+		close;
+	}
+	else if (prt_curse == 33 || prt_curse > 41 && prt_curse < 51 || prt_curse == 52) {
+		specialeffect EF_POISONATTACK;
+		specialeffect EF_POISONHIT;
+		specialeffect EF_BUBBLE;
+		mes "^3355ffyou倒了一點";
+		mes "用綠色製成的解決方案";
+		mes "藥水和黃寶石";
+		mes "在身體的尺度上。這";
+		mes "比例標記變得虛弱，";
+		mes "接觸時解決方案氣泡。";
+		close;
+	}
+	else {
+		mes "^3355ffit的男性身體";
+		mes "穿著豪華的長袍。";
+		mes "雖然已故，但顏色";
+		mes "生活尚未離開身體。";
+		close;
+	}
+}
+
+prt_church,24,111,5	script	#prince3	887,{
+	if (prt_curse == 21) {
+		mes "^3355ffyou和bamph父親";
+		mes "急忙檢查第三個";
+		mes "王子的身體，發現";
+		mes "皮膚上的比例尺是";
+		mes "比標記還黑一點";
+		mes "在第二個王子的皮膚上。 ^000000";
+		next;
+		mes "[Bamph神父]";
+		mes "這很可疑...";
+		mes "第二次死亡和";
+		mes "第三王子可能是";
+		mes "由謀殺而不是";
+		mes "詛咒。但是，可以";
+		mes "可能被用來殺死他們？";
+		next;
+		while(1) {
+			if (select("武器！ :毒！") == 1) {
+				mes "[Bamph神父]";
+				mes "嗯...但是沒有";
+				mes "身體有傷口";
+				mes "或疤痕。如果那是";
+				mes "情況，我確定國王會";
+				mes "已經對某人宣戰了。";
+				mes "它不可能是武器。";
+				next;
+			}
+			else  break;
+		}
+		mes "[Bamph神父]";
+		mes "毒...？";
+		mes "哦親愛的！沒有人";
+		mes "Prontera教堂會知道";
+		mes "第一件事。但";
+		mes "也許使用了毒藥。";
+		mes "我們如何確定？";
+		next;
+		mes "[餅乾父親]";
+		mes "我說，你直接去";
+		mes "專家。有人在";
+		mes "^ff000000000000中的ff000000000000000000000000000000000000。";
+		mes "應該知道。我聽到他們";
+		mes "可以殺死可以殺死的毒藥";
+		mes "一個只有一滴的男人！";
+		next;
+		mes "[Bamph神父]";
+		mes "啊，這是個好主意！";
+		mes "嗯，但是首先，讓我們去";
+		mes "繼續這次對話";
+		mes "在外面，我們嗎？我喜歡";
+		mes "不要打擾這些身體...";
+		set prt_curse,22;
+		close;
+	}
+	else if (prt_curse == 22) {
+		mes "[Bamph神父]";
+		mes "讓我們上樓";
+		mes "可以繼續這次對話。";
+		mes "啊，你可能想問";
+		mes "父親餅乾帶領你。";
+		close;
+	}
+	else if (prt_curse == 32 || prt_curse == 41 || prt_curse == 51) {
+		if (countitem(506) > 0 && countitem(715) > 0) {
+			mes "^3355ffyou打開一瓶";
+			mes "綠藥並插入";
+			mes "黃寶石。寶石";
+			mes "快速溶解，方便";
+			mes "構成測試毒藥含量的解決方案。你倒";
+			mes "它在王子的規模上。 ^000000";
+			next;
+			specialeffect EF_POISONATTACK;
+			specialeffect EF_POISONHIT;
+			specialeffect EF_BUBBLE;
+			mes "^3355ff*PSSSSSSSSH*^000000";
+			next;
+			mes "^3355ff溶液氣泡";
+			mes "一旦接觸皮膚，";
+			mes "和蛇形標記";
+			mes "在王子的身體上";
+			mes "褪色直到消失為止。 ^000000";
+			delitem 506,1; //Green_Potion
+			delitem 715,1; //Yellow_Gemstone
+			if (prt_curse == 32) set prt_curse,33;
+			else if (prt_curse == 41) set prt_curse,42;
+			else set prt_curse,52;
+			//changequest 18046,18047;
+			close;
+		}
+		mes "^3355ffyou將需要";
+		mes "綠色藥水和";
+		mes "黃色寶石";
+		mes "為了測試並確認";
+		mes "毒藥是否殺死了";
+		mes "第二和第三王子。 ^000000";
+		close;
+	}
+	else if (prt_curse == 33 || prt_curse == 42 || prt_curse == 52) {
+		mes "^3355ff蛇量表標記";
+		mes "在這個王子的身體上";
+		mes "申請後消失了";
+		mes "綠色藥水和黃色";
+		mes "寶石溶液對皮膚。 ^000000";
+		close;
+	}
+	else {
+		mes "^3355ffit的男性身體";
+		mes "穿著豪華的長袍。";
+		mes "雖然已故，但顏色";
+		mes "生活尚未離開身體。";
+		close;
+	}
+}
+
+moc_fild16,201,295,5	script	Assassin Guildsman#poiso	884,{
+	if (prt_curse == 23) {
+		mes "[刺客公會人]";
+		mes "什麼業務";
+		mes "帶你到這裡嗎？";
+		next;
+		if (select("毒:無") == 1) {
+			mes "["+strcharinfo(0)+"]";
+			mes "我需要談談";
+			mes "毒物專家。";
+			mes "我正在調查";
+			mes "一些東西";
+			mes "Prontera教堂，";
+			mes "可能是謀殺案。";
+			next;
+			mes "[刺客公會人]";
+			mes "...";
+			mes "......";
+			mes "…………";
+			next;
+			mes "[刺客公會";
+			mes "仔細聽。";
+			mes "我只會告訴這個";
+			mes "給你一次。";
+			next;
+			mes "[刺客公會人]";
+			mes "有一個";
+			mes "刺客的私人酒吧";
+			mes "在7點的方向";
+			mes "在摩洛哥。去找人";
+			mes "命名為 ^3131ffmarjana ^000000。";
+			set prt_curse,24;
+			//changequest 18040,18041;
+			close;
+		}
+		mes "[刺客公會人]";
+		mes "不。";
+		mes "你的眼睛。我敢肯定";
+		mes "是有原因的";
+		mes "你來這裡...";
+		close;
+	}
+	else {
+		mes "[刺客公會人]";
+		mes "非常乾，";
+		mes "今天大風。我喜歡這個";
+		mes "天氣。感覺就像";
+		mes "完美匹配靈魂";
+		mes "一個真正的刺客，孤獨者";
+		mes "這隱藏在陰影中。";
+		close;
+	}
+}
+
+que_job01,10,16,5	script	Marjana#poison	885,{
+	if (prt_curse == 24) {
+		mes "[瑪嘉娜]";
+		mes "業務帶來了什麼";
+		mes "你在這裡？我在給";
+		mes "你4分鐘講話";
+		mes "和我在一起，所以要直接。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "我想學習";
+		mes "有關毒藥的更多信息";
+		mes "並確認是否是";
+		mes "曾經殺死某人。";
+		next;
+		mes "[瑪嘉娜]";
+		mes "毒？你來了";
+		mes "唯一的人。";
+		mes "如果我不知道答案，";
+		mes "我懷疑你會找到任何人";
+		mes "否則會。問。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "的確";
+		mes "刺客的毒藥";
+		mes "可以是如此強大，";
+		mes "那隻是一滴";
+		mes "可以殺人嗎？";
+		next;
+		mes "[瑪嘉娜]";
+		mes "的確如此強大";
+		mes "存在毒藥，但是如此致命";
+		mes "毒藥通常僅由";
+		mes "刺客十字架。一般來說，";
+		mes "普通刺客使用毒藥";
+		mes "效力要少得多。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "好吧。你能嗎？";
+		mes "留下的毒藥";
+		mes "身體上的特定標記？";
+		next;
+		mes "[瑪嘉娜]";
+		mes "當然。有各種各樣的";
+		mes "我存在的毒藥";
+		mes "當然，您甚至無法想像。";
+		mes "但是，離開的毒藥離開了";
+		mes "特定標記很難";
+		mes "使用，很少有人可以處理它們。";
+		next;
+		mes "[瑪嘉娜]";
+		mes "標記的類型";
+		mes "留下的一切";
+		mes "取決於材料";
+		mes "用於創造毒藥。";
+		mes "由於某些材料是";
+		mes "獨有某些領域...";
+		next;
+		mes "[瑪嘉娜]";
+		mes "好吧，商標類型";
+		mes "那被拋在後面";
+		mes "實際上是某種";
+		mes "線索。什麼是標記";
+		mes "在受害者的身體上？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "我們不確定是否";
+		mes "毒藥被使用了";
+		mes "但是有標記";
+		mes "看起來像蛇秤";
+		mes "留在身體上。";
+		next;
+		mes "[瑪嘉娜]";
+		mes "唔。你知道，如果我有";
+		mes "猜想，我會說";
+		mes "毒藥可能被使用。";
+		mes "但是毒藥會";
+		mes "起源於外部";
+		mes "符文米加特王國...";
+		next;
+		mes "[瑪嘉娜]";
+		mes "是的...";
+		mes "過去的材料";
+		mes "使那些蛇秤";
+		mes "標記...其中一些不能";
+		mes "甚至可以在這裡找到";
+		mes "Midgard大陸。";
+		next;
+		mes "[瑪嘉娜]";
+		mes "我們沒時間了。";
+		mes "聽著，你可以確認是否";
+		mes "毒藥被用來殺死某人";
+		mes "通過將黃色寶石與綠色藥水混合併灑水";
+		mes "身體上的溶液。";
+		next;
+		mes "[瑪嘉娜]";
+		mes "如果使用毒藥，";
+		mes "與反應溶液與";
+		mes "身體。但是這個方法";
+		mes "如果時間太多";
+		mes "謀殺後已經過去了。";
+		mes "您最好盡快嘗試一下...";
+		set prt_curse,25;
+		close;
+	}
+
+OnInit:
+	disablenpc "Marjana#poison";
+	end;
+
+OnEnable:
+	enablenpc "Marjana#poison";
+	end;
+}
+
+morocc,45,103,0	script	#prtcurse	-1,2,2,{
+OnTouch:
+	if (prt_curse == 25) {
+		mes "["+strcharinfo(0)+"]";
+		mes "嗯。我最好審查";
+		mes "我學到的事實";
+		mes "我可以更好地專注於";
+		mes "這項調查。讓我們看看~";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "很久以前，巨型蛇";
+		mes "喬曼格和威脅人類。";
+		mes "7個勇士擊敗了喬博格的特里斯特拉姆三世領導的喬爾蒙德";
+		mes "一家人，但喬爾蒙德（Jormungand）在失敗中詛咒了蓋博格（Geoborg）的血統。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "從那以後，詛咒殺死了";
+		mes "第一個出生的王子";
+		mes "Geoborg家族很小。";
+		mes "但是，所有的王子";
+		mes "這一代人被殺。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "根據我的";
+		mes "從那個刺客那裡學到";
+		mes "第一王子死於";
+		mes "詛咒，另外兩個";
+		mes "死於中毒。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "很可能是";
+		mes "使用了毒藥，然後";
+		mes "使用它的人是";
+		mes "刺客";
+		mes "符文米加特斯王國。是的，";
+		mes "那就是我所知道的一切。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "現在，那位歷史學家羅達弗里安（Rodafrian）";
+		mes "一直在等我告訴我";
+		mes "她那首歌的歌詞，但班普神父也在等待";
+		mes "有關我從刺客公會中學到的信息。我應該怎麼辦？";
+		next;
+		if (select("去找羅達弗里安:去找班夫神父") == 1) {
+			mes "["+strcharinfo(0)+"]";
+			mes "好吧，對我來說更容易";
+			mes "現在訪問Rodafrian。";
+			mes "她比";
+			mes "父親Bamph，所以我想";
+			mes "我會先和她說話。";
+			set prt_curse,30;
+			//changequest 18041,18042;
+			close;
+		}
+		mes "["+strcharinfo(0)+"]";
+		mes "好吧，這更重要";
+		mes "我去看班普神父";
+		mes "並調查王子";
+		mes "身體。我最好走";
+		mes "立即到Prontera。";
+		set prt_curse,50;
+		//changequest 18041,18043;
+		close;
+	}
+}
+
+prt_in,162,99,4	script	Librarian#curse	67,{
+	if (checkweight(1201,1) == 0) {
+		mes "^3355FFWAIT第二秒！";
+		mes "現在，您正在攜帶";
+		mes "你和你在一起太多。";
+		mes "請在";
+		mes "使用KAFRA服務";
+		mes "存儲您的一些物品。";
+		close;
+	}
+	if (prt_curse == 3) {
+		if (countitem(7431) < 1) {
+			mes "[圖書館員]";
+			mes "請確保返回";
+			mes "正確的圖書館";
+			mes "使用它們後放置。";
+			mes "我們沒有足夠的員工";
+			mes "組織所有這些書...";
+			next;
+			if (select("掛失書籍:結束對話") == 1) {
+				mes "[圖書館員]";
+				mes "哦，你丟了一些書嗎？";
+				mes "請寫下書";
+				mes "標題並支付700 Zeny";
+				mes "罰款。 aftewards，";
+				mes "我們將為您提供";
+				mes "更換副本。";
+				next;
+				if (Zeny > 699) {
+					mes "[圖書館員]";
+					mes "啊，你在這裡。";
+					mes "請拿這些";
+					mes "替換副本，";
+					mes "並儘量不輸";
+					mes "再次。謝謝。";
+					set Zeny, Zeny-700;
+					getitem 7431,1; //Books
+					close;
+				}
+				mes "[圖書館員]";
+				mes "唔...";
+				mes "盡快回來";
+				mes "盡可能";
+				mes "700 Zeny支付";
+				mes "丟失書籍罰款。";
+				close;
+			}
+			mes "[圖書館員]";
+			mes "請保持沉默";
+			mes "在圖書館內。";
+			mes "謝謝您的合作。";
+			close;
+		}
+		else {
+			mes "[圖書館員]";
+			mes "成為圖書館員可以";
+			mes "變得很粗糙。人們";
+			mes "只剩下書";
+			mes "分散，但期望他們";
+			mes "有組織。哦，書";
+			mes "總是迷路...";
+			next;
+			mes "[圖書館員]";
+			mes "當你有";
+			mes "清理他們的";
+			mes "混亂，你要";
+			mes "意識到多麼草率";
+			mes "人們真的可以。";
+			close;
+		}
+	}
+	else {
+		mes "[圖書館員]";
+		mes "成為圖書館員可以";
+		mes "變得很粗糙。人們";
+		mes "只剩下書";
+		mes "分散，但期望他們";
+		mes "有組織。哦，書";
+		mes "總是迷路...";
+		next;
+		mes "[圖書館員]";
+		mes "當你有";
+		mes "清理他們的";
+		mes "混亂，你要";
+		mes "意識到多麼草率";
+		mes "人們真的可以。";
+		close;
+	}
+}

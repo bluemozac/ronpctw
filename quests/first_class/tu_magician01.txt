@@ -1,0 +1,785 @@
+﻿//===== rAthena Script =======================================
+//= Magician Class Tutorial and Job Specific Quest
+//===== By: ==================================================
+//= Fix up by Jukka
+//===== Current Version: =====================================
+//= 2.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Magician training quest.
+//===== Additional Comments: =================================
+//= 1.0 Fully working
+//= 1.1 Optimized [Lupus]
+//= 1.2 Fixed experience gains to match upcoming rate adjustments. [SinSloth]
+//= 1.3 Misc. updates. [L0ne_W0lf]
+//= 1.4 Updated to match the official script. [Euphy]
+//= 2.0 Replaced occurrence of PcName and clean-up. [Capuche]
+//============================================================
+
+// Sign
+//============================================================
+geffen,61,174,4	script	Sign#M	HIDDEN_NPC,{
+	mes "- 法師工作變更 -";
+	close;
+}
+
+// New Mage Manager
+//============================================================
+geffen,67,180,4	script	New Mage Manager#M	8_F,{
+	mes "[法力]";
+	if(Class == Job_Novice){
+		mes "你還沒有準備好";
+		mes "我接受的任何培訓";
+		mes "提供。你必須訓練";
+		mes "更多，成為";
+		mes "首先。好吧親愛的？";
+		close;
+	}
+	if(BaseClass != Job_Mage || (eaclass()&EAJL_BABY)){
+		mes "你知道，有時";
+		mes "其他工作可能看起來";
+		mes "在某些戰鬥中好一點";
+		mes "情況，但總是有";
+		mes "為自己感到自豪。不僅";
+		mes "任何人都可以做你做的事~";
+		close;
+	}
+	if(Class != Job_Mage && tu_magician01 < 7){
+		mes "雖然我提供魔術";
+		mes "培訓，這不是很有幫助";
+		mes "如果您已經經歷了";
+		mes "在使用魔術中。對不起，";
+		mes "但是你必須依靠你的";
+		mes "自己磨練自己的技能。";
+		close;
+	}
+	switch(tu_magician01){
+	case 0:
+		mes "啊，歡迎~";
+		mes "我叫法力，";
+		mes "負責教練";
+		mes "新兵";
+		mes "法師行會。這意味著";
+		mes "我對你負責~";
+		next;
+		mes "[法力]";
+		mes "我只是在做";
+		mes "這只是一會兒，";
+		mes "但是我在這里為您提供幫助";
+		mes "您想了解更多";
+		mes "法師工作的基礎。";
+		next;
+		switch(select("你要教我嗎？:也許晚點...")) {
+		case 1:
+			mes "[法力]";
+			mes "當然！";
+			mes "不用擔心，";
+			mes "每個人都是初學者";
+			mes "在某一或另一點。";
+			mes "您只能變得更好！";
+			next;
+			break;
+		case 2:
+			mes "[法力]";
+			mes "好吧，我想";
+			mes "一切都可以解決。";
+			mes "但我期待";
+			mes "再次見面";
+			mes "如果你決定你";
+			mes "想要一些指示~";
+			close;
+		}
+		mes "[法力]";
+		mes "好吧，讓我們從";
+		mes "一般描述";
+		mes "我們的工作，對嗎？";
+		mes "什麼是法師？";
+		next;
+		mes "[法力]";
+		mes "而不是體力，而是";
+		mes "法師使用的力量";
+		mes "戰鬥中的要素。這些都是";
+		mes "^FF0000FERRY^000000，^5S40333333333333333333DABH0WIND^000000，^000FFVILLS^000000。";
+		mes "我們也可以訪問咒語";
+		mes "用 ^cfb53bghost ^000000屬性拼寫。";
+		next;
+		mes "[法力]";
+		mes "現在，當敵人有";
+		mes "一個元素屬性，它將";
+		mes "能夠抵抗該元素，但將容易受到他人的影響。";
+		mes "這就是為什麼了解元素屬性對我們如此重要的原因。";
+		next;
+		mes "[法力]";
+		mes "仔細聽這些";
+		mes "元素關係。";
+		mes "^ff0000fire^000000對地球很強，";
+		mes "但是對水很虛弱。";
+		mes "^5c403333erth^000000在風中很強，";
+		mes "但是對火很虛弱。";
+		next;
+		mes "[法力]";
+		mes "^0000ffwater^000000強烈反對";
+		mes "火，但反對風弱。";
+		mes "最後， ^93db70wind ^000000強烈反對";
+		mes "水，但在地球上微弱。";
+		next;
+		mes "[法力]";
+		mes "我不記得了";
+		mes "我最後一次";
+		mes "一言不發";
+		mes "坐著！我灌木叢，所以";
+		mes "休息時間。但是我們";
+		mes "繼續這樣做，好嗎？";
+		tu_magician01 = 1;
+		if (checkre(3))
+			getexp BaseLevel*3,BaseLevel*2;
+		else
+			getexp BaseLevel*30,BaseLevel*15;
+		specialeffect2 EF_HIT5;
+		close;
+	case 1:
+		mes "你準備好了嗎？";
+		mes "繼續我們的";
+		mes "討論";
+		mes "元素屬性？";
+		next;
+		mes "[法力]";
+		mes "你應該知道";
+		mes "每個怪物都有一個";
+		mes "元素屬性和";
+		mes "有不同的級別";
+		mes "所有這些要素。它是";
+		mes "了解這一點很重要...";
+		next;
+		mes "[法力]";
+		mes "讓我向你解釋";
+		mes "所有細微差別";
+		mes "每個元素。只是問";
+		mes "我哪個特定元素";
+		mes "您想了解更多有關。";
+		next;
+		mes "[法力]";
+		mes "換句話說，即使是相同的屬性";
+		mes "具有必須考慮的不同功能。";
+		mes "我現在將解釋這些屬性。";
+		while((1)){
+			next;
+		switch(select("^ff0000火^000000", "^5C4033土^000000", "^93DB70風^000000", "^0000FF水^000000", "^CFB53B幽靈^000000", "退出。")){
+			case 1:
+				mes "[法力]";
+				mes "^ff0000fire ^000000的怪物";
+				mes "財產往往具有強大";
+				mes "攻擊。由於我們的法師是";
+				mes "身體較弱，甚至輕微";
+				mes "這些怪物可以";
+				mes "對我們非常損害。";
+				next;
+				mes "[法力]";
+				mes "所以如果我們必須戰鬥";
+				mes "^ff0000fire ^000000的怪物";
+				mes "我們自己的財產，我們";
+				mes "可以使用霜凍潛水員";
+				mes "將它們凍結在他們的軌道上。";
+				next;
+				mes "[法力]";
+				mes "但是如果我們使用火";
+				mes "著火的財產技能";
+				mes "怪物，我們幾乎不會做";
+				mes "損壞，那不好。";
+				next;
+				mes "[法力]";
+				mes "作為參考，我們的火";
+				mes "財產技能是景象，";
+				mes "火螺栓，火球和火";
+				mes "牆。哦，讓我告訴你";
+				mes "關於火牆的更多信息。";
+				next;
+				mes "[法力]";
+				mes "火牆非常獨特";
+				mes "因為它可以用來";
+				mes "在一個屏幕上3次。任何";
+				mes "遇到其中的怪物將";
+				mes "被損壞，然後移開";
+				mes "朝相反的方向。";
+				next;
+				mes "[法力]";
+				mes "但是如果一個不死的怪物";
+				mes "碰到火牆，是";
+				mes "只受傷了，";
+				mes "火牆不一定是";
+				mes "阻止其方法。所以當心！";
+				.@eread_1 = 1;
+				break;
+			case 2:
+				mes "[法力]";
+				mes "好吧， ^5c40333333330000屬性";
+				mes "怪物通常有";
+				mes "良好的目標，甚至";
+				mes "如果您的躲閃率很高，";
+				mes "您可能會發現很難";
+				mes "逃避他們所有的攻擊。";
+				next;
+				mes "[法力]";
+				mes "處理這些";
+				mes "怪物，使用消防財產";
+				mes "咒語。火牆通常是";
+				mes "非常有效，因為它會";
+				mes "停止怪物和";
+				mes "造成一些良好的傷害。";
+				next;
+				mes "[法力]";
+				mes "知道也很方便";
+				mes "當您使用石頭";
+				mes "詛咒怪物，那";
+				mes "怪物變成地球";
+				mes "屬性時咒語";
+				mes "有效。酷，是嗎？";
+				next;
+				mes "[法力]";
+				mes "因此，如果您使用石頭詛咒，";
+				mes "一個好策略是";
+				mes "正確使用火災財產技能";
+				mes "之後，像火螺栓一樣";
+				mes "火球，利用";
+				mes "怪物的地球財產。";
+				.@eread_2 = 1;
+				break;
+			case 3:
+				mes "[法力]";
+				mes "現在，不要太驚訝";
+				mes "如果你不斷失";
+				mes "攻擊 ^93db70wind ^000000屬性怪物。";
+				mes "他們中的大多數可以避免身體";
+				mes "攻擊真的很好";
+				mes "他們高的躲閃率。";
+				next;
+				mes "[法力]";
+				mes "但是自從我們法師";
+				mes "主要是用我們的";
+				mes "咒語，我們不需要";
+				mes "非常擔心。";
+				mes "儘管如此，風怪還是";
+				mes "要快點，所以要小心。";
+				next;
+				mes "[法力]";
+				mes "在進攻方面";
+				mes "風怪，這是理想的";
+				mes "使用地球財產技能。";
+				mes "但是由於只有巫師";
+				mes "進入地球財產攻擊，";
+				mes "我們應該滿足火力技能。";
+				next;
+				mes "[法力]";
+				mes "火災財產技能可能";
+				mes "不會造成很多傷害，";
+				mes "但是它們的效果比風或水財產技能更大，這對風怪造成了很少的損害。";
+				next;
+				mes "[法力]";
+				mes "只是你知道，";
+				mes "^93db70wind ^000000財產技能";
+				mes "我們法師可以使用的是";
+				mes "Lighning Bolt和Thunder Storm。";
+				.@eread_3 = 1;
+				break;
+			case 4:
+				mes "[法力]";
+				mes "^0000FFWATER^000000屬性怪物";
+				mes "往往有很多健康，";
+				mes "這樣他們可以造成更多傷害";
+				mes "比其他怪物製作";
+				mes "與他們戰鬥更長的時間。";
+				next;
+				mes "[法力]";
+				mes "現在，記住我怎麼說";
+				mes "有不同的水平";
+				mes "對於屬性？水財產怪物實際上更多";
+				mes "對較高級別的對立元素的損害敏感。";
+				next;
+				mes "[法力]";
+				mes "換句話說，怪物";
+				mes "較高的水平";
+				mes "水財產正在運轉";
+				mes "遭受更多傷害";
+				mes "來自風質攻擊。";
+				next;
+				mes "[法力]";
+				mes "水財產技能";
+				mes "在法師的曲目中";
+				mes "包括冷螺栓和霜凍";
+				mes "潛水員。這些技能非常";
+				mes "有效防止火災怪物。";
+				next;
+				mes "[法力]";
+				mes "弗羅斯特潛水員很特別";
+				mes "它有機會";
+				mes "實際上凍結了怪物。";
+				mes "怪物被凍結";
+				mes "弗羅斯特潛水員，它們被認為是水怪。有趣的，是嗎？";
+				.@eread_4 = 1;
+				break;
+			case 5:
+				mes "[法力]";
+				mes "現在，沒有很多";
+				mes "^cfb53bghost^000000屬性怪物";
+				mes "大約。但是，如果您確實遇到了";
+				mes "他們，繼續使用你的";
+				mes "幽靈財產技能，";
+				mes "應該有效。";
+				next;
+				mes "[法力]";
+				mes "幽靈財產攻擊";
+				mes "我們法師可以使用的是";
+				mes "凝固汽油彈和靈魂罷工。";
+				mes "這些技能通常趨向於";
+				mes "做得很好，除了";
+				mes "高神聖財產怪物。";
+				next;
+				mes "[法力]";
+				mes "現在，安全牆咒語";
+				mes "有點像鬼魂";
+				mes "技巧，但很難分類。鑄造安全牆創建";
+				mes "障礙比防止";
+				mes "近距離物理攻擊。";
+				next;
+				mes "[法力]";
+				mes "但是，只有這個障礙";
+				mes "適合一個人，不";
+				mes "屏蔽遠距離";
+				mes "攻擊或強大的財產";
+				mes "攻擊，所以要小心！";
+				.@eread_5 = 1;
+				break;
+			case 6:
+				mes "[法力]";
+				mes "你確定你";
+				mes "聽說過足夠多的";
+				mes "元素的細微差別";
+				mes "特性？因為如果你";
+				mes "準備好了，我們將介紹一些新的";
+				mes "材料供您學習。";
+				next;
+				if(select("等-等等，還沒！:我準備好繼續了。") == 2) {
+					mes "[法力]";
+					mes "好吧，我們";
+					mes "進入下一個";
+					mes "然後。 ho ho ho~！";
+					tu_magician01 = 2;
+					specialeffect2 EF_HIT5;
+					.@total = .@eread_1 + .@eread_2 + .@eread_3 + .@eread_4 + .@eread_5;
+					if (.@total) getexp (.@total*150),(.@total*70);
+					close;
+				}
+				break;
+			}
+		}
+	case 2:
+		mes "我知道這個概念";
+		mes "可能是";
+		mes "現在令人困惑，但是結束了";
+		mes "時間你會掛了";
+		mes "它。現在該說話了";
+		mes "關於魔術技能深入~";
+		next;
+		mes "[法力]";
+		mes "現在，最基本的魔術";
+		mes "攻擊法術是火螺栓，";
+		mes "冷螺栓，閃電和";
+		mes "納帕姆拍打。學習這些";
+		mes "使法師能夠學習他們的";
+		mes "更高級的技能。";
+		specialeffect2 EF_NAPALMBEAT;
+		next;
+		mes "[法力]";
+		mes "增加";
+		mes "這些技能不僅開放";
+		mes "訪問其他咒語，但";
+		mes "這些基本的損害";
+		mes "攻擊技巧也會提高。";
+		specialeffect2 EF_LIGHTBOLT;
+		next;
+		mes "[法力]";
+		mes "其他技能";
+		mes "法師課的基礎";
+		mes "是視線，石頭詛咒和";
+		mes "增加SP恢復。他們";
+		mes "並不是真正的攻擊法術，但在某些情況下很有用。";
+		next;
+		specialeffect2 EF_SIGHT;
+		mes "[法力]";
+		mes "視線習慣";
+		mes "揭示敵人";
+		mes "正在隱藏。繼續";
+		mes "介意這項技能";
+		mes "範圍不會走得太遠。";
+		next;
+		specialeffect2 EF_STONECURSE;
+		mes "[法力]";
+		mes "石詛咒有機會";
+		mes "詛咒目標，暫時";
+		mes "固定它並製作";
+		mes "^5c403333330000屬性。但是，每個";
+		mes "嘗試鑄造石頭詛咒";
+		mes "需要1個紅色寶石。";
+		next;
+		mes "[法力]";
+		mes "SP恢復的增加是";
+		mes "被動技能有助於";
+		mes "您坐下來休息時恢復了更多的SP。它不會直接影響戰鬥，但是擁有更多的SP總是更好。";
+		next;
+		mes "[法力]";
+		mes "好吧，我覺得我";
+		mes "解釋了基本咒語";
+		mes "足夠的。現在，在我說話之前";
+		mes "關於我們的高級技能，";
+		mes "我想要一個任務";
+		mes "您要完成培訓。";
+		next;
+		mes "[法力]";
+		mes "如果你從";
+		mes "在這裡，您會發現一座大橋";
+		mes "橋樑你可以遇到的地方";
+		mes "這些怪物稱為pupa。";
+		mes "pupa不動，不能";
+		mes "攻擊以挽救他們的生命。";
+		next;
+		mes "[法力]";
+		mes "狩獵這些p";
+		mes "直到收集到";
+		mes "他們的10 chrysalis。";
+		mes "然後把它們帶給我，好嗎？";
+		tu_magician01 = 3;
+		getexp 400,200;
+		specialeffect2 EF_HIT5;
+		close;
+	case 3:
+	case 4:
+		if (tu_magician01 == 3) {
+			mes "啊，你回來了嗎？";
+			mes "讓我們看看您是否聚集";
+			mes "全部10個Chrysalis狩獵";
+			mes "所有這些。嗯...";
+		}
+		else {
+			mes "所以...";
+			mes "你得到了";
+			mes "10 蛹";
+			mes "來自狩獵pupa";
+			mes "就像我問的嗎？我希望如此...";
+			mes "因為我要檢查~";
+		}
+		next;
+		mes "[法力]";
+		if (countitem(915) < 10){// Chrysalis
+			if (tu_magician01 == 3) {
+				mes "噢，你沒有";
+				mes "有夠了";
+				mes "他們還向西行駛";
+				mes "從這里和亨特·帕帕";
+				mes "要獲得更多的chrysalis，好嗎？";
+				mes "現在，我會醫治你。";
+				tu_magician01 = 4;
+				percentheal 100,100;
+			}
+			else {
+				mes "哇，你需要";
+				mes "不僅僅是這個。";
+				mes "我知道你可以做到...";
+				mes "木花完全是";
+				mes "毫無防備的怪物！";
+			}
+		}
+		else {
+			mes "...九，十。";
+			mes "好吧，你通過！";
+			mes "到現在為止，你必須更多";
+			mes "習慣於使用您的技能，是嗎？";
+			mes "無論如何，讓我知道您什麼時候準備上一課，好嗎？";
+			tu_magician01 = 5;
+			getexp 400,200;
+			specialeffect2 EF_HIT5;
+		}
+		close;
+	case 5:
+		mes "現在我告訴你";
+		mes "我對";
+		mes "更高級的法師";
+		mes "技能。哪一個";
+		mes "你喜歡我解釋嗎？";
+		while(1){
+			next;
+			switch(select("靈魂打擊:安全之牆:火球術:霜凍潛水:雷暴術:火牆術:能量外套:退出。")) {
+			case 1:
+				mes "[法力]";
+				mes "靈魂罷工是 ^cfb53bghost ^000000";
+				mes "您可以的財產技能";
+				mes "在增加後學習";
+				mes "納帕姆擊敗技巧";
+				mes "一定水平。它攻擊";
+				mes "具有古老的精神力量~";
+				next;
+				specialeffect2 EF_SOULSTRIKE;
+				next;
+				mes "[法力]";
+				mes "當您訓練使用時";
+				mes "靈魂罷工和增加";
+				mes "該技能的水平將增長，您將能夠";
+				mes "更快地投射它。";
+				.@skill_e1 = 1;
+				break;
+			case 2:
+				mes "[法力]";
+				mes "您可以學習安全牆";
+				mes "訓練使用後";
+				mes "凝固汽油彈和靈魂罷工。";
+				mes "安全牆防止";
+				mes "最近距離攻擊。";
+				next;
+				specialeffect2 EF_GLASSWALL;
+				next;
+				mes "[法力]";
+				mes "但是，安全牆";
+				mes "有時間持續時間";
+				mes "只能保護";
+				mes "一定數量的攻擊，";
+				mes "取決於";
+				mes "您使用的安全牆技能。";
+				.@skill_e2 = 1;
+				break;
+			case 3:
+				mes "[法力]";
+				mes "火球是 ^ff0000fire ^000000";
+				mes "您的財產技能";
+				mes "訓練後可以學習";
+				mes "在使用火螺栓中。";
+				next;
+				specialeffect2 EF_FIREBALL;
+				next;
+				mes "[法力]";
+				mes "火球實際上可以";
+				mes "對多重造成損害";
+				mes "敵人在內";
+				mes "技能範圍。製作";
+				mes "充分利用破壞性";
+				mes "火球的力量！";
+				.@skill_e3 = 1;
+				break;
+			case 4:
+				mes "[法力]";
+				mes "弗羅斯特潛水員是A ^0000FFWATER ^000000";
+				mes "可以是財產技能";
+				mes "在增加後就學到了";
+				mes "冷螺栓技能";
+				mes "一定水平。";
+				specialeffect2 EF_FROSTDIVER;
+				next;
+				specialeffect2 EF_FROSTDIVER2;
+				mes "[法力]";
+				mes "弗羅斯特潛水員會損壞";
+				mes "敵人有機會";
+				mes "也凍結它們。一次";
+				mes "凍結的怪物會";
+				mes "被認為是水";
+				mes "財產生物。";
+				next;
+				mes "[法力]";
+				mes "現在，隨著您的增加";
+				mes "霜凍潛水員的水平";
+				mes "技巧，損害和機會";
+				mes "凍結怪物也將";
+				mes "增加。非常危險，嗯？ ^ffffffkamenriderblack^000000";
+				.@skill_e4 = 1;
+				break;
+			case 5:
+				mes "[法力]";
+				mes "雷暴是一個";
+				mes "^93db70wind^000000屬性技能";
+				mes "您可以在此之後學習";
+				mes "增加閃電";
+				mes "螺栓技能達到一定水平。";
+				next;
+				specialeffect2 EF_THUNDERSTORM;
+				mes "[法力]";
+				mes "雷暴是相似的";
+				mes "發射球可以";
+				mes "攻擊多個敵人";
+				mes "在一定範圍內。";
+				mes "這是一個非常有力的";
+				mes "地面靶向攻擊。";
+				.@skill_e5 = 1;
+				break;
+			case 6:
+				mes "[法力]";
+				mes "火牆是 ^ff0000fire ^000000";
+				mes "可以可以的財產技能";
+				mes "在訓練後學習";
+				mes "在使用火球和";
+				mes "視線。與其他技能不同，";
+				mes "火牆針對一個區域。";
+				next;
+				specialeffect2 EF_FIREWALL;
+				mes "[法力]";
+				mes "所以你可以放置";
+				mes "位置的火牆";
+				mes "您認為敵人的地方";
+				mes "將朝著。是的";
+				mes "何時特別有用";
+				mes "怪物接近你！";
+				next;
+				mes "[法力]";
+				mes "因此，如果您可以使用";
+				mes "戰略性射擊很好";
+				mes "有效地，它可以";
+				mes "成為非常有力的技能~";
+				.@skill_e6 = 1;
+				break;
+			case 7:
+				mes "[法力]";
+				mes "能量外套是";
+				mes "您的獨特技能";
+				mes "不能只是自己學習。";
+				mes "您必須問Blizardis";
+				mes "在法師公會內";
+				mes "教您如何使用它。";
+				next;
+				specialeffect2 EF_ENERGYCOAT;
+				next;
+				mes "[法力]";
+				mes "如果您決定";
+				mes "學習能量外套，我";
+				mes "當然Blizardis會告訴";
+				mes "你們所有需要知道。";
+				.@skill_e7 = 1;
+				break;
+			case 8:
+				mes "[法力]";
+				mes "你理解嗎？";
+				mes "所有這些？好，因為";
+				mes "現在我有一個使命";
+				mes "你代表法師";
+				mes "公會。當你準備好";
+				mes "簡報，跟我說話，好嗎？";
+				next;
+				mes "[法力]";
+				mes "哦，請服用";
+				mes "這。這是禮物";
+				mes "你幫助你";
+				mes "訓練。我希望它來了";
+				mes "戰鬥時方便...";
+				tu_magician01 = 6;
+				getitem 1604,1; //Wand
+				specialeffect2 EF_HIT5;
+				.@total = .@skill_e1 + .@skill_e2 + .@skill_e3 + .@skill_e4 + .@skill_e5;
+				if (.@total) getexp (.@total*300),(.@total*100);
+				close;
+			}
+		}
+		close;
+	case 6:
+		mes "哦，好，你回來了。";
+		mes "讓我告訴你";
+		mes "你的使命。最近，";
+		mes "發生了什麼事";
+		mes "摩洛哥和小偷公會";
+		mes "正在請求我們的幫助。";
+		next;
+		mes "[法力]";
+		mes "這不是強制性的";
+		mes "讓你這樣做，但是";
+		mes "你會得到補償";
+		mes "為了您的努力，我們將";
+		mes "給你一些支持。";
+		mes "那你怎麼看？";
+		next;
+		switch(select("我會做的。:抱歉，但是...")) {
+		case 1:
+			mes "[法力]";
+			mes "偉大的！好吧，";
+			mes "我會寄給你";
+			mes "然後摩洛哥。一旦你";
+			mes "到達那裡，走到前面";
+			mes "摩洛哥金字塔和";
+			mes "與Yierhan交談。謝謝~";
+			next;
+			mes "[法力]";
+			mes "哦，當你";
+			mes "用yierhan完成";
+			mes "你做了嗎，回來了";
+			mes "並向我報告，好嗎？";
+			tu_magician01 = 7;
+			emotion ET_SMILE;
+			warp "morocc",182,286;
+			close;
+		case 2:
+			mes "[法力]";
+			mes "嗯...？";
+			mes "我懂了。好吧，如果";
+			mes "你碰巧改變了";
+			mes "你的想法，回來";
+			mes "然後問我，好嗎？";
+			close;
+		}
+	case 7:
+		mes "我不知道";
+		mes "什麼樣的工作";
+		mes "Yierhan有商店";
+		mes "給你，但希望";
+		mes "這不會太困難。";
+		close;
+	case 27:
+		mes "Yierhan剛寄給我";
+		mes "一條消息，說";
+		mes "您在";
+		mes "完成任務。";
+		mes "非常好的工作，"+strcharinfo(0)+"~";
+		next;
+		mes "[法力]";
+		mes "似乎有";
+		mes "兩個秘密組織";
+		mes "參與了所有這些骯髒";
+		mes "商業。他們為什麼會";
+		mes "一起工作？";
+		next;
+		mes "[法力]";
+		mes "好吧，無論如何...";
+		mes "這很漂亮";
+		mes "主要業務";
+		mes "我想更高";
+		mes "會處理，所以你不";
+		mes "現在需要擔心它。";
+		next;
+		mes "[法力]";
+		mes "請把它作為";
+		mes "有一點幫助";
+		mes "我們兩個行會。一次";
+		mes "再次，非常感謝~";
+		tu_magician01 = 28;
+		getitem 2321,1; //Silk_Robe
+		Zeny = Zeny + 3000;
+		getexp 3000,1000;
+		close;
+	default:
+		if(tu_magician01 < 27){
+			mes "所以...";
+			mes "看起來有些東西";
+			mes "在符文中進行";
+			mes "肯定是王國。怪不得";
+			mes "所有的行會都很忙...";
+			next;
+			mes "[法力]";
+			mes "無論如何，請";
+			mes "保持好";
+			mes "工作。嗯，是";
+			mes "Yierhan表現良好？";
+		} else {
+			mes "你似乎很好";
+			mes "現在和那裡經驗豐富";
+			mes "我什麼還能";
+			mes "真的教你。現在已經上了";
+			mes "給您尋找掌握的方法";
+			mes "自己的魔術方式。";
+		}
+		close;
+	}
+}

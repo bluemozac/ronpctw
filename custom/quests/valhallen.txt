@@ -1,0 +1,130 @@
+﻿//===== rAthena Script ======================================= 
+//= Valhallen Items Quests NPC
+//===== By: ================================================== 
+//= Avaji
+//===== Current Version: ===================================== 
+//= 2.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= All-in-one: Mjolnir,Sleipnir,Brisingamen,Gleipnir,Megingjard
+//= Custom quest, ingredients based on official RO FAQ
+//===== Additional Comments: ================================= 
+//= 1.1 Optimized. [Euphy]
+//= 2.0 Adds SE and TE Godlikes. Fixed Mixing Itemlist. [Jey]
+//= Sources for the mixing lists 2016-08-15:
+//= http://irowiki.org/wiki/God_Items_Quest
+//= http://irowiki.org/wiki/God_Items_Quest_2
+//= http://irowiki.org/wiki/God_Items_Quest_3
+//============================================================ 
+
+prontera,147,171,5	script	Lenneth	811,{
+	mes "[倫內斯]";
+	mes "我來自瓦爾哈拉（Valhalla）為您提供幫助。";
+	mes "我可以為您傳輸許多Valhallen項目，";
+	mes "儘管它們需要許多罕見的要素才能製作。";
+	next;
+	switch(select("雷神之鎚:斯萊普尼爾:布里辛加門:格萊普尼爾:梅金賈德:阿斯普里卡:布倫希爾德:赫沃爾:耶蒙剛德:穆斯佩里姆:符文精華:關閉")) {
+		case 1:
+			mes "[倫內斯]";
+			mes "^3355ffmjolnir^000000是雷神的強大錘子。";
+			setarray .@Items[0],1530,1522,2,984,20,985,5,969,40,7074,2,7075,4,7078,5,7091,5,7089,5;
+			break;
+		case 2:
+			mes "[倫內斯]";
+			mes "^3355ffsleipnir^000000是奧丁戰馬後製造的靴子。";
+			setarray .@Items[0],2410,2406,2,969,20,985,10,7076,3,7079,5,7083,3,7086,4,7087,3;
+			break;
+		case 3:
+			mes "[倫內斯]";
+			mes "^3355FfbrisingAmmen^000000是美女女神Freyja的神奇項鍊。";
+			setarray .@Items[0],2630,2603,1,726,2,722,3,727,10,724,5,969,20,7073,4,7077,4,7088,3,7090,3,7092,3;
+			break;
+		case 4:
+			mes "[倫內斯]";
+			mes "^3355ffgleipnir ^000000是製造 ^3355ffmegingjard ^000000所需的輕巧但堅固的繩索";
+			setarray .@Items[0],7058,7080,4,7081,5,7082,4,7084,3,7085,3;
+			break;
+		case 5:
+			mes "[倫內斯]";
+			mes "^3355ffmegingjard ^000000是Thor的強大腰帶。";
+			setarray .@Items[0],2629,7058,1,2627,1,969,20,726,10,984,10;
+			break;
+		case 6:
+			mes "[倫內斯]";
+			mes "^3355ffasprika ^000000是神的光。";
+			setarray .@Items[0],2541,7835,1,7836,1,7837,1,7838,1,2513,1,7063,100,7291,10,7293,10,985,20;
+			break;
+		case 7:
+			mes "[倫內斯]";
+			mes "^3355ffbrynhild ^000000是戰士的裝甲。";
+			setarray .@Items[0],2383,7830,1,7831,1,7832,1,7833,1,7834,1,7510,100,2357,1,969,10,985,20;
+			break;
+		case 8:
+			mes "[倫內斯]";
+			mes "^3355ffhervor ^000000以維爾利人的命名，她確保了自己的勇士隊勝利。";
+			setarray .@Items[0],2181,6595,2,6596,1,6594,4,6597,3,6602,1,6604,1,6605,1,2115,1;
+			break;
+		case 9:
+			mes "[倫內斯]";
+			mes "^3355fffjormungand ^000000以毒害敵人的能力而聞名。";
+			setarray .@Items[0],2020,6603,4,6599,1,6598,1,6601,4,6600,1,6604,1,6605,1,1473,1;
+			break;
+		case 10:
+			mes "[倫內斯]";
+			mes "需要 ^3355ffmuspellium ^000000才能製造 ^3355ffjormungand ^000000和 ^3355ffhervor ^000000。";
+			setarray .@Items[0],6605,984,50,985,50;
+			break;
+		case 11:
+			mes "[倫內斯]";
+			mes "需要 ^3355 Fffessence ^000000才能製作 ^3355ffjormungand ^000000和 ^3355ffhervor ^000000。";
+			setarray .@Items[0],6604,12735,200,12736,100;
+			break;
+		default:
+			close;
+	}
+	
+	mes "^ff0000我需要的項目如下：^000000";
+	set .@itemmissing,0;
+	for(set .@i,1; .@i<getarraysize(.@Items); set .@i,.@i+2) {
+		set .@amount,.@Items[.@i+1];
+		set .@id,.@Items[.@i];
+		mes "～"+.@amount+"x "+((countitem(.@id)<.@amount)?("^dd3355"):("^33dd55"))+getitemname(.@id)+((getitemslots(.@id)>0)?" ["+getitemslots(.@id)+"]":"")+"^000000";
+		if (countitem(.@id) < .@amount) 
+			set .@itemmissing,1;
+	}
+	if (.@itemmissing) {
+		next;
+		mes "[倫內斯]";
+		mes "繼續找到所有這些項目。";
+		mes "我將在這裡等待幫助您。";
+		close;
+	}
+	next;
+	mes "[倫內斯]";
+	mes "你想要 ^3355ff嗎"+getitemname(.@Items[0])+"^000000?";
+	next;
+	if(select("No","Yes")==1) {
+		mes "[倫內斯]";
+		mes "如果您改變主意，請返回。";
+		close;
+	}
+	mes "[倫內斯]";
+	mes "這是您的 ^3355ff"+getitemname(.@Items[0])+"^000000.";
+	mes "願它為您服務。";
+	//second check if the player tries to bypass the first
+	for(set .@i,1; .@i<getarraysize(.@Items); set .@i,.@i+2) {
+		set .@amount,.@Items[.@i+1];
+		set .@id,.@Items[.@i];
+		if (countitem(.@id) < .@amount) 
+			close;
+	}
+	// Delete the items _after_ the second check
+	for(set .@i,1; .@i<getarraysize(.@Items); set .@i,.@i+2) {
+		set .@amount,.@Items[.@i+1];
+		set .@id,.@Items[.@i];
+		delitem .@id, .@amount;
+	}
+	getitem .@Items[0],1;
+	close;
+}

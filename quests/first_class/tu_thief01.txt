@@ -1,0 +1,722 @@
+﻿//===== rAthena Script =======================================
+//= Thief Class Tutorial and Job Specific Quest
+//===== By: ==================================================
+//= Fix up by Jukka
+//===== Current Version: =====================================
+//= 2.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Thief training quest.
+//===== Additional Comments: =================================
+//= 1.0 Fully working
+//= 1.1 optimized [Lupus]
+//= 1.2 Fixed experience gains to match upcoming rate adjustments. [SinSloth]
+//= 1.3 Fixed a few minor mistakes [Playtester]
+//= 1.4 Misc. updates. [L0ne_W0lf]
+//= 1.5 Added Pre-Renewal support. [Euphy]
+//= 2.0 Fixed a wrong exp value & clean-up. [Capuche]
+//============================================================
+
+// Thief Trainer
+//============================================================
+moc_ruins,66,164,4	script	Thief Trainer#T	4_M_02,{
+	mes "[Y I二涵]";
+	if(Class == Job_Novice){
+		mes "嗯...？";
+		mes "新手？";
+		mes "仍在思考";
+		mes "你是什麼工作";
+		mes "會選擇...";
+		mes "我對嗎？";
+		next;
+		mes "[Y I二涵]";
+		mes "聽著，如果您決定成為小偷 - 一個明智的選擇";
+		mes "我可能會添加 - 與我交談。我給你看繩索！";
+		close;
+	}
+	else if (BaseClass == Job_Thief && Upper != 2) {
+		if (Class != Job_Thief && tu_thief01 < 8) {
+			mes "你是你";
+			mes "在這裡嗎？有";
+			mes "我沒有什麼可以教你的！";
+			mes "你超越了我！";
+			next;
+			mes "[Y I二涵]";
+			mes "實際上，我認為";
+			mes "你有資格";
+			mes "教我一些東西！";
+			mes "快點！我需要新的動作！";
+			close;
+		}
+		if(tu_thief01 == 0){
+			mes "嘿時刻。";
+			mes "我是Yierhan。";
+			mes "我碰巧是";
+			mes "負責人";
+			mes "訓練新的小偷。";
+			next;
+			switch(select("訓練？:現在就訓練？")){
+			case 1:
+				mes "[Y I二涵]";
+				mes "是的，訓練。我的意思是，這種東西對某些人來說是第二天性，但是其他人需要更多幫助。因此，這是“以防萬一”。";
+				next;
+				break;
+			case 2:
+				mes "[Y I二涵]";
+				mes "現在？";
+				mes "是的，現在！";
+				mes "但是，如果您由於某種原因沒有準備好，我想我可以等待。";
+				close;
+			}
+			mes "[Y I二涵]";
+			mes "好吧，首先，小偷使用近戰攻擊。好吧，我們大多數人都這樣做。有一些喜歡使用遠距離弓的人。但是我們所有人都擅長快速！";
+			next;
+			mes "[Y I二涵]";
+			mes "因此，對於近戰攻擊，哪個統計數據會增加您的傷害？快點";
+			mes "現在，如果您不跳過新手訓練場，則應該知道這一點。";
+			next;
+			switch(select("^Taqa'a'na^000000:^2F4F'更快^000000:^Qaqa'adadx^000000")){
+			case 1:
+				mes "[Y I二涵]";
+				mes "說whaaat？ ^6B8E23INT^000000會影響魔術傷害，魔術防禦和一些技能。小偷甚至都不與魔術一起工作！";
+				next;
+				mes "[Y I二涵]";
+				mes "您完全跳過了新手訓練場！不是我怪你。無論如何，是 ^2f4f2fstr ^000000增加了您的攻擊傷害，知道了嗎？";
+				next;
+				mes "[Y I二涵]";
+				mes "因此，如果您覺得自己造成的損害非常薄弱，則可能需要在 ^2f4f2fstr ^000000中更多的統計點。提高自己的str的高度確實取決於您。";
+				getexp 200,100;
+				break;
+			case 2:
+				mes "[Y I二涵]";
+				mes "是的，是的！如果您想增加傷害，您需要";
+				mes "將一些統計點放入 ^2f4f2fstr ^000000中。增加Str也會增加";
+				mes "您的最大體重限制也是如此。";
+				next;
+				mes "[Y I二涵]";
+				mes "因此，如果您覺得自己造成的損害非常薄弱，則可能需要在 ^2f4f2fstr ^000000中更多的統計點。提高自己的str的高度確實取決於您。";
+				next;
+				mes "[Y I二涵]";
+				mes "當然， ^23238Edex ^000000和Luk可以";
+				mes "還會增加您的攻擊傷害，但與STR相比，它們微不足道。我重複： ^660000毫無意義的 ^000000。";
+				getexp 400,200;
+				break;
+			case 3:
+				mes "[Y I二涵]";
+				mes "說whaaat？ ^23238Edex^000000影響";
+				mes "您的攻擊準確性，而不是損害！好吧，除非您正在使用";
+				mes "弓。否則，它只會增加一點點的傷害。";
+				next;
+				mes "[Y I二涵]";
+				mes "您完全跳過了新手訓練場！不是我怪你。無論如何，是 ^2f4f2fstr ^000000增加了您的攻擊傷害，知道了嗎？";
+				next;
+				mes "[Y I二涵]";
+				mes "因此，如果您覺得自己造成的損害非常薄弱，則可能需要在 ^2f4f2fstr ^000000中更多的統計點。提高自己的str的高度確實取決於您。";
+				getexp 200,100;
+			}
+			tu_thief01 = 1;
+			specialeffect2 EF_HIT5;
+			close;
+		}
+		else if(tu_thief01 == 1){
+			mes "好吧，對統計數據足夠多。";
+			mes "你知道嗎？我想我會和您談談我們盜賊使用的技能。";
+			next;
+			mes "[Y I二涵]";
+			mes "因此，提高您的技能，學習一些新技能，以及";
+			mes "然後回到這裡。";
+			tu_thief01 = 2;
+			close;
+		}
+		else if(tu_thief01 == 2){
+			mes "好吧，讓我看看你的技能。您知道您必鬚根據擁有哪些技能來改變戰略策略，對嗎？技能與統計數據一樣重要！";
+			next;
+			.@chk_th_skill1 = getskilllv("TF_DOUBLE");
+			.@chk_th_skill2 = getskilllv("TF_MISS");
+			.@chk_th_skill3 = getskilllv("TF_STEAL");
+			.@chk_th_skill4 = getskilllv("TF_HIDING");
+			.@chk_th_skill5 = getskilllv("TF_POISON");
+			.@chk_th_skill6 = getskilllv("TF_DETOXIFY");
+
+			if(.@chk_th_skill1 == 0 && .@chk_th_skill2 == 0 && .@chk_th_skill3 == 0 && .@chk_th_skill4 == 0 && .@chk_th_skill5 == 0 && .@chk_th_skill6 == 0){
+				mes "[Y I二涵]";
+				mes "您還沒有學到任何技能嗎？來吧，您的技能使您與新手和其他所有人區分開來！";
+				close;
+			}
+			if(.@chk_th_skill1 > 0){
+				mes "[Y I二涵]";
+				mes "啊，所以你學到了";
+				mes "等級"+.@chk_th_skill1+" Double Attack.";
+				mes "好的！這種技能使您有機會一次攻擊兩次";
+				mes "攻擊。邪惡！";
+				next;
+				mes "[Y I二涵]";
+				mes "這是一種被動的技能，因此它始終有效，不必使用任何SP來使用它。您的雙重攻擊技能水平越高，您將進行的雙重攻擊越多。";
+				next;
+			}
+			if(.@chk_th_skill2 > 0){
+				mes "[Y I二涵]";
+				mes "讓我們來看看...";
+				mes "等級"+.@chk_th_skill2+" Increase Dodge?";
+				mes "這增加了您的逃離率，這意味著您有更好的機會躲避敵人的攻擊。";
+				next;
+				mes "[Y I二涵]";
+				mes "就像雙重攻擊技能一樣，增加道奇是一種被動的技能。它不會使用SP，並且總是在";
+				mes "影響。如果您不喜歡瘀傷，這就是您的技能。";
+				next;
+			}
+			if(.@chk_th_skill3 > 0){
+				mes "[Y I二涵]";
+				mes "哇，你";
+				mes "有水平"+.@chk_th_skill3+" Steal~";
+				mes "現在，這就是賦予我們工作名稱的技能！你不能使用";
+				mes "它反對人...";
+				next;
+				mes "[Y I二涵]";
+				mes "但是您可以使用偷竊來從怪物那裡獲取物品。如果幸運的話，您可以以這種方式獲得一些好的物品。哦，偷竊不會影響怪物的下降率。";
+				next;
+			}
+			if(.@chk_th_skill4 > 0){
+				mes "[Y I二涵]";
+				mes "你學到了";
+				mes "等級"+.@chk_th_skill4+" Hiding?";
+				mes "讓我們看看，您只能學習";
+				mes "在學習了一定水平的竊取技能之後。";
+				next;
+				mes "[Y I二涵]";
+				mes "當然，您使用";
+				mes "在緊急情況下躲藏在地下的隱藏技巧，例如當您被強硬的敵人包圍時。雖然要小心...";
+				next;
+				mes "[Y I二涵]";
+				mes "某些怪物仍然可以找到您，無論您隱藏的程度如何。甚至有幾個怪物可以將您躲藏起來！";
+				next;
+			}
+			if(.@chk_th_skill5 > 0){
+				mes "[Y I二涵]";
+				mes "好吧，我看到你";
+				mes "知道水平"+.@chk_th_skill5+" Envenom.";
+				mes "你喜歡危險，";
+				mes "不是嗎？";
+				next;
+				mes "[Y I二涵]";
+				mes "這種攻擊技巧有機會";
+				mes "毒害敵人一定的時間。在中毒時，敵人將不斷失去HP，並將減少防守。";
+				next;
+				mes "[Y I二涵]";
+				mes "嗯，但是請記住。";
+				mes "如果怪物對您來說太強壯，那麼您可能無法毒死它。所以不要發瘋。";
+				next;
+			}
+			if(.@chk_th_skill6 > 0){
+				mes "[Y I二涵]";
+				mes "等級"+.@chk_th_skill6+" Detoxify.";
+				mes "如果您遇到麻煩來了解這一點，那麼您一定是謹慎的";
+				mes "類型之類的東西。";
+				next;
+				mes "[Y I二涵]";
+				mes "您只能學習排毒";
+				mes "在學習了融合技能之後。排毒使您可以抵消毒藥對目標的影響。";
+				next;
+			}
+			mes "[Y I二涵]";
+			mes "好吧，我想";
+			mes "如果你想知道";
+			mes "關於其他任何技能，";
+			mes "我可以很快解釋。";
+			tu_thief01 = 3;
+			getexp BaseLevel*30,BaseLevel*15;
+			specialeffect2 EF_HIT5;
+			close;
+		}
+		else if(tu_thief01 == 3){
+			mes "所以...";
+			mes "有嗎？";
+			mes "您想要的技能";
+			mes "解釋還是這是";
+			mes "幾乎塞滿了你";
+			mes "已經知道了嗎？";
+			while(1){
+				next;
+				switch(select("雙重攻擊:增加閃避:偷竊:隱藏:施毒:解毒:我已經了解夠多了。")) {
+				case 1:
+					mes "[Y I二涵]";
+					mes "就像它的名字一樣";
+					mes "雙重攻擊使您的攻擊有機會成為雙重攻擊，一次打擊兩次罷工。";
+					next;
+					mes "[Y I二涵]";
+					mes "這是一種被動的技能，因此它始終有效，不必使用任何SP來使用它。您的雙重攻擊技能水平越高，您將進行的雙重攻擊越多。";
+					.@read_d = 1;
+					break;
+				case 2:
+					mes "[Y I二涵]";
+					mes "增加道奇";
+					mes "給予不錯的提升";
+					mes "您的逃離率";
+					mes "其他工作不提供。";
+					mes "為什麼當你的時候抓住你的腫塊";
+					mes "可以完全避免它們嗎？";
+					next;
+					mes "[Y I二涵]";
+					mes "就像雙重攻擊技能一樣，增加道奇是一種被動的技能。它不會使用SP，並且總是在";
+					mes "影響。如果您不喜歡瘀傷，這就是您的技能。";
+					.@read_f = 1;
+					break;
+				case 3:
+					mes "[Y I二涵]";
+					mes "偷是一種積極的技能，有機會吸引您一些";
+					mes "免費物品！但是，您不能對其他人使用它。";
+					next;
+					specialeffect2 EF_STEAL;
+					mes "[Y I二涵]";
+					mes "但是您可以使用偷竊來從怪物那裡獲取物品！如果幸運的話，您可以以這種方式獲得一些好的物品。哦，偷竊不會影響怪物的下降率。";
+					.@read_s = 1;
+					break;
+				case 4:
+					mes "[Y I二涵]";
+					mes "隱藏是一項積極的技能，您可以在地下淹沒自己。您只能保持這麼長時間的隱藏狀態，而您不能移動，但是有時候它比被發現的好！";
+					next;
+					mes "[Y I二涵]";
+					mes "當然，您使用";
+					mes "在緊急情況下躲藏在地下的隱藏技巧，例如當您被強硬的敵人包圍時。雖然要小心...";
+					next;
+					mes "[Y I二涵]";
+					mes "某些怪物仍然可以找到您，無論您隱藏的程度如何。甚至有幾個怪物可以將您躲藏起來！";
+					.@read_p = 1;
+					break;
+				case 5:
+					mes "[Y I二涵]";
+					mes "Envenom是每個小偷都應該知道的進攻性積極技能。但這就是我的想法。";
+					next;
+					mes "[Y I二涵]";
+					mes "這種攻擊技巧有機會";
+					mes "毒害敵人一定的時間。在中毒時，敵人將不斷失去HP，並將減少防守。";
+					mes "記住這一點。";
+					.@read_h = 1;
+					break;
+				case 6:
+					mes "[Y I二涵]";
+					mes "自小偷交易";
+					mes "有毒物相當多，";
+					mes "我們必須有辦法";
+					mes "嗯，有一個品味";
+					mes "我們自己的藥。";
+					next;
+					mes "[Y I二涵]";
+					mes "您可以學習排毒";
+					mes "在學習了融合技能之後。排毒使您可以抵消毒藥對目標的影響。";
+					.@read_r = 1;
+					next;
+					specialeffect2 EF_DETOXICATION;
+					break;
+				case 7:
+					mes "[Y I二涵]";
+					mes "是的...";
+					mes "無論如何，我厭倦了解釋這些技能。讓我們繼續前進";
+					mes "小偷訓練的下一部分...";
+					next;
+					mes "[Y I二涵]";
+					mes "既然您是技能的專家，我希望您提高自己的技能並回來，明白了嗎？";
+					tu_thief01 = 4;
+					specialeffect2 EF_HIT5;
+					.@total = .@read_d + .@read_f + .@read_s + .@read_p + .@read_h + .@read_r;
+					if (.@total)
+						getexp (.@total*300),(.@total*100);
+					close;
+				}
+			}
+		}
+		else if(tu_thief01 == 4){
+			mes "好吧，我們研究了技能，您一直在練習一點，對嗎？你最好有...";
+			next;
+			mes "[Y I二涵]";
+			mes "好吧，現在我接受了我想讓您做的一些實際的戰鬥訓練。這是您有機會找出最適合哪些情況的技能。";
+			next;
+			mes "[Y I二涵]";
+			mes "去找我";
+			mes "10 ^ff0000鳥 ^000000。";
+			mes "您可以繼續殺死挑戰。真的不應該那麼難。哦，用這個機翼的東西回來。";
+			tu_thief01 = 5;
+			savepoint "moc_ruins",80,164,1,1;
+			getitem 602,1; //Wing_Of_Butterfly
+			getexp 100,50;
+			specialeffect2 EF_HIT5;
+			close2;
+			warp "moc_fild12",158,373;
+			end;
+		}
+		else if(tu_thief01 == 5 || tu_thief01 == 6){
+			if(countitem(916) < 10){
+				mes "“嗯，你沒有10 ^ff0000鳥 ^000000我問你！您必須應用您所知道的東西。";
+				mes "現在快點做！";
+				close2;
+				warp "moc_fild07",203,38;
+				end;
+			}
+			else {
+				mes "好吧...！";
+				mes "做得好，朋友。";
+				mes "看到這些羽毛時，您必須真正成為一個好小偷。";
+				next;
+				mes "[Y I二涵]";
+				mes "我希望你保持";
+				mes "投入工作";
+				mes "變得越來越好。";
+				mes "總是盡力！哦，";
+				mes "你有任何疑問嗎？";
+				next;
+				if(tu_thief01 == 6){
+				switch(select("關於那些痕跡...:沒有。")) {
+ 					case 1:
+						mes "[Y I二涵]";
+						mes "你發現，嗯？";
+						mes "好吧，我不是真的";
+						mes "想告訴你這個，";
+						mes "您成為品牌的帳戶";
+						mes "全新的小偷等等，但是...";
+						next;
+						mes "[Y I二涵]";
+						mes "有這個";
+						mes "戰鬥";
+						mes "南部";
+						mes "這個小鎮。";
+						next;
+						mes "[Y I二涵]";
+						mes "由於它發生在深夜，因此只有少數人實際上知道。至於我，我在公會會議上呆了很晚，所以";
+						mes "我看到的愚蠢運氣。";
+						next;
+						mes "[Y I二涵]";
+						mes "我回到了戰鬥發生的地方，發現痕跡表明戰鬥的傢伙向南走。";
+						next;
+						mes "[Y I二涵]";
+						mes "由於使用毒藥";
+						mes "這場戰鬥，我猜涉及刺客，但我不能太確定。如果您想檢查一下，請按照那場戰鬥的痕跡。";
+						next;
+						mes "[Y I二涵]";
+						mes "嗯，但是要小心";
+						mes "不要太近";
+						mes "毒藥！那東西";
+						mes "很強壯！";
+						tu_thief01 = 8;
+						getitem 1207,1; //Main_Gauche
+						getexp 1000,500;
+						specialeffect2 EF_HIT5;
+						close;
+					case 2:
+						mes "[Y I二涵]";
+						mes "好的！";
+						mes "對我來說更少的工作！";
+						mes "好吧，下次我見到你時，最好變得更強壯。哦，您可以擁有這些東西。您知道，因為您是如此的黑幫和所有人。";
+						tu_thief01 = 7;
+						getitem 1207,1; //Main_Gauche
+						getexp 500,200;
+						specialeffect2 EF_HIT5;
+						close;
+					}
+				}
+				else {
+					switch(select("很高興認識你。:沒有。")) {
+					case 1:
+						mes "[Y I二涵]";
+						mes "是的，只是閒逛真是太酷了。繼續戰鬥";
+						mes "怪物以你的方式和";
+						mes "您將很快成為一個很棒的小偷。";
+						next;
+						mes "[Y I二涵]";
+						mes "而且我喜歡";
+						mes "你這麼多，孩子，";
+						mes "你可以有這個。";
+						mes "接受，是你的！";
+						getexp 500,200;
+						break;
+					case 2:
+						mes "[Y I二涵]";
+						mes "好的！";
+						mes "對我來說更少的工作！";
+						mes "好吧，下次我見到你時，最好變得更強壯。哦，您可以擁有這些東西。您知道，因為您是如此的黑幫和所有人。";
+						getexp 50,20;
+						break;
+					}
+					tu_thief01 = 7;
+					getitem 1207,1; //Main_Gauche
+					specialeffect2 EF_HIT5;
+					close;
+				}
+			}
+		}
+		else if(tu_thief01 == 7){
+			mes "[Y I二涵]";
+			mes "你知道...";
+			mes "有這個";
+			mes "戰鬥";
+			mes "南部";
+			mes "這個小鎮。";
+			next;
+			mes "[Y I二涵]";
+			mes "由於它發生在深夜，因此只有少數人實際上知道。至於我，我在公會會議上呆了很晚，所以";
+			mes "我看到的愚蠢運氣。";
+			next;
+			mes "[Y I二涵]";
+			mes "我回到了戰鬥發生的地方，發現痕跡表明戰鬥的傢伙向南走。";
+			next;
+			mes "[Y I二涵]";
+			mes "由於使用毒藥";
+			mes "這場戰鬥，我猜涉及刺客，但我不能太確定。如果您想檢查一下，請按照那場戰鬥的痕跡。";
+			next;
+			mes "[Y I二涵]";
+			mes "嗯，但是要小心";
+			mes "不要太近";
+			mes "毒藥！那東西";
+			mes "很強壯！";
+			next;
+			mes "[Y I二涵]";
+			mes "嘿，你可能遇到";
+			mes "毒藥，請記住";
+			mes "綠色草藥和綠色藥水";
+			mes "會抵消它。哦，請記住，紅色寶石可以";
+			mes "用於毒物攻擊。";
+			next;
+			mes "[Y I二涵]";
+			mes "嘿，如果你這樣";
+			mes "決定檢查";
+			mes "出去，真的要小心";
+			mes "其他，好嗎？";
+			tu_thief01 = 8;
+			getexp 200,100;
+			specialeffect2 EF_HIT5;
+			close;
+		}
+		else if(tu_thief01 == 8){
+			mes "嘿時刻。";
+			mes "你好嗎？";
+			next;
+			mes "[Y I二涵]";
+			mes "與某事作鬥爭";
+			mes "您一無所知總是有風險的。由於我聽說有局外人周圍炫耀自己的力量，因此最好小心。";
+			next;
+			mes "[Y I二涵]";
+			mes "這是一個很好的政策，只是要小心您的冒險經歷。尋找怪物並看";
+			mes "為人！知道了？";
+			close;
+		}
+		else if(tu_thief01 < 26){
+			mes "我聽說有";
+			mes "這個刺客";
+			mes "進行了任務";
+			mes "再也沒有回來。";
+			next;
+			mes "[Y I二涵]";
+			mes "令人奇怪的是，刺客行會報告了任務完成了！";
+			mes "我記得聽到那個傢伙";
+			mes "真的很好...";
+			next;
+			mes "[Y I二涵]";
+			mes "瘋狂，不是嗎？";
+			mes "無論如何，拿";
+			mes "照顧自己。";
+			close;
+		}
+		else if(tu_thief01 == 26){
+			mes "“嗯，你了";
+			mes "完成任務？";
+			mes "我知道，我知道，您要做的事情很粗糙。";
+			next;
+			switch(select("我還在調查中。:還沒。:是的，我完成了。")) {
+			case 1:
+				mes "[Y I二涵]";
+				mes "啊，康查。好吧，這是可以理解的。我的意思是，這些事情需要時間，你知道嗎？";
+				close;
+			case 2:
+				mes "[Y I二涵]";
+				mes "是的...？";
+				mes "沒關係。";
+				mes "我想這些事情需要耐心。和思考。";
+				mes "你知道，我很恐怖。";
+				close;
+			case 3:
+				mes "[Y I二涵]";
+				mes "好吧...！";
+				mes "那麼這是什麼一回事？";
+				mes "打我";
+				mes "你知道的~";
+				next;
+				mes "^3355ffyou向Yierhan解釋您的調查結果，並告訴他您在任務中發現的布料剪貼。 ^000000";
+				next;
+				mes "[Y I二涵]";
+				mes "布料片？";
+				mes "嗯，好吧。說，";
+				mes "Lemme有一個景點。";
+				next;
+				mes "[Y I二涵]";
+				mes "哇！";
+				mes "你做得很好。";
+				mes "這很漂亮";
+				mes "重要信息！";
+				next;
+				mes "[Y I二涵]";
+				mes "您會發現，這塊布上的圖案就像刺客使用的一種代碼之一。這種特殊的模式看起來像是其中一種較高的刺客。";
+				next;
+				mes "[Y I二涵]";
+				mes "我也許可以弄清楚那天晚上發生了什麼，並用這套布可能帶我去的新信息。多謝！";
+				next;
+				mes "[Y I二涵]";
+				mes "從這裡，";
+				mes "較高的UPS";
+				mes "公會將接管這項調查。您完成了完美的工作，所以是時候讓您磨練自己的技能了。";
+				next;
+				mes "[Y I二涵]";
+				mes "嘿，這是你的東西。將其視為幫助我們的獎勵。現在照顧好自己~";
+				tu_thief01 = 27;
+				getitem 2307,1; //Mantle
+				Zeny = Zeny + 5000;
+				getexp 8000,3000;
+				close;
+			}
+		}
+		else {
+			mes "[Y I二涵]";
+			mes "嘿...";
+			mes "你有夢想，";
+			mes "不是嗎？我知道，";
+			mes "有點深";
+			mes "主題我拉開了";
+			mes "沒有任何地方，但是...";
+			next;
+			mes "[Y I二涵]";
+			mes "我喜歡告訴人們跟隨他們的夢想。就這樣做。唐查（Doncha）認為，沒有什麼可期待的生活真是太無聊了嗎？";
+			close;
+		}
+	}
+	else if (BaseClass == Job_Mage && Upper != 2){
+		if(tu_magician01 < 7){
+			mes "[Y I二涵]";
+			mes "嘿。";
+			mes "我是這裡的小偷訓練師。當然，看來我們沒有太多共同點，但是...";
+			next;
+			mes "[Y I二涵]";
+			mes "實際上，我在這里和那裡使用了一些魔術。那個神秘的東西在我的頭上是waaay，但是";
+			mes "我對此得到了尊重。";
+			close;
+		}
+		else if(tu_magician01 == 7){
+			mes "嗯...？";
+			mes "這很奇怪，通常只是";
+			mes "小偷在這個關節周圍徘徊。像你這樣的人在做什麼";
+			mes "這裡？除非...";
+			next;
+			select("我代表“瑪娜”來到這裡。");
+			mes "[Y I二涵]";
+			mes "是的，您必須是Mana發送的幫助！您只是在正確的時間來。您知道，我們在南摩洛哥（South Morocc）發現了一些奇怪的東西。";
+			next;
+			mes "[Y I二涵]";
+			mes "基本上，我們發現了戰鬥中使用的毒藥痕跡。我們要調查它，但是我們已經淹沒了所有其他工作。";
+			next;
+			mes "[Y I二涵]";
+			mes "這就是為什麼我們一直在問";
+			mes "尋求法師公會的幫助。幸運的是，我是馬納的好朋友，所以...";
+			next;
+			mes "[Y I二涵]";
+			mes "無論如何，前往";
+			mes "南摩洛哥（South Morocc），因為它似乎是開始調查的好地方。您會看到我們在南摩洛哥門外發現的東西。";
+			tu_magician01 = 8;
+			close;
+		}
+		else if(tu_magician01 < 26){
+			mes "我聽說有";
+			mes "這個刺客";
+			mes "進行了任務";
+			mes "再也沒有回來。";
+			next;
+			mes "[Y I二涵]";
+			mes "令人奇怪的是，刺客行會報告了任務完成了！";
+			mes "我記得聽到那個傢伙";
+			mes "真的很好...";
+			next;
+			mes "[Y I二涵]";
+			mes "小心，好。";
+			mes "看來你的";
+			mes "調查";
+			mes "可能與";
+			mes "那個神秘的刺客...";
+			close;
+		}
+		else if(tu_magician01 == 26){
+			mes "那怎麼樣";
+			mes "調查";
+			mes "來嗎？";
+			mes "我一直很忙，";
+			mes "我無法集中精力";
+			mes "根本...";
+			next;
+			switch(select("我還在調查中。:我還沒完成...:哦，我完成了~")) {
+			case 1:
+				mes "[Y I二涵]";
+				mes "啊，康查。好吧，這是可以理解的。我的意思是，這些事情需要時間，你知道嗎？";
+				close;
+			case 2:
+				mes "[Y I二涵]";
+				mes "是的...？";
+				mes "沒關係。";
+				mes "我想這些事情需要耐心。和思考。";
+				mes "你知道，我很恐怖。";
+				close;
+			case 3:
+				mes "[Y I二涵]";
+				mes "好吧...！";
+				mes "那麼這是什麼一回事？";
+				mes "打我";
+				mes "你知道的~";
+				next;
+				mes "^3355ffyou向Yierhan解釋您的調查結果，並告訴他您在任務中發現的布料剪貼。 ^000000";
+				next;
+				mes "[Y I二涵]";
+				mes "布料片？";
+				mes "嗯，好吧。說，";
+				mes "Lemme有一個景點。";
+				next;
+				mes "[Y I二涵]";
+				mes "哇！";
+				mes "你做得很好。";
+				mes "這很漂亮";
+				mes "重要信息！";
+				next;
+				mes "[Y I二涵]";
+				mes "您會發現，這塊布上的圖案就像刺客使用的一種代碼之一。這種特殊的模式看起來像是其中一種較高的刺客。";
+				next;
+				mes "[Y I二涵]";
+				mes "我也許可以弄清楚那天晚上發生了什麼，並用這套布可能帶我去的新信息。多謝！";
+				next;
+				mes "[Y I二涵]";
+				mes "從這裡，";
+				mes "較高的UPS";
+				mes "公會將接管這項調查。您完成了完美的工作，所以是時候讓您磨練自己的技能了。";
+				next;
+				mes "[Y I二涵]";
+				mes "嘿，這是你的東西。將其視為幫助我們的獎勵。是的，我會讓法力知道您做得很好。現在照顧好自己~";
+				tu_magician01 = 27;
+				Zeny = Zeny + 5000;
+				getexp 5000,2000;
+				close;
+			}
+		}
+		else {
+			mes "就像我想的那樣，";
+			mes "不止一組";
+			mes "參與了這一切。";
+			mes "嗯。真正糟糕的東西";
+			mes "可能很快發生...";
+			close;
+		}
+	}
+	mes "有些人認為";
+	mes "沙漠只是一個";
+	mes "危險，不舒服";
+	mes "沒有人想要的地方";
+	mes "是。但是有全部";
+	mes "這裡有很多很棒的東西。";
+	next;
+	mes "[Y I二涵]";
+	mes "我們得到了鼓勵輕巧服裝的熾熱，我們得到了……仙人掌。我們的沙子比海灘更多。嗯...沙塵暴？";
+	close;
+}

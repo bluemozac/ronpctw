@@ -1,0 +1,124 @@
+﻿//===== rAthena Script =======================================
+//= Custom Halloween Event 2006
+//===== By: ==================================================
+//= Stryker
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Halloween Event Script
+//===== Additional Comments: =================================
+//= 1.1 - Added trick to script
+//= 1.2 fixed bugs, optimized. Now uses 1 var instead of 3 [Lupus]
+//============================================================
+
+prontera,151,190,5	script	Hallows' Eve Event	807,{
+	mes "[Hallows的前夕活動]";
+	if(Class == Job_Novice){
+		mes "很抱歉，您必須找到一份工作才能完成活動。";
+		emotion ET_SWEAT, playerattached();
+		close;
+	}
+	if((EVENT_HALWN06&1) && (EVENT_HALWN06&2)){
+		mes "對不起，您已經完成了活動。";
+		emotion ET_SORRY;
+		close;
+	}
+	mes "問候同胞生動的人。";
+	next;
+	mes "[Hallows的前夕活動]";
+	mes "萬聖節在我們身邊，幾乎是時候冒險進入幾乎不敢去的地方了。";
+	next;
+	mes "[Hallows的前夕活動]";
+	mes "搗蛋，您更喜歡哪個？";
+	next;
+	menu "Trick",-, "Treat",L_Treat;
+
+	mes "[Hallows的前夕活動]";
+	if(EVENT_HALWN06&2){
+		mes "對不起，但是您已經有了一個技巧。你為什麼不現在就選擇享受。";
+		emotion ET_SORRY;
+		close;
+	}
+	mes "給我一分鐘...";
+	next;
+	set BaseExp,BaseExp+BaseLevel*1000;
+	set EVENT_HALWN06,EVENT_HALWN06|2;
+
+	mes "[Hallows的前夕活動]";
+	mes "這是你的享受。您的基本經驗已略有增加。";
+	next;
+	mes "[Hallows的前夕活動]";
+	mes "希望您喜歡萬聖節快樂！";
+	close;
+
+L_Treat:
+	mes "[Hallows的前夕活動]";
+	if(EVENT_HALWN06&1){
+		mes "對不起，但是您已經有過待遇。你為什麼不去選一個把戲。";
+		emotion ET_SORRY;
+		close;
+	}
+	if(!(EVENT_HALWN06&4)){
+		mes "偉大的！這應該很有趣。";
+		next;
+		mes "[Hallows的前夕活動]";
+		mes "我將向您發送尋寶遊戲。";
+		next;
+		mes "[Hallows的前夕活動]";
+		mes "帶回所有必要的物品，我將為您創造一種享受。";
+		next;
+		mes "[Hallows的前夕活動]";
+		mes "不僅可以吃任何普通的治療，而且還可以戴在頭上。";
+		next;
+		mes "[Hallows的前夕活動]";
+		mes "但是，遵循所有的事情，首先需要一些項目。";
+		mes "列表：";
+		mes "1帽子，";
+		mes "30南瓜，然後";
+		mes "20黑色布";
+		next;
+		mes "[Hallows的前夕活動]";
+		mes "現在快點。";
+		set EVENT_HALWN06,EVENT_HALWN06|4;
+		close;
+	}
+	mes "您是否得到了我要求的項目，還是需要再次查看列表？";
+	next;
+	menu "Got'em",-, "Don't Have",L_Dont_Have, "See List",L_List;
+
+	mes "[Hallows的前夕活動]";
+	if((countitem(2220) < 1) || (countitem(535) < 30) || (countitem(7205) < 20)){
+		mes "您沒有足夠的物品。當你這樣做的時候回來。";
+		emotion ET_SORRY;
+		close;
+	}
+	delitem 2220,1;
+	delitem 535,30;
+	delitem 7205,20;
+	getitem 5134,1;
+	set EVENT_HALWN06,EVENT_HALWN06|1;
+	mes "好工作！希望您對自己的物品感到滿意。";
+	emotion ET_CONGRATULATION;
+	next;
+	mes "[Hallows的前夕活動]";
+	mes "享受萬聖節的其餘部分。";
+	emotion ET_SCISSOR, playerattached();
+	close;
+
+L_Dont_Have:
+	mes "[Hallows的前夕活動]";
+	mes "回去尋找它們。您想查看列表嗎？";
+	next;
+	menu "No",-, "Yes",L_List;
+	close;
+
+L_List:
+	mes "[Hallows的前夕活動]";
+	mes "我需要以下項目：";
+	mes "1帽子，";
+	mes "30南瓜，然後";
+	mes "20個黑色布。";
+	close;
+}

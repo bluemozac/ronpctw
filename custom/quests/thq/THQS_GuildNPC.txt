@@ -1,0 +1,86 @@
+﻿//===== rAthena Script =======================================
+//= Treasure Hunter Quests
+//===== By: ==================================================
+//= Fredzilla
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Start for Treasure hunter quests
+//===== Additional Comments: =================================
+//= Event_THQS - Used to check if you have already registered
+//= #Treasure_Token - used to keep track of tokens
+//============================================================
+
+yuno_in01,124,164,6	script	Guild Leader	108,{
+	mes "[基根]";
+	mes "是什麼把你帶到這裡？有話要說嗎？";
+	next;
+	menu "I want to be a Treasure Hunter",-,"Take a New Quest.",N_NQuest,"Take me to the Official Shop.",N_OShop,"Never mind.",N_NVM;
+	if(Event_THQS==1) goto N_AlreadyReg;
+	mes "[基根]";
+	mes "出色地"+strcharinfo(0)+" if you want to be a Treasure Hunter first you must.";
+	mes " ";
+	mes "^ff00001。 ^000000，您可以更改^ff00000025,000z^000000，用於基礎培訓和您成為會員的證明。";
+	mes " ";
+	mes "嗯...好吧，這就是您需要做的。哈哈哈。";
+	next;
+	menu "Pay ^FF000025,000z^000000.",-,"Thats way to high!!",N_HighPrice;
+	if (Zeny < 25000) goto N_NoZeny;
+	set Zeny,Zeny-25000;
+	//getitem 7950, 1;
+	//getitem 7951, 1;
+	set Event_THQS,1;
+	mes "[基根]";
+	mes "恭喜！";
+	emotion ET_CONGRATULATION;
+	next;
+	mes "[基根]";
+	mes "歡迎來到尋寶協會。";
+	mes "如您所見，您現在可以進行尋寶任務。";
+	close;
+N_NoZeny:
+	mes "[基根]";
+	mes "嗯，您似乎沒有 ^ff000025,000z ^000000"+strcharinfo(0)+". Please come back when you do.";
+	close;
+N_HighPrice:
+	mes "[基根]";
+	mes "好吧，如果您負擔不起小型 ^ff000025,000z ^000000，那麼您還不應該是尋寶者。";
+	close;
+N_AlreadyReg:
+	mes "[基根]";
+	mes "哈哈哈...你已經是會員了。";
+	close;
+N_NQuest:
+	if (Event_THQS!=1) goto A_NeedReg;
+	mes "[基根]";
+	mes "出色地"+strcharinfo(0)+" if you wish to take a quest go talk to the fellow Treasure Hunter in the other room there.";
+	close;
+A_NeedReg:
+	mes "[基根]";
+	mes "抱歉，如果您想進行任務，則必須是尋寶協會的成員。";
+	mes " ";
+	mes "同樣，現在您可以隨時隨時使用我們的商店。它們都位於此樓層。";
+	mes " ";
+	mes "我們還只有另一家成員的商店，其中我們使用稱為尋寶令牌的小金屬鑽石來換成稀有商品。";
+	mes " ";
+	mes "您甚至可以訪問我們的獨家個人地牢。";
+	close;
+N_OShop:
+	if (Event_THQS!=1) goto N_NeedMem;
+	mes "[基根]";
+	mes "是的"+strcharinfo(0)+" I will take you to our shop right away!";
+	next;
+	warp "prt_in",166,171;
+	close;
+	end;
+N_NeedMem:
+	mes "[基根]";
+	mes "對不起，只有成員可以參觀我們的私人商店。";
+	close;
+N_NVM:
+	mes "[基根]";
+	mes "好吧，當您有空閒時間時，回來了。";
+	close;
+}

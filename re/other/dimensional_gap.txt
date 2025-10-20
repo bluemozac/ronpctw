@@ -1,0 +1,568 @@
+﻿//===== rAthena Script ======================================
+//= Dimensional Gap NPCs
+//===== Description: =========================================
+//= NPC script for Dimensional Gap
+//===== Additional Comments: =================================
+//= 1.0 First Version. [Nova]
+//============================================================
+
+mid_camp,207,290,6	script	Expedition Guide#01	4_M_EIN_SOLDIER,{
+	mes "[探險指南]";
+	mes "您要輸入 ^0000ffdimensional Gap ^000000嗎？  請使用您在此處看到的運輸設備。";
+	next;
+	switch(select("什麼是維度差距？ :結束對話。")) {
+	case 1:
+		mes "[探險指南]";
+		mes "如您所知，我們已經通過維度裂片進入了Ash真空嗎？  尺寸差距是該初始發現的擴展。";
+		next;
+		mes "[探險指南]";
+		mes "探險隊的一名成員發現這些後門通道可以通過維度裂痕。";
+		next;
+		mes "[探險指南]";
+		mes "這就像Bifrost Bridge的Midgard Alliance版本，因此它可以將我們連接到新世界的不同部分。";
+		next;
+		mes "[探險指南]";
+		mes "時間和空間在維度間隙中扭曲。  並非所有通道都已被發現，因此在進入未經驗證的區域時請務必謹慎。";
+		next;
+		mes "[探險指南]";
+		mes "任何在這裡迷路的人都尚未回來。";
+		close;
+	case 2:
+		mes "[探險指南]";
+		mes "小心。";
+		close;
+	}
+}
+
+mid_camp,212,290,4	script	Expedition Guide#02	4_M_EIN_SOLDIER,{
+	mes "[探險指南]";
+	mes "如果您想穿越尺寸裂谷，請使用 ^0000fftransport設備 ^000000。  內部尚未完全探索，因此請小心。";
+	close;
+}
+
+moc_fild22b,225,198,6	duplicate(Expedition Guide#01)	Expedition Guide#03	4_M_MOC_SOLDIER
+moc_fild22b,223,203,4	duplicate(Expedition Guide#02)	Expedition Guide#04	4_M_MOC_SOLDIER
+bif_fild01,314,155,6	duplicate(Expedition Guide#01)	Expedition Guide#05	4_M_EIN_SOLDIER
+bif_fild01,320,154,4	duplicate(Expedition Guide#02)	Expedition Guide#06	4_M_EIN_SOLDIER
+dic_fild02,236,33,6	duplicate(Expedition Guide#01)	Expedition Guide#07	4_M_EIN_SOLDIER
+dic_fild02,239,36,4	duplicate(Expedition Guide#02)	Expedition Guide#08	4_M_EIN_SOLDIER
+
+dali,137,87,4	script	Allied Forces Soldier	4_M_MOCASS1,{
+	mes "[盟軍士兵]";
+	mes "該維裂谷連接到Jotunheim的盟軍 ^0000fexpedition Camp ^000000。";
+	next;
+	mes "[盟軍士兵]";
+	mes "不用擔心，它是在測試數百個實驗以進行安全傳送後設置的。";
+	close;
+}
+
+dali,122,60,4	script	Morocc Soldier	4_M_MOC_SOLDIER,{
+	mes "[摩洛哥士兵]";
+	mes "此維裂距離在Midgard的 ^0000ffmorocc ^000000連接。";
+	next;
+	mes "[摩洛哥士兵]";
+	mes "這是回到我們世界的最快門戶。  該地區仍然被摧毀，但恢復工作很快就會上映。";
+	close;
+}
+
+dali,51,104,6	script	Spledide Soldier	4_M_FAIRYSOLDIER2,{
+	mes "[Spledide士兵]";
+	mes "該維裂口連接到 ^0000ffbifrost ^000000的南部。  它可以快速前往出色的前線。";
+	next;
+	mes "[Spledide士兵]";
+	mes "如果我們正確使用它，它使我們能夠更輕鬆地晉升為Sapha的首都。";
+	next;
+	mes "[Spledide士兵]";
+	mes "市長要求我們盡力而為而不是戰鬥，所以我下令不做任何事情。  由於我們有一個共同的敵人，我們不會與Sapha作戰...現在...";
+	close;
+}
+
+dali,56,126,4	script	Dispatched Sapha	4_MAN_BENKUNI,{
+	mes "[派遣的sapha]";
+	mes "該尺寸裂谷連接到El Dicastes中 ^0000ffkamidal山的南部區域 ^000000。  我只是求助於我的研究，但這真是不可思議。";
+	next;
+	mes "[派遣的sapha]";
+	mes "此外，它毗鄰Laphine Capital .....嗯...不用擔心，我不想在這樣的地方戰鬥。";
+	close;
+}
+
+dali,109,94,4	shop	Sundries Merchant	4_M_MERCAT2,611:-1,1750:-1,1065:-1
+
+dali,112,95,4	script	Logistics Manager	4_M_MERCAT2,{
+	mes "[物流經理]";
+	mes "歡迎。  我負責物流，在這個怪異的地方照顧您的物品。  您需要訪問存儲空間嗎？";
+	next;
+	switch(select("打開存儲 200 Zeny。 :不，謝謝。")) {
+	case 1:
+		if (Zeny > 199) {
+			if(!callfunc("F_CanOpenStorage")){
+				mes "[物流經理]";
+				mes "您尚無資格使用存儲空間。";
+			}
+			else {
+				Zeny -= 200;
+				openstorage;
+			}
+		}
+		else {
+			mes "[物流經理]";
+			mes "您至少需要200個Zeny來使用存儲。";
+		}
+		break;
+	case 2:
+		mes "[物流經理]";
+		mes "讓我知道您是否改變主意。";
+	}
+	close;
+}
+
+dali,115,85,5	script	Party Leader#dali	2_M_SWORDMASTER,{
+	hideonnpc "Party Leader#dali";
+	hideoffnpc "Party Leader#dali2";
+	donpcevent "#dalichat::OnEnable";
+	end;
+}
+
+dali,115,85,0	script	#dalichat	-1,{
+	end;
+OnInit:
+	hideonnpc "Party Leader#dali2";
+	disablenpc "#dalichat";
+	end;
+OnEnable:
+	enablenpc "#dalichat";
+	initnpctimer;
+	end;
+OnTimer1000:
+	npctalk "Attention!!!", "Party Leader#dali2";
+	end;
+OnTimer2000:
+	npctalk "Here, here. Everybody be quiet and line up!", "Party Leader#dali2";
+	end;
+OnTimer3000:
+	npctalk "We have now entered the inside of the Dimensional Crack. Where should be go first?", "Party Leader#dali2";
+	end;
+OnTimer4000:
+	npctalk "Anyone have an opinion?", "Party Leader#dali2";
+	end;
+OnTimer6000:
+	npctalk "I heard rumors about some magic swordman. Let's go find him.", "Party Member#MONK";
+	end;
+OnTimer7500:
+	npctalk "We heard about a magic competition being held here!", "Party Member#WANDERER";
+	end;
+OnTimer9000:
+	npctalk "Where is it?!", "Party Member#MONK";
+	end;
+OnTimer10500:
+	npctalk "Uh, I'm a little bit hungry... I wonder if anybody is selling some warm sweet potatoes or even dumplings...", "Party Member#CRU";
+	end;
+OnTimer12000:
+	npctalk "You want to eat again?", "Party Member#GUILL";
+	end;
+OnTimer13500:
+	npctalk "I am just wondering about the tournament..", "Party Member#WANDERER";
+	end;
+OnTimer15000:
+	npctalk "I need to eat something before doing anything.", "Party Member#CRU";
+	end;
+OnTimer16500:
+	npctalk "By the way, I also heard about something called the Devil's Tower.", "Party Member#MONK";
+	end;
+OnTimer18000:
+	npctalk "I just saw a street trader passing by... Where is he?", "Party Member#GUILL";
+	end;
+OnTimer19500:
+	emotion ET_SLEEPY, getnpcid(0, "Party Member#SURA");
+	npctalk "Huh? What is this? You still haven't entered?", "Party Member#SURA";
+	end;
+OnTimer20000:
+	npctalk "I am curious about the Faceworms I heard about from a Laphine.", "Party Member#MONK";
+	end;
+OnTimer21000:
+	npctalk "Can I come back after having a meal?", "Party Member#CRU";
+	end;
+OnTimer22500:
+	npctalk "Can you even catch that?", "Party Member#WANDERER";
+	npctalk "Are you awake?", "Party Member#SHADOW";
+	end;
+OnTimer24000:
+	emotion ET_FRET, getnpcid(0, "Party Member#SURA");
+	npctalk "Why are you still here?", "Party Member#SURA";
+	end;
+OnTimer24500:
+	npctalk "Hang on a bit. The merchant is going to pass by soon.", "Party Member#GUILL";
+	end;
+OnTimer25500:
+	npctalk "That is your wish....", "Party Member#MONK";
+	end;
+OnTimer27000:
+	npctalk "I want to buy cold grape juice~", "Party Member#CRU";
+	end;
+OnTimer28500:
+	npctalk "I have no idea. There might be an accident up front.", "Party Member#SHADOW";
+	end;
+OnTimer30000:
+	npctalk "What? How dare you?!", "Party Member#WANDERER";
+	end;
+OnTimer31500:
+	npctalk "Give me a sip of juice.", "Party Member#GUILL";
+	end;
+OnTimer32000:
+	npctalk "Cough~ Cough~", "Party Member#EINOLD";
+	end;
+OnTimer33000:
+	emotion ET_FRET, getnpcid(0, "Party Member#SURA");
+	end;
+OnTimer34000:
+	npctalk "Damn! I am pissed off! I came here because I heard only a party is allowed to get in!", "Party Member#SURA";
+	end;
+OnTimer36000:
+	npctalk "Are you going to hit me? Do it!", "Party Member#MONK";
+	emotion ET_ANGER, getnpcid(0, "Party Member#MONK");
+	npctalk "You pay for your food.", "Party Member#CRU";
+	end;
+OnTimer37500:
+	emotion ET_FRET, getnpcid(0, "Party Member#SURA");
+	end;
+OnTimer39000:
+	npctalk "Whatever, I'm not eating.", "Party Member#WANDERER";
+	npctalk "So mean.. I won't eat then.", "Party Member#GUILL";
+	npctalk "Right.. I should have entered with another group!", "Party Member#SHADOW";
+	end;
+OnTimer40500:
+	emotion ET_KIK, getnpcid(0, "Party Member#CRU");
+	npctalk "Hey. Are you pissed off?", "Party Member#CRU";
+	end;
+OnTimer42000:
+	npctalk "Not at all.", "Party Member#GUILL";
+	end;
+OnTimer43500:
+	emotion ET_KIK, getnpcid(0, "Party Member#MONK");
+	npctalk "Look at him snoozing. Hehe.", "Party Member#MONK";
+	end;
+OnTimer45000:
+	emotion ET_SLEEPY, getnpcid(0, "Party Member#SURA");
+	npctalk "Bah, I don't care. I'm gonna take a nap, so wake me up when we're ready.";
+	end;
+OnTimer46500:
+	emotion ET_KIK, getnpcid(0, "Party Member#CRU");
+	npctalk "You are upset!!", "Party Member#CRU";
+	npctalk "Can I get back before I die...", "Party Member#WANDERER";
+	npctalk "What? You, we gotta talk! I've been too nice to you!", "Party Member#EINOLD";
+	end;
+OnTimer48000:
+	npctalk "Excuse me..... everyone.............?", "Party Leader#dali2";
+	end;
+OnTimer49500:
+	emotion ET_ANGER, getnpcid(0, "Party Member#GUILL");
+	npctalk "No!!!!!!!!!", "Party Member#GUILL";
+	npctalk "Whatever~", "Party Member#MONK";
+	end;
+OnTimer51000:
+	emotion ET_CRY, getnpcid(0, "Party Leader#dali2");
+	npctalk "Please listen to me....", "Party Leader#dali2";
+	npctalk "He's angry all right....", "Party Member#WANDERER";
+	npctalk "Take a nap. I am sleepy too, so we'll take shifts.", "Party Member#SHADOW";
+	end;
+OnTimer52500:
+	hideonnpc "Party Leader#dali2";
+	hideoffnpc "Party Leader#dali";
+	stopnpctimer;
+	disablenpc "#dalichat";
+	end;
+}
+
+dali,115,85,3	script	Party Leader#dali2	2_M_SWORDMASTER,{}
+dali,117,81,7	script	Party Member#WANDERER	4_F_WANDERER,{}
+dali,117,79,5	script	Party Member#CRU	4_F_CRU,{}
+dali,118,83,3	script	Party Member#MONK	4_F_MONK,{}
+dali,119,76,7	script	Party Member#SHADOW	4_F_SHADOWCHASER,{}
+dali,119,78,2	script	Party Member#GUILL	4_M_JPNOJI,{}
+dali,120,77,4	script	Party Member#SURA	4_F_SURA,{}
+dali,120,81,3	script	Party Member#EINOLD	4_M_EINOLD,{}
+
+dali,102,83,5	script	Merchant Prince#HUMERC	4_M_HUMERCHANT,2,2,{
+	mes "[卡內特王子]";
+	mes "你是誰？";
+	next;
+	mes "[卡內特王子]";
+	mes "你想要什麼？";
+	mes "你在看東西";
+	mes "特別的？";
+	next;
+	mes "[卡內特王子]";
+	mes "所以有些執法人員已經";
+	mes "最近對商人打擊。";
+	mes "我什麼都不賣。";
+	next;
+	mes "[卡內特王子]";
+	mes "來這裡...";
+	next;
+	mes "[跳躍騎士]";
+	mes "我知道你會在這裡！";
+	mes "不允許非法交易";
+	mes "這裡！";
+	mes "你不知道嗎？";
+	hideoffnpc "Jumpy Knight#JP_RUN";
+	next;
+	mes "[卡內特王子]";
+	mes "說誰？";
+	next;
+	mes "[跳躍騎士]";
+	mes "好的，然後告訴我您的許可證。";
+	next;
+	mes "[卡內特王子]";
+	mes "允許？";
+	mes "這裡沒有人負責！";
+	next;
+	mes "[卡內特王子]";
+	mes "你！如果您需要什麼";
+	mes "我好嗎？";
+	next;
+	mes "[跳躍騎士]";
+	mes "我會抓住你的！";
+	hideonnpc "Merchant Prince#HUMERC";
+	close2;
+	hideonnpc "Jumpy Knight#JP_RUN";
+	enablenpc "Merchant Prince#HUMERC2";
+	hideoffnpc "Merchant Prince#HUMERC2";
+	disablenpc "Merchant Prince#HUMERC";
+	end;
+OnTouch:
+	mes "[卡內特王子]";
+	mes "冷果汁！";
+	mes "蘋果，葡萄，橙色~";
+	mes "您想要的任何東西！";
+	next;
+	mes "[卡內特王子]";
+	mes "地瓜，餃子~";
+	mes "在這裡，我們有美味的甜點~";
+	close;
+}
+
+dali,105,82,1	script	Jumpy Knight#JP_RUN	4_M_JP_RUN,{
+	end;
+OnInit:
+	hideonnpc "Jumpy Knight#JP_RUN";
+	end;
+}
+
+dali,63,112,7	script	Merchant Prince#HUMERC2	4_M_HUMERCHANT,2,2,{
+	mes "[卡內特王子]";
+	mes "您需要付出代價才能過去。";
+	next;
+	switch(select("什麼收費？"))
+	{
+		case 1:
+			mes "[卡內特王子]";
+			mes "你不知道嗎？";
+			mes "500 名女性";
+			next;
+			mes "[跳躍騎士]";
+			mes "你在那裡！";
+			mes "停在那裡！";
+			hideoffnpc "Jumpy Knight#JP_RUN2";
+			next;
+			mes "[卡內特王子]";
+			mes "啊!你總是跟隨我？";
+			mes "對我有些迷戀嗎？我認為你和我做得很好...";
+			next;
+			mes "[跳躍騎士]";
+			mes "那我們為什麼不知道呢？";
+			next;
+			mes "[卡內特王子]";
+			mes "不再說話了。";
+			mes "我不在這裡~";
+			next;
+			mes "[跳躍騎士]";
+			mes "繼續奔跑偷偷摸摸的膽小鬼！";
+			hideonnpc "Merchant Prince#HUMERC2";
+			close2;
+			hideonnpc "Jumpy Knight#JP_RUN2";
+			hideoffnpc "Merchant Prince#HUMERC3";
+			disablenpc "Merchant Prince#HUMERC2";
+			end;
+	}
+OnInit:
+	disablenpc "Merchant Prince#HUMERC2";
+	end;
+OnTouch:
+	mes "[卡內特王子]";
+	mes "500 名女性";
+	close;
+}
+
+dali,67,113,3	script	Jumpy Knight#JP_RUN2	4_M_JP_RUN,{
+	end;
+OnInit:
+	hideonnpc "Jumpy Knight#JP_RUN2";
+	end;
+}
+
+dali,89,97,3	script	Merchant Prince#HUMERC3	4_M_HUMERCHANT,{
+	mes "[卡內特王子]";
+	mes "你很幸運你見面了";
+	mes "與我一起。";
+	mes "我是誰？";
+	mes "我在這裡成為商人";
+	mes "國王。";
+	next;
+	mes "[卡內特王子]";
+	mes "我可能正在街頭攤";
+	mes "現在，但是我會有一家實際的商店";
+	mes "有一天。";
+	next;
+	mes "[卡內特王子]";
+	mes "這是我的第一天，所以我有一個";
+	mes "主要銷售。";
+	next;
+	mes "[卡內特王子]";
+	mes "讓我們看看我有一個...";
+	mes "戒指！";
+	mes "劍！";
+	mes "某種背包！";
+	next;
+	mes "[卡內特王子]";
+	mes "告訴我您是否需要什麼，";
+	hideoffnpc "Jumpy Knight#JP_RUN3";
+	next;
+	mes "[卡內特王子]";
+	mes "你在這裡做什麼？";
+	mes "這是我去商店的地方";
+	mes "離開我的草皮！";
+	next;
+	mes "[跳躍騎士]";
+	mes "呸！ ！";
+	mes "您會後悔這些話！";
+	next;
+	mes "[卡內特王子]";
+	mes "我在顫抖...";
+	hideonnpc "Merchant Prince#HUMERC3";
+	close2;
+	hideonnpc "Jumpy Knight#JP_RUN3";
+	enablenpc "Merchant Prince#HUMERC";
+	hideoffnpc "Merchant Prince#HUMERC";
+	end;
+OnInit:
+	hideonnpc "Merchant Prince#HUMERC3";
+	end;
+}
+
+dali,89,94,7	script	Jumpy Knight#JP_RUN3	4_M_JP_RUN,{
+	end;
+OnInit:
+	hideonnpc "Jumpy Knight#JP_RUN3";
+	end;
+}
+
+
+dali02,58,123,3	script	Curious Knight#KY_KNT	4_M_KY_KNT,{
+	mes "[奇怪的騎士]";
+	mes "這裡的皇家衛隊";
+	mes "迫切尋求幫助。";
+	mes "我們進入了一個秘密的地方";
+	mes "在宮殿。";
+	next;
+	mes "[奇怪的騎士]";
+	mes "我們在這裡被趕走...";
+	mes "不知道我在哪裡，但我必須";
+	mes "在這裡建立一個基礎";
+	mes "騎士。";
+	close;
+}
+dali02,51,112,5	script	Confused Thief#DST_SOL	4_DST_SOLDIER,{
+	mes "[困惑的小偷]";
+	mes "一分鐘我在酒吧...";
+	mes "第二分鐘我在這裡...";
+	mes "這個地方是什麼？";
+	next;
+	mes "[困惑的小偷]";
+	mes "這裡沒有黑夜。";
+	mes "嗯，必須有價值的東西";
+	mes "在這個地方...";
+	close;
+}
+dali02,65,115,5	script	Adventurous Rafflesia#ra	4_M_RAFLE_GR,{
+	mes "[冒險的Rafflesia]";
+	mes "不，不，這必須是塔納塔斯";
+	mes "塔...";
+	mes "我在這裡感覺到黑魔法。";
+	next;
+	mes "[指導]";
+	mes "哦，我們又回到了這裡。";
+	mes "我找不到出路！";
+	mes "我們被困在這個迷宮中！";
+	next;
+	mes "[遊客]";
+	mes "這個地方是著名的普通人嗎？";
+	mes "就像一個大城市一樣黑暗！";
+	next;
+	mes "[遊客]";
+	mes "我聽到一個滴答的時鐘。";
+	mes "這個地方一定是蓋芬！";
+	close;
+}
+
+dali02,68,117,5	script	Guide#ra	4_M_RAFLE_GR,{
+	mes "[指導]";
+	mes "哦，我們又回到了這裡。";
+	mes "我找不到出路！";
+	mes "我們被困在這個迷宮中！";
+	next;
+	mes "[遊客]";
+	mes "這個地方是著名的普通人嗎？";
+	mes "就像一個大城市一樣黑暗！";
+	next;
+	mes "[遊客]";
+	mes "我聽到一個滴答的時鐘。";
+	mes "這個地方一定是蓋芬！";
+	next;
+	mes "[冒險的Rafflesia]";
+	mes "不，不，這必須是塔納塔斯";
+	mes "塔...";
+	mes "我在這裡感覺到黑魔法。";
+	close;
+}
+
+dali02,65,119,5	script	Tourist#ra	4_M_RAFLE_GR,{
+	mes "[遊客]";
+	mes "這個地方是著名的普通人嗎？";
+	mes "就像一個大城市一樣黑暗！";
+	next;
+	mes "[冒險的Rafflesia]";
+	mes "不，不，這必須是塔納塔斯";
+	mes "塔...";
+	mes "我在這裡感覺到黑魔法。";
+	next;
+	mes "[指導]";
+	mes "哦，我們又回到了這裡。";
+	mes "我找不到出路！";
+	mes "我們被困在這個迷宮中！";
+	next;
+	mes "[遊客]";
+	mes "我聽到一個滴答的時鐘。";
+	mes "這個地方一定是蓋芬！";
+	close;
+}
+
+dali02,69,122,5	script	Traveller#ra	4_M_RAFLE_GR,{
+	mes "[遊客]";
+	mes "我聽到一個滴答的時鐘。";
+	mes "這個地方一定是蓋芬！";
+	next;
+	mes "[指導]";
+	mes "哦，我們又回到了這裡。";
+	mes "我找不到出路！";
+	mes "我們被困在這個迷宮中！";
+	next;
+	mes "[遊客]";
+	mes "這個地方是著名的普通人嗎？";
+	mes "就像一個大城市一樣黑暗！";
+	next;
+	mes "[冒險的Rafflesia]";
+	mes "不，不，這必須是塔納塔斯";
+	mes "塔...";
+	mes "我在這裡感覺到黑魔法。";
+	close;
+}

@@ -1,0 +1,175 @@
+﻿//===== rAthena Script =======================================
+//= Arrow Quiver Event
+//===== By: ==================================================
+//= Muad_Dib (Prometheus Project); L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Turns arrows into Arrow Quivers.
+//= Breakdown of Subroutine "S_BuyQuiver"
+//= arg(0): Type of Arrow to be packaged (item ID).
+//= arg(1): How many of each 'getarg(0)' arrow per quiver.
+//= arg(2): The cost of making a 'getarg(0)' quiver.
+//= arg(3): The quiver given by the NPC (item ID).
+//===== Additional Comments: =================================
+//= 07/06/05 : Added 1st Version. [Muad_Dib]
+//= Converted to rAthena format by Dr.Evil
+//= added prize to quest - 500 Zeny
+//= Fixed a few spelling errors. [Nexon]
+//= 1.1 Added Holy Arrow Quivers [Playtester]
+//= 1.2 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//=     Removed "Holy Arrows" from the list.
+//============================================================
+
+payon_in01,5,134,5	script	Inventor Jaax	89,{
+	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 2000) {
+		mes "[發明家Jaax]";
+		mes "嘿，你正在攜帶";
+		mes "太多的東西。您為什麼不將其藏在Kafra存儲中？在您這樣做之後，我們可以談談，對嗎？";
+		close;
+	}
+	mes "[發明家Jaax]";
+	mes "我叫jaxx。";
+	mes "沒有自我，我可以";
+	mes "說我也許是";
+	mes "^663300我們時間的最高發明者^000000。";
+	next;
+	mes "[發明家jaxx]";
+	mes "這次，我";
+	mes "創建了一些東西";
+	mes "真正的非凡。我稱他們為... ^663300magic Quivers ^000000！這將在歷史上被記住";
+	mes "箭頭革命！";
+	emotion ET_BEST;
+	next;
+	mes "[發明家Jaax]";
+	mes "我已經學習了多年的魔術和顫抖，白天和夜間工作，直到我終於弄清楚如何用魔法凝結箭頭！有了魔術箭彈，您將攜帶更多的箭頭，但重量減少！";
+	next;
+	mes "[發明家Jaax]";
+	mes "您想嘗試使用我的箭頭之一嗎？我毫不懷疑像您這樣的人會欣賞我的天才！";
+	next;
+	switch(select("箭袋:鐵箭箭袋:鋼箭箭袋:神之金屬箭箭袋:火箭箭袋:銀箭箭袋:風靈箭箭袋:石箭箭袋:水晶箭箭袋:暗影箭箭袋:無形箭箭袋:生鏽箭箭袋")) {
+	case 1: callsub S_BuyQuiver,1750,500,500,12004;
+	case 2: callsub S_BuyQuiver,1770,500,500,12005;
+	case 3: callsub S_BuyQuiver,1753,500,500,12006;
+	case 4: callsub S_BuyQuiver,1765,500,500,12007;
+	case 5: callsub S_BuyQuiver,1752,500,500,12008;
+	case 6: callsub S_BuyQuiver,1751,500,500,12009;
+	case 7: callsub S_BuyQuiver,1755,500,500,12010;
+	case 8: callsub S_BuyQuiver,1756,500,500,12011;
+	case 9: callsub S_BuyQuiver,1754,500,500,12012;
+	case 10: callsub S_BuyQuiver,1767,500,500,12013;
+	case 11: callsub S_BuyQuiver,1757,500,500,12014;
+	case 12: callsub S_BuyQuiver,1762,500,500,12015;
+	}
+	//This doesn't seem to be accessable...
+	//mes "[發明家賈克斯]";
+	//mes "有沒有";
+	//mes "你想要什麼嗎？";
+	//close;
+
+S_BuyQuiver:
+	.@item_id = getarg(0);
+	.@amount = getarg(1);
+	.@zeny_req = getarg(2);
+
+	if (countitem(.@item_id) >= .@amount) {
+		mes "[發明家Jaax]";
+		mes "出色的！";
+		mes "您是否隨身攜帶箭頭？我會為你提供一個可以攜帶的顫抖"+ .@amount +" of your "+ getitemname(.@item_id) +"s for only ^FF3131"+ .@zeny_req +" Zeny^000000.";
+		next;
+		switch(select("盡可能多地將箭矢存入箭袋:購買1個箭袋:取消")) {
+		case 1:
+			.@arrows = countitem(.@item_id);
+			set .@quiver,.@arrows / .@amount;
+			set .@arrows_used,.@quiver * .@amount;
+			.@arrow_zeny01 = .@quiver * .@zeny_req;
+			mes "數量";
+			mes "箭頭： ^3131ff"+.@arrows+" ^000000";
+			mes "最大數字";
+			mes "可購買的";
+			mes "紀念物： ^3131ff"+.@quiver+" ^000000";
+			mes "Zeny需要： ^3131ff"+.@arrow_zeny01+" Zeny^000000";
+			next;
+			mes "[發明家Jaax]";
+			mes "你是否想要";
+			mes "購買盡可能多的砂紙";
+			mes "盡可能";
+			mes "您目前正在攜帶嗎？";
+			next;
+			if (select("是:取消") == 1) {
+				if (.@arrow_zeny01 < Zeny) {
+					mes "[發明家Jaax]";
+					mes "你去！";
+					mes "請記住， ^ff0000 you在攜帶重量時將無法使用箭量，這是您的最大重量限制的90％ ^000000。";
+					set Zeny, Zeny-.@arrow_zeny01;
+					delitem .@item_id,.@arrows_used;// Arrow
+					getitem getarg(3),.@quiver; //Quiver
+					next;
+					mes "[發明家Jaax]";
+					mes "所以...";
+					mes "只需跟";
+					mes "你多少";
+					mes "隨著時間的流逝";
+					mes "時間，你應該";
+					mes "沒事。";
+					close;
+				}
+				else {
+					mes "[發明家Jaax]";
+					mes "對不起，但是您沒有足夠的Zeny。工作年後，我不能只是丟掉這些";
+					mes "開發這種革命性的技術！";
+					close;
+				}
+			}
+			mes "[發明家Jaax]";
+			mes "你改變了主意？";
+			mes "當擁有的榮耀";
+			mes "顫抖的人如此近嗎？";
+			close;
+		case 2:
+			if (Zeny > .@zeny_req) {
+				mes "[發明家Jaax]";
+				mes "你去！";
+				mes "請記住， ^ff0000 you在攜帶重量時將無法使用箭量，這是您的最大重量限制的90％ ^000000。";
+				Zeny = Zeny -.@zeny_req;
+				delitem .@item_id,.@amount;// Arrow
+				getitem getarg(3),1; //Quiver
+				next;
+				mes "[發明家Jaax]";
+				mes "所以...";
+				mes "只需跟";
+				mes "你多少";
+				mes "隨著時間的流逝";
+				mes "時間，你應該";
+				mes "沒事。";
+				close;
+			}
+			else {
+				mes "[發明家Jaax]";
+				mes "你什至沒有";
+				mes "有"+ .@zeny_req +" Zeny?";
+				mes "我很抱歉。我沒有";
+				mes "想法你是如此...";
+				mes "^Aaadsettt^000000。";
+				close;
+			}
+		case 3:
+			mes "[發明家Jaax]";
+			mes "什麼...？";
+			mes "您沒有看到本發明可以永遠改變箭頭的方式嗎？現在的未來！";
+			close;
+		}
+	}
+	else {
+		mes "[發明家Jaax]";
+		mes "您最多可以攜帶"+ .@amount +" Arrows within this quiver. It was made using my secret method,";
+		mes "因此，箭頭和箭袋的總重量小於單獨攜帶箭頭。";
+		next;
+		mes "[發明家Jaax]";
+		mes "這是科學的奇蹟！如果您至少帶給我，您可以自己體驗的一個"+ .@amount +" Arrows and "+ .@zeny_req +" Zeny for each Quiver.";
+		close;
+	}
+}

@@ -1,0 +1,104 @@
+﻿//===== rAthena Script ======================================= 
+//= Dead Branch (+Bloody Branch) Quest
+//===== By: ================================================== 
+//= GM-Yevon
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+// Simple item trade-in quest, a person can get a Dead Branch
+// by simply providing the items: Log x3 (7201), Wooden Heart x1 (7189), 
+// Trunk x5 (1019), and Wooden Gnarl x1 (7222).
+//===== Additional Comments: ================================= 
+//= 1.1 Optimized, added Bloody Branch with 0.01% chance [Lupus]
+//============================================================
+
+niflheim,204,179,3	script	Mister Mobry	121,{
+
+	mes "[Mobry先生]";
+	mes "樹木擁有你知道的精神...";
+	next;
+
+	mes "[Mobry先生]";
+	mes "實際上，我知道這些精神可以以某種方式……也許會幫助您...";
+	next;
+
+	mes "[Mobry先生]";
+	mes "我可以創建一個充滿活力的分支...也就是說，如果您可以為我提供正確的材料...";
+	next;
+	goto L_MENU;
+
+L_MENU:
+	menu "What Do I Need?",-,"Where Can I find this Crap?",M_FIND,"Make me a Dead Branch!",M_CREATE,"Forget it...",M_END;
+
+	mes "[Mobry先生]";
+	mes "Mwehehe ...我看到您想控制樹烈，對嗎？好...我需要：";
+	mes "^1354453 日誌^000000";
+	mes "^1354451木心^000000";
+	mes "^1354455 後備箱^000000";
+	mes "^1354451木製gnarl^000000";
+	next;
+	goto L_MENU;
+
+M_FIND:
+	mes "[Mobry先生]";
+	mes "您可以從某些怪物中找到以下物品...";
+	mes "^135445logs可以從樹go中找到。 ^000000";
+	mes "^135445木心樹的本質。 ^000000";
+	mes "^135445Trunks？認真地思考木材...^000000";
+	mes "^135445木節...絞刑架...^000000";
+	next;
+	goto L_MENU;
+
+L_NOLOG:
+	mes "[Mobry先生]";
+	mes "^135445logs^000000是身體...我需要更多。";
+	mes "給我三個原木，我會讓你成為精神...";
+	close;
+
+L_NOHEART:
+	mes "[Mobry先生]";
+	mes "^135445木心 ^000000是精神的本質。";
+	mes "給我一顆木製的心，我會讓你成為精神...";
+	close;
+
+L_NOTRUNK:
+	mes "[Mobry先生]";
+	mes "什麼？您甚至找不到 ^1354455 TRUNKS ^000000？";
+	mes "殺死柳樹長老或其他... geez ...沒有樹幹的呵呵...可悲。";
+	close;
+
+L_NOGNARL:
+	mes "[Mobry先生]";
+	mes "我如何在沒有A ^135445 Wooden gnarl ^000000的情況下製作一個？";
+	mes "我說吉布（Gibbet）...他們都在這個地方...";
+	close;
+
+M_CREATE:
+	mes "[Mobry先生]";
+	mes "好吧...讓我們看看你給我帶來了什麼...";
+	next;
+	if(countitem(7201)<3) goto L_NOLOG;
+	if(countitem(7189)<1) goto L_NOHEART;
+	if(countitem(1019)<5) goto L_NOTRUNK;
+	if(countitem(7222)<1) goto L_NOGNARL;
+	delitem 7201,3;
+	delitem 7189,1;
+	delitem 1019,5;
+	delitem 7222,1;
+	mes "[Mobry先生]";
+	mes "呵呵...希望您能和樹烈酒一起玩...現在小心...";
+	mes "嘿...現在小心嗎？如果你di ....沒關係，我會在乎什麼。";
+	if(rand(1000)==0) goto L_GIVE2;
+	getitem 604,1; //Dead Branch
+	close;
+L_GIVE2:
+	getitem 12103,1; //Bloody Branch
+	close;
+
+M_END:
+	mes "[Mobry先生]";
+	mes "沒有給你的精神...然後走！";
+	close;
+}

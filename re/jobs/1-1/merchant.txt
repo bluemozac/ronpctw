@@ -1,0 +1,125 @@
+﻿//===== rAthena Script ======================================= 
+//= Renewal Merchant Job Quest
+//===== By: ================================================== 
+//= Kisuka
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Job Change to Merchant Class
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. [Kisuka]
+//= 1.1 Added support for Baby classes. [Euphy]
+//============================================================ 
+alberta_in,53,43,6	script	Merchant#mer	86,{
+	if (Upper == 1) {
+		if (Class == Job_Novice_High && (ADVJOB == Job_Whitesmith || ADVJOB == Job_Creator)) {
+			mes "[酋長Mahnsoo]";
+			mes "長時間看不到！";
+			mes "嘿，你沒有退出";
+			mes "你的公司，是嗎？";
+			mes "發生了什麼？";
+			next;
+			mes "[酋長Mahnsoo]";
+			mes "哇...";
+			mes "您實際上去過瓦爾哈拉嗎？哇，你走了很長一段路...";
+			next;
+			if (!callfunc("F_CanChangeJob")) {
+				mes "[酋長Mahnsoo]";
+				mes "嗯...";
+				mes "看來您還沒有準備好再次成為商人。首先要完成學習基本的新手技能。";
+				next;
+				mes "[酋長Mahnsoo]";
+				mes "不用擔心，我們將始終為您開放商人職位。準備好後回來，好嗎？";
+				close;
+			}
+			mes "[酋長Mahnsoo]";
+			mes "我想我們再次遇到這是命運。好吧。再一次，讓我將您變成商人！";
+			next;
+			skill "NV_TRICKDEAD",0,SKILL_PERM;
+			jobchange Job_Merchant_High;
+			skill "MC_CARTREVOLUTION",1,SKILL_PERM;
+			skill "MC_CHANGECART",1,SKILL_PERM;
+			skill "MC_LOUD",1,SKILL_PERM;
+			mes "[酋長Mahnsoo]";
+			mes "啊~如何懷舊。就像過去一樣！好吧，盡力！";
+			close;
+		}else{
+			mes "[酋長Mahnsoo]";
+			mes "^333333*嘆氣*^000000";
+			mes "我很無聊...";
+			mes "我什麼時候會聽到我可愛的開花的來信？";
+			close;
+		}
+	}
+	mes "[公會人Mahnsoo]";
+	mes "嘿，你為什麼在這裡？";
+	next;
+	switch(select("我想要成為商人:我想了解更多關於商人的資訊:詢問成為商人的條件:沒事")) {
+	case 1:
+		mes "[公會人Mahnsoo]";
+		if(BaseJob != Job_Novice) {
+			if(BaseJob == Job_Merchant) {
+				mes ".....？對不起？你在說什麼？";
+				mes "您已經是商人。哦，我的..";
+				mes "嗯？ ！ ...我現在需要笑嗎？";
+			}else{
+				mes "啊？您是否試圖這兩種方式？";
+				mes "只要把自己送到原始工作呢？";
+				next;
+				mes "[公會人Mahnsoo]";
+				mes "我們知道您知道的商業道德。";
+			}
+			close;
+		}else{
+			mes "想成為商人嗎？唔...";
+			next;
+			if (!callfunc("F_CanChangeJob")) {
+				mes "[公會人Mahnsoo]";
+				mes "但是，如果您想成為商人，您的基本技能水平必須達到9級，否則您必須花費所有技能點。";
+				next;
+				mes "[公會人Mahnsoo]";
+				mes "您不認為我們只是在處理錢，但我們不需要學習一些基本技能嗎？";
+				close;
+			}
+			mes "[公會人Mahnsoo]";
+			mes "很好，我認為您已經準備好了您的基本技能水平已經實現。";
+			mes "現在，我允許您成為商人。";
+			next;
+			mes "[公會人Mahnsoo]";
+			mes "恭喜成為商人！";
+			mes "再次恭喜成為商人協會和我們的一位同事的成員。我希望您從現在開始積極參與！";
+			callfunc "Job_Change",Job_Merchant;
+			getitem 1381,1;	// N_Battle_Axe
+			next;
+			mes "[公會人Mahnsoo]";
+			mes "絕對，我們需要充滿激情的年輕人來實現我們確保全球貨幣量20％的偉大目標。你明白了嗎？嗯？";
+			mes "好吧，我只是說...這意味著讓我們賺很多錢。你們知道~";
+			close;
+		}
+	case 2:
+		mes "[公會人Mahnsoo]";
+		mes "商人？簡而言之，賣出並賺錢的人是商人。";
+		mes "不擅長戰鬥，也沒有特殊的攻擊/恢復技能……但是商人可以以低價購買東西，然後出售並賺錢。";
+		next;
+		mes "[公會人Mahnsoo]";
+		mes "好吧，商人擁有一種名為Mammonite的終極技能，它用他/她的錢襲擊了一個敵人……我們可以裝備除弓，桿和雙手劍以外的所有東西。但是我們總是可以賣和購買。";
+		mes "是的...我們的商人總是有錢，明白了嗎？";
+		close;
+	case 3:
+		mes "[公會人Mahnsoo]";
+		mes "要成為商人，儘管僅出售和收錢是我們的工作，但您必須至少達到基本技能9級。";
+		next;
+		mes "[公會人Mahnsoo]";
+		mes "好吧，我們以前曾經收到過啟動費。賺錢難道不難嗎？";
+		mes "太多的人無法收集這筆錢而一直在哭。";
+		next;
+		mes "[公會人Mahnsoo]";
+		mes "因此，最近，我們決定允許任何想成為商人的新手。";
+		mes "因為活著或不以後是一個人的能力。";
+		close;
+	case 4:
+		close;
+	}
+}

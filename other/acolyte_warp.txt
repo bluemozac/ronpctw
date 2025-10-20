@@ -1,0 +1,149 @@
+﻿//===== rAthena Script =======================================
+//= Acolyte Warpers
+//===== By: ==================================================
+//= Euphy
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Warpers to various towns.
+//===== Additional Comments: =================================
+//= 1.0 First version. [Euphy]
+//=     Unsure if this is on kRO, so disabled for now.
+//= 1.1 Added iRO VIP features. [Euphy]
+//=     The function is located in re/quests/eden/eden_vip.txt.
+//============================================================
+
+// Warpers :: acolyte_warp
+//============================================================
+prontera,98,121,4	script	Acolyte#Prtclear	90,{
+	mes "[問]";
+	mes "你好，冒險家。";
+	mes "我一直在研究各地的符文米加特人的魔術，以升級我認為這是Acolyte班級可用的最佳技能之一。";
+	next;
+
+	if (is_function("VIP_iRO_Acolyte"))
+		callfunc "VIP_iRO_Acolyte","[Keiki]","Juno";
+
+	mes "[問]";
+	mes "我是唯一獲得10級翹曲門戶技能的助手！";
+	emotion ET_THINK, playerattached();
+	next;
+	mes "[問]";
+	mes "這是正確的！和...";
+	mes "我向您保證，我不會忘記我已經記住的位置。";
+	mes "有一天，我將升級自己的技能，以扭曲到我隨時隨地的任何地方~";
+	next;
+	mes "[問]";
+	mes "我願意將您扭轉到我以少量費用記憶的許多地點。";
+	mes "您想使用此服務嗎？";
+	next;
+	switch(select("是:否")) {
+	case 1:
+		mes "[問]";
+		mes "您想去哪裡？";
+		mes "祝您旅途好。";
+		next;
+
+		setarray .@towns$[0], "Izlude", "Geffen", "Payon", "Morocc", "Alberta", "Al De Baran", "Comodo", "Umbala", "Juno";
+		setarray .@cost[0],        600,     1200,    1200,     1200,      1800,          2200,     2200,     2200,   1800;
+
+		set .@size, getarraysize(.@towns$);
+		for(set .@i,0; .@i<.@size; set .@i,.@i+1)
+			set .@menu$, .@menu$+.@towns$[.@i]+" -> "+.@cost[.@i]+"z:";
+		set .@i, select(.@menu$+"Cancel")-1;
+		if (.@i == .@size)
+			close;
+		if (Zeny < .@cost[.@i]) {
+			mes "[問]";
+			mes "對不起，但是你沒有";
+			mes "足夠的zeny來傳送";
+			mes "服務。傳送費";
+			mes "到"+.@towns$[.@i]+" is "+.@cost[.@i]+" zeny.";
+			close;
+		}
+		specialeffect2 EF_READYPORTAL;
+		specialeffect2 EF_TELEPORTATION;
+		specialeffect2 EF_PORTAL;
+		next;
+		set Zeny, Zeny - .@cost[.@i];
+		switch(.@i) {
+			case 0: if (checkre(0)) warp "izlude",128,98; else warp "izlude",91,105; break;
+			case 1: warp "geffen",120,39; break;
+			case 2: warp "payon",161,58; break;
+			case 3: warp "morocc",156,46; break;
+			case 4: warp "alberta",117,56; break;
+			case 5: warp "aldebaran",168,112; break;
+			case 6: warp "comodo",209,143; break;
+			case 7: warp "umbala",100,154; break;
+			case 8: warp "yuno",158,125; break;
+		}
+		close;
+	case 2:
+		close;
+	}
+}
+
+yuno,142,184,6	script	Acolyte#Junoclear	90,{
+	mes "[伊薩雷]";
+	mes "你好，冒險家。";
+	mes "我和我的同伴凱基（Keiki）發現了一種提高經線門戶能力的方法。";
+	next;
+
+	if (is_function("VIP_iRO_Acolyte"))
+		callfunc "VIP_iRO_Acolyte","[Isalei]","Prontera";
+
+	mes "[伊薩雷]";
+	mes "儘管我還沒有掌握她的水平，但我已經能夠達到5級。";
+	emotion ET_THINK, playerattached();
+	next;
+	mes "[伊薩雷]";
+	mes "也許有一天，我可以足夠升級自己的技能，以便可以將翹曲門戶用於更加保存的位置。";
+	next;
+	mes "[伊薩雷]";
+	mes "我願意將您扭轉到我以少量費用記憶的許多地點。";
+	mes "您想使用此服務嗎？";
+	next;
+	switch(select("是:否")) {
+	case 1:
+		mes "[伊薩雷]";
+		mes "您想去哪裡？";
+		mes "祝您旅途好。";
+		next;
+
+		setarray .@towns$[0], "Einbroch", "Lighthalzen", "Hugel", "Rachel", "Prontera";
+		setarray .@cost[0],         2200,          2200,    2200,     2200,       1800;
+
+		set .@size, getarraysize(.@towns$);
+		for(set .@i,0; .@i<.@size; set .@i,.@i+1)
+			set .@menu$, .@menu$+.@towns$[.@i]+" -> "+.@cost[.@i]+"z:";
+		set .@i, select(.@menu$+"Cancel")-1;
+		if (.@i == .@size)
+			close;
+		if (Zeny < .@cost[.@i]) {
+			mes "[伊薩雷]";
+			mes "對不起，但是你沒有";
+			mes "足夠的zeny來傳送";
+			mes "服務。傳送費";
+			mes "到"+.@towns$[.@i]+" is "+.@cost[.@i]+" zeny.";
+			close;
+		}
+		specialeffect2 EF_READYPORTAL;
+		specialeffect2 EF_TELEPORTATION;
+		specialeffect2 EF_PORTAL;
+		next;
+		set Zeny, Zeny - .@cost[.@i];
+		switch(.@i) {
+			case 0: warp "einbroch",67,195; break;
+			case 1: warp "lighthalzen",159,90; break;
+			case 2: warp "hugel",98,150; break;
+			case 3: warp "rachel",119,135; break;
+			case 4: warp "prontera",116,72; break;
+		}
+		close;
+	case 2:
+		close;
+	}
+}

@@ -1,0 +1,176 @@
+﻿//===== rAthena Script ======================================= 
+//= Clothes Dyer
+//===== By: ================================================== 
+//= Usnul
+//===== Current Version: ===================================== 
+//= 2.5
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Clothes dyer with standard palletes
+//===== Additional Comments: ================================= 
+//= Fully working
+//= 2.1 Shortened some labels to make this script loading,
+//= Added Black+White Colors desc [Lupus]
+//= 2.1a added adv classes + baby class support [Lupus]
+//= 2.2 Spell checked. [Nexon]
+//= 2.3 Fixed dis $hit! [Poki#3]
+//= 2.4 Disabled cloth dyeing since it's not implemented
+//	   on official servers and cause your client to crash
+//	   [Playtester]
+//= 2.5 Optimized. [Euphy]
+//============================================================
+
+prt_in,284,168,2	script	Dyer Ginedin Rephere	55,{
+function Dyes;
+
+	set .@EnableDyes,1;	// Disable (set to 0) if palettes cause errors [see note v2.4]
+
+	set .n$,"[Dyer Ginedin Rephere]";
+	mes .n$;
+	mes "11 ... 12 ...嗯...好。我想我能夠在今晚的聚會前完成。哦！我沒注意到你在這裡！";
+	while(1) {
+		next;
+		mes .n$;
+		mes "我該如何幫助您？";
+		next;
+		switch(select("- 對話:- 染衣服:- 價格列表:- ^777777取消^000000")) {
+		case 1:
+			mes .n$;
+			mes "生活可能會好多了，但是當我查看我收到的所有訂單時...哇！";
+			mes "看來，如今，符文中的年輕婦女一定很不錯。";
+			next;
+			mes .n$;
+			mes "並不是說他們沉迷於任何豪華的事，請注意。";
+			mes "我認為追求美麗和時尚沒有什麼錯。";
+			next;
+			mes .n$;
+			mes "對於我們沒有五顏六色的皮毛或裝飾性鱗片的人類來說，衣服是我們展現我們的個性，風格和美麗的幾種方式之一。";
+			next;
+			mes .n$;
+			mes "哈哈...當我考慮一下時，我真的覺得我的工作值得。  我相信我提供了人們想要的服務。";
+			next;
+			mes .n$;
+			mes "你也能感覺到嗎？當粗糙的織物和皮革用顏色栩栩如生時釋放的能量？ ..... .....";
+			next;
+			mes .n$;
+			mes "儘管這個過程非常乏味和耗時，但我的喜悅和幸福既不彌補所有艱苦的工作！";
+			break;
+		case 2:
+			mes .n$;
+			if (!.@EnableDyes) {
+				mes "抱歉，我太忙於其他工作來染上衣服。";
+				break;
+			}
+			mes "哦...你需要我的工作嗎？好吧...好吧，聽起來不錯。";
+			next;
+			mes .n$;
+			mes "請選擇顏色";
+			mes "適合你。";
+			next;
+
+			// Dyes(<color value>,<dye number>{,...});
+			// Colors: [1]Orange, [2]Violet, [3]Red, [4]Black, [5]Green, [6]Blue, [7]White, [8]Yellow
+			switch(BaseJob) {
+			case Job_Novice:
+				if (Sex == SEX_MALE) Dyes(4,1,6,2,5,3); else Dyes(6,1,3,2,5,3,4,4);
+			case Job_Swordman:
+				if (Sex == SEX_MALE) Dyes(4,1,6,2,5,3); else Dyes(3,1,5,3,4,4);
+			case Job_Mage:
+				if (Sex == SEX_MALE) Dyes(3,1,2,2,1,3,7,4); else Dyes(3,1,2,2,7,3,4,4);
+			case Job_Archer:
+				if (Sex == SEX_MALE) Dyes(4,1,2,2,5,3); else Dyes(3,1,5,2,7,3,4,4);
+			case Job_Acolyte:
+				if (Sex == SEX_MALE) Dyes(6,1,3,2,7,3,4,4); else Dyes(3,1,5,3,4,4);
+			case Job_Merchant:
+				if (Sex == SEX_MALE) Dyes(4,1,6,2,5,3); else Dyes(2,1,5,3,4,4);
+			case Job_Thief:
+				if (Sex == SEX_MALE) Dyes(5,1,3,2,7,4); else Dyes(3,1,7,3,4,4);
+			case Job_Knight:
+			case Job_Crusader:
+				if (Sex == SEX_MALE) Dyes(2,1,3,3,4,4); else Dyes(6,1,7,3,4,4);
+			case Job_Priest:
+			case Job_Monk:
+				if (Sex == SEX_MALE) Dyes(6,1,5,2,3,3,7,4); else Dyes(3,1,5,2,7,3,4,4);
+			case Job_Wizard:
+			case Job_Sage:
+				if (Sex == SEX_MALE) Dyes(6,1,5,3,4,4); else Dyes(3,1,6,2,7,3,5,4);
+			case Job_Blacksmith:
+			case Job_Alchemist:
+				if (Sex == SEX_MALE) Dyes(4,4,5,2,7,3); else Dyes(3,1,5,2,2,3,4,4);
+			case Job_Hunter:
+			case Job_Bard:
+			case Job_Dancer:
+				if (Sex == SEX_MALE) Dyes(4,1,6,2,5,3); else Dyes(6,1,5,3,2,4);
+			case Job_Assassin:
+			case Job_Rogue:
+				if (Sex == SEX_MALE) Dyes(6,1); else Dyes(4,1,8,2,7,3);
+			case Job_Super_Novice:
+				if (Sex == SEX_MALE) Dyes(2,1,6,2,5,3,4,4); else Dyes(6,1,3,2,5,3,4,4);
+			default: 
+				mes "哇，我以前從未見過這樣的衣服！對不起，但我認為我不能畫畫。";
+				close;
+			}
+		case 3:
+			mes .n$;
+			mes "每種顏色的成本為10000Z和1染料：";
+			mes " ";
+			mes "-  ^ff4422red ^000000：猩紅色染料";
+			mes "-  ^d5a500yellow ^000000：檸檬染料";
+			mes "-  ^aa00aaviolet ^000000：紫羅蘭色染料";
+			mes "-  ^FF8800ORANGE ^000000：橙色染料";
+			mes "-  ^4422ffblue ^000000：鈷藍色染料";
+			mes "-  ^009500GREEN ^000000：Darkgreen染料";
+			mes "- 黑色：黑色染料";
+			mes "- 白：白色染料";
+			break;
+		case 4:
+			goto L_End;
+		}
+	}
+
+L_End:
+	mes .n$;
+	mes "請隨便一點，就像在自己家一樣。即使我沒有時間給你。";
+	close;
+
+function Dyes {
+	setarray .@DyeName$[0],"預設顏色","橙色","紫色","紅色","黑色","綠色","藍色","白色","黃色";
+	setarray .@DyeItems[0],0,980,981,975,983,979,978,982,976;
+	set .@menu$,"- Default:";
+	for(set .@i,0; .@i<getargcount(); set .@i,.@i+2)
+		set .@menu$, .@menu$+"- "+.@DyeName$[getarg(.@i)]+":";
+	set .@menu$, .@menu$+"- ^777777Cancel^000000";
+	set .@s, select(.@menu$)-1;
+	if (.@s == (getargcount()/2)+1) goto L_End;
+	mes .n$;
+	if (.@s == 0) {
+		mes "我可以將您的染料更改為";
+		mes "默認值免費。";
+		mes "你確定嗎？";
+		next;
+		switch(select("是:否")) {
+		case 1:
+			mes .n$;
+			setlook 7,0;
+		mes "你的衣服被染了"+.@DyeName$[0]+"。";
+			close;
+		case 2:
+			goto L_End;
+		}
+	}
+	if (!countitem(.@DyeItems[getarg((.@s-1)*2)])) {
+		mes "為了使我染上衣服，我需要適當的染料。請檢查我的價格清單以獲取信息。";
+		close;
+	}
+	if (Zeny < 10000) {
+		mes "對不起，但是您沒有足夠的錢。";
+		close;
+	}
+	delitem .@DyeItems[getarg((.@s-1)*2)],1;
+	set Zeny, Zeny-10000;
+	setlook 7, ((.@s)?(getarg((.@s-1)*2+1)):0);
+	mes "你的衣服被染了"+((.@s)?.@DyeName$[getarg((.@s-1)*2)]:.@DyeName$[0])+"。";
+	close;
+}
+}

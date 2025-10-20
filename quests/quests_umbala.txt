@@ -1,0 +1,1326 @@
+﻿//===== rAthena Script ======================================= 
+//= Quest NPCs related to Umbala
+//===== By: ================================================== 
+//= sabernet09 & rAthena Team
+//===== Current Version: ===================================== 
+//= 2.2a
+//===== Compatible With: ===================================== 
+//= rAthena Project; 7.15 +
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Umbalian Language Quest, Umbala Skeletal Gate Quest,
+//= Umbala Event, Create Essence/Dismantle Stone
+//	Phase 1. Learning the Language
+//	  (Elder) First discussion
+//	  (Elder) Asking about learning the language
+//	  (Elder) Final step (understanding NPC speech)
+//	------------------------------------------
+//	Phase 2. Create Essence/Dismantle Stone
+//	 (Shaman) Get permission to speak with her from the chief
+//	  (Elder) Ask about conditions needed to be fulfilled to get permission
+//	  (Elder) Get permission
+//	 (Shaman) Use the shaman to create essences and dismantle elemental stones.
+//= Umbala Domestic Dispute?
+//= - This quest is only avaliable if you have not done language quest.
+//= - Variables in use: um_wind, MISC_QUEST (Bit 32768)
+//===== Additional Comments: ================================= 
+//= fixed by x[tsk], Lupus, PoW
+//= Quest completion is now registered
+//= 1.1 fixed Poporing Egg ID -> Poring Egg, fixed condition
+//= 1.2-1.6 fixed some Umbalian Language quests [Lupus]
+//= 1.7 Moved Umbala Event, Create Essence/Dismantle Stone, and Skeletal Gate from npc/cities/umbala.txt [Evera]
+//= 1.7a Removed all custom quests to custom folder [Lupus]
+//= 1.8 Added official chance of failure to Create Essence/Dismantle Stone [Lupus]
+//= 1.9 Added functionality to allow players to dismantle more
+//=     than a stone at once, up to 10. [SinSloth]
+//= 2.0 Updated hack check and added a weight check to dismantling. [SinSloth]
+//= 2.1 Rescripted to Aegis 10.3 standards. Added strange quest. [L0ne_W0lf]
+//= 2.2 Readded the ability to dismantle multiple stones at once. [L0ne_W0lf]
+//= 2.2a Fixed weight check from previous update. [L0ne_w0lf]
+//============================================================ 
+
+// Umbalian Language Quest :: um_trans
+//============================================================
+um_in,39,122,5	script	Utan Chief	784,{
+	if (event_umbala == 0) {
+		mes "[捻]";
+		mes "呵呵，符文米加特斯人。";
+		mes "我想這是你的第一個";
+		mes "參觀我的村莊，不是嗎？";
+		next;
+		mes "[捻]";
+		mes "來自符文米加特人的每個人";
+		mes "我遇到的也一樣";
+		mes "他們的表達";
+		mes "像你現在一樣面對";
+		mes "當他們第一次來到這裡。";
+		next;
+		mes "[捻]";
+		mes "也許是因為他們不能";
+		mes "由於";
+		mes "語言障礙，所以";
+		mes "他們不知道發生了什麼";
+		mes "在。是的，我明白...";
+		mes "無論如何，歡迎來到我的村莊。";
+		next;
+		mes "[捻]";
+		mes "我叫Karkatan，我";
+		mes "是烏蘭部落的負責人。";
+		mes "你一定想知道如何";
+		mes "我可以說你的語言。";
+		next;
+		mes "[捻]";
+		mes "很久以前就向我教了";
+		mes "由您的冒險家";
+		mes "土地。已經很長一段時間了";
+		mes "我不知道有什麼";
+		mes "成為他...";
+		next;
+		mes "[捻]";
+		mes "無論如何，我學到了很多東西";
+		mes "關於符文米加特斯文化";
+		mes "和語言。";
+		next;
+		mes "[捻]";
+		mes "有時，我教烏丹";
+		mes "語言，但我不給";
+		mes "每個特權的人。";
+		mes "如果不道德的局外人";
+		mes "學習烏蘭語，他們";
+		mes "可能會對我的部落造成傷害。";
+		next;
+		mes "[捻]";
+		mes "在您學習烏丹之前";
+		mes "語言，首先嘗試學習";
+		mes "烏丹文化通過探索我們的文化";
+		mes "村莊。";
+		next;
+		mes "[捻]";
+		mes "雖然你不能";
+		mes "與我的人交流";
+		mes "現在，嘗試了解";
+		mes "我們通過你的生活方式";
+		mes "觀察。";
+		next;
+		mes "[捻]";
+		mes "注意這件衣服，";
+		mes "外觀和生活方式";
+		mes "當地人。當你想";
+		mes "你對烏丹足夠了解";
+		mes "文化，回到我身邊，向我展示您學到的東西。";
+		set event_umbala,1;
+		close;
+	}
+	else if (event_umbala == 1) {
+		mes "[捻]";
+		mes "哦，又是你。所以...";
+		mes "你了解烏丹嗎";
+		mes "文化？我想听你的";
+		mes "意見以及您的印象。";
+		next;
+		mes "[捻]";
+		mes "還有一些村民";
+		mes "誰對符文中的人非常天真。";
+		mes "通常，他們害怕遇到";
+		mes "和你的人一起";
+		mes "隱藏自己。";
+		next;
+		mes "[捻]";
+		mes "所以...";
+		mes "我可以幫你什麼嗎？";
+		mes "我認為你沒有太多";
+		mes "一個圍繞著的問題";
+		mes "村莊，但似乎您有什麼要問我的。";
+		next;
+		switch(select("我想學習烏坦語。 :Umbabah Umbabah?:沒什麼。")) {
+		case 1:
+			if (isequipped(2278) || isequipped(2297) || isequipped(2288) || isequipped(2292) || isequipped(5005) || isequipped(2281) || isequipped(5043)) {
+				mes "[捻]";
+				mes "嗯...那是一個很棒的面具";
+				mes "你穿著。我們喜歡";
+				mes "戴口罩以避開";
+				mes "顯示我們的面部表情。";
+				next;
+				mes "[捻]";
+				mes "這就是為什麼我們戴所有面具";
+				mes "時間。我們相信這種互動";
+				mes "和其他人的待遇";
+				mes "不應該取決於我們的外觀。";
+				next;
+				mes "[捻]";
+				mes "好吧。我確定你是";
+				mes "有資格學習烏丹";
+				mes "語言。我會教你如何";
+				mes "講話並在烏拉特語中閱讀";
+				mes "現在打開。";
+				next;
+				mes "[捻]";
+				mes "但是，我需要你得到一些";
+				mes "準備好物品，以便我們繼續";
+				mes "上課。首先，我們需要";
+				mes "兩種不同的紙。";
+				mes "^3377FF10油紙^000000和";
+				mes "^3377ff5光滑紙^000000。";
+				next;
+				mes "[捻]";
+				mes "我們還需要一些東西";
+				mes "寫。讓我們使用";
+				mes "^3377ff1魷魚墨水^000000和";
+				mes "^3377ff1鳥類的羽毛^000000。";
+				mes "請帶我那些，我會";
+				mes "準備好時要教你。";
+				set event_umbala,2;
+				close;
+			}
+			else {
+				mes "[捻]";
+				mes "你似乎不明白";
+				mes "我們的文化。你不能";
+				mes "如果您學習另一種語言";
+				mes "不了解文化。";
+				next;
+				mes "[捻]";
+				mes "當你有這樣的表達";
+				mes "你的臉，尤特人會";
+				mes "恐嚇...因為我們這樣做";
+				mes "不向別人展示我們的臉，";
+				mes "我們實際上非常";
+				mes "容易受到面部表達的影響。";
+				next;
+				mes "[捻]";
+				mes "去探索村莊一點";
+				mes "更長。你可以回來";
+				mes "每當您認為自己準備就緒時。";
+				next;
+				mes "[捻]";
+				mes "無論如何，您如何看待";
+				mes "關於我的面具？這是電流";
+				mes "美國尤特人中的趨勢...不是嗎";
+				mes "覺得很棒？";
+				close;
+			}
+		case 2:
+			mes "[捻]";
+			mes "哈哈~當你只是模仿的時候";
+			mes "聲音，你不會做任何";
+			mes "感覺。語言是一個共同的系統";
+			mes "進行思想和感受的交流。";
+			next;
+			mes "[捻]";
+			mes "我很遺憾地說似乎";
+			mes "如今，所有民族都不";
+			mes "對其他文化敏感的更長";
+			mes "在這方面。";
+			next;
+			mes "[捻]";
+			mes "我看到人們鄙視或";
+			mes "嘲笑別人";
+			mes "了解他們。真的";
+			mes "可悲的是，這種偏執仍然存在...";
+			next;
+			mes "[捻]";
+			mes "如果您對Utan感興趣";
+			mes "語言，嘗試了解我們的";
+			mes "更好的文化回來";
+			mes "當你準備好時。我會";
+			mes "教您所使用的這些聲音的含義。";
+			close;
+		case 3:
+			mes "[捻]";
+			mes "有時候徘徊是一件好事";
+			mes "沒有目的。但這是";
+			mes "最好設定目標";
+			mes "如果您想";
+			mes "從";
+			mes "經驗。";
+			close;
+		}
+	}
+	else if (event_umbala == 2) {
+		if ((countitem(7151) > 9) && (countitem(7111) > 4) && (countitem(1024) > 0) && (countitem(916) > 0)) {
+			mes "[捻]";
+			mes "好吧，我想我們很好。";
+			mes "讓我們開始課程。";
+			mes "希望您能更好地交流";
+			mes "我們完成後與烏丹在一起。";
+			next;
+			mes "[捻]";
+			mes "........................";
+			next;
+			mes "[捻]";
+			mes "........................";
+			mes "................................";
+			next;
+			mes "[捻]";
+			mes "........................";
+			mes "................................";
+			mes "................................................";
+			next;
+			mes "[捻]";
+			mes "好吧，僅此而已。只是忘記";
+			mes "關於您對烏丹的感受";
+			mes "在學習語言之前。";
+			mes "現在去嘗試與烏丹交談。";
+			mes "對話是理解他人的一種非常重要的方法。";
+			delitem 7151,10; //Oil_Paper
+			delitem 7111,5; //Smooth_Paper
+			delitem 1024,1; //Chinese_Ink
+			delitem 916,1; //Feather_Of_Birds
+			set event_umbala,3;
+			next;
+			mes "[捻]";
+			mes "好吧，如果您有任何生意";
+			mes "稍後在我們村里，感到自由";
+			mes "和我說話。我會盡力幫助";
+			mes "你盡可能多。";
+			close;
+		}
+		else {
+			mes "[捻]";
+			mes "我想你還沒有準備好...";
+			mes "你忘記了你什麼項目嗎";
+			mes "需要？我會讓你知道";
+			mes "再次，請帶他們";
+			mes "這樣我們就可以開始課程。";
+			next;
+			mes "[捻]";
+			mes "^3377FF10油紙^000000，";
+			mes "^3377ff5光滑紙^000000，";
+			mes "^3377ff1魷魚墨水^000000，";
+			mes "^3377ff1鳥類的羽毛^000000。";
+			mes "當您帶來所有這些時，";
+			mes "我會教你我們的語言。";
+			close;
+		}
+	}
+	else if (event_umbala >= 3) {
+		if (event_umbala == 4) {
+			mes "[捻]";
+			mes "Puchuchartan一定已經派您去";
+			mes "我。我需要檢查是否";
+			mes "您有資格要求";
+			mes "她的幫助...我們烏丹不想要";
+			mes "幫助邪惡的人。";
+			next;
+			mes "[捻]";
+			mes "嗯... ...";
+			mes "戴口罩會很好";
+			mes "那是在符文米達（Rune-Midgarts）中製作的...";
+			next;
+			mes "[捻]";
+			mes "我希望擁有 ^3377ff1 Smile ^000000先生。";
+			mes "到尤蒂人，接受口罩作為一個";
+			mes "禮物被認為是";
+			mes "榮譽。也許是木偶";
+			mes "希望您這樣做向我們展示您的尊重。";
+			set event_umbala,5;
+			close;
+		}
+		else if (event_umbala == 5) {
+			if (countitem(2278) > 0) {
+				mes "[捻]";
+				mes "哦，你帶來了！是的，我";
+				mes "總是希望我能擁有";
+				mes "這個面具！這確實是一個";
+				mes "榮譽！謝謝，冒險家";
+				mes "來自符文米加特人。";
+				next;
+				mes "[捻]";
+				mes "我會告訴賓夕法爾坦我";
+				mes "確認您的資格。";
+				mes "去和她說話。雖然我";
+				mes "我不確定她能提供什麼幫助";
+				mes "您，希望我們能夠回報這個青睞。";
+				delitem 2278,1; //Mr_Smile
+				set event_umbala,6;
+				close;
+			}
+			else {
+				mes "[捻]";
+				mes "我告訴你你需要嗎";
+				mes "^3377ff1微笑微笑^000000？";
+				mes "請把它作為證明";
+				mes "你的善意";
+				mes "作為您的榮譽感。";
+				close;
+			}
+		}
+		else {
+			mes "[捻]";
+			mes "怎麼樣了？";
+			mes "我希望我能引導你";
+			mes "村莊，但我不能忽略";
+			mes "我作為部落負責人的職責。";
+			next;
+			mes "[捻]";
+			mes "領導部落並不那麼容易";
+			mes "看起來。你會明白的";
+			mes "如果您處於同一位置";
+			mes "作為我。無論如何，我希望您能在我們村里度過時光。";
+			close;
+		}
+	}
+}
+
+// Create Essence/Dismantle Stone Quest :: um_npc
+//============================================================
+um_in,44,71,2	script	Utan Shaman	782,{
+	if (checkweight(908,600) == 0) {
+		mes "^3355FFWAIT第二秒！";
+		mes "現在，您正在攜帶";
+		mes "你和你在一起太多。";
+		mes "請在";
+		mes "使用KAFRA服務";
+		mes "存儲您的一些物品。 ^000000";
+		close;
+	}
+	switch(event_umbala) {
+	default:
+		mes "[???????????]";
+		mes "洗衣店 洗衣店 洗衣店 洗衣店 洗衣店";
+		mes "洗穆卡拉洗..";
+		mes "烏巴胡巴烏巴巴";
+		mes "烏姆巴巴 烏姆巴巴 烏姆巴巴 烏姆巴巴";
+		mes "嗡嗡聲Umbah Umbah。";
+		close2;
+		warp "umbala",217,186;
+		end;
+	case 3:
+		mes "[疑問]";
+		mes "我沒想到";
+		mes "你們中的更多符文米加人";
+		mes "會找到我的村莊。我是";
+		mes "害怕地球母親可能";
+		mes "造成痛苦是因為";
+		mes "這...";
+		next;
+		mes "[疑問]";
+		mes "你是符文米加爾人非常";
+		mes "邪惡的部落...總是成就";
+		mes "您的目標是";
+		mes "犯規或公平，毫不猶豫";
+		mes "破壞他人的財產";
+		mes "你想要什麼。";
+		next;
+		mes "[疑問]";
+		mes "我擔心如何繼續";
+		mes "與外界接觸";
+		mes "將影響我們的未來...";
+		next;
+		mes "[疑問]";
+		mes "沒有人來自符文中的人";
+		mes "拜訪了我沒有目的";
+		mes "我不認為你";
+		mes "是例外。";
+		next;
+		mes "[疑問]";
+		mes "我只用我的力量來";
+		mes "我的部落的服務，不";
+		mes "向陌生人提供幫助。如果你";
+		mes "真的需要我的幫助，去找";
+		mes "酋長的許可。";
+		next;
+		mes "[疑問]";
+		mes "另外，我不同意";
+		mes "局外人與部落交談";
+		mes "超出了他們的要...";
+		mes "我們想過上和平的生活，所以不要打擾我們。";
+		set event_umbala,4;
+		close;
+	case 4:
+	case 5:
+		mes "[疑問]";
+		mes "我已經告訴過你得到";
+		mes "酋長的批准。也有";
+		mes "我自己的事務要照顧。";
+		next;
+		mes "[疑問]";
+		mes "我知道你經歷了";
+		mes "來這裡有許多困難";
+		mes "但是你現在必須離開。";
+		close;
+	case 6:
+		mes "[疑問]";
+		mes "我從酋長那裡聽說他";
+		mes "給了你他的認可...";
+		mes "雖然我不喜歡這樣";
+		mes "會信守我的諾言。但這是";
+		mes "如果您真的需要我的幫助，您的電話。";
+		next;
+		mes "[疑問]";
+		mes "我的力量使我能夠創造粗糙";
+		mes "附魔石頭並分開";
+		mes "純淨的石頭變成粗糙";
+		mes "一個。所以我也許可以幫助";
+		mes "你以這種方式。";
+		next;
+		mes "[疑問]";
+		mes "所以來跟我說話";
+		mes "你認為我的力量可能是";
+		mes "為您服務。";
+		set event_umbala,7;
+		close;
+	case 7:
+		mes "《不動日壇》";
+		mes "我不知道我的才華";
+		mes "對您有用，但我會";
+		mes "無論如何，請幫助您。";
+		next;
+		mes "《不動日壇》";
+		mes "我可以從自然對像中創建基本本質，";
+		mes "或者，將元素石材拆除到其組成本質中。";
+		mes "您想做哪個？";
+	}
+	next;
+	mes "[疑問]";
+	mes "符文 - 米達斯安（Rune-Midgartsian）";
+	mes "我的幫助...儘管我不確定";
+	mes "如果您真的需要我的力量，我";
+	mes "會嘗試提供我的幫助。";
+	next;
+	if (checkweight(1101,10) == 0) {
+		mes "[疑問]";
+		mes "等待 - ！";
+		mes "您擁有的東西";
+		mes "在打擾我的安寧";
+		mes "頭腦。這不會...";
+		next;
+		mes "[疑問]";
+		mes "去離開你的財產";
+		mes "在其他地方，只帶來";
+		mes "您現在需要的項目。";
+		next;
+		mes "[疑問]";
+		mes "如果您拒絕這樣做，";
+		mes "我不能為你做任何事情。";
+		mes "做好準備，然後";
+		mes "回來。";
+		close;
+	}
+	mes "[疑問]";
+	mes "現在，您想做什麼？";
+	mes "我的力量使我能夠創造粗糙";
+	mes "附魔石頭並分開";
+	mes "純淨的石頭變成粗糙的石頭。";
+	next;
+	switch (select("製造粗糙的魔法石:分割純淨的魔法石:退出。")) {
+	case 1:
+		mes "[疑問]";
+		mes "你想創造粗糙嗎";
+		mes "迷人的石頭？哪個";
+		mes "您想創建屬性嗎？";
+		mes "地球，水，火，風...";
+		mes "...選擇一個。";
+		next;
+		switch (select("地:水:火:風")) {
+		case 1:
+			set .@consume,947; //Horn
+			set .@amount,15; 
+			set .@success,993; //Yellow_Live
+			break;
+		case 2:
+			set .@consume,946; //Snail's_Shell
+			set .@amount,20; 
+			set .@success,991; //Crystal_Blue
+			break;
+		case 3:
+			set .@consume,904; //Scorpion's_Tail
+			set .@amount,20; 
+			set .@success,990; //Boody_Red
+			break;
+		case 4:
+			set .@consume,1013; //Colorful_Shell
+			set .@amount,25; 
+			set .@success,992; //Wind_Of_Verdure
+			break;
+		}
+		if (countitem(.@consume) >= .@amount) {
+			mes "[疑問]";
+			mes "我將嘗試放大隱藏";
+			mes "天然物體的力量";
+			mes "為了創造粗糙的附魔";
+			mes "石頭。從中選擇一個數字";
+			mes "'1'至“ 9.”。如果您想取消";
+			mes "此請求，輸入“ 0”。";
+			next;
+			while(1) {
+				input .@input,0,10;
+				if (.@input == 0) {
+					mes "[疑問]";
+					mes "我懂了。這是你的電話。";
+					mes "當你需要我時回來。";
+					close;
+				}
+				else if (.@input > 9) {
+					mes "[疑問]";
+					mes "記住選擇一個數字";
+					mes "從1到9。";
+					next;
+				}
+				else {
+					break;
+				}
+			}
+			mes "[疑問]";
+			switch(.@success) {
+			case 990:
+				mes "我把這些尾巴放在"; break;
+			case 991:
+				mes "我把這些殼放在一個"; break;
+			case 992:
+				mes "我把這些殼放在一個"; break;
+			case 993:
+				mes "我把這些角放在"; break;
+			}
+			mes "沸騰的鍋，鑄造";
+			mes "神聖的咒語。記住";
+			mes "您輸入的號碼。";
+			next;
+			mes "[疑問]";
+			mes "Amba Omba Zatbag！ UMBA！蒂！";
+			mes "Umputaun Eulukaba！ UMBA！哈!";
+			mes "Julu Humba larala！ UMBA！洛杉磯！";
+			mes "漏了！";
+			mes "蘇納塔巴·阿布魯姆巴！ UMBA！ si！";
+			next;
+			if (rand(1,10) == 1) {
+				mes "[疑問]";
+				mes "我想我的力量還不夠。";
+				mes "我收集的自然力量";
+				mes "我的咒語失去了焦點，被分散了...";
+				delitem .@consume,.@amount;
+				getitem 910,1; //Garlet
+				next;
+				mes "[疑問]";
+				mes "看來大自然的精神";
+				mes "目前還沒有和諧。";
+				mes "但是，如果您稍後再回來，";
+				mes "我會盡力幫助您。當然，";
+				mes "我可能會失敗的可能性相同。";
+				close;
+			}
+			else {
+				mes "[疑問]";
+				mes "這是迷人的石頭";
+				mes "希望有。我創建了這個";
+				mes "付出很多努力，所以";
+				mes "充分利用它。";
+				delitem .@consume,.@amount;
+				getitem .@success,1;
+				close;
+			}
+		}
+		else {
+			mes "[疑問]";
+			switch (.@success) {
+			case 990:
+				mes "消防財產...";
+				mes "我需要自然";
+				mes "充滿的對象";
+				mes "火的精神。";
+				next;
+				mes "[疑問]";
+				mes "蝎子忍受";
+				mes "沙漠的熱烈";
+				mes "充滿火力。";
+				mes "我需要 ^3377ff20蝎子尾巴 ^000000。";
+				break;
+			case 991:
+				mes "水財產...";
+				mes "我需要自然";
+				mes "充滿的對象";
+				mes "水的精神。";
+				next;
+				mes "[疑問]";
+				mes "Ambernite ...精神";
+				mes "水在其內部";
+				mes "保護性外殼...";
+				mes "我需要 ^3377FF20蝸牛的外殼。 ^000000";
+				break;
+			case 992:
+				mes "風能...";
+				mes "我需要自然";
+				mes "充滿的對象";
+				mes "風的精神。";
+				next;
+				mes "[疑問]";
+				mes "污漬...甲蟲";
+				mes "飛過天空";
+				mes "有風的精神。";
+				mes "我需要 ^3377FF25彩虹殼 ^000000。";
+				break;
+			case 993:
+				mes "地球財產...我需要自然";
+				mes "充滿的對象";
+				mes "地球的精神。";
+				next;
+				mes "[疑問]";
+				mes "喇叭...居住在森林中";
+				mes "充滿了精神";
+				mes "地球和木頭...喇叭...";
+				mes "我需要 ^3377ff15號角 ^000000。";
+				break;
+			}
+			mes "[疑問]";
+			mes "這就是我需要的...";
+			mes "什麼時候回來";
+			mes "你準備好了。";
+			mes "我會在這裡。";
+			close;
+		}
+	case 2:
+		mes "[疑問]";
+		mes "你想分割純淨的";
+		mes "迷人的石頭變成粗糙的石頭？";
+		mes "您想哪個屬性";
+		mes "劃分？地球，水，火，風...";
+		mes "選擇一個。";
+		next;
+		switch(select("地:水:火:風")) {
+		case 1:
+			set .@divide,997; //Great_Nature
+			break;
+		case 2:
+			set .@divide,995; //Mistic_Frozen
+			break;
+		case 3:
+			set .@divide,994; //Flame_Heart
+			break;
+		case 4:
+			set .@divide,996; //Rough_Wind
+			break;
+		}
+		mes "[疑問]";
+		mes "請輸入";
+		mes "附魔的數量";
+		mes "你希望的石頭";
+		mes "分裂。我只能";
+		mes "一次最多分10個。";
+		next;
+		input .@input,0,11;
+		if ((.@input > 0) && (.@input < 11)) {
+			if (countitem(.@divide) >= .@input) {
+				if (checkweight(908,(.@input * 30)) == 0) {
+					mes "[疑問]";
+					mes "你也在攜帶";
+					mes "現在有很多項目。";
+					mes "放一些你的東西";
+					mes "在Kafra存儲中，然後";
+					mes "回到我身邊，好嗎？";
+					close;
+				}
+				mes "[疑問]";
+				mes "我會嘗試恢復這些";
+				mes "迷人的石頭";
+				mes "粗糙形式。輸入號碼";
+				mes "從1到9，或輸入0";
+				mes "您決定取消。";
+				next;
+				while(1) {
+					input .@input2,0,10;
+					if (.@input2 == 0) {
+						mes "[疑問]";
+						mes "您想取消嗎？";
+						mes "好吧，如果您改變了";
+						mes "介意，隨意來";
+						mes "請我隨時提供幫助。";
+						close;
+					}
+					else if (.@input2 > 9) {
+						mes "[疑問]";
+						mes "嗯？您需要輸入";
+						mes "一個從1到9的數字。";
+						next;
+					}
+					else {
+						break;
+					}
+				}
+				mes "[疑問]";
+				mes "我現在會念誦";
+				mes "神聖的單詞。記住";
+				mes "您輸入的號碼！";
+				next;
+				mes "[疑問]";
+				mes "UMBA UMBA KALAPUM！ UMBA！塔！";
+				mes "Lukura夏威夷四弦琴UM！ UMBA！卡！";
+				mes "Abulaka Tabulakan！ UMBA！洛杉磯！";
+				mes "UMBA 的 Obaludu 調查";
+				mes "Kum Tum Lakulakun！ UMBA！哈!";
+				next;
+				mes "[疑問]";
+				mes "這是粗糙的魔法石";
+				mes "你希望有。我創建了這個";
+				mes "付出了很多努力，所以做得好";
+				mes "使用它們。";
+				while(1) {
+					if (.@sha_man == .@input) {
+						break;
+					}
+					else {
+						set .@shaman_max,.@shaman_max + rand(6,10);
+						set .@sha_man,.@sha_man + 1;
+					}
+				}
+				switch(.@divide) {
+				case 994:
+					getitem 990,.@shaman_max; //Boody_Red
+					break;
+				case 995:
+					getitem 991,.@shaman_max; //Crystal_Blue
+					break;
+				case 996:
+					getitem 992,.@shaman_max; //Wind_Of_Verdure
+					break;
+				case 997: 
+					getitem 993,.@shaman_max; //Yellow_Live
+				}
+				delitem .@divide,.@input;
+				close;
+			}
+			else {
+				mes "[疑問]";
+				mes "所以，你希望有粗糙";
+				switch(.@divide) {
+				case 994:
+					mes "火石？那我需要";
+					mes "你帶"+input_want+" pure fire stone.";
+					break;
+				case 995:
+					mes "水石？那我需要";
+					mes "你帶"+input_want+" pure water stone.";
+					break;
+				case 996:
+					mes "風石？那我需要";
+					mes "你帶"+input_want+" pure wind stone.";
+					break;
+				case 997: 
+					mes "地上石頭？那我需要";
+					mes "你帶"+.@input+" pure earth stone.";
+					break;
+				}
+				mes "^啊哈夫"+.@input+" "+getitemname(.@divide)+"^000000.";
+				next;
+				mes "[疑問]";
+				mes "這就是我需要的...";
+				mes "什麼時候回來";
+				mes "你準備好了。";
+				mes "我會在這裡。";
+				close;
+			}
+		}
+		else {
+			mes "[疑問]";
+			mes "嗯？您需要輸入";
+			mes "一個從1到10的數字。";
+			close;
+		}
+	case 3:
+		mes "[疑問]";
+		mes "我懂了。這是你的電話。";
+		mes "當你需要我時回來。";
+		close;
+	}
+}
+
+umbala,221,193,1	script	#Skulldoor	111,{
+	if (event_umbala >= 7) {
+		warp "um_in",32,71;
+		end;
+	}
+	else {
+		mes "^3355ffa人類頭骨令人不安";
+		mes "掛在門旁邊。門是";
+		mes "緊緊鎖定，所以你無法進入。";
+		mes "當您穿過鑰匙孔時，";
+		mes "您可以看到有人在房間內移動。 ^000000";
+		next;
+		if (select("檢查頭骨。 :退出。") == 1) {
+			mes "^3355ffyou看到眼窩";
+			mes "頭骨是空的。";
+			mes "多麼奇特...";
+			mes "看來寶石";
+			mes "非常適合內部";
+			mes "他們。 ^000000";
+			next;
+			mes "^3355ffyou看到左眼插座";
+			mes "顱骨。你想做什麼？ ^000000";
+			next;
+			switch(select("保持原樣。 :插入藍色寶石。 :插入黃色寶石。 :插入紅色寶石。")) {
+			case 1:
+				mes "^3355ffyou離開眼窩。 ^000000";
+				next;
+				break;
+			case 2:
+				set .@insert,717;
+				break;
+			case 3:
+				set .@insert,715;
+				break;
+			case 4:
+				set .@insert,716;
+				break;
+			}
+			if (.@insert) {
+				if (countitem(.@insert) > 0) {
+					mes "^3355ffyou插入a"+getitemname(.@insert)+"";
+					mes "進入眼窩。 ^000000";
+					next;
+					mes "^3355ff，寶石從";
+					mes "頭骨的嘴。 ^000000";
+					set .@skulldoor,.@skulldoor+1;
+					switch (.@insert) {
+					case 715: set .@skull,2; break;
+					case 716: set .@skull,3; break;
+					case 717: set .@skull,1; break;
+					}
+					delitem .@insert,1;
+					getitem .@insert,1;
+					next;
+				}
+				else {
+					mes "^3355ffyou忘記攜帶"+getitemname(.@insert)+"";
+					mes "與你。所以你不能做你的";
+					mes "打算。 ^000000";
+					next;
+				}
+			}
+			mes "^3355ffyou看到右眼插座";
+			mes "頭骨。你想做什麼？ ^000000";
+			next;
+			switch(select("保持原樣。 :插入藍色寶石。 :插入黃色寶石。 :插入紅色寶石。")) {
+			case 1:
+				mes "^3355ffyou離開眼窩。 ^000000";
+				next;
+				break;
+			case 2:
+				set .@insert2,717;
+				break;
+			case 3:
+				set .@insert2,715;
+				break;
+			case 4:
+				set .@insert2,716;
+				break;
+			}
+			if (.@insert2) {
+				if (countitem(.@insert2) > 0) {
+					mes "^3355ffyou插入a"+getitemname(.@insert2)+"";
+					mes "進入眼窩。 ^000000";
+					next;
+					mes "^3355ff，寶石從";
+					mes "頭骨的嘴。 ^000000";
+					if (.@insert2 == .@insert) {
+						set .@skulldoor,.@skulldoor+1;
+					}
+					else {
+						set .@skulldoor,.@skulldoor+2;
+					}
+					delitem .@insert2,1;
+					getitem .@insert2,1;
+					next;
+				}
+				else {
+					mes "^3355ffyou忘記攜帶"+getitemname(.@insert2)+"";
+					mes "與你。所以你不能做你的";
+					mes "打算。 ^000000";
+					next;
+				}
+			}
+			mes "^3355ff ................................................................^000000";
+			next;
+			mes "^3355ff ......................................................................";
+			mes "................................................^000000";
+			next;
+			mes "^3355ff ......................................................................";
+			mes "........................................................";
+			mes "................................................^000000";
+			next;
+			switch(.@skulldoor) {
+			case 3:
+				if (rand(1,4) != 1) {
+					set .@skullopen,1;
+				}
+				break;
+			case 2:
+				if (rand(1,2) == 2) {
+					set .@skullopen,1;
+				}
+				break;
+			case 1:
+				if (rand(1,4) == 1) {
+					set .@skullopen,1;
+				}
+				break;
+			default:
+				break;
+			}
+			if (.@skullopen == 0) {
+				mes "^3355 fffnothing發生了。";
+				mes "你有一種感覺";
+				mes "頭骨對你咧嘴笑。但...";
+				mes "這可能只是光的竅門。 ^000000";
+				close;
+			}
+			else {
+				mes "^3355ffsuddenly，單擊聲音";
+				mes "從頭骨的眼插座和";
+				mes "門打開。在您不知不覺中";
+				mes "你走進去，好像被引導";
+				mes "由看不見的力量...^000000";
+				close2;
+				warp "um_in",32,71;
+				end;
+			}
+		}
+		mes "^3355ffyou決定通過門。";
+		mes "看起來可能很難打開。 ^000000";
+		close;
+	}
+}
+
+// Umbala Domestic Dispute Quest :: um_npc_ryu
+//============================================================ 
+um_in,139,48,5	script	Phrenetan	783,{
+	if (event_umbala >= 3) {
+		mes "[弗雷頓]";
+		mes "我厭倦了";
+		mes "我丈夫！就像他一樣";
+		mes "和每個女孩調情";
+		mes "在村里！";
+		next;
+		mes "[弗雷頓]";
+		mes "如果我看到他調情";
+		mes "女人再次...我發誓...";
+		mes "我會告訴他地獄！";
+		close;
+	}
+	if (BaseJob == Job_Novice && Upper != 2) {
+		mes "[弗雷頓]";
+		mes "烏姆巴~烏姆巴姆巴！";
+		mes "洗烏姆姆姆！";
+		mes "洗Woomum洗！";
+		close;
+	}
+	if (um_wind <= 3 && (MISC_QUEST & 32768) == 0) {
+		if (um_wind == 0) set um_wind,1;
+		emotion ET_FRET;
+		mes "[弗雷頓]";
+		mes "烏姆巴烏加烏加";
+		mes "烏姆巴姆巴巴巴巴巴巴！";
+		mes "嗯！";
+		next;
+		emotion ET_O;
+		mes "[弗雷頓]";
+		mes "烏姆巴烏姆巴烏姆巴烏姆巴";
+		mes "天花板天花板天花板天花板天花板。";
+		mes "那個傻笑就是那個傻笑。";
+		next;
+		emotion ET_GO;
+		close;
+	}
+	else if (um_wind == 6 || (MISC_QUEST & 32768)) {
+		emotion ET_FRET;
+		mes "[弗雷頓]";
+		mes "烏姆巴巴！ Umbaumbah .....";
+		mes "Umbaum Umbaum Wooga wooga！";
+		mes "wooga umum woobabap!!!!!";
+		next;
+		emotion ET_SWEAT;
+		close;
+	}
+	end;
+}
+
+um_in,144,45,5	script	Umpokoriohtan	789,{
+	if (event_umbala >= 3) {
+		if(rand(1,3) == 2) {
+			mes "[unpokorithan]";
+			mes "嘿，很酷的貓。";
+			mes "不介意妻子...";
+			mes "就像我愛她一樣";
+			mes "我知道我的義務，你挖了嗎？";
+			next;
+			mes "[unpokorithan]";
+			mes "如果一個男人有很多，他是";
+			mes "必須與那些分享";
+			mes "沒什麼可付出的。";
+			next;
+			mes "[unpokorithan]";
+			mes "如果男人的手很好";
+			mes "在Healin'，他必須使用";
+			mes "那些手幫助人們生活的手。";
+			next;
+			mes "[unpokorithan]";
+			mes "如果男人的嘴唇擅長";
+			mes "唱歌，他必須co";
+			mes "我們喜歡聽到很多歌曲。";
+			next;
+			mes "[unpokorithan]";
+			mes "但是，如果甜蜜的愛是金色的，";
+			mes "然後寶貝...我得到了Midas Touch。";
+			next;
+			mes "[unpokorithan]";
+			mes "哦...！";
+			mes "......................";
+			mes "我的背 - ！";
+			mes "煮下來，寶貝，輪到一分鐘的輪到了~";
+			emotion ET_ROCK, getnpcid(0, "Phrenetan");
+			emotion ET_SWEAT;
+			close;
+		}
+		else {
+			mes "[unpokorithan]";
+			mes "男人...有時我的妻子可以";
+			mes "變得太粗糙了，也許";
+			mes "甚至傷害。但這很酷...";
+			mes "這只是意味著她被火了。";
+			next;
+			mes "[unpokorithan]";
+			mes "但是有一天，她必須";
+			mes "得知我要分享";
+			mes "我的心和女士的心";
+			mes "誰真的需要一劑維生素";
+			mes "愛，你挖了嗎？這是我的義務。";
+			next;
+			mes "[unpokorithan]";
+			mes "懷納坦，貝爾茲坦，查比馬坦...";
+			mes "那些漂亮的女孩在等待";
+			mes "太長了。不用擔心，";
+			mes "大爸爸很快就會comin。";
+			next;
+			mes "[unpokorithan]";
+			mes "哦~！ phrenetan！";
+			mes "寶貝，為什麼你要粗糙？";
+			mes "輕輕地打我，你挖了嗎？";
+			mes "我不是要傷害你~";
+			emotion ET_HUK, getnpcid(0, "Phrenetan");
+			emotion ET_KEK;
+			close;
+		}
+	}
+	emotion ET_SMILE;
+	mes "[unpokorithan]";
+	mes "烏姆巴姆巴…………";
+	mes "烏姆巴烏加烏加烏！";
+	mes "U。";
+	next;
+	emotion ET_FRET;
+	close;
+
+OnInit:
+	disablenpc "Umpokoriohtan";
+	end;
+}
+
+um_in,101,73,3	script	Wainatan	783,{
+	if (event_umbala >= 3) {
+		mes "[外納坦]";
+		mes "我厭倦了這個傢伙";
+		mes "誰總是在晚上出現，並把我的地獄煩惱...";
+		next;
+		mes "[外納坦]";
+		mes "'流暢的操作員";
+		mes "工作完成了嗎？我的天啊...！";
+		mes "我熱情地討厭他！";
+		mes "我希望Umpokoriohtan會";
+		mes "只是死了。";
+		close;
+	}
+	if (um_wind == 1) {
+		if (gettime(DT_HOUR) > 18) {
+			set um_wind,2;
+			emotion ET_FRET;
+			mes "[外納坦]";
+			mes "Umbaumbah Umgagaga。";
+			mes "Umbaumbawoogawoo Gababah。";
+			mes "翁巴洪巴巴:村莊。";
+			next;
+			emotion ET_O;
+			mes "[外納坦]";
+			mes "賭博那一面的緣故就是如此。";
+			mes "吳加加 吳加加";
+			mes "全球國家的加瓦奧路。";
+			close;
+		}
+		else {
+			mes "[外納坦]";
+			mes "烏姆巴巴！ Umbaumbah Wooga";
+			mes "烏加烏加 umbawooga 嗯。";
+			mes "烏姆巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴巴";
+			close;
+		}
+	}
+	else {
+		mes "[外納坦]";
+		mes "烏姆巴姆巴 烏姆巴姆巴 烏巴姆巴";
+		mes "烏加烏加烏加烏加";
+		mes "雨天umumumumumum。";
+		close;
+	}
+}
+
+um_in,94,123,5	script	Bertztan	783,{
+	if (event_umbala >= 3) {
+		mes "[再次]";
+		mes "...*嘆氣*那個病";
+		mes "umpo-什麼！我告訴他";
+		mes "我不喜歡他，但他";
+		mes "只是不聽！";
+		mes "我希望...我希望他會";
+		mes "只是消失了！";
+		close;
+	}
+	if (um_wind == 2) {
+		if (gettime(DT_HOUR) > 18) {
+			set um_wind,3;
+			emotion ET_FRET;
+			mes "[再次]";
+			mes "Umbaumbah Umgagaga。";
+			mes "Umbaumbawoogawoo Gababah。";
+			mes "翁巴洪巴巴:村莊。";
+			next;
+			emotion ET_O;
+			mes "[再次]";
+			mes "烏加·烏姆巴爾·烏姆巴爾·烏姆巴！";
+			mes "Umbar Woogagaga Woo！哇！哇！";
+			mes "Wooga~Woo Egypt 埃及森林之書。";
+			close;
+		}
+		else {
+			mes "[再次]";
+			mes "Umbar Woogaumbarumbah嗯！";
+			mes "嗯~Wooga Wooga Umbarum。";
+			mes "洗……嗚。";
+			close;
+		}
+	}
+	else {
+		mes "[再次]";
+		mes "Umbar Wooga Umbar Umbah嗯！";
+		mes "嗯~UMhayota 的 Wooga Woods";
+		mes "洗……嗚。";
+		close;
+	}
+}
+
+umbala,145,217,3	script	Chabimatan	783,{
+	if (event_umbala >= 3) {
+		mes "[圖片]";
+		mes "...*嘆** umpokoriohtan";
+		mes "結婚。我沒有";
+		mes "知道他為什麼還會調情";
+		mes "與其他女性。也許他是";
+		mes "不是很成熟，否則他是";
+		mes "不負責任...";
+		next;
+		mes "[圖片]";
+		mes "好吧，無論他是什麼，";
+		mes "他當然不是";
+		mes "浪漫的。那些接送";
+		mes "他的線路";
+		mes "有些工作，也許";
+		mes "甚至一些清理。";
+		close;
+	}
+	if (um_wind == 3) {
+		if (gettime(DT_HOUR) > 18) {
+			set um_wind,4;
+			emotion ET_FRET;
+			mes "[圖片]";
+			mes "U。";
+			mes "烏姆巴巴 烏姆巴巴 烏加烏加 烏姆巴巴";
+			mes "陽光！哇！";
+			next;
+			emotion ET_O;
+			mes "[圖片]";
+			mes "烏巴巴~~~~~~~";
+			mes "烏加烏加 烏姆巴爾 烏姆巴爾 烏！";
+			mes "烏加·烏姆巴爾·烏加烏加。";
+			enablenpc "Umpokoriohtan";
+			enablenpc "#!@#$%";
+			close;
+		}
+		else {
+			mes "[圖片]";
+			mes "烏巴巴~~~~~~~";
+			mes "烏加烏加 烏姆巴爾 烏姆巴爾 吳";
+			mes "最後的。";
+			mes "烏加·烏姆巴爾 烏加·烏姆巴爾";
+			mes "女子歌手";
+			close;
+		}
+	}
+	else {
+		mes "[圖片]";
+		mes "烏巴巴~~~~~~~";
+		mes "烏加烏加 烏姆巴爾 烏姆巴爾";
+		mes "那那個Woo Woo Welves那個Wo。";
+		mes "烏加·烏姆巴爾 烏加·烏姆巴爾";
+		mes "女子歌手";
+		close;
+	}
+}
+
+um_in,141,46,0	script	#!@#$%	-1,8,8,{
+OnInit:
+	disablenpc "#!@#$%";
+	end;
+
+OnTouch_:
+	if (um_wind == 4) {
+		set um_wind,5;
+		mes "^3355ffas您進入房屋";
+		mes "你碰巧見證了";
+		mes "Phrenetan擊敗一個男人";
+		mes "無情。 ^000000";
+		next;
+		emotion ET_FRET;
+		mes "[弗雷頓]";
+		mes "嗚嗚嗚嗚嗚！";
+		mes "烏姆巴烏姆巴烏姆巴！";
+		mes "嗚嗚嗚嗚嗚嗚！ ！ ！ ！ ！ ！";
+		next;
+		mes "^3355ffyou被踢出房子";
+		mes "作者：^000000";
+		next;
+		enablenpc "#unpc";
+		disablenpc "#!@#$%";
+		warp "umbala",94,181;
+	}
+	end;
+}
+
+umbala,94,181,0	script	#unpc	-1,1,1,{
+OnInit:
+	disablenpc "#unpc";
+	end;
+
+OnTouch_:
+	if (um_wind == 5) {
+		mes "^3355ffas你意識到發生了什麼";
+		mes "被踢出";
+		mes "房子，你看到一片葉子";
+		mes "靠近您站立的地方。 ^000000";
+		next;
+		if (select("拿走它:留下它。") == 1) {
+			close2;
+			set um_wind,0;
+			set MISC_QUEST,MISC_QUEST | 32768;
+			getitem 610,1; //Leaf_Of_Yggdrasil
+			disablenpc "#unpc";
+			end;
+		}
+		set um_wind,0;
+		set MISC_QUEST,MISC_QUEST | 32768;
+		mes "[" + strcharinfo(0) + "]";
+		mes "我不應該接受";
+		mes "可能屬於他人的東西。";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "是的，我是一個好人。";
+		close2;
+		disablenpc "#unpc";
+	}
+	end;
+}

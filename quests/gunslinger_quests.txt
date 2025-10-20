@@ -1,0 +1,1598 @@
+﻿//===== rAthena Script =======================================
+//= Gunslinger quests
+//===== By: ==================================================
+//= Playtester
+//===== Current Version: =====================================
+//= 1.7
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Gunslinger guns and bullet quests
+//===== Additional Comments: =================================
+//= 1.0 Only Garrison Gun done yet [Playtester]
+//= 1.1 Added Garrison[2] [Playtester]
+//= 1.2 Added Drifter, Destroyer and Inferno [Playtester]
+//= 1.3 Added official Gatling quests [Playtester]
+//= 1.4 Updated Destroyer Quest - Credits to Sinoco for first
+//= official version. [SinSloth]
+//= 1.5 Updated Inferno Quest to official version [SinSloth]
+//= 1.6 Updated Garrison Quest - Credits to Lazarus^ for
+//= making the first official version. [SinSloth]
+//= 1.6a Removed .GATs [Lupus]
+//= 1.6b Changed item names to item IDs on some scripts. [Samuray22]
+//= 1.6c Corrected a bad delitem. (bugreport:763) [Samuray22]
+//= 1.7 Removed all 'menu' and 'goto'. [Euphy]
+//============================================================
+
+que_ng,182,85,3	script	Garrison	109,{
+
+	if(BaseJob != Job_Gunslinger)
+	{
+		mes "[駐軍]";
+		mes "你不是槍手。";
+		mes "你會分散我的注意力。繼續。";
+		close;
+	}
+	else if(BaseLevel < 55)
+	{
+		mes "[駐軍]";
+		mes "我叫駐軍。我是製作槍支的大師。";
+		mes "我製造的槍也稱為駐軍。我的命名是因為我認為駐軍像我一樣酷而完美。";
+		next;
+		mes "[駐軍]";
+		mes "你為什麼不委託我駐軍？";
+		next;
+		callsub SubGarrison;
+	}
+	switch(gun_gs)
+	{
+		case 0:
+			if(countitem(13104) < 1)
+			{
+				mes "[駐軍]";
+				mes "我叫駐軍。我是製作槍支的大師。";
+				mes "我製造的槍也稱為駐軍。我的命名是因為我認為駐軍像我一樣酷而完美。";
+				next;
+				mes "[駐軍]";
+				mes "您在這裡委託我駐軍嗎？";
+				next;
+				callsub SubGarrison;
+			}
+			mes "[駐軍]";
+			mes "嗯~發生了什麼事？";
+			mes "您在這裡是因為您需要武器嗎？";
+			next;
+			switch( select( "I need a Garrison.","Not really.","Cancel") )
+			{
+				case 1:
+					mes "[駐軍]";
+					mes "哦~歡迎";
+					mes "每個人都需要我~！";
+					mes "它只是證明我的槍，駐軍，是最好的。";
+					mes "那麼，您要問我現在做一個嗎？";
+					next;
+					callsub SubGarrison;
+
+				case 2:
+					mes "[駐軍]";
+					mes "嗯~你看起來好像沒有任務徘徊。";
+					mes "如果您有時間，您會幫我一個忙嗎？";
+					next;
+					mes "["+strcharinfo(0)+"]";
+					mes "這是什麼？";
+					next;
+					mes "[駐軍]";
+					mes "嗯~好吧，我實際上收到了一封信，最近我收到了許多我創建的槍支的缺陷，稱為“六射擊者”。";
+					next;
+					mes "[駐軍]";
+					mes "我是一個完美主義者，但是由於我的年齡，我的眼睛變得黑暗，我想我可能已經出售了有缺陷的六名射手。";
+					next;
+					mes "[駐軍]";
+					mes "因此，我想說的是，我希望有人會找到我可以用來代替偵探六個射手中有缺陷的零件的備件。";
+					next;
+					mes "[駐軍]";
+					mes "如果您幫助我，我將在您現在持有的那個駐軍中放一個插槽。";
+					mes "你怎麼說？";
+					next;
+					mes "[駐軍]";
+					mes "您知道，如果我駐守您的駐軍，那麼當前的任何精煉點或開槽卡都會消失。仔細決定。";
+					next;
+					switch( select( "I don't like the sound of this.","Ok, I'll try it out.") )
+					{
+						case 1:
+							mes "[駐軍]";
+							mes "嗯，我明白了。";
+							mes "我明白。";
+							mes "我想我會尋找一個不同的男人。";
+							close;
+
+						case 2:
+							mes "[駐軍]";
+							mes "哦，你會嗎？";
+							mes "我很感激。";
+							mes "這些是我製作備件需要的材料...";
+							next;
+							mes "[駐軍]";
+							mes "10鋼，1個Elunium，10個Emveretarcon，30個煤炭和10個生鏽的螺釘。";
+							mes "我需要這個確切的數量。不要忘記。";
+							set gun_gs,1;
+							close;
+					}
+
+				case 3:
+					mes "[駐軍]";
+					mes "嗯...來看我。";
+					close;
+			}
+
+		case 1:
+			if((countitem(999) < 10) || (countitem(7317) < 10) || (countitem(1011) < 10) || (countitem(1003) < 30) || (countitem(985) < 1))
+			{
+				mes "[駐軍]";
+				mes "10鋼，1個Elunium，10個Emveretarcon，30個煤炭和10個生鏽的螺釘。";
+				mes "別忘了 - 必須確切的金額。";
+				close;
+			}
+			mes "[駐軍]";
+			mes "哦~你回來了我需要的~";
+			mes "我很感激。";
+			mes "哦，我需要做的另一個忙。犯錯...";
+			next;
+			mes "[駐軍]";
+			mes "一旦我將零件交付給另一個人，我需要運送備件，但是在這裡我有很多工作要做。";
+			next;
+			mes "[駐軍]";
+			mes "很抱歉問，但我希望您能將這些材料從這些材料中付諸實踐。";
+			next;
+			mes "[駐軍]";
+			mes "當您要交付時，我將按照承諾做準備，以便駐守您的駐軍。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "- 嗯，我不想這樣做，但是我還是會這樣做。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "好的。";
+			next;
+			mes "[駐軍]";
+			mes "哦，非常感謝。";
+			mes "然後將其交付給一個叫Ravey的人。他住在燈塔的貧民窟中。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "您會收到駐軍的送貨商品。";
+			mes "讓我們把它們交給一個名叫Ravey的人，他住在Lighthalzen的貧民窟中。";
+			delitem 999,10;
+			delitem 1011,10;
+			delitem 7317,10;
+			delitem 985,1;
+			delitem 1003,30;
+			set gun_gs,2;
+			close;
+
+		case 2:
+			mes "["+strcharinfo(0)+"]";
+			mes "您會收到駐軍的送貨商品。";
+			mes "讓我們把它們交給一個名叫Ravey的人，他住在Lighthalzen的貧民窟中。";
+			close;
+
+		case 3:
+			mes "[駐軍]";
+			mes "哦~你的旅行怎麼樣？";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "嘎~";
+			mes "我差點死了！ ！ ！";
+			mes "那個男人在看到我時試圖攻擊我。我幾乎沒有逃脫死亡！";
+			next;
+			mes "[駐軍]";
+			mes "啊~哦，不。";
+			mes "我不知道發送這封信的人實際上是在密謀暗殺我。他可能是由我們的一個敵方公會派遣的...";
+			next;
+			mes "[駐軍]";
+			mes "看來我無意中寄給您執行非常危險的任務。";
+			next;
+			mes "[駐軍]";
+			mes "我很抱歉。";
+			mes "您可能也知道，但是有壞人在整個地方攻擊教授和槍手行會。";
+			next;
+			mes "[駐軍]";
+			mes "將此視為訓練的一部分。";
+			next;
+			mes "[駐軍]";
+			mes "我為發生的事情感到抱歉。";
+			mes "但是，正如所承諾的，我會駐紮你的駐軍...";
+			next;
+			if(countitem(13104) < 1)
+			{
+				mes "[駐軍]";
+				mes "嗯？嘆。";
+				mes "你走了時賣掉了槍嗎？";
+				mes "我說我會把你的槍插在你的槍支上，但是我從來沒有說過我會插入不在這裡的槍。";
+				mes "去駐紮，然後回到我身邊。";
+				set gun_gs,4;
+				close;
+			}
+			mes "[駐軍]";
+			mes "讓我們看看~";
+			mes "*咚咚**咚咚**重擊**重擊*";
+			mes "這是您修改的";
+			mes "駐軍。";
+			mes "請很好地使用。";
+			delitem 13104,1;
+			getitem 13105,1;
+			set gun_gs, 5;
+			close;
+		case 4:
+			if(countitem(13104) < 1)
+			{
+				mes "[駐軍]";
+				mes "去駐紮，然後回到我身邊。";
+				close;
+			}
+			mes "[駐軍]";
+			mes "啊，就在那裡。";
+			mes "這是您修改的";
+			mes "駐軍。";
+			mes "很好地使用它。";
+			delitem 13104, 1;
+			getitem 13105, 1;
+			set gun_gs,5;
+			close;
+		case 5:
+			mes "[駐軍]";
+			mes "嗯~你又回來了~";
+			mes "怎麼了？";
+			mes "您是否因為需要武器而回來？";
+			mes "你需要什麼？";
+			next;
+			switch( select( "Garrison","Slot a Garrison","Cancel"))
+			{
+				case 1:
+					callsub SubGarrison;
+				case 2:
+					callsub SubGarrison_;
+				case 3:
+					mes "[駐軍]";
+					mes "當我見到你時，我會見你~";
+					close;
+			}
+	}
+
+SubGarrison:
+	mes "[駐軍]";
+	mes "要創建駐軍，我需要...";
+	mes "50鋼，3個ELUNIUM，";
+	mes "1 Oridecon，50煤炭，";
+	mes "20個生鏽的螺釘，然後";
+	mes "有30,000 Zeny的費用。";
+	mes "好吧，你想要一個嗎？";
+	next;
+	switch( select( "Maybe later.","Yes, make it for me immediately.","Cancel") )
+	{
+		case 1:
+			mes "[駐軍]";
+			mes "嗯~我一無所有~";
+			mes "考慮一下。來看看我，如果你決定。";
+			close;
+
+		case 2:
+			if((countitem(999) < 50) || (countitem(7317) < 20) || (countitem(984) < 1) || (countitem(1003) < 50) ||(countitem(985) < 3) )
+			{
+				mes "[駐軍]";
+				mes "你沒有帶足夠的材料";
+				mes "要創建駐軍，我需要...";
+				mes "50鋼，3個ELUNIUM，";
+				mes "1 Oridecon，50煤炭，";
+				mes "50個生鏽的螺釘，";
+				mes "而且有30,000 Zeny的費用";
+				mes "不要忘記。";
+				close;
+			}
+			else if(Zeny < 30000)
+			{
+				mes "[駐軍]";
+				mes "您需要更多的Zeny~！";
+				mes "更多的zeny！";
+				close;
+			}
+			else if(checkweight(13104,1) == 0)
+			{
+				mes "[駐軍]";
+				mes "庫存中沒有空間";
+				mes "為了我的創造。";
+				mes "做一些房間";
+				mes "在您的庫存中，然後";
+				mes "來看看我。";
+				close;
+			}
+			mes "[駐軍]";
+			mes "嗯，看起來像正確數量的材料和Zeny。";
+			mes "這是駐軍~";
+			mes "如果您再次需要一個，來看看我~";
+			delitem 984,1; //Oridecon
+			delitem 985,3; //Elunium
+			delitem 999,50; //Steel
+			delitem 1003,50; //Coal
+			delitem 7317,20; //Rusty Screw
+			set Zeny,Zeny-30000;
+			getitem 13104,1; //Garrison
+			close;
+
+		case 3:
+			mes "[駐軍]";
+			mes "當我見到你時，我會見你~";
+			close;
+	}
+
+SubGarrison_:
+	mes "[駐軍]";
+	mes "為了駐軍，我需要";
+	mes "10鋼，1個ELUNIUM，";
+	mes "10 Emveretarcon，30煤炭，";
+	mes "10個生鏽的螺釘，然後";
+	mes "1駐軍。";
+	mes "好吧，你想要一個嗎？";
+	next;
+	switch( select( "Maybe later.","Yes, make it for me immediately.","Cancel" ))
+	{
+		case 1:
+			mes "[駐軍]";
+			mes "你讓我一無所有~";
+			mes "當您下定決心時，請與我聯繫。";
+			close;
+
+		case 2:
+			if((countitem(999) < 10) || (countitem(7317) < 10) || (countitem(1011) < 10) || (countitem(1003) < 30) || (countitem(985) < 1) || (countitem(13104) < 1))
+			{
+				mes "[駐軍]";
+				mes "你沒有帶足夠的材料";
+				mes "為了駐軍，我需要";
+				mes "10鋼，1個ELUNIUM，";
+				mes "10 Emveretarcon，30煤炭，";
+				mes "10個生鏽的螺釘，然後";
+				mes "1駐軍。";
+				mes "不要忘記。";
+				close;
+			}
+			else if(checkweight(13105,1) != 1)
+			{
+				mes "[駐軍]";
+				mes "庫存中沒有空間";
+				mes "為了我的創造。";
+				mes "做一些房間";
+				mes "在您的庫存中，然後";
+				mes "來看看我。";
+				close;
+			}
+			mes "[駐軍]";
+			mes "嗯，看起來像正確數量的材料和Zeny。";
+			mes "這是一個帶有插槽的修改後的駐軍。";
+			mes "如果您再次需要一個，來看看我~";
+			delitem 999, 10;
+			delitem 1011, 10;
+			delitem 7317, 10;
+			delitem 985, 1;
+			delitem 1003, 30;
+			delitem 13104, 1;
+			getitem 13105, 1;
+			close;
+		
+		case 3:
+			mes "[駐軍]";
+			mes "當我見到你時，我會見你~";
+			close;
+	}
+}
+
+lighthalzen,322,247,6	script	Ravey	86,{
+
+	if(gun_gs == 2)
+	{
+		mes "["+strcharinfo(0)+"]";
+		mes "打擾一下。你好。";
+		mes "我在這里為您提供替換零件，以解決有缺陷的Gunslin ...";
+		next;
+		mes "[審查]";
+		mes "你！ ！ ！";
+		mes "呼呼~!!";
+		mes "死！ ！ ！";
+		set gun_gs,3;
+		percentheal 100,0;
+		percentheal -90,0;
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "- 叫拉維的那個人突然攻擊，好像他在等待槍手...-";
+		mes "你差點死了。 -";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "您不回頭逃跑。";
+		mes "讓我們趕緊回到駐軍。 -";
+		close;
+	}
+	if(gun_gs == 3)
+	{
+		mes "["+strcharinfo(0)+"]";
+		mes "- 叫拉維的那個人突然攻擊，好像他在等待槍手...-";
+		mes "你差點死了。 -";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "讓我們趕緊回到駐軍。 -";
+		close;
+	}
+	mes "[審查]";
+	mes "啊...";
+	mes "錯誤..錯誤..";
+	mes "......";
+	close;
+}
+
+
+que_ng,187,163,3	script	Ingrid	744,{
+
+	if(BaseJob != Job_Gunslinger)
+	{
+		mes "[英格麗德]";
+		mes "你好嗎！";
+		mes "我被任命為新的Gunslinger武器創建者。這個名字是Ingrid。";
+		next;
+		mes "[英格麗德]";
+		mes "但是，您似乎並不是槍手行會的成員，所以我無所不能。對不起。";
+		close;
+	}
+	switch(gun_inf)
+	{
+		case 0:
+			mes "[英格麗德]";
+			mes "你好嗎！";
+			mes "我被任命為新槍手";
+			mes "武器創造者。這個名字是Ingrid。";
+			mes "很高興為您服務！";
+			next;
+			mes "[英格麗德]";
+			mes "只有很短的時間";
+			mes "自從我開始工作以來";
+			mes "但是我會盡力";
+			mes "協助你。";
+			next;
+			mes "[英格麗德]";
+			mes "啊...我感到很焦慮。";
+			mes "截至目前，我正在為客戶創建一個名為Inferno的武器的工作。";
+			next;
+			mes "[英格麗德]";
+			mes "地獄是我們公會實驗室中最先進的武器。";
+			next;
+			mes "[英格麗德]";
+			mes "它具有令人難以置信的功率和範圍，以及人體工程學的設計，因此可以很好地保持射擊後的回扣。";
+			mes "這是一種值得被稱為任何槍手的終極武器的武器。";
+			mes "霍夫怒氣...";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "你知道很多";
+			mes "…………";
+			next;
+			mes "[英格麗德]";
+			mes "啊。當然~";
+			mes "我是設計這種武器的人。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "哇~這太不可思議了~";
+			next;
+			mes "[英格麗德]";
+			mes "啊，...";
+			mes "我最終吹牛了嗎？";
+			mes "與Serena教授相比，我仍然沒有。";
+			next;
+			mes "[英格麗德]";
+			mes "實際上，我也想成為一名槍手，但是由於我的身體缺點弱，我不得不放棄。";
+			next;
+			mes "[英格麗德]";
+			mes "當我申請成為槍手時，我很幸運能讓塞雷娜教授看到我的才華，在她的幫助下，我現在正在幫助槍手武器的製造和銷售";
+			next;
+			mes "[英格麗德]";
+			mes "我仍然為自己無法成為槍手而感到re悔，但是至少我的兄弟和我一起參加了槍手測試，並通過了一個。";
+			next;
+			mes "[英格麗德]";
+			mes "我很高興即使我跌倒了，我的兄弟也能夠實現我們的夢想。";
+			next;
+			mes "[英格麗德]";
+			mes "哈哈~當您甚至不問時，看著我告訴您所有這些事情。";
+			mes "對不起。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "不，沒關係。";
+			mes "您可能沒有成為槍手，但我認為您已成為一個偉大的人。";
+			next;
+			mes "[英格麗德]";
+			mes "真的嗎？謝謝~";
+			mes "我會盡力的。";
+			next;
+			mes "[英格麗德]";
+			mes "為了產生地獄，";
+			mes "我需要100張二手鐵板，10個Oridecons，50個舊的生鏽螺釘，100個燃燒的心臟和200,000 Zeny。";
+			mes "您想為您製作嗎？";
+			next;
+			switch( select( "I'll think about it.", "Yes, please." ) )
+			{
+				case 1:
+					mes "[英格麗德]";
+					mes "啊~我明白了。";
+					mes "我明白。";
+					mes "好吧，好吧，請考慮一下。";
+					mes "下定決心時回來。";
+					close;
+
+				case 2:
+					mes "[英格麗德]";
+					mes "我明白。";
+					mes "這又是材料。";
+					next;
+					mes "[地獄]";
+					mes "為了產生地獄，";
+					mes "我需要100張二手鐵板，10個甲板，50個生鏽的舊螺釘，100個燃燒的心臟和200,000 Zeny。";
+					mes "您必須給我帶來正確數量的材料。";
+					mes "請不要忘記這一點。";
+					set gun_inf,1;
+					close;
+			}
+
+		case 1:
+			callsub SubInferno;
+
+		case 2:
+			mes "[英格麗德]";
+			mes "你好~你回來了~";
+			mes "您因為需要地獄而回來嗎？";
+			next;
+			switch( select( "Nah, I'm back just because..","Yes, make me an Inferno." ) )
+			{
+				case 1:
+					mes "[英格麗德]";
+					mes "啊~我明白了。";
+					mes "我明白。";
+					mes "好吧，好吧，請考慮一下。";
+					mes "下定決心時回來。";
+					close;
+
+				case 2:
+					callsub SubInferno;
+			}
+	}
+
+SubInferno:
+	if ((countitem(7319) < 100) || (countitem(7317) < 50) || (countitem(984) < 10) || countitem(7097) < 100)
+	{
+		mes "[英格麗德]";
+		mes "是的，所需的材料是100盤二手鐵板，10個Oridecons，50個生鏽的舊螺絲，100顆燃燒的心和200,000 Zeny";
+		mes "您必須給我帶來正確數量的材料。";
+		mes "請不要忘記這一點。";
+		close;
+	}
+	else if(Zeny < 200000)
+	{
+		mes "[英格麗德]";
+		mes "你帶來了很多材料，";
+		mes "但是你帶來了足夠的zeny？";
+		mes "創建地獄的價格為200,000 Zeny。";
+		mes "請不要忘記這一點。";
+		close;
+	}
+	else if(checkweight(13162,1) != 1)
+	{
+		mes "[英格麗德]";
+		mes "看來您有太多的物品可以攜帶我的創作，所以我不能給您。";
+		mes "當您準備好接收它時，為什麼不來再次見到我？";
+		close;
+	}
+	else
+	{
+		mes "[英格麗德]";
+		mes "我看到您有適當的材料和Zeny。";
+		mes "這是我為您創建的地獄。";
+		mes "很好地使用。";
+		set Zeny,Zeny-200000;
+		delitem 7319,100;
+		delitem 984,10;
+		delitem 7317,50;
+		delitem 7097,100;
+		getitem 13162,1;
+		if(gun_inf == 1) set gun_inf,2;
+		close;
+	}
+}
+
+que_ng,185,180,3	script	Vanessa	726,{
+
+	if(BaseJob != Job_Gunslinger)
+	{
+		mes "[凡妮莎]";
+		mes "哈！哈！";
+		mes "誇大！指揮官Sambo！";
+		mes "摔跤！ ，Muye Tai！";
+		mes "pancracy, 結束語,";
+		mes "我將掌握這個世界上所有裸手武器！ ！";
+		next;
+		mes "[凡妮莎]";
+		mes "唔？ ！";
+		mes "你是誰？你正在努力我的練習！";
+		mes "迷路！";
+		close;
+	}
+	switch(gunst)
+	{
+		case 0:
+			mes "[凡妮莎]";
+			mes "哈！ hyaa！";
+			mes "Vale Tudo！突擊隊Sambo！";
+			mes "摔跤！ ，泰拳！";
+			mes "pankration！ ，大量免費！";
+			mes "我將掌握所有戰鬥風格";
+			mes "在這個世界上！";
+			next;
+			mes "[凡妮莎]";
+			mes "毫米？";
+			mes "你是槍手，是嗎？";
+			mes "你為什麼干擾";
+			mes "我的練習和我";
+			mes "站在我旁邊？";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "只是看運動";
+			mes "看起來不錯...";
+			mes "......................";
+			next;
+			mes "[凡妮莎]";
+			mes "哦！你喜歡武術嗎？";
+			mes "來這裡~我會鎖";
+			mes "你在胳膊bar中~";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "n~不，謝謝~";
+			mes "沒關係~";
+			next;
+			mes "[凡妮莎]";
+			mes "沒關係~";
+			mes "來這裡~！";
+			mes "-嘭！嘭！ -";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "啊~ugh~不要那樣做~";
+			mes "啊啊啊啊啊啊~~！ ！";
+			mes "哎呀~";
+			mes "- 打破的東西 -";
+			mes "哇~~";
+			mes "*抽泣*~~";
+			next;
+			mes "[凡妮莎]";
+			mes "嗯...我做得太強了嗎？";
+			mes "嗯~";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "顯然！";
+			mes "白痴！白痴！";
+			mes "*抽泣*~";
+			next;
+			mes "[凡妮莎]";
+			mes "嗯~嗯~";
+			mes "對不起~";
+			mes "好吧，好吧，";
+			mes "不要哭。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "*抽泣*~";
+			next;
+			mes "[凡妮莎]";
+			mes "好吧~好吧.. ..";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "*抽泣*~";
+			next;
+			mes "[凡妮莎]";
+			mes "停止！阿爾格！";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "…………";
+			next;
+			mes "[凡妮莎]";
+			mes "很好，好的。";
+			mes "對不起，發生了什麼";
+			mes "我會為你做武器";
+			mes "如果您收集一些";
+			mes "材料...";
+			next;
+			mes "[凡妮莎]";
+			mes "我是凡妮莎·路易絲（Vanessa Louise）。";
+			mes "最初是武術家申請人";
+			mes "但是我走了一個錯誤的轉彎";
+			mes "我堅持製造武器。";
+			mes "哦，天哪~哦，我的~我的悲慘生活~";
+			next;
+			mes "[凡妮莎]";
+			mes "現在進入主題。";
+			mes "我可以創造的武器是";
+			mes "稱為驅逐艦。";
+			next;
+			mes "[凡妮莎]";
+			mes "我特別命名";
+			mes "經過我在舞台上使用的技術之後";
+			mes "呵呵~";
+			mes "採用這個~！驅逐艦~";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "*sob*~請停止~";
+			next;
+			mes "[凡妮莎]";
+			mes "啊呃..鎮靜...";
+			mes "第一個驅逐艦需要";
+			mes "在創建之前材料。";
+			next;
+			mes "[凡妮莎]";
+			mes "需要大量物品";
+			mes "因此，請仔細考慮。";
+			next;
+			mes "[凡妮莎]";
+			mes "怎麼樣？這種";
+			mes "機會並不常見。";
+			mes "想提出請求嗎？";
+			next;
+			switch( select( "Maybe next time.","Okay.") )
+			{
+				case 1:
+					mes "[凡妮莎]";
+					mes "mm~就是這樣~";
+					mes "這將是您的機會。";
+					mes "你會後悔的~";
+					mes "然後下次見~";
+					mes "再見";
+					close;
+           
+				case 2:
+					mes "[凡妮莎]";
+					mes "嗯，好的。";
+					mes "為了做一個驅逐艦，";
+					mes "您需要50盤鐵板";
+					mes "5個Oridecons，70個生鏽的舊螺釘";
+					mes "和100,000 Zeny的費用。";
+					mes "您必須帶我這些確切的材料。理解？";
+					set gunst,1;
+					close;
+			}
+
+		case 1:
+			callsub SubDestroyer;
+			
+		case 2:
+			mes "[凡妮莎]";
+			mes "哦~你回來了。";
+			mes "你現在好嗎？";
+			mes "商店裡有一個新物品。";
+			mes "繼續選擇。";
+			next;
+			switch(select( "Destroyer","Slotted Destroyer","Cancel") )
+			{
+				case 1:
+					mes "[凡妮莎]";
+					mes "是的，很好";
+					mes "那是普通的驅逐艦。";
+					mes "它需要50個用過的鐵板，";
+					mes "5個Oridecons，70個生鏽的舊螺釘，";
+					mes "和100,000 Zeny做到這一點。";
+					mes "您必須給我帶來正確數量的材料。";
+					mes "你想要嗎？";
+					next;
+					switch( select( "Maybe next time.","Okay.") )
+					{
+               					case 1:
+							mes "[凡妮莎]";
+							mes "什麼~c'mon";
+							mes "有什麼要考慮的？";
+							mes "好吧，好吧，想一想";
+							mes "然後回來...";
+							close;
+							case 2:
+							callsub SubDestroyer;
+					}
+							
+				case 2:
+					mes "[凡妮莎]";
+					mes "哦~開槽的驅逐艦~";
+					mes "與普通驅逐艦不同，";
+					mes "我希望您找到我收集的稀有物品之一。";
+					mes "那我給你。";
+					next;
+					mes "[凡妮莎]";
+					mes "我正在尋找手指[2]。";
+					mes "我也想要5個Oridecons。";
+					mes "您必須給我帶來正確數量的材料。";
+					mes "您還想要一個開槽的驅逐艦嗎？";
+					next;
+					switch( select( "I'll think about it.","OK! I do!") )
+					{
+               					case 1:
+							mes "[凡妮莎]";
+							mes "什麼~c'mon";
+							mes "有什麼要考慮的？";
+							mes "好吧，好吧，想一想";
+							mes "然後回來...";
+							close;
+			
+						case 2:
+							callsub SubDestroyer_;
+			
+					}
+           
+				case 3:
+					mes "[凡妮莎]";
+					mes "嗯~是的";
+					mes "慢慢來。";
+					mes "也許您想和我一起嗎？";
+					close;
+			}
+	}
+
+SubDestroyer:
+
+	if ((countitem(7319) < 50) || (countitem(7317) < 70) || (countitem(984) < 5))
+	{
+		mes "[凡妮莎]";
+		mes "是的，所需的材料是50種二手鐵板，";
+		mes "5個Oridecons，70個生鏽的舊螺釘和100,000 Zeny。";
+		mes "請記住，您必須帶上正確的金額。";
+		close;
+	}
+	else if(Zeny < 100000)
+	{
+		mes "[凡妮莎]";
+		mes "你帶來了很多材料，";
+		mes "但是費用為100,000。";
+		mes "請記住這一點。";
+		close;
+	}
+	else if(checkweight(13160,1) != 1)
+	{
+		mes "[凡妮莎]";
+		mes "看起來即使我做到了，您也無法隨身攜帶我的創作。";
+		mes "去清空您的庫存。";
+		close;
+	}
+	else
+	{
+		mes "[凡妮莎]";
+		mes "好吧~很好~";
+		mes "所有檢查~";
+		mes "您有完美的材料和Zeny~";
+		mes "這是我提前為您製作的驅逐艦。";
+		mes "很好地使用。";
+		set Zeny,Zeny-100000;
+		delitem 7319,50;
+		delitem 984,5;
+		delitem 7317,70;
+		getitem 13160,1;
+		if(gunst == 1) set gunst,2;
+		next;
+		mes "[凡妮莎]";
+		mes "如果您以後再需要一個";
+		mes "來吧，隨時好~";
+		mes "下次我將施加另一種裸手技術。";
+		close;
+	}
+
+SubDestroyer_:
+
+	if ((countitem(1812) < 1) || (countitem(984) < 5))
+	{
+		mes "[凡妮莎]";
+		mes "是的，所需的材料是1個手指[2]";
+		mes "和5個Oridecon。";
+		mes "請記住，材料必須確切。";
+		close;
+	}
+	else if(checkweight(13161,1) != 1)
+	{
+		mes "[凡妮莎]";
+		mes "您的庫存中沒有空間。";
+		mes "即使我讓你一個";
+		mes "你將無法攜帶它";
+		mes "清除庫存後，回來。";
+		close;
+	}
+	else
+	{
+		mes "[凡妮莎]";
+		mes "好吧~很好~";
+		mes "所有檢查~";
+		mes "您有完美的材料和Zeny~";
+		mes "這是我提前為您製作的開槽驅逐艦。";
+		mes "很好地使用。";
+		delitem 1812,1;
+		delitem 984,5;
+		getitem 13161,1;
+		next;
+		mes "[凡妮莎]";
+		mes "如果您以後再需要一個";
+		mes "來吧，隨時好~";
+		mes "下次我將施加另一種裸手技術。";
+		close;
+	}
+}
+
+que_ng,149,178,4	script	Lab Director	744,{
+
+	if(gun_na == 1){
+		if(countitem(1043) > 999 && countitem(932) > 999){
+			delitem 1043,1000;
+			delitem 932,1000;
+			set gun_na,2;
+			mes "[N.一個]";
+			mes "啊，一切都在這裡！啊，我";
+			mes "擔心沒有人";
+			mes "可以處理我的 ^ff0000butcher ^000000";
+			mes "當我完成創建時！";
+			next;
+			mes "[N.一個]";
+			mes "好吧，我會給您 ^ff0000butcher ^000000。";
+			mes "但是，我們不為";
+			mes "免費，所以我們需要向您收費";
+			mes "為此。另外，您需要獲得";
+			mes "允許使用屠夫";
+			mes "塞琳娜夫人。";
+			next;
+			mes "[N.一個]";
+			mes "一旦獲得許可，我將";
+			mes "付款後，給您屠夫";
+			mes "100000 Zeny的費用。";
+			close;
+		}else{
+			mes "[N.一個]";
+			mes "您是否找到了 ^ff00001000 orc claw ^000000和 ^ff00001000 skel bone ^000000？";
+			mes "如果您認為這太難了，";
+			mes "您可以選擇放棄。";
+			next;
+			if(select("我不會放棄！ :我放棄...") == 1){
+				mes "[N.一個]";
+				mes "好吧，我相信你。";
+				mes "祝你好運。";
+				close;
+			}else{
+				mes "[N.一個]";
+				mes "你放棄吧？";
+				mes "好吧，我承認";
+				mes "測試非常困難，但是";
+				mes "你不能處理這個武器";
+				mes "如果您無法處理測試。";
+				mes "您稍後可能會回到";
+				mes "再次挑戰。";
+				set gun_na,0;
+				close;
+			}
+		}
+	}
+	else if(gun_na == 2){
+		mes "[N.一個]";
+		mes "我已經有塞琳娜夫人的";
+		mes "允許您使用";
+		mes "屠夫。您可以使用一次";
+		mes "您已經付給我100000 Zeny。";
+		mes "您現在要付款嗎？";
+		next;
+		if(select("不:是的。") == 1){
+			mes "[N.一個]";
+			mes "好吧。我在等你回來";
+			mes "用錢。";
+			close;
+		}else{
+			if(Zeny < 100000){
+				mes "[N.一個]";
+				mes "嗯，我認為你沒有";
+				mes "你有足夠的錢。";
+				mes "回來錢，";
+				mes "好吧？";
+				close;
+			}
+			if(checkweight(13158,1) == 0){
+				mes "[N.一個]";
+				mes "你超重。";
+				mes "即使我給你";
+				mes "武器，您無法攜帶它。";
+				mes "請清除您的庫存。";
+				close;
+			}
+			set Zeny,Zeny-100000;
+			set gun_na,0;
+			getitem 13158,1;
+			mes "[N.一個]";
+			mes "一，兩個，三個，四個，五，";
+			mes "六... 99997，99998，99999 ...";
+			mes "100000。 * ding~！ *很好！";
+			mes "現在的費用很明顯。您可以";
+			mes "立即使用 ^ff0000butcher ^000000！";
+			next;
+			mes "[N.一個]";
+			mes "來自Lighthalzen的F. Harrison先生";
+			mes "對您的新事物非常感興趣";
+			mes "玩具在那裡。向他展示一些";
+			mes "時間。他會高興的。";
+			next;
+			mes "[N.一個]";
+			mes "充分利用它！";
+			mes "看！";
+			close;
+		}
+	}
+	else if(gun_na == 10){
+		if (countitem(999) > 69 && countitem(985) > 4 && countitem(984) > 2 && countitem(1003) > 69 && countitem(7317) > 49 && Zeny > 50000){
+			delitem 999,70;
+			delitem 985,5;
+			delitem 984,3;
+			delitem 1003,70;
+			delitem 7317,50;
+			set Zeny,Zeny-50000;
+			set gun_na,11;
+			mes "[N.一個]";
+			mes "啊哈，你讓我所有";
+			mes "材料。在這裡，讓我下車";
+			mes "馬上就可以了！會採取的";
+			mes "一段時間，所以等待...";
+			close;
+		}else{
+			mes "[N.一個]";
+			mes "嗯？你沒有材料";
+			mes "和你在一起嗎？";
+			next;
+			mes "[N.一個]";
+			mes "為了製作漂流者，我需要";
+			mes "70鋼，5 ELUNIUM，";
+			mes "3 Oridecon，70煤，50生鏽";
+			mes "螺絲，也有費用";
+			mes "50000名女性。";
+			mes "一旦有";
+			mes "一切準備就緒。";
+			next;
+			mes "[N.一個]";
+			mes "如果您不想要它，";
+			mes "您可以取消請求。";
+			next;
+			if(select("不取消:取消。") == 1){
+				mes "[N.一個]";
+				mes "好吧，請回來";
+				mes "材料。我會等待。";
+				close;
+			}else{
+				mes "[N.一個]";
+				mes "好吧，要求";
+				mes "為您提供的漂流者被取消。";
+				mes "祝你好運";
+				mes "在你的未來。";
+				set gun_na,0;
+				close;
+			}
+		}
+	}
+	else if(gun_na == 11){
+		if(checkweight(13157,1) == 0){
+			mes "[N.一個]";
+			mes "你超重。";
+			mes "即使我讓你";
+			mes "武器，您無法攜帶它。";
+			mes "請清除您的庫存。";
+			close;
+		}
+		set gun_na,0;
+		getitem 13157,1;
+		mes "[N.一個]";
+		mes "啊，這是完成的";
+		mes "為您提供漂流者。";
+		next;
+		mes "[N.一個]";
+		mes "請學習使用";
+		mes "蓋特林斯很好。瘋狂";
+		mes "破壞肯定會";
+		mes "對您有幫助。";
+		close;
+	}
+	else if(gun_na == 101){
+		mes "[N.一個]";
+		mes "啊，你好？";
+		mes "我是";
+		mes "Einbroch武器開發。";
+		mes "我叫“實驗室導演”。";
+		mes "你需要什麼嗎？";
+		next;
+		select("我需要一根特殊的金屬棒。");
+		mes "[N.一個]";
+		mes "嗯...？嘿，你不是那個傢伙";
+		mes "誰和";
+		mes "不久前屠夫？怎麼樣";
+		mes "屠夫？";
+		next;
+		mes "[N.一個]";
+		mes "...... 什麼！ ？你弄壞了！ ？";
+		mes "我以為你會";
+		mes "好好...你讓我失望！ ！ ！";
+		next;
+		mes "[N.一個]";
+		mes "你背叛了我對你的信仰！";
+		mes "你叛徒！叛徒！ ！叛徒！ ！ ！ ！";
+		next;
+		select("解釋一切。");
+		mes "[N.一個]";
+		mes "......哇。";
+		mes "所以是F. Harrison先生";
+		mes "打破了，是嗎？對不起，我應該";
+		mes "沒有懷疑你。";
+		next;
+		mes "[N.一個]";
+		mes "塞琳娜夫人有特殊的金屬";
+		mes "您想要的桿，但文檔是";
+		mes "現在不在，沒有其他人";
+		mes "知道它在哪裡...";
+		next;
+		mes "[N.一個]";
+		mes "我現在還有其他研究";
+		mes "所以我不能浪費我的時間";
+		mes "為此... grr ...我需要";
+		mes "元素球繼續前進";
+		mes "與我的研究...";
+		next;
+		select("向他提出報價。");
+		mes "[N.一個]";
+		mes "要約？喜歡什麼？";
+		next;
+		select("我們為彼此找到東西。");
+		mes "[N.一個]";
+		mes "嗯...聽起來不錯。";
+		mes "好吧，根據提議，";
+		mes "我會為你尋找桿子，";
+		mes "當你找到我";
+		mes "元素球。";
+		next;
+		mes "[N.一個]";
+		mes "30毒球，30耀斑球，";
+		mes "30個閃電球，30個盲人";
+		mes "球體，或30個冰點球。";
+		mes "找到我的30個元素。";
+		set gun_na,102;
+		close;
+	}
+	else if(gun_na == 102){
+		mes "[N.一個]";
+		mes "30毒球，30耀斑球，";
+		mes "30個閃電球，30個盲人";
+		mes "球體，或30個冰點球。";
+		mes "找到我的30個元素。";
+		mes "你找到了嗎？";
+		next;
+		switch(select("不。 :我找到了 30 個毒球。 :我找到了 30 個耀斑球。 :我找到了 30 個閃電球。 :我找到了 30 個盲球。 :我找到了 30 個冰凍球。")){
+		case 1:
+			mes "[N.一個]";
+			mes "只是帶我任何類型";
+			mes "你可以找到。";
+			close;
+		case 2:
+			if(countitem(13205) >= 30){
+				delitem 13205,30;
+				set gun_na,103;
+			}
+			break;
+		case 3:
+			if(countitem(13203) >= 30){
+				delitem 13203,30;
+				set gun_na,103;
+			}
+			break;
+		case 4:
+			if(countitem(13204) >= 30){
+				delitem 13204,30;
+				set gun_na,103;
+			}
+			break;
+		case 5:
+			if(countitem(13206) >= 30){
+				delitem 13206,30;
+				set gun_na,103;
+			}
+			break;
+		case 6:
+			if(countitem(13207) >= 30){
+				delitem 13207,30;
+				set gun_na,103;
+			}
+			break;
+		}
+		if (gun_na != 103) {
+			mes "[N.一個]";
+			mes "嗯？什麼？我是唯一的";
+			mes "誰看不到他們？";
+			mes "帶我更多！";
+			close;
+		}
+		mes "[N.一個]";
+		mes "哇，你為我找到了全部！";
+		mes "我不得不變成塞琳娜夫人的實驗室";
+		mes "再找到這個桿。";
+		mes "然後讓我們進行交易！";
+		next;
+		mes "- 你給了元素";
+		mes "領取研究協調員並獲得";
+		mes "金屬桿回報。 -";
+		next;
+		mes "[N.一個]";
+		mes "F. Harrison先生非常好。";
+		mes "我確定他可以修復你的";
+		mes "屠夫為你。";
+		mes "好吧，稍後再見！";
+		close;
+	}
+	else if(gun_na == 103 || gun_na == 104){
+		mes "[N.一個]";
+		mes "F. Harrison先生非常好。";
+		mes "我確定他可以修復你的";
+		mes "屠夫為你。";
+		mes "好吧，稍後再見！";
+		close;
+	}
+	mes "[N.一個]";
+	mes "啊，你好？";
+	mes "我是";
+	mes "Einbroch武器開發。";
+	mes "我叫“實驗室導演”。";
+	mes "你需要什麼嗎？";
+	next;
+	if (BaseJob != Job_Gunslinger){
+		select("和他談談。");
+		mes "[N.一個]";
+		mes "如果您在周圍看到槍手，";
+		mes "請告訴他們我有";
+		mes "關於武器的最新消息。";
+		mes "如有必要，請發送";
+		mes "這裡。呵呵呵呵...";
+		close;
+	}
+	if (BaseLevel < 55) {
+		select("講話。");
+		mes "[N.一個]";
+		mes "...破壞...瘋狂...";
+		mes "嗯...攻擊速度超過180 ...";
+		next;
+		mes "[N.一個]";
+		mes "啊，對不起，我正在發展一些";
+		mes "新武器。請不要";
+		mes "打擾我。";
+		close;
+	}
+	switch(select(((BaseLevel > 67)?"Ask about 'Butcher'.":"")+":Ask about the 'Drifter'.:Cancel")) {
+	case 1:
+		mes "[N.一個]";
+		mes "啊，你聽到了消息";
+		mes "結束後不久";
+		mes "發展嗎？";
+		next;
+		mes "[N.一個]";
+		mes "^ff0000butcher^000000是最新的開發項目";
+		mes "由我們，Einbroch槍支實驗室。";
+		mes "這是最新類型的加特林";
+		mes "我們已經發展了。儘管";
+		mes "^ff0000drifter^000000是一個好武器";
+		mes "同樣， ^ff0000butcher ^000000絕對具有";
+		mes "火力更強大！";
+		next;
+		mes "[N.一個]";
+		mes "由於其強大的火力，";
+		mes "屠夫也被稱為";
+		mes "作為“兇手”。";
+		next;
+		mes "[N.一個]";
+		mes "但是，即使是槍手也可以";
+		mes "控制這樣的麻煩";
+		mes "強大的武器。";
+		next;
+		mes "[N.一個]";
+		mes "您認為您可以處理嗎？";
+		next;
+		if(select("我不確定...:當然可以！ ！") == 1){
+			mes "[N.一個]";
+			mes "^ff0000butcher ^000000是您的武器";
+			mes "沒有強者就無法應付";
+			mes "將要。我會再次見到你";
+			mes "你有足夠的信心";
+			mes "處理這個怪物。";
+			close;
+		}else{
+			mes "[N.一個]";
+			mes "啊哈，你有多自信";
+			mes "是！但是，我看到有人";
+			mes "到處都是自信。";
+			mes "您需要證明它...";
+			mes "但是怎麼...嗯...";
+			next;
+			mes "[N.一個]";
+			mes "嗯......";
+			next;
+			mes "[N.一個]";
+			mes "啊！我得到了它！";
+			next;
+			mes "[N.一個]";
+			mes "在這裡，帶我 ^ff00001000 orc爪 ^000000和 ^ff00001000 skel bone ^000000。";
+			mes "如果你能帶我這些物品，";
+			mes "我會讓你使用屠夫。";
+			next;
+			mes "[N.一個]";
+			mes "容易，不是嗎？去證明";
+			mes "那你的能力！呵呵...";
+			set gun_na,1;
+			close;
+		}
+	case 2:
+		mes "[N.一個]";
+		mes "啊，你在這裡學習";
+		mes "^ff0000drifter ^000000 呃？";
+		next;
+		mes "[N.一個]";
+		mes "^ff0000drifter ^000000是眾多";
+		mes "開發了最高的武器";
+		mes "塞萊娜夫人。這是自動的";
+		mes "蓋特林很高";
+		mes "火率，這是最高的";
+		mes "在所有槍支武器中。";
+		next;
+		mes "[N.一個]";
+		mes "當然，您需要技能";
+		mes "為了讓您控制gatlings，";
+		mes "但是他的gatlings很好";
+		mes "將從";
+		mes "^ff0000漂流者^000000。";
+		next;
+		mes "[N.一個]";
+		mes "您想嘗試使用 ^ff0000drifter ^000000嗎？";
+		next;
+		if(select("嗯，不:是啊！") == 1){
+			mes "[N.一個]";
+			mes "如果您想嘗試一下";
+			mes "一段時間，回到這裡。";
+			close;
+		}else{
+			set gun_na,10;
+			mes "[N.一個]";
+			mes "因為很難找到";
+			mes "構造材料";
+			mes "^ff0000drifter ^000000，我們只製作它們";
+			mes "應要求，我們需要";
+			mes "誰想要使用 ^ff0000drifter ^000000帶來";
+			mes "我們的材料。";
+			next;
+			mes "[N.一個]";
+			mes "我會告訴你材料";
+			mes "需要的，只需帶它們";
+			mes "我們將為您構建。";
+			next;
+			mes "[N.一個]";
+			mes "為了做一個漂流者，我們需要";
+			mes "70鋼，5個Eluniums，3";
+			mes "Oridecons，70煤，50生鏽";
+			mes "螺絲和費用";
+			mes "5萬名女性。";
+			mes "發現後回來";
+			mes "商場。";
+			close;
+		}
+	case 3:
+		mes "[N.一個]";
+		mes "我有最新消息";
+		mes "武器，但是...我想你";
+		mes "太忙了，無法聽到他們的聲音。";
+		mes "也許下次我猜。";
+		close;
+	}
+}
+
+lighthalzen,205,284,6	script	F. Harrison	85,{
+
+	if (gun_na == 100){
+		if(checkweight(13102,1) == 0){
+			mes "[F.哈里森]";
+			mes "你超重。";
+			mes "即使我給了你";
+			mes "武器，您無法攜帶它。";
+			mes "請清除您的庫存。";
+			close;
+		}
+		mes "[F.哈里森]";
+		mes "嗯...哦？";
+		mes "啊……嗯？";
+		next;
+		mes "[F.哈里森]";
+		mes "呵呵...嗯...嗯...？";
+		next;
+		select("現在可以讓我的屠夫回來嗎？");
+		mes "[F.哈里森]";
+		mes "嗯？哦，嗯...呵呵...";
+		next;
+		mes "[F.哈里森]";
+		mes "th，是嗎？嗯...呵呵...";
+		next;
+		mes "[F.哈里森]";
+		mes "啊！我...";
+		next;
+		mes "[F.哈里森]";
+		mes "那東西！繁榮！";
+		next;
+		mes "[F.哈里森]";
+		mes "bam bam！我要解僱它！";
+		mes "是的！";
+		next;
+		mes "[F.哈里森]";
+		mes "但是它抵制了！所以我去了“ bam！”和";
+		mes "我的手！ Muahahahah！";
+		next;
+		mes "[F.哈里森]";
+		mes "它破裂了…… *哭泣 *";
+		next;
+		mes "[F.哈里森]";
+		mes "我稱自己為“博士”一切'和";
+		mes "我想自己修理，但是我";
+		mes "似乎沒有材料";
+		mes "修復它...材料是";
+		mes "如此稀有... *哭泣 *";
+		next;
+		mes "[F.哈里森]";
+		mes "嗯...很抱歉打破";
+		mes "但是...你能給我";
+		mes "我需要修復的材料？";
+		mes "給我帶來這些物品，我可以";
+		mes "修復它，加上我將其修改為";
+		mes "你！我保證！ ！";
+		next;
+		mes "所以請給我帶來材料...";
+		mes "*哭泣的索布*";
+		next;
+		mes "[F.哈里森]";
+		mes "我需要的材料是";
+		mes "10鋼，2個Eluniums，";
+		mes "1 Oridecon，20煤...";
+		mes "和一種特殊的金屬棒";
+		mes "在屠夫中使用...";
+		mes "我認為只有塞琳娜夫人可以";
+		mes "製作那些桿......";
+		next;
+		mes "[F.哈里森]";
+		mes "但是首先，您需要談論";
+		mes "致塞琳娜夫人的助手，“實驗室導演”，";
+		mes "並尋求他的幫助。";
+		mes "那個孩子有點歇斯底里，但是";
+		mes "如果您說話，她會很好的幫助";
+		mes "對她很好...";
+		next;
+		mes "[F.哈里森]";
+		mes "我真的很抱歉...在這裡，我";
+		mes "借給你我珍貴的武器，";
+		mes "“深紅色螺栓”。但是請確保";
+		mes "你帶所有這些材料";
+		mes "一旦您找到了全部！";
+		mes "答應我！ ！ ！";
+		set gun_na,101;
+		getitem 13102,1;
+		close;
+	}
+	else if(gun_na == 101 || gun_na == 102){
+		mes "[F.哈里森]";
+		mes "我需要的材料是";
+		mes "10鋼，2個Eluniums，";
+		mes "1 Oridecon，20煤...";
+		mes "和一種特殊的金屬棒";
+		mes "在屠夫中使用...";
+		mes "與“實驗室導演”交談";
+		mes "在桿上的幫助。";
+		close;
+	}
+	else if(gun_na == 103){
+		if(countitem(999) >= 10 && countitem(985) >= 2 && countitem(984) >= 1 && countitem(1003) >= 20){
+			if(countitem(13102) > 0){
+				delitem 999,10;
+				delitem 985,2;
+				delitem 984,1;
+				delitem 1003,20;
+				delitem 13102,1;
+				set gun_na,104;
+				mes "[F.哈里森]";
+				mes "啊！你得到了所有的材料";
+				mes "為我！我要修理";
+				mes "馬上，請堅持...";
+				close;
+			}
+			else{
+				mes "[F.哈里森]";
+				mes "啊！你得到了所有的材料";
+				mes "為我！";
+				mes "...但是我的珍貴在哪裡";
+				mes "“深紅色螺栓”！ ？我不會修復";
+				mes "如果您不這樣做的話，您的屠夫";
+				mes "把它帶回我！";
+				close;
+			}
+		}
+		else{
+			mes "[F.哈里森]";
+			mes "我需要的材料是";
+			mes "10鋼，2個Eluniums，";
+			mes "1 Oridecon，20煤...";
+			mes "和一種特殊的金屬棒";
+			mes "在屠夫中使用...";
+			mes "你發現的好東西";
+			mes "特殊的金屬棒已經。";
+			close;
+		}
+	}
+	else if(gun_na == 104){
+		if(checkweight(13159,1) == 0){
+			mes "- 您已經超重了。 -";
+			mes "- 放下一些";
+			mes "首先。 -";
+			close;
+		}
+		set gun_na,0;
+		getitem 13159,1;
+		mes "[F.哈里森]";
+		mes "哇...終於是固定的，謝謝";
+		mes "努力。我很抱歉";
+		mes "破壞它，謝謝";
+		mes "為了你的努力。我感到內gui";
+		mes "為了修復它，所以我添加了";
+		mes "上面有一些額外的力量。我希望";
+		mes "它將對您有效。";
+		mes "好吧，享受它。";
+		close;
+	}
+	else if(gun_na == 0){
+		if(BaseJob != Job_Gunslinger) {
+			mes "[F.哈里森]";
+			mes "伙計，我很無聊...";
+			mes "我想知道有什麼";
+			mes "有趣的...";
+			next;
+			mes "[F.哈里森]";
+			mes "哦，好吧...我會和我一起玩";
+			mes "美麗的“深紅螺栓”。";
+			close;
+		}
+		if(BaseLevel > 67 && countitem(13158) > 0){
+			mes "[F.哈里森]";
+			mes "伙計，我很無聊...";
+			mes "我想知道有什麼";
+			mes "有趣的...";
+			next;
+			mes "[F.哈里森]";
+			mes "嗯？你是槍手嗎？";
+			mes "我還沒看過那把武器";
+			mes "在您的手之前...";
+			next;
+			mes "[F.哈里森]";
+			mes "我可以看看嗎？請？";
+			mes "來吧，讓我看看！";
+			mes "我在這裡很無聊！";
+			mes "拜拜拜拜～？";
+			next;
+			if(select("沒辦法:這裡……") == 1){
+				mes "[F.哈里森]";
+				mes "啊！你認為你是唯一的";
+				mes "一個帶有酷武器的人！ ？出色地";
+				mes "我得到了我美麗的深紅色螺栓！";
+				mes "哼！";
+				close;
+			}
+			mes "[F.哈里森]";
+			mes "呵呵...這是最新的";
+			mes "Einbroch槍支的開發";
+			mes "實驗室，所謂的不受控制的";
+			mes "“驅逐艦屠夫”，是嗎？";
+			mes "有趣...非常有趣...";
+			next;
+			mes "[F.哈里森]";
+			mes "嘿，讓我嘗試一下";
+			mes "有點，好嗎？不用擔心，我";
+			mes "知道如何處理武器，";
+			mes "我不會打破它！";
+			mes "就是這樣！讓我們走~";
+			delitem 13158,1;
+			set gun_na,100;
+			close;
+		}
+	}
+}

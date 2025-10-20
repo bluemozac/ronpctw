@@ -1,0 +1,2166 @@
+﻿//===== rAthena Script =======================================
+//= Rune Knight Job Quest
+//===== By: ==================================================
+//= L0ne_W0lf, Muad_Dib
+//===== Current Version: =====================================
+//= 1.6
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Job change Quest from Knight / Lord Knight -> Rune Knight.
+//===== Additional Comments: =================================
+//= 1.0 First version.
+//= 1.1 Added forgotten Header. [Masao]
+//= 1.2 Added Energy Rune item reward. [Masao]
+//= 1.3 Updated script, optimized. [Euphy]
+//= 1.3a Added 'npcskill' command. [Euphy]
+//= 1.4 Fixed a few bugs. [Euphy]
+//= 1.4a Moved Kafra to main file. [Euphy]
+//= 1.5 Added GM management function. [Euphy]
+//= 1.6 Added VIP features. [Euphy]
+//============================================================
+
+prt_in,162,24,3	script	Splendid-Looking Knight	470,2,2,{
+	mes "[符文騎士曼努埃爾]";
+	if (Class == Job_Rune_Knight || Class == Job_Rune_Knight_T || Class == Job_Baby_Rune_Knight) {
+		mes "您現在是我們精選弟兄的成員。我仍然記得我第一次見到你的時候。";
+		next;
+		mes "[符文騎士曼努埃爾]";
+		mes "努力以榮譽生活劍的道路...";
+		next;
+		mes "[符文騎士曼努埃爾]";
+		mes "歡呼我們的新未來...";
+		close;
+	}
+	if (job_rune_edq == 0) {
+		mes "世界上可以走很多道路。大多數人可以看到自己的道路，但並沒有真正遵循。";
+		next;
+		mes "[符文騎士曼努埃爾]";
+		mes "無論如何，這裡的飲料真的很好。你想擁有一個嗎？";
+		next;
+		if(select("當然，我們喝一杯吧:我拒絕。") == 2) {
+			mes "[符文騎士曼努埃爾]";
+			mes "你確定嗎？您不知道這些飲料的真正優雅...";
+			close;
+		}
+		mes "[符文騎士曼努埃爾]";
+		if (BaseJob == Job_Knight) {
+			mes "你也走劍的路，不是嗎？然後我們可以互相理解。當與劍客的同伴時，飲料的味道更好。";
+			next;
+			mes "[符文騎士曼努埃爾]";
+			mes "我會買這一輪。";
+			mes "對友誼的敬酒~";
+			next;
+			mes "[符文騎士曼努埃爾]";
+			if (BaseLevel > 98 && JobLevel > 49) {
+				mes "我認為您似乎已經準備好開始一種新的方式...";
+				next;
+				mes "[符文騎士曼努埃爾]";
+				mes "沿著劍走是一場永恆的戰鬥。從現在開始，您可能會艱難的旅程。";
+				next;
+				mes "[符文騎士曼努埃爾]";
+				mes "如果您想以新的方式行走並超過當前限制，我願意為您提供幫助。";
+				next;
+				mes "[符文騎士曼努埃爾]";
+				mes "學會了和諧以打破劍極限的劍客的真實方式是符文騎士。";
+				next;
+				mes "[符文騎士曼努埃爾]";
+				mes "你不加入我們的弟兄嗎？您看起來自己有資格成為我們中的一員。";
+				next;
+				mes "[符文騎士曼努埃爾]";
+				mes "如果您有興趣，我將向您介紹大師，他們將通過我的建議引導您進入符文騎士。";
+				next;
+				switch(select("我還沒準備好:我已經準備好成為一名符文騎士了。")) {
+				case 1:
+					mes "[符文騎士曼努埃爾]";
+					mes "正確的。每個挑戰總是需要準備。好吧，我等你。";
+					next;
+					mes "[符文騎士曼努埃爾]";
+					mes "當然，只有當您確定自己成為符文騎士的信念百分之一百時，我才會接受。";
+					close;
+				case 2:
+					if (VIP_SCRIPT) {
+						callfunc "VIP_Third_Class";
+						set job_rune_edq,1;
+						setquest 3200;
+						next;
+					}
+					mes "[符文騎士曼努埃爾]";
+					mes "你現在確定嗎？";
+					mes "讓我向我的同誌發送一個派遣，您願意加入我們的隊伍。";
+					next;
+					set job_rune_edq,1;
+					setquest 3200;
+					mes "[符文騎士曼努埃爾]";
+					mes "你知道那個叫Glast Heim的地方嗎？那裡有一個符文騎士在那裡等你，他將引導您進入Glast Heim Tower的入口。";
+					next;
+					mes "[符文騎士曼努埃爾]";
+					mes "我叫曼努埃爾。我被稱為光彩的符文騎士。當您告訴他您是符文騎士候選人時，他將處理其餘的。";
+					next;
+					mes "[符文騎士曼努埃爾]";
+					mes "我將等待您成為真正的符文騎士的那一天。";
+					close;
+				}
+			}
+			mes "如果您不斷走劍，您最終會感受到力量的極限。像我之前...";
+			next;
+			mes "[符文騎士曼努埃爾]";
+			mes "當時間到來時，將有一種方法可以幫助您超越該限制。直到您的力量增長的那一天，我們至少仍然可以一起喝一杯。";
+			next;
+			mes "[符文騎士曼努埃爾]";
+			mes "您的力量可以承受符文騎士的力量的那一天！";
+			close;
+		}
+		mes "我相信，變化的風並不總是好的。";
+		next;
+		mes "[符文騎士曼努埃爾]";
+		mes "就像這種飲料的味道一樣。我希望這種飲料的味道永遠保存在這裡。";
+		close;
+	} else if (job_rune_edq == 1) {
+		mes "符文騎士在Glast Heim等著您。他將引導您進入Glast Heim Tower的入口。";
+		next;
+		mes "[符文騎士曼努埃爾]";
+		mes "告訴他，您是符合符文騎士的候選人，他將處理其餘的。";
+		next;
+		mes "[符文騎士曼努埃爾]";
+		mes "我將等待您成為真正的符文騎士的那一天。";
+		close;
+	}
+	mes "您現在沒有事情要做嗎？";
+	next;
+	mes "[符文騎士曼努埃爾]";
+	mes "不？好吧，沒關係。";
+	mes "你不喜歡酒精的氣味嗎？";
+	close;
+}
+
+glast_01,44,363,3	script	Rune Leader Jungberg	468,2,2,{
+	mes "[符文領袖榮格伯格]";
+	if (Class == Job_Rune_Knight || Class == Job_Rune_Knight_T || Class == Job_Baby_Rune_Knight) {
+		mes "哦，你一定是"+strcharinfo(0)+".";
+		mes "歡迎。";
+		next;
+		mes "[符文領袖榮格伯格]";
+		mes "我們期待著您幫助符文騎士在全球範圍內傳播榮譽。";
+		next;
+		mes "[符文領袖榮格伯格]";
+		mes "那麼，我能為您提供什麼幫助？";
+		next;
+		switch(select("我想去集合地:沒什麼。")) {
+		case 1:
+			mes "[符文領袖榮格伯格]";
+			mes "正確的。我現在寄給你。我很快見。";
+			close2;
+			warp "job3_rune01",80,65;
+			end;
+		case 2:
+			close;
+		}
+	}
+	if (BaseJob != Job_Knight) {
+		mes "我是唯一一個在這個被詛咒的地方Glast Heim的劍客之路的騎士。";
+		next;
+		mes "[符文領袖榮格伯格]";
+		mes "由於您不走劍，因此您不會理解我們的精神。我可以自己管理。遵循自己的道路。";
+		close;
+	}
+	if (job_rune_edq < 2) {
+		mes "您是這個地方被詛咒的幽靈嗎？還是您是無知的冒險家？";
+		next;
+		mes "[符文領袖榮格伯格]";
+		mes "如果您是一個呼吸的人，那就仔細聽我說。我不會猶豫要與任何人交談來在這裡冒險。";
+		next;
+		if (job_rune_edq == 0) {
+			switch(select("你是誰？ :你在這裡做什麼？ :取消。")) {
+			case 1:
+				mes "[符文領袖榮格伯格]";
+				mes "我是唯一一個在這個被詛咒的地方Glast Heim的劍客之路的騎士。";
+				next;
+				mes "[符文領袖榮格伯格]";
+				mes "如果您還遵循劍客的方式，那麼當您發揮全部潛力時，我們的道路肯定會再次跨越。";
+				close;
+			case 2:
+				mes "[符文領袖榮格伯格]";
+				mes "我是一個沿著劍走的男人。但是我和你一樣，符文米加特騎士團並不完全相同。";
+				next;
+				mes "[符文領袖榮格伯格]";
+				mes "我們不像其他被盛行和環境所吸收的騎士一樣，因此您可能還不了解我們。";
+				next;
+				mes "[符文領袖榮格伯格]";
+				mes "我們是符文騎士。一個領導真正的力量和身體力量的群體，以劍的正義方式。";
+				next;
+				mes "[符文領袖榮格伯格]";
+				mes "我們已經秘密地在Glast Heim的深處生活了一個半個世紀，但是是時候讓世界知道我們的目的了。";
+				next;
+				mes "[符文領袖榮格伯格]";
+				mes "現在，有許多講師在符文中的各個地方都在尋找才華橫溢的劍術。他們正在尋找一個將加入劍道方式的人。";
+				next;
+				mes "[符文領袖榮格伯格]";
+				mes "如果您想加入符文騎士。請從其中一位指南中獲得建議，然後再次來找我。";
+				close;
+			case 3:
+				close;
+			}
+		} else if (job_rune_edq == 1) {
+			switch(select("我是來當符文騎士的。 :取消。")) {
+			case 1:
+				mes "[符文領袖榮格伯格]";
+				mes "嗯...您是曼努埃爾談論的符文騎士候選人嗎？";
+				next;
+				mes "[符文領袖榮格伯格]";
+				mes "你的名字是"+strcharinfo(0)+", right? I can see clearly that you are qualified to become our comrade.";
+				next;
+				mes "[符文領袖榮格伯格]";
+				mes "好的。我不必再詢問您的資格即可加入我們的弟兄。 ...1.S ...現在我給您您的第一個任務。";
+				next;
+				mes "[符文領袖榮格伯格]";
+				mes "找到我們隱藏在Glast Heim內部的符文騎士聚會場所。";
+				next;
+				mes "[符文領袖榮格伯格]";
+				mes "有一個地方，通往閃光的海姆騎士精神中的符文騎士的秘密聚會室。自己找到那個地方。";
+				next;
+				mes "[符文領袖榮格伯格]";
+				mes "如果您能找到它，會有一個人在等待您打招呼，所以讓我們開始。";
+				next;
+				mes "[符文領袖榮格伯格]";
+				mes "當然，您的生命可能會受到Glast Heim的幽靈的危險……但是要克服符文騎士候選人的風險並不難。";
+				set job_rune_edq,2;
+				changequest 3200,3201;
+				close;
+			case 2:
+				close;
+			}
+		}
+	} else if (job_rune_edq == 2) {
+		mes "第一個任務是找出我們隱藏在Glast Heim內部的符文騎士聚會場所。";
+		next;
+		mes "[符文領袖榮格伯格]";
+		mes "有一個地方，導致符文騎士團的秘密聚會位置在Glast Heim騎士中。自己找到那個地方。";
+		next;
+		mes "[符文領袖榮格伯格]";
+		mes "如果您能找到它，會有一個人在等待您打招呼，所以讓我們開始。";
+		next;
+		mes "[符文領袖榮格伯格]";
+		mes "當然，您的生命可能會受到Glast Heim的幽靈的危險……但是要克服符文騎士候選人的風險並不難。";
+		close;
+	}
+	mes "看來您仍在接受測試。盡力而為並通過所有測試。";
+	next;
+	switch(select("我要去集合地點:退出談話。")) {
+	case 1:
+		mes "[符文領袖榮格伯格]";
+		mes "好的。我會馬上寄給你。我稍後再檢查。";
+		close2;
+		warp "job3_rune01",80,65;
+		end;
+	case 2:
+		close;
+	}
+}
+
+gl_knt02,150,55,3	script	Rune Knight Staff	83,2,2,{
+	mes "[符文騎士工作人員]";
+	if (Class == Job_Rune_Knight || Class == Job_Rune_Knight_T || Class == Job_Baby_Rune_Knight) {
+		mes "歡迎，"+strcharinfo(0)+". Are you going to the gathering place?";
+		next;
+		switch(select("是的，帶我去那裡。 :我有別的事。 :取消。")) {
+		case 1:
+			mes "[符文騎士工作人員]";
+			mes "好吧，進來。我指導你。";
+			close2;
+			warp "job3_rune01",80,65;
+			end;
+		case 2:
+			mes "[符文騎士工作人員]";
+			mes "哦真的嗎？然後，繼續工作。我將繼續執行任務。";
+			close;
+		case 3:
+			close;
+		}
+	}
+	if (BaseJob == Job_Knight) {
+		if (job_rune_edq == 1) {
+			mes "啊...這個區域不受限制，您被禁止在這裡。請不要做任何阻礙我們的努力。";
+			next;
+			mes "[符文騎士工作人員]";
+			mes "雖然...您似乎有潛力成為那些遵循劍道的人的伴侶。";
+			next;
+			mes "[符文騎士工作人員]";
+			mes "我敢肯定，我們會不久就要越過道路。我相信我們會再次見面。";
+			close;
+		} else if (job_rune_edq > 1) {
+			mes "您找到了這個地方。 Jungberg派我將您送到聚會場所。";
+			next;
+			mes "[符文騎士工作人員]";
+			mes "當您進入聚會場所時，請與Tigris上尉交談。他一直在等待新成員出現。";
+			next;
+			mes "[符文騎士工作人員]";
+			mes "好吧，請跟隨我。";
+			close2;
+			warp "job3_rune01",80,65;
+			end;
+		}
+	}
+	mes "等待！這個地方被禁止。我不介意你在徘徊，但不要再打擾我了。";
+	close;
+}
+
+job3_rune01,80,60,3	script	Rune Knight Captain	470,2,2,{
+	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 1000) {
+		mes "你有太多事情。你不能繼續進行。減肥後，請重試。";
+		close;
+	}
+	if (Class == Job_Rune_Knight || Class == Job_Rune_Knight_T || Class == Job_Baby_Rune_Knight) {
+		mes "[Tigris上尉]";
+		if (job_rune_edq == 23) {
+			mes "哦，我明白了...請等待片刻。";
+			next;
+			mes "[Tigris上尉]";
+			mes "我忘了檢查您是否有資格獲得更改工作的慶祝禮物...";
+			next;
+			mes "[Tigris上尉]";
+			mes "讓我從照顧您的測試的講師那裡檢查報告。";
+			next;
+			mes "[Tigris上尉]";
+			if (job_rune_edq3 == 0) {
+				mes "嗯...這是完美的。您已經以非常罕見的良好唱片來到這裡。";
+				set .@item,2140; //Energy_Rune_Guard
+			} else if (job_rune_edq3 > 2 && job_rune_edq3 < 6) {
+				mes "嗯...太好了。您已經有像樣的記錄來這裡。";
+				set .@item,2794; //Magic_Stone_Ring
+			} else {
+				mes "嗯，還不錯。這不是一個很好的記錄，但您盡了最大的努力。";
+				set .@item,15002; //Rune_Plate
+			}
+			next;
+			mes "[Tigris上尉]";
+			mes "在這裡，拿這個。這是我喜歡給自己的年輕一代的禮物。";
+			getitem .@item,1; //Energy_Rune_Guard
+			set job_rune_edq,24;
+			close;
+		}
+		mes "嘿，很久沒看見，"+strcharinfo(0)+". I don't think you've got any important matters to discuss but make yourself comfortable.";
+		close;
+	}
+	if (BaseJob == Job_Knight) {
+		if (job_rune_edq == 2) {
+			mes "一個穿著光榮的盔甲和眼睛的熱情的人站在我面前。";
+			next;
+			mes "他看上去不在凝視著我，過了一會兒，他開始聊天。";
+			next;
+			mes "[Tigris上尉]";
+			mes "嘿，您是曼努埃爾建議的符文騎士候選人嗎？我是符文騎士團的蒂格里斯上尉，你的名字是？";
+			next;
+			mes "[Tigris上尉]";
+			mes "哦，我以前聽過，但我忘記了它。是的，你是嗎？"+strcharinfo(0)+"? I truly welcome you from the heart for coming here.";
+			next;
+			mes "[Tigris上尉]";
+			mes "讓我們來看看。這個房間有多少候選人？嘿，Lunarea，這是哪個候選人？";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "……第172期。";
+			next;
+			mes "[Tigris上尉]";
+			mes "她說我的朋友。實際上，我不想看到下一個。所以請做好。";
+			next;
+			mes "[Tigris上尉]";
+			mes "讓我看看...手冊和Jungberg必須完成基本驗證，然後立即開始測試。";
+			next;
+			mes "[Tigris上尉]";
+			mes "Lunarea，繼續進行第一次測試。";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "...";
+			next;
+			mes "這個名叫Lunarea的蒼白的雌性符文騎士正在悄悄地向她點頭，看著我。";
+			next;
+			mes "[Tigris上尉]";
+			mes "測試現在開始。首先，您將從那個美麗的冰冷女士那裡獲得第一次測試，因此請盡力而為。";
+			next;
+			mes "[Tigris上尉]";
+			mes "測試完成後，與我交談。無論如何，您需要關心與其他人一起進行的測試。";
+			next;
+			set job_rune_edq,3;
+			changequest 3201,3202;
+			mes "[Tigris上尉]";
+			mes "那麼，我將在這裡等待，所以參加測試。";
+			close;
+		} else if (job_rune_edq == 3) {
+			mes "[Tigris上尉]";
+			mes "現在測試開始了。首先，您將從那個美麗的冰冷女士那裡獲得第一次測試，因此請盡力而為。";
+			next;
+			mes "[Tigris上尉]";
+			mes "測試完成後，與我交談...無論如何，您需要關心與其他人進行的測試。";
+			next;
+			mes "[Tigris上尉]";
+			mes "那麼，我將在這裡等待，所以參加測試。";
+			close;
+		} else if (job_rune_edq > 3 && job_rune_edq < 6) {
+			mes "[Tigris上尉]";
+			mes "嘿，你不是測試嗎？ Lunarea，發生了什麼事？測試都完成了嗎？";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "......";
+			next;
+			mes "她只是搖了搖頭，沒有說任何話，盯著我。她有刺眼的眼睛。";
+			next;
+			mes "[Tigris上尉]";
+			mes "好吧，盧納雷亞。嘿，仔細聽我說。 Lunarea是一個可憐的說話者，安靜，但您不應該忽略她。";
+			next;
+			mes "[Tigris上尉]";
+			mes "即使對我來說...不，我們當中的任何一個讓她感到不適的人都無法處理。";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "......";
+			next;
+			mes "[Tigris上尉]";
+			mes "哇，不要那樣看我。好吧，你知道嗎？有抱負的符文騎士。像她說的那樣回到Lunarea進行測試。那對你有好處。";
+			close;
+		} else if (job_rune_edq == 6) {
+			mes "[Tigris上尉]";
+			mes "嗯，看來您已經通過了Lunarea的測試了嗎？我想我不必為基礎知識進行更多測試。";
+			next;
+			mes "[Tigris上尉]";
+			mes "不可否認，我們的符文騎士有一些差異，但我們不應該忘記劍客的根源。";
+			next;
+			mes "[Tigris上尉]";
+			mes "從現在開始，這將是您想要成為的符文騎士的真正考驗。您需要準備下一次測試。";
+			next;
+			mes "[Tigris上尉]";
+			mes "里諾亞（Renoa），我知道您已經等了很長時間，但是輪到您了。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "確實已經很長時間了，但是Lunarea的測試和我的測試與地球的天空一樣有所不同。我希望你不要只是一個肌肉頭的傻瓜。";
+			next;
+			mes "[Tigris上尉]";
+			mes "哈哈哈。你聽到了嗎？這次並不容易。我希望你能通過我的朋友。";
+			next;
+			mes "[Tigris上尉]";
+			mes "去圖書館室裡的那個火熱的女士，完成下一個測試，然後回來。";
+			set job_rune_edq,7;
+			changequest 3204,3205;
+			close;
+		} else if (job_rune_edq > 6 && job_rune_edq < 16) {
+			mes "[Tigris上尉]";
+			mes "現在，這將是符文騎士的真正考驗。您必須準備參加下一個測試。";
+			next;
+			mes "[Tigris上尉]";
+			mes "里諾亞（Renoa），我知道您已經等了很長時間，但是輪到您了。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "確實已經很長時間了，但是Lunarea的測試和我的測試與地球的天空一樣有所不同。希望您不要只是一個肌肉頭的傻瓜。";
+			next;
+			mes "[Tigris上尉]";
+			mes "哈哈哈。你聽到了嗎？這次並不容易。我希望你能通過我的朋友。";
+			next;
+			mes "[Tigris上尉]";
+			mes "去圖書館室裡的那個火熱的女士，完成下一個測試，然後回來。";
+			close;
+		} else if (job_rune_edq == 16) {
+			mes "[Tigris上尉]";
+			mes "哦，我聽說您通過了Renoa的測試，只有很少有人可以通過。";
+			next;
+			mes "[Tigris上尉]";
+			mes "我聽說參加里諾阿測試時放棄的候選人人數很高。";
+			next;
+			mes "[Tigris上尉]";
+			mes "你必須了解。我認為正是測試準確顯示了測試講師的個性。唔...";
+			next;
+			mes "[Tigris上尉]";
+			mes "現在，只剩下最後一個測試。當您通過此消息時，您將正式成為符文騎士。";
+			next;
+			mes "[Tigris上尉]";
+			mes "從阿森納右側的符文騎士韋爾皮諾（Rune Knight Velpino）進行最終測試。";
+			next;
+			mes "[Tigris上尉]";
+			mes "我不是在開玩笑，我真的很期待您作為符文騎士的新開始。";
+			mes "所以請盡力而為。";
+			set job_rune_edq,17;
+			changequest 3215,3216;
+			close;
+		} else if (job_rune_edq > 16 && job_rune_edq < 22) {
+			mes "[Tigris上尉]";
+			mes "從阿森納右側的符文騎士韋爾皮諾（Rune Knight Velpino）進行最終測試。";
+			next;
+			mes "[Tigris上尉]";
+			mes "我不是在開玩笑，我真的很期待您作為符文騎士的新開始。所以請盡力而為。";
+			close;
+		} else if (job_rune_edq == 22) {
+			mes "[Tigris上尉]";
+			mes "恭喜。現在，您已經通過了所有測試，可以走符文騎士。";
+			next;
+			mes "[Tigris上尉]";
+			mes "我從內心感到高興。我為你感到驕傲。";
+			next;
+			mes "[Tigris上尉]";
+			mes "現在，您可以成為我們周圍的自己，並以我們中的一員感到自豪。";
+			next;
+			mes "[Tigris上尉]";
+			mes "有Lunarea，Renoa和Velpino的評估負責您的測試。";
+			next;
+			mes "[Tigris上尉]";
+			mes "這並不多，但是對於新的符文騎士來說，有一些禮物，他們在測試中獲得了良好的成績。";
+			next;
+			mes "[Tigris上尉]";
+			mes "取決於分數會有所不同，但它們對符文騎士的任何人都有幫助。";
+			next;
+			mes "[Tigris上尉]";
+			mes "最後，作為一個騎士，有幾件事要注意，他在瓦爾哈拉（Valhalla）的一位騎士經歷了工作。";
+			next;
+			callsub L_Warning;
+			mes "[Tigris上尉]";
+			mes "好吧，我的工作已經完成。您想從符文騎士開始新的生活嗎？";
+			next;
+			switch(select("一切準備工作都已完成:我需要更多時間思考。")) {
+			case 1:
+				if (SkillPoint != 0 || checkriding()) {
+					mes "[Tigris上尉]";
+					mes "你不聽嗎？";
+					next;
+					callsub L_Warning;
+					mes "[Tigris上尉]";
+					mes "如果您理解，請做準備並回來。";
+					close;
+				}
+				if (BaseLevel < 99 || JobLevel < 50) {
+					mes "[Tigris上尉]";
+					mes "似乎還不夠嗎？";
+					close;
+				}
+				if (ismounting()) {
+					mes "[Tigris上尉]";
+					mes "請取消安裝安裝，然後再回來。";
+					close;
+				}
+				mes "[Tigris上尉]";
+				mes "我們的主人Beljeve ...和偉大的聖人，Serpeone ...";
+				next;
+				mes "[Tigris上尉]";
+				mes "這個騎士將與我們一起走符文騎士，所以請給您祝福。";
+				next;
+				getitem 5746,1; //Rune_Circlet
+				getitem 2795,1; //Green_Apple_Ring
+				set job_rune_edq,23;
+				completequest 3219;
+				jobchange roclass(eaclass()|EAJL_THIRD);
+				mes "[Tigris上尉]";
+				mes "恭喜。";
+				mes "您現在是光榮的符文騎士。";
+				mes "記住這一天的這一天！";
+				next;
+				mes "[Tigris上尉]";
+				mes "符文米加特斯王國有一份皇家禮物，所有新符文騎士。";
+				next;
+				mes "[Tigris上尉]";
+				mes "給我一秒鐘來拿到皇家禮物，然後再次與我交談。";
+				close;
+			case 2:
+				close;
+			}
+		}
+	}
+	mes "[Tigris上尉]";
+	mes "我不知道你怎麼能到達這裡。但是看來您來到了一個不應該成為的地方。";
+	next;
+	mes "[Tigris上尉]";
+	mes "回到您的屬於您的位置。";
+	close2;
+	warp "gl_knt02",150,55;
+	end;
+L_Warning:
+	mes "[Tigris上尉]";
+	mes "如果您現在穿著任何設備，或者您拿著任何設備。請為您的工作零時刻清空。";
+	next;
+	mes "[Tigris上尉]";
+	mes "與Kafra員工交談以使用存儲空間。";
+	next;
+	mes "[Tigris上尉]";
+	mes "您可能已經知道，如果您要騎Peco Peco，則應該將其遺留在後面。如果您帶來了它，請留下它再來。";
+	next;
+	mes "[Tigris上尉]";
+	mes "還有一件事。如果您還有任何剩餘的技能點，請全部使用並學習技能。如果您有更多的技能點，您將無法更改工作。";
+	next;
+	return;
+}
+
+job3_rune01,90,50,3	script	Rune Knight Lunarea	469,2,2,{
+	if (Class == Job_Rune_Knight || Class == Job_Rune_Knight_T || Class == Job_Baby_Rune_Knight) {
+		mes "她安靜地抬起下巴，輕輕點頭，注意到我。";
+		next;
+		mes "然後片刻之後，她把臉放下來，似乎被其他想法所吸收。";
+		close;
+	}
+	if (BaseJob == Job_Knight) {
+		if (job_rune_edq == 3) {
+			mes "她終於張開嘴，開始說話。";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "5分鐘...當您忍受並擺脫所有人時，您成功了。";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "在這項測試中，蒂格里斯上尉，里諾亞，韋爾皮諾和我將一起訪問。";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "如果您願意，您可以向我們中的一個尋求幫助。但是不要以為我們將永遠提供幫助。";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "由於這是一個測試，因此從我們這裡獲得幫助是您的選擇。無論您是在我們的幫助下還是全部參加考試都沒關係。";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "當您準備去測試現場時，請與我交談。";
+			next;
+			switch(select("現在前往試驗場:給我時間準備。")) {
+			case 1:
+				callsub L_Test,0;
+				close;
+			case 2:
+				close;
+			}
+		} else if (job_rune_edq == 4) {
+			mes "[符文騎士，lunarea]";
+			mes "你失敗了嗎？但是，您可以嘗試的次數沒有限制。";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "如果您想再次參加測試。我可以將您發送到測試字段。";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "5分鐘...當您忍受並擺脫所有人時，您成功了。";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "如果您準備搬到測試領域，請與我交談。";
+			next;
+			switch(select("現在前往測試場:請給我時間準備。")) {
+			case 1:
+				if (checkquest(3220,PLAYTIME) == 1) {
+					mes "[符文騎士，lunarea]";
+					mes "一旦有人進入測試字段，您將無法直接輸入。該測試是一一進行的。";
+					next;
+					mes "[符文騎士，lunarea]";
+					mes "輪到您進入時，您將直接發送到那裡。";
+					close;
+				}
+				callsub L_Test,1;
+				close;
+			case 2:
+				close;
+			}
+		} else if (job_rune_edq == 5) {
+			mes "[符文騎士，lunarea]";
+			mes "您的測試成功了嗎？";
+			next;
+			mes "她顯示出一個幾乎看不見的微笑，看著我。";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "測試的這一部分已經結束。去和蒂格里斯上尉談談。";
+			set job_rune_edq,6;
+			changequest 3203,3204;
+			close;
+		} else if (job_rune_edq > 5) {
+			mes "[符文騎士，lunarea]";
+			mes "測試的這一部分已經結束。去和蒂格里斯上尉談談。";
+			next;
+			mes "[符文騎士，lunarea]";
+			mes "您還需要完成其他測試。我希望你做得好。";
+			close;
+		}
+	}
+	mes "這個膚色蒼白的缺席女性符文騎士似乎不在乎。當然，她似乎對我的存在不感興趣";
+	close;
+L_Test:
+	mes "她點點頭，輕輕伸出手。然後她畫劍並發出信號。";
+	if ($@job_rune_test1 == 0) {
+		if (getarg(0) == 0) {
+			set job_rune_edq,4;
+			changequest 3202,3203;
+			setquest 3220; // ?
+		} else if (checkquest(3220) > -1) {
+			erasequest 3220;
+			setquest 3220;
+		}
+		set $@job_rune_test1,1;
+		close2;
+		warp "job3_rune02",38,40;
+		end;
+	}
+	// Custom translation
+	next;
+	mes "但是當她看著說話時，她的表情突然改變了。";
+	next;
+	mes "[符文騎士，lunarea]";
+	mes "現在...測試室目前已被佔用...";
+	next;
+	mes "[符文騎士，lunarea]";
+	mes "您必須等待...法規認為測試必須一一進行。";
+	next;
+	mes "[符文騎士，lunarea]";
+	mes "只需等待5分鐘，應該輪到您了。";
+	close;
+}
+
+job3_rune01,55,50,3	script	Rune Knight, Renoa	469,2,2,{
+	mes "[符文騎士，里諾亞]";
+	if (Class == Job_Rune_Knight || Class == Job_Rune_Knight_T || Class == Job_Baby_Rune_Knight) {
+		mes "祝賀成為我們中的一員。少年符文騎士，"+strcharinfo(0)+".";
+		next;
+		mes "[符文騎士，里諾亞]";
+		mes "很快，您將看到我們需要清楚的方式。";
+		next;
+		mes "[符文騎士，里諾亞]";
+		mes "在此之前，我會在這裡發現更多像您一樣的候選人。";
+		close;
+	}
+	if (BaseJob == Job_Knight) {
+		if (job_rune_edq < 7) {
+			mes "您是想成為符文騎士的人嗎？今天有很多。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "太糟糕了，沒有很多候選人能參加我的考試，所以我只是休息一下。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "如果您要參加符文騎士測試，我希望您能盡力而為。這不像Lunarea的測試那樣容易嗎？";
+			close;
+		} else if (job_rune_edq == 7) {
+			mes "最後！輪到我了嗎？我太高興了。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "有很多候選人未能通過Lunarea的考驗，我放棄了計數。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "我是里諾亞。我負責符文騎士候選人的符文和魔術的教學和測試。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "感謝您到目前為止參加考試的所有麻煩。好吧，無論如何。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "好吧，首先，我給你一個作業。讓我們從學習開始。去圖書館學習這些書。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "umm， ^0000ffrunes和符文騎士 ^000000， ^0000ff runes ^000000的原理， ^0000ff符文的製作和使用 ^000000。從這3 ...開始";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "徹底閱讀本書然後回來。如果您是那種不喜歡閱讀和學習的人，那麼您很容易作為符文騎士生活。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "不用擔心，您不會被要求與Geffen或Juno的魔術師擁有相同的知識。但是你也不能成為白痴。";
+			set job_rune_edq,8;
+			changequest 3205,3206;
+			close;
+		} else if (job_rune_edq > 7 && job_rune_edq < 11) {
+			mes "好吧，首先，我給你一個作業。讓我們從學習開始。去圖書館學習這些書。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "umm， ^0000ffrunes和符文騎士 ^000000， ^0000ff runes ^000000的原理， ^0000ff符文的製作和使用 ^000000。從這3 ...開始";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "徹底閱讀本書然後回來。如果您是那種不喜歡閱讀和學習的人，那麼您很容易作為符文騎士生活。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "不用擔心，您不會被要求與Geffen或Juno的魔術師擁有相同的知識。但是你也不能成為白痴。";
+			close;
+		} else if (job_rune_edq == 11) {
+			mes "您閱讀了圖書館的所有書籍嗎？閱讀並不容易，但是如果您確定是符文騎士，則必須擁有這種基本知識。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "基本上，如果沒有訓練來汲取自然和元素的力量，就無法使用魔術的力量。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "因此，諸如巫師和聖人之類的工作已經出來，魔術成為了他們自己的神聖領域。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "符文騎士團的領袖貝爾杰夫（Beljeve）甚至在撒旦摩洛哥（Satan Morocc）復活時就與仙女保持聯繫。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "我從魔術學者那裡聽到了一個關於可以實質性魔術本質的技術的故事。我開始了一項研究，通過獲得幫助，將其實質性地化為符文。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "我們的符文騎士的誕生是從該研究的結果出生的，這使得可以使用符文練習劍的力量和魔術的力量。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "您看起來不明白為什麼我要重複本書中已經寫過的故事的教學。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "因此，要進行第二次測試，您需要參觀在Ash-Vacuum直接幫助符文騎士的誕生的Laphine Magical學者。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "找到一直在研究和幫助Ash-Vacuum營地的符文騎士的鼠尾草，幫助符文騎士。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "聖人已經與我們聯繫了很長時間，因此您不必擔心了解Serpeone的語言。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "如果您準備好了，我將指導您直接將您移至Serpeone的經線。見她並從她那裡得到指示。";
+			set job_rune_edq_book,0;
+			set job_rune_edq,12;
+			changequest 3206,3207;
+			close;
+		} else if (job_rune_edq > 11 && job_rune_edq < 14) {
+			mes "如果您準備好了好，我將打開通往聖人的道路，在Ash-Vacuum的Midgard Post中的Serpeone。你準備了嗎？";
+			next;
+			switch(select("是的，我準備好了:還沒有。")) {
+			case 1:
+				mes "[符文騎士，里諾亞]";
+				mes "好的。然後，我現在寄給您。但是，我需要告訴你一件事。";
+				next;
+				mes "[符文騎士，里諾亞]";
+				mes "您將被送到灰燼。派遣到Midgard郵政的人們是經過認證的冒險家和官員。";
+				next;
+				mes "[符文騎士，里諾亞]";
+				mes "Beljeve與其他聯盟國家達成了一項協議，可以保證我們的符文騎士的自由行為，但...";
+				next;
+				mes "[符文騎士，里諾亞]";
+				mes "如果您想自由地通過Ash-Vacuum，則必須經過正常的路線，該路線正在獲得Midgard Alliance的資格。它與我們無關。";
+				next;
+				mes "[符文騎士，里諾亞]";
+				mes "該協議只允許我們將候選人派往Midgard營地，而無處可去。";
+				next;
+				mes "[符文騎士，里諾亞]";
+				mes "祝你好運。";
+				close2;
+				warp "mid_camp",235,250;
+				end;
+			case 2:
+				mes "[符文騎士，里諾亞]";
+				mes "如果您準備好再次與我交談。我隨時自由。";
+				close;
+			}
+		} else if (job_rune_edq == 14) {
+			mes "嗯，你回來了嗎？在灰vacuum中怎麼樣？";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "好吧，一個有力量的人一定已經在那裡沒有嗎？";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "現在是時候參加有關符文的測試了。我知道您經歷了一個非常複雜的過程。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "我將為您提供一個測試，使您可以直接處理符文。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "在此測試中，您將自己製作符文石，也將用於您的上一次測試。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "如果您還記得以前在庫中閱讀的內容，那麼您就可以在這裡生產符文石，而無需我的解釋。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "如果您成功製作符文石，它將自動成為成為符文騎士時您將自己使用的符文石，因此請盡力而為。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "您需要製作的符文總數為20。";
+			mes "記住這很好。";
+			set job_rune_edq,15;
+			changequest 3213,3214;
+			close;
+		} else if (job_rune_edq == 15) {
+			mes "在此測試中，您將自己製作符文石，將用於您的上一次測試。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "如果您還記得以前在圖書館中讀過的書，那麼您就可以在這裡生產符文石，而無需我的解釋。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "如果您成功製作符文石，它將成為您成功時將自己使用的符文石，並將其交付給Tigris上尉...所以請努力。";
+			next;
+			mes "[符文騎士，里諾亞]";
+			mes "您需要製作的符文石的數量正好20。請記住。";
+			next;
+			switch(select("檢查已製作的符文數量？ :我已經製作了所有 20 顆符文石。")) {
+			case 1:
+				mes "[符文騎士，里諾亞]";
+				mes "現在製作的符文石的數量是" + job_rune_edq2 + ".";
+				close;
+			case 2:
+				if (job_rune_edq2 < 20) {
+					mes "[符文騎士，里諾亞]";
+					mes "嘿！我想我告訴你至少要做20個。";
+					close;
+				}
+				if (job_rune_edq2 == 20) {
+					mes "[符文騎士，里諾亞]";
+					mes "您剛剛帶來了適量的數量。我將所有成品的符文石交給蒂格里斯上尉。";
+					next;
+				} else {
+					mes "[符文騎士，里諾亞]";
+					mes "哇！這是什麼？您已經完成了20多個。目前還可以，但請記住下次遵循指示。";
+					mes "我將所有製成的符文石交給蒂格里斯上尉。";
+					next;
+				}
+				mes "[符文騎士，里諾亞]";
+				mes "因為有一個測試等待您使用這些符文石。";
+				next;
+				mes "[符文騎士，里諾亞]";
+				mes "在這裡，你已經過去了。回到底格里船長，完成下一個測試。";
+				next;
+				mes "[符文騎士，里諾亞]";
+				mes "哈!考慮到我的測試有多困難，您做得很好。如果您很緊張，現在可以放鬆。";
+				set job_rune_edq,16;
+				if (job_rune_edq2 == 20)
+					changequest 3214,3215;
+				close;
+			}
+		}
+		mes "成為驕傲的符文騎士。";
+		close;
+	}
+	mes "怎麼...你怎麼進這裡的？船長，我們有間諜！";
+	next;
+	mes "[Tigris上尉]";
+	mes "啊？你在說什麼，里諾亞？不要以這種方式說話！你讓我們聽起來像罪犯。";
+	next;
+	mes "[符文騎士，里諾亞]";
+	mes "好吧，這裡有一個身份不明的人。";
+	next;
+	mes "[Tigris上尉]";
+	mes "啊...嘿，朋友，過來，讓我們聊一分鐘...";
+	close;
+}
+
+job3_rune01,58,51,1	script	Rune Furnace	844,{
+	if (job_rune_edq < 15) {
+		mes "[符文騎士Renoa]";
+		mes "您不想觸摸那件事。相信我，我不是在開玩笑。";
+		close;
+	} else if (job_rune_edq == 15) {
+		mes "我可以在里諾阿後面的巨大的符文石雕像下看到一個洞。顯然，這是我在書中讀過的量大符文供暖爐。";
+		next;
+		if(select("使用符文加熱爐:停止。") == 2) close;
+		switch(rand(24)) {
+			case 0: setarray .@str$[0],"Ehwaz","This red hot spiral is..."; break;
+			case 1: setarray .@str$[0],"Osilia","The rune flashing with this violet oblique line shape is..."; break;
+			case 2: setarray .@str$[0],"Mannaz","This live emerald diamond rune is..."; break;
+			case 3: setarray .@str$[0],"Ansuz","The rune flashing with an emerald round shape is..."; break;
+			case 4: setarray .@str$[0],"Hagalas","The rune flashing with this sky-blue star shape is..."; break;
+			case 5: setarray .@str$[0],"Kano","The rune flashing with a red diamond shape is..."; break;
+			case 6: setarray .@str$[0],"Rhydo","The rune flashing with this sky-blue oblique line shape is..."; break;
+			case 7: setarray .@str$[0],"Turisus","The rune flashing with this yellow round shape is..."; break;
+			case 8: setarray .@str$[0],"Dagaz","The rune flashing with this emerald spiral line shape is..."; break;
+			case 9: setarray .@str$[0],"Sowilo","The rune flashing with this sky-blue fan-shape is..."; break;
+			case 10: setarray .@str$[0],"Laguz","The rune flashing with this yellow diamond shape is..."; break;
+			case 11: setarray .@str$[0],"Isia","The rune flashing with this violet spiral line is..."; break;
+			case 12: setarray .@str$[0],"Pertz","The rune flashing with this silver spiral shape is..."; break;
+			case 13: setarray .@str$[0],"Verkana","The rune flashing with this gold star shape is..."; break;
+			case 14: setarray .@str$[0],"Gebo","The rune flashing with this yellow cone shape is..."; break;
+			case 15: setarray .@str$[0],"Algiz","The rune flashing with this emerald oblique line is..."; break;
+			case 16: setarray .@str$[0],"Arwez","The rune flashing with this gray diamond is..."; break;
+			case 17: setarray .@str$[0],"Teiwaz","The rune flashing with this gold sphere is..."; break;
+			case 18: setarray .@str$[0],"Wunjo","The rune flashing with this emerald star shape is..."; break;
+			case 19: setarray .@str$[0],"Jera","The rune flashing with this yellow sphere is..."; break;
+			case 20: setarray .@str$[0],"Nosiege","The rune flashing with this yellow fan-shape is..."; break;
+			case 21: setarray .@str$[0],"Ingz","The rune flashing with this violet diamond shape is..."; break;
+			case 22: setarray .@str$[0],"Fehu","The rune flashing with this silver round shape is..."; break;
+			case 23: setarray .@str$[0],"Urj","The rune flashing with this violet spiral is..."; break;
+		}
+		progressbar "ffff00",5;
+		mes "符文的魔力和折騰的魔力在變形的同時。";
+		next;
+		mes .@str$[1];
+		next;
+		input .@inputstr$;
+		if (.@inputstr$ == .@str$[0]) {
+			mes "[符文騎士Renoa]";
+			mes "哇！這很棒。我頭上的符文石的圖像和建模的符文石匹配完美。做得好。";
+			next;
+			mes "[符文騎士Renoa]";
+			mes "1"+.@str$[0]+" rune was created normally.";
+			set job_rune_edq2, job_rune_edq2+1;
+			close;
+		}
+		if (rand(1,(6 + job_rune_edq3)) == 3) {
+			mes "[符文騎士Renoa]";
+			mes "我很幸運。我頭上的符文石的圖像和模型的符文石不匹配，但通常製成。這種情況很少見。";
+			next;
+			mes "[符文騎士Renoa]";
+			mes "1"+.@str$[0]+" rune was created normally.";
+			set job_rune_edq2, job_rune_edq2+1;
+			close;
+		}
+		mes "[符文騎士Renoa]";
+		mes "這是自然的結果。符文石和建模的符文石的圖像不匹配，因此成功率降低了。";
+		next;
+		mes "[符文騎士Renoa]";
+		mes "完善符文石已經失敗了...請重試。";
+		set job_rune_edq3, job_rune_edq3+1;
+		close;
+	}
+	mes "[符文騎士Renoa]";
+	mes "您不想觸摸那件事。相信我，我不是在開玩笑。";
+	close;
+}
+
+job3_rune01,40,54,1	script	Runes and Rune Knights	844,{
+	if (job_rune_edq < 8) {
+		mes "[符文騎士Renoa]";
+		mes "除了未經許可在這個地方觸摸東西。您能理解這本書的內容嗎？";
+		next;
+		mes "[Tigris上尉]";
+		mes "嘿，里諾亞，在那個騎士上輕鬆。您也在那裡，最好未經許可在這裡觸摸這裡。";
+		close;
+	}
+	while(1) {
+		switch(select("符文騎士的誕生:符文與魔法能量:停止閱讀")) {
+		case 1:
+			set .@book1,1;
+			mes "符文騎士是進化的劍客的聚會，他們達到了劍與魔術的和諧。";
+			next;
+			mes "傳說中的劍客貝爾杰夫（Beljeve）實現了這一目標，他被稱為劍術大師和可配置支出的創始人。";
+			next;
+			mes "符文騎士使用符文石作為魔法力量的媒介，而不是使用直接在體內製造的魔法能量。";
+			next;
+			mes "魔術能力只有以前才能通過長時間的研究來利用自己體內的魔術能力的人使用";
+			next;
+			mes "但是，對於符文魔術的直接研究，破壞了人類正常概念的魔法力量現在正在進行中。";
+			next;
+			mes "眾所周知，劍大師貝爾杰夫（Beljeve）感受到了他的力量的極限，因此他研究了克服凡人的身體局限性的道路。";
+			next;
+			mes "我們猜想他已經在發現尺寸裂谷之前已經與拉芬部落保持聯繫，以達到灰燼。";
+			next;
+			mes "腰葉族部落是來自灰果的仙女，與符文騎士的誕生有著密切的關係。";
+			next;
+			mes "現在，對於那些通常不適合使用魔術能力來攜帶一種可以攜帶正常凡人以前無法使用的魔法的媒介的人來說，有可能。";
+			next;
+			mes "研究這些技術的結果是與劍的物理力量和諧相處的符文石。";
+			next;
+			mes "貝爾杰夫（Beljeve）的門徒開始學習將劍與符文石（Rune Stones）浸入劍的道路上，被稱為符文騎士（Rune Knights）。";
+			next;
+			break;
+		case 2:
+			set .@book2,1;
+			mes "一種稱為符文的珠寶是一種媒介，其中包含無形的存在，魔力和本質可以直接使用。";
+			next;
+			mes "Laphine Sage，Serpeone和Rune Knights Beljeve的創始人共同研究了符文，他們的研究結果直到最近才成為世界所知。";
+			next;
+			mes "這是無限的替代能源，對它們的研究仍在進行中。";
+			next;
+			mes "與人類不同，灰vacuum中的生物通過將其握在體內來保留魔法能量。";
+			next;
+			mes "Beljeve和Serpeone將這種神奇的力量轉移到符文中的發現並與符文騎士分享了。";
+			next;
+			break;
+		case 3:
+			if (.@book1 && .@book2 && job_rune_edq < 11 && (job_rune_edq_book & 1) == 0) {
+				set job_rune_edq_book, job_rune_edq_book | 1;
+				set job_rune_edq, job_rune_edq+1;
+			}
+			close;
+		}
+	}
+}
+
+job3_rune01,43,44,1	script	The Principles of Runes	844,{
+	if (job_rune_edq < 8) {
+		mes "[符文騎士Renoa]";
+		mes "除了未經許可在這個地方觸摸東西。您能理解這本書的內容嗎？";
+		next;
+		mes "[Tigris上尉]";
+		mes "嘿，里諾亞，在那個騎士上輕鬆。您也在那裡，最好未經許可在這裡觸摸這裡。";
+		close;
+	}
+	while(1) {
+		switch(select("符文的原理使用:符文的種類:停止閱讀")) {
+		case 1:
+			set .@book1,1;
+			mes "符文是自古以來在Midgard大陸上使用的一種符號。到目前為止，它僅由神秘圈使用。";
+			next;
+			mes "符文被用作符號系統，但是，通過口服的故事，它被眾所周知用於算命或用來吸收人類的次要意識。";
+			next;
+			mes "符文具有自己的系統和類型，可以根據其安排方式汲取各種力量。但是目前無法通過已知手段來衡量它們的功率水平。";
+			next;
+			mes "幸運的是，符文騎士發現了他們用於積極手段的用途。符文尚未用於黑暗魔法，但是如果錯誤的手肯定會濫用其力量。";
+			next;
+			break;
+		case 2:
+			set .@book2,1;
+			mes "符文是由總共25個小石頭創建的，它們非常脆弱，對物理衝擊非常脆弱。因此，他們在處理時需要特別注意。";
+			next;
+			mes "這25塊石頭具有不同的含義，其中14個時，當反定位的功率和含義與原始作品完全不同，因此研究特殊方面至關重要。";
+			next;
+			mes "其他11個符文具有一致的功率，不受任何位置的影響，因此，如果您不掌握所有11個普通符文和14個反符文，則無法汲取所有完整的功率。";
+			next;
+			mes "在11個普通符文中，空白符文是一個例外。";
+			next;
+			mes "25個符文石的名稱如下：";
+			next;
+			mes "刪除:Rhydo、Turisus、Aso Isia:Pert、今天的 GeboIoes ，Algiz，The Serpents Service、Funiness 冬季猶太人 Jera、Jera、Jer Night-Ingrael-Ingsoys";
+			next;
+			break;
+		case 3:
+			if (.@book1 && .@book2 && job_rune_edq < 11 && (job_rune_edq_book & 2) == 0) {
+				set job_rune_edq_book, job_rune_edq_book | 2;
+				set job_rune_edq, job_rune_edq+1;
+			}
+			close;
+		}
+	}
+}
+
+job3_rune01,50,36,1	script	Runes, Make & Use	844,{
+	if (job_rune_edq < 8) {
+		mes "[符文騎士Renoa]";
+		mes "除了未經許可在這個地方觸摸東西。您能理解這本書的內容嗎？";
+		next;
+		mes "[Tigris上尉]";
+		mes "嘿，里諾亞，在那個騎士上輕鬆。您也在那裡，最好未經許可在這裡觸摸這裡。";
+		close;
+	}
+	while(1) {
+		switch(select("符石製作:符石能力詳情:停止閱讀")) {
+		case 1:
+			set .@book1,1;
+			mes "符文石的製作是通過一種稱為符文精通的技能來實現的，當一個人成為符文騎士時，它就可以學到。";
+			next;
+			mes "符文的掌握就像是符文騎士的標記的代碼。";
+			next;
+			mes "普通人也可以學習這項技能，它需要自己的機器稱為符文爐。";
+			next;
+			mes "當您用符文爐製作符文石時，符文的類型由含有魔法的能量確定，無法更改。";
+			next;
+			mes "通過使用符文製作符文石時，可以將其製成所需的符文屬性，但被歸類為符文騎士自己的能力。";
+			next;
+			mes "當您操作符文爐時，人體的神奇能量就會集中在它上，並且可以使變成符文石。";
+			next;
+			break;
+		case 2:
+			set .@book2,1;
+			switch(select("第一章:第二章:第三章:第四章:停止閱讀")) {
+			case 1:
+				mes "EHWAZ-這意味著增強運氣和積極力量。它以符文爐中的紅色螺旋形式塑造源。";
+				next;
+				mes "Osilia-此符文是一種同等的交換，這意味著您失去了一個，也意味著需要成本的力量。這被形狀成符文爐中紫羅蘭色線的形式。";
+				next;
+				mes "Mannaz-符文意味著希望和新的起點，也意味著可以扭轉絕望情況的積極力量。這將變成符文爐中的翡翠鑽石的形式。";
+				next;
+				mes "Ansuz-此符文意味著準備或安排以及可以克服未來未來的不安的力量。這被形狀成符文爐中的祖母綠圓形的形式。";
+				next;
+				mes "哈加拉斯 - 符文意味著自由和抵制約束的力量。這被形狀成符文爐中天藍色的恆星形式。";
+				next;
+				mes "卡諾 - 這意味著火焰和激情，以及一切都結束了一切的力量。它的來源被形狀成符文爐中紅色鑽石的形式。";
+				next;
+				break;
+			case 2:
+				mes "Rhydo-此符文是指結合和重組以及完成的力量。這被形狀在符文爐中的天藍色斜線中。";
+				next;
+				mes "TOWISUS-符文意味著邊界和限制的力量。這被形狀成符文爐中的黃色圓。";
+				next;
+				mes "達加茲（Dagaz） - 這意味著持久逆境的才能和力量。這被形狀成符文爐中的翡翠螺旋。";
+				next;
+				mes "Sowilo-這個符文意味著勝利，成功以及安排和停止的力量。這是符文爐中天藍色風扇形狀的形式。";
+				next;
+				mes "拉古斯 - 這意味著不確定性和保護內部的力量。這被形狀成符文爐中的黃色鑽石形式。";
+				next;
+				mes "ISIA-這意味著停止一切的力量。這將變成符文爐中的紫羅蘭色螺旋。";
+				next;
+				break;
+			case 3:
+				mes "pertz-這個符文意味著啟示和機會的力量。這被形狀成符文爐中的銀螺旋形式。";
+				next;
+				mes "Verkana-這意味著豐富，出生以及防禦和保護的力量。這被形狀成符文爐中金色恆星的形式。";
+				next;
+				mes "GEBO-符文意味著合作和和諧的力量。這被形狀成符文爐中的黃色錐體的形式。";
+				next;
+				mes "Algiz-此符文意味著機會和挑戰的力量。這被形狀成符文爐中的翡翠傾斜線的形式。";
+				next;
+				mes "Arwez-此符文意味著變化，抽搐和運動的力量。這被形狀成符文爐中的灰色鑽石的形式。";
+				next;
+				mes "Teiwaz-此符文意味著完美的勝利和絕對解決方案的力量。這被形狀成符文爐中的金圓的形式。";
+				next;
+				break;
+			case 4:
+				mes "Wunjo-這意味著智慧和智慧的力量。這被形狀成符文爐中的翡翠之星的形式。";
+				next;
+				mes "Jera-這意味著舒適和休息的力量。這將變成符文爐中黃色圓形的形式。";
+				next;
+				mes "Nosiege-這意味著弱點和衰減的力量。這是符文爐中黃色風扇形狀的形式。";
+				next;
+				mes "INGZ-此符文意味著破壞和分離的力量。這被形狀成符文爐中的紫色鑽石的形式。";
+				next;
+				mes "fehu-這種符文意味著成就和物質化的力量。這被形狀成符文爐中的銀圓的形式。";
+				next;
+				mes "urj-這意味著命運和限制的力量。這被形狀成符文爐中紫羅蘭色的螺旋線的形式。";
+				next;
+				break;
+			case 5:
+				close;
+			}
+			break;
+		case 3:
+			if (.@book1 && .@book2 && job_rune_edq < 11 && (job_rune_edq_book & 4) == 0) {
+				set job_rune_edq_book, job_rune_edq_book | 4;
+				set job_rune_edq, job_rune_edq+1;
+			}
+			close;
+		}
+	}
+}
+
+mid_camp,238,250,3	script	Rune Knight Sage Guard	468,2,2,{
+	mes "[符文騎士鼠尾草護衛]";
+	if (Class == Job_Rune_Knight || Class == Job_Rune_Knight_T || Class == Job_Baby_Rune_Knight) {
+		mes "鼠尾草Serpeone是自符文騎士開始以來與我們在一起的人。";
+		next;
+		mes "[符文騎士鼠尾草護衛]";
+		mes "作為符文騎士，我為在她旁邊服務而感到自豪。";
+		close;
+	}
+	if (BaseJob == Job_Knight) {
+		if (job_rune_edq < 11) {
+			mes "您可能正在走劍的道路，但您還不是符文騎士。如果您知道我的意思，請不要在這裡徘徊太多。";
+			close;
+		}
+		mes "Splendide是Laphine的土地。我們通過符文騎士與探險隊之間的協議提供便利。";
+		next;
+		mes "[符文騎士鼠尾草護衛]";
+		mes "我們的經紀人只為參加符文騎士工作變更測試的受訓者開闢了輝煌的道路。";
+		next;
+		mes "[符文騎士鼠尾草護衛]";
+		mes "但是，當您成為符文騎士時，您需要確保加入探險隊，以充分探索灰燼。";
+		close;
+	}
+	mes "在這個男人周圍閒逛對你不會有好處。繼續前進。";
+	close;
+}
+
+mid_camp,13,138,3	script	Dispatched Rune Knight#1	83,2,2,{
+	mes "[派遣符文騎士]";
+	if (Class == Job_Rune_Knight || Class == Job_Rune_Knight_T || Class == Job_Baby_Rune_Knight) {
+		mes "感謝您的工作。我們將繼續為符文騎士測試人員的任務。";
+		close;
+	}
+	if (BaseJob == Job_Knight && job_rune_edq > 10) {
+		mes "我一直在等你符文騎士候選人。我正在幫助候選人為Serpeone女士提供幫助。";
+		next;
+		mes "[派遣符文騎士]";
+		if (strnpcinfo(0) == "Dispatched Rune Knight#1") {
+			mes "您想去出色的領域嗎？";
+			next;
+			if(select("移至 Splendide 字段:取消。") == 1)
+				warp "spl_fild01",355,325;
+			close;
+		} else if (strnpcinfo(0) == "Dispatched Rune Knight#2") {
+			mes "您想回到探險隊的職位嗎？";
+			next;
+			if(select("是的，請:還沒有。") == 1)
+				warp "mid_camp",50,153;
+			close;
+		}
+		close;
+	}
+	mes "噓...我們的使命不是向公眾揭示的東西。請繼續前進。";
+	close;
+}
+spl_fild01,361,327,3	duplicate(Dispatched Rune Knight#1)	Dispatched Rune Knight#2	83,2,2
+
+spl_fild02,13,241,0	script	#Barricade1	139,10,10,{
+	end;
+OnTouch:
+	if (job_rune_edq > 0 && job_rune_edq < 23) {
+		mes "- 鼠尾草serpeone的耳語被我想到了。 -";
+		next;
+		mes "[賢者塞佩奧內]";
+		mes "在您成為光榮的符文騎士之前，我無法控制Midgard的力量。";
+		next;
+		mes "[賢者塞佩奧內]";
+		mes "請理解這一點，並致力於此測試。";
+		close2;
+		warp "spl_fild02",25,245;
+		end;
+	}
+	end;
+}
+
+mid_camp,235,250,3	script	Sage Serpeone	435,2,2,{
+	mes "[賢者塞佩奧內]";
+	if (Class == Job_Rune_Knight || Class == Job_Rune_Knight_T || Class == Job_Baby_Rune_Knight) {
+		mes "最後，您是一個光榮的符文騎士。我很高興為您提供幫助。";
+		next;
+		mes "[賢者塞佩奧內]";
+		mes "符文的力量並不完美，還需要進行更多的研究才能使其完全安全。這取決於我和其他像您這樣的符文騎士，以確保繼續進行這項研究。";
+		next;
+		mes "[賢者塞佩奧內]";
+		mes "請致力於符文，希望您的生活會被它照亮。";
+		close;
+	}
+	if (BaseJob == Job_Knight) {
+		if (job_rune_edq < 12) {
+			mes "我的laphine在你的人民的基礎上就在這裡，這是令人驚訝的。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "自從尺寸裂開之前，我們中的一些人一直在特殊情況下與人類接觸。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "多年來，我已經與人類有通信了。這是出於共同利益。無論如何，這就是我學習您的語言的方式。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "也許需要有一台可以翻譯laphine語言的機器，以使人類更容易理解我們。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "不僅如此...我無法告訴你更多。我不能粗心地說話，因為我在這里為我的人說話，而且我正在特殊的通行證中被允許進入您的營地。";
+			close;
+		} else if (job_rune_edq == 12) {
+			mes "歡迎，您是參加符文騎士的職業訓練測試的人。我是蛇形。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "到目前為止，您遇到的所有符文騎士都是我和Beljeve教的門徒。現在，您正在加入他們。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "我認為您已經聽過Renoa的基本解釋和指示。現在看來，輪到我幫助您了。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "符文騎士使用的神奇力量在技術上與人類世界中的神奇力量不同。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "對了這個地方...我們稱為Ash-Vacuum的領域...這是由";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "這個地方的生物一直在保留我們體內的魔力，與人類世界中的生物不同。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "符文石的力量是將我們體內的神奇力量塑造成符文的方式，而符文是我們身體作為一種媒介而發生的。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "因此，要使用符文石，您需要直接了解另一個領域的生物。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "但是，對於您來說，從這片土地上的生物中提取神奇的能量必須太多了。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "現在，我將在您的身體上施放一個魔法咒語，以便您可以從其他生物中收集魔法能量。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "暫時，您將能夠從人類世界中的邪惡生物中提取魔力。當然，您將無法直接使用能量...";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "如果您通過擺脫人類世界中的邪惡生物來儲存能量，我將其轉換為可以使用的能量。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "即使死後，他們仍然保留的惡性靈魂是神奇力量的重要來源。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "請擺脫 ^0000ff10 dullahan ^000000， ^0000FF10偽裝 ^000000， ^0000FF10 QUVE ^000000， ^0000FF10 Heirozoist ^000000並收集他們的能量。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "我事先告訴您，但我沒有測試或判斷您的資格。符文騎士將成為法官。";
+			next;
+			mes "[賢者塞佩奧內]";
+			mes "如果您有任何問題或任何疑問，請與我交談。";
+			set job_rune_edq,13;
+			changequest 3207,3208;
+			setquest 3209;
+			setquest 3210;
+			setquest 3211;
+			setquest 3212;
+			close;
+		} else if (job_rune_edq == 13) {
+			mes "您正在收集足夠的神奇能量嗎？還是您有任何疑問？";
+			next;
+			switch(select("我已經收集了足夠的能量。 :到集合地點。 :停止談話。")) {
+			case 1:
+				mes "[賢者塞佩奧內]";
+				mes "是嗎？然後讓我們檢查一下。";
+				next;
+				if (checkquest(3209,HUNTING) == 2 && checkquest(3210,HUNTING) == 2 && checkquest(3211,HUNTING) == 2 && checkquest(3212,HUNTING) == 2) {
+					mes "[賢者塞佩奧內]";
+					mes "嗯，這很棒。您體內積累了足夠多的活體魔法能量。";
+					next;
+					mes "[賢者塞佩奧內]";
+					mes "符文騎士·里諾阿（Rune Knight Renoa）將告訴您使用符文石的方式。";
+					next;
+					mes "[賢者塞佩奧內]";
+					mes "現在，我認為我的角色已經結束。希望您能成為光榮的符文騎士。";
+					next;
+					mes "[賢者塞佩奧內]";
+					mes "如果您在這裡有任何業務，我將把您送到符文騎士聚會場所。如果您準備好了，請告訴我。";
+					set job_rune_edq,14;
+					changequest 3208,3213;
+					completequest 3209;
+					completequest 3210;
+					completequest 3211;
+					completequest 3212;
+					close;
+				}
+				mes "[賢者塞佩奧內]";
+				mes "您還沒有收集足夠的神奇能量。";
+				next;
+				mes "[賢者塞佩奧內]";
+				mes "請付出自己的能力，通過派遣這些怪物來收集足夠的能量。";
+				close;
+			case 2:
+				mes "[賢者塞佩奧內]";
+				mes "您想回到聚會場所嗎？如果需要，我會立即將您送回那裡。但是要繼續測試，您需要再次見到我。";
+				next;
+				mes "[賢者塞佩奧內]";
+				mes "您想回到符文騎士聚會場所嗎？";
+				next;
+				if(select("我想回去:我想取消。") == 1)
+					warp "job3_rune01",80,65;
+				close;
+			case 3:
+				close;
+			}
+		} else if (job_rune_edq == 14) {
+			mes "您準備好回到符文騎士聚會場所了嗎？";
+			next;
+			if(select("我現在想回去:我還沒準備好。") == 1)
+				warp "job3_rune01",80,65;
+			close;
+		}
+		mes "準備工作進展順利嗎？";
+		next;
+		mes "[賢者塞佩奧內]";
+		mes "您現在不處於錯誤狀態嗎？";
+		next;
+		mes "[賢者塞佩奧內]";
+		mes "然後，我將把您送到應該去的符文騎士聚會場所。";
+		next;
+		if(select("我現在就回去:我會留下來。") == 1)
+			warp "job3_rune01",80,65;
+		close;
+	}
+	mes "我的laphine在你的人民的基礎上就在這裡，這是令人驚訝的。";
+	next;
+	mes "[賢者塞佩奧內]";
+	mes "自從尺寸裂開之前，我們中的一些人一直在特殊情況下與人類接觸。";
+	next;
+	mes "[賢者塞佩奧內]";
+	mes "多年來，我已經與人類有通信了。這是出於共同利益。無論如何，這就是我學習您的語言的方式。";
+	next;
+	mes "[賢者塞佩奧內]";
+	mes "也許需要有一台可以翻譯laphine語言的機器，以使人類更容易理解我們。";
+	next;
+	mes "[賢者塞佩奧內]";
+	mes "不僅如此...我無法告訴你更多。我不能粗心地說話，因為我在這里為我的人說話，而且我正在特殊的通行證中被允許進入您的營地。";
+	close;
+}
+
+job3_rune01,114,50,3	script	Rune Knight Velpino	468,{
+	if (Class == Job_Rune_Knight || Class == Job_Rune_Knight_T || Class == Job_Baby_Rune_Knight) {
+		mes "[符文騎士Velpino]";
+		mes "你仍然聞起來像果了。為符文騎士帶來榮譽並提高您的力量...";
+		close;
+	}
+	if (BaseJob == Job_Knight) {
+		if (job_rune_edq < 17) {
+			mes "符文騎士從頭到腳都穿著黑色的騎士感到非常寒冷。";
+			next;
+			mes "為什麼所有的符文騎士都吹牛或不開采和好鬥？";
+			next;
+			mes "[Tigris上尉]";
+			mes "嘿...我呢？我不是那樣！";
+			close;
+		} else if (job_rune_edq == 17) {
+			mes "[符文騎士Velpino]";
+			mes "我認為候選人今天不會這樣做...";
+			next;
+			mes "[符文騎士Velpino]";
+			mes "恭喜！您正在接受長期為期的最終測試...我認為您現在已經掌握了基礎知識。";
+			next;
+			mes "[符文騎士Velpino]";
+			mes "最終測試相對簡單。當您擺脫這個鏡頭Heim中的所有神奇怪物時，一切都結束了...";
+			next;
+			mes "[符文騎士Velpino]";
+			mes "唯一的條件是，您必須使用前測試中製作的符文石來擺脫這些怪物。";
+			next;
+			mes "[符文騎士Velpino]";
+			mes "對於此測試，只能配備單手武器，盾牌或雙手武器。";
+			next;
+			mes "[符文騎士Velpino]";
+			mes "您可以使用的唯一一套武器應該在400的重量限制之內。要提供的符文石是30只符合攻擊的符文石和30只僅防禦的符文石。";
+			next;
+			mes "[符文騎士Velpino]";
+			mes "要使用這些符文，我將在您身上施放一個特殊的Buff咒語。";
+			next;
+			mes "[符文騎士Velpino]";
+			mes "神奇的怪物是Glast Heim的三種魔術怪物，您可能已經知道了……這不是一場輕鬆的戰鬥，但是如果您只是經歷了最後的痛苦，您就會走符文騎士的道路。";
+			next;
+			mes "[符文騎士Velpino]";
+			mes "為了幫助準備工作，我們通過僱用Kafra員工，特別是在這個聚會場所，與Al de Baran的Kafra總部簽訂了合同。所以拜訪她會很好。";
+			next;
+			mes "[符文騎士Velpino]";
+			mes "如果您準備好，請再次與我交談。";
+			set job_rune_edq,18;
+			changequest 3216,3217;
+			close;
+		} else if (job_rune_edq > 17 && job_rune_edq < 21) {
+			if (countitem(12388)+countitem(12389)+countitem(12390) == 0) {
+				mes "[符文騎士Velpino]";
+				mes "如果您的所有準備工作都完成，我將把您發送到最終的測試字段。";
+				set job_rune_edq,18;
+				next;
+				if(select("進入最終測試場:我還沒準備好。") == 2) close;
+				if (getequipisequiped(EQI_HEAD_TOP) || getequipisequiped(EQI_ARMOR) || getequipisequiped(EQI_GARMENT) || getequipisequiped(EQI_SHOES) ||
+				    getequipisequiped(EQI_ACC_L) || getequipisequiped(EQI_ACC_R) || getequipisequiped(EQI_HEAD_MID) || getequipisequiped(EQI_HEAD_LOW)) {
+					mes "[符文騎士Velpino]";
+					mes "對於此測試，只能配備單手武器，盾牌或雙手武器。將您的其他設備與KAFRA員工保持在中心。";
+					close;
+				}
+				if (checkquest(3220,PLAYTIME) == 1) {
+					mes "[符文騎士Velpino]";
+					mes "您是否在測試中失敗了...如果您失敗了一次，則不能再次輸入10分鐘。";
+					next;
+					mes "[符文騎士Velpino]";
+					mes "對於其他正在等待測試的測試人員來說，這是一個考慮因素，就像您一樣，因此在指定的時間之後回來。";
+					close;
+				}
+				if ($@job_rune_test1 == 0) {
+					if (Weight < 4001) {
+						set $@job_rune_test1,1;
+						sc_start SC_INCINT,300000,40;
+						getitem 12389,30; //Runstone_Storm
+						getitem 12390,30; //Runstone_Millennium
+						if (checkquest(3220) > -1) erasequest 3220;
+						setquest 3220;
+						warp "job3_rune02",38,40;
+						end;
+					}
+					mes "[符文騎士Velpino]";
+					mes "您可以使用的唯一一套武器應該在400的重量限制之內。要提供的符文石是30只符合攻擊的符文石和30只僅防禦的符文石。";
+					next;
+					mes "[符文騎士Velpino]";
+					mes "您所持有的剩餘內容應由Kafra員工保留在中間。";
+					close;
+				}
+				// Custom translation
+				mes "[符文騎士Velpino]";
+				mes "看起來測試室中已經有申請人。";
+				next;
+				mes "[符文騎士Velpino]";
+				mes "要耐心等待輪到你。";
+				close;
+			}
+			mes "[符文騎士Velpino]";
+			mes "等等，我將收集以前提供的所有符文石。使用用於測試的符文石有一定的限制。";
+			if (countitem(12388)) delitem 12388,countitem(12388); //Runstone_Crush
+			if (countitem(12389)) delitem 12389,countitem(12389); //Runstone_Storm
+			if (countitem(12390)) delitem 12390,countitem(12390); //Runstone_Millennium
+			next;
+			mes "[符文騎士Velpino]";
+			mes "我會得到新的符文石，所以如果您的準備工作都已經完成，請再次與我交談。";
+			close;
+		} else if (job_rune_edq == 21) {
+			mes "[符文騎士Velpino]";
+			mes "在上一場測試之前，您一直非常成功。";
+			next;
+			if (countitem(12388)+countitem(12389)+countitem(12390) == 0) {
+				mes "[符文騎士Velpino]";
+				mes "現在，您需要接受的所有測試都結束了。回到蒂格里斯船長，並告知他這個測試結果，然後感受到重生為符文騎士的深刻情感。";
+				next;
+				mes "[符文騎士Velpino]";
+				mes "恭喜！";
+				mes "好吧，我最好現在去剩下的候選人。";
+				set job_rune_edq,22;
+				changequest 3218,3219;
+				close;
+			}
+			mes "[符文騎士Velpino]";
+			mes "等等，我將收集以前提供的所有符文石。使用用於測試的符文石有一定的限制。";
+			if (countitem(12388)) delitem 12388,countitem(12388); //Runstone_Crush
+			if (countitem(12389)) delitem 12389,countitem(12389); //Runstone_Storm
+			if (countitem(12390)) delitem 12390,countitem(12390); //Runstone_Millennium
+			next;
+			mes "[符文騎士Velpino]";
+			mes "我需要重複使用這些未使用的符文石。一旦我拿走了所有測試符文石，再次與我交談。";
+			close;
+		}
+	}
+	mes "符文騎士從頭到腳都穿著黑色的騎士感到非常寒冷。";
+	close;
+}
+
+job3_rune02,38,40,0	script	#RK Test Hidden Portal 1	139,15,15,{
+	end;
+OnEnable:
+	enablenpc "#RK Test Hidden Portal 1";
+	end;
+OnDisable:
+	disablenpc "#RK Test Hidden Portal 1";
+	end;
+OnTouch:
+	if (job_rune_edq == 4) {
+		donpcevent "job_rune_edq#1st_tb::OnEnable";
+		donpcevent "#RK Test Hidden Portal 1::OnDisable";
+		end;
+	} else if (job_rune_edq > 17 && job_rune_edq < 21) {
+		donpcevent "job_rune_edq#3rd_tb::OnEnable";
+		donpcevent "#RK Test Hidden Portal 1::OnDisable";
+		end;
+	} else {
+		donpcevent "#RK Test Hidden Portal 1::OnDisable";
+		donpcevent "job_rune_edq#1st_tb::OnDisable";
+		donpcevent "job_rune_edq#1st_tc::OnDisable";
+		donpcevent "job_rune_edq#1st_tcmc::OnDisable";
+		donpcevent "job_rune_edq#1st_tcmc2::OnDisable";
+		donpcevent "job_rune_edq#1st_tcnc::OnDisable";
+		donpcevent "job_rune_edq#3rd_tb::OnDisable";
+		donpcevent "job_rune_edq#3rd_tc::OnDisable";
+		set $@job_rune_test1,0;
+		set $@job_rune_test2,0;
+		donpcevent "#RK Test Hidden Portal 1::OnEnable";
+		mapwarp "job3_rune02","job3_rune01",80,65;
+		end;
+	}
+}
+
+job3_rune02,1,1,0	script	job_rune_edq#1st_tb	139,{
+	end;
+OnInit:
+	disablenpc "job_rune_edq#1st_tb";
+	end;
+OnEnable:
+	enablenpc "job_rune_edq#1st_tb";
+	initnpctimer;
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "job_rune_edq#1st_tb";
+	end;
+OnTimer5000:
+	mapannounce "job3_rune02","I'll start the first test of the Rune Knight Job Change.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+	end;
+OnTimer8000:
+	mapannounce "job3_rune02","The content of the test is to get rid of all the monsters for 5 minutes and survive.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+	end;
+OnTimer11000:
+	mapannounce "job3_rune02","If you fail to survive or cannot get rid of all the monsters within the time limit, I'll consider it a failure.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+	end;
+OnTimer14000:
+	mapannounce "job3_rune02","Now let's start the test.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+	donpcevent "job_rune_edq#1st_tc::OnEnable";
+	donpcevent "job_rune_edq#1st_tb::OnDisable";
+	end;
+}
+
+job3_rune02,1,2,0	script	job_rune_edq#1st_tc	139,{
+	end;
+OnInit:
+	disablenpc "job_rune_edq#1st_tc";
+	end;
+OnEnable:
+	enablenpc "job_rune_edq#1st_tc";
+	initnpctimer;
+	donpcevent "job_rune_edq#1st_tcmc::OnEnable";
+	donpcevent "job_rune_edq#1st_tcnc::OnEnable";
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "job_rune_edq#1st_tc";
+	end;
+OnTimer300000:
+	killmonster "job3_rune02","job_rune_edq#1st_tc::OnMyMobDead";
+	mapannounce "job3_rune02","You reached the limit time so I'll consider the test as a failure.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+	end;
+OnTimer305000:
+	donpcevent "#RK Test Hidden Portal 1::OnDisable";
+	donpcevent "job_rune_edq#1st_tb::OnDisable";
+	donpcevent "job_rune_edq#1st_tc::OnDisable";
+	donpcevent "job_rune_edq#1st_tcmc::OnDisable";
+	donpcevent "job_rune_edq#1st_tcmc2::OnDisable";
+	donpcevent "job_rune_edq#1st_tcnc::OnDisable";
+	donpcevent "job_rune_edq#3rd_tb::OnDisable";
+	donpcevent "job_rune_edq#3rd_tc::OnDisable";
+	donpcevent "#RK Test Hidden Portal 1::OnEnable";
+	mapwarp "job3_rune02","job3_rune01",80,65;
+	set $@job_rune_test1,0;
+	set $@job_rune_test2,0;
+	stopnpctimer;
+	end;
+}
+
+job3_rune02,3,10,0	script	job_rune_edq#1st_tcmc	139,{
+	end;
+OnInit:
+	disablenpc "job_rune_edq#1st_tcmc";
+	end;
+OnEnable:
+	enablenpc "job_rune_edq#1st_tcmc";
+	initnpctimer;
+	end;
+OnDisable:
+	killmonster "job3_rune02","job_rune_edq#1st_tcmc::OnMyMobDead";
+	stopnpctimer;
+	disablenpc "job_rune_edq#1st_tcmc";
+	end;
+OnReset:
+	killmonster "job3_rune02","job_rune_edq#1st_tcmc::OnMyMobDead";
+	end;
+OnTimer5000:
+	monster "job3_rune02",0,0,"Raydric",1467,1,"job_rune_edq#1st_tcmc::OnMyMobDead";
+	monster "job3_rune02",0,0,"Raydric Archer",1453,2,"job_rune_edq#1st_tcmc::OnMyMobDead";
+	end;
+OnTimer50000:
+OnTimer100000:
+OnTimer150000:
+OnTimer200000:
+	switch(rand(6)) {
+	case 0:
+		monster "job3_rune02",0,0,"Raydric",1467,1,"job_rune_edq#1st_tcmc::OnMyMobDead";
+		monster "job3_rune02",0,0,"Raydric Archer",1453,2,"job_rune_edq#1st_tcmc::OnMyMobDead";
+		end;
+	case 1:
+	case 2:
+		monster "job3_rune02",0,0,"Rideword",1478,4,"job_rune_edq#1st_tcmc::OnMyMobDead";
+		end;
+	case 3:
+	case 4:
+		monster "job3_rune02",0,0,"Phendark",1484,1,"job_rune_edq#1st_tcmc::OnMyMobDead";
+		monster "job3_rune02",0,0,"Rybio",1483,1,"job_rune_edq#1st_tcmc::OnMyMobDead";
+		end;
+	case 5:
+		monster "job3_rune02",0,0,"Wraith Dead",1475,4,"job_rune_edq#1st_tcmc::OnMyMobDead";
+		end;
+	}
+	end;
+OnTimer250000:
+	killmonster "job3_rune02","job_rune_edq#1st_tcmc::OnMyMobDead";
+	donpcevent "job_rune_edq#1st_tcmc2::OnEnable";
+	donpcevent "job_rune_edq#1st_tcmc::OnDisable";
+	end;
+OnMyMobDead:
+	end;
+}
+
+job3_rune02,3,11,0	script	job_rune_edq#1st_tcmc2	139,{
+	end;
+OnInit:
+	disablenpc "job_rune_edq#1st_tcmc2";
+	end;
+OnEnable:
+	enablenpc "job_rune_edq#1st_tcmc2";
+	switch(rand(6)) {
+	case 0:
+		monster "job3_rune02",0,0,"Raydric",1467,1,"job_rune_edq#1st_tcmc2::OnMyMobDead";
+		monster "job3_rune02",0,0,"Raydric Archer",1453,2,"job_rune_edq#1st_tcmc2::OnMyMobDead";
+		end;
+	case 1:
+	case 2:
+		monster "job3_rune02",0,0,"Rideword",1478,4,"job_rune_edq#1st_tcmc2::OnMyMobDead";
+		end;
+	case 3:
+	case 4:
+		monster "job3_rune02",0,0,"Phendark",1484,1,"job_rune_edq#1st_tcmc2::OnMyMobDead";
+		monster "job3_rune02",0,0,"Rybio",1483,1,"job_rune_edq#1st_tcmc2::OnMyMobDead";
+		end;
+	case 5:
+		monster "job3_rune02",0,0,"Wraith Dead",1475,4,"job_rune_edq#1st_tcmc2::OnMyMobDead";
+		end;
+	}
+	end;
+OnDisable:
+	killmonster "job3_rune02","job_rune_edq#1st_tcmc2::OnMyMobDead";
+	disablenpc "job_rune_edq#1st_tcmc2";
+	end;
+OnMyMobDead:
+	if (mobcount("job3_rune02","job_rune_edq#1st_tcmc2::OnMyMobDead") < 1) {
+		set job_rune_edq,5;
+		erasequest 3220;
+		killmonster "job3_rune02","job_rune_edq#1st_tcmc2::OnMyMobDead";
+		mapannounce "job3_rune02","Congratulations. You've passed the first test.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		mapwarp "job3_rune02","job3_rune01",80,65;
+		donpcevent "job_rune_edq#1st_tb::OnDisable";
+		donpcevent "job_rune_edq#1st_tc::OnDisable";
+		donpcevent "job_rune_edq#1st_tcnc::OnDisable";
+		donpcevent "job_rune_edq#1st_tcmc::OnDisable";
+		donpcevent "job_rune_edq#1st_tcmc2::OnDisable";
+		donpcevent "#RK Test Hidden Portal 1::OnEnable";
+		set $@job_rune_test1,0;
+		set $@job_rune_test2,0;
+		end;
+	}
+	end;
+}
+
+job3_rune02,1,10,0	script	job_rune_edq#1st_tcnc	139,{
+	end;
+OnInit:
+	disablenpc "job_rune_edq#1st_tcnc";
+	end;
+OnEnable:
+	enablenpc "job_rune_edq#1st_tcnc";
+	initnpctimer;
+	end;
+OnDisable:
+	stopnpctimer;
+	set $@job_rune_test2,0;
+	donpcevent "Captain Tigris#jrt1::OnDisable";
+	donpcevent "Rune Knight Lunarea#jrt1::OnDisable";
+	donpcevent "Rune Knight Renoa#jrt1::OnDisable";
+	donpcevent "Rune Knight Velpino#jrt1::OnDisable";
+	disablenpc "job_rune_edq#1st_tcnc";
+	end;
+OnUse:
+	mapannounce "job3_rune02","Captain Tigris : Gentlemen, let's watch the test for a while.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+	stopnpctimer;
+	set $@job_rune_test2,0;
+	donpcevent "Captain Tigris#jrt1::OnDisable";
+	donpcevent "Rune Knight Lunarea#jrt1::OnDisable";
+	donpcevent "Rune Knight Renoa#jrt1::OnDisable";
+	donpcevent "Rune Knight Velpino#jrt1::OnDisable";
+	donpcevent "job_rune_edq#1st_tcnc::OnEnable";
+	end;
+OnTimer30000:
+	mapannounce "job3_rune02","Captain Tigris : Rune Knight Candidates... If you want to borrow our power talk to one of us.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+	donpcevent "Captain Tigris#jrt1::OnEnable";
+	donpcevent "Rune Knight Lunarea#jrt1::OnEnable";
+	donpcevent "Rune Knight Renoa#jrt1::OnEnable";
+	donpcevent "Rune Knight Velpino#jrt1::OnEnable";
+	end;
+OnTimer60000:
+	mapannounce "job3_rune02","Captain Tigris : It seems you don't need our help... Let's watch the test for a while.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+	stopnpctimer;
+	donpcevent "Captain Tigris#jrt1::OnDisable";
+	donpcevent "Rune Knight Lunarea#jrt1::OnDisable";
+	donpcevent "Rune Knight Renoa#jrt1::OnDisable";
+	donpcevent "Rune Knight Velpino#jrt1::OnDisable";
+	donpcevent "job_rune_edq#1st_tcnc::OnEnable";
+	end;
+}
+
+job3_rune02,34,46,5	script	Captain Tigris#jrt1	470,2,2,{
+	if (job_rune_edq != 4 || $@job_rune_test2 != 0) {
+		donpcevent "job_rune_edq#1st_tcnc::OnUse";
+		end;
+	}
+	switch(rand(6)) {
+	case 0:
+		mapannounce "job3_rune02","Captain Tigris : May Beljeve bless you!",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		npcskill "AL_BLESSING",1,0,0;
+		break;
+	case 1:
+	case 2:
+		mapannounce "job3_rune02","Captain Tigris : The Spark of life... may flame again.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		npcskill "AL_HEAL",8,70,99;
+		break;
+	case 3:
+		mapannounce "job3_rune02","Captain Tigris : Evil demons! I will send you back to your graves!",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		specialeffect2 EF_METEORSTORM;
+		donpcevent "job_rune_edq#1st_tcmc::OnReset";
+		break;
+	case 4:
+		mapannounce "job3_rune02","Captain Tigris : For a Rune Knight, this kind of ordeal is nothing!",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		sc_start SC_STUN,10000,0;
+		break;
+	case 5:
+		mapannounce "job3_rune02","Captain Tigris : For a Rune Knight, this kind of ordeal is nothing!",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		sc_start SC_BLEEDING,10000,0;
+		break;
+	}
+	set $@job_rune_test2,1;
+	initnpctimer;
+	end;
+OnInit:
+OnDisable:
+	disablenpc "Captain Tigris#jrt1";
+	end;
+OnEnable:
+	enablenpc "Captain Tigris#jrt1";
+	end;
+OnTimer5000:
+	donpcevent "job_rune_edq#1st_tcnc::OnUse";
+	set $@job_rune_test2,0;
+	stopnpctimer;
+	end;
+}
+
+job3_rune02,43,46,3	script	Rune Knight Lunarea#jrt1	469,2,2,{
+	if (job_rune_edq != 4 || $@job_rune_test2 != 0) {
+		donpcevent "job_rune_edq#1st_tcnc::OnUse";
+		end;
+	}
+	switch(rand(6)) {
+	case 0:
+		mapannounce "job3_rune02","Rune Knight Lunarea : Quickly... find and strike at the enemy's weakness!",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		npcskill "AL_INCAGI",1,0,0;
+		break;
+	case 1:
+	case 2:
+		mapannounce "job3_rune02","Rune Knight Lunarea : It's not over... you need more power...",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		npcskill "AL_HEAL",8,60,90;
+		break;
+	case 3:
+		mapannounce "job3_rune02","Rune Knight Lunarea : Everything starts from the beginning!",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		npcskill "AL_CURE",1,0,0;
+		break;
+	case 4:
+		mapannounce "job3_rune02","Rune Knight Lunarea : There can't be growth without a trial.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		sc_start SC_POISON,30000,0;
+		break;
+	case 5:
+		mapannounce "job3_rune02","Rune Knight Lunarea : There can't be growth without a trial.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		sc_start SC_CURSE,30000,0;
+		break;
+	}
+	set $@job_rune_test2,1;
+	initnpctimer;
+	end;
+OnInit:
+OnDisable:
+	disablenpc "Rune Knight Lunarea#jrt1";
+	end;
+OnEnable:
+	enablenpc "Rune Knight Lunarea#jrt1";
+	end;
+OnTimer5000:
+	donpcevent "job_rune_edq#1st_tcnc::OnUse";
+	set $@job_rune_test2,0;
+	stopnpctimer;
+	end;
+}
+
+job3_rune02,43,34,1	script	Rune Knight Renoa#jrt1	469,2,2,{
+	if (job_rune_edq != 4 || $@job_rune_test2 != 0) {
+		donpcevent "job_rune_edq#1st_tcnc::OnUse";
+		end;
+	}
+	switch(rand(6)) {
+	case 0:
+		mapannounce "job3_rune02","Rune Knight Renoa : The rune of Wind! May it give you strength!",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		npcskill "AL_INCAGI",1,0,0;
+		break;
+	case 1:
+	case 2:
+		mapannounce "job3_rune02","Rune Knight Renoa : The rune of Birth! May give you the power of life!",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		npcskill "AL_HEAL",8,60,90;
+		break;
+	case 3:
+		mapannounce "job3_rune02","Rune Knight Renoa : I am faster than all of them! Different then the others!",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		specialeffect2 EF_PIERCESELF;
+		donpcevent "job_rune_edq#1st_tcmc::OnReset";
+		break;
+	case 4:
+		mapannounce "job3_rune02","Rune Knight Renoa : For a Rune Knight, this kind of ordeal is nothing!",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		sc_start SC_POISON,30000,0;
+		break;
+	case 5:
+		mapannounce "job3_rune02","Rune Knight Renoa : For a Rune Knight, this kind of ordeal is nothing!",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		sc_start SC_CURSE,30000,0;
+		break;
+	}
+	set $@job_rune_test2,1;
+	initnpctimer;
+	end;
+OnInit:
+OnDisable:
+	disablenpc "Rune Knight Renoa#jrt1";
+	end;
+OnEnable:
+	enablenpc "Rune Knight Renoa#jrt1";
+	end;
+OnTimer5000:
+	set $@job_rune_test2,0;
+	donpcevent "job_rune_edq#1st_tcnc::OnUse";
+	stopnpctimer;
+	end;
+}
+
+job3_rune02,34,34,7	script	Rune Knight Velpino#jrt1	468,2,2,{
+	if (job_rune_edq != 4 || $@job_rune_test2 != 0) {
+		donpcevent "job_rune_edq#1st_tcnc::OnUse";
+		end;
+	}
+	switch(rand(6)) {
+	case 0:
+		mapannounce "job3_rune02","Rune Knight Velpino : You are not one who gets to fall down in this kind of place.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		npcskill "AL_HEAL",8,60,90;
+		break;
+	case 1:
+	case 2:
+		mapannounce "job3_rune02","Rune Knight Velpino : Move on! There are obstacles to overcome.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		npcskill "AL_INCAGI",1,0,0;
+		break;
+	case 3:
+		mapannounce "job3_rune02","Rune Knight Velpino : You are not alone. We are by your side.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		npcskill "AL_BLESSING",1,0,0;
+		break;
+	case 4:
+		mapannounce "job3_rune02","Rune Knight Velpino : Fight and win! Don't give in to the pain!",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		sc_start SC_FREEZE,10000,0;
+		break;
+	case 5:
+		mapannounce "job3_rune02","Rune Knight Velpino : It's not a big trial for a true Rune Knight!",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		sc_start SC_SLEEP,10000,0;
+		break;
+	}
+	set $@job_rune_test2,1;
+	initnpctimer;
+	end;
+OnInit:
+OnDisable:
+	disablenpc "Rune Knight Velpino#jrt1";
+	end;
+OnEnable:
+	enablenpc "Rune Knight Velpino#jrt1";
+	end;
+OnTimer5000:
+	set $@job_rune_test2,0;
+	donpcevent "job_rune_edq#1st_tcnc::OnUse";
+	stopnpctimer;
+	end;
+}
+
+job3_rune02,2,1,0	script	job_rune_edq#3rd_tb	139,{
+	end;
+OnInit:
+	disablenpc "job_rune_edq#3rd_tb";
+	end;
+OnEnable:
+	enablenpc "job_rune_edq#3rd_tb";
+	initnpctimer;
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "job_rune_edq#3rd_tb";
+	end;
+OnTimer5000:
+	mapannounce "job3_rune02","I'll start the last test of the Rune Knight Job change.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+	end;
+OnTimer8000:
+	mapannounce "job3_rune02","Get rid of monsters appearing here within 8 minutes by using the provided rune stones.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+	end;
+OnTimer11000:
+	mapannounce "job3_rune02","If you die or can't get rid of all the monsters within the time limit, I'll consider the try as a failure.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+	end;
+OnTimer14000:
+	mapannounce "job3_rune02","Now I'll start the test.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+	donpcevent "job_rune_edq#3rd_tc::OnEnable";
+	donpcevent "job_rune_edq#3rd_tb::OnDisable";
+	end;
+}
+
+job3_rune02,2,2,0	script	job_rune_edq#3rd_tc	139,{
+	end;
+OnInit:
+	disablenpc "job_rune_edq#3rd_tc";
+	end;
+OnEnable:
+	enablenpc "job_rune_edq#3rd_tc";
+	initnpctimer;
+	donpcevent "job_rune_edq#3rd_tc1::OnEnable";
+	end;
+OnDisable:
+	stopnpctimer;
+	donpcevent "job_rune_edq#3rd_tc1::OnDisable";
+	donpcevent "job_rune_edq#3rd_tc2::OnDisable";
+	donpcevent "job_rune_edq#3rd_tc3::OnDisable";
+	disablenpc "job_rune_edq#3rd_tc";
+	end;
+OnTimer480000:
+	killmonster "job3_rune02","job_rune_edq#3rd_tc::OnMyMobDead";
+	mapannounce "job3_rune02","You reached the limit time so I'll consider the test as a failure.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+	end;
+OnTimer482000:
+	mapwarp "job3_rune02","job3_rune01",80,65;
+	donpcevent "job_rune_edq#1st_tb::OnDisable";
+	donpcevent "job_rune_edq#1st_tc::OnDisable";
+	donpcevent "job_rune_edq#1st_tcnc::OnDisable";
+	donpcevent "job_rune_edq#1st_tcmc2::OnDisable";
+	donpcevent "job_rune_edq#1st_tcmc::OnDisable";
+	donpcevent "job_rune_edq#3rd_tb::OnDisable";
+	donpcevent "job_rune_edq#3rd_tc::OnDisable";
+	donpcevent "#RK Test Hidden Portal 1::OnEnable";
+	set $@job_rune_test1,0;
+	set $@job_rune_test2,0;
+	stopnpctimer;
+	end;
+}
+
+job3_rune02,2,3,0	script	job_rune_edq#3rd_tc1	139,{
+	end;
+OnInit:
+	disablenpc "job_rune_edq#3rd_tc1";
+	end;
+OnEnable:
+	enablenpc "job_rune_edq#3rd_tc1";
+	monster "job3_rune02",40,40,"Executioner",2039,1,"job_rune_edq#3rd_tc1::OnMyMobDead";
+	end;
+OnDisable:
+	killmonster "job3_rune02","job_rune_edq#3rd_tc1::OnMyMobDead";
+	disablenpc "job_rune_edq#3rd_tc1";
+	end;
+OnMyMobDead:
+	if (mobcount("job3_rune02","job_rune_edq#3rd_tc1::OnMyMobDead") < 1) {
+		set job_rune_edq,19;
+		killmonster "job3_rune02","job_rune_edq#3rd_tc1::OnMyMobDead";
+		donpcevent "job_rune_edq#3rd_tc2::OnEnable";
+		donpcevent "job_rune_edq#3rd_tc1::OnDisable";
+		end;
+	}
+	end;
+}
+
+job3_rune02,2,4,0	script	job_rune_edq#3rd_tc2	139,{
+	end;
+OnInit:
+	disablenpc "job_rune_edq#3rd_tc2";
+	end;
+OnEnable:
+	enablenpc "job_rune_edq#3rd_tc2";
+	monster "job3_rune02",40,40,"Ogretooth",2040,1,"job_rune_edq#3rd_tc2::OnMyMobDead";
+	end;
+OnDisable:
+	killmonster "job3_rune02","job_rune_edq#3rd_tc2::OnMyMobDead";
+	disablenpc "job_rune_edq#3rd_tc2";
+	end;
+OnMyMobDead:
+	if (mobcount("job3_rune02","job_rune_edq#3rd_tc2::OnMyMobDead") < 1) {
+		set job_rune_edq,20;
+		killmonster "job3_rune02","job_rune_edq#3rd_tc2::OnMyMobDead";
+		donpcevent "job_rune_edq#3rd_tc3::OnEnable";
+		donpcevent "job_rune_edq#3rd_tc2::OnDisable";
+		end;
+	}
+	end;
+}
+
+job3_rune02,2,5,0	script	job_rune_edq#3rd_tc3	139,{
+	end;
+OnInit:
+	disablenpc "job_rune_edq#3rd_tc3";
+	end;
+OnEnable:
+	enablenpc "job_rune_edq#3rd_tc3";
+	monster "job3_rune02",40,40,"Mysteltainn",2041,1,"job_rune_edq#3rd_tc3::OnMyMobDead";
+	end;
+OnDisable:
+	killmonster "job3_rune02","job_rune_edq#3rd_tc3::OnMyMobDead";
+	disablenpc "job_rune_edq#3rd_tc3";
+	end;
+OnMyMobDead:
+	if (mobcount("job3_rune02","job_rune_edq#3rd_tc3::OnMyMobDead") < 1) {
+		set job_rune_edq,21;
+		changequest 3217,3218;
+		erasequest 3220;
+		killmonster "job3_rune02","job_rune_edq#3rd_tc3::OnMyMobDead";
+		mapannounce "job3_rune02","Congratulations. You've passed the test.",bc_map,"0xFFFF00"; //FW_NORMAL 12 0 0
+		mapwarp "job3_rune02","job3_rune01",80,65;
+		donpcevent "job_rune_edq#1st_tb::OnDisable";
+		donpcevent "job_rune_edq#1st_tc::OnDisable";
+		donpcevent "job_rune_edq#1st_tcnc::OnDisable";
+		donpcevent "job_rune_edq#1st_tcmc2::OnDisable";
+		donpcevent "job_rune_edq#1st_tcmc::OnDisable";
+		donpcevent "job_rune_edq#3rd_tb::OnDisable";
+		donpcevent "job_rune_edq#3rd_tc::OnDisable";
+		donpcevent "#RK Test Hidden Portal 1::OnEnable";
+		set $@job_rune_test1,0;
+		set $@job_rune_test2,0;
+		end;
+	}
+	end;
+}
+
+sec_in02,34,167,3	script	R.Knight Job Manager	470,1,1,{
+	callfunc "F_GM_NPC";
+	mes "輸入密碼。";
+	next;
+	if (callfunc("F_GM_NPC","1854",1) == 1) {
+		mes "符文騎士變更管理模塊開始";
+		next;
+		switch(select("GlobalVar 檢查:GlobalVar Oneshot 修改")) {
+		case 1:
+			mes "符文騎士的工作變更globalvar現在是" + $@job_rune_test1 + ".";
+			mes "符文騎士測試字段的數量是..." + getmapusers("job3_rune02") + ".";
+			close;
+		case 2:
+			set $@job_rune_test1,0;
+			mes "符文騎士作業變更GlobalVar被修改為0。現在可以使用測試字段。";
+			close;
+		}
+	}
+	close;
+}
+job3_rune01,1,1,3	duplicate(R.Knight Job Manager)	#renshucheck	844

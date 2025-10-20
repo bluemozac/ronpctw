@@ -1,0 +1,1393 @@
+﻿//===== rAthena Script ======================================= 
+//= Refining NPCs
+//===== By: ==================================================
+//= Syrus22 (1.1) dafide18 (1.4) Skotlex (1.5)
+//===== Current Version: =====================================
+//= 3.4
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Refining NPCs and Metal Salesmen.
+//===== Additional Comments: =================================
+//= 3.0 Updated several NPC names and locations. [Xantara]
+//=     Added WoE map Refiners.
+//= 3.1 Added the new refinement & Ore creation NPC's for +11 and above Refinement. [Masao]
+//= 3.2 Moved some scripts to Renewal file, other minor changes. [Euphy]
+//= 3.2a Added 'disable_items' command. [Euphy]
+//= 3.3 Some official script updates. [Euphy]
+//= 3.4 Added VIP features. [Euphy]
+//= 3.5 Added Refine UI [Atemo, Lemongrass]
+//============================================================
+
+// Christopher: Geffen Blacksmith
+//============================================================
+geffen_in,110,172,0	script	Christopher#1	63,{
+	mes "[克里斯托弗·吉倫羅]";
+	mes "歡迎來到克里斯托弗的車間。你們可以在這裡鍛造所有東西。什麼業務";
+	mes "你給我嗎？";
+	next;
+	switch(select("購買砧:購買鍛造物品:購買金屬:淨化粗糙礦石:取消")) {
+	case 1:
+		mes "[克里斯托弗·吉倫羅]";
+		mes "更好的砧座使Ye有機會製造更好的武器，您知道嗎？但是他們會花更多的錢。只需將其從胸口拿下來，購買最適合您的目的的東西，Laddy。";
+		next;
+		switch(select("砧 - 30,000 zeny:神之金屬砧 - 120,000 zeny:黃金砧 - 300,000 zeny:比其他的更好的砧:取消")) {
+		case 1:
+			if (Zeny < 30000) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "我認為我不能讓你們與zeny ye一起做這個。我不能因為你們而損失我的錢。";
+				close;
+			}
+			getitem 986,1; // Anvil
+			Zeny = Zeny-30000;
+			mes "[克里斯托弗·吉倫羅]";
+			mes "這是最便宜的，但有效的效率足以製造大多數物品。謝謝你在我的車間購物。  隨時隨時隨地，隨時隨地。";
+			close;
+		case 2:
+			if (Zeny < 120000) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "我認為我不能讓你們與zeny ye一起做這個。我不能因為你們而損失我的錢。";
+				close;
+			}
+			getitem 987,1; // Oridecon_Anvil
+			Zeny = Zeny-120000;
+			mes "[克里斯托弗·吉倫羅]";
+			mes "是的，朋友，你們關注砧。這一定是鐵匠的適當砧，是嗎？謝謝你在我的車間購物。  隨時隨時隨地，隨時隨地。";
+			close;
+		case 3:
+			if (Zeny < 300000) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "我認為我不能讓你們與zeny ye一起做這個。我不能因為你們而損失我的錢。";
+				close;
+			}
+			getitem 988,1; // Golden_Anvil
+			Zeny = Zeny-300000;
+			mes "[克里斯托弗·吉倫羅]";
+			mes "這是我所有工作室中最好的東西！這樣，你們可以統治鐵匠世界！謝謝你在我的車間購物。  隨時隨時隨地，隨時隨地。";
+			close;
+		case 4:
+			mes "[克里斯托弗·吉倫羅]";
+			mes "好吧，對不起。但是我沒有比黃金砧的“難”。";
+			next;
+			mes "[克里斯托弗·吉倫羅]";
+			mes "我認為傳奇的砧店“林格”會有一個。但是，儘管他在這個世界上的某個地方，但我認為你們無法找到他。";
+			close;
+		case 5:
+			mes "[克里斯托弗·吉倫羅]";
+			mes "好吧，隨時隨時隨地，隨時隨地。票價很好。";
+			close;
+		}
+	case 2:
+		mes "[克里斯托弗·吉倫羅]";
+		mes "可敬的鐵匠使用精美的工具。你們可以成為我的東西。選擇任何想要的東西。";
+		next;
+		switch(select("迷你熔爐 - 150 zeny:鐵鎚 - 1000 zeny:黃金鎚 - 3000 zeny:神之金屬鎚 - 5000 zeny:取消")) {
+		case 1:
+			mes "[克里斯托弗·吉倫羅]";
+			mes "這是一種急需的工具，即煉油金屬！那麼，你們希望購買多少？如果你們想退出，只需輸入數字'0。";
+			next;
+			while(1) {
+				input .@input;
+				if (.@input == 0) {
+					mes "[克里斯托弗·吉倫羅]";
+					mes "是的，這筆交易被取消。票價很好。";
+					close;
+				}
+				else if ((.@input < 0) || (.@input > 500)) {
+					mes "[克里斯托弗·吉倫羅]";
+					mes "你們可以買到500，更少。";
+					next;
+				}
+				else {
+					break;
+				}
+			}
+			.@sell = .@input * 150;
+			if (Zeny < .@sell) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "我認為我不能讓你們與zeny ye一起做這個。我不能因為你們而損失我的錢。";
+				close;
+			}
+			if (checkweight(612,.@input) == 0) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "看起來您在庫存中沒有足夠的空間。將一些東西放入您的kafra存儲中，你為什麼不呢？";
+				close;
+			}
+			getitem 612,.@input; // Portable_Furnace
+			Zeny = Zeny-.@sell;
+			mes "[克里斯托弗·吉倫羅]";
+			mes "謝謝你在我的車間購物。隨時隨時隨地，隨時隨地。";
+			close;
+		case 2:
+			if (Zeny < 1000) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "我認為我不能讓你們與zeny ye一起做這個。我不能因為你們而損失我的錢。";
+				close;
+			}
+			getitem 613,1; // Iron_Hammer
+			Zeny = Zeny-1000;
+			mes "[克里斯托弗·吉倫羅]";
+			mes "謝謝你在我的車間購物。隨時隨時隨地，隨時隨地。";
+			close;
+		case 3:
+			if (Zeny < 3000) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "我認為我不能讓你們與zeny ye一起做這個。我不能因為你們而損失我的錢。";
+				close;
+			}
+			getitem 614,1; // Golden_Hammer
+			Zeny = Zeny-3000;
+			mes "[克里斯托弗·吉倫羅]";
+			mes "謝謝你在我的車間購物。隨時隨時隨地，隨時隨地。";
+			close;
+		case 4:
+			if (Zeny < 5000) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "我認為我不能讓你們與zeny ye一起做這個。我不能因為你們而損失我的錢。";
+				close;
+			}
+			getitem 615,1; // Oridecon_Hammer
+			Zeny = Zeny-5000;
+			mes "[克里斯托弗·吉倫羅]";
+			mes "謝謝你在我的車間購物。隨時隨時隨地，隨時隨地。";
+			close;
+		case 5:
+			mes "[克里斯托弗·吉倫羅]";
+			mes "隨時隨時隨地，隨時隨地。票價很好。";
+			close;
+		}
+	case 3:
+		mes "[克里斯托弗·吉倫羅]";
+		mes "我準備每種金屬，只有高質量的奧斯科。那時，你們需要哪個？";
+		next;
+		switch(select("弗拉肯 - 200z.:艾默特肯 - 1000z.:取消")) {
+		case 1:
+			mes "[克里斯托弗·吉倫羅]";
+			mes "那麼，你們希望購買多少？如果你們不想要任何東西，只需將數字輸入為“ 0”。";
+			next;
+			while(1) {
+				input .@input;
+				if (.@input == 0) {
+					mes "[克里斯托弗·吉倫羅]";
+					mes "交易有";
+					mes "被取消。";
+					mes "票價很好。";
+					close;
+				}
+				else if ((.@input < 0) || (.@input > 500)) {
+					mes "[克里斯托弗·吉倫羅]";
+					mes "你們可以買到500，更少。";
+					next;
+				}
+				else {
+					break;
+				}
+			}
+			.@sell = .@input * 200;
+			if (Zeny < .@sell) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "你們沒有足夠的錢。你們知道我不能以較低的價格出售它……你知道妻子的na味是關於zeny的。";
+				close;
+			}
+			if (checkweight(1010,.@input) == 0) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "你們看起來您沒有房間可以隨身攜帶任何新的東西。你為什麼不把一些東西放入kafra存儲中，n'回來了。";
+				close;
+			}
+			getitem 1010,.@input; // Phracon
+			Zeny = Zeny-.@sell;
+			mes "[克里斯托弗·吉倫羅]";
+			mes "謝謝你在我的車間購物。隨時隨時隨地，隨時隨地。";
+			close;
+		case 2:
+			mes "[克里斯托弗·吉倫羅]";
+			mes "那麼，你們希望購買多少？如果你們根本不想要任何東西，只需將數字輸入為“ 0”。";
+			next;
+			while(1) {
+				input .@input;
+				if (.@input == 0) {
+					mes "[克里斯托弗·吉倫羅]";
+					mes "交易有";
+					mes "被取消。";
+					mes "票價很好。";
+					close;
+				}
+				else if ((.@input < 0) || (.@input > 500)) {
+					mes "[克里斯托弗·吉倫羅]";
+					mes "你們可以買到500，更少。";
+					next;
+				}
+				else {
+					break;
+				}
+			}
+			.@sell = .@input * 1000;
+			if (Zeny < .@sell) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "我認為我不能讓你們與zeny ye一起做這個。我不能因為你們而損失我的錢。";
+				close;
+			}
+			if (checkweight(1011,.@input) == 0) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "我的朋友...在我看來，你們沒有庫存空間。為什麼Doncha首先將一些東西放入Kafra存儲中？";
+				close;
+			}
+			getitem 1011,.@input; // Emveretarcon
+			Zeny = Zeny-.@sell;
+			mes "[克里斯托弗·吉倫羅]";
+			mes "謝謝你在我的車間購物。隨時隨地，隨時隨地都可以隨時隨地來。";
+			close;
+		case 3:
+			mes "[克里斯托弗·吉倫羅]";
+			mes "隨時隨時隨地，隨時隨地。票價很好。";
+			close;
+		}
+	case 4:
+		mes "[克里斯托弗·吉倫羅]";
+		mes "我可以淨化您的Oridecon和Elunium。我在5點粗糙的礦石中製作了一個精緻的礦石。好吧...你們想製作哪一個？";
+		next;
+		switch(select("製作神之金屬:製作鋁原石:取消")) {
+		case 1:
+			if (countitem(756) < 5) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "我告訴你們，我需要5點rough oridecon。";
+				close;
+			}
+			else {
+				delitem 756,5;  //Oridecon_Stone
+				getitem 984,1; // Oridecon
+				mes "[克里斯托弗·吉倫羅]";
+				mes "這是一個Oridecon fer ye。你們將永遠受到歡迎，我會等你們。";
+				close;
+			}
+		case 2:
+			if (countitem(757) < 5) {
+				mes "[克里斯托弗·吉倫羅]";
+				mes "我告訴你們，我需要5個粗糙的Eluniums。";
+				close;
+			}
+			else {
+				delitem 757,5;  //Elunium_Stone
+				getitem 985,1; // Elunium
+				mes "[克里斯托弗·吉倫羅]";
+				mes "Arrr，這是您的Elunium。總是歡迎您的業務在這裡，因此請隨時再次來。";
+				close;
+			}
+		case 3:
+			mes "[克里斯托弗·吉倫羅]";
+			mes "隨時隨時隨地，隨時隨地。票價很好。";
+			close;
+		}
+	case 5:
+		mes "[克里斯托弗·吉倫羅]";
+		mes "隨時隨時隨地，無論何時需要，何時都需要。票價很好。";
+		close;
+	}
+}
+
+// Paul Spanner: Einbroch Blacksmith Supplier
+//============================================================
+ein_in01,38,29,0	script	Paul Spanner	63,{
+	if (checkweight(1201,1) == 0) {
+		mes "- 等一下 ！ ！ -";
+		mes "- 目前您正在攜帶 -";
+		mes "- 與您在一起太多。 -";
+		mes "- 請重試 -";
+		mes "- 減肥後。 -";
+		close;
+	}
+	mes "[保羅·斯潘納]";
+	mes "歡迎，我的朋友。";
+	mes "在我的商店中，您會找到所需的一切。";
+	mes "告訴我你需要什麼。";
+	next;
+	switch(select("購買砧:購買鍛造物品:購買金屬:處理礦石:離開")) {
+	case 1:
+		mes "[保羅·斯潘納]";
+		mes "砧是鐵匠最必要的物品。";
+		mes "由於您將不止一次使用砧，因此您最好購買一個不錯的砧座。";
+		next;
+		switch(select("砧 - 30,000z.:神之金屬砧 - 120,000z.:黃金砧 - 300,000z.:我需要更好的砧:取消")) {
+		case 1:
+			if (Zeny < 30000) {
+				mes "[保羅·斯潘納]";
+				mes "有了那麼多錢，您甚至都無法購買玩具砧！";
+				close;
+			}
+			getitem 986,1; //Anvil
+			Zeny = Zeny-30000;
+			mes "[保羅·斯潘納]";
+			mes "它是最便宜的砧，具有最基本的能力。";
+			mes "感謝您使用我的商店。如果您需要什麼，請告訴我。";
+			close;
+		case 2:
+			if (Zeny < 120000) {
+				mes "[保羅·斯潘納]";
+				mes "有了那麼多錢，您甚至都無法購買玩具砧！";
+				close;
+			}
+			getitem 987,1; //Oridecon_Anvil
+			Zeny = Zeny-120000;
+			mes "[保羅·斯潘納]";
+			mes "啊，你有砧。鐵匠至少需要一個砧座。";
+			mes "感謝您使用我的商店。如果您需要什麼，請告訴我。";
+			close;
+		case 3:
+			if (Zeny < 300000) {
+				mes "[保羅·斯潘納]";
+				mes "有了那麼多錢，您甚至都無法購買玩具砧！";
+				close;
+			}
+			getitem 988,1; //Golden_Anvil
+			Zeny = Zeny-300000;
+			mes "[保羅·斯潘納]";
+			mes "我可以告訴您，只要看到您選擇這種金砧，就可以告訴您成為一名好鐵匠！";
+			mes "這種砧座肯定會幫助您創建最好的武器。";
+			close;
+		case 4:
+			mes "[保羅·斯潘納]";
+			mes "對不起，我的砧座不如黃金砧更好。";
+			mes "除非您找到“ linggell”的傳奇砧，否則我認為在任何其他地方都不會找到比金砧更好的。";
+			close;
+		case 5:
+			mes "[保羅·斯潘納]";
+			mes "如果您需要什麼，請告訴我。";
+			close;
+		}
+	case 2:
+		mes "[保羅·斯潘納]";
+		mes "您需要各種材料來加工礦石和鍛造武器。";
+		mes "我有您需要的一切。看看。";
+		next;
+		switch(select("迷你熔爐 - 150z.:鐵鎚 - 1,000z.:黃金鎚 - 3,000z.:神之金屬鎚 - 5,000z.:取消")) {
+		case 1:
+			.@item = 612;
+			.@item_cost = 150;
+			.@item_weight = 200;
+			mes "[保羅·斯潘納]";
+			mes "您一定需要此家具來處理礦石！";
+			next;
+			break;
+		case 2:
+			.@item = 613;
+			.@item_cost = 1000;
+			.@item_weight = 200;
+			break;
+		case 3:
+			.@item = 614;
+			.@item_cost = 3000;
+			.@item_weight = 300;
+			break;
+		case 4:
+			.@item = 615;
+			.@item_cost = 5000;
+			.@item_weight = 400;
+			break;
+		case 5:
+			mes "[保羅·斯潘納]";
+			mes "如果您需要什麼，請告訴我。";
+			close;
+		}
+		mes "[保羅·斯潘納]";
+		mes "那麼，您需要幾個？如果要取消交易，請輸入“ 0”。";
+		next;
+		while(1) {
+			input .@input;
+			if (.@input == 0) {
+				mes "[保羅·斯潘納]";
+				mes "您已經取消了交易。如果您需要什麼，請告訴我。";
+				close;
+			}
+			else if ((.@input < 0) || (.@input > 500)) {
+				mes "[保羅·斯潘納]";
+				mes "您一次只能購買500或更少。";
+				next;
+			}
+			else {
+				break;
+			}
+		}
+		.@sell = .@input * .@item_cost;
+		if (Zeny < .@sell) {
+			mes "[保羅·斯潘納]";
+			mes "你沒有足夠的錢。抱歉，我不能虧本出售它們。";
+			close;
+		}
+		if (checkweight(.@item,.@input) == 0) {
+			mes "[保羅·斯潘納]";
+			mes "嘿，你看起來蒼白。為什麼不先減輕體重。";
+			close;
+		}
+		Zeny = Zeny-.@sell;
+		getitem .@item,.@input;
+		mes "[保羅·斯潘納]";
+		mes "感謝您使用我的商店。如果您需要什麼，請告訴我。";
+		close;
+	case 3:
+		mes "[保羅·斯潘納]";
+		mes "我有高質量的金屬。";
+		mes "那麼，您想購買哪種金屬？";
+		next;
+		switch(select("弗拉肯 - 200z.:艾默特肯 - 1,000z.:離開")) {
+		case 1:
+			.@item = 1010;
+			.@item_price = 200;
+			break;
+		case 2:
+			.@item = 1011;
+			.@item_price = 1000;
+			break;
+		case 3:
+			mes "[保羅·斯潘納]";
+			mes "如果您需要什麼，請告訴我。";
+			close;
+		}
+		mes "[保羅·斯潘納]";
+		mes "那麼，您需要多少個？如果要取消交易，請輸入“ 0”。";
+		next;
+		while(1) {
+			input .@input;
+			if (.@input == 0) {
+				mes "[保羅·斯潘納]";
+				mes "交易已取消。如果您需要什麼，請告訴我。";
+				close;
+			}
+			else if ((.@input < 0) || (.@input > 500)) {
+				mes "[保羅·斯潘納]";
+				mes "您可以一次購買500或更少。";
+				next;
+			}
+			else {
+				break;
+			}
+		}
+		.@sell = .@input * .@item_price;
+		if (Zeny < .@sell) {
+			mes "[保羅·斯潘納]";
+			mes "你沒有足夠的錢。抱歉，我不能虧本出售它們。";
+			close;
+		}
+		if (checkweight(.@item,.@input) == 0) {
+			mes "[保羅·斯潘納]";
+			mes "嘿，你看起來蒼白。你為什麼不先減輕體重？";
+			close;
+		}
+		getitem .@item,.@input;
+		Zeny = Zeny-.@sell;
+		mes "[保羅·斯潘納]";
+		mes "感謝您使用我的商店。如果您需要什麼，請告訴我。";
+		close;
+	case 4:
+		mes "[保羅·斯潘納]";
+		mes "我可以為您處理Oridecon和Elunium。";
+		mes "您需要5個礦石才能將它們加工成一個Oridecon或Elunium。";
+		mes "那麼，您想處理哪一個？";
+		switch(select("神之金屬:鋁原石:離開")) {
+		case 1:
+			if (countitem(756) < 5) {
+				mes "[保羅·斯潘納]";
+				mes "您需要5個礦石才能將它們加工成一個純的Oridecon。";
+				close;
+			}
+			else {
+				delitem 756,5; //Oridecon_Stone
+				getitem 984,1; //Oridecon
+				mes "[保羅·斯潘納]";
+				mes "你去。感謝您使用我的服務。";
+				close;
+			}
+		case 2:
+			if (countitem(757) < 5) {
+				mes "[保羅·斯潘納]";
+				mes "您需要5個礦石才能將它們加工成一個純淨的Elunium。";
+				close;
+			}
+			else {
+				delitem 757,5; //Elunium_Stone
+				getitem 985,1; //Elunium
+				mes "[保羅·斯潘納]";
+				mes "你去。感謝您使用我的服務。";
+				close;
+			}
+		case 3:
+			mes "[保羅·斯潘納]";
+			mes "如果您需要什麼，請告訴我。";
+			close;
+		}
+	case 5:
+		mes "[保羅·斯潘納]";
+		mes "如果您需要什麼，請告訴我。";
+		close;
+	}
+}
+
+// Weapon/Armor Refiners
+//============================================================
+prt_in,63,60,0	script	Hollgrehenn	4_M_03,{
+	if( getbattleflag( "feature.refineui" ) ){
+		mes "[霍爾格萊恩]";
+		mes "我是一個可以完善武器和設備的鐵匠。";
+		mes "您是否有要完善的物品？";
+		close2;
+		refineui();
+		end;
+	}else{
+		callfunc "refinemain","Hollgrehenn",0;
+		end;
+	}
+}
+
+morocc_in,73,38,6	script	Aragham	4W_M_03,{
+	if( getbattleflag( "feature.refineui" ) ){
+		mes "[阿格姆]";
+		mes "de~sert~鐵匠~";
+		mes "Aragham Ssaleh~誰可以完善任何Ssaleh~";
+		mes "讓我看看你想完善什麼~";
+		close2;
+		refineui();
+		end;
+	}else{
+		callfunc "refinemain","Aragham",0;
+		end;
+	}
+}
+
+payon,144,173,5	script	Antonio	4_M_ORIENT01,{
+	if( getbattleflag( "feature.refineui" ) ){
+		mes "[安東尼奧]";
+		mes "停止na縮，給我您要精煉的設備。";
+		close2;
+		refineui();
+		end;
+	}else{
+		callfunc "refinemain","Antonio",0;
+		end;
+	}
+}
+
+alberta_in,28,58,0	script	Fredrik	4_M_03,{
+	if( getbattleflag( "feature.refineui" ) ){
+		mes "[弗雷德里克·赫曼索恩]";
+		mes "我是一個鐵匠，可以完善您的武器或設備。";
+		mes "您有想完善的東西嗎？";
+		close2;
+		refineui();
+		end;
+	}else{
+		callfunc "refinemain","Fredrik",0;
+		end;
+	}
+}
+
+yuno_in01,171,21,4	script	Lambert	4_M_ORIENT01,{
+	if( getbattleflag( "feature.refineui" ) ){
+		mes "[蘭伯特]";
+		mes "歡迎...來...這是...最好的... Smithy ...在Juno。";
+		close2;
+		refineui();
+		end;
+	}else{
+		callfunc "refinemain","Lambert",0;
+		end;
+	}
+}
+
+ein_in01,24,87,5	script	Manthasman	4_M_DWARF,{
+	if( getbattleflag( "feature.refineui" ) ){
+		mes "[曼薩斯曼·普里哈格]";
+		mes "哈哈哈，你已經知道了。所以你想好一些東西嗎？";
+		mes "讓我們今天嘗試一些冒險的東西！";
+		close2;
+		refineui();
+		end;
+	}else{
+		callfunc "refinemain","Manthasman Pruhag",0;
+		end;
+	}
+}
+
+lhz_in02,282,20,7	script	Fulerr	4_M_LGTMAN,{
+	if( getbattleflag( "feature.refineui" ) ){
+		mes "[富勒]";
+		mes "呵呵...你想精煉嗎？";
+		mes "呵呵..考慮完成..";
+		mes "呵呵...";
+		close2;
+		refineui();
+		end;
+	}else{
+		callfunc "refinemain","Fulerr",0;
+		end;
+	}
+}
+
+//============================================================
+//= Main Refiner Function
+//============================================================
+//= To allow auto safe refining/multiple refining set the
+//= second argument to '1' in the function call.
+//= If you enable this function, be sure to edit the value of
+//= .@safe to the max safe refine in refine.yml as well.
+//============================================================
+function	script	refinemain	{
+	disable_items;
+	.@npc_name$ = getarg(0);
+	.@features = getarg(1);
+	mes "["+ .@npc_name$ +"]";
+	mes "我是軍事匠。";
+	mes "我可以完善各種武器，盔甲和設備，所以讓我";
+	mes "知道你要我完善什麼。";
+	next;
+
+	setarray .@indices[1], EQI_HEAD_TOP, EQI_ARMOR, EQI_HAND_L, EQI_HAND_R, EQI_GARMENT, EQI_SHOES, EQI_ACC_L, EQI_ACC_R, EQI_HEAD_MID, EQI_HEAD_LOW;
+	for(.@i = 1; .@i<getarraysize(.@indices); ++.@i) {
+		if(getequipisequiped(.@indices[.@i])) {
+			.@menu$ = .@menu$ + F_getpositionname(.@indices[.@i]) + "-[" + getequipname(.@indices[.@i]) + "]";
+			.@equipped = 1;
+		}
+		.@menu$ = .@menu$ + ":";
+	}
+	if (.@equipped == 0) {
+		mes "["+ .@npc_name$ +"]";
+		mes "我認為我無法完善您擁有的任何物品...";
+		close;
+	}
+	.@part = .@indices[select(.@menu$)];
+
+	if(!getequipisequiped(.@part)) { //custom check
+		mes "["+ .@npc_name$ +"]";
+		mes "你不穿";
+		mes "那裡的任何東西";
+		mes "我可以完善。";
+		emotion ET_FRET;
+		close;
+	}
+	//Check if the item is refinable...
+	if(!getequipisenableref(.@part)) {
+		mes "["+ .@npc_name$ +"]";
+		mes "我認為我不能";
+		mes "根本完善此項目...";
+		close;
+	}
+	//Check to see if the items is already +10
+	if(getequiprefinerycnt(.@part) >= 10) {
+		mes "["+ .@npc_name$ +"]";
+		mes "我不能完善這個";
+		mes "再過。這就是";
+		mes "隨後變得精緻！";
+		close;
+	}
+	.@refineitemid = getequipid(.@part); // save id of the item
+	.@refinerycnt = getequiprefinerycnt(.@part); //save refinery count
+	setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+	.@price = getequiprefinecost(.@part, REFINE_COST_NORMAL, REFINE_ZENY_COST);
+	.@material = getequiprefinecost(.@part, REFINE_COST_NORMAL, REFINE_MATERIAL_ID);
+	.@itemtype = getiteminfo( .@refineitemid, ITEMINFO_TYPE );
+
+	if( .@itemtype == IT_ARMOR ){
+		.@equip_lv = getequiparmorlv( .@part );
+
+		switch( .@equip_lv ){
+			case 1:
+				.@safe = 4;
+				break;
+			default:
+				// TODO:
+				close;
+		}
+
+		// If the VIP system is enabled, the prices for non-VIP players are considerably higher.
+		if( VIP_SCRIPT && !vip_status(VIP_STATUS_ACTIVE) ){
+			switch( .@equip_lv ){
+				case 1:
+					.@price = .@price * 10;
+					break;
+				default:
+					// TODO:
+					close;
+			}
+		}
+	}else if( .@itemtype == IT_WEAPON ){
+		.@equip_lv = getequipweaponlv( .@part );
+
+		switch( .@equip_lv ){
+			case 1:
+				.@safe = 7;
+				break;
+			case 2:
+				.@safe = 6;
+				break;
+			case 3:
+				.@safe = 5;
+				break;
+			case 4:
+				.@safe = 4;
+				break;
+			default:
+				// TODO:
+				close;
+		}
+
+		// If the VIP system is enabled, the prices for non-VIP players are considerably higher.
+		if( VIP_SCRIPT && !vip_status(VIP_STATUS_ACTIVE) ){
+			switch( .@equip_lv ){
+				case 1:
+					.@price = .@price * 40;
+					break;
+				case 2:
+					.@price = .@price * 50;
+					break;
+				case 3:
+					.@price = .@price * 2;
+					break;
+				case 4:
+					.@price = .@price * 2;
+					break;
+				default:
+					// TODO:
+					close;
+			}
+		}
+	}else{
+		.@safe = 4;
+	}
+
+	// TODO: What was this? Maybe shadow?
+	// case 5: .@price = .@price * 10; break;
+
+	if(.@features != 1) {
+		mes "["+ .@npc_name$ +"]";
+		mes "為了完善我需要的";
+		mes "一個 ^003366"+getitemname(.@material)+"^000000 and";
+		mes "服務費" + .@price + " Zeny.";
+		mes "您真的希望繼續嗎？";
+		next;
+		if(select("是:否") == 2){
+			mes "["+ .@npc_name$ +"]";
+			mes "是的...";
+			mes "無需";
+			mes "匆忙。慢慢來。";
+			close;
+		}
+		if(getequippercentrefinery(.@part) < 100) {
+			mes "["+ .@npc_name$ +"]";
+			mes "哦，不！如果我繼續";
+			mes "完善這個，有可能";
+			switch(.@material) {
+			case 985:
+				mes "被摧毀！這意味著 ^ff0000 this設備 ^000000和 ^ff0000 wond cards ^000000或在此裝甲中添加的特殊屬性， ^ff000000將消失 ^000000。";
+				break;
+			default:
+				mes "被摧毀，您將 ^ff0000降低武器 ^000000，武器中的任何 ^ff0000card ^000000，";
+				mes "或任何添加的特殊屬性。";
+				break;
+			}
+			next;
+			mes "["+getarg(0)+"]";
+			mes "我不能更清楚。";
+			mes "一旦武器被摧毀，";
+			mes "沒有收回它。";
+			mes "你真的有機會";
+			mes "^ff0000lose這個武器^000000永遠。";
+			mes "您還想完善嗎？";
+			next;
+			if(select("是:否") == 2){
+				mes "["+ .@npc_name$ +"]";
+				mes "我完全同意...";
+				mes "我可能是一個很棒的煉油廠，但有時甚至我會犯錯。";
+				close;
+			}
+		}
+		if((countitem(.@material) < 1) || (Zeny < .@price)) {
+			mes "["+ .@npc_name$ +"]";
+			mes "你似乎沒有";
+			mes "足夠的zeny或"+getitemname(.@material)+"...";
+			mes "去獲取更多。我會";
+			mes "如果您需要我，整天都在這裡。";
+			close;
+		}
+		Zeny = Zeny-.@price;
+		delitem .@material,1;
+
+		// anti-hack
+		if (callfunc("F_IsEquipIDHack", .@part, .@refineitemid) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3]) ||
+		    callfunc("F_IsEquipRefineHack", .@part, .@refinerycnt)) {
+			mes "["+ .@npc_name$ +"]";
+			emotion ET_FRET;
+			mes "等待一秒鐘...";
+			mes "你覺得我很愚蠢嗎？";
+			mes "我不在時切換物品！離開這裡！";
+			close;
+		}
+
+		if(getequippercentrefinery(.@part) <= rand(100)) {
+			failedrefitem .@part;
+			mes "["+ .@npc_name$ +"]";
+			emotion (!rand(5))?ET_MONEY:ET_HUK;
+			.@lose = rand(1,3);
+			if (.@lose == 1) {
+				mes "哦！我的上帝！";
+				mes "該死的！不再！";
+				mes "我非常抱歉，但是您知道練習確實是完美的。";
+				mes "嗯，對嗎？呵呵...";
+			} else if(.@lose == 2) {
+				mes "不！";
+				mes "它破裂了！";
+				mes "我 - 對不起！";
+			} else {
+				mes "廢話！";
+				mes "不可以";
+				mes "更加脾氣！";
+				mes "對此很抱歉...";
+			}
+			close;
+		}
+		mes "["+getarg(0)+"]";
+		successrefitem .@part;
+		emotion ET_SMILE;
+		.@win = rand(1,3);
+		if (.@win == 1) {
+			mes "完美的！";
+			mes "呵呵！";
+			mes "再次，";
+			mes "完美的工作";
+			mes "來自主人~";
+		} else if(.@win == 2) {
+			mes "成功...！";
+			mes "再一次，我的驚人";
+			mes "才華真正地眼花azz亂";
+			mes "今天閃耀。";
+		} else {
+			mes "呵呵！";
+			mes "我都完成了。";
+			mes "毫無疑問，我的工作是";
+			mes "為您滿意。";
+			mes "純粹，完全完美~";
+		}
+		close;
+	}
+
+// New Refining Functions ========================
+	if (.@refinerycnt < .@safe) {
+		mes "["+ .@npc_name$ +"]";
+		mes "我可以將其完善到安全的限製或所需的次數。這是您的選擇。";
+		next;
+		.@menu2 = select("To the safe limit, please.","I'll decide how many times.","I've changed my mind...");
+	} else
+		.@menu2 = 2;
+	switch(.@menu2){
+	case 1: 
+		.@refinecnt = .@safe - .@refinerycnt;
+		break;
+	case 2:
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "您希望我幾次完善您的物品？";
+		next;
+		input .@refinecnt;
+		.@refinecheck = .@refinecnt + .@refinerycnt;
+		if (.@refinecnt < 1 || .@refinecheck > 10) {
+			mes "["+ .@npc_name$ +"]";
+			mes "我不能多次完善這個項目。";
+			close;
+		}
+		if(.@refinecheck > .@safe) {
+			.@refinecheck = .@refinecheck - .@safe;
+			mes "["+ .@npc_name$ +"]";
+			mes "這將嘗試完善設備" + .@refinecheck + " times past the safe limit. Your equipment may be destroyed... is that ok?";
+			next;
+			if(select("Yes...","No...") == 2){
+				mes "["+ .@npc_name$ +"]";
+				mes "你這麼說...這樣。";
+				close;
+			}
+		}
+		break;
+	case 3:
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "你這麼說...這樣。";
+		close;
+	}
+	.@fullprice = .@price * .@refinecnt;
+	mes "["+ .@npc_name$ +"]";
+	mes "那會花你的錢" + .@refinecnt + " " + getitemname(.@material) + " and " + .@fullprice + " Zeny. Is that ok?";
+	next;
+	if(select("Yes","No...") == 2){
+		mes "["+ .@npc_name$ +"]";
+		mes "你這麼說...這樣。";
+		close;
+	}
+	if(countitem(.@material) < .@refinecnt || Zeny < .@fullprice) {
+		mes "["+ .@npc_name$ +"]";
+		mes "那是你只有的嗎？不幸的是，我不能以較低的價格為您工作。嘗試把自己放在我的鞋子裡。";
+		close;
+	}
+	Zeny = Zeny - .@fullprice;
+	delitem .@material,.@refinecnt;
+	while(.@refinecnt){
+		if (getequipisequiped(.@part) == 0) {
+			mes "["+ .@npc_name$ +"]";
+			mes "在這裡看...您沒有任何物品...";
+			close;
+		}
+		// anti-hack
+		if (callfunc("F_IsEquipIDHack", .@part, .@refineitemid) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3]) ||
+				callfunc("F_IsEquipRefineHack", .@part, .@refinerycnt) || (.@menu2 == 1 && getequippercentrefinery(.@part) < 100)) {
+			mes "["+ .@npc_name$ +"]";
+			mes "clang ...不，但是你想我會這麼愚蠢嗎？";
+			mes "你改變了...";
+			mes "在我用錘子擊打你之前滾出去！";
+			close;
+		} 
+		mes "叮叮噹當！ ！ ！";
+		if(.@menu2 == 2 && getequippercentrefinery(.@part) <= rand(100)) {
+			failedrefitem .@part;
+			emotion ET_HUK;
+			mes "["+ .@npc_name$ +"]";
+			mes "哇！ ！ ！我很抱歉...我警告過你這可能發生...";
+			.@refinecnt = .@refinecnt - 1;
+			if(.@refinecnt == 0) close;
+			mes "這是未使用的Zeny和材料回...";
+			getitem .@material,.@refinecnt;
+			.@fullprice = .@refinecnt * .@price;
+			Zeny = Zeny + .@fullprice;
+			close;
+		}
+		successrefitem .@part;
+		emotion ET_BEST;
+		.@refinecnt = .@refinecnt - 1;
+		.@refinerycnt = getequiprefinerycnt(.@part);
+		next;
+	}
+	mes "["+ .@npc_name$ +"]";
+	mes "全部結束了...很快再來。";
+	close;
+}
+
+// Material Salesmen
+//============================================================
+prt_in,56,68,5	script	Vurewell	86,{
+	callfunc "phramain","Vurewell";
+	end;
+}
+payon,145,178,3	script	Begnahd	88,{
+	callfunc "phramain","Begnahd";
+	end;
+}
+morocc_in,63,32,6	script	Sade	99,{
+	callfunc "phramain","Sade";
+	end;
+}
+alberta_in,13,71,3	script	Kahlamanlith	86,{
+	callfunc "phramain","Kahlamanlith";
+	end;
+}
+yuno_in01,171,27,4	script	Dilemma	88,{
+	callfunc "phramain","Dilemma";
+	end;
+}
+ein_in01,15,87,3	script	Tirehaus	86,{
+	callfunc "phramain","Tirehaus";
+	end;
+}
+lhz_in02,278,24,3	script	Krugg	86,{
+	callfunc "phramain","Krugg";
+	end;
+}
+
+// Material Salesmen Functions
+//============================================================
+function	script	phramain	{
+	if (checkweight(1201,1) == 0) {
+		mes "- 等一下 ！ ！ -";
+		mes "- 目前您正在攜帶 -";
+		mes "- 與您在一起太多。 -";
+		mes "- 請重試 -";
+		mes "- 減肥後。 -";
+		close;
+	}
+	.@npc_name$ = getarg(0);
+	mes "["+ .@npc_name$ +"]";
+	mes "我賣2種金屬";
+	mes "用於調速武器。";
+	mes "我有1級的 ^0077777770000";
+	mes "武器和 ^0077777 emveretarcon ^000000";
+	mes "對於2級武器。";
+	next;
+	switch(select("弗拉肯 - 200 Zeny:艾默特肯 - 1000 Zeny:詢問其他金屬")) {
+	case 1:
+		.@material = 1010;
+		.@price = 200;
+		break;
+	case 2:
+		.@material = 1011;
+		.@price = 1000;
+		break;
+	case 3:
+		mes "["+ .@npc_name$ +"]";
+		mes "其他金屬？";
+		mes "好吧，您需要特殊的金屬來升級更高級別的武器或任何類型的盔甲。但是你知道，Oridecon和Elunium確實是";
+		mes "很難找到...";
+		close;
+	}
+	mes "["+ .@npc_name$ +"]";
+	mes "那你想買多少？";
+	mes "如果您不需要，請輸入“ 0”號碼。";
+	next;
+	while(1) {
+		input .@input;
+		if (.@input == 0) {
+			mes "["+ .@npc_name$ +"]";
+			mes "交易有";
+			mes "被取消。";
+			close;
+		}
+		else if (.@input < 0 || .@input > 500) {
+			mes "["+ .@npc_name$ +"]";
+			mes "好吧，你可以";
+			mes "Puchase最多500。";
+			mes "不僅如此，";
+			mes "知道了？好的。";
+			next;
+		}
+		else {
+			break;
+		}
+	}
+	.@sell = .@input * .@price;
+	if (Zeny < .@sell) {
+		mes "["+ .@npc_name$ +"]";
+		mes "犯錯...";
+		mes "你沒有";
+		mes "足夠的zeny買";
+		mes ""+ .@input +" of them.";
+		close;
+	}
+	if (checkweight(.@material,.@input) == 0) {
+		mes "["+ .@npc_name$ +"]";
+		mes "唔...";
+		mes "如果您的庫存中沒有足夠的空間，我什麼都不能給您任何東西。您為什麼不將額外的東西放在Kafra存儲中，然後重試？";
+		close;
+	}
+	getitem .@material,.@input;
+	Zeny = Zeny-.@sell;
+	mes "["+ .@npc_name$ +"]";
+	mes "給你！";
+	mes "謝謝你";
+	mes "您的光顧。";
+	close;
+}
+
+// Ori/Elu Refiners
+//============================================================
+prt_in,63,69,3	script	Dietrich	84,{
+	callfunc "orimain","Dietrich";
+	end;
+}
+payon,137,178,5	script	Hakhim	88,{
+	callfunc "orimain","Hakhim";
+	end;
+}
+morocc_in,72,32,6	script	Abdula	99,{
+	callfunc "orimain","Abdula";
+	end;
+}
+alberta_in,21,63,5	script	Xenophon	84,{
+	callfunc "orimain","Xenophon Zolotas";
+	end;
+}
+yuno_in01,164,27,4	script	Delight	88,{
+	callfunc "orimain","Delight";
+	end;
+}
+ein_in01,18,82,6	script	Matestein	84,{
+	callfunc "orimain","Matestein";
+	end;
+}
+lhz_in02,281,24,5	script	Fruel	84,{
+	callfunc "orimain","Fruel";
+	end;
+}
+
+// Ori/Elu Functions
+//============================================================
+function	script	orimain	{
+	if (checkweight(1201,1) == 0) {
+		mes "- 等一下 ！ ！ -";
+		mes "- 目前您正在攜帶 -";
+		mes "- 與您在一起太多。 -";
+		mes "- 請重試 -";
+		mes "- 減肥後。 -";
+		close;
+	}
+	.@npc_name$ = getarg(0);
+	mes "["+ .@npc_name$ +"]";
+	mes "我可以淨化你的";
+	mes "粗糙的Oridecons或";
+	mes "粗糙的Eluniums。我需要";
+	mes "5個粗糙的石頭";
+	mes "1純的一個。";
+	next;
+	switch(select("製作神之金屬:製作鋁原石:詢問附魔石")) {
+	case 1:
+		if (countitem(756) > 4) {
+			delitem 756,5;  //Oridecon_Stone
+			getitem 984,1; // Oridecon
+			mes "["+ .@npc_name$ +"]";
+			mes "這是您的Oridecon。";
+			mes "歡迎您來";
+			mes "隨時隨地回來。";
+			close;
+		}
+		else {
+			mes "["+ .@npc_name$ +"]";
+			mes "你在開玩笑，對嗎？";
+			mes "我只是告訴你，我需要5個粗糙的Oridecon來製作一個純粹的Oridecon。";
+			close;
+		}
+	case 2:
+		if (countitem(757) > 4) {
+			delitem 757,5;  //Elunium_Stone
+			getitem 985,1; // Elunium
+			mes "["+ .@npc_name$ +"]";
+			mes "這是您的Elunium。";
+			mes "歡迎您來";
+			mes "隨時隨地回來。";
+			close;
+		}
+		else {
+			mes "["+ .@npc_name$ +"]";
+			mes "你在開玩笑，對嗎？";
+			mes "我只是告訴你，我需要5個粗糙的Elunium來製作純淨的Elunium。";
+			close;
+		}
+	case 3:
+		mes "["+ .@npc_name$ +"]";
+		mes "迷人的石頭...？";
+		mes "我一直是石匠20年，所以我聽說了很多關於它們的信息。據說有";
+		mes "四種不同的種類。";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "每座迷人的石頭都具有以下元素特性之一：地球，風，水和火。";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "如果有人在砸碎時將迷人的石頭與武器結合在一起，則該武器將擁有與石頭相同的特性。";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "不用說，您需要擁有一些砸碎的技能來生產這種元素武器。";
+		close;
+	}
+}
+
+// Equipment Repairmen
+//============================================================
+alberta_in,31,65,4	script	Repairman#alb	86,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+moc_ruins,107,94,4	script	Repairman#moc	99,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+payon,143,165,4	script	Repairman#pay	88,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+prt_in,63,54,2	script	Repairman#prt	86,{
+	callfunc "repairmain","Grendal";
+	end;
+}
+
+yuno_in01,175,28,3	script	Repairman#juno	86,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+geffen_in,34,166,3	script	Repairman#gef	99,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+aldeba_in,38,60,3	script	Repairman#alde	86,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+lhz_in02,284,14,3	script	Repairman#lhz	86,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+prt_gld,139,117,4	script	Repairman#prt_gld	86,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+gef_fild13,263,117,4	script	Repairman#gef_fild	86,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+pay_gld,295,183,4	script	Repairman#pay_gld	86,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+alde_gld,220,152,4	script	Repairman#alde_gld	86,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+aru_gld,189,336,4	script	Repairman#aru_gld	86,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+sch_gld,340,80,7	script	Repairman#sch_gld	86,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+// Equipment Repair Function
+//============================================================
+function	script	repairmain	{
+	.@repairprice = 5000;
+	.@npc_name$ = getarg(0);
+	mes "["+ .@npc_name$ +"]";
+	mes "嘿！";
+	mes "你要我嗎";
+	mes "修理任何物品？";
+	mes "你可以指望我";
+	mes "用於物品維修！";
+	next;
+	switch(select("實際上，我確實有一些物品...:目前沒有")) {
+	case 1:
+		.@checkitem = 1;
+		while (1) {
+			if (getbrokenid(.@checkitem) == 0) {
+				break;
+			}
+			.@checkitem = .@checkitem+1;
+		}
+		.@checkitem = .@checkitem-1;
+		if (!.@checkitem) {
+			mes "["+ .@npc_name$ +"]";
+			mes "哦，這太不可思議了！";
+			mes "您必須很好地照顧好自己的事情。您的物品都沒有損壞！";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "如果每個人都像你一樣，我將失業！ ！哈哈~！";
+			close;
+		}
+		mes "["+ .@npc_name$ +"]";
+		mes "唔...";
+		mes "讓我們來看看...";
+		mes "在所有物品中，";
+		mes "" + .@checkitem + " are damaged.";
+		mes "您想修理嗎？";
+		next;
+		.@totalcost = .@repairprice*.@checkitem;
+		mes "["+ .@npc_name$ +"]";
+		mes "每個維修費用" + .@repairprice + " Zeny. So to repair all your damaged items would cost " + .@totalcost + " Zeny! Would you like to repair the items?";
+		next;
+		switch(select("是:否")) {
+		case 1:
+			if (Zeny < .@totalcost) {
+				mes "["+ .@npc_name$ +"]";
+				mes "哇哇...";
+				mes "在收到維修賬單之前，請檢查您的錢包！我無法修理任何東西，因為您沒有足夠的Zeny。";
+				close;
+			}
+			.@checkitem2 = 1;
+			while (1) {
+				if (getbrokenid(.@checkitem2) == 0) {
+					break;
+				}
+				.@checkitem2 = .@checkitem2+1;
+			}
+			.@checkitem2 = .@checkitem2-1;
+			if (.@checkitem == .@checkitem2) {
+				Zeny = Zeny-.@totalcost;
+				while (.@checkitem) {
+					repair(.@checkitem);
+					.@checkitem = .@checkitem-1;
+				}
+				mes "["+ .@npc_name$ +"]";
+				mes "好的！一切都完成了。現在，嘗試更加小心。您知道的物品也有生命。";
+				close;
+			}
+			else {
+				mes "["+ .@npc_name$ +"]";
+				mes "嗯？出了點問題。等待...裝備您需要修理的物品，然後再回到我身邊。";
+				close;
+			}
+		case 2:
+			mes "["+ .@npc_name$ +"]";
+			mes "好吧，我的鼻子沒有皮膚，但是將物品損壞並不好。您應該盡快修復它們！";
+			close;
+		}
+	case 2:
+		mes "["+ .@npc_name$ +"]";
+		mes "呼呼呼……";
+		mes "你沒有";
+		mes "與我的任何生意";
+		mes "如果您沒有任何";
+		mes "要修理的物品。";
+		close;
+	}
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.0 by A bunch of people!
+//=     Syrus22 - Completely redid the script using functions... also
+//=     added the option for auto safe refining and multiple refining.
+//= 1.1 Negative input bug fixed [Lupus]
+//= 1.2 Added additional reparimen in Morocc and payon. Added
+//=     Christopher the blacksmith in Geffen. Edited some dialogue [kobra_k88]
+//= 1.3 New Payon Locations [Darkchild]
+//=     Corrected zeny subtraction thx to jpnmania77.[kobra_k88]
+//= 1.3a Temporary corrected an exploit. Need to check sources
+//=     to fully fix bug [Shinigami]
+//=     Fixed repairman prices [shadowlady]
+//=     Fixed bug that skips requirements thanks to sir_loon [massdriller]
+//=     Fixed itemid error thanks to -Vitamin- [massdriller]
+//= 1.4 check again item in refining procedure to avoid
+//=     hacker that can change item [dafide18]
+//= 1.5 Fixed crashing due to badly used callfunc's [Skotlex]
+//=     Lupus, don't rollback this important fix again! >.<
+//= 1.5a Corrected an unneeded callfunc, fixed the anti-bot 
+//=     exploit ruining the safe refine loop. [Skotlex]
+//= 1.5b Fixed Spelling mistakes. [Nexon] 
+//= 1.6 Replaced all breaks for ends as per the new script engine [Skotlex]
+//= 1.7 Added Einbroch Refiners (Custom names ^^;) and a duplicated BS Shop. [Poki#3]
+//= 1.8 Added Lighthalzen Refiners (Custom names again ^^;) [Poki#3]
+//= 1.8a Fixed wrong indication thanks to NeoSaro [Lupus]
+//= 1.9 Rewrote repairman, removed the Steel from repair cost [DracoRPG]
+//= 2.0 Fixed missed equppment presence check. Thx2 Coltaro [Lupus]
+//= 2.0a Added weight checks thanks to Neouni [Playtester]
+//= 2.0b Fixed the names of Lighthalzen and Einbroch refiners thanks to Maud_Dib [Kargha]
+//= 2.1 Removed Duplicates [Silent]
+//= 2.2 Changed name from "Emvertacon" to "Emveretarcon". [Samuray22]
+//=     Thanks to Barron-Monster.
+//= 2.2b Changed name from "Pharacon" to "Phracon". [Samuray22]
+//=     Thanks to Barron-Monster.
+//= 2.3 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 2.4 Updated Refiner function. cleaner, and less dated. [L0ne_w0lf]
+//= 2.5 Rather large update to the refiner and merchants. :D [L0ne_W0lf]
+//= 2.6 Fixed a few bugs with creating pure stones. [L0ne_W0lf]
+//= 2.7 Refiner function accepts additional paramater. [L0ne_W0lf]
+//=     0 = No special features; 1 = new refining features
+//=     Updated Repairmen and function. No longer shows menu.
+//= 2.7a A couple touch-ups to the repairman function. [L0ne_w0lf]
+//= 2.8 Changed the nonexistent variable .@matname$ for getitemname(.@material). (bugreport:2340) [Samuray22]
+//= 2.8 Added proper Blacksmith Supplier to Einroch. [L0ne_W0lf]
+//=     Updated dated features comment to reflect new usage.
+//= 2.8a Small bugfix. (bugreport:2418) [Paradox924X]
+//= 2.9 Moved Morocc repairman to Morocc Ruins. [L0ne_W0lf]
+//============================================================

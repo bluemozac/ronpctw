@@ -1,0 +1,176 @@
+﻿//===== rAthena Script ======================================= 
+//= Brasilis Town
+//===== By: ================================================== 
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Brasilis Town Script
+//===== Additional Comments: ================================= 
+//= 1.0 First version. Transportation and Basic NPCs.
+//= 1.1 Fixed Zeny not being removed for payment. [Kisuka]
+//= 1.2 Updated dialog, added Ice Cream Maker. [L0ne_W0lf]
+//= 1.3 Moved Alberta NPC to pre-re/re paths. [Euphy]
+//= 1.4 Added VIP features. [Euphy]
+//============================================================ 
+
+// Brasilis Transportation :: brasilis_trans
+//============================================================
+/* Pre-Renewal coordinates: alberta,247,115,3 */
+alberta,246,82,3	script	Crewman#bra2	100,{
+	mes "[船員]";
+	mes "嘿，您聽說過一個叫巴西利斯的地方嗎？ ，您聽說過一個叫巴西利斯的地方嗎？";
+	mes "這是一個熱帶城市，像沙漠一樣熱，但也多雨。這是一個非常神秘的地方。 ，但也多雨。這是一個非常神秘的地方。";
+	next;
+	mes "[船員]";
+	mes "最近，我們發現了一條新的海洋路線，可以輕鬆到達那裡。 ，可以輕鬆到達那裡。";
+	if (VIP_SCRIPT) {
+		set .@cost, vip_status(VIP_STATUS_ACTIVE)?1000:10000;
+		mes "往返只有10,000 Zeny，而VIP只有1,000個！那你想去嗎？"; //custom translation (VIP)
+	} else {
+		set .@cost,10000;
+		mes "往返只有10,000 Zeny ！那你想去嗎？";
+	}
+	next;
+	switch(select("帶我去巴西利斯！ :我會留在這裡。")) {
+	case 1:
+		if (Zeny < .@cost) {
+			mes "[船員]";
+			mes "我說"+callfunc("F_InsertComma",.@cost)+" zeny.";
+			close;
+		}
+		else {
+			mes "[船員]";
+			mes "酷~!!讓我們走~！";
+			set Zeny, Zeny-.@cost;
+			close2;
+			warp "brasilis",314,60;
+			end;
+		}
+	case 2:
+		mes "[船員]";
+		mes "好吧，如果您有興趣，請告訴我，我可以帶您到那裡。 ，我可以帶您到那裡。";
+		close;
+	}
+}
+
+brasilis,316,57,3	script	Crewman#bra1	100,{
+	mes "[船員]";
+	mes "我的船要回艾伯塔省，您想加入我們嗎？ ，您想加入我們嗎？";
+	next;
+	switch(select("回阿爾伯塔吧:還沒有~。")) {
+	case 1:
+		mes "[船員]";
+		mes "我當然想念家。";
+		close2;
+		if (checkre(0))
+			warp "alberta",243,82;
+		else
+			warp "alberta",244,115;
+		end;
+	case 2:
+		mes "[船員]";
+		mes "好，適合自己。當我們回來時，我們會見。 ，我們會見。";
+		close;
+	}
+}
+
+// Generic Brasilis NPCs :: brazil_tre
+//============================================================
+brasilis,155,165,3	script	Signpost#bra1	858,{
+	mes "::美術館::";
+	close;
+}
+
+brasilis,191,239,3	script	Signpost#bra2	858,{
+	mes "::動詞紀念碑::";
+	close;
+}
+
+brasilis,240,247,3	script	Signpost#bra3	858,{
+	mes "：：：市場：：：：";
+	mes " ";
+	mes "- 對於您的藥水和武器- -";
+	close;
+}
+
+brasilis,303,309,3	script	Signpost#bra4	858,{
+	mes "::叢林有線::";
+	mes "- 不是為了膽小的人- -";
+	close;
+}
+
+brasilis,278,137,3	script	Signpost#bra5	858,{
+	mes ":: 巴西利斯酒店 ::";
+	close;
+}
+
+brasilis,137,77,5	script	Ice-Cream Maker	85,{
+	mes "[冰淇淋製造商]";
+	mes "來~~~";
+	mes "冰淇淋是炎熱一天的理想小吃~";
+	mes "只是 ^ ^3355ff100 Zeny ^000000~";
+	mes "冰淇淋~";
+	mes "得到'yer 冰淇淋！";
+	next;
+	switch(select("給我一個！ :冰淇淋？ :取消。")) {
+	case 1:
+		mes "[冰淇淋製造商]";
+		mes "由於有很多人想獲得涼爽的冰淇淋，因此您一次只能訂購5個。";
+		mes "那麼有多少個d'y想要？";
+		next;
+		while(1) {
+			input .@input; //,1,5;
+			if (.@input == 0) {
+				mes "[冰淇淋製造商]";
+				mes "沒有任何？";
+				mes "很好地走開了，我有客戶可以服務。 ，我有客戶可以服務。";
+				close;
+			}
+			else if ((.@input < 0) || (.@input > 5)) {
+				mes "[冰淇淋製造商]";
+				mes "哇。";
+				mes "您點了太多。";
+				mes "如果您吃了5，則可能需要與肚子裡的怪物戰鬥。冷靜下來的好友。 ，則可能需要與肚子裡的怪物戰鬥。冷靜下來的好友。";
+				next;
+			}
+			else
+				break;
+		}
+		set .@icecream_hap,.@input*100;
+		if (Zeny < .@icecream_hap) {
+			mes "[冰淇淋製造商]";
+			mes "dood~！你沒有足夠的錢。";
+			mes "只有 ^ ^3355ff100 Zeny ^000000~認真！";
+			close;
+		}
+		if (!checkweight(536,.@input)) {
+			mes "[冰淇淋製造商]";
+			mes "您似乎有太多東西。";
+			mes "購買之前，請減輕您的背包。 ，請減輕您的背包。";
+			close;
+		}
+		set Zeny, Zeny-.@icecream_hap;
+		getitem 536,.@input; //Ice_Cream
+		close;
+	case 2:
+		mes "[冰淇淋製造商]";
+		mes "'冰淇淋是...";
+		mes "等等，你不知道";
+		mes "什麼是冰淇淋？";
+		mes "你有什麼岩石";
+		mes "一直生活在下面？";
+		next;
+		mes "[冰淇淋製造商]";
+		mes "我什至不會從聽起來很奇怪開始。";
+		mes "無論如何，當冰淇淋既又好又冷。 ，當冰淇淋既又好又冷。";
+		close;
+	case 3:
+		mes "[冰淇淋製造商]";
+		mes "不要錯過您在整個土地上吃最大冰淇淋的機會~！";
+		close;
+	}
+}

@@ -1,0 +1,676 @@
+﻿//===== rAthena Script =======================================
+//= Eden Group Quests - Mission [26 - 40]
+//===== By: ==================================================
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Repetable Quests for Players between Baselevel 26 - 40.
+//===== Additional Comments: =================================
+//= 1.0 First Version.
+//= 1.1 Some little optimization here and there. [Masao]
+//= 1.2 Optimized. [Euphy]
+//= 1.3 Added support to Para_Team_Mark_ in Eden Group. [Ragno]
+//= 1.4 Added use of F_HasEdenGroupMark function. [Ragno]
+//============================================================
+
+moc_para01,38,38,3	script	Mission [26 - 40]	857,{
+	if (!callfunc("F_HasEdenGroupMark")) {
+		mes "您不是合格的成員。您無法使用公告板。";
+		close;
+	}
+	mes "[26~40 lv。任務委員會]";
+	mes "- 許多任務是 -";
+	mes "- 在公告板上。 -";
+	next;
+	if ((BaseLevel < 26) || (BaseLevel > 40)) {
+		mes "您的水平沒有資格。您無法使用公告板。";
+		close;
+	}
+	switch(select("狩獵任務:運送任務:採集任務:護送任務")) {
+	case 1:
+		mes "[狩獵任務委員會]";
+		mes "- 狩獵任務細節 -";
+		mes "- 在董事會上。 -";
+		next;
+		switch(select("狩獵毒孢子:狩獵煙熏:狩獵柳樹長者(30級以上):狩獵可可(35級以上):狩獵塔拉蛙(38級以上)")) {
+			case 1: callsub L_Quest,8266,0,"Hunting Poison Spore","Sponiac","Geffen","Hunt 10 Poison Spores";
+			case 2: callsub L_Quest,8267,0,"Hunting Smokie","Sponiac","Geffen","Hunt 10 Smokies";
+			case 3: callsub L_Quest,8268,30,"Hunting Elder Willow","Sponiac","Geffen","Hunt 10 Elder Willows";
+			case 4: callsub L_Quest,8269,35,"Hunting Coco","Sponiac","Geffen","Hunt 10 Cocos";
+			case 5: callsub L_Quest,8270,38,"Hunting Thara Frog","Sponiac","Geffen","Hunt 10 Thara Frogs";
+		}
+	case 2:
+		mes "[送貨任務委員會]";
+		mes "- 送貨任務詳細信息 -";
+		mes "- 在董事會上。 -";
+		next;
+		switch(select("送殺蟲劑:送蜂蜜:送毯子（35級以上）")) {
+			case 1: callsub L_Quest,8271,0,"Deliver an Insecticide","Dieshin Man","Morocc Ruins","Get an 'Insecticide' from Dieshin Man and deliver it south east of Payon";
+			case 2: callsub L_Quest,8272,0,"Deliver Honey","Dieshin Man","Morocc Ruins","Get 'Honey' from Dieshin Man and deliver it west of St. Capitolina Abbey";
+			case 3: callsub L_Quest,8273,35,"Deliver Blanket","Dieshin Man","Morocc Ruins","Get Blankets from Dieshin Man and deliver to the field south of Lutie";
+		}
+	case 3:
+		mes "[聚集任務委員會]";
+		mes "- 收集任務詳細信息 -";
+		mes "- 在董事會上。 -";
+		next;
+		switch(select("收集骨頭:收集獸皮:收集果皮(30級以上):收集尾巴(32級以上):收集餅乾(35級以上):收集鬍鬚(35級以上)")) {
+			case 1: callsub L_Quest,8274,0,"Gather Bones","Dashia","Payon","Gather '10 Skel-Bones' and give them to Dashia";
+			case 2: callsub L_Quest,8275,0,"Gather Animal Skins","Dashia","Payon","Gather '10 Bear's Footskins' and '5 Animal Skins' and give them to Dashia";
+			case 3: callsub L_Quest,8276,30,"Gather Peelings","Dashia","Payon","Gather '20 Worm Peelings' and '20 Garlets' and give them to Dashia";
+			case 4: callsub L_Quest,8277,32,"Gather Tails","Dashia","Payon","Gather '10 Yoyo Tails', '10 Acorns' and '10 Raccon Leafs' and give them to Dashia";
+			case 5: callsub L_Quest,8278,35,"Gather Cookies","Dashia","Payon","Gather '5 Well-baked Cookies' and '1 Piece of Cake' and give them to Dashia";
+			case 6: callsub L_Quest,8279,35,"Gather Mustaches","Dashia","Payon","Gather '5 Mole Whiskers' and '3 Mole Claws' and give them to Dashia";
+		}
+	case 4:
+		mes "[護送任務委員會]";
+		mes "目前，董事會沒有登記的陪同任務。";
+		close;
+	}
+	end;
+L_Quest:
+	//QuestID,ReqLvl,Quest,Client,Loc,Desc
+	.@string$ = getarg(2);
+	if (BaseLevel < getarg(1,26)) {
+		mes "您的水平不符合要求。你不能接受'"+ .@string$ +"' mission.";
+		close;
+	}
+	mes "["+ .@string$ +" !!]";
+	mes "客戶 ："+getarg(3);
+	mes "客戶位置："+getarg(4);
+	mes "要求的任務："+getarg(5);
+	mes " ";
+	mes "你會接受這個任務嗎？";
+	next;
+	if(select("不，我不會接受:是的，我會接受。") == 1) {
+		mes "你拒絕了"+ .@string$ +" mission.";
+		close;
+	}
+	if (checkquest(getarg(0)) > -1) mes "你已經在執行這個任務了。";
+	else {
+		setquest getarg(0);
+		mes "你接受了"+ .@string$ +" mission.";
+	}
+	mes "完成任務後，您可以從客戶那裡獲得獎勵。";
+	next;
+	mes "有關更多詳細信息，請按“ alt + u”，以從“任務”窗口獲取更多信息。";
+	close;
+}
+
+geffen,103,42,5	script	Sponiac	99,{
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 3500) {
+		mes "[斯波尼亞克]";
+		mes "你為什麼要攜帶這麼多物品？";
+		mes "您正在參加培訓課程嗎？";
+		close;
+	}
+	mes "[斯波尼亞克]";
+	mes "路~路~路~路~";
+	mes "lu~嗯？";
+	next;
+	mes "[斯波尼亞克]";
+	mes "哇，你一定是初學者，對嗎？";
+	mes "真是無辜的面孔！哈哈哈哈。";
+	emotion ET_KIK;
+	next;
+	mes "[斯波尼亞克]";
+	mes "您為什麼不在外面狩獵而不是四處走走並浪費時間？";
+	next;
+	if(select("我現在要走了:我有一個狩獵任務。") == 1) {
+		mes "[斯波尼亞克]";
+		mes "那好吧。然後，去看。";
+		mes "再見。";
+		close;
+	}
+	mes "[斯波尼亞克]";
+	mes "哦，你來自伊甸園嗎？";
+	mes "你有什麼任務？";
+	next;
+	switch(select("狩獵毒孢子:狩獵斯莫基:狩獵老柳:狩獵可可:狩獵塔拉青蛙")) {
+		case 1: callsub L_Quest,8266,"Hunting Poison Spore",1000,0,100,"You can find Poison Spores on the Geffen Dungeon 1F or northeast of Prontera. There are other spots but I'll leave it up to you to find out.";
+		case 2: callsub L_Quest,8267,"Hunting Smokie",1000,0,100,"You can find Smokies northeast and northwest of Geffen. Oh, also the field east of Ayothaya is good spot to find them.";
+		case 3: callsub L_Quest,8268,"Hunting Elder Willow",1000,100,110,"You can find Elder Willows northeast of Geffen, east of payon and southwest of Prontera.";
+		case 4: callsub L_Quest,8269,"Hunting Coco",1000,200,150,"You can find Cocos around the east of Payon, southwest of Prontera and the field east of Ayothaya.";
+		case 5: callsub L_Quest,8270,"Hunting Thara Frog",1500,300,200,"You can find Thara Frogs in the Cave east of Comodo or on Turtle Island.";
+	}
+	end;
+L_Quest:
+	//QuestID,Quest,BExp,JExp,PotionAmt,Desc
+	.@quest_id = getarg(0);
+	if (checkquest(.@quest_id) == 1) {
+		if (checkquest(.@quest_id,HUNTING) == 2) {
+			mes "[斯波尼亞克]";
+			mes getarg(1)+"呢";
+			mes "哇，我沒想到你會做那個任務。我正要放棄。但是你做得很好。我很感激！";
+			next;
+			mes "[斯波尼亞克]";
+			mes "好吧，我要求任務，您做得很好。";
+			mes "按照我的承諾，我會給你一個獎勵。";
+			next;
+			mes "[斯波尼亞克]";
+			mes "這裡是。非常感謝。上帝保佑你！";
+			getitem 569,getarg(4); //Novice_Potion
+			getexp getarg(2),getarg(3);
+			erasequest .@quest_id;
+			close;
+		}
+		mes "[斯波尼亞克]";
+		mes "哦，你是對的。";
+		next;
+		mes "[斯波尼亞克]";
+		mes "但是，您還沒有完成任務。你為什麼現在來找我？您尚未完成任務！";
+		mes "如果您完成任務，我會給您一個獎勵。好的？我們很好嗎？";
+		next;
+		mes "[斯波尼亞克]";
+		mes getarg(5);
+		mes "您可以通過按“ CTRL +~”鍵來檢查世界地圖。";
+		next;
+		mes "[斯波尼亞克]";
+		mes "無論如何，我會在這裡等你。完成任務後，請回來！";
+		close;
+	}
+	mes "[斯波尼亞克]";
+	mes "嗯？你確定嗎？有問題...";
+	next;
+	mes "[斯波尼亞克]";
+	mes "很奇怪。";
+	mes "請按“ Alt + U”來檢查您的任務窗口。";
+	close;
+}
+
+moc_ruins,173,55,3	script	Dieshin Man	89,{
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 3500) {
+		mes "[鐵新人]";
+		mes "你為什麼要攜帶這麼多物品？";
+		mes "您正在參加培訓課程嗎？";
+		close;
+	}
+	mes "[鐵新人]";
+	mes "胡胡~~我們是交貨人~";
+	mes "我們比任何航班都要快~！";
+	next;
+	mes "[鐵新人]";
+	mes "歡迎~歡迎！";
+	mes "我們是最快的送貨公司Dieshin Corperation。";
+	next;
+	mes "[鐵新人]";
+	mes "我怎麼幫你？";
+	next;
+	if(select("我不需要幫助:我有一個送貨任務。") == 1) {
+		mes "[鐵新人]";
+		mes "那好吧。然後，去看。再見~！";
+		close;
+	}
+	mes "[鐵新人]";
+	mes "哦，你來自伊甸園嗎？";
+	mes "你有什麼任務？";
+	next;
+	switch(select("提供殺蟲劑。 :提供蜂蜜。 :提供毯子。")) {
+		case 1: callsub L_Quest,8271;
+		case 2: callsub L_Quest,8272;
+		case 3: callsub L_Quest,8273;
+	}
+	end;
+L_Quest:
+	if (checkquest(getarg(0)) != 1) {
+		mes "[鐵新人]";
+		mes "嗯？你確定嗎？有問題...";
+		next;
+		mes "[鐵新人]";
+		mes "很奇怪。";
+		mes "請按“ Alt + U”來檢查您的任務窗口。";
+		close;
+	}
+	if (countitem(6218) > 0) {
+		mes "[鐵新人]";
+		mes "等等，但是您已經有一個送貨框。";
+		next;
+		mes "[鐵新人]";
+		mes "我們不能讓您一次交付兩個盒子。因此，請先完成送貨。";
+		next;
+		mes "[鐵新人]";
+		mes "如果您忘記了在哪裡交付的地方，請通過按“ Alt + U”來檢查任務窗口。";
+		close;
+	}
+	switch(getarg(0)) {
+	case 8271:
+		mes "[鐵新人]";
+		mes "啊！我得到了它！";
+		mes "殺蟲劑？佩隆東南部的動物學家一定是命令殺蟲劑的動物學家。";
+		break;
+	case 8272:
+		mes "[鐵新人]";
+		mes "啊！我得到了它！";
+		mes "蜂蜜？它一定是聖大大廈大教堂西部的昆蟲學家，是prontera的東北，他命令蜂蜜。";
+		break;
+	case 8273:
+		mes "[鐵新人]";
+		mes "哦，對！";
+		mes "毯子！訂購了毯子的路蒂菲爾德（Lutie Field）一定是Lutie Field南部的生物學家。";
+		next;
+		mes "[鐵新人]";
+		mes "您可以通過詢問al de Baran東北部的克勞斯先生來去路易。";
+		break;
+	}
+	next;
+	mes "[鐵新人]";
+	mes "Dieshin的合作動機是提供最快，最信譽的交付。因此，請立即將其交付而不會延遲。";
+	next;
+	mes "[鐵新人]";
+	mes "如果您忘記在哪裡進行交付，請按“ alt + u”檢查任務窗口。";
+	getitem 6218,1; //Disin_Delivery_Box
+	close;
+}
+
+pay_fild07,83,89,7	script	Zoologist	89,{
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 3500) {
+		mes "[動物學家]";
+		mes "你為什麼要攜帶這麼多物品？";
+		mes "您正在參加培訓課程嗎？";
+		close;
+	}
+	mes "[動物學家]";
+	mes "您聽說過一個名叫Bigfoot的怪物嗎？";
+	mes "它看起來像一隻紅色的熊，肩膀上有“ X”形疤痕。";
+	next;
+	mes "[動物學家]";
+	mes "根據最近的研究，蒼蠅和大腳怪怪物具有共生關係。";
+	next;
+	mes "[動物學家]";
+	mes "我目前正在研究它，並試圖證明這一理論。因此，我計劃殺死大腳怪周圍的蒼蠅，並觀察他的反應。";
+	next;
+	if(select("...我不感興趣。 :這是殺蟲劑。") == 1) {
+		mes "[動物學家]";
+		mes "哦，我需要一種殺蟲劑才能繼續研究。";
+		close;
+	}
+	if (checkquest(8271) != 1) {
+		mes "[動物學家]";
+		mes "嗯？";
+		mes "您不是Dieshin的送貨員嗎？";
+		next;
+		mes "[動物學家]";
+		mes "我正在等待特殊的送貨。";
+		close;
+	}
+	if (countitem(6218) > 0) {
+		mes "[動物學家]";
+		mes "哦！是的！那個！";
+		next;
+		mes "[動物學家]";
+		mes "那就是我點的殺蟲劑！您是由Dieshin發送的吧？";
+		next;
+		mes "[動物學家]";
+		mes "我一直在等待這個！";
+		mes "給我！";
+		next;
+		mes "[動物學家]";
+		mes "它到達的速度比我想像的要快得多。我想立即對其進行測試！";
+		next;
+		mes "[動物學家]";
+		mes "做得好。好工作！太感謝了！這是給你的小禮物。";
+		delitem 6218,1; //Disin_Delivery_Box
+		erasequest 8271;
+		getitem 569,100; //Novice_Potion
+		getexp 1000,0;
+		close;
+	}
+	mes "[動物學家]";
+	mes "感謝您的好意。";
+	mes "但是，你帶來了什麼？";
+	next;
+	mes "[動物學家]";
+	mes "嗯，我以為Dieshin快速準確，但是您給我帶了一個空盒子。多麼令人失望。";
+	next;
+	mes "[動物學家]";
+	mes "請帶我的訂單。 Dieshin會給您我的產品。";
+	close;
+}
+
+prt_fild03,30,254,3	script	Entomologist	83,{
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 3500) {
+		mes "[昆蟲學家]";
+		mes "你為什麼要攜帶這麼多物品？";
+		mes "您正在參加培訓課程嗎？";
+		close;
+	}
+	mes "[昆蟲學家]";
+	mes "您聽說過喇叭怪獸嗎？";
+	mes "它的形狀像昆蟲，皮膚黑色，頭有一個巨大的角。";
+	next;
+	mes "[昆蟲學家]";
+	mes "最近的研究提出，表明這個怪物可以被蜂蜜馴服和訓練。";
+	next;
+	mes "[昆蟲學家]";
+	mes "我目前正在研究它，並試圖證明這一理論。因此，我計劃在他通常經過的地方設置一個蜂蜜陷阱並觀察他的反應。";
+	next;
+	if(select("...我不感興趣。 :這是蜂蜜。") == 1) {
+		mes "[昆蟲學家]";
+		mes "哦，我需要蜂蜜繼續研究。";
+		close;
+	}
+	if (checkquest(8272) != 1) {
+		mes "[昆蟲學家]";
+		mes "嗯？";
+		mes "您不是Dieshin的送貨員嗎？";
+		next;
+		mes "[昆蟲學家]";
+		mes "我正在等待特殊的送貨。";
+		close;
+	}
+	if (countitem(6218) > 0) {
+		mes "[昆蟲學家]";
+		mes "哦！是的！那個！";
+		next;
+		mes "[昆蟲學家]";
+		mes "那是我點的蜂蜜！您是由Dieshin發送的吧？";
+		next;
+		mes "[昆蟲學家]";
+		mes "我一直在等待這個！";
+		mes "給我！";
+		next;
+		mes "[昆蟲學家]";
+		mes "它到達的速度比我想像的要快得多。我想立即對其進行測試！";
+		next;
+		mes "[昆蟲學家]";
+		mes "做得好。好工作！太感謝了！這是給你的小禮物。";
+		delitem 6218,1; //Disin_Delivery_Box
+		erasequest 8272;
+		getitem 569,100; //Novice_Potion
+		getexp 1000,0;
+		close;
+	}
+	mes "[昆蟲學家]";
+	mes "感謝您的好意。";
+	mes "但是，你帶來了什麼？";
+	next;
+	mes "[昆蟲學家]";
+	mes "嗯，我以為Dieshin快速準確，但是您給我帶了一個空盒子。多麼令人失望。";
+	next;
+	mes "[昆蟲學家]";
+	mes "請帶我的訂單。 Dieshin會給您我的產品。";
+	close;
+}
+
+xmas_fild01,92,57,3	script	Biologist	97,{
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 3500) {
+		mes "[生物學家]";
+		mes "你為什麼要攜帶這麼多物品？";
+		mes "您正在參加培訓課程嗎？";
+		close;
+	}
+	mes "[生物學家]";
+	mes "您聽說過Marin Monster嗎？";
+	mes "它確實看起來像通常的寵物，但具有獨特的特徵。";
+	next;
+	mes "[生物學家]";
+	mes "波林斯偷了物品，如果他們在地面上看到它們。但是，馬林對掉落物品沒有興趣。因此，我想知道，即使馬林與Porings是同一種類的怪物，也不要注意收集物品。";
+	next;
+	mes "[生物學家]";
+	mes "但是，這個地方很冷。";
+	next;
+	if(select("...我不感興趣。 :這是毯子。") == 1) {
+		mes "[生物學家]";
+		mes "嗯，無論如何。但是要小心！這裡非常滑。";
+		close;
+	}
+	if (checkquest(8273) != 1) {
+		mes "[生物學家]";
+		mes "嗯？";
+		mes "您不是Dieshin的送貨員嗎？";
+		next;
+		mes "[生物學家]";
+		mes "我正在等待特殊的送貨。";
+		close;
+	}
+	if (countitem(6218) > 0) {
+		mes "[生物學家]";
+		mes "哦！是的！那個！";
+		next;
+		mes "[生物學家]";
+		mes "這些是我訂購的毯子！您是由Dieshin發送的吧？";
+		next;
+		mes "[生物學家]";
+		mes "我一直在等待這個！";
+		mes "給我！";
+		next;
+		mes "[生物學家]";
+		mes "它到達的速度比我想像的要快得多。我想立即測試它們！";
+		next;
+		mes "[生物學家]";
+		mes "做得好。好工作！太感謝了！這是給你的小禮物。";
+		delitem 6218,1; //Disin_Delivery_Box
+		erasequest 8273;
+		getitem 569,100; //Novice_Potion
+		getexp 1000,0;
+		close;
+	}
+	mes "[生物學家]";
+	mes "感謝您的好意。";
+	mes "但是，你帶來了什麼？";
+	next;
+	mes "[生物學家]";
+	mes "嗯，我以為Dieshin快速準確，但是您給我帶了一個空盒子。多麼令人失望。";
+	next;
+	mes "[生物學家]";
+	mes "請帶我的訂單。 Dieshin會給您我的產品。";
+	close;
+}
+
+payon,179,66,3	script	Dashia	931,{
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 3500) {
+		mes "《達西婭》";
+		mes "你為什麼要攜帶這麼多物品？";
+		mes "您正在參加培訓課程嗎？";
+		close;
+	}
+	mes "《達西婭》";
+	mes "這是一些頭髮~時鐘折斷~！";
+	next;
+	mes "《達西婭》";
+	mes "破碎的時鐘..？胡胡..";
+	next;
+	mes "《達西婭》";
+	mes "嘿~！伙計！你看起來像一個非常有錢的冒險家。";
+	next;
+	if(select("我是一個貧窮的冒險家:我有一個採集任務。") == 1) {
+		mes "《達西婭》";
+		mes "真的嗎？嗯，哦，對。你看起來不復雜。";
+		next;
+		mes "《達西婭》";
+		mes "你是一個可憐的冒險家~！祝你好運！";
+		close;
+	}
+	mes "《達西婭》";
+	mes "哦，你來自伊甸園嗎？";
+	mes "你有什麼任務？";
+	next;
+	switch(select("收集骨頭:收集獸皮:收集果皮:收集尾巴:收集餅乾:收集鬍鬚")) {
+	case 1:
+		callsub L_Quest,8274;
+		if (countitem(932) > 9) {
+			callsub L_Reward;
+			delitem 932,10; //Skel_Bone
+			getitem 569,100; //Novice_Potion
+			getexp 1000,100;
+			erasequest 8274;
+			close;
+		}
+		mes "《達西婭》";
+		mes "我可以看到您有一個聚會任務。";
+		mes "但是，Skel骨在哪裡？";
+		next;
+		mes "《達西婭》";
+		mes "您還沒有完成任務。你為什麼回到這裡？";
+		next;
+		mes "《達西婭》";
+		mes "您沒有足夠的“ Skel-Bons” ...狩獵骨骼時可以找到它。";
+		next;
+		mes "《達西婭》";
+		mes "要查找骨骼，最好檢查位於佩隆以北的Archer Village的Payon Dungeon 1F。";
+		break;
+	case 2:
+		callsub L_Quest,8275;
+		if ((countitem(948) > 9) && (countitem(919) > 4)) {
+			callsub L_Reward;
+			getitem 569,100; //Novice_Potion
+			delitem 948,10; //Bear's_Foot
+			delitem 919,5; //Animal's_Skin
+			getexp 1000,100;
+			erasequest 8275;
+			close;
+		}
+		mes "《達西婭》";
+		mes "我可以看到您有一個聚會任務。";
+		mes "但是，熊的腳部和動物皮在哪裡？";
+		next;
+		mes "《達西婭》";
+		mes "您還沒有完成任務。你為什麼回到這裡？";
+		next;
+		mes "《達西婭》";
+		mes "您必須帶10個熊的腳腳和'5個動物皮！";
+		mes "您可以從大腳怪和動物的動物皮膚上找到熊的腳。";
+		next;
+		mes "《達西婭》";
+		mes "Bigfoot在Geffen Field或Payon Field的東南部附近。";
+		break;
+	case 3:
+		callsub L_Quest,8276;
+		if ((countitem(955) > 19) && (countitem(910) > 19)) {
+			callsub L_Reward;
+			delitem 955,20; //Worm_Peelings
+			delitem 910,20; //Garlet
+			getitem 569,100; //Novice_Potion
+			getexp 1000,100;
+			erasequest 8276;
+			close;
+		}
+		mes "《達西婭》";
+		mes "我可以看到您有一個聚會任務。";
+		mes "但是，蠕蟲的剝皮和飼養在哪裡？";
+		next;
+		mes "《達西婭》";
+		mes "您必須帶上'20蠕蟲剝皮'和'20 Garlets'才能完成任務。";
+		next;
+		mes "《達西婭》";
+		mes "您可以從“ Piere”，“ Andre”，“ Deniro”，“ Vitata”，“ Thief Bug”，“雌性小偷蟲”和“男性小偷蟲”中獲取這些物品。";
+		next;
+		mes "《達西婭》";
+		mes "“ Piere”，“ Andre”，“ Deniro”和“ Vitata”位於Ant Hell，位於摩洛哥的Saint Darmain Fortress Soutwest附近。";
+		next;
+		mes "《達西婭》";
+		mes "“小偷蟲”，“雌性小偷蟲”和“男性小偷蟲”是他的胸膜涵洞。要到達那裡，您需要成為Prontera Culvert懲罰力量的志願者。";
+		break;
+	case 4:
+		callsub L_Quest,8277;
+		if ((countitem(942) > 9) && (countitem(1026) > 9) && (countitem(945) > 9)) {
+			callsub L_Reward;
+			delitem 942,10; //Yoyo_Tail
+			delitem 1026,10; //Acorn
+			delitem 945,10; //Raccoon_Leaf
+			getitem 569,150; //Novice_Potion
+			getexp 1000,200;
+			erasequest 8277;
+			close;
+		}
+		mes "《達西婭》";
+		mes "我可以看到您有一個聚會任務。";
+		mes "但是，Yoyo的尾巴，橡子和浣熊葉在哪裡？";
+		next;
+		mes "《達西婭》";
+		mes "您還沒有完成任務。你為什麼回到這裡？";
+		mes "您必須帶上“ 10個Yoyo尾巴”，“ 10橡子”和“ 10浣熊葉子”才能完成任務。";
+		next;
+		mes "《達西婭》";
+		mes "您可以從“ Yoyo's”，“ Coco's”和“ Smokies”中的浣熊葉中獲得Yoyo尾巴。";
+		next;
+		mes "《達西婭》";
+		mes "您可以在田野周圍輕鬆找到它們，但是Ayothaya以東的田野是狩獵所有3個怪物的最佳地點。";
+		next;
+		mes "《達西婭》";
+		mes "要到達Ayothaya，您最好去艾伯塔省的“ Aibakthing”並支付他的票價。";
+		break;
+	case 5:
+		callsub L_Quest,8278;
+		if ((countitem(538) > 4) && (countitem(539) > 0)) {
+			callsub L_Reward;
+			delitem 538,5; //Well_Baked_Cookie
+			delitem 539,1; //Piece_Of_Cake
+			getitem 569,150; //Novice_Potion
+			getexp 1000,200;
+			erasequest 8278;
+			close;
+		}
+		mes "《達西婭》";
+		mes "我可以看到您有一個聚會任務。";
+		mes "但是，烤好的餅乾和蛋糕在哪裡？";
+		next;
+		mes "《達西婭》";
+		mes "您還沒有完成任務。你為什麼回到這裡？";
+		mes "您必須帶上“ 5個烘烤的餅乾”和“ 1塊蛋糕”才能完成任務。";
+		next;
+		mes "《達西婭》";
+		mes "您可以從穿紅色或綠色襯衫的“ Cookie”中獲得烘烤的餅乾。";
+		mes "要吃蛋糕，您應該尋找“神秘售”。";
+		next;
+		mes "《達西婭》";
+		mes "兩個怪物都在玩具工廠倉庫或玩具監控室發現。要到達那裡，請在阿爾·巴蘭（Al de Baran）東北地區的克勞斯先生（Claus）先生。";
+		break;
+	case 6:
+		callsub L_Quest,8279;
+		if ((countitem(1017) > 4) && (countitem(1018) > 2)) {
+			callsub L_Reward;
+			delitem 1017,5; //Moustache_Of_Mole
+			delitem 1018,3; //Nail_Of_Mole
+			getitem 569,150; //Novice_Potion
+			getexp 1000,200;
+			erasequest 8279;
+			close;
+		}
+		mes "《達西婭》";
+		mes "我可以看到您有一個聚會任務。";
+		mes "但是，痣晶須和痣爪在哪裡？";
+		next;
+		mes "《達西婭》";
+		mes "您還沒有完成任務。你為什麼回到這裡？";
+		mes "您必須帶上“ 5摩爾晶須”和“ 3摩爾爪”才能完成任務。";
+		next;
+		mes "《達西婭》";
+		mes "您可以從“ Martins”中獲取這些物品。";
+		mes "馬丁斯可以在Mjolnir Dead Pit中找到，但二樓很危險，所以要小心！";
+		next;
+		mes "《達西婭》";
+		mes "要到達那裡，請在Geffen詢問Kafra員工，他們可以在那裡扭動您。";
+		break;
+	}
+	next;
+	mes "《達西婭》";
+	mes "無論如何，我會在這裡等你。完成任務後，請回來！";
+	close;
+L_Quest:
+	if (checkquest(getarg(0)) != 1) {
+		mes "《達西婭》";
+		mes "嗯？你確定嗎？有問題...";
+		next;
+		mes "《達西婭》";
+		mes "很奇怪。";
+		mes "請按“ Alt + U”來檢查您的任務窗口。";
+		close;
+	}
+	return;
+L_Reward:
+	mes "《達西婭》";
+	mes "哇~你做得很好！";
+	next;
+	mes "《達西婭》";
+	mes "非常感謝。上帝保佑你！";
+	emotion ET_SMILE;
+	next;
+	mes "《達西婭》";
+	mes "哈~！哈~！";
+	mes "我會按照承諾給你一個獎勵。";
+	return;
+}

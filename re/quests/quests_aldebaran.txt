@@ -1,0 +1,109 @@
+﻿//===== rAthena Script =======================================
+//= NPCs related to Aldebaran Clock Tower (Nightmare)
+//===== By: ==================================================
+//= Ridley8819
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Additional Comments: =================================
+//= 1.0 Initial release [Ridley8819]
+//= 1.1 Dialogue cleanup [Aleos]
+//============================================================
+
+c_tower1,232,222,5	script	Belljamin Button#ct	968,{
+	mes "[Belljamin按鈕]";
+	mes "這裡的怪物能夠控制時間。";
+	if( BaseLevel < 150 ){
+		mes "當您到達 ^0000fflevel 150 ^000000時，請回來。";
+		close;
+	}
+	mes "時間，回憶，環境...所有人都可以在這裡扭曲。";
+	next;
+	mes "[Belljamin按鈕]";
+	mes "我懇求您不要詢問更多。這可能會使您的生命處於危險之中。";
+	next;
+	.@menu = select("不要問:去扭曲塔2層:去扭曲塔3層");
+	switch(.@menu){
+		case 1:
+			break;
+		case 2:
+		case 3:
+			if( .@menu == 2 ){
+				.@map$ = "c_tower2_";
+				.@x = 268;
+				.@y = 26;
+			}else{
+				.@map$ = "c_tower3_";
+				.@x = 65;
+				.@y = 147;
+			}
+			mes "[Belljamin按鈕]";
+			mes "小心您的選擇。";
+			next;
+			mes "[Belljamin按鈕]";
+			mes "我需要 ^0000FF10,000Z ^000000才能讓您進入。這是一個非常危險的地方。";
+			next;
+			switch( select("退出:付10,000z:你為什麼需要錢？") ){
+				case 1:
+					break;
+				case 2:
+					if( Zeny < 10000 ){
+						mes "[Belljamin按鈕]";
+						mes "真的嗎？你沒有錢，要我帶你到那裡嗎？";
+						close;
+					}
+					Zeny -= 10000;
+					mes "[Belljamin按鈕]";
+					mes "我不確定如何跟那裡的時間，但要盡可能小心。";
+					close2;
+					warp .@map$, .@x, .@y;
+					end;
+				case 3:
+					mes "[Belljamin按鈕]";
+					mes "我整天都在這裡，因為冒險家的安全。我總是提醒他們危險。這就是為什麼我需要某種形式的付款。";
+					emotion ET_SWEAT;
+					close;
+			}
+			break;
+	}
+	mes "[Belljamin按鈕]";
+	mes "PHEW ...您做出了一個不錯的選擇。這個地方是殘酷的，因此您可能應該回到安全區域。";
+	close;
+}
+
+c_tower2_,274,26,3	script	Belljamin Button#nct1	962,{
+	mes "[Belljamin按鈕]";
+	mes "也許你以前見過我？";
+	next;
+	mes "[Belljamin按鈕]";
+	mes "您看到我在另一個地方，外觀不同。";
+	next;
+	if( select("你是誰？ :帶我離開這裡！") == 1 ){
+		mes "[Belljamin按鈕]";
+		mes "您能向我解釋您所看到的，您做了什麼？";
+		next;
+		mes "[Belljamin按鈕]";
+		mes "我也是。您可能也缺少一個。沒有意識到，沒有目的也沒有想法。";
+		next;
+		mes "[Belljamin按鈕]";
+		mes "是時候回去了。請再珍惜您的時間。";
+		next;
+		if( select("再停留一點:請帶我回去") == 1 ){
+			mes "[Belljamin按鈕]";
+			mes "您必須真的很喜歡這個地方。好吧，做任何你想做的。";
+			close;
+		}
+	}else{
+		mes "[Belljamin按鈕]";
+		mes "是時候繼續前進了。你有喜歡的飲料嗎？";
+		next;
+	}
+	mes "[Belljamin按鈕]";
+	mes "想想杯子裡的飲料。用勺子慢慢攪拌杯子，然後凝視飲料變色。";
+	close2;
+	warp "c_tower1", 235, 223;
+	end;
+}
+
+c_tower3_,59,148,5	duplicate(Belljamin Button#nct1)	Belljamin Button#nct2	574

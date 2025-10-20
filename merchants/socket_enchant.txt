@@ -1,0 +1,368 @@
+﻿//===== rAthena Script =======================================
+//= Episode 11.1 Socket Enchant NPC
+//===== By: ==================================================
+//= rAthena Dev Team
+//===== Current Version: =====================================
+//= 2.0a
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Adds slots to selected weapons and armor.
+//===== Additional Comments: =================================
+//= 0.1a added missing L_No: to 2 funcs [Lupus]
+//= 0.1b Removed duplicates [Toms]
+//= 0.2 Added missing next;'s [Evera]
+//= 0.3 Fixed Zweihander[+] id [Lupus]
+//= 1.0 Fixed ingredients check [Lupus]
+//= 1.1 Updated to official. [SinSloth]
+//= 1.1b Optimized/cleaned [ultramage]
+//= 1.2 Fixed some typos and a nasty bug. [SinSloth]
+//= 1.3 Fixed a wrong item ID with Sphinx Hat. [SinSloth]
+//= 1.4 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 1.5 Removed Ontouch trigger area from NPCs. [L0ne_W0lf]
+//= 1.6 Replaced effect numerics with constants. [Samuray22]
+//= 1.7 Adjusted prices on some armor and weapons. [L0ne_W0lf]
+//= 1.8 Added missing Gae Bolg and Dragon Slayer. [Kisuka]
+//= 1.9 Moved Episode 12 items to separate NPC.
+//=     Some cleanup & optimization. [Gepard]
+//= 2.0 Duplicates now spawn from floating NPCs. [L0ne_W0lf]
+//= 2.0a Added 'disable_items' command. [Euphy]
+//============================================================
+
+-	script	Seiyablem#dummy::SocketEnchant	-1,{
+	if (checkweight(1201,1) == 0)
+	{
+		mes "- 等一下 ！ ！ -";
+		mes "- 目前您正在攜帶 -";
+		mes "- 與您在一起太多。 -";
+		mes "- 請重試 -";
+		mes "- 減肥後。 -";
+		close;
+	}
+	mes "[塞亞布勒姆]";
+	mes "我是一名專門為普通武器和盔甲增加插槽的工程師。";
+	mes "我的服務費，所需的材料和成功的機會都取決於我正在從事的特定項目。";
+	next;
+	mes "[塞亞布勒姆]";
+	mes "添加插槽似乎很簡單，但是它比看起來要復雜得多。";
+	mes "如果您對我的服務感興趣，請告訴我。";
+	next;
+	switch(select("為武器添加插槽:為盔甲添加插槽:插槽嘗試資訊:取消"))
+	{
+		case 1:
+			mes "[塞亞布勒姆]";
+			mes "您想在武器中添加一個插槽嗎？";
+			mes "我在添加一個插槽時的困難將武器分類，C級最簡單，而S級最困難。";
+			mes "您想嘗試哪個課？";
+			next;
+			switch(select("C級:B級:A級:S級"))
+			{
+				case 1:
+					mes "[塞亞布勒姆]";
+					mes "C課，嗯？";
+					mes "現在，我只能升級該課程中的某些設備，因此請選擇以下項目之一，因此我們可以嘗試在其中添加一個插槽。";
+					next;
+					switch(select("三叉戟:繩子:小提琴"))
+					{
+						case 1: callfunc "Func_Socket",1460,1461,40,66,200,1010,10;
+						case 2: callfunc "Func_Socket",1950,1951,40,66,200,1010,10;
+						case 3: callfunc "Func_Socket",1901,1902,40,66,200,1010,10;
+					}
+				case 2:
+					mes "[塞亞布勒姆]";
+					mes "B課？";
+					mes "好吧，這是普通設備類別。";
+					mes "請選擇您希望我嘗試添加一個插槽的武器。";
+					next;
+					switch(select("鏈錘:羅馬短劍:角弓:長矛:海東劍:魯特琴:鐵絲:拳刃:十字弓"))
+					{
+						case 1: callfunc "Func_Socket",1519,1520,40,61,300,1010,10;
+						case 2: callfunc "Func_Socket",1219,1220,40,61,300, 984, 1,999,5;
+						case 3: callfunc "Func_Socket",1714,1716,40,61,300, 984, 2,999,5;
+						case 4: callfunc "Func_Socket",1407,1408,40,61,200,1010,10;
+						case 5: callfunc "Func_Socket",1123,1128,40,61,300, 984, 2,999,5;
+						case 6: callfunc "Func_Socket",1905,1906,40,61,300,1011,10;
+						case 7: callfunc "Func_Socket",1954,1955,40,61,300,1011,10;
+						case 8: callfunc "Func_Socket",1801,1802,40,61,300,1010,10;
+						case 9: callfunc "Func_Socket",1713,1715,40,61,300, 984, 2,999,5;
+					}
+				case 3:
+					mes "[塞亞布勒姆]";
+					mes "哦，一個課。";
+					mes "這是一些高風險領域！";
+					mes "好吧，您希望我嘗試添加哪種武器？";
+					next;
+					switch(select("獵弓:生存之杖(INT):雙手劍:焰形劍:滲透者:弩砲:暈眩之錘:狂暴之斧:克雷默"))
+					{
+						case 1: callfunc "Func_Socket",1718,1726,40,61,500,984,2,999,10;
+						case 2: callfunc "Func_Socket",1619,1620,40,61,500,984,5,999,10;
+						case 3: callfunc "Func_Socket",1168,1171,40,61,800,984,5,999,10;
+						case 4: callfunc "Func_Socket",1129,1149,40,61,500,984,2,999,10;
+						case 5: callfunc "Func_Socket",1261,1266,40,61,700,984,5,999,10;
+						case 6: callfunc "Func_Socket",1722,1727,40,61,500,984,5,999,10;
+						case 7: callfunc "Func_Socket",1522,1532,40,61,500,984,2,999,10;
+						case 8: callfunc "Func_Socket",1814,1816,40,61,500,984,5,999,10;
+						case 9: callfunc "Func_Socket",1163,1172,40,61,500,984,2,999,10; // NPC says "5 Oridecon" (Aegis) but takes only 2
+					}
+				case 4:
+					mes "[塞亞布勒姆]";
+					mes "哇，哇，哇...";
+					mes "S課？好吧...";
+					mes "如果我能真正實現這一點，那將是一個奇蹟。";
+					mes "好吧...我們應該嘗試將哪種武器添加到哪種武器？";
+					next;
+					switch(select("永恆之槍:毒刀:冰錐:蘇克薩瑪德:金倫加:彎刀:月牙鐮刀:生存之杖(DEX)"))
+					{
+						case 1: callfunc "Func_Socket", 1413, 1418,40,51,1000,984,5,999,10;
+						case 2: callfunc "Func_Socket", 1239,13016,40,51,1000,984,5,999,10;
+						case 3: callfunc "Func_Socket", 1230,13017,40,51,2000,984,5,999,10;
+						case 4: callfunc "Func_Socket", 1236,13018,40,51,1000,984,5,999,10;
+						case 5: callfunc "Func_Socket",13002,13019,40,51,1000,984,5,999,10;
+						case 6: callfunc "Func_Socket", 1135,13400,40,51,1000,984,5,999,10;
+						case 7: callfunc "Func_Socket", 1466, 1476,40,51,1000,984,5,999,10;
+						case 8: callfunc "Func_Socket", 1617, 1618,40,51,2000,984,5,999,10;
+					}
+			}
+		case 2:
+			mes "[塞亞布勒姆]";
+			mes "盔甲，你說嗎？";
+			mes "當然，沒問題。";
+			mes "根據工作難度，裝甲分為4個不同的類別。";
+			mes "C班是最簡單的課程，也是他最艱難的課。";
+			mes "您想嘗試哪個課？";
+			next;
+			switch(select("C級:B級:A級:S級"))
+			{
+				case 1:
+					mes "[塞亞布勒姆]";
+					mes "C級裝甲，是嗎？";
+					mes "聽起來很合理。";
+					mes "您想嘗試添加哪個裝甲？";
+					next;
+					switch(select("披肩:外套:頭箍:四角帽"))
+					{
+						case 1: callfunc "Func_Socket",2307,2308,40,66,200,999,3;
+						case 2: callfunc "Func_Socket",2309,2310,40,66,200,999,3;
+						case 3: callfunc "Func_Socket",2232,2233,40,66,200,999,3;
+						case 4: callfunc "Func_Socket",2216,2217,40,66,200,999,3;
+					}
+				case 2:
+					mes "[塞亞布勒姆]";
+					mes "您選擇了平均B類。";
+					mes "那麼，您有哪種盔甲？";
+					next;
+					switch(select("鏡盾:鎖子甲:聖職之袍:絲質外袍:長靴:鞋子:圍巾:鋼盾:圓盾:盾牌:波利帽"))
+					{
+						case 1:  callfunc "Func_Socket",2107,2108,40,61,250,999,5;
+						case 2:  callfunc "Func_Socket",2314,2315,40,61,250,999,5;
+						case 3:  callfunc "Func_Socket",2325,2326,40,61,300,999,5;
+						case 4:  callfunc "Func_Socket",2321,2322,40,61,300,999,5;
+						case 5:  callfunc "Func_Socket",2405,2406,40,61,300,999,5;
+						case 6:  callfunc "Func_Socket",2403,2404,40,61,300,999,5;
+						case 7:  callfunc "Func_Socket",2503,2504,40,61,300,999,5;
+						case 8:  callfunc "Func_Socket",2101,2102,40,61,300,999,5;
+						case 9:  callfunc "Func_Socket",2103,2104,40,61,300,999,5;
+						case 10: callfunc "Func_Socket",2105,2106,40,61,250,999,5;
+						case 11: callfunc "Func_Socket",5046,5168,40,61,250,999,5;
+					}
+				case 3:
+					mes "[塞亞布勒姆]";
+					mes "哦，一個課。";
+					mes "這是一些高風險領域！";
+					mes "好吧，您希望我嘗試添加一個插槽？";
+					next;
+					switch(select("寶石頭盔:鐵製頭盔:記憶書:緊身便衣:秘銀金屬鎧甲:全身鎧甲:盜賊之衣:金屬鎧甲:鋼鐵頭盔:斗篷:頭盔:忍者裝束:獸人頭盔:古代斗篷:修道士帽:黃金齒輪:胸針:木乃伊帽"))
+					{
+						case 1:  callfunc "Func_Socket",2230,2231,40,61,400,985,1;
+						case 2:  callfunc "Func_Socket",5114,5120,40,61,400,985,1;
+						case 3:  callfunc "Func_Socket",2109,2121,40,61,400,985,1;
+						case 4:  callfunc "Func_Socket",2330,2331,40,61,400,985,1;
+						case 5:  callfunc "Func_Socket",2341,2342,40,61,400,985,1;
+						case 6:  callfunc "Func_Socket",2316,2317,40,61,400,985,1;
+						case 7:  callfunc "Func_Socket",2335,2336,40,61,400,985,1;
+						case 8:  callfunc "Func_Socket",2411,2412,40,61,400,985,1;
+						case 9:  callfunc "Func_Socket",5092,5093,40,61,400,985,1;
+						case 10: callfunc "Func_Socket",2505,2506,40,61,400,985,1;
+						case 11: callfunc "Func_Socket",2228,2229,40,61,400,985,1;
+						case 12: callfunc "Func_Socket",2337,2359,40,61,400,985,1;
+						case 13: callfunc "Func_Socket",2299,5157,40,61,400,985,1;
+						case 14: callfunc "Func_Socket",2507,2525,40,61,400,985,1;
+						case 15: callfunc "Func_Socket",2251,5158,40,61,400,985,1;
+						case 16: callfunc "Func_Socket",2246,5159,40,61,400,985,1;
+						case 17: callfunc "Func_Socket",2605,2625,40,61,400,985,1;
+						case 18: callfunc "Func_Socket",2264,5167,40,61,300,985,1;
+					}
+				case 4:
+					mes "[塞亞布勒姆]";
+					mes "嗯... S班？";
+					mes "您確定這個嗎？";
+					mes "好吧...讓我知道您想添加一個插槽的盔甲，我會告訴我需要嘗試什麼。";
+					next;
+					switch(select("山羊頭盔:尖角髮圈:骨製頭盔:海盜帽:后冠:頭飾:獅身人面帽:魔法外套:耳環:戒指:射手手套"))
+					{
+						case 1:  callfunc "Func_Socket",2256,5160,40,51,2000,985,2;
+						case 2:  callfunc "Func_Socket",2258,5161,40,51,2000,985,2;
+						case 3:  callfunc "Func_Socket",5017,5162,40,51,2000,985,2;
+						case 4:  callfunc "Func_Socket",5019,5163,40,51,2000,985,2;
+						case 5:  callfunc "Func_Socket",2235,5165,40,51,2000,985,2;
+						case 6:  callfunc "Func_Socket",2234,5164,40,51,2000,985,2;
+						case 7:  callfunc "Func_Socket",5053,5166,40,51,1000,985,2;
+						case 8:  callfunc "Func_Socket",2343,2360,40,51,1000,985,2;
+						case 9:  callfunc "Func_Socket",2602,2622,40,51,1000,985,2;
+						case 10: callfunc "Func_Socket",2601,2621,40,51,1000,985,2;
+						case 11: callfunc "Func_Socket",2619,2671,40,51,1000,985,2;
+					}
+			}
+		case 3:
+			mes "[塞亞布勒姆]";
+			mes "好吧，我還沒有真正完善插槽添加的藝術。";
+			mes "這太複雜了，如果我告訴您我知道影響過程的每個因素，我會撒謊。";
+			mes "不過，我確實注意到一些趨勢...";
+			next;
+			mes "[塞亞布勒姆]";
+			mes "在某些城鎮中，對於升級較少的設備，插槽增加的嘗試更為成功。";
+			mes "在其他城鎮，情況恰恰相反。";
+			mes "那不是真的很奇怪嗎？";
+			next;
+			mes "[塞亞布勒姆]";
+			mes "哦，還有一些非常重要的事情。";
+			mes "如果您要求我在某些方面添加一個插槽，請確保您的庫存中沒有倍數。";
+			next;
+			mes "[塞亞布勒姆]";
+			mes "這是一個例子：如果您的庫存中有+7 Manteau和普通Manteau，那麼我將隨機選擇其中一個進行插槽添加嘗試。";
+			mes "請記住要小心。";
+			next;
+			mes "[塞亞布勒姆]";
+			mes "同樣， ^ff0000ly攜帶您要我添加一個插槽 ^000000的設備之一。";
+			mes "所有其他具有相同名稱的設備都應放在您的KAFRA存儲中，知道嗎？";
+			close;
+		case 4:
+			mes "[塞亞布勒姆]";
+			mes "輕鬆，冒險家。";
+			mes "如果您想嘗試在某些設備中添加一個插槽，請回來讓我知道。";
+			mes "西婭~";
+			close;
+	}
+}
+
+function	script	Func_Socket	{
+	.@item_id = getarg(0);
+	.@zeny_req = getarg(4);
+	setarray .@item_req[0], getarg(5), getarg(7,0);
+	setarray .@req_amount[0], getarg(6), getarg(8,0);
+
+	disable_items;
+	mes "[塞亞布勒姆]";
+	mes "您想向一個添加一個插槽"+ getitemname(.@item_id) +"?";
+	mes "好吧，請帶我 ^ff0000"+ .@req_amount[0] +" "+ getitemname(.@item_req[0]) + (.@req_amount[0] > 1 && .@item_req[0] != 999 ? "s":"") +"^000000, "+ (.@item_req[1] != 0 && .@req_amount[1] != 0 ? ("^FF0000"+ .@req_amount[1] +" "+ getitemname(.@item_req[1]) + (.@req_amount[1] > 1 && .@item_req[1] != 999 ? "s":"") + "^000000 ") : "") + "and my ^FF0000" + (.@zeny_req >= 1000 ? (.@zeny_req /1000 +",000") : .@zeny_req) +",000 zeny^000000 service fee.";
+	mes "啊，別忘了帶"+ getitemname(.@item_id) +"!";
+	next;
+	mes "[塞亞布勒姆]";
+	if (getiteminfo(.@item_id, ITEMINFO_LOCATIONS) & EQP_HAND_R) // weapon
+	{
+		mes "如果您有所需的項目和Zeny，我現在可以嘗試添加一個插槽。";
+		mes "但是，您應該知道我有可能失敗。";
+		mes "因此，我需要給你一個公平的警告...";
+		next;
+		mes "[塞亞布勒姆]";
+		mes "如果嘗試在武器中添加一個插槽的嘗試失敗，則 ^ff0000weapon ^000000， ^ff0000和任何復合的卡片都將被銷毀 ^000000。";
+	}
+	else // armor
+	{
+		mes "如果您有所有必需的材料，我的Zeny服務費和裝甲，那麼我們可以繼續嘗試。";
+		mes "但是在此之前，我必須警告您風險。";
+		next;
+		mes "[塞亞布勒姆]";
+		mes "如果嘗試在盔甲中添加一個插槽的嘗試失敗，則 ^ff0000armor ^000000， ^ff0000it的升級 ^000000 ^ff0000 and和任何加重其的卡片都會被銷毀 ^000000。";
+	}
+	mes "您還想嘗試添加一個插槽嗎？";
+	next;
+	switch(select("嘗試插槽添加:取消"))
+	{
+		case 1:
+			if ((Zeny >= .@zeny_req*1000) && countitem(.@item_req[0]) >= .@req_amount[0] && countitem(getarg(7,512)) >= .@req_amount[1] && countitem(.@item_id) > 0)// if there's no getarg(7) and getarg(8) provided, check itemcount against 0 (we still need a valid item ID though)
+			{
+				mes "[塞亞布勒姆]";
+				mes "好吧，然後開始工作！";
+				mes "您最好為成功的結果祈禱。";
+				next;
+				set .@a, rand(1,100);
+				if ((.@a > getarg(2)) && (.@a < getarg(3)))
+				{
+					specialeffect getarg(3) == 51 ? EF_LORD : EF_SANCTUARY; // only S Class items have Lord of Vermillion effect
+					mes "[塞亞布勒姆]";
+					mes "太好了，它似乎是成功的。";
+					mes "看起來做得很好。恭喜！";
+					delitem .@item_id,1;
+					delitem .@item_req[0],.@req_amount[0];
+					if (.@item_req[1] != 0 && .@req_amount[1] != 0)
+						delitem .@item_req[1],.@req_amount[1];
+					Zeny = Zeny - .@zeny_req *1000;
+					getitem getarg(1),1;
+					next;
+					mes "[塞亞布勒姆]";
+					mes "再見，哥們！";
+					close;
+				}
+				else
+				{
+					specialeffect EF_SUI_EXPLOSION;
+					mes "[塞亞布勒姆]";
+					mes "哇！ ...我很抱歉，它失敗了。";
+					mes "但是，我完全無辜。";
+					mes "這是您的運氣，它是上帝注定的，好嗎？";
+					mes "不要那麼失望，下次嘗試。";
+					delitem .@item_id,1;
+					delitem .@item_req[0],.@req_amount[0];
+					if (.@item_req[1] != 0 && .@req_amount[1] != 0)
+						delitem .@item_req[1],.@req_amount[1];
+					Zeny = Zeny - .@zeny_req *1000;
+					next;
+					mes "[塞亞布勒姆]";
+					mes "祝您下次好運！";
+					close;
+				}
+			}
+			else
+			{
+				mes "[塞亞布勒姆]";
+				mes "我想繼續進行此插槽添加嘗試，但是您錯過了一些事情。";
+				mes "您確定擁有設備，必需的材料和Zeny嗎？";
+				close;
+			}
+		case 2:
+			mes "[塞亞布勒姆]";
+			mes "需要一些時間來思考，對嗎？";
+			mes "好吧，我能理解。";
+			mes "只要記住，如果您一直在安全地玩它，那么生活就沒什麼好玩的~";
+			close;
+	}
+}
+
+payon,140,151,5	duplicate(SocketEnchant)	Seiyablem#pay	84
+lhz_in02,281,35,5	duplicate(SocketEnchant)	Seiyablem#lhz	84
+prt_in,33,70,5	duplicate(SocketEnchant)	Seiyablem#prt	84
+morocc,51,41,4	duplicate(SocketEnchant)	Seiyablem#moc	84
+
+-	script	Young Man#dummy::SocketMan	-1,{
+	mes "[年輕人]";
+	mes "我正在考慮成為一名老闆工程師。";
+	mes "這是一個新的領域，您可以在設備中添加插槽，如果我可以在如此有利可圖的職業中工作，那就太酷了。";
+	next;
+	mes "[年輕人]";
+	mes "成功地添加我能理解的內容，有很多運氣涉及。";
+	mes "您有時會失敗，但是如果您超級幸運，可以添加兩個插槽。";
+	mes "瘋狂的。嗯？";
+	next;
+	mes "[年輕人]";
+	mes "但是不要太興奮。";
+	mes "只有某些設備才能處理兩個額外的插槽。";
+	mes "在成為學徒之前，我還需要學習更多...";
+	close;
+}
+
+prt_in,31,57,1	duplicate(SocketMan)	Young Man#prt	97
+payon,143,143,7	duplicate(SocketMan)	Young Man#pay	97
+morocc,60,42,3	duplicate(SocketMan)	Young Man#moc	97
+lhz_in02,269,33,5	duplicate(SocketMan)	Young Man#lhz	97

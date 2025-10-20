@@ -1,0 +1,89 @@
+﻿//===== rAthena Script =======================================
+//= Coin Merchants
+//===== By: ==================================================
+//= rAthena Dev Team
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Coin redemption NPCs.
+//===== Additional Comments: =================================
+//= 1.0 First version 
+//= 1.1 Fixed checkweight. [Gepard]
+//= 1.2 Optimized and merged into one file. [Euphy]
+//============================================================
+
+// Manuk & Splendide
+//============================================================
+-	script	::merchant_13_2	-1,{
+	set .@n$, "["+strnpcinfo(1)+"]";
+	mes .@n$;
+	if (isequipped(2782) && ep13_2_rhea == 100) {
+		if (!checkweight(1201,1)) {
+			mes "看來您攜帶太多的東西。";
+			mes "為什麼不將您的一些物品放在存儲中並回來？";
+			close;
+		}
+		mes "你好。";
+		mes "你要買什麼？";
+		next;
+		if (strnpcinfo(1) == "Merchant of Manuk") {
+			setarray .@Items[2],12342,12343,12348;
+			set .@Book,11019; //Manuk_Selling_Item
+			set .@Coin,6080; //Manuk_Coin
+			set .@i, select("查看物品描述:馬努克的機會:馬努克的勇氣:馬努克的信仰:取消");
+		}
+		else {
+			setarray .@Items[2],12344,12345,12349;
+			set .@Book,11018; //Splendide_Selling_Item
+			set .@Coin,6081; //Splendide_Coin
+			set .@i, select("查看物品描述:購買捕蟲堇果醬:購買螢火蟲蜂蜜果醬:購買山茱萸之淚:不做任何事");
+		}
+		mes .@n$;
+		if (.@i == 1) {
+			mes "這是項目描述。";
+			close2;
+			readbook .@Book,1;
+			end;
+		}
+		else if (.@i < 5) {
+			mes "我可以賣給你3"+getitemname(.@Items[.@i])+" for ^3131FF1 coin^000000.";
+			next;
+			switch(select("購買:不購買")) {
+			case 1:
+				if (countitem(.@Coin)) {
+					mes .@n$;
+					mes "謝謝你的到來。";
+					delitem .@Coin,1; 
+					getitem .@Items[.@i],3;
+					close;
+				}
+				else {
+					mes .@n$;
+					mes "您沒有足夠的硬幣。";
+					close;
+				}
+			case 2:
+				mes .@n$;
+				break;
+			}
+		}
+		mes "如果您改變主意，請再來。";
+		close;
+	}
+	else {
+		if (strnpcinfo(1) == "Merchant of Manuk") {
+			mes "RTT OD d";
+			mes "QWO高清是D Irr";
+		}
+		else {
+			mes "布爾韋哈拉";
+			mes "潑Ie ru";
+		}
+		close;
+	}
+}
+man_in01,286,16,1	duplicate(merchant_13_2)	Merchant of Manuk	454
+spl_in01,110,326,5	duplicate(merchant_13_2)	Merchant of Splendide	439

@@ -1,0 +1,361 @@
+﻿//===== rAthena Script =======================================
+//= Kagerou/Oboro Equipment Quests
+//===== By: ==================================================
+//= Euphy
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Quests for Kagerou/Oboro weapons and armor.
+//===== Additional Comments: =================================
+//= 1.0 First version. [Euphy]
+//= 1.1 Little clean-up. [Capuche]
+//============================================================
+
+// Armor and Weapon NPCs :: kaboro_gearmix
+//============================================================
+que_ng,21,72,6	script	Master Armor Craftsman	4_M_RASWORD,{
+	mes "[房地產投資信託基金]";
+	mes "您將如何定義勝利？";
+	mes "摔倒敵人...";
+	mes "但是，最重要的是...";
+	mes "永遠不要摔倒自己！";
+	next;
+	mes "[房地產投資信託基金]";
+	mes "為此，您必須更好地保護自己。";
+	mes "在阻礙“自己的”保護時，您無法保護“他人”。";
+	next;
+	if(select("組合裝甲。 :結束對話。") == 2) {
+		mes "[房地產投資信託基金]";
+		mes "審慎也是戰鬥中的重要美德。";
+		close;
+	}
+	switch(select("狼護臂[1]:月牙護臂[1]:忍者鱗甲[1]:黑暗生活[1]:退出。")) {
+	case 1:
+		mes "[房地產投資信託基金]";
+		mes "狼扶手...一塊野獸裝甲。";
+		next;
+		callsub L_Select,2172;
+		if (countitem(2171) > 0 && countitem(6252) > 9) {  //custom translation
+			delitem 2171,1; //Fox_Armguard
+			delitem 6252,10; //Wolf_Blood
+			getitem 2172,1; //Wolf_Armguard
+			mes "[房地產投資信託基金]";
+			mes "你感覺到狼的本性嗎？";
+			mes "狂野和迷人...";
+			close;
+		}
+		break;
+	case 2:
+		mes "[房地產投資信託基金]";
+		mes "新月形的武裝...一種美麗和力量的東西...沒有少的東西。";
+		next;
+		callsub L_Select,2173;
+		if (countitem(2171) > 0 && countitem(7321) > 99) {  //custom translation
+			delitem 2171,1; //Fox_Armguard
+			delitem 7321,100; //Fragment_Of_Crystal
+			getitem 2173,1; //Crescent_Armguard
+			mes "[房地產投資信託基金]";
+			mes "這樣的美麗...";
+			mes "好像整個身體都充滿了魔法。";
+			close;
+		}
+		break;
+	case 3:
+		mes "[房地產投資信託基金]";
+		mes "忍者秤盔甲...據說傳奇的忍者曾經戴過它。";
+		next;
+		callsub L_Select,15054;
+		if (countitem(7451) > 29 && countitem(7562) > 29 && countitem(6091) > 29) {  //custom translation
+			delitem 7451,30; //Scale_Of_Red_Dragon
+			delitem 7562,30; //Ice_Scale
+			delitem 6091,30; //Dark_Red_Scale
+			getitem 15054,1; //Ninja_Scale_Armor
+			mes "[房地產投資信託基金]";
+			mes "這確實是一款傳奇的裝甲...";
+			mes "即使我不相信傳奇...";
+			close;
+		}
+		break;
+	case 4:
+		mes "[房地產投資信託基金]";
+		mes "陰影金的盔甲...是為了保護他人。";
+		next;
+		callsub L_Select,15055;
+		if (countitem(15056) > 0 && countitem(6089) > 9) {  //custom translation
+			delitem 15056,1; //Special_Ninja_Suit_
+			delitem 6089,10; //Piece_Of_Darkness
+			getitem 15055,1; //Tenebris_Latitantes
+			mes "[房地產投資信託基金]";
+			mes "如何？";
+			mes "盔甲是否看起來好像有兩個？";
+			close;
+		}
+		break;
+	case 5:
+		close;
+	}
+	mes "[房地產投資信託基金]";
+	mes "您沒有足夠的成分。";
+	mes "再次看...";
+	close;
+
+L_Select:
+	.@string1$ = "Check Ingredients.";
+	.@string2$ = "Check Stats.";
+	while(1) {
+		switch(select(.@string1$,.@string2$,"Combine.","Quit.")) {
+		case 1:
+			.@string1$ = "";
+			callsub L_Ingredients, getarg(0);
+			break;
+		case 2:
+			.@string2$ = "";
+			callsub L_Stats, getarg(0);
+			break;
+		case 3:
+			callsub L_Combine;
+			return;
+		case 4:
+			mes "[房地產投資信託基金]";
+			mes "看起來您需要更多時間來決定。";
+			close;
+		}
+	}
+
+L_Ingredients:
+	mes "[房地產投資信託基金]";
+	switch (getarg(0)) {
+	case 2172:	//Wolf_Armguard
+		mes "要製作 ^ff0000 wolf武器，您需要1個Fox Armguard和10個狼的血液 ^000000。";
+		mes "你能感覺到嗎？狼血的th動...";
+		break;
+	case 2173:	//Crescent_Armguard
+		mes "要製作 ^ff0000crescent Armguard，您需要1個Fox Armguard和100 Crystal Fragments ^000000。";
+		mes "像晶體一樣美麗而清晰的新月將刻在上面。";
+		break;
+	case 15054:	//Ninja_Scale_Armor
+		mes "要製作 ^ff0000ninja鱗片裝甲，您需要30個火龍秤，30個冰秤和30個黑暗比例塊 ^000000。";
+		mes "您可以感覺到它的傳奇能力。";
+		break;
+	case 15055:	//Tenebris_Latitantes
+		mes "要製作 ^ff0000shadow王的盔甲，您需要一套特殊的忍者西裝，帶有一個插槽和10個黑暗零件 ^000000。";
+		mes "隨著黑暗，它擦除存在本身...";
+		break;
+	}
+	next;
+	return;
+
+L_Stats:
+	mes "[" + getitemname(getarg(0)) + "]";
+	switch (getarg(0)) {
+	case 2172:	//Wolf_Armguard
+		mes "有機會有5秒。 ATK+100，在近戰攻擊後逃離-50。";
+		mes "盾牌類型，防禦45，插槽1";
+		mes "所需的100級，僅忍者類型";
+		break;
+	case 2173:	//Crescent_Armguard
+		mes "每次增強量都會減少2％的技能延遲。";
+		mes "盾牌類型，防禦70，插槽1";
+		mes "所需的100級，僅忍者類型";
+		break;
+	case 15054:	//Ninja_Scale_Armor
+		mes "MHP+15％，MSP-30％";
+		mes "裝甲類型，防禦90，插槽1";
+		mes "所需的100級，僅忍者類型";
+		break;
+	case 15055:	//Tenebris_Latitantes
+		mes "激活LVL的機會。 1幻覺 - 被近戰攻擊攻擊時的陰影。";
+		mes "裝甲類型，防禦60，插槽1";
+		mes "所需的100級，僅忍者類型";
+		break;
+	}
+	next;
+	return;
+
+L_Combine:
+	mes "[房地產投資信託基金]";
+	mes "確保 ^ff0000 you在手上有正確的成分和設備 ^000000。";
+	mes "稍後再也沒有哭泣。";
+	next;
+	switch(select("結合:退出。")) {
+	case 1:
+		if (checkweight(1201,1) == 0 || MaxWeight - Weight < 2000) {
+			mes "- 堅持，稍等！ ！ -";
+			mes "- 您無法收到物品 -";
+			mes "- 因為你攜帶太多。 -";
+			mes "- 請重試 -";
+			mes "- 減輕了您的負擔。 -";
+			close;
+		}
+		return;
+	case 2:
+		mes "[房地產投資信託基金]";
+		mes "看起來您需要更多時間來決定。";
+		close;
+	}
+	end;
+}
+
+que_ng,23,70,3	script	Master Weapon Craftsman	4_DST_SOLDIER,{
+	mes "[到]";
+	mes "進攻是最好的防御手段。";
+	mes "強大的武器生病使您真正完整。";
+	next;
+	mes "[到]";
+	mes "當然，最好有一些特別的東西。";
+	next;
+	if(select("組合武器:結束對話。") == 2) {
+		mes "[到]";
+		mes "太小心有時可能是致命的。";
+		close;
+	}
+	switch(select("巨匕首[1]:三勝月[1]:風魔飛舞花瓣[2]:退出。")) {
+	case 1:
+		mes "[到]";
+		mes "Raksasa Dagger只能在經過大量培訓後才使用。";
+		next;
+		callsub L_Select,13076;
+		if (countitem(13013) > 0 && countitem(718) > 0) {  //custom translation
+			delitem 13013,1; //Murasame_
+			delitem 718,1; //Dark_Red_Jewel
+			getitem 13076,1; //Raksasa_Dagger
+			mes "[到]";
+			mes "啊...";
+			mes "多麼美麗的光澤...";
+			close;
+		}
+		mes "[到]";
+		mes "嗯...您沒有足夠的時間來製作raksasa匕首。";
+		break;
+	case 2:
+		mes "[到]";
+		mes "Mikatsuki ...像新月一樣美麗的曲線...";
+		mes "沒有多少人可以製造它們。";
+		next;
+		callsub L_Select,13078;
+		if (countitem(13015) > 0 && countitem(727) > 0) {  //custom translation
+			delitem 13015,1; //Hakujin_
+			delitem 727,1; //White_Jewel
+			getitem 13078,1; //Mikatsuki
+			mes "[到]";
+			mes "真正美麗...";
+			mes "我很幸運能夠看到如此宏偉的匕首。";
+			close;
+		}
+		mes "[到]";
+		mes "嗯...您沒有足夠的時間來製作Mikatsuki。";
+		break;
+	case 3:
+		mes "[到]";
+		mes "Huuma旋轉的花瓣...您見過花瓣漩渦嗎？";
+		next;
+		callsub L_Select,13313;
+		if (countitem(13304) > 0 && countitem(7156) > 99) {  //custom translation
+			delitem 13304,1; //Huuma_Calm_Mind
+			delitem 7156,100; //Broken_Shuriken
+			getitem 13313,1; //Huuma_Swirling_Petal
+			mes "[到]";
+			mes "飛行...花瓣！";
+			close;
+		}
+		mes "[到]";
+		mes "嗯...您沒有足夠的時間來製作huuma旋轉的花瓣。";
+		break;
+	case 4:
+		close;
+	}
+	mes "你為什麼不再次檢查？";
+	mes "有些人不能放棄他們所擁有的東西。";
+	close;
+
+L_Select:
+	.@string1$ = "Check Ingredients.";
+	.@string2$ = "Check Stats.";
+	while(1) {
+		switch(select(.@string1$,.@string2$,"Combine.","Quit.")) {
+		case 1:
+			.@string1$ = "";
+			callsub L_Ingredients, getarg(0);
+			break;
+		case 2:
+			.@string2$ = "";
+			callsub L_Stats, getarg(0);
+			break;
+		case 3:
+			callsub L_Combine;
+			return;
+		case 4:
+			mes "[到]";
+			mes "仔細考慮~~";
+			close;
+		}
+	}
+
+L_Ingredients:
+	mes "[到]";
+	switch (getarg(0)) {
+	case 13076:	//Raksasa_Dagger
+		mes "對於 ^ff0000raksasa匕首，您需要1個帶有2個插座和1個石榴石 ^000000的穆拉斯梅。";
+		mes "石榴石使Raksasa Dagger具有獨特的顏色。";
+		break;
+	case 13078:	//Mikatsuki
+		mes "對於 ^ff0000mikatsuki，您需要一個帶有插槽和蛋白石 ^000000的hakujin。";
+		mes "蛋白石是散發出半透明發光的原因。";
+		break;
+	case 13313:	//Huuma_Swirling_Petal
+		mes "對於A ^ff0000huuma旋轉的花瓣，您需要一個huuma鎮靜的頭腦shuriken和100個破碎的shurikens ^000000。";
+		mes "似乎需要太多的shurikens ...但是對於美麗的撲動效果至關重要。";
+		break;
+	}
+	next;
+	return;
+
+L_Stats:
+	mes "[" + getitemname(getarg(0)) + "]";
+	switch (getarg(0)) {
+	case 13076:	//Raksasa_Dagger
+		mes "智力+3 徒步+100。";
+		mes "匕首型，ATK 120，插槽1";
+		mes "所需級別110，僅忍者類型";
+		break;
+	case 13078:	//Mikatsuki
+		mes "在技能使用後，MATK + 120，將鑄造和SP的使用減少了5％。";
+		mes "匕首類型，ATK 50，武器LVL。 4個插槽1";
+		mes "所需的100級，僅忍者類型";
+		break;
+	case 13313:	//Huuma_Swirling_Petal
+		mes "MATK + 50，Huuma旋轉的花瓣技巧損害增加了20％。";
+		mes "Shuriken類型，ATK 150";
+		mes "武器LVL。 3，插槽2";
+		mes "所需級別110，僅忍者類型";
+		break;
+	}
+	next;
+	return;
+
+L_Combine:
+	mes "[到]";
+	mes "確保 ^ff0000 you在手上有正確的成分和設備 ^000000。";
+	mes "完成後，它就無法解開。";
+	next;
+	switch(select("結合:退出。")) {
+	case 1:
+		if (checkweight(1201,1) == 0 || MaxWeight - Weight < 2000) {
+			mes "- 堅持，稍等！ ！ -";
+			mes "- 您無法收到物品 -";
+			mes "- 因為你攜帶太多。 -";
+			mes "- 請重試 -";
+			mes "- 減輕了您的負擔。 -";
+			close;
+		}
+		return;
+	case 2:
+		mes "[到]";
+		mes "仔細考慮~~";
+		close;
+	}
+	end;
+}

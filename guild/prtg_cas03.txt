@@ -1,0 +1,137 @@
+﻿//===== rAthena Script =======================================
+//= War of Emperium (Prontera) - Fadhgridh
+//===== By: ==================================================
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= NPCs that relate to Prontera Guild Castle 3
+//===== Additional Comments: =================================
+//= 1.0 First Version. No longer uses functions. [L0ne_W0lf]
+//= 1.1 Corrected flag-in spawn point. [L0ne_W0lf]
+//= 1.2 Corrected treasure room switch coordinates. [L0ne_W0lf]
+//= 1.3 Removed dialog from interior flags. [L0ne_W0lf]
+//= 1.4 Partially rewrote Script. [Masao]
+//============================================================
+
+// Guild Flags (Outside Castle)
+//============================================================
+-	script	Fadhgridh#1::OutsideFlagsPR3	722,{
+
+	set .@GID, GetCastleData("prtg_cas03",1);
+
+	if (.@GID == 0) {
+		mes "[神符文米加特王國的法令]";
+		mes " ";
+		mes "1。遵循神聖符文米加特斯王國的條例，";
+		mes "我們聲明了這一點";
+		mes "這座城堡沒有正式的主人。";
+		mes " ";
+		mes "2。";
+		mes "克服所有試驗";
+		mes "並摧毀皇帝，";
+		mes "國王將賦予那個";
+		mes "這座城堡的所有權。";
+		close;
+	}
+	if (getcharid(2) == .@GID) {
+		mes "[迴聲聲音]";
+		mes "勇敢的人...";
+		mes "您想回到光榮的地方嗎？";
+		next;
+		if(select("返回公會城堡:退出。") == 1) {
+			close2;
+			if (getcharid(2) == GetCastleData("prtg_cas03",1)) {
+				warp "prtg_cas03",181,215;
+				end;
+			}
+			end;
+		}
+		close;
+	}
+	mes "[神符文米加特王國的法令]";
+	mes " ";
+	mes "1。遵循神聖符文米加特斯王國的條例，";
+	mes "我們贊成這個地方在";
+	mes "^ff0000的私人prossession"+GetGuildName(.@GID)+"^000000 Guild.";
+	mes " ";
+	mes "2。 ^ff0000的公會大師"+GetGuildName(.@GID)+"^000000 Guild is";
+	mes "^ff0000"+GetGuildMaster(.@GID)+"^000000";
+	mes "如果有人反對這一點，";
+	mes "用手裡的鋼刀片證明自己的力量和榮譽。";
+	close;
+
+OnRecvCastlePt03:
+	FlagEmblem GetCastleData("prtg_cas03",1);
+	end;
+}
+
+prt_gld,147,140,4	duplicate(OutsideFlagsPR3)	Fadhgridh#1-2	722
+prt_gld,147,136,4	duplicate(OutsideFlagsPR3)	Fadhgridh#2	722
+prt_gld,158,140,4	duplicate(OutsideFlagsPR3)	Fadhgridh#3	722
+prt_gld,158,136,4	duplicate(OutsideFlagsPR3)	Fadhgridh#4	722
+
+// Guild Flags (Inside Castle)
+//============================================================
+-	script	Fadhgridh#5::InsideFlagsPR3	722,{
+	end;
+
+OnRecvCastlePt03:
+	FlagEmblem GetCastleData("prtg_cas03",1);
+	end;
+}
+
+prtg_cas03,168,28,4	duplicate(InsideFlagsPR3)	Fadhgridh#5-2	722
+prtg_cas03,182,28,4	duplicate(InsideFlagsPR3)	Fadhgridh#6	722
+prtg_cas03,43,50,4	duplicate(InsideFlagsPR3)	Fadhgridh#7	722
+prtg_cas03,48,50,4	duplicate(InsideFlagsPR3)	Fadhgridh#8	722
+prtg_cas03,43,58,4	duplicate(InsideFlagsPR3)	Fadhgridh#9	722
+prtg_cas03,48,58,4	duplicate(InsideFlagsPR3)	Fadhgridh#10	722
+prtg_cas03,158,210,4	duplicate(InsideFlagsPR3)	Fadhgridh#11	722
+prtg_cas03,169,210,4	duplicate(InsideFlagsPR3)	Fadhgridh#12	722
+prtg_cas03,162,201,4	duplicate(InsideFlagsPR3)	Fadhgridh#13	722
+prtg_cas03,165,201,4	duplicate(InsideFlagsPR3)	Fadhgridh#14	722
+
+// Guild Flag (Town)
+//============================================================
+prontera,143,203,2	duplicate(InsideFlagsPR3)	Fadhgridh#15	722
+
+// Kafra Employee
+//============================================================
+prtg_cas03,181,215,4	duplicate(guildkafra)	Kafra Staff#prtg_cas03	117
+
+// Steward
+//============================================================
+prtg_cas03,51,100,4	duplicate(cm)	Sttick#prtg_cas03	55
+
+// Treasure Room Exit
+//============================================================
+prtg_cas03,193,130,0	script	#Lever_PR03	111,{
+	mes " ";
+	mes "有一個小槓桿。你會拉嗎？";
+	next;
+	if(select("拉動:不要。") == 1) {
+		close2;
+		warp "prtg_cas03",51,101;
+		end;
+	}
+	close;
+}
+
+// Guild Dungeon Switch
+//============================================================
+prtg_cas03,5,70,0	duplicate(gdlever)	#prtg_cas03	111
+
+// Guild Treasure Spawns
+//============================================================
+prtg_cas03,189,132,0	duplicate(Gld_Trea_Spawn)	Treasure#prtg_cas03	-1
+
+// AGIT Manager
+//============================================================
+prtg_cas03,17,221,0	duplicate(Gld_Agit_Manager)	Agit#prtg_cas03	-1
+
+// Guardians
+//============================================================
+prtg_cas03,51,100,4	duplicate(Gld_Guard_Template)	Guardian#prtg_cas03	-1

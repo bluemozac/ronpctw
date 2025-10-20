@@ -1,0 +1,482 @@
+﻿//===== rAthena Script ======================================= 
+//= Super Novice Job Quest
+//===== By: ================================================== 
+//= Darkchild
+//===== Current Version: ===================================== 
+//= 2.4
+//===== Compatible With: ===================================== 
+//= rAthena Project; SVN r15340+
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Super Novice Job Change Npc
+//= Super Novice Cart Rental Npc
+//= Some Other Useless Super Novice Npc
+//===== Additional Comments: ================================= 
+//= 1.9 Rescripted to the Aegis 10.3 Standars. [Samuray22]
+//= 2.0 Rescripted again, this time using an iRO base. [L0ne_W0lf]
+//= 2.1 Swapped use of baseclass for basejob. [L0ne_W0lf]
+//= 2.2 Added Quest Log commands. [Kisuka]
+//= 2.3 NPC "Esseray" calls Ex. Super Novice script when enabled. [Euphy]
+//= 2.4 Added an Ex. Super Novice dialog check. [Euphy]
+//============================================================ 
+
+aldeba_in,223,167,3	script	Tzerero#sn	709,{
+	if (BaseJob == Job_Super_Novice) {
+		mes "[零]";
+		mes "我相信你很喜歡";
+		mes "作為超級新手的生活？啊，";
+		mes "很好...正如我所期望的那樣。";
+		mes "確實，平庸的光線在你裡面閃閃發光...";
+		next;
+		mes "[零]";
+		mes "我鼓勵你生活";
+		mes "像Kimu-Shaun先生一樣的生活...";
+		mes "成為所有行業的傑克...";
+		mes "...和無主人。";
+		close;
+	}
+	if (countitem(938) > 29 && countitem(907) > 29 && SUPNOV_Q == 1) {
+		delitem 938,30; //Sticky_Mucus
+		delitem 907,30; //Resin
+		mes "[零]";
+		mes "啊，你帶來了";
+		mes "我要求的項目！";
+		mes "您已經證明了自己";
+		mes "值得加入我們的";
+		mes "超級新手協會。";
+		next;
+		mes "[零]";
+		mes "然後，按照承諾，我會";
+		mes "將您的工作更改為";
+		mes "^3355ffsuper novi-^000000HUH？";
+		mes "你身後是什麼？";
+		next;
+		select("嗯？:那是什麼？");
+		mes "^3355fffyou在你身後看，但是...";
+		mes "那裡什麼都沒有。";
+		mes "這裡發生了一些可疑的東西！ ^000000";
+		next;
+		completequest 6010;
+		callfunc "F_ClearJobVar";
+		getitem 2339,1; //G_Strings
+		if (Upper==0) jobchange Job_Super_Novice;
+		if (Upper==2) jobchange Job_Super_Baby;
+		mes "[零]";
+		mes "bwaha！我接到你了！";
+		mes "所以...你喜歡我的笑話嗎？";
+		mes "哦，好吧，讓我們忘了...";
+		next;
+		mes "[零]";
+		mes "盡可能";
+		mes "原因是一個成年男子，例如";
+		mes "我自己會隨身攜帶";
+		mes "一對內褲。";
+		next;
+		mes "[零]";
+		mes "重要的是...";
+		mes "你加入了尊敬的";
+		mes "偉大的超級新手的隊伍。";
+		next;
+		mes "[零]";
+		mes "將這些內褲視為禮物...";
+		mes "謠傳這件衣服";
+		mes "要由Kimu-Shaun先生穿著，";
+		mes "我們的傳奇俱樂部創始人";
+		mes "他努力的早期";
+		mes "模範平庸。";
+		next;
+		mes "[零]";
+		mes "出去享受新生活";
+		mes "作為超級新手！冒險";
+		mes "提出並幫助共同";
+		mes "伙計，雖然在";
+		mes "同時！";
+		close;
+	}
+	if (SUPNOV_Q == 1) {
+		mes "[零]";
+		mes "嗯？你忘了我什麼嗎";
+		mes "想要你嗎？好的，";
+		mes "我會讓你知道一次";
+		mes "再次。請記住";
+		mes "這次...";
+		next;
+		mes "[零]";
+		mes "我要你帶我";
+		mes "^ff000030粘性粘液^000000和";
+		mes "^ff000030樹脂^000000。";
+		close;
+	}
+	if (BaseJob == Job_Novice && Upper != 1) {
+		mes "[零]";
+		mes "...唔？";
+		mes "停止。";
+		mes "讓我看你。";
+		next;
+		mes "[零]";
+		mes "…………";
+		mes "…………";
+		mes "…………";
+		emotion ET_THINK;
+		next;
+		mes "[零]";
+		mes "我看到光明";
+		mes "平庸的光芒";
+		mes "你內心明亮...";
+		next;
+		mes "[零]";
+		mes "你為什麼不加入我們";
+		mes "年輕的新手？加入";
+		mes "我們並學習微妙的";
+		mes "存在的偉大";
+		mes "平庸...";
+		next;
+		mes "[零]";
+		mes "接受我的報價...";
+		mes "拋棄你的";
+		mes "棕色，塵土飛揚的衣服";
+		mes "然後綻放...";
+		next;
+		mes "[零]";
+		mes "... a ^ce6300super新手 ^000000。";
+		next;
+		switch(select("接受他的提議。:拒絕他的提議。:仔細聆聽更多說明。")) {
+		case 1:
+			if (!callfunc("F_CanChangeJob")) {
+				mes "[零]";
+				mes "嗯...但是你真的嗎";
+				mes "欣賞價值";
+				mes "尋找力量";
+				mes "弱點？你必須";
+				mes "向我證明你";
+				mes "是真正的成績。";
+				next;
+				mes "[零]";
+				mes "作為新手的生活...";
+				mes "當你返回";
+				mes "已經掌握了";
+				mes "基本技能...";
+				mes "在平庸和";
+				mes "成為10級新手...";
+				close;
+			}
+			if (BaseLevel < 45) {
+				mes "[零]";
+				mes "嗯...但是你真的嗎";
+				mes "重視輕鬆的生活方式";
+				mes "平庸的冒險家？";
+				mes "向我證明你沒有";
+				mes "對力量的慾望...";
+				next;
+				mes "[零]";
+				mes "過著生活的生活...";
+				mes "成為45級新手...";
+				mes "那時你可以加入我們...";
+				close;
+			}
+			mes "[零]";
+			mes "我可以看到你的眼睛";
+			mes "決心";
+			mes "過上的生活...";
+			next;
+			mes "[零]";
+			mes "只有真正明智的才能";
+			mes "看到那是普通的";
+			mes "平庸是最好的";
+			mes "生活的方式。";
+			next;
+			mes "[零]";
+			mes "但是，我們不歡迎";
+			mes "只是任何進入我們社會的人。";
+			mes "你必須首先通過我們的";
+			mes "資格測試。";
+			next;
+			mes "[零]";
+			mes "對於此測試，您必須";
+			mes "給我一些東西";
+			mes "從正常掉下來，";
+			mes "毫無根據的怪物。";
+			next;
+			mes "[零]";
+			mes "嗯...";
+			mes "^ff000030粘性粘液^000000";
+			mes "和 ^ff000030樹脂";
+			mes "^000000將適合測試您的";
+			mes "能夠與微薄的敵人作鬥爭的能力。";
+			next;
+			mes "[零]";
+			mes "另外，數字30";
+			mes "很重要。它不是";
+			mes "任何特別的...只是";
+			mes "一個普通的數字。";
+			mes "哈哈哈哈哈~";
+			next;
+			set SUPNOV_Q,1;
+			setquest 6010;
+			mes "[零]";
+			mes "祝你好運，我的朋友。";
+			close;
+		case 2:
+			mes "[零]";
+			mes "好吧，...我想";
+			mes "簡單生活的價值";
+			mes "你很難";
+			mes "掌握。沒關係...";
+			mes "你的生活是你自己的。";
+			next;
+			mes "[零]";
+			mes "但是，如果您看到";
+			mes "平淡的光，你";
+			mes "歡迎拜訪我";
+			mes "隨時...";
+			next;
+			mes "[零]";
+			mes "作為我們的新手俱樂部";
+			mes "變得更受歡迎，並且";
+			mes "我們獲得了更多的追隨者，";
+			mes "我們可以考慮使用";
+			mes "一個更困難的測試...";
+			close;
+		case 3:
+			mes "[零]";
+			mes "我們的新手協會建立了";
+			mes "由傳奇的先生";
+			mes "Kimu-shaun ...也許是";
+			mes "我們這一代人中最偉大的人。";
+			next;
+			mes "[零]";
+			mes "他意識到那裡";
+			mes "在";
+			mes "世界，尤其是中間";
+			mes "普通百姓";
+			mes "米德加德...";
+			next;
+			mes "[零]";
+			mes "他從中學到了很多技能";
+			mes "他的所有不同人";
+			mes "遇見...但是由於他沒有";
+			mes "在一個地方呆了很長時間";
+			mes "他成為所有人的傑克";
+			mes "交易...和無主人。";
+			next;
+			mes "[零]";
+			mes "分享痛苦";
+			mes "普通人，他變成了";
+			mes "成為一個人...";
+			mes "最大的普通";
+			mes "曾經。";
+			next;
+			mes "[零]";
+			mes "我們社會的成員";
+			mes "嘗試當先生";
+			mes "根據Kimu-Shaun的說法";
+			mes "他在我們面前提出的原則...";
+			close;
+		}
+	}
+	else {
+		if (BaseJob == Job_Super_Novice) {
+			mes "[零]";
+			mes "你喜歡生活";
+			mes "生活只是超級";
+			mes "新手？我敢肯定";
+			mes "您很喜歡~";
+			next;
+			mes "[零]";
+			mes "請成長為超級";
+			mes "通過幫助";
+			mes "普通人在";
+			mes "同時...";
+			next;
+			mes "[零]";
+			mes "我鼓勵你";
+			mes "在你的超級";
+			mes "新聞和領導";
+			mes "生活中的一個例子";
+			mes "一個異常";
+			mes "平凡的生活。";
+			close;
+		}
+		mes "[零]";
+		mes "你好，我是tzerero，";
+		mes "非官方主管";
+		mes "偉大的";
+		mes "新手協會。";
+		next;
+		mes "[零]";
+		mes "嗯...你似乎很好";
+		mes "高於普通人。";
+		mes "是的，你絕對更多";
+		mes "“非凡”比你";
+		mes "'普通的...'";
+		next;
+		mes "[零]";
+		mes "*嘆*我想你";
+		mes "永遠無法理解";
+		mes "我們的生活方式，";
+		mes "微妙的偉大";
+		mes "是普通的。但";
+		mes "沒關係。";
+		next;
+		mes "[零]";
+		mes "好吧...有成千上萬";
+		mes "其中的不同人";
+		mes "世界，所以我只是試圖接受";
+		mes "我們所有的差異。";
+		mes "我希望你也會。";
+		close;
+	}
+}
+
+aldeba_in,216,169,5	script	Esseray#sn	86,{
+	if (Class == Job_Super_Novice_E || Class == Job_Super_Baby_E) {
+		mes "[散文]";
+		mes "你！比以前強。";
+		mes "我知道你可以通過考試~";
+		close;
+	}
+	if (BaseJob == Job_Super_Novice) {
+		if (checkre(0))
+			callfunc "Esseray_Ex";
+		mes "[散文]";
+		mes "嗯？嘿，你是會員";
+		mes "我們偉大的新手社會";
+		mes "不是嗎？這不是";
+		mes "有史以來最好的俱樂部嗎？";
+		next;
+		mes "[隨筆]";
+		mes "生活中的生活，";
+		mes "根據原則";
+		mes "Kimu-shaun先生...";
+		mes "變得普通真是太好了！";
+		next;
+		mes "[散文]";
+		mes "讓我們嘗試過我們的生活";
+		mes "盡可能正常！";
+		mes "供您參考，我是";
+		mes "第一成員，";
+		mes "在特塞羅先生的下";
+		mes "課程！";
+		close;
+	}
+	if (BaseJob == Job_Novice && Upper != 1) {
+		mes "[散文]";
+		mes "哈哈~你什麼都不知道";
+		mes "關於成為一個普通人！";
+		mes "你為什麼不加入我們的新手";
+		mes "社會？這個俱樂部是世界上最好的~";
+		next;
+		mes "[散文]";
+		mes "是的，超級新手";
+		mes "是最好的角色！";
+		mes "哈哈哈哈哈哈哈！";
+		close;
+	}
+	else {
+		mes "[散文]";
+		mes "bah~！你比";
+		mes "普通...地獄，你可能";
+		mes "甚至是“特別”。";
+		mes "真丟臉！出色地...";
+		mes "我希望你仍然活著";
+		mes "您的生活積極。";
+		close;
+	}
+}
+
+aldebaran,54,238,5	script	Kafra Employee#sn	117,{
+	if (BaseJob == Job_Super_Novice) {
+		mes "[KAFRA員工]";
+		if (Sex == SEX_MALE)
+			mes "你好，超級新手~";
+		else
+			mes "您好，超級新手，女士。";
+		mes "你一定是真的";
+		mes "失望的是另一個";
+		mes "Kafra員工不會讓";
+		mes "您從他們那裡租車。";
+		mes "但是你現在不用擔心...";
+		next;
+		mes "[KAFRA員工]";
+		mes "我在這裡支持你們";
+		mes "通過提供購物車...";
+		next;
+		mes "[KAFRA員工]";
+		mes "^3355ff*竊竊私語*^000000";
+		mes "^555555i不應該這樣做";
+		mes "因為這是對我們的";
+		mes "公司政策。但是我感到";
+		mes "真的很抱歉超級新手";
+		mes "...所以我在這裡。 ^000000";
+		next;
+		mes "[KAFRA員工]";
+		mes "無論如何，您想租車嗎？服務費是1,900 Zeny。";
+		next;
+		if (select("租用推車。:取消。") == 1) {
+			mes "[KAFRA員工]";
+			mes "哦，這是什麼...";
+			mes "你學會了“推車”";
+			mes "技能？我只能租你";
+			mes "購物車，但是如果你沒有";
+			mes "學會了推動它，你會";
+			mes "只是浪費你的zeny。";
+			next;
+			mes "[KAFRA員工]";
+			mes "因此，請確保您有";
+			mes "已經“推車”技能。";
+			next;
+			if (select("租用推車。:取消。") == 1) {
+				if (checkcart()) {
+					mes "[KAFRA員工]";
+					mes "哦，您已經裝備了一輛購物車。";
+					close;
+				}
+				if (Zeny >= 1899) {
+					set RESRVPTS, RESRVPTS + 190;
+					set Zeny, Zeny-1900;
+					if (getskilllv("MC_PUSHCART") > 0) setcart;
+					mes "[KAFRA員工]";
+					mes "感謝您使用我的服務。";
+					mes "雖然我在做什麼";
+					mes "與其他人合法不合法";
+					mes "Kafra員工，我強烈";
+					mes "相信我正在做適合客戶的事情。";
+					close;
+				}
+				else {
+					mes "[KAFRA員工]";
+					mes "對不起，但是您沒有足夠的Zeny。服務費是1,900 Zeny。";
+					close;
+				}
+			}
+			mes "[KAFRA員工]";
+			mes "請再來。";
+			mes "感謝您使用我的服務。";
+			close;
+		}
+		mes "[KAFRA員工]";
+		mes "請再來。";
+		mes "感謝您使用我的服務。";
+		close;
+	}
+	mes "[KAFRA員工]";
+	mes "好da  - 哎呀...！";
+	mes "我認為我不能給你";
+	mes "使用您想要的服務...";
+	mes "請去另一個";
+	mes "Kafra員工。我道歉";
+	mes "出於不便...";
+	close;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= Dialogs From Some Other Scripts (Most Of It)
+//= 1.3-1.5 Added Baby class support (and to the Kafta SN Cart
+//=     renter, too) [Lupus]
+//= 1.6 Added a fix which prevent High Novices passing
+//=     this Job Quests again. [Lupus]
+//= 1.7 Fixed Baby Class Support. [Lupus]
+//= 1.8 Now a Baby can become a Super Baby [Lupus]
+//============================================================

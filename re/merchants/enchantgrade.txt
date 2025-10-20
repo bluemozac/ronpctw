@@ -1,0 +1,131 @@
+﻿//===== rAthena Script ======================================= 
+//= Enchant Grade
+//===== Changelogs: ==========================================
+//= 1.0 First Version. [JohnnyPlayy]
+//= 1.1 Fixed small issues. [Lemongrass]
+//= 1.2 Added translation. [Asheraf]
+//= 1.3 Added paramarket NPC and warps. [Balfear]
+//= 1.4 Translated paramarket NPC. [Lemongrass]
+//============================================================
+
+grademk,34,184,4	script	Sratos#sratos	4_JP_GARM_H,{
+	mes "[斯拉托斯]";
+	mes "您好，親愛的顧客，他們走進來，希望今天有一個奇蹟。";
+	mes "我怎麼幫你？";
+	next;
+	switch( select( "Enhance the equipment's grade.", "Exchange Etel items", "What is Grade Enhancement?" ) ){
+		case 1:
+			mes "[斯拉托斯]";
+			mes "我們的客戶。您想增強設備等級。";
+			mes "移動珠寶的神奇力量並不容易。";
+			next;
+			mes "[斯拉托斯]";
+			mes "神奇的力量可以當場爆炸。";
+			mes "然後，將繼承神奇力量的武器也爆炸了！";
+			next;
+			switch( select( "I'll still do it!", "I'll think about it." ) ){
+				case 1:
+					mes "[斯拉托斯]";
+					mes "祝我們勇敢的客戶好運！";
+					close2;
+					enchantgradeui();
+					end;
+				case 2:
+					mes "[斯拉托斯]";
+					mes "每當您有勇氣挑戰時，請回來。";
+					close;
+			}
+		case 2:
+			mes "[斯拉托斯]";
+			mes "這些是用於提高成績的珠寶。";
+			mes "埃特灰塵，將是基礎的珠寶，如果您給我一小筆費用，我會換給埃爾珠寶。";
+			close2;
+			callshop "EnchantGradeExchange";
+			end;
+
+		case 3:
+			mes "[斯拉托斯]";
+			mes "有時，會發現具有許多純粹魔力的不穩定珠寶。";
+			mes "我們稱這些以太寶石，對嗎？";
+			next;
+			mes "[斯拉托斯]";
+			mes "您可以將以太寶石的神奇力量轉移到其他武器上，但是當然有一些風險。";
+			mes "這很細膩，所以如果您不小心，請流行！它將爆炸。";
+			next;
+			mes "[斯拉托斯]";
+			mes "無論如何，如果您使用這種以太寶石，則可以增強所使用的武器。";
+			mes "性能變得更好。我們稱此成績增強。";
+			next;
+			mes "[斯拉托斯]";
+			mes "您也是，如果您喜歡的武器進一步增長，您是否會感到高興？";
+			mes "我們是協助它的人。不過，這有點風險。啊哈哈哈。";
+			close;
+	}
+
+OnInit:
+	setunittitle(getnpcid(0), "<Grade Enhancer>");
+	end;
+}
+
+paramk,34,184,4	script	Suribell#suribell	4_F_FRUIT,{
+	mes "[蘇里貝爾]";
+	mes "祝您好運永遠與您同在！";
+	mes "歡迎來到Paramarket的成績增強中心~";
+	next;
+	switch( select( "Enhance the equipment's grade.", "Exchange Etel items", "What is Grade Enhancement?" )) {
+		case 1:
+			mes "[蘇里貝爾]";
+			mes "您想解鎖自己喜歡的設備的潛力嗎？";
+			mes "在處理魔法力量的過程中也可能發生爆炸。";
+			next;
+			mes "[蘇里貝爾]";
+			mes "不過，如果您想提高自己的成績...！";
+			mes "我，蘇里貝爾（Suribell）會盡力！";
+			next;
+			switch( select( "I'll still do it!", "I'll think about it." ) ){
+				case 1:
+					mes "[蘇里貝爾]";
+					mes "讓我們握手並有信心！嘗試抓緊牙齒！";
+					close2;
+					enchantgradeui();
+					end;
+				case 2:
+					mes "[蘇里貝爾]";
+					mes "好的！讓我們喝一杯冷水！";
+					close;
+			}
+		case 2:
+			mes "[蘇里貝爾]";
+			mes "您需要以太寶石來提高成績！";
+			mes "如果您將埃特灰塵和珠寶結合在一起，那就很好！埃爾珠寶的冒險家珠寶已經完成！";
+			mes "您想結合珠寶和埃特塵嗎？";
+			close2;
+			callshop "EnchantGradeExchange";
+			end;
+		case 3:
+			mes "[蘇里貝爾]";
+			mes "有時，會發現具有許多純粹魔力的不穩定珠寶。";
+			mes "我決定稱這種寶石以太寶石。";
+			mes "WHO？我是蘇里貝爾！";
+			next;
+			mes "[蘇里貝爾]";
+			mes "以太寶石的神奇力量有時會喚醒設備的隱藏潛力。";
+			mes "我們之所以稱其為年級，是因為它上升了一層！";
+			next;
+			mes "[蘇里貝爾]";
+			mes "冒險家可能具有他未知的潛力。";
+			mes "有風險，如果做錯了，它可能會被銷毀，但要信仰嘗試一下！";
+			close;
+	}
+
+OnInit:
+	setunittitle(getnpcid(0), "<Grade Enhancer>");
+	end;
+}
+
+// = Portals
+//============================================================
+prontera,50,293,0	warp	Grademk_Int	1,1,grademk,13,172
+grademk,9,172,0	warp	Grademk_Out	1,1,prontera,50,290
+paramk,8,171,0	warp	grade_in	1,1,paramk,141,64
+paramk,145,64,0	warp	grade_out	1,1,paramk,11,171

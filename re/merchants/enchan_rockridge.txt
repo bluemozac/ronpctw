@@ -1,0 +1,520 @@
+﻿//===== rAthena Script =======================================
+//= Rock Ridge npcs
+//===== Description: =========================================
+//= [Official Conversion]
+//= Enchant npcs on Rockridge.
+//===== Changelogs: ==========================================
+//= 1.0 First version. [Capuche]
+//============================================================
+
+// enchant npc
+har_in01,17,74,7	script	Contraband Processor#pa	4_DR_SOLDIER,{
+	if (checkweight(1201,1) == 0) {
+		mes "我攜帶太多類型的物品。我應該先減輕我的書包。";
+		close;
+	}
+	if ((MaxWeight - Weight) < 10000) {
+		mes "我超重。我最好先照亮我的書包。";
+		close;
+	}
+	disable_items;
+	mes "[違禁處理器]";
+	mes "您是否試圖購買一些帶有Rock Ridge硬幣的違禁品？我可以使您的違禁品更好。";
+	next;
+	.@reset = select( "Make them better? How?", "Enchant contraband items.", "Reset contraband item Enchantment level." ) - 2;
+	if (.@reset == -1) {
+		mes "[違禁處理器]";
+		mes "啊，我們以前見面了嗎？我每天遇到很多人，以至於我不記得他們所有的臉。讓我趕上你的速度。";
+		next;
+		mes "[違禁處理器]";
+		mes "我可以迷住您可以用岩石嶺硬幣購買的設備，最多3個用於裝甲和服裝的插座以及配件最多2個插座。";
+		next;
+		mes "[違禁處理器]";
+		mes "我為每個插座收取2個岩石脊硬幣，以進行迷人和重置。";
+		next;
+		mes "[違禁處理器]";
+		mes "哦，請注意，這些違禁品很容易破壞，尤其是當它們重置時。";
+		close;
+	}
+	switch( select( "Cancel", "Armor", "Garment", "Accessory (Right Slot)" ) ) {
+	case 1:
+		mes "[違禁處理器]";
+		mes "你很傻。";
+		close;
+	case 2:
+		.@part = EQI_ARMOR;
+		break;
+	case 3:
+		.@part = EQI_GARMENT;
+		break;
+	case 4:
+		.@part = EQI_ACC_R;
+		break;
+	}
+	.@equip_id = getequipid(.@part);
+	switch( .@equip_id ) {
+	case 15176:	// Vigilante_Suit
+	case 15177:	// Elemental_Robe
+	case 15178:	// Golden_Ninja_Suit
+	case 15179:	// Mine_Worker's_Vest
+	case 15180:	// Hippie Clothes
+
+	case 20820:	// Elemental_Cape
+	case 20821:	// Golden_Scarf
+	case 20822:	// Mine_Worker's_Backpack
+
+	case 28441:	// Vigilante_Badge
+	case 28442:	// Hippie_Feather
+		break;
+	case -1:
+		mes "[違禁處理器]";
+		mes "你為什麼要浪費我的時間？首先穿上設備。";
+		close;
+	default:
+		mes "[違禁處理器]";
+		mes "我不處理這樣的項目。";
+		close;
+	}
+	.@refine = getequiprefinerycnt(.@part);
+	setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+	copyarray .@tmp_card[0], .@card[0], 4;
+	if ((.@card[1] && getiteminfo(.@card[1], ITEMINFO_SUBTYPE) == CARD_NORMAL) || (.@card[2] && getiteminfo(.@card[2], ITEMINFO_SUBTYPE) == CARD_NORMAL) || (.@card[3] && getiteminfo(.@card[3], ITEMINFO_SUBTYPE) == CARD_NORMAL)) {// armor enchant system custom check
+		mes "[違禁處理器]";
+		mes "發生了問題。";
+		close;
+	}
+	switch( .@reset ) {
+	case TRUE:
+		if (.@card[3] == 0) {
+			mes "[違禁處理器]";
+			mes "它沒有迷人。您希望我重置什麼？";
+			close;
+		}
+		mes "[違禁處理器]";
+		mes "哦，您真的想重置嗎？正如我以前告訴過的那樣，違禁品警惕徽章容易破壞。";
+		if (select( "I'll come back later.", "Let's do it." ) == 1) {
+			mes "[違禁處理器]";
+			mes "好吧，如果您改變主意，請回來。";
+			close;
+		}
+		if (.@part == EQI_ACC_R)
+			.@chance_of_breaking_on_reset = 45;
+		else
+			.@chance_of_breaking_on_reset = 30;
+		.@card[1] = .@card[2] = .@card[3] = 0;
+		break;
+	case FALSE:
+		switch( .@part ) {
+		case EQI_ARMOR:
+		case EQI_GARMENT:
+			if (.@card[1] > 0) {
+				mes "[違禁處理器]";
+				mes "這已被魔術到最大限制。也許您應該重置它。";
+				close;
+			}
+			if (.@card[3] == 0)
+				.@enchant_slot = 3;
+			else if (.@card[2] == 0)
+				.@enchant_slot = 2;
+			else
+				.@enchant_slot = 1;
+			if (.@refine >= 9) {
+				.@r = rand(1,215);
+				if (.@r < 16) .@card[.@enchant_slot] = getiteminfo("Agility2", ITEMINFO_ID);
+				else if (.@r < 31) .@card[.@enchant_slot] = getiteminfo("Dexterity2", ITEMINFO_ID);
+				else if (.@r < 46) .@card[.@enchant_slot] = getiteminfo("Strength2", ITEMINFO_ID);
+				else if (.@r < 61) .@card[.@enchant_slot] = getiteminfo("Inteligence2", ITEMINFO_ID);
+				else if (.@r < 76) .@card[.@enchant_slot] = getiteminfo("Def20", ITEMINFO_ID);
+				else if (.@r < 91) .@card[.@enchant_slot] = getiteminfo("Mdef5", ITEMINFO_ID);
+				else if (.@r < 106) .@card[.@enchant_slot] = getiteminfo("Critical3", ITEMINFO_ID);
+				else if (.@r < 121) .@card[.@enchant_slot] = getiteminfo("Evasion6", ITEMINFO_ID);
+				else if (.@r < 135) .@card[.@enchant_slot] = getiteminfo("Expert_Archer1", ITEMINFO_ID);
+				else if (.@r < 149) .@card[.@enchant_slot] = getiteminfo("Fatal1", ITEMINFO_ID);
+				else if (.@r < 163) .@card[.@enchant_slot] = getiteminfo("Spell1", ITEMINFO_ID);
+				else if (.@r < 173) .@card[.@enchant_slot] = getiteminfo("Expert_Archer2", ITEMINFO_ID);
+				else if (.@r < 183) .@card[.@enchant_slot] = getiteminfo("Fatal2", ITEMINFO_ID);
+				else if (.@r < 193) .@card[.@enchant_slot] = getiteminfo("Spell2", ITEMINFO_ID);
+				else if (.@r < 197) .@card[.@enchant_slot] = getiteminfo("Expert_Archer3", ITEMINFO_ID);
+				else if (.@r < 201) .@card[.@enchant_slot] = getiteminfo("Fatal3", ITEMINFO_ID);
+				else if (.@r < 205) .@card[.@enchant_slot] = getiteminfo("Spell3", ITEMINFO_ID);
+				else if (.@r < 209) .@card[.@enchant_slot] = getiteminfo("Attack_Delay_1", ITEMINFO_ID);
+				else if (.@r < 210) .@card[.@enchant_slot] = getiteminfo("Expert_Archer4", ITEMINFO_ID);
+				else if (.@r < 211) .@card[.@enchant_slot] = getiteminfo("Fatal4", ITEMINFO_ID);
+				else if (.@r < 212) .@card[.@enchant_slot] = getiteminfo("Spell4", ITEMINFO_ID);
+				else .@card[.@enchant_slot] = getiteminfo("Attack_Delay_2", ITEMINFO_ID);
+			}
+			else {
+				.@r = rand(1,206);
+				if (.@r < 14) .@card[.@enchant_slot] = getiteminfo("Agility1", ITEMINFO_ID);
+				else if (.@r < 27) .@card[.@enchant_slot] = getiteminfo("Dexterity1", ITEMINFO_ID);
+				else if (.@r < 40) .@card[.@enchant_slot] = getiteminfo("Strength1", ITEMINFO_ID);
+				else if (.@r < 53) .@card[.@enchant_slot] = getiteminfo("Inteligence1", ITEMINFO_ID);
+				else if (.@r < 66) .@card[.@enchant_slot] = getiteminfo("Def15", ITEMINFO_ID);
+				else if (.@r < 79) .@card[.@enchant_slot] = getiteminfo("Mdef2", ITEMINFO_ID);
+				else if (.@r < 92) .@card[.@enchant_slot] = getiteminfo("Critical1", ITEMINFO_ID);
+				else if (.@r < 105) .@card[.@enchant_slot] = getiteminfo("Evasion3", ITEMINFO_ID);
+				else if (.@r < 114) .@card[.@enchant_slot] = getiteminfo("Agility2", ITEMINFO_ID);
+				else if (.@r < 123) .@card[.@enchant_slot] = getiteminfo("Dexterity2", ITEMINFO_ID);
+				else if (.@r < 132) .@card[.@enchant_slot] = getiteminfo("Strength2", ITEMINFO_ID);
+				else if (.@r < 141) .@card[.@enchant_slot] = getiteminfo("Inteligence2", ITEMINFO_ID);
+				else if (.@r < 150) .@card[.@enchant_slot] = getiteminfo("Def20", ITEMINFO_ID);
+				else if (.@r < 159) .@card[.@enchant_slot] = getiteminfo("Mdef5", ITEMINFO_ID);
+				else if (.@r < 168) .@card[.@enchant_slot] = getiteminfo("Critical3", ITEMINFO_ID);
+				else if (.@r < 177) .@card[.@enchant_slot] = getiteminfo("Evasion6", ITEMINFO_ID);
+				else if (.@r < 184) .@card[.@enchant_slot] = getiteminfo("Expert_Archer1", ITEMINFO_ID);
+				else if (.@r < 191) .@card[.@enchant_slot] = getiteminfo("Fatal1", ITEMINFO_ID);
+				else if (.@r < 198) .@card[.@enchant_slot] = getiteminfo("Spell1", ITEMINFO_ID);
+				else if (.@r < 201) .@card[.@enchant_slot] = getiteminfo("Expert_Archer2", ITEMINFO_ID);
+				else if (.@r < 204) .@card[.@enchant_slot] = getiteminfo("Fatal2", ITEMINFO_ID);
+				else .@card[.@enchant_slot] = getiteminfo("Spell2", ITEMINFO_ID);
+			}
+			break;
+		case EQI_ACC_R:
+			if (.@card[2] > 0) {
+				mes "[違禁處理器]";
+				mes "這已被魔術到最大限制。也許您應該重置它。";
+				close;
+			}
+			if (.@card[3] == 0)
+				.@enchant_slot = 3;
+			else
+				.@enchant_slot = 2;
+			.@r = rand(1,236);
+			if (.@r < 16) .@card[.@enchant_slot] = getiteminfo("Agility1", ITEMINFO_ID);
+			else if (.@r < 31) .@card[.@enchant_slot] = getiteminfo("Dexterity1", ITEMINFO_ID);
+			else if (.@r < 46) .@card[.@enchant_slot] = getiteminfo("Strength1", ITEMINFO_ID);
+			else if (.@r < 61) .@card[.@enchant_slot] = getiteminfo("Inteligence1", ITEMINFO_ID);
+			else if (.@r < 76) .@card[.@enchant_slot] = getiteminfo("Vitality1", ITEMINFO_ID);
+			else if (.@r < 91) .@card[.@enchant_slot] = getiteminfo("Luck1", ITEMINFO_ID);
+			else if (.@r < 106) .@card[.@enchant_slot] = getiteminfo("HP100", ITEMINFO_ID);
+			else if (.@r < 121) .@card[.@enchant_slot] = getiteminfo("SP50", ITEMINFO_ID);
+			else if (.@r < 131) .@card[.@enchant_slot] = getiteminfo("Agility2", ITEMINFO_ID);
+			else if (.@r < 141) .@card[.@enchant_slot] = getiteminfo("Dexterity2", ITEMINFO_ID);
+			else if (.@r < 151) .@card[.@enchant_slot] = getiteminfo("Strength2", ITEMINFO_ID);
+			else if (.@r < 161) .@card[.@enchant_slot] = getiteminfo("Inteligence2", ITEMINFO_ID);
+			else if (.@r < 171) .@card[.@enchant_slot] = getiteminfo("Vitality2", ITEMINFO_ID);
+			else if (.@r < 181) .@card[.@enchant_slot] = getiteminfo("Luck2", ITEMINFO_ID);
+			else if (.@r < 191) .@card[.@enchant_slot] = getiteminfo("HP200", ITEMINFO_ID);
+			else if (.@r < 201) .@card[.@enchant_slot] = getiteminfo("SP100", ITEMINFO_ID);
+			else if (.@r < 208) .@card[.@enchant_slot] = getiteminfo("Expert_Archer1", ITEMINFO_ID);
+			else if (.@r < 215) .@card[.@enchant_slot] = getiteminfo("Spell1", ITEMINFO_ID);
+			else if (.@r < 222) .@card[.@enchant_slot] = getiteminfo("Fighting_Spirit1", ITEMINFO_ID);
+			else if (.@r < 229) .@card[.@enchant_slot] = getiteminfo("Attack_Delay_1", ITEMINFO_ID);
+			else if (.@r < 236) .@card[.@enchant_slot] = getiteminfo("Fatal1", ITEMINFO_ID);
+			else .@card[.@enchant_slot] = getiteminfo("Atk_Speed1", ITEMINFO_ID);
+			break;
+		default:
+			mes "[違禁處理器]";
+			mes "您只是嘗試切換設備嗎？";
+			close;
+		}
+		break;
+	}
+	if (countitem(25250) < 2) {
+		mes "[違禁處理器]";
+		mes "我為這項服務收取2個Rock Ridge硬幣。把他們帶給我。";
+		close;
+	}
+	delitem 25250,2;// Rock_Ridge_Coin
+
+	// anti-hack
+	if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipRefineHack", .@part, .@refine) || callfunc("F_IsEquipCardHack", .@part, .@tmp_card[0], .@tmp_card[1], .@tmp_card[2], .@tmp_card[3]))
+		close;
+
+	delequip .@part;
+	if (rand(100) < .@chance_of_breaking_on_reset) {
+		specialeffect2 EF_LORD;
+		mes "[違禁處理器]";
+		mes "啊，那不是很好。";
+		mes "好吧，只是我的運氣。";
+		close;
+	}
+	specialeffect2 EF_REPAIRWEAPON;
+	getitem2 .@equip_id,1,1,.@refine,0,.@card[0],.@card[1],.@card[2],.@card[3];
+	mes "[違禁處理器]";
+	mes "完畢。一探究竟。";
+	close;
+}
+
+
+har_in01,24,69,3	script	Affable Lady#rockridge0	1_F_MERCHANT_02,{
+	if (checkweight(1301,3) == 0) {
+		mes "[和affable女士]";
+		mes "您必須堅強地隨身攜帶這麼多。";
+		next;
+		mes "[和affable女士]";
+		mes "如果您想減輕行李，那將有一名Kafra僱員朝警長辦公室的方向前進。";
+		close;
+	}
+	mes "[和affable女士]";
+	mes "你是一個冒險家。我喜歡像你這樣充滿激情的人。";
+	mes "那麼，您是因為 ^0000cdit ^000000而在這裡？";
+	next;
+	if (select( "Because of what?", "I am." ) == 1) {
+		mes "[和affable女士]";
+		mes "HMPF，不要像您不知道的行為。我說的是您可以在Rock Ridge購買的特殊設備。";
+		next;
+		mes "[和affable女士]";
+		mes "裝甲經銷商每個星期五都會帶來新的股票，並且每次都售出幾乎一旦售出。";
+		close;
+	}
+	mes "[和affable女士]";
+	mes "*笑*您想要哪一個：一個用於您的 ^0000CDSHOULDER ^000000， ^0000CDNECK或CHEST ^000000？";
+	next;
+	switch( select( "Um, anything.", "For my shoulders", "For my neck or chest" ) ) {
+	case 1:
+		mes "[和affable女士]";
+		mes "*笑*當然，無論穿什麼衣服，年輕人總是看起來不錯。";
+		mes "但是，如果您想要一些特別的東西，請去檢查裝甲店。";
+		close;
+	case 2:
+		mes "[和affable女士]";
+		mes "選擇您喜歡的一個，我會告訴你。";
+		mes "所有設備均為 ^0000CD3,000,000 Zeny ^000000，無論其類型如何。";
+		next;
+		.@cost = 3000000;
+		setarray .@item_id[0],20820,20821,20822;
+		setarray .@item_name$[0], "Elemental Cape", "Golden Scarf", "Mine Worker Backpack";
+		.@s = select( "Elemental Cape", "Golden Scarf", "Mine Worker Backpack", "I have no idea what you're talking about." ) - 1;
+		break;
+	case 3:
+		mes "[和affable女士]";
+		mes "選擇您喜歡的一個，我會告訴你。";
+		mes "所有設備均為 ^0000CD1,500,000 Zeny ^000000，無論其類型如何。";
+		next;
+		.@cost = 1500000;
+		setarray .@item_id[0],28441,28442;
+		setarray .@item_name$[0], "Vigilante Badge", "Hippie Feather";
+		.@s = select( "Vigilante Badge", "Hippie Feather", "I have no idea what you're talking about." ) - 1;
+		break;
+	}
+	if (.@item_id[.@s] == 0) {
+		mes "[和affable女士]";
+		mes "糟糕，我想你太無辜了，無法聽到我剛才說的話。";
+		mes "您應該為自己的利益而忘記它。";
+		close;
+	}
+	mes "[和affable女士]";
+	mes "啊，你對";
+	mes "[" + mesitemlink( .@item_id[.@s], false, .@item_name$[.@s] ) + "].";
+	mes "單擊名稱以獲取詳細說明。";
+	mes "正如我告訴你的那樣，它是 ^0000CD3,000,000 Zeny ^000000。你想買嗎？";
+	next;
+	if (select( "Yes.", "No." ) == 2) {
+		mes "[和affable女士]";
+		mes "嗯。因此，我浪費了不想購買的人。";
+		mes "本設備的每一部分都有一個故事要講，如果您不隨身攜帶它，它可能會懷有怨恨。";
+		next;
+		mes "[和affable女士]";
+		mes "我建議您不要告訴其他任何人，";
+		mes "保證我會回來的。我會為您保留設備。";
+		close;
+	}
+	if (Zeny < .@cost) {
+		mes "[和affable女士]";
+		mes "嗯，您沒有足夠的錢來購買。";
+		mes "你為什麼不以後再回來？我將永遠在這裡。";
+		close;
+	}
+	mes "[和affable女士]";
+	mes "當然。這是你的" + .@item_name$[.@s] + ".";
+	Zeny = Zeny - .@cost;
+	getitem .@item_id[.@s],1;
+	next;
+	mes "[和affable女士]";
+	mes "人們經常讓他們的先入為主的觀念欺騙他們。大多數人認為像我這樣的老婦人不會出售這樣的特殊物品。";
+	mes "如果您想要更多設備，請回來。我將永遠在這裡。 *笑*";
+	close;
+}
+
+har_in01,34,81,5	script	Howard#rr	4_M_TATIO,{
+	if (checkweight(1301,1) == 0) {
+		mes "[霍華德]";
+		mes "錯誤，您正在攜帶很多東西。";
+		mes "你為什麼不去";
+		mes "先減輕您的包？";
+		close;
+	}
+	mes "[霍華德]";
+	mes "你好。今天我該如何幫助您？";
+	next;
+	if (countitem(25250) < 1) {
+		mes "[霍華德]";
+		mes "嗯，您沒有硬幣。";
+		mes "你為什麼不先收集它們？";
+		close;
+	}
+	mes "[霍華德]";
+	mes "啊，你有硬幣。";
+	mes "感謝您幫助岩石山脊。";
+	mes "環顧四周，看看是否有想要的東西。";
+	next;
+	mes "[霍華德]";
+	mes "你想要點什麼？";
+	next;
+	setarray .@data$[0],
+		 24, 15176, "Vigilante Suit",	// <cost>, <item ID>, <item name>
+		 24, 15177, "Elemental Robe",
+		 24, 15178, "Golden Ninja Suit",
+		 24, 15179, "Mine Worker Vest",
+		 24, 15180, "Hippie Clothes",
+		150, 20834, "Drifter's Cape",
+		150, 22131, "Spurred Boots",
+		180, 16060, "Liquor Bottle",
+		300, 26107, "Elder Staff",
+		100, 31140, "Costume Black Cowboy Hat",
+		100, 31141, "Costume Cactus Flower Corsage";
+
+	.@size = getarraysize(.@data$);
+	for ( .@i = 0; .@i < .@size; .@i += 3 )
+		.@menu$ += .@data$[.@i+2] + ":";
+	.@s = ( select(.@menu$) - 1 ) * 3;
+
+	mes "[霍華德]";
+	mes mesitemlink( atoi( .@data$[.@s+1] ), false, .@data$[.@s+2] ) + "， 知道了。";
+	mes "那會" + .@data$[.@s] + " Rock Ridge Coins.";
+	mes "您確定要這個項目嗎？";
+	next;
+	if (select( "Yes.", "No." ) == 2) {
+		mes "[霍華德]";
+		mes "如果您下定決心，請再次與我交談。";
+		close;
+	}
+	if (countitem(25250) < atoi(.@data$[.@s])) {
+		mes "[霍華德]";
+		mes "您沒有足夠的硬幣。";
+		mes "請帶更多。";
+		close;
+	}
+	mes "[霍華德]";
+	mes "你去。享受！";
+	delitem 25250, atoi(.@data$[.@s]);// Rock Ridge Coin
+	getitem atoi(.@data$[.@s+1]),1;
+	close;
+}
+
+-	shop	shotguns_rockridge	-1,13154:-1,13155:-1,13192:-1,13193:-1,13194:-1
+-	shop	revolvers_rockridge	-1,13102:-1,13120:-1,13122:-1
+-	shop	bullets_rockridge	-1,13200:-1,13221:-1,13222:-1,13228:-1,13229:-1,13230:-1,13231:-1,13232:-1
+
+har_in01,19,86,4	script	Weapon Dealer#rockridge01	1_F_02,{
+	if (checkweight(1301,3) == 0) {
+		mes "[武器經銷商]";
+		mes "您正在攜帶太多購買武器。";
+		mes "請先減輕您的包。";
+		close;
+	}
+	mes "[武器經銷商]";
+	mes "我攜帶shot彈槍，左輪手槍和子彈。";
+	mes "告訴我您想要什麼樣的物品，我將向您展示一個列表。";
+	next;
+	switch( select( "Shotguns", "Revolvers", "Bullets", "Sell items.", "Cancel." ) ) {
+	case 1:
+		mes "[武器經銷商]";
+		mes "您想瀏覽shot彈槍嗎？我懂了。";
+		mes "讓我向您展示一些不錯的模型。";
+		close2;
+		callshop "shotguns_rockridge", 1;
+		end;
+	case 2:
+		mes "[武器經銷商]";
+		mes "您想瀏覽左輪手槍嗎？我懂了。";
+		mes "我剛剛帶來了一些好的型號。";
+		close2;
+		callshop "revolvers_rockridge", 1;
+		end;
+	case 3:
+		mes "[武器經銷商]";
+		mes "我知道要子彈。";
+		mes "我所有的子彈都是最好的。";
+		close2;
+		callshop "bullets_rockridge", 1;
+		end;
+	case 4:
+		mes "[武器經銷商]";
+		mes "當然，如果您有我可以出售的東西。";
+		mes "告訴我你有什麼。";
+		close2;
+		callshop "bullets_rockridge", 2;
+		end;
+	case 5:
+		mes "[武器經銷商]";
+		mes "再來。";
+		close;
+	}
+}
+
+-	marketshop	armor_rockridge_1	-1,2247:500000:10,2248:500000:10,5018:700000:10
+-	marketshop	armor_rockridge_2	-1,5067:700000:10,5071:700000:10,5075:700000:10
+-	marketshop	armor_rockridge_3	-1,2267:100000:10,2268:500000:10,2241:5000:10
+-	marketshop	armor_rockridge_4	-1,5067:700000:10,5071:700000:10,5075:700000:10,31144:1500000:3
+
+har_in01,16,86,4	script	Armor Dealer#rockridge02	1_M_04,{
+	if (checkweight(1301,3) == 0) {
+		mes "[裝甲經銷商]";
+		mes "您攜帶的東西太多了，無法購買任何東西。";
+		mes "請先減輕您的包。";
+		close;
+	}
+	.@day = gettime(DT_DAYOFWEEK);
+	if (.@day == SUNDAY) {
+		mes "[裝甲經銷商]";
+		mes "我今天關閉。";
+		mes "每週一次，我關閉商店，花一天的時間感謝自己的東西。";
+		next;
+		mes "[裝甲經銷商]";
+		mes "...這是同一天沒有交貨。";
+		close;
+	}
+	if (.@day == MONDAY)
+		.@string$ = "Romantic Gents, Western Graces, and Feather Bonnet";
+	else if (.@day == TUESDAY)
+		.@string$ = "Sombreros, Indian Headbands, and Cowboy Hats";
+	else if (.@day == WEDNESDAY)
+		.@string$ = "Cigarettes, Pipes, and Grampa Beards";
+	else if (.@day == THURSDAY)
+		.@string$ = "Romantic Gents, Western Graces, and Feather Bonnet";
+	else if (.@day == FRIDAY)
+		.@string$ = "Sombreros, Indian Headbands, Cowboy Hats, and Indian Feather Headbands, the last of the rare costumes that are available in limited quantities every week,";
+	else
+		.@string$ = "Cigarettes, Pipes, and Grampa Beards";
+	mes "[裝甲經銷商]";
+	mes "你好。歡迎來到Rock Ridge Armor Shop。";
+	mes "今天，" +.@string$ + "are in stock.";
+	next;
+	mes "[裝甲經銷商]";
+	mes "盔甲比武器笨重，因此我每週只能提供大量產品。";
+	mes "我將向您展示可用項目的列表。 ^0000cdif它是空白的，然後一切都售罄^000000。";
+	next;
+	mes "[裝甲經銷商]";
+	mes "出於同樣的原因，我無法給出 ^0000cdspecial折扣 ^000000。";
+	mes "但是 ^0000cdall我的產品很難在其他地方找到 ^000000。你為什麼不看看他們？";
+	close2;
+	if (.@day == MONDAY || .@day == THURSDAY)
+		callshop "armor_rockridge_1", 1;
+	else if (.@day == TUESDAY)
+		callshop "armor_rockridge_2", 1;
+	else if (.@day == WEDNESDAY || .@day == SATURDAY)
+		callshop "armor_rockridge_3", 1;
+	else if (.@day == FRIDAY)
+		callshop "armor_rockridge_4", 1;
+	end;
+	
+OnSun0000:	// custom restock, no official info
+	npcshopupdate "armor_rockridge_1",2247,0,10;
+	npcshopupdate "armor_rockridge_1",2248,0,10;
+	npcshopupdate "armor_rockridge_1",5018,0,10;
+	npcshopupdate "armor_rockridge_2",5067,0,10;
+	npcshopupdate "armor_rockridge_2",5071,0,10;
+	npcshopupdate "armor_rockridge_2",5075,0,10;
+	npcshopupdate "armor_rockridge_3",2267,0,10;
+	npcshopupdate "armor_rockridge_3",2268,0,10;
+	npcshopupdate "armor_rockridge_3",2241,0,10;
+	npcshopupdate "armor_rockridge_4",5067,0,10;
+	npcshopupdate "armor_rockridge_4",5071,0,10;
+	npcshopupdate "armor_rockridge_4",5075,0,10;
+	npcshopupdate "armor_rockridge_4",31144,0,3;
+	end;
+}
+
+har_in01,34,84,3	shop	Tool Dealer#rockridge00	1_F_03,611:-1,645:-1,656:-1,601:-1,602:-1,1065:-1,610:-1

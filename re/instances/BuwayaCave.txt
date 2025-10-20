@@ -1,0 +1,464 @@
+﻿//===== rAthena Script ======================================= 
+//= Buwaya Cave
+//===== By: ================================================== 
+//= Euphy
+//===== Current Version: ===================================== 
+//= 1.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Defeat Buwaya in his cave.
+//= Part of the "Secret in the Woods" quest.
+//===== Additional Comments: ================================= 
+//= 1.0 First version. [Euphy]
+//============================================================ 
+
+// Instance Creation :: buwaya_dun
+//============================================================
+ma_fild02,312,317,5	script	Guard#buwaya_cave	570,{
+	if (BaseLevel < 130) {
+		mes "[警衛]";
+		mes "^ff0000level下的人130 ^000000";
+		mes "無法進入這個地方。";
+		mes "這個地方很危險。請回去。";
+		close;
+	}
+
+	set .@party_id,getcharid(1);
+	set .@md_name$,"Buwaya Cave";
+
+	if (!.@party_id) {
+		mes "[警衛]";
+		mes "Buwaya很危險。";
+		mes "組成一個後，請回來";
+		mes "與其他人團隊。";
+		close;
+	}
+	if (is_party_leader() == true) {
+		mes "[警衛]";
+		mes "這個地方很危險。請回去。";
+		mes "如果您在這裡沒有任何業務，請回去。";
+		next;
+		while(1) {
+			switch(select("為什麼這麼危險？ :我是來追捕布瓦亞的。 :結束對話。")) {
+			case 1:
+				mes "[警衛]";
+				mes "最近，有一個案子";
+				mes "村民消失了。";
+				mes "調查了軌道後，";
+				mes "我們發現了巨型怪物Buwaya";
+				mes "負責。";
+				next;
+				mes "[警衛]";
+				mes "士兵和僱傭軍已被派往";
+				mes "追捕布韋亞，但從來沒有";
+				mes "完全成功。";
+				next;
+				mes "[警衛]";
+				mes "布韋亞仍在綁架";
+				mes "村民至今。";
+				mes "請聚集一些人擺脫Buwaya。";
+				next;
+				break;
+			case 2:
+				set .@playtime, checkquest(4229,PLAYTIME);
+				if (.@playtime == -1) {
+					// fall through
+				} else if (.@playtime == 0 || .@playtime == 1) {
+					mes "[警衛]";
+					mes "Buwaya仍在隱藏。";
+					mes "即使您現在進入，Buwaya也不會出來。";
+					mes "請稍後再回來。";
+					close;
+				} else {
+					erasequest 4229;
+					// fall through
+				}
+				if (instance_create(.@md_name$) < 0) {
+					mes "[警衛]";
+					mes "派對名稱是..."+getpartyname(.@party_id)+".";
+					mes "黨的負責人是..."+strcharinfo(0);
+					mes "^0000ff"+.@md_name$+"^000000 cannot be opened now.";
+					mes "請稍後再試。";
+					close;
+				}
+				mes "[警衛]";
+				mes "我將向 ^0000ff打開隧道"+.@md_name$+"^000000.";
+				mes "祝你好運。";
+				close;
+			case 3:
+				mes "[警衛]";
+				mes "這個地方很危險。您不能輸入。";
+				close;
+			}
+		}
+	} else {
+		mes "[警衛]";
+		mes "讓我與黨的負責人交談。";
+		mes "請打電話給領導。";
+		close;
+	}
+}
+
+ma_fild02,315,323,0	script	Cave Entrance#buwaya	45,2,2,{
+	end;
+OnTouch:
+	if (BaseLevel < 130) {
+		mes "[警衛]";
+		mes "^ff0000level下的人130 ^000000";
+		mes "無法進入這個地方。";
+		mes "這個地方很危險。請回去。";
+		close;
+	}
+	set .@playtime, checkquest(4229,PLAYTIME);
+	if (.@playtime == -1) {
+		// fall through
+	} else if (.@playtime == 0 || .@playtime == 1) {
+		mes "[警衛]";
+		mes "Buwaya仍在隱藏。";
+		mes "即使您現在進入，Buwaya也不會出來。";
+		mes "請稍後再回來。";
+		close;
+	} else {
+		erasequest 4229;
+		// fall through
+	}
+	switch(select("輸入:返回。")) {
+	case 1:
+		switch(instance_enter("Buwaya Cave")) {
+		case IE_OTHER:
+			mes "[警衛]";
+			mes "哦，現在不是一個好時機。";
+			mes "請稍後再試。";
+			close;
+		case IE_NOINSTANCE:
+		case IE_NOMEMBER:
+			mes "[警衛]";
+			mes "這個地方很危險。請不要輸入。";
+			close;
+		case IE_OK:
+			mapannounce "ma_fild02",getpartyname(getcharid(1))+" party's "+strcharinfo(0)+" member began hunting Buwaya in Buwaya Cave.",bc_map,"0x00ff99"; //FW_NORMAL 12 0 0
+			setquest 4229;
+			//warp "1@ma_c",35,57;
+			end;
+		default:
+			mes "- 由於身份不明的力量無法進入。 -";
+			close;
+		}
+	case 2:
+		mes "[警衛]";
+		mes "您必須重視自己的生活。";
+		mes "最好在行動之前仔細考慮。";
+		close;
+	}
+}
+
+// Instance Scripts :: buwaya_in
+//============================================================
+1@ma_c,33,112,0	script	#damage	139,7,7,{
+	end;
+OnInstanceInit:
+	initnpctimer;
+	disablenpc instance_npcname("#damage");
+	end;
+OnTimer1000:
+	enablenpc instance_npcname("#damage");
+	specialeffect EF_POISONHIT;
+	end;
+OnTimer2000:
+	stopnpctimer;
+	initnpctimer;
+	disablenpc instance_npcname("#damage");
+	end;
+OnTouch:
+	percentheal -10,-10;
+	sc_start SC_BLEEDING,60000,0;
+	sc_start SC_POISON,60000,0;
+	end;
+}
+
+1@ma_c,29,110,5	script	Kidnapped People#1	575,{
+	mes "[被綁架的居民]";
+	mes "布韋亞在四處奔波，";
+	mes "新朋友被抓住了。";
+	mes "我們將終生被困在這裡。";
+	next;
+	switch(select("帶我離開這裡！ ！ :Ca…逃不掉？")) {
+	case 1:
+		mes "[被綁架的居民]";
+		mes "我們沒有足夠的力量來摧毀它，但是Buwaya有弱點。";
+		mes "看著那邊的牆。";
+		mes "如果您在那裡敲門，Buywaya會感到痛苦並吐口水。";
+		donpcevent instance_npcname("#box_mob_call")+"::OnEnable";
+		close2;
+		disablenpc instance_npcname("Kidnapped People#1");
+		end;
+	case 2:
+		mes "[被綁架的人]";
+		mes "這裡是錯誤的...";
+		mes "你以前有過這個嗎？";
+		close;
+	}
+	end;
+OnInstanceInit:
+	disablenpc instance_npcname("Kidnapped People#1");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Kidnapped People#1");
+	donpcevent instance_npcname("#box_mob_call")+"::OnDisable";
+	end;
+}
+
+1@ma_c,36,110,5	script	Kidnapped People#2	574,{
+	mes "[被綁架的居民]";
+	mes "啊哈！我希望我有更多的力量...";
+	mes "我知道它的弱點...";
+	next;
+	switch(select("告訴我:你真的知道嗎？")) {
+	case 1:
+		mes "[被綁架的居民]";
+		mes "您確定可以做到嗎？";
+		mes "好，仔細聽，";
+		mes "它的弱點是...";
+		next;
+		mes "[被綁架的居民]";
+		mes "...在牆上的我們身後。";
+		sc_start SC_ATKPOTION,60000,45;
+		sc_start SC_MATKPOTION,60000,45;
+		disablenpc instance_npcname("Kidnapped People#2");
+		close;
+	case 2:
+		mes "[被綁架的居民]";
+		mes "什麼？ ！";
+		mes "你無視我嗎";
+		mes "因為我在這裡被捕？";
+		close;
+	}
+	end;
+OnInstanceInit:
+	disablenpc instance_npcname("Kidnapped People#2");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Kidnapped People#2");
+	end;
+}
+
+1@ma_c,3,3,0	script	#box_mob_call	139,1,1,{
+	end;
+OnInstanceInit:
+	setcell instance_mapname("1@ma_c"),30,118,35,118,cell_shootable,1; //custom
+	disablenpc instance_npcname("#box_mob_call");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#box_mob_call");
+	set .@label$, instance_npcname("#box_mob_call")+"::OnMyMobDead";
+	set .@map$, instance_mapname("1@ma_c");
+	monster .@map$,30,118,"Buwaya's Weakness",2333,1,.@label$;
+	monster .@map$,35,118,"Buwaya's Weakness",2333,1,.@label$;
+	end;
+OnDisable:
+	killmonster instance_mapname("1@ma_c"),instance_npcname("#box_mob_call")+"::OnMyMobDead";
+	disablenpc instance_npcname("#box_mob_call");
+	end;
+OnMyMobDead:
+	if (mobcount(instance_mapname("1@ma_c"),instance_npcname("#box_mob_call")+"::OnMyMobDead") < 1)
+		donpcevent instance_npcname("#box_out")+"::OnEnable";
+	end;
+}
+
+1@ma_c,33,118,0	script	#box_out	45,2,2,{
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("#box_out");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#box_out");
+	end;
+OnTouch:
+	set .@x, rand(1,20) + 97;
+	set .@y, rand(1,20) + 74;
+	warp instance_mapname("1@ma_c"),.@x,.@y;
+	end;
+}
+
+1@ma_c,97,74,0	script	#box_call	139,50,50,{
+	end;
+OnInstanceInit:
+	disablenpc instance_npcname("#box_call");
+	initnpctimer;
+	end;
+OnTimer30000:
+	mapannounce instance_mapname("1@ma_c"),"Buwaya : I will put you in my treasure box!",bc_map,"0x00ff99"; //FW_NORMAL 12 0 0
+	// Should execute OnTimer33000, but client doesn't render the effect fast enough.
+	for(set .@i,1; .@i<=9; set .@i,.@i+1)
+		donpcevent instance_npcname("#yunobi"+.@i)+"::OnEnable";
+	end;
+OnTimer33000:
+	donpcevent instance_npcname("#box_out")+"::OnDisable";
+	donpcevent instance_npcname("#box_mob_call")+"::OnDisable";
+	donpcevent instance_npcname("Kidnapped People#1")+"::OnEnable";
+	donpcevent instance_npcname("Kidnapped People#2")+"::OnEnable";
+	end;
+OnTimer34000:
+	enablenpc instance_npcname("#box_call");
+	end;
+OnTimer35000:
+	stopnpctimer;
+	initnpctimer;
+	disablenpc instance_npcname("#box_call");
+	end;
+OnTouch_:
+	specialeffect2 EF_GUIDEDATTACK;
+	warp instance_mapname("1@ma_c"),33,112;
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc instance_npcname("#box_call");
+	end;
+}
+
+1@ma_c,97,74,0	script	#yunobi1	139,{
+	end;
+OnInstanceInit:
+	hideonnpc instance_npcname(strnpcinfo(0));
+	end;
+OnEnable:
+	specialeffect EF_MAPPILLAR2;
+	end;
+}
+1@ma_c,97,94,0	duplicate(#yunobi1)	#yunobi2	139
+1@ma_c,117,94,0	duplicate(#yunobi1)	#yunobi3	139
+1@ma_c,117,74,0	duplicate(#yunobi1)	#yunobi4	139
+1@ma_c,117,54,0	duplicate(#yunobi1)	#yunobi5	139
+1@ma_c,97,54,0	duplicate(#yunobi1)	#yunobi6	139
+1@ma_c,77,54,0	duplicate(#yunobi1)	#yunobi7	139
+1@ma_c,77,74,0	duplicate(#yunobi1)	#yunobi8	139
+1@ma_c,77,94,0	duplicate(#yunobi1)	#yunobi9	139
+
+1@ma_c,1,1,0	script	#bunshin	139,{
+	end;
+OnInstanceInit:
+	initnpctimer;
+	end;
+OnTimer58000:
+	mapannounce instance_mapname("1@ma_c"),"Buwaya : I had enough with this, let's go till the end!",bc_map,"0x00ff99"; //FW_NORMAL 12 0 0
+	end;
+OnTimer61000:
+	mapannounce instance_mapname("1@ma_c"),"Buwaya : This is!",bc_map,"0x00ff99"; //FW_NORMAL 12 0 0
+	end;
+OnTimer62000:
+	mapannounce instance_mapname("1@ma_c"),"Buwaya : This is...MY!",bc_map,"0x00ff99"; //FW_NORMAL 12 0 0
+	end;
+OnTimer63000:
+	mapannounce instance_mapname("1@ma_c"),"Buwaya : This is...MY...Deadly!",bc_map,"0x00ff99"; //FW_NORMAL 12 0 0
+	end;
+OnTimer64000:
+	mapannounce instance_mapname("1@ma_c"),"Buwaya : This is...MY...Deadly... ATTACK!",bc_map,"0x00ff99"; //FW_NORMAL 12 0 0
+	end;
+OnTimer65000:
+	set .@label$, instance_npcname("#bunshin")+"::OnMyMobDead";
+	set .@map$, instance_mapname("1@ma_c");
+	areamonster .@map$,112,89,122,99,"Buwaya",2332,1,.@label$;
+	areamonster .@map$,112,49,122,59,"Buwaya",2332,1,.@label$;
+	areamonster .@map$,72,49,82,59,"Buwaya",2332,1,.@label$;
+	areamonster .@map$,72,89,82,99,"Buwaya",2332,1,.@label$;
+	end;
+OnTimer66000:
+	mapannounce instance_mapname("1@ma_c"),"Buwaya : Are you scared?",bc_map,"0x00ff99"; //FW_NORMAL 12 0 0
+	end;
+OnTimer105000:
+	killmonster instance_mapname("1@ma_c"),instance_npcname("#bunshin")+"::OnMyMobDead";
+	stopnpctimer;
+	initnpctimer;
+	end;
+OnMyMobDead:
+	if (mobcount(instance_mapname("1@ma_c"),instance_npcname("#bunshin")+"::OnMyMobDead") < 1) {
+		stopnpctimer;
+		initnpctimer;
+	}
+	end;
+OnDisable:
+	stopnpctimer;
+	killmonster instance_mapname("1@ma_c"),instance_npcname("#bunshin")+"::OnMyMobDead";
+	disablenpc instance_npcname("#bunshin");
+	end;
+}
+
+1@ma_c,2,2,0	script	#buwaya_con	139,{
+	end;
+OnInstanceInit:
+	areamonster instance_mapname("1@ma_c"),90,67,104,81,"Buwaya",2319,1,instance_npcname("#buwaya_con")+"::OnMyMobDead";
+	end;
+OnMyMobDead:
+	set .@map$, instance_mapname("1@ma_c");
+	if (mobcount(.@map$,instance_npcname("#buwaya_con")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("#box_call")+"::OnDisable";
+		donpcevent instance_npcname("#bunshin")+"::OnDisable";
+		donpcevent instance_npcname("#exit_mob")+"::OnDisable";
+		donpcevent instance_npcname("#cave_out")+"::OnEnable";
+		mapannounce .@map$,"Guard : You did great work. Please hurry up and escape to the way you came in!",bc_map,"0x00ff99"; //FW_NORMAL 12 0 0
+	}
+	end;
+}
+
+1@ma_c,3,3,0	script	#exit_mob	139,{
+	end;
+OnInstanceInit:
+	initnpctimer;
+	end;
+OnTimer60000:
+	set .@label$, instance_npcname("#exit_mob")+"::OnMyMobDead";
+	set .@map$, instance_mapname("1@ma_c");
+	if (mobcount(.@map$,.@label$) < 30)
+		set .@amount,10;
+	else
+		set .@amount,1;
+	areamonster .@map$,43,58,47,60,"Water Plant",2331,.@amount,.@label$;
+	areamonster .@map$,43,58,47,60,"Egg",2329,.@amount,.@label$;
+	stopnpctimer;
+	initnpctimer;
+	end;
+OnDisable:
+	stopnpctimer;
+	killmonster instance_mapname("1@ma_c"),instance_npcname("#exit_mob")+"::OnMyMobDead";
+	disablenpc instance_npcname("#exit_mob");
+	end;
+OnMyMobDead:
+	end;
+}
+
+1@ma_c,28,57,0	script	#cave_out	45,2,2,{
+OnInstanceInit:
+	disablenpc instance_npcname("#cave_out");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#cave_out");
+	end;
+OnTouch:
+	mes "想出去嗎？";
+	next;
+	if(select("是的！ :不，我會留下來。") == 1)
+		warp "ma_fild02",315,315;
+	close;
+}
+
+1@ma_c,1,1,0	script	#buwaya_spawn_mobs	-1,{
+OnInstanceInit:
+	set .@map$, instance_mapname("1@ma_c");
+	areamonster .@map$,73,81,93,101,"Seaweed",2331,18;
+	areamonster .@map$,110,97,116,103,"Seaweed",2331,8;
+	areamonster .@map$,59,63,63,67,"Seaweed",2331,8;
+	areamonster .@map$,73,55,77,59,"Seaweed",2331,4;
+	areamonster .@map$,103,69,107,73,"Seaweed",2331,4;
+	areamonster .@map$,108,45,122,63,"Seaweed",2331,15;
+	areamonster .@map$,73,81,93,101,"Buwaya's Egg",2329,10;
+	areamonster .@map$,110,97,116,103,"Buwaya's Egg",2329,8;
+	areamonster .@map$,59,63,63,67,"Buwaya's Egg",2329,4;
+	areamonster .@map$,73,55,77,59,"Buwaya's Egg",2329,3;
+	areamonster .@map$,103,69,107,73,"Buwaya's Egg",2329,3;
+	areamonster .@map$,108,45,122,63,"Buwaya's Egg",2329,15;
+	monster .@map$,0,0,"Seaweed",2331,5;
+	monster .@map$,0,0,"Buwaya's Slave",2330,5;
+	end;
+}

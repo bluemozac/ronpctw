@@ -1,0 +1,232 @@
+﻿//===== rAthena Script ======================================= 
+//= Ticket Refiner
+//===== By: ==================================================
+//= Euphy
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Refiner that uses +5~9/+11 refine tickets to refine
+//= equipment with no chance of failure.
+//= NOTE: This NPC is currently disabled on official servers.
+//===== Additional Comments: =================================
+//= 1.0 First version. [Euphy]
+//= 1.1 Do not refine above ticket level. [Euphy]
+//============================================================
+
+// Main NPC :: safety_Ref_NPC
+//============================================================
+prontera,184,177,6	script	Refine Master	851,{
+	disable_items;
+	setarray .@cert_weapon[0],
+		6864,	// Guarantee_Weapon_19Up
+		6875,	// Guarantee_Weapon_18Up
+		6874,	// Guarantee_Weapon_17Up
+		6873,	// Guarantee_Weapon_16Up
+		6872,	// Guarantee_Weapon_15Up
+		6871,	// Guarantee_Weapon_14Up
+		6870,	// Guarantee_Weapon_13Up
+		6584,	// Guarantee_Weapon_12Up
+		6238,	// Guarantee_Weapon_11Up
+		6228,	// Guarantee_Weapon_9Up
+		6229,	// Guarantee_Weapon_8Up
+		6230,	// Guarantee_Weapon_7Up
+		6231,	// Guarantee_Weapon_6Up
+		6456;	// Guarantee_Weapon_5Up
+	setarray .@cert_armor[0],
+		6865,	// Guarantee_Armor_19Up
+		6881,	// Guarantee_Armor_18Up
+		6880,	// Guarantee_Armor_17Up
+		6879,	// Guarantee_Armor_16Up
+		6878,	// Guarantee_Armor_15Up
+		6877,	// Guarantee_Armor_14Up
+		6876,	// Guarantee_Armor_13Up
+		6585,	// Guarantee_Armor_12Up
+		6239,	// Guarantee_Armor_11Up
+		6232,	// Guarantee_Armor_9Up
+		6233,	// Guarantee_Armor_8Up
+		6234,	// Guarantee_Armor_7Up
+		6235,	// Guarantee_Armor_6Up
+		6457;	// Guarantee_Armor_5Up
+	setarray .@cert_level[0],19,18,17,16,15,14,13,12,11,9,8,7,6,5;
+	.@size_cert = getarraysize(.@cert_weapon);
+
+	for ( .@i = 0; .@i < .@size_cert; ++.@i ) {
+		if (countitem(.@cert_weapon[.@i]) > 0 || countitem(.@cert_armor[.@i]) > 0) {
+			.@check = 1;
+			break;
+		}
+	}
+
+	if (.@check == 0) {
+		mes "[完善大師]";
+		mes "你好！";
+		mes "這是怎麼回事？";
+		mes "我是專家";
+		mes "用於精煉物品，";
+		mes "但是我不再工作了。";
+		next;
+		switch(select("我會繼續我的路。 :嗯...這讓我很好奇。")) {
+		case 1:
+			mes "[完善大師]";
+			mes "保重，冒險家。";
+			close;
+		case 2:
+			mes "[完善大師]";
+			mes "實際上，有時我會為冒險家提供精煉服務，並使用 ^006400 Refine Ticket ^000000 ...";
+			mes "再見~！";
+			close;
+		}
+	}
+	emotion ET_SURPRISE;
+	mes "[完善大師]";
+	mes "問候！";
+	mes "我可以將項目完善到 ^006400same級別，作為您的票證 ^000000。";
+	mes "您不必擔心！沒有機會破壞您的物品。";
+	next;
+	if(select("我稍後再回來。 :用票精煉物品。") == 1) {
+		mes "[完善大師]";
+		mes "好的。";
+		mes "您可以稍後再來。";
+		close;
+	}
+	mes "[完善大師]";
+	mes "您想改進哪種設備？";
+	next;
+	setarray .@position$[1],"Head upper","Armor","Left hand","Right hand","Robe","Shoes","Accessory 1","Accessory 2","Head middle","Head lower";
+	setarray .@indices[1], EQI_HEAD_TOP, EQI_ARMOR, EQI_HAND_L, EQI_HAND_R, EQI_GARMENT, EQI_SHOES, EQI_ACC_L, EQI_ACC_R, EQI_HEAD_MID, EQI_HEAD_LOW;
+	for ( .@i = 1; .@i <= 10; ++.@i )
+		.@menu$ += (getequipisequiped(.@indices[.@i]) ? getequipname(.@indices[.@i]) : .@position$[.@i] + "- [Empty]") + ":";
+
+	.@part = .@indices[ select(.@menu$) ];
+	if (!getequipisequiped(.@part)) {
+		mes "[完善大師]";
+		mes "您必須裝備要完善的物品。";
+		close;
+	}
+	if (!getequipisenableref(.@part)) {
+		emotion ET_OTL;
+		mes "[完善大師]";
+		mes "哦，對不起。";
+		mes "這個項目不可能完善。";
+		close;
+	}
+	.@refineitemid = getequipid(.@part); // save id of the item
+	.@refinerycnt = getequiprefinerycnt(.@part); //save refinery count
+	setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+	.@itemtype = getiteminfo( .@refineitemid, ITEMINFO_TYPE );
+	if( .@itemtype == IT_WEAPON ){
+		switch( getequipweaponlv( .@part ) ){
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				copyarray .@tickets[0], .@cert_weapon[0], .@size_cert;
+				.@type$ = "Weapon";
+				break;
+			default:
+				// TODO:
+				close;
+		}
+	}else if( .@itemtype == IT_ARMOR ){
+		switch( getequiparmorlv( .@part ) ){
+			case 1:
+				copyarray .@tickets[0], .@cert_armor[0], .@size_cert;
+				.@type$ = "Armor";
+				break;
+			default:
+				// TODO:
+				close;
+		}
+	}else{
+		// TODO:
+		close;
+	}
+	.@check = 0;
+	for ( .@i = 0; .@i < .@size_cert; ++.@i ) {
+		if (countitem(.@tickets[.@i]) > 0) {
+			.@check = 1;
+			break;
+		}
+	}
+	if (.@check == 0) {
+		emotion ET_THINK;
+		mes "[完善大師]";
+		mes "如果您想完善此 ^006400"+.@type$+"^000000, please come along with ^006400"+.@type$+" Refine Ticket^000000.";
+		mes "稍後再見！";
+		close;
+	}
+	mes "[完善大師]";
+	mes "請選擇 ^006400"+.@type$+" Refine Ticket^000000 you want to use.";
+	next;
+	.@menu$ = "";
+	for ( .@i = 0; .@i < .@size_cert; ++.@i )
+		.@menu$ += getitemname(.@tickets[.@i]) + ":";
+	.@select = select(.@menu$)-1;
+	.@ticket_lv = .@cert_level[.@select];
+	.@ticket_id = .@tickets[.@select];
+
+	if (countitem(.@ticket_id) == 0) {
+		emotion ET_QUESTION;
+		mes "[完善大師]";
+		mes getitemname(.@ticket_id)+"不在您的庫存中。你把它放在存儲空間中嗎？";
+		mes "請再次檢查。";
+		mes "稍後再見！";
+		close;
+	}
+	if (getequiprefinerycnt(.@part) >= .@ticket_lv) {
+		emotion ET_PROFUSELY_SWEAT;
+		mes "[完善大師]";
+		mes "^8B4513這個項目已經與您的契約一樣多。 ^000000";
+		mes "請隨身攜帶的物品少於您的門票。";
+		close;
+	}
+	mes "[完善大師]";
+	mes "我要完善 ^006400"+getequipname(.@part)+"^8B4513 up to the +"+.@ticket_lv+" level^000000 with ^006400"+getitemname(.@ticket_id)+"^000000.";
+	mes "我可以繼續嗎？";
+	next;
+	if(select("否:是的。") == 1) {
+		emotion ET_THINK;
+		mes "[完善大師]";
+		mes "哦，你改變了主意。";
+		mes "好的。";
+		mes "您可以稍後再回來。";
+		close;
+	}
+	mes "[完善大師]";
+	mes "偉大的。";
+	mes "如您所願！";
+	mes "我有自己的特殊方法來完善...";
+	mes "........ ka繁榮！";
+	specialeffect EF_SUI_EXPLOSION;
+	if (countitem(.@ticket_id) < 1) {
+		next;
+		mes "錯誤！";
+		mes "請報告。";
+		close;
+	}
+	delitem .@ticket_id,1;
+
+	// anti-hack
+	if (callfunc("F_IsEquipIDHack", .@part, .@refineitemid) ||
+		callfunc("F_IsEquipRefineHack", .@part, .@refinerycnt) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3])) {
+		mes "[完善大師]";
+		emotion ET_FRET;
+		mes "等待一秒鐘...";
+		mes "你覺得我很愚蠢嗎？";
+		mes "我不在時切換物品！離開這裡！";
+		close;
+	}
+	successrefitem .@part, .@ticket_lv - getequiprefinerycnt(.@part);
+	next;
+	emotion ET_DELIGHT;
+	mes "[完善大師]";
+	mes "好吧，這是~";
+	mes "好吧， ^0000ff"+strcharinfo(0)+"^000000!";
+	mes "恭喜您發光"+.@type$+".";
+	mes "你看起來很棒！";
+	mes "告別~！";
+	close;
+}

@@ -1,0 +1,106 @@
+﻿//===== rAthena Script ======================================= 
+//= General Eclage NPC.
+//===== By: ================================================== 
+//= Dastgir
+//===== Current Version: ===================================== 
+//= 2.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Eclage Town NPC
+//===== Additional Comments: ================================= 
+//= 1.0 Generic NPC place holders. [Euphy]
+//= 2.0 Converted from the official Aegis script. [Dastgir]
+//============================================================ 
+
+ecl_in02,96,22,3	script	sign#prison_inn	545,{
+	mes "[北]監獄";
+	mes "[西]診所";
+	close;
+}
+
+ecl_in01,8,71,5	script	Eclage Guard#pri_inn	447,{
+	mes "[埃克拉格守衛]";
+	mes "這條路徑將帶您到eclage的下部。您會在那裡找到監獄和診所。";
+	close;
+}
+
+ecl_in02,164,56,3	script	Receptionist#Laphine	835,{
+	mes "[接待員]";
+	mes "歡迎來到eclage診所。";
+	next;
+	switch (select("保存地點:休息:完成對話")) {
+	case 1:
+		mes "[接待員]";
+		mes "診所已被視為您的保存點。雖然要小心~";
+		savepoint "ecl_in02",162,50,1,1;
+		close;
+	case 2:
+		mes "[接待員]";
+		mes "在我們的診所恢復您的身心。它充滿了eclage的清潔能源。";
+		mes "我們通常會收取1枚出色的硬幣，但我們為旅行者提供特別的折扣。您的總數為5,000 Zeny。";
+		next;
+		switch (select("使用 Splendide Coin 支付:使用 Zeny 支付:算了")) {
+		case 1:
+			if (!countitem(6081)) {
+				mes "[接待員]";
+				mes "看來您沒有足夠的硬幣。請問您會再次檢查您的帳戶嗎？";
+				close;
+			}
+			mes "[接待員]";
+			mes "讓自己在家~";
+			close2;
+			delitem 6081,1; //6081
+			percentheal 100,100;
+			warp "ecl_in02",167,49;
+			end;
+		case 2:
+			if (Zeny < 5000) {
+				mes "[接待員]";
+				mes "看來您沒有足夠的資源進行。您介意再次檢查您的帳戶嗎？";
+				close;
+			}
+			mes "[接待員]";
+			mes "讓自己在家~";
+			close2;
+			Zeny = Zeny - 5000;
+			percentheal 100,100;
+			warp "ecl_in02",167,49;
+			end;
+		case 3:
+			close;
+		}
+	case 3:
+		close;
+	}
+}
+
+ecl_in02,135,45,5	script	Injured Laphine	442,{
+	mes "[受傷的腰丁]";
+	mes "哦...";
+	mes "在哪裡...我... 我？";
+	next;
+	mes "[醫生]";
+	mes "你在診所。不用擔心。";
+	mes "我們停止了出血並施放緊急咒語。";
+	mes "你流血很多。那很近，你知道。 ，你知道。";
+	next;
+	mes "[受傷的腰丁]";
+	mes "......";
+	mes "什麼，不，我...我什麼都沒感覺... 發生了什麼事？";
+	next;
+	mes "[醫生]";
+	mes "嗯...箭損壞了你的機翼很嚴重...";
+	next;
+	mes "[受傷的腰丁]";
+	mes "... 你是什麼意思？";
+	next;
+	mes "[醫生]";
+	mes "好吧...康復後我要告訴你，但你應該知道。你不能再裝飾耶了。 ，但你應該知道。你不能再裝飾耶了。";
+	mes "換句話說，您受傷了。箭穿過機翼最關鍵的部分。 ，您受傷了。箭穿過機翼最關鍵的部分。";
+	next;
+	mes "[受傷的腰丁]";
+	mes "什麼？沒辦法 ...請... 醫生！不！ 醫生！不！";
+	close;
+}
+ecl_in02,137,44,3	duplicate(Injured Laphine)	Doctor Laphine#doctor	441

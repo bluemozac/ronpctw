@@ -1,0 +1,1813 @@
+﻿//===== rAthena Script ======================================= 
+//= Ranger Job Quest
+//===== By: ================================================== 
+//= Muad_Dib
+//===== Current Version: ===================================== 
+//= 1.7
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job change Quest from Hunter / Sniper -> Ranger.
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. [Masao]
+//= 1.1 Updated SC_STONE duration from 2 Seconds to 2 Minutes
+//=     and fixed Mercenary check.
+//= 1.2 Fixed first quest so that when a false poring got killed
+//=     it decreases the total points by 1, commented the SC_STONE
+//=     part until M_DESERT_WOLF_B Mercenary is fully working.
+//= 1.3 Fixed waves not being announced and counted [Elias]
+//= 1.3a Little beauty fix, changed break; to next; . [Masao]
+//= 1.4 Some optimization. [Euphy]
+//= 1.5 Updated script, optimized. [Euphy]
+//= 1.6 Added GM management function. [Euphy]
+//= 1.7 Added VIP features. [Euphy]
+//============================================================
+
+tur_dun01,156,36,5	script	Survival Instructor#jr01	59,{
+	mes "[救援生存教練]";
+	if (BaseJob == Job_Hunter) {
+		if (job_ranger01 < 1) {
+			mes "誒誒誒~哈！";
+			mes "天氣真的很棒。";
+			next;
+			mes "[救援生存教練]";
+			mes "這是怎麼回事？";
+			mes "這裡的怪物是";
+			mes "幾乎沒有艱難，所以要小心。";
+			next;
+			if(select("我來這裡是為了成為一名遊騎兵:我只是來看看周圍。") == 2) {
+				mes "[救援生存教練]";
+				mes "哦，是嗎？";
+				mes "天氣真的很棒。我們可以拍照來紀念它嗎？";
+				next;
+				mes "[救援生存教練]";
+				mes "不？";
+				mes "然後安靜地環顧四周，然後回去。";
+				close;
+			}
+			mes "[救援生存教練]";
+			mes "嗯？";
+			mes "你是怎麼找到我的？";
+			next;
+			mes "[救援生存教練]";
+			mes "好吧，這是您認識我的傳球標記...讓我看看。";
+			next;
+			if (BaseLevel < 99 || JobLevel < 50) {
+				mes "[救援生存教練]";
+				mes "不。";
+				mes "我可以通過看著你來告訴你你似乎沒有經驗。";
+				next;
+				mes "[救援生存教練]";
+				mes "對您的工作感到更加自豪並獲得更多的經驗，然後當您成長為獵人或狙擊手時，您可以自己製作光環，請再次回來。";
+				close;
+			}
+			mes "[救援生存教練]";
+			mes "好的！";
+			mes "看起來你有";
+			mes "足夠的經驗。";
+			next;
+			if (VIP_SCRIPT) {
+				callfunc "VIP_Third_Class";
+				set job_ranger01,1;
+				setquest 8254;
+				next;
+			}
+			mes "[救援生存教練]";
+			mes "好的。";
+			mes "首先，讓我告訴您工作變更資格成為遊俠。";
+			next;
+			mes "[救援生存教練]";
+			mes "我已經檢查了您經歷過足夠的第一個資格，可以使Aura成為獵人或狙擊手。";
+			next;
+			mes "[救援生存教練]";
+			mes "要準確判斷自己的能力，您需要減輕自己的身心。";
+			next;
+			if (Class == Job_Hunter || Class == Job_Baby_Hunter) {
+				mes "[救援生存教練]";
+				mes "啊，等等。";
+				mes "當您將工作從獵人身上更改為護林員時，";
+				mes "您將沒有機會學習狙擊手的技能，這還可以嗎？";
+				next;
+				switch(select("我會再考慮一下:我已經想成為一名遊騎兵了。")) {
+				case 1:
+					mes "[救援生存教練]";
+					mes "好的。";
+					mes "花點時間思考，如果可以的話，然後回來。";
+					close;
+				case 2:
+					mes "[救援生存教練]";
+					mes "好的。";
+					mes "那你準備好了。";
+					next;
+				}
+				mes "[救援生存教練]";
+				mes "好吧，讓我們繼續對話。";
+				mes "在變成遊俠之前，即使您達到了獵人的最高水平，也不是對您能力的最佳評估。";
+				next;
+				mes "[救援生存教練]";
+				mes "因此，為了檢查您的能力，我需要評估您的純粹能力。";
+				next;
+			} else {
+				mes "[救援生存教練]";
+				mes "在變成遊俠之前，即使您達到了狙擊手的最高水平，也不是對您能力的最佳評估。";
+				next;
+				mes "[生存教練]";
+				mes "因此，為了檢查您的能力，我需要評估您的純粹能力。";
+				next;
+			}
+			mes "[救援生存教練]";
+			mes "為此，您需要清洗身體和靈魂。";
+			mes "確保您的體重等於“ 0”才能繼續。";
+			set job_ranger01,1;
+			setquest 8254;
+			close2;
+			warp "alberta",117,57;
+			end;
+		} else if (job_ranger01 == 1) {
+			if (Weight < 1) {
+				mes "哇，你回來這麼快。";
+				next;
+				mes "[救援生存教練]";
+				mes "好的，現在我將討論參加測試以成為護林員的要求。";
+				next;
+				mes "[救援生存教練]";
+				mes "成為遊俠的所有測試都將通過實用手段進行。";
+				next;
+				mes "[救援生存教練]";
+				mes "會有書面測試嗎？";
+				next;
+				mes "[救援生存教練]";
+				mes "你為什麼要一個？";
+				mes "該測試中最重要的部分是您在戰場上的經驗測試。";
+				next;
+				mes "[救援生存教練]";
+				mes "因此，我的要求是證明您的生存力量。";
+				next;
+				mes "[救援生存教練]";
+				mes "即使您跌倒並被毆打，我也想看到生存的真正力量。";
+				next;
+				mes "[救援生存教練]";
+				mes "如果您在此生存功率測試中取得成功，您將獲得第一個資格。";
+				next;
+				mes "[救援生存教練]";
+				mes "好吧，當您獲得參加考試資格時，讓我們談談細節。";
+				mes "當您想參加生存功率測試時，請再次與我交談。";
+				set job_ranger01,2;
+				changequest 8254,8255;
+				close;
+			}
+			mes "在變成護林員之前，我需要評估您的純粹能力。";
+			next;
+			mes "[救援生存教練]";
+			mes "為此，您需要清洗身體和靈魂。";
+			mes "確保您的體重等於0繼續。";
+			close;
+		} else if (job_ranger01 == 2) {
+			if (Weight < 1) {
+				mes "嗯。您再次與我交談意味著您決心變成遊俠並進行生存功率測試。";
+				next;
+				if(select("我會再考慮一下:我會參加考試") == 1) {
+					mes "[救援生存教練]";
+					mes "在參加這項測試之前，請做好準備。";
+					next;
+					mes "[救援生存教練]";
+					mes "很好地考慮一下，然後回來。";
+					close;
+				}
+				mes "[救援生存教練]";
+				mes "如果您確定了，那麼就沒有什麼可等待的。";
+				next;
+				mes "[救援生存教練]";
+				mes "我會簡單地解釋。";
+				mes "我要為您提供的是10翼，500箭和1個測試弓。";
+				next;
+				mes "[救援生存教練]";
+				mes "採用所提供的物品，生存功率測試所需要做的就是 ^0000ffo到Turtle Island的西北地區，並找到教練淚珠 ^000000。";
+				mes "容易，對吧？";
+				next;
+				mes "[救援生存教練]";
+				mes "請記住，您沒有其他設備，所以請注意怪物。";
+				mes "準備開始了嗎？";
+				next;
+				if(select("等一下:是的，我準備好了") == 1) {
+					mes "[救援生存教練]";
+					mes "什麼樣的準備工作可能是這麼長的。";
+					next;
+					mes "[救援生存教練]";
+					mes "絕對準備好時再來。";
+					close;
+				}
+				mes "[救援生存教練]";
+				mes "好吧，然後開始。";
+				mes "沒有時間猶豫。";
+				mes "盡力。";
+				set job_ranger01,3;
+				changequest 8255,8256;
+				getitem 1703,1; //Bow__
+				getitem 12323,10; //N_Fly_Wing
+				getitem 1750,500; //Arrow
+				close;
+			}
+			mes "我就知道。";
+			next;
+			mes "[救援生存教練]";
+			mes "你為什麼帶這麼多？";
+			mes "最好在工作上盡力而為是很好的，但是，這項測試的關鍵是測試我們的真實能力...";
+			next;
+			mes "[救援生存教練]";
+			mes "如果您沒有重量0，則將無法參加測試。";
+			close;
+		} else if (job_ranger01 == 3) {
+			mes "嗯？";
+			mes "你還在等什麼？";
+			next;
+			if(select("再告訴我一次任務:我只是想談談。") == 1) {
+				mes "[救援生存教練]";
+				mes "哦，是的。";
+				mes "這是要參加考試的人的思想嗎？";
+				next;
+				mes "[救援生存教練]";
+				mes "保持警惕並聽。";
+				next;
+				mes "[救援生存教練]";
+				mes "採用所提供的物品，生存功率測試所需要做的就是 ^0000ffo到Turtle Island的西北地區，並找到教練淚珠 ^000000。";
+				mes "那不是那麼容易嗎？";
+				next;
+				mes "[救援生存教練]";
+				mes "由於您沒有任何設備，因此請小心野外的怪物。";
+				mes "好吧，我們可以開始嗎？";
+				next;
+				if(select("等一下:我要開始了") == 1) {
+					mes "[救援生存教練]";
+					mes "什麼樣的準備工作可能是這麼長的。";
+					next;
+					mes "[救援生存教練]";
+					mes "絕對準備好時再來。";
+					close;
+				}
+				mes "[救援生存教練]";
+				mes "好吧，讓我們開始。";
+				mes "沒有時間猶豫，請盡力而為。";
+				close;
+			}
+			mes "[救援生存教練]";
+			mes "我認為您沒有時間。";
+			next;
+			mes "[救援生存教練]";
+			mes "快點完成測試。";
+			close;
+		} else if (job_ranger01 > 3 && job_ranger01 < 7) {
+			mes "您還在這裡徘徊嗎？";
+			next;
+			mes "[救援生存教練]";
+			mes "好吧，如果您是一個容易的人，那與我無關，但是如果您決定一次，那麼一分鐘內就可以在成為遊俠後與我見面會不會更好？";
+			close;
+		} else if (job_ranger01 == 7) {
+			mes "哦，嘿。你在這裡做什麼？";
+			next;
+			mes "[救援生存教練]";
+			mes "因為您突然消失了，所以遊俠大師正在尋找您。";
+			mes "你想現在去找他嗎？";
+			next;
+			switch(select("不走:走")) {
+			case 1:
+				mes "[救援生存教練]";
+				mes "你忙於其他東西嗎？";
+				close;
+			case 2:
+				mes "[救援生存教練]";
+				mes "那我寄給你，請好。";
+				close2;
+				warp "job3_rang01",89,38;
+				end;
+			}
+		}
+		mes "哦，嘿。這是誰？";
+		next;
+		mes "[救援生存教練]";
+		mes "嘿，你看起來很棒。";
+		mes "祝賀成為遊俠~";
+		next;
+		mes "[救援生存教練]";
+		mes "下次，請不要恐嚇他人。";
+		close;
+	}
+	if (Class == Job_Ranger || Class == Job_Ranger_T || Class == Job_Baby_Ranger) {
+		if (job_ranger01 == 8) {
+			mes "何這是誰";
+			mes "你看起來很有才華...";
+			next;
+			mes "[救援生存教練]";
+			mes "下次，請不要恐嚇他人。";
+			close;
+		}
+	}
+	mes "哈哈。";
+	mes "天氣真的很棒。";
+	next;
+	mes "[救援生存教練]";
+	mes "這是怎麼回事？";
+	mes "這裡的怪物是";
+	mes "幾乎沒有艱難，所以要小心。";
+	close;
+}
+
+tur_dun01,91,169,3	script	Test Instructor#jr02	732,{
+	mes "[測試講師，淚珠]";
+	if (BaseJob == Job_Hunter) {
+		if (job_ranger01 < 3) {
+			mes "很好，goooooo ！ ！ ！ ！ ！";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "嗯？你是誰？你在這裡做什麼，你是弓箭手。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "我可以告訴你一件事嗎？";
+			mes "如果您想將工作更改為護林員，請先與生存教練救援進行交談。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "然後，他會告訴您工作變更測試的要求！ ！ ！";
+			close;
+		} else if (job_ranger01 == 3) {
+			mes "很好，goooooo ！ ！ ！ ！ ！";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "嗯？你是誰？你在這裡做什麼，你是弓箭手。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "你要來來去找我，所以你能停下來嗎？";
+			next;
+			if(select("遊俠實戰測試樓？ :我是來測試的。") == 1) {
+				mes "[測試講師，淚珠]";
+				mes "什麼，你是什麼...？";
+				next;
+				mes "[測試講師，淚珠]";
+				mes "您認為您在看什麼？";
+				next;
+				mes "[測試講師，淚珠]";
+				mes "如果您甚至無法識別出面前的事物，怎麼會成為遊俠？離開這裡！";
+				close;
+			}
+			mes "[測試講師，淚珠]";
+			mes "霍，走了這麼遠，這意味著您已經通過了第一個生存測試。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "但是，您能確定沒有作弊嗎？";
+			next;
+			if (Weight > 500) {
+				mes "[測試講師，淚珠]";
+				mes "看，我知道。";
+				next;
+				mes "[測試講師，淚珠]";
+				mes "正常進行測試後，您將重量調整為0，並保留Rescue提供的物品！";
+				mes "但是，你怎麼這麼稱重呢？";
+				next;
+				mes "[測試講師，淚珠]";
+				mes "我認為這是作弊！";
+				mes "來看看我！";
+				close2;
+				warp "tur_dun01",162,33;
+				end;
+			}
+			mes "[測試講師，淚珠]";
+			mes "唔。令人懷疑...";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "我沒有聞到作弊的跡象。目前...";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "在進行實際測試之前，我想吃東西。";
+			mes "您知道在外國的食物狀況並不總是那麼好。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "我知道，生存的基本方法可能是提高自己身體的力量。但是，我發現派遣冒險家對我來說更容易。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "因此，殺死 ^0000ff1龍尾 ^000000，給我帶來 ^0000ff1蜻蜓 ^000000的機翼。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "如果您用完了所提供的物品，我們將無法更多地支持您，請注意。";
+			mes "將其視為生存功率測試的擴展。";
+			set job_ranger01,4;
+			changequest 8256,8257;
+			close;
+		} else if (job_ranger01 == 4) {
+			if (checkquest(8257,HUNTING) == 2) {
+				if (countitem(7064) > 0) {
+					mes "哦！哦！哇！";
+					mes "你帶來了！讓我看看...";
+					next;
+					mes "[測試講師，淚珠]";
+					mes "嗯，還很熱嗎？";
+					mes "您似乎在任何地方都不會受傷...";
+					next;
+					mes "[測試講師，淚珠]";
+					mes "很好，現在您有資格參加實際測試。";
+					next;
+					mes "[測試講師，淚珠]";
+					mes "好吧，在我解釋之前，您能給我那條蜻蜓翼嗎？";
+					mes "您聽說過這句話：“在任何情況下，飲食首先來了”？";
+					delitem 7064,1; //Dragon_Fly_Wing
+					set job_ranger01,5;
+					changequest 8257,8258;
+					close;
+				}
+			}
+			mes "你在那裡做什麼？站著空白的外觀。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "我餓了。";
+			mes "在進行實際測試之前，我想吃東西。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "我知道，生存的基本方法可能是提高自己身體的力量。但是，我發現派遣冒險家對我來說更容易。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "因此，殺死 ^0000ff1龍尾 ^000000，給我帶來 ^0000ff1龍飛翼 ^000000。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "如果您用完了所提供的項目，我們將不支持更多，請注意。";
+			mes "將其視為生存功率測試的擴展。";
+			close;
+		} else if (job_ranger01 == 5) {
+			mes "噢。 Yumyum。";
+			mes "嗯？你在看什麼？";
+			mes "你想吃一些嗎？";
+			next;
+			switch(select("哦，吃飽了:……")) {
+			case 1:
+				mes "[測試講師，淚珠]";
+				mes "你為什麼不吃？";
+				mes "這很可食用。";
+				mes "如果您用米飯覆蓋，它就像烤海藻，非常美味可口。";
+				next;
+				mes "[測試講師，淚珠]";
+				mes "您需要足夠強大，不要對這樣的事情如此挑剔...";
+				next;
+				break;
+			case 2:
+				mes "["+strcharinfo(0)+"]";
+				mes "不，謝謝...無論如何...";
+				next;
+				mes "[測試講師，淚珠]";
+				mes "唔？哦，我的，哦，我的，我已經向你展示了我的濕潤。";
+				next;
+				break;
+			}
+			mes "[測試講師，淚珠]";
+			mes "好的，我將您發送到實用的測試字段。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "實際測試總共包含3個部分。";
+			mes "這是為了重新檢查您作為獵人或狙擊手所學到的東西，所以沒有什麼可擔心的。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "如果您在三個測試中獲得傳球標記，那麼您將成為一名遊俠。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "我將解釋測試的路徑。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "進入測試領域後，員工將等待您。進入員工製作的房間，然後待命。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "該測試是一一進行的，如果有很多人，您可能需要等待。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "第一個測試是測試您的眼睛的熱衷。";
+			mes "不同的怪物將出現在8個地方。只殺死名為“ poring”的怪物，當您達到某個標記時，您就會得到一個觀點。容易，是嗎？";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "第二個測試是關於您可以有效使用陷阱的數量。";
+			mes "擺脫怪物，僅使用提供的陷阱來執行任務，然後通過。請注意不要被爆炸所吞噬。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "對於第三次測試，當您成為護林員時，您可以處理狼，因此您將在處理這種動物的能力方面接受測試。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "當您使用給定的狼去除炸彈時，您會得到積分。當您在測試中獲得一定的標記時，您會通過。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "那裡的工作人員也會告訴您更多細節。";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "現在，我將您進入實用的測試字段，您的準備工作都完成了嗎？";
+			next;
+			if(select("請稍等:我們去實戰測試場吧！") == 1) {
+				mes "[測試講師，淚珠]";
+				mes "嗯？你還沒準備好嗎？";
+				next;
+				mes "[測試講師，淚珠]";
+				mes "出色地。要小心是好的。";
+				mes "準備好後回來。";
+				close;
+			}
+			callsub L_Start,0;
+			close;
+		} else if (job_ranger01 == 6) {
+			mes "很好，goooooo ！ ！ ！ ！ ！";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "嗯？發生了什麼？";
+			mes "你為什麼要在這裡走？該測試呢？";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "啊哈...你失敗了中間！";
+			mes "你真是個傻瓜。";
+			emotion ET_KIK;
+			next;
+			mes "[測試講師，淚珠]";
+			mes "那你打算做什麼？再試一次？";
+			next;
+			switch(select("等一下:去實戰試驗場吧！ :我放棄跳槽。")) {
+			case 1:
+				mes "[測試講師，淚珠]";
+				mes "嗯？你還沒準備好嗎？";
+				next;
+				mes "[測試講師，淚珠]";
+				mes "好的。要小心是好的。";
+				mes "準備好時來。";
+				close;
+			case 2:
+				callsub L_Start,1;
+				close;
+			case 3:
+				mes "[測試講師，淚珠]";
+				mes "嗯？什麼，你在開玩笑吧？";
+				next;
+				mes "[測試講師，淚珠]";
+				mes "想一想。";
+				mes "您真的想放棄變更工作以成為遊俠嗎？";
+				next;
+				switch(select("不，我再試一次:我放棄！")) {
+				case 1:
+					mes "[測試講師，淚珠]";
+					mes "嘿。你畢竟在開玩笑嗎？";
+					next;
+					mes "[測試講師，淚珠]";
+					mes "這不是有趣的，所以不要再開玩笑了。";
+					close;
+				case 2:
+					mes "[測試講師，淚珠]";
+					mes "您沒有我想像的那麼多的膽量。";
+					nude;
+					next;
+					if (countitem(1703) > 0) {
+						mes "[測試講師，淚珠]";
+						mes "好的。我會尊重你的意見。";
+						mes "我將從"+strcharinfo(0)+".";
+						delitem 1703,1; //Bow__
+						set job_ranger01,0;
+						for(set .@i,8254; .@i<=8262; set .@i,.@i+1)
+							if (checkquest(.@i) > -1) erasequest .@i;
+						close;
+					}
+					mes "[測試講師，淚珠]";
+					mes "嗯？我給你的弓箭在哪裡進行實踐測試？";
+					next;
+					mes "[測試講師，淚珠]";
+					mes "如果您不返回，我將無法取消您的工作更改請求。";
+					close;
+				}
+			}
+		} else if (job_ranger01 == 7) {
+			mes "哦，嘿。你在這裡做什麼？";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "因為您突然消失了，所以遊俠大師正在尋找您。";
+			mes "你想現在去找他嗎？";
+			next;
+			switch(select("不走:走")) {
+			case 1:
+				mes "[測試講師，淚珠]";
+				mes "你忙於其他東西嗎？";
+				close;
+			case 2:
+				mes "[測試講師，淚珠]";
+				mes "那我寄給你，請好。";
+				close2;
+				warp "job3_rang01",89,38;
+				end;
+			}
+		}
+		mes "哇。這是誰？";
+		next;
+		mes "[測試講師，淚珠]";
+		mes "看來您的昏暗的眼睛現在有些熱衷於此？";
+		next;
+		mes "[測試講師，淚珠]";
+		mes "然後，像遊俠一樣享受冒險。";
+		close;
+	}
+	mes "很好，goooooooooo oooo ！ ！ ！ ！ ！";
+	next;
+	mes "[測試教練]";
+	mes "嗯？你是做什麼的？你從哪來？";
+	mes "不要在這裡閒逛。這是我的區域！";
+	close;
+L_Start:
+	if (getmercinfo(1)) {
+		mes "[測試講師，淚珠]";
+		mes "停止！";
+		next;
+		mes "[測試講師，淚珠]";
+		mes "您認為您要去哪裡僱傭軍？";
+		next;
+		mes "[測試講師，淚珠]";
+		mes "如果您不取消僱傭軍，則無法進入測試領域！首先取消！";
+		close;
+	}
+	if (getarg(0) == 1) {
+		if (countitem(12380)) {
+			mes "[測試講師，淚珠]";
+			mes "什麼，這是什麼？";
+			mes "您不應該留下來！";
+			delitem 12380,countitem(12380); //Desert_Wolf_Babe_Scroll
+			next;
+		}
+		if (countitem(12258)) {
+			mes "[測試講師，淚珠]";
+			mes "什麼，這是一個彈性膠囊。";
+			mes "您不應該保留如此危險的事情！";
+			delitem 12258,countitem(12258); //Bombring_Box
+			next;
+		}
+		if (countitem(6156)) {
+			mes "[測試講師，淚珠]";
+			mes "什麼，所有這些文件是什麼？";
+			mes "我想我知道。您要謹慎行事，對嗎？";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "如果您持有這樣的東西，它會打擾您的實際測試，因此我將接受此操作。";
+			delitem 6156,countitem(6156); //Approval_Report
+			next;
+		}
+	}
+	if (Weight > 500) {
+		mes "[測試講師，淚珠]";
+		mes "好吧，然後讓我們gooooooooo ....哦，嗯？";
+		next;
+		mes "[測試講師，淚珠]";
+		mes "嘿，你躲在那裡什麼？";
+		mes "我已經指出了幾次，您甚至不應該想到除了提供的物品以外的任何其他東西！";
+		next;
+		mes "[測試講師，淚珠]";
+		mes "您最好減輕體重。";
+		close;
+	}
+	mes "[測試講師，淚珠]";
+	mes "我最後一次警告您，嚴格禁止作弊。";
+	next;
+	if (countitem(1750) < 100) {
+		mes "[測試講師，淚珠]";
+		mes "好吧，我再一次為您提供箭頭，然後我會讓你進去。";
+		set .@arrow,1;
+		next;
+	}
+	mes "[測試講師，淚珠]";
+	mes "祝你好運。";
+	mes "成為遊俠，我們將再次見面。";
+	set job_ranger01,6;
+	if (getarg(0) == 0)
+		changequest 8258,8259;
+	else {
+		erasequest 8260;
+		erasequest 8261;
+	}
+	if (.@arrow) getitem 1750,100; //Arrow
+	close2;
+	warp "job3_rang01",30,36;
+	end;
+}
+
+job3_rang01,30,44,3	script	Test Waiting Room#jr_03	88,{
+	mes "[工作人員DTS]";
+	mes "請在實用的測試候診室等待開始測試過程。";
+	next;
+	mes "[工作人員DTS]";
+	mes "按照您輸入的順序，您可以一一進行實用的測試。";
+	mes "有三種遊俠的工作變更實踐測試，總共需要10分鐘。";
+	next;
+	switch(select("測試說明:取消:我放棄遊俠測試")) {
+	case 1:
+		break;
+	case 2:
+		mes "[工作人員DTS]";
+		mes "您不需要任何解釋嗎？";
+		next;
+		mes "[工作人員DTS]";
+		mes "進入聊天室，等待訂單，並進行工作變更實踐測試。";
+		close;
+	case 3:
+		mes "[工作人員DTS]";
+		mes "請再次考慮。";
+		mes "如果您在這裡放棄，您的工作更改請求將被取消。您真的想放棄為遊騎兵的工作變更嗎？";
+		next;
+		switch(select("不，我繼續測試:我放棄遊俠轉職")) {
+		case 1:
+			mes "[工作人員DTS]";
+			mes "如果您想繼續進行實際測試，請進入聊天室。";
+			close;
+		case 2:
+			mes "[工作人員DTS]";
+			mes "您沒有我想像的那麼多的膽量。";
+			nude;
+			next;
+			if (countitem(1703) > 0) {
+				mes "[工作人員DTS]";
+				mes "好的。我會尊重你的意見。";
+				mes "我將從"+strcharinfo(0)+".";
+				delitem 1703,1; //Bow__
+				set job_ranger01,0;
+				for(set .@i,8254; .@i<=8262; set .@i,.@i+1)
+					if (checkquest(.@i) > -1) erasequest .@i;
+				close;
+				close2;
+				warp "alberta",117,57;
+				end;
+			}
+			mes "[工作人員DTS]";
+			mes "嗯？我給你的弓箭在哪裡進行實踐測試？";
+			next;
+			mes "[測試講師，淚珠]";
+			mes "如果您不返回，我將無法取消您的工作更改請求。";
+			close;
+		}
+	}
+	while (1) {
+		mes "[工作人員DTS]";
+		mes "我將解釋Ranger的工作變更實用測試。";
+		mes "在第一，第二和第三實踐測試中，您好奇哪種測試方法？";
+		next;
+		switch(select("第一次測試:第二次測試:第三次測試:取消")) {
+		case 1:
+			mes "[工作人員DTS]";
+			mes "對於第一次測試，我們測試您的視力和準確性。";
+			next;
+			mes "[工作人員DTS]";
+			mes "怪物從左側，右，上下的8側隨機出現，其中包括您擺脫一個名為“ Poring”的怪物，您會得到一個觀點。";
+			next;
+			mes "[工作人員DTS]";
+			mes "^0000f.形式看起來如何，您需要殺死名為“ Poring”的怪物才能獲得觀點，如果您擺脫了其他人，您的觀點就會被扣除，所以要小心。 ^000000";
+			next;
+			mes "[工作人員DTS]";
+			mes "第一次測試的進展時間約為3分鐘。當您獲得20分或20點以上時，您將被發送到第二個測試字段。";
+			next;
+			break;
+		case 2:
+			mes "[工作人員DTS]";
+			mes "第二個測試是測試任務性能能力和有效使用陷阱。";
+			next;
+			mes "[工作人員DTS]";
+			mes "服務員會收到10個“彈力膠囊”。當您消耗炸彈膠囊時，在您到達一定時間時，召喚和召喚之後會召喚爆炸聲，彈力會爆炸。";
+			next;
+			mes "[工作人員DTS]";
+			mes "^0000ff爆炸會影響您，因此請注意不要參與爆炸。您需要使用彈性膠囊，完成任務並活著。 ^000000，您需要擺脫怪物。";
+			next;
+			mes "[工作人員DTS]";
+			mes "第二個測試的進展時間約為3分鐘。當您消耗所有彈性膠囊，收集隱藏的設備並生存時，您將被送到第三個測試場。";
+			next;
+			break;
+		case 3:
+			mes "[工作人員DTS]";
+			mes "第三次是測試如何有效地使用給護林員的狼。";
+			next;
+			mes "[工作人員DTS]";
+			mes "測試儀配有一次性狼召喚長笛。通過控制召喚的戰爭，刪除在此處和那里分散的所有炸彈，您會得到一個觀點。";
+			next;
+			mes "[工作人員DTS]";
+			mes "^0000ff，測試儀在進行測試時無法移動，並且在僅使用WARG快速準確地刪除炸彈時，測試完成了。 ^000000";
+			next;
+			mes "[工作人員DTS]";
+			mes "第三個測試的進展時間約為3分鐘，當您在20多次以上獲得10個或以上時，所有實際測試都完成。";
+			next;
+			break;
+		case 4:
+			mes "[工作人員DTS]";
+			mes "當您想通過實踐測試進行進步時，請進入聊天室。";
+			close;
+		}
+	}
+	end;
+OnInit:
+	waitingroom "Practical Test Waiting Room",20,"Test Waiting Room#jr_03::OnStartArena",1;
+	enablewaitingroomevent;
+	end;
+OnStartArena:
+	warpwaitingpc "job3_rang02",45,48;
+	donpcevent "Test Supervisor#jr_04::OnEnable";
+	disablewaitingroomevent;
+	end;
+OnEnable:
+	enablewaitingroomevent;
+	end;
+OnDisable:
+	disablewaitingroomevent;
+	end;
+}
+
+job3_rang02,100,95,0	script	Test Supervisor#jr_04	139,{
+OnInit:
+	set $@job_rang_point01,0;
+	disablenpc "Test Supervisor#jr_04";
+	end;
+OnEnable:
+	enablenpc "Test Supervisor#jr_04";
+	set $@job_rang_point01,0;
+	initnpctimer;
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "Test Supervisor#jr_04";
+	end;
+OnStart:
+	stopnpctimer;
+	donpcevent "CallCorrectAnswer#jr::OnEnable";
+	donpcevent "CallWrongAnswer#jr::OnEnable";
+	donpcevent "First Test Timer#jr_05::OnEnable";
+	disablenpc "Test Supervisor#jr_04";
+	end;
+OnTimer3000:
+	mapannounce "job3_rang02","Test Supervisor, Notice : Welcome to the Ranger Job Change Test. I am Test Supervisor, Notice.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer6000:
+	mapannounce "job3_rang02","Test Supervisor, Notice : The 1st test is to test your eyesight and accuracy.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer9000:
+	mapannounce "job3_rang02","Test Supervisor, Notice : The test method is, to kill monsters named 'Poring' amongst the random spawned monsters on 8 locations.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer12000:
+	mapannounce "job3_rang02","Test Supervisor, Notice : Whatever it may look like, you need to kill the monster named 'Poring' to get a point, and if you kill others you will lose points, so be careful.",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+OnTimer15000:
+	mapannounce "job3_rang02","Test Supervisor, Notice : The test progression time would be around 3 minutes. You need to get 15 points or more to qualify for the next test.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer18000:
+	stopnpctimer;
+	mapannounce "job3_rang02","Test Supervisor, Notice : Then let's begin the test. Good luck.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	donpcevent "Test Supervisor#jr_04::OnStart";
+	end;
+}
+
+job3_rang02,102,95,0	script	First Test Timer#jr_05	139,{
+OnInit:
+	disablenpc "First Test Timer#jr_05";
+	end;
+OnEnable:
+	enablenpc "First Test Timer#jr_05";
+	set $@job_rang_point01,0;
+	set $@job_rang_text01,0;
+	setarray .text$[1],
+		"First","Second","Third","Fourth","Fifth","Sixth","Seventh","Eighth","Ninth","Tenth","Eleventh",
+		"Twelfth","Thirteenth","Fourteenth","Fifteenth","Sixteenth","Seventeenth","Eighteenth","Nineteenth","Last";
+	initnpctimer;
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "First Test Timer#jr_05";
+	end;
+OnTimer8000:
+OnTimer15000:
+OnTimer22000:
+OnTimer29000:
+OnTimer36000:
+OnTimer43000:
+OnTimer50000:
+OnTimer57000:
+OnTimer64000:
+OnTimer71000:
+OnTimer78000:
+OnTimer85000:
+OnTimer92000:
+OnTimer99000:
+OnTimer106000:
+OnTimer113000:
+OnTimer120000:
+OnTimer127000:
+OnTimer134000:
+OnTimer141000:
+	donpcevent "CallCorrectAnswer#jr::OnReset";
+	donpcevent "CallWrongAnswer#jr::OnReset";
+	end;
+OnTimer3000:
+OnTimer10000:
+OnTimer17000:
+OnTimer24000:
+OnTimer31000:
+OnTimer38000:
+OnTimer45000:
+OnTimer52000:
+OnTimer59000:
+OnTimer66000:
+OnTimer73000:
+OnTimer80000:
+OnTimer87000:
+OnTimer94000:
+OnTimer101000:
+OnTimer108000:
+OnTimer115000:
+OnTimer122000:
+OnTimer129000:
+OnTimer136000:
+	set $@job_rang_text01,$@job_rang_text01+1;
+	mapannounce "job3_rang02","Test Supervisor, Notice : "+.text$[$@job_rang_text01]+" Wave! Kill the Poring!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	donpcevent "CallCorrectAnswer#jr::OnStart";
+	end;
+OnTimer143000:
+	mapannounce "job3_rang02","Test Supervisor, Notice : Well done! Now for your test result!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer146000:
+	if ($@job_rang_point01 < 1)
+		set $@job_rang_point01,0;
+	mapannounce "job3_rang02","Test Supervisor, Notice : I'll announce the test result. The number of Porings you killed out of 20 is ..." + $@job_rang_point01 + "!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer149000:
+	if ($@job_rang_point01 > 14) {
+		mapannounce "job3_rang02","Test Supervisor, Notice : Congratulations! You've killed " + $@job_rang_point01 + " out of 20 Porings total, so you've passed the 1st test. I will send you to the 2nd test field.",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+		mapwarp "job3_rang02","job3_rang02",113,58;
+		donpcevent "Second Test Timer#jr_08::OnEnable";
+		stopnpctimer;
+	} else
+		mapannounce "job3_rang02","Test Supervisor, Notice : You couldn't kill 15 Porings or more on a total of 20 total, so you've failed the 1st test... I am sorry but please try again.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer151000:
+	mapannounce "job3_rang02","Test Supervisor, Notice : The adventurer's 1st test ends now. Please make yourself more capable. Goodbye.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	end;
+OnTimer154000:
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	donpcevent "CallCorrectAnswer#jr::OnDisable";
+	donpcevent "CallWrongAnswer#jr::OnDisable";
+	end;
+OnTimer157000:
+	stopnpctimer;
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	set $@job_rang_point01,0;
+	set $@job_rang_text01,0;
+	donpcevent "Test Supervisor#jr_04::OnDisable";
+	donpcevent "Test Waiting Room#jr_03::OnEnable";
+	donpcevent "First Test Timer#jr_05::OnDisable";
+	end;
+}
+
+job3_rang02,104,95,0	script	CallCorrectAnswer#jr	139,{
+OnInit:
+OnDisable:
+	disablenpc "CallCorrectAnswer#jr";
+	end;
+OnEnable:
+	enablenpc "CallCorrectAnswer#jr";
+	end;
+OnStart:
+	setarray .@label$[0],"OnOne","OnTwo","OnThree","OnFour","OnFive","OnSix","OnSeven","OnEight";
+	setarray .@x[0],35,44,54,35,54,35,44,54;
+	setarray .@y[0],58,58,58,49,49,39,39,39;
+	setarray .@id[0],1002,1031,1242,1113;
+	set .@i, rand(8);
+	donpcevent "CallWrongAnswer#jr::"+.@label$[.@i];
+	monster "job3_rang02",.@x[.@i],.@y[.@i],"Poring",.@id[rand(4)],1,"CallCorrectAnswer#jr::OnMyMobDead";
+	end;
+OnReset:
+	killmonster "job3_rang02","CallCorrectAnswer#jr::OnMyMobDead";
+	end;
+OnMyMobDead:
+	specialeffect2 EF_POTION_CON;
+	set $@job_rang_point01, $@job_rang_point01+1;
+	mapannounce "job3_rang02","Test Supervisor, Notice : Correct Target! You have very good eyesight!",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+}
+
+job3_rang02,106,95,0	script	CallWrongAnswer#jr	139,{
+OnInit:
+OnDisable:
+	disablenpc "CallWrongAnswer#jr";
+	end;
+OnEnable:
+	enablenpc "CallWrongAnswer#jr";
+	end;
+OnOne:
+	monster "job3_rang02",44,58,"Poing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Horing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Poporing",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Puring",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Poriring",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Marine",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Dropporing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnTwo:
+	monster "job3_rang02",35,58,"Poyong",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Puding",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Porin",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Poja",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Poporing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Drops",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Pororing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnThree:
+	monster "job3_rang02",35,58,"Poporing",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,58,"Podaegi",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Poing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Poja",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Maporing",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Drops",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Pororing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnFour:
+	monster "job3_rang02",35,58,"Poing",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,58,"Hoing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Marine",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Drops",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Puding",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Droporing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Marine",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnFive:
+	monster "job3_rang02",35,58,"Popuri",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,58,"Poporing",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Mariring",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Poyong",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Marine",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Puding",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Hoing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnSix:
+	monster "job3_rang02",35,58,"Pork",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,58,"Drops",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Poja",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Poporing",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Horing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Marun",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Drawing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnSeven:
+	monster "job3_rang02",35,58,"Marine",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,58,"Pororing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Pork",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Porin",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Poporing",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Horin",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,39,"Puding",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnEight:
+	monster "job3_rang02",35,58,"Marun",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,58,"Poja",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,58,"Drops",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,49,"Poing",1242,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",54,49,"Puding",1002,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",35,39,"Horing",1031,1,"CallWrongAnswer#jr::OnMyMobDead";
+	monster "job3_rang02",44,39,"Poporing",1113,1,"CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnReset:
+	killmonster "job3_rang02","CallWrongAnswer#jr::OnMyMobDead";
+	end;
+OnMyMobDead:
+	specialeffect2 EF_DEVIL;
+	set $@job_rang_point01, $@job_rang_point01-1;
+	mapannounce "job3_rang02","Test Supervisor, Notice : Wrong Target! Pull yourself together!",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+}
+
+job3_rang02,100,93,0	script	Second Test Timer#jr_08	139,{
+OnInit:
+	disablenpc "Second Test Timer#jr_08";
+	end;
+OnEnable:
+	enablenpc "Second Test Timer#jr_08";
+	initnpctimer;
+	donpcevent "Test Supervisor#jr_04::OnDisable";
+	donpcevent "First Test Timer#jr_05::OnDisable";
+	donpcevent "CallCorrectAnswer#jr::OnDisable";
+	donpcevent "CallWrongAnswer#jr::OnDisable";
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "Second Test Timer#jr_08";
+	end;
+OnStop:
+	stopnpctimer;
+	end;
+OnTimer3000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : Yeah. Congrats on you passing the 1st practical test. I am the 2nd practical test supervisor Caution.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer6000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : The Second Test is about test performance ability and the effective usage of traps.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer9000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : When the test begins, you'll recive 'Bombring Caspule's' from a staff member near you, and kill the monsters in your way.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer11000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : When you use a 'Bombring Capsule' a Bombring is summoned near you, and after 3 seconds it will explode.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer14000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : The explosive range of the Bombring is a 5x5 cell around the Bombring, so be careful not to be caught in the explosion.",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+OnTimer17000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : Whilst progressing, if you complete the mission given by an staff member come and see me, then you will pass the 2nd practical test!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer20000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : Oh! When you come and see me, all 'Bombring Capsules' have to been used up.",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+OnTimer23000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : The test period will take 3 minutes in total! Copmplete the mission in 3 minutes and stay alive! Then come to see me!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer26000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : Well the test begins now!! Start going!!!!!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	donpcevent "Staff Rust#jr_09::OnEnable";
+	end;
+OnTimer80000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : 1 Minute has passed. You are coming to see me, right?",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer83000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : Don't be too brave to rush and get yourself killed, be slow and careful.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer140000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : 2 Minutes have passed. Getting here on time should be your top priority.?",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer143000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : However, you need to be alive in order to make the time limit, right? Please watch out.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer170000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : 2 Minutes and 30 Seconds have passed. There's not much time left!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer173000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : Hurry up! Hurry up! Come on.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer200000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : 3 Minutes have passed! 3 Minutes!!!! I'll be a little easy on you, so hurry up!!!!!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer205000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : 5 Seconds remaining!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer206000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : 4 Seconds remaining!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer207000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : 3 Seconds remaining!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer208000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : 2 Seconds remaining!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer209000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : 1 Second remaining!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer210000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : Ugh... What are you doing? Your time is up!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer213000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : You couldn't get here on time, therefore the 2nd practical test ends here!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer217000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : If you want to blame something, blame your own stupidness! Start over from the beginning! You fool!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	end;
+OnTimer220000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : If you want to blame something, blame your own stupidness! Start over from the beginning! You fool!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	donpcevent "Staff Rust#jr_09::OnDisable";
+	donpcevent "Summon Monster#jr_10::OnDisable";
+	donpcevent "Test Supervisor#jr_11::OnDisable";
+	end;
+OnTimer223000:
+	stopnpctimer;
+	donpcevent "Test Waiting Room#jr_03::OnEnable";
+	donpcevent "Second Test Timer#jr_08::OnDisable";
+	end;
+}
+
+job3_rang02,111,56,3	script	Staff Rust#jr_09	89,{
+	if (job_ranger01 == 6) {
+		if (countitem(12258) < 1) {
+			percentheal 100,0;
+			specialeffect2 EF_ABSORBSPIRITS;
+			mes "[工作人員生鏽]";
+			mes "我會給你“彈力膠囊”。";
+			mes "只能為使用所有這些的人再次給出“彈性膠囊”，因此請記住這一點。";
+			if (countitem(6156)) {
+				getitem 12258,5; //Bombring_Box
+				close;
+			}
+			next;
+			emotion ET_FRET;
+			mes "[工作人員生鏽]";
+			mes "任務是....將這些文件交付給主管，請謹慎。他不會接受我給的...";
+			setquest 8260;
+			getitem 6156, (MaxWeight-Weight-2000)/10; //Approval_Report
+			getitem 12258,10; //Bombring_Box
+			getitem 569,100; //Novice_Potion
+			close;
+		}
+		mes "[工作人員生鏽]";
+		mes "對不起，但是您已經有了“炸彈膠囊”，所以我無法為您提供更多。";
+		close;
+	}
+	mes "[工作人員生鏽]";
+	mes "對不起，但是你是怎麼進來的？";
+	next;
+	mes "[工作人員生鏽]";
+	mes "如果您不在這裡進行工作變更測試，請離開。";
+	close;
+OnInit:
+	disablenpc "Staff Rust#jr_09";
+	end;
+OnEnable:
+	enablenpc "Staff Rust#jr_09";
+	donpcevent "Summon Monster#jr_10::OnEnable";
+	donpcevent "Test Supervisor#jr_11::OnEnable";
+	end;
+OnDisable:
+	disablenpc "Staff Rust#jr_09";
+	end;
+}
+
+job3_rang02,136,21,0	script	Summon Monster#jr_10	139,5,5,{
+OnInit:
+	disablenpc "Summon Monster#jr_10";
+	end;
+OnEnable:
+	enablenpc "Summon Monster#jr_10";
+	monster "job3_rang02",112,45,"Mandragora",1020,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",114,45,"Mandragora",1020,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",116,45,"Mandragora",1020,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",110,30,"Flora",1118,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",112,30,"Flora",1118,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",114,30,"Flora",1118,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",116,30,"Flora",1118,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",116,41,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",112,41,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",111,34,"Flora",1118,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",117,22,"Muscipular",1780,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",114,21,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",115,23,"Parasite",1500,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",135,25,"Drosera",1781,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",135,23,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",137,36,"Drosera",1781,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",139,34,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",144,41,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",152,41,"Parasite",1500,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",168,49,"Drosera",1781,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",165,48,"Muscipular",1780,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",160,56,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",158,56,"Drosera",1781,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",170,53,"Flora",1118,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",168,56,"Parasite",1500,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",174,63,"Muscipular",1780,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",176,60,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",170,59,"Geographer",1368,1,"Summon Monster#jr_10::OnMyMobDead";
+	monster "job3_rang02",126,19,"Nepenthes",1988,1,"Summon Monster#jr_10::OnMyMobDead";
+	end;
+OnDisable:
+	killmonster "job3_rang02","Summon Monster#jr_10::OnMyMobDead";
+	disablenpc "Summon Monster#jr_10";
+	end;
+OnTouch_:
+	percentheal 10,0;
+	specialeffect2 EF_ABSORBSPIRITS;
+	mapannounce "job3_rang02","Test Supervisor, Caution : You are doing well! If you come closer a little more, you should be able to see me.",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnMyMobDead:
+	end;
+}
+
+job3_rang02,180,78,3	script	Test Supervisor#jr_11	882,1,1,{
+	mes "[謹慎測試主管]";
+	mes "快來，靠近，近，靠近！";
+	close;
+OnInit:
+	disablenpc "Test Supervisor#jr_11";
+	end;
+OnEnable:
+	enablenpc "Test Supervisor#jr_11";
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "Test Supervisor#jr_11";
+	end;
+OnTouch_:
+	if (job_ranger01 == 6) {
+		if (countitem(12258)) {
+			mes "[謹慎測試主管]";
+			mes "不，不！";
+			mes "您需要使用所有“彈力膠囊”？";
+			next;
+			mes "[謹慎測試主管]";
+			mes "全部使用並回來！";
+			mes "時間在滴答作響，所以您最好快點。";
+			close;
+		}
+		if (countitem(6156) > 0) {
+			mes "[謹慎測試主管]";
+			mes "你安全到達了！ ！ ！";
+			donpcevent "Second Test Timer#jr_08::OnDisable";
+			donpcevent "Staff Rust#jr_09::OnDisable";
+			donpcevent "Summon Monster#jr_10::OnDisable";
+			initnpctimer;
+			next;
+			mes "[謹慎測試主管]";
+			mes "這些文件是什麼？";
+			emotion ET_STARE_ABOUT;
+			next;
+			select("魯斯特先生讓我把這個給你。");
+			mes "[謹慎測試主管]";
+			mes "哈哈哈！";
+			mes "我一直在避開他！";
+			delitem 6156,countitem(6156); //Approval_Report
+			erasequest 8260;
+			next;
+			mes "[謹慎測試主管]";
+			mes "我從來沒有想過這可能是測試...";
+			emotion ET_CRY;
+			next;
+			mes "[謹慎測試主管]";
+			mes "無論如何，您通過第二次測試。";
+			next;
+			mes "[謹慎測試主管]";
+			mes "通過第三局，您將成為一名偉大的護林員。";
+			close2;
+			warp "job3_rang02",250,49;
+			donpcevent "Test Supervisor#jr_13::OnEnable";
+			end;
+		}
+	}
+	mes "[謹慎測試主管]";
+	mes "你安全到達……呃？";
+	next;
+	mes "[謹慎測試主管]";
+	mes "生鏽沒有給你什麼嗎？";
+	next;
+	mes "[謹慎測試主管]";
+	mes "你在哪裡失去了？";
+	mes "快速撿起！";
+	close;
+OnTimer60000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : Come here, you don't have to rush your test, but why are you delaying the test?",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+OnTimer63000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : I hate people that make me wait! if you don't talk to me in 30 seconds to continue the test, I will end your test progress!",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+OnTimer93000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : Hurry up! Hurry up! Come on.",bc_map,"0xffb6c1"; //FW_NORMAL 12 0 0
+	end;
+OnTimer96000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : You couldn't get here on time, therefore the 2nd practical test ends here!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer99000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : If you want to blame something, blame your own stupidity! Start over from the beginning! You fool!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	end;
+OnTimer102000:
+	mapannounce "job3_rang02","Test Supervisor, Caution : If you want to blame something, blame your own stupidity! Start over from the beginning! You fool!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	donpcevent "Staff Rust#jr_09::OnDisable";
+	donpcevent "Summon Monster#jr_10::OnDisable";
+	donpcevent "Second Test Timer#jr_08::OnDisable";
+	end;
+OnTimer105000:
+	stopnpctimer;
+	donpcevent "Test Waiting Room#jr_03::OnEnable";
+	donpcevent "Test Supervisor#jr_11::OnDisable";
+	end;
+}
+
+job3_rang02,104,93,0	script	Third Test Timer#jr_12	139,{
+OnInit:
+	disablenpc "Third Test Timer#jr_12";
+	end;
+OnEnable:
+	enablenpc "Third Test Timer#jr_12";
+	initnpctimer;
+	end;
+OnDisable:
+	stopnpctimer;
+	set $@job_rang_point03,0;
+	disablenpc "Third Test Timer#jr_12";
+	end;
+OnTimer3000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Well, then let's start the 3rd practical test! Are you ready?",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer6000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : From now on, every 3 seconds an 'Egg Bomb' will appear! Look at it carefully, and have your wolf attack the egg bomb to dismantle it!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer9000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : You can control the wolf by pressing the alt key and left click the surface, the wolf then moves to that point! Then you target the bomb and click on more time, it will then attack it!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer12000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : The 'Egg Bombs' will spawn 20 times! Each time you successfully dismantle one, you get 1 point! If you get 10 or more points, you pass the practical test, so go for it! Then I'll start!!!!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	set .n,14;
+	end;
+OnTimer15000:
+OnTimer20000:
+OnTimer25000:
+OnTimer30000:
+OnTimer35000:
+OnTimer40000:
+OnTimer45000:
+OnTimer50000:
+OnTimer55000:
+OnTimer60000:
+OnTimer65000:
+OnTimer70000:
+OnTimer75000:
+OnTimer80000:
+OnTimer85000:
+OnTimer90000:
+OnTimer95000:
+OnTimer100000:
+OnTimer105000:
+OnTimer110000:
+	donpcevent "Egg Bomb#"+(.n+rand(3))+"::OnEnable";
+	if (.n == 26) set .n,14;
+	else set .n,.n+3;
+	end;
+OnTimer113000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : The test is ooooooooooooooveeeeerrr!!!!!!!!!!!!!!!!!!!!!!!!!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	for(set .@i,14; .@i<=28; set .@i,.@i+1)
+		donpcevent "Egg Bomb#"+.@i+"::OnDisable";
+	set .n,0;
+	end;
+OnTimer116000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Well let's see the result?!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer119000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Your score is ..." + $@job_rang_point03 + " out of 20!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer121000:
+	if ($@job_rang_point03 > 9) {
+		mapannounce "job3_rang02","Test Supervisor, Freeze : You have been successful so far! You've passed all practical tests! Let's move to the waitingroom!!!!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+		mapwarp "job3_rang02","job3_rang01",89,38;
+	} else
+		mapannounce "job3_rang02","Test Supervisor, Freeze : It's too bad but you couldn't pass the 10 points, so you failed!!!!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer124000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : It's too bad, but you'll need to retake the test from the beginning! Please go back!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	end;
+OnTimer127000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : It's too bad, but you'll need to retake the test from the beginning! Please go back!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	set $@job_rang_point03,0;
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	donpcevent "Test Supervisor#jr_13::OnDisable";
+	end;
+OnTimer130000:
+	stopnpctimer;
+	set $@job_rang_point03,0;
+	donpcevent "Test Waiting Room#jr_03::OnEnable";
+	donpcevent "Third Test Timer#jr_12::OnDisable";
+	end;
+}
+
+job3_rang02,251,49,3	script	Test Supervisor#jr_13	732,{
+	mes "[測試主管，凍結]";
+	if (job_ranger01 == 6) {
+		if (checkquest(8261) == -1) {
+			mes "恭喜您通過了第二個實用測試！我是第三次實用的測試主管凍結！";
+			next;
+			mes "[測試主管，凍結]";
+			mes "對於第三次測試，我將測試您可以有效使用多少狼。將來成為遊俠時，您將學習一隻狼！";
+			next;
+			mes "[測試主管，凍結]";
+			mes "^0000ff，為測試儀提供了一次性狼召喚長笛！當您通過控制召喚的狼從這里和那裡刪除雞蛋炸彈時，您會得到積分！ ^000000";
+			next;
+			mes "[測試主管，凍結]";
+			mes "測試儀在測試過程中無法移動，並且僅在給定時間內快速，準確地將所有炸彈刪除時，測試才能完成！";
+			next;
+			mes "[測試主管，凍結]";
+			mes "^0000ff控制狼的方法是按下alt鍵並左鍵單擊表面，然後狼移至您單擊的點！ ^000000";
+			mes "^0000ff瞄準炸彈並再按一個，它開始攻擊！ ^000000";
+			next;
+			mes "[測試主管，凍結]";
+			mes "第三個測試時間限制約為3分鐘，當您在20點以上獲得10點時，您可以通過實際測試！";
+			next;
+			mes "[測試主管，凍結]";
+			mes "好吧，然後首先得到這隻狼的長笛，然後召喚狼，跟我說話！";
+			getitem 12380,1; //Desert_Wolf_Babe_Scroll
+			setquest 8261;
+			close;
+		}
+		if (getmercinfo(1) == 2034) {
+			erasequest 8261;
+			mes "好的！然後，我立即開始測試！";
+			next;
+			mes "[測試主管，凍結]";
+			mes "記住！您需要在雞蛋炸彈僅使用狼爆炸之前卸下雞蛋炸彈！";
+			next;
+			mes "[測試主管，凍結]";
+			mes "然後，祝你好運！";
+			sc_start SC_STONE,120000,10;
+			close2;
+			donpcevent "Test Supervisor#jr_13::OnDisable";
+			donpcevent "Third Test Timer#jr_12::OnEnable";
+			end;
+		}
+		if (countitem(12380) < 1) {
+			mes "嗯？ ！沒有狼，沒有測試長笛，你從哪裡擺脫了？";
+			next;
+			mes "[測試主管，凍結]";
+			mes "我會再給你一次特別的時間，所以請握住自己！";
+			next;
+			mes "[測試主管，凍結]";
+			mes "迅速召喚狼，再次與我交談！";
+			getitem 12380,1; //Desert_Wolf_Babe_Scroll
+			close;
+		}
+		mes "哈？你在幹什麼？";
+		next;
+		mes "[測試主管，凍結]";
+		mes "快速演奏測試長笛以召喚狼並與我交談！";
+		close;
+	}
+	mes "你是誰？";
+	next;
+	mes "[測試主管，凍結]";
+	mes "該區域用於遊騎兵的工作變更測試！";
+	mes "您無權在這裡，請出去！";
+	close;
+OnInit:
+	disablenpc "Test Supervisor#jr_13";
+	end;
+OnEnable:
+	enablenpc "Test Supervisor#jr_13";
+	initnpctimer;
+	donpcevent "Second Test Timer#jr_08::OnDisable";
+	donpcevent "Staff Rust#jr_09::OnDisable";
+	donpcevent "Summon Monster#jr_10::OnDisable";
+	donpcevent "Test Supervisor#jr_11::OnDisable";
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "Test Supervisor#jr_13";
+	end;
+OnTimer3000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Welcome to the 3rd practical test field! I am the 3rd practical Test Supervisor Freeze!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer6000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : For the smooth testing progress for the other testers, if you don't talk to me again in 2 minutes to start the 3rd test, the test will end!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer9000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Don't hesitate and let's begin!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer60000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : For the smooth testing progress for the other testers, if you don't talk to me again in 1 minute to start the 3rd test, the test will end!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer63000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Don't hesitate and let's begin!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer120000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : Why aren't you starting the test?",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer123000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : You weren't on time for the test, so I am ending the 3rd practical test!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnTimer127000:
+	set $@job_rang_point03,0;
+	mapannounce "job3_rang02","Test Supervisor, Freeze : It's too bad, but try again!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	end;
+OnTimer130000:
+	mapannounce "job3_rang02","Test Supervisor, Freeze : It's too bad, but try again!",bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	mapwarp "job3_rang02","tur_dun01",93,165;
+	end;
+OnTimer133000:
+	stopnpctimer;
+	donpcevent "Third Test Timer#jr_12::OnDisable";
+	donpcevent "Test Waiting Room#jr_03::OnEnable";
+	donpcevent "Test Supervisor#jr_13::OnDisable";
+	end;
+}
+
+-	script	Egg Bomb#0	-1,{
+OnInit:
+	disablenpc();
+	end;
+OnEnable:
+	enablenpc();
+	initnpctimer;
+	getmapxy(.@map$,.@x,.@y,BL_NPC);
+	monster "job3_rang02",.@x,.@y,"Egg Bomb",1047,1,strnpcinfo(0)+"::OnMyMobDead";
+	switch(atoi(strnpcinfo(2))%3) {
+		case 0: set .@str$,"Hey, I am going to explode. What are you going to do?"; break;
+		case 1: set .@str$,"I... no, I can't stand anymore!!"; break;
+		case 2: set .@str$,"I am almost done now... Don't stop me."; break;
+	}
+	mapannounce "job3_rang02","Egg Bomb : "+.@str$,bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	end;
+OnDisable:
+	stopnpctimer;
+	killmonster "job3_rang02",strnpcinfo(0)+"::OnMyMobDead";
+	disablenpc();
+	end;
+OnMyMobDead:
+	set $@job_rang_point03, $@job_rang_point03+1;
+	switch(atoi(strnpcinfo(2))%3) {
+		case 0: set .@str$,"The world is meaningless and my dream is so far away..."; break;
+		case 1: set .@str$,"Don't be relieved. Misery always comes from carelessness."; break;
+		case 2: set .@str$,"Alas, it was only a dream for a short time..."; break;
+	}
+	mapannounce "job3_rang02","Egg Bomb : "+.@str$,bc_map,"0x87ceeb"; //FW_NORMAL 12 0 0
+	donpcevent strnpcinfo(0)+"::OnDisable";
+	end;
+OnTimer10000:
+	mapannounce "job3_rang02","Egg Bomb : Ughhhhhhhhhhhhhh!!! So what did I say!!",bc_map,"0xFF9900"; //FW_NORMAL 12 0 0
+	donpcevent strnpcinfo(0)+"::OnDisable";
+	end;
+}
+job3_rang02,246,42,0	duplicate(Egg Bomb#0)	Egg Bomb#14	139
+job3_rang02,249,46,0	duplicate(Egg Bomb#0)	Egg Bomb#15	139
+job3_rang02,256,43,0	duplicate(Egg Bomb#0)	Egg Bomb#16	139
+job3_rang02,243,54,0	duplicate(Egg Bomb#0)	Egg Bomb#17	139
+job3_rang02,246,58,0	duplicate(Egg Bomb#0)	Egg Bomb#18	139
+job3_rang02,255,56,0	duplicate(Egg Bomb#0)	Egg Bomb#19	139
+job3_rang02,260,48,0	duplicate(Egg Bomb#0)	Egg Bomb#20	139
+job3_rang02,244,53,0	duplicate(Egg Bomb#0)	Egg Bomb#21	139
+job3_rang02,254,50,0	duplicate(Egg Bomb#0)	Egg Bomb#22	139
+job3_rang02,241,41,0	duplicate(Egg Bomb#0)	Egg Bomb#23	139
+job3_rang02,259,41,0	duplicate(Egg Bomb#0)	Egg Bomb#24	139
+job3_rang02,256,52,0	duplicate(Egg Bomb#0)	Egg Bomb#25	139
+job3_rang02,259,58,0	duplicate(Egg Bomb#0)	Egg Bomb#26	139
+job3_rang02,254,52,0	duplicate(Egg Bomb#0)	Egg Bomb#27	139
+job3_rang02,247,42,0	duplicate(Egg Bomb#0)	Egg Bomb#28	139
+
+job3_rang01,90,43,3	script	Ranger Master#jr_29	832,{
+	mes "【遊俠大師，永不再有】";
+	if (job_ranger01 < 6) {
+		mes "... ...嗯？";
+		mes "很奇怪...你是怎麼到達這裡的？";
+		next;
+		mes "【遊俠大師，永不再有】";
+		mes "你似乎不屬於這裡...";
+		next;
+		mes "【遊俠大師，永不再有】";
+		mes "離開。";
+		mes "你不應該在這裡。";
+		close2;
+		warp "alberta",117,57;
+		end;
+	} else if (job_ranger01 == 6 || job_ranger01 == 7) {
+		if (BaseLevel < 99 || JobLevel < 50) {
+			mes "不。";
+			mes "我可以通過看著你來告訴你你似乎沒有經驗。";
+			next;
+			mes "【遊俠大師，永不再有】";
+			mes "對您的工作感到更加自豪並獲得更多的經驗，然後當您成長為獵人或狙擊手時，您可以自己製作光環，請再次回來。";
+			close2;
+			warp "alberta",117,57;
+			end;
+		}
+		mes "恭喜！";
+		mes "您已經完成了所有粗略的實踐測試！";
+		if (job_ranger01 == 6) {
+			set job_ranger01,7;
+			changequest 8259,8262;
+		}
+		next;
+		mes "【遊俠大師，永不再有】";
+		mes "好吧，您有足夠的經驗，所以我不需要拖延。";
+		next;
+		mes "【遊俠大師，永不再有】";
+		mes "在進行工作更改之前，您的Falcon ^000000，檢查您是否使用了所有 ^0000ffskill點 ^000000。";
+		next;
+		if(select("等一下:我準備好了") == 1) {
+			mes "【遊俠大師，永不再有】";
+			mes "我沒有逃跑，所以花點時間。";
+			close;
+		}
+		mes "【遊俠大師，永不再有】";
+		if (checkfalcon()) {
+			mes "你不是解僱獵鷹嗎？";
+			next;
+			mes "【遊俠大師，永不再有】";
+			mes "請解僱你的獵鷹，然後回到我身邊。";
+			close;
+		}
+		if (SkillPoint != 0) {
+			mes "我認為您需要了解更多。";
+			next;
+			mes "[遊俠大師不再]";
+			mes "在繼續之前，請先用盡所有技能點。";
+			close;
+		}
+		mes "好的。沒有獵鷹，您已經用盡了所有技能點。";
+		next;
+		mes "【遊俠大師，永不再有】";
+		mes "好的，在您真正將工作更改為護林員之前，我會再問您更多時間。";
+		mes "您真的想成為遊俠嗎？";
+		next;
+		if(select("不:是的！") == 1) {
+			mes "【遊俠大師，永不再有】";
+			mes "...嗯？那不是我在等待的答案...";
+			next;
+			mes "【遊俠大師，永不再有】";
+			mes "即使經過所有粗略的實際測試，您也不想成為一名遊俠...您確定嗎？";
+			close;
+		}
+		mes "【遊俠大師，永不再有】";
+		if (ismounting()) {
+			mes "你在騎寵物上，";
+			mes "因此，您無法改變工作。";
+			mes "請取消騎行寵物，然後重試！";
+			close;
+		}
+		if (BaseJob != Job_Hunter) {
+			mes "等等，你是誰？";
+			mes "你不是獵人還是狙擊手？";
+			next;
+			mes "【遊俠大師，永不再有】";
+			mes "你在這裡做什麼？";
+			mes "你不應該在這裡。出去！";
+			set job_ranger01,0;
+			for(set .@i,8254; .@i<=8262; set .@i,.@i+1)
+				if (checkquest(.@i) > -1) erasequest .@i;
+			close2;
+			warp "alberta",117,57;
+			end;
+		}
+		mes "您的公司回答似乎非常值得信賴！";
+		next;
+		nude;
+		if (countitem(1703) < 1) {
+			mes "【遊俠大師，永不再有】";
+			mes "嗯？";
+			mes "您需要退還借來的東西。";
+			mes "為您提供工作變更測試的弓在哪裡？";
+			close;
+		}
+		mes "【遊俠大師，永不再有】";
+		mes "從現在開始，作為一名出色的護林員活躍！";
+		mes "祝您未來幸運！";
+		delitem 1703,1; //Bow__
+		set job_ranger01,8;
+		completequest 8262;
+		jobchange roclass(eaclass()|EAJL_THIRD);
+		getitem 5748,1; //Sniper_Goggle
+		getitem 2795,1; //Green_Apple_Ring
+		getitem 6124,1; //Wolf's_Flute
+		close;
+	}
+	mes "嘿，你看起來很棒。";
+	mes "你在這裡做什麼？";
+	next;
+	switch(select("我剛剛經過:請讓我出去一下")) {
+	case 1:
+		mes "【遊俠大師，永不再有】";
+		mes "好吧，沒有什麼可見的，你來了。";
+		next;
+		mes "【遊俠大師，永不再有】";
+		mes "只要您需要休息一下。";
+		mes "這是您可以輕鬆喝茶的地方。";
+		close;
+	case 2:
+		mes "【遊俠大師，永不再有】";
+		mes "很高興見到你。";
+		mes "無論您走到哪裡，都不要在遊騎兵時失去尊嚴。";
+		close2;
+		warp "alberta",117,57;
+		end;
+	}
+}
+
+job3_rang01,58,1,0	script	Worker#job_ranger	88,{
+	callfunc "F_GM_NPC";
+	switch(select("啟用等候室:禁用等候室:啟用第一個測試:禁用第一個測試:啟用第二個測試:禁用第二個測試:啟用第三個測試:禁用第三個測試:取消")) {
+	case 1:
+		mes "啟用了候診室";
+		donpcevent "Test Waiting Room#jr_03::OnEnable";
+		close;
+	case 2:
+		mes "殘疾候診室";
+		donpcevent "Test Waiting Room#jr_03::OnDisable";
+		close;
+	case 3:
+		mes "啟用了第1個測試";
+		donpcevent "Test Supervisor#jr_04::OnEnable";
+		close;
+	case 4:
+		mes "第一次測試禁用";
+		donpcevent "Test Supervisor#jr_04::OnDisable";
+		donpcevent "First Test Timer#jr_05::OnDisable";
+		donpcevent "CallCorrectAnswer#jr::OnReset";
+		donpcevent "CallWrongAnswer#jr::OnReset";
+		donpcevent "CallCorrectAnswer#jr::OnDisable";
+		donpcevent "CallWrongAnswer#jr::OnDisable";
+		close;
+	case 5:
+		mes "啟用了第二個測試";
+		donpcevent "Second Test Timer#jr_08::OnEnable";
+		close;
+	case 6:
+		mes "第二次測試禁用";
+		donpcevent "Second Test Timer#jr_08::OnDisable";
+		close;
+	case 7:
+		mes "已經啟用了第三個測試";
+		donpcevent "Third Test Timer#jr_12::OnEnable";
+		close;
+	case 8:
+		mes "第三測試已被禁用";
+		donpcevent "Third Test Timer#jr_12::OnDisable";
+		for(set .@i,14; .@i<=28; set .@i,.@i+1)
+			donpcevent "Egg Bomb#"+.@i+"::OnDisable";
+		close;
+	case 9:
+		close;
+	}
+}

@@ -1,0 +1,218 @@
+﻿//===== rAthena Script =======================================
+//= Eden Group Quests - Mission [91 - 99]
+//===== By: ==================================================
+//= Chilly
+//===== Current Version: =====================================
+//= 1.5
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Repetable Quests for Players between Baselevel 91 - 99.
+//===== Additional Comments: =================================
+//= 1.0 First Version. [Chilly]
+//= 1.1 Some little improvements here and there. [Masao]
+//= 1.2 Optimized. [Euphy]
+//= 1.3 Updated to match the official script. [Euphy]
+//= 1.4 Added support to Para_Team_Mark_ in Eden Group. [Ragno]
+//= 1.5 Added use of F_HasEdenGroupMark function. [Ragno]
+//============================================================
+
+moc_para01,48,177,3	script	91-99 Mission Board	857,{
+	if (!callfunc("F_HasEdenGroupMark")) {
+		mes "等一下！";
+		mes "- 你需要一個";
+		mes "- ^4d4dfff'eden組標記'^000000-";
+		mes "- 接收這些任務。 -";
+		next;
+		switch(select("走開吧。 :^0000FFEden Group^000000 個任務？ :我怎樣才能成為 ^0000FFEden Group^000000 的成員？")) {
+		case 1:
+			close;
+		case 2:
+			mes "::伊甸園團體任務";
+			mes "::基本上是任務";
+			mes "::請求";
+			mes "::來自王國周圍的人們。";
+			mes "::我們只是對它們進行分類。";
+			next;
+			mes "::在伊甸園，";
+			mes "::我們整理了任務";
+			mes "::根據難度的水平。";
+			mes "::根據這個級別，";
+			mes "::您可以找到";
+			mes "::任務";
+			mes "::適合你。";
+			next;
+			mes "::完成後，";
+			mes "::你可以回來";
+			mes "::致任務委員會。";
+			next;
+			mes "::那麼你將";
+			mes "::獎勵！ ！";
+			mes "::簡單，不是！";
+			mes "::無需佣金！";
+			close;
+		case 3:
+			mes "::您可以成為會員";
+			mes ":: 伊登集團";
+			mes ":: 至^0000flaime甚至^000000，";
+			mes "::誰在一樓等待。";
+			next;
+			mes "::如果您成為會員，";
+			mes "::您會得到一個";
+			mes "::\"^006400Eden Group Mark^000000\".";
+			mes "::那麼您將能夠";
+			mes "::看任務委員會。";
+			close;
+		}
+	}
+	if (BaseLevel < 91 || BaseLevel > 99) {
+		// Quest IDs: 4181-4196
+		// Quest cooldown IDs: 4212-4227
+		setarray .@names$[0],
+			"Solider","Freezer","Heater",
+			"Injustice","Rybio","Dark Priest",
+			"Stapo","Roween","Siroma",
+			"Shinobi","Evil Nymph",
+			"Deviruchi","Mineral","Kaho","Neraid","Disguise";
+		setarray .@exp[0],
+			90000,94000,114000,
+			96000,96000,146000,
+			96000,102000,110000,
+			102000,108000,
+			110000,138000,118000,96000,134000;
+		mes "您必須在91-99級以內才能接受這些任務。";
+		for(set .@quest,4181; .@quest<=4196; set .@quest,.@quest+1) {
+			set .@hunting, checkquest(.@quest,HUNTING);
+			if (.@hunting == 0 || .@hunting == 1) {
+				next;
+				mes "::您無法繼續";
+				mes ": ^0000ff"+.@names$[.@quest-4181]+" Hunting^000000.";
+				mes "::任務註冊";
+				mes "::被取消。";
+				erasequest .@quest;
+				close;
+			} else if (.@hunting == 2) {
+				next;
+				mes "::您添加了信息";
+				mes "::關於任務";
+				mes ": ^0000ff"+.@names$[.@quest-4181]+" Hunting^000000";
+				mes "::在任務委員會上。";
+				mes "::你有一個";
+				mes "::有益的經驗。";
+				erasequest .@quest;
+				getexp .@exp[.@quest-4181],0;
+				close;
+			}
+		}
+		close;
+	}
+	mes "[91-99任務委員會]";
+	mes "該董事會上有幾個請求。";
+	next;
+	switch(select("^8B4513海龜島^000000:^8B4513格拉斯特海姆^000000:^8B4513雷切爾/靜脈^000000:^8B4513擴張城市^000000:^8B4513其他地區^000000")) {
+	case 1:
+		mes "^8B4513海龜島^000000。";
+		mes "您將狩獵哪個怪物或完成狩獵？";
+		next;
+		switch(select("^0000FFSolder^000000:^0000FFFreezer^000000:^0000FFHeater^000000")) {
+			case 1: callsub L_Quest,4181,"Solider",90000,"","There is a monster that only can be found on ^8B4513Turtle Island^000000.";
+			case 2: callsub L_Quest,4182,"Freezer",94000,"","There is a monster that only can be found on ^8B4513Turtle Island^000000.";
+			case 3: callsub L_Quest,4183,"Heater",114000,"","There is a monster that only can be found on ^8B4513Turtle Island^000000.";
+		}
+	case 2:
+		mes "^8b4513格拉斯特海姆^000000。";
+		mes "您將狩獵哪個怪物或完成狩獵？";
+		next;
+		switch(select("^0000FF不公正^000000:^0000FFRybio^000000:^0000FF黑暗牧師^000000")) {
+			case 1: callsub L_Quest,4184,"Injustice",96000,"","There is a monster only found in ^8B4513Glast Heim prison^000000.";
+			case 2: callsub L_Quest,4185,"Rybio",96000,"","There is a monster only found in ^8B4513Glast Heim prison^000000.";
+			case 3: callsub L_Quest,4186,"Dark Priest",146000,"","There is a monster only found in ^8B4513Glast Heim prison^000000.";
+		}
+	case 3:
+		mes "^8B4513RACHEL /靜脈^000000。";
+		mes "您將狩獵哪個怪物或完成狩獵？";
+		next;
+		switch(select("^0000FFStapo^000000:^0000FFRoween^000000:^0000FFSiroma^000000")) {
+			case 1: callsub L_Quest,4187,"Stapo",96000,"","There is a monster only found in ^8B4513Veins^000000.";
+			case 2: callsub L_Quest,4188,"Roween",102000,"","There is a monster only found in ^8B4513Rachel^000000.";
+			case 3: callsub L_Quest,4189,"Siroma",110000,"","There is a monster only found in ^8B4513Ice Dungeon^000000.";
+		}
+	case 4:
+		mes "^8B4513擴展城市^000000。";
+		mes "您將狩獵哪個怪物或完成狩獵？";
+		next;
+		switch(select("^0000FFShinobi^000000:^0000FFE邪惡寧芙^000000")) {
+			case 1: callsub L_Quest,4190,"Shinobi",102000,"","There is a monster only found in ^8B4513Amatsu Dungeon^000000.";
+			case 2: callsub L_Quest,4191,"Evil Nymph",108000,"","There is a monster only found in ^8B4513Kunlun Dungeon^000000.";
+		}
+	case 5:
+		mes "其他地區。";
+		mes "您將狩獵哪個怪物或完成狩獵？";
+		next;
+		switch(select("^0000FFDeviruchi^000000:^0000FFMineral^000000:^0000FFKaho^000000:^0000FFNeraid^000000:^0000FFDisguise^000000")) {
+			case 1: callsub L_Quest,4192,"Deviruchi",110000,"","There is a monster only found in ^8B4513Geffen Dungeon^000000.";
+			case 2: callsub L_Quest,4193,"Mineral",138000,"","There is a monster only found in ^8B4513Einbech Dungeon^000000.";
+			case 3: callsub L_Quest,4194,"Kaho",118000,"","There is a monster found in ^8B4513Nogg Road Magma 1^000000.";
+			case 4: callsub L_Quest,4195,"Neraid",96000,"","There is a monster only found in ^8B4513Comodo Dungeon^000000.";
+			case 5: callsub L_Quest,4196,"Disguise",134000,"","There is a monster only found in ^8B4513Niflheim^000000.";
+		}
+	}
+	end;
+
+//callsub L_Quest,<quest ID>,"<monster name>",<reward EXP>,"<cutin image>","<description>"{,"s"};
+L_Quest:
+	set .@quest1, getarg(0);
+	set .@quest2, .@quest1+31;
+	.@cutin$ = getarg(3);
+	set .@playtime, checkquest(.@quest2,PLAYTIME);
+	if (.@playtime == 0 || .@playtime == 1) {
+		mes "[91-99任務委員會]";
+		mes "您需要等待3個小時才能再次執行此任務。";
+		close;
+	}
+	set .@hunting, checkquest(.@quest1,HUNTING);
+	if (.@hunting == 0 || .@hunting == 1) {
+		mes "[91-99任務委員會]";
+		mes "你完成了30次狩獵嗎"+getarg(1)+getarg(5,"")+" yet?";
+		close;
+	} else if (.@hunting == 2) {
+		mes "[91-99任務委員會]";
+		mes "您已經完成了狩獵。";
+		mes "請接受此獎勵作為補償。";
+		erasequest .@quest1;
+		if (.@playtime > -1) erasequest .@quest2;
+		setquest .@quest2;
+
+		// Job Experience calculation.
+		if (JobLevel > 50 && JobLevel < 56) set .@jexp,67000;
+		else if (JobLevel > 55 && JobLevel < 61) set .@jexp,94000;
+		else if (JobLevel > 60 && JobLevel < 66) set .@jexp,141000;
+		else if (JobLevel > 65 && JobLevel < 69) set .@jexp,212000;
+		else if (JobLevel == 69) set .@jexp,311000;
+
+		getexp getarg(2),.@jexp;
+		close;
+	}/* else if (.@hunting == 3) {
+//		recall_completequest .@quest1
+		erasequest .@quest1;
+		mes "[91-99任務委員會]";
+		mes "您已經重新接受了"+getarg(1)+" Hunting mission.";
+		close;
+	}*/ else {
+		mes "[91-99任務委員會]";
+		mes getarg(4);
+		next;
+		if (.@cutin$ != "") cutin .@cutin$,3;
+		mes "[91-99任務委員會]";
+		mes "亨特30"+getarg(1)+" monsters there and post your success on this board.";
+		next;
+		if (.@cutin$ != "") cutin .@cutin$,255;
+		if(select("我會追捕他們。 :不，謝謝。") == 1) {
+			mes "[91-99任務委員會]";
+			mes "完成任務後，將其發佈在該板上並收集獎勵。";
+			if (.@playtime > -1) erasequest .@quest2;
+			setquest .@quest1;
+		}
+		close;
+	}
+}

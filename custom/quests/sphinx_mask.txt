@@ -1,0 +1,52 @@
+﻿//===== rAthena Script ======================================= 
+//= Sphinx Mask Quest (custom)
+//===== By: ================================================== 
+//= sabernet09
+//===== Current Version: ===================================== 
+//= 1.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= This quest is related to Umbalian Chief.
+//= 1.1 Removed it from official Umbala quests [Lupus]
+//= 1.2 Added a missing variable (sphmask_q) [erKURITA]
+//= 1.3 Optimized, and coordinates moved. [Euphy]
+//============================================================ 
+
+morocc,208,90,6	script	Turban Thief	58,{
+	mes "[頭巾小偷]";
+	if(event_umbala < 2) {
+		mes "你想和我在一起什麼？走了！";
+		close; }
+	if(sphmask_q) {
+		mes "您再也沒有我的生意了，走開了！";
+		close; }
+	mes "e'llo mah frien，我會用這個稀有面具搭配嗎？它的價值我保證您是真正的Mah Frien。 Tis manific！";
+	next;
+	callsub L_Menu,1,"1,000,000",1000000;
+	callsub L_Menu,2,"750,000",750000;
+	callsub L_Menu,3,"500,000",500000;
+	next;
+	mes "[頭巾小偷]";
+	mes "阿克！ Forgez它！我可以在Elsez的位置進行bettaz en！";
+	set sphmask_q,1;
+	close;
+
+L_Menu:
+	mes "[頭巾小偷]";
+	switch(getarg(0)) {
+		case 1: mes "哇？哦，呵呵，所以你知道我從那些野蠻人那裡偷了這個，不是嗎？好吧，我不會把它還給你。但我願意付出代價……你說什麼？"; break;
+		case 2: mes "啊，你不是商人嗎？好吧，怎麼樣..."; break;
+		case 3: mes "嗯...你討價還價，好吧...我的最終報價..."; break; }
+	next;
+	if(select("Pay "+getarg(1)+"z:No deal")==2) return;
+	mes "[頭巾小偷]";
+	if (Zeny < getarg(2)) {
+		mes "你在玩我嗎？您沒有ZE錢！";
+		close; }
+	set Zeny, Zeny-getarg(2);
+	mes "哦，這是一筆交易！";
+	getitem 7114,1;
+	set sphmask_q,1;
+	close;
+}

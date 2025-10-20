@@ -1,0 +1,131 @@
+﻿//===== rAthena Script =======================================
+//= War of Emperium (Geffen) - Bergel
+//===== By: ==================================================
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= NPCs that relate to Geffen Guild Castle 4
+//===== Additional Comments: =================================
+//= 1.0 First Version. No longer uses functions. [L0ne_W0lf]
+//= 1.1 Removed dialog from interior flags. [L0ne_W0lf]
+//= 1.2 Partially rewrote Script. [Masao]
+//============================================================
+
+// Guild Flag (Outside Castle)
+//============================================================
+-	script	Bergel#1::OutsideFlagsG4	722,{
+
+	set .@GID, GetCastleData("gefg_cas04",1);
+
+	if (.@GID == 0) {
+		mes "[神符文米加特王國的法令]";
+		mes " ";
+		mes "1。遵循神聖符文米加特斯王國的條例，";
+		mes "我們聲明了這一點";
+		mes "這座城堡沒有正式的主人。";
+		mes " ";
+		mes "2。";
+		mes "克服所有試驗";
+		mes "並摧毀皇帝，";
+		mes "國王將賦予那個";
+		mes "這座城堡的所有權。";
+		close;
+	}
+	if (getcharid(2) == .@GID) {
+		mes "[迴聲聲音]";
+		mes "勇敢的人...";
+		mes "您想回到光榮的地方嗎？";
+		next;
+		if(select("返回公會城堡:退出。") == 1) {
+			close2;
+			if (getcharid(2) == GetCastleData("gefg_cas04",1)) {
+				warp "gefg_cas04",168,43;
+				end;
+			}
+			end;
+		}
+		close;
+	}
+	mes "[神符文米加特王國的法令]";
+	mes " ";
+	mes "1。遵循神聖符文米加特斯王國的條例，";
+	mes "我們贊成這個地方在";
+	mes "^ff0000的私人prossession"+GetGuildName(.@GID)+"^000000 Guild.";
+	mes " ";
+	mes "2。 ^ff0000的公會大師"+GetGuildName(.@GID)+"^000000 Guild is";
+	mes "^ff0000"+GetGuildMaster(.@GID)+"^000000";
+	mes "如果有人反對這一點，";
+	mes "用手裡的鋼刀片證明自己的力量和榮譽。";
+	close;
+
+OnRecvCastleG04:
+	FlagEmblem GetCastleData("gefg_cas04",1);
+	end;
+}
+
+gef_fild13,190,283,3	duplicate(OutsideFlagsG4)	Bergel#1-2	722
+gef_fild13,199,274,3	duplicate(OutsideFlagsG4)	Bergel#2	722
+
+// Guild Flag (Inside Castle)
+//============================================================
+-	script	Bergel#3::InsideFlagsG4	722,{
+	end;
+
+OnRecvCastleG04:
+	FlagEmblem GetCastleData("gefg_cas04",1);
+	end;
+}
+
+gefg_cas04,24,157,4	duplicate(InsideFlagsG4)	Bergel#3-2	722
+gefg_cas04,35,158,4	duplicate(InsideFlagsG4)	Bergel#4	722
+gefg_cas04,44,184,4	duplicate(InsideFlagsG4)	Bergel#5	722
+gefg_cas04,51,184,4	duplicate(InsideFlagsG4)	Bergel#6	722
+gefg_cas04,39,212,7	duplicate(InsideFlagsG4)	Bergel#7	722
+gefg_cas04,29,212,1	duplicate(InsideFlagsG4)	Bergel#8	722
+gefg_cas04,24,73,1	duplicate(InsideFlagsG4)	Bergel#9	722
+gefg_cas04,35,73,4	duplicate(InsideFlagsG4)	Bergel#10	722
+
+// Guild Flag (Town)
+//============================================================
+geffen,127,130,7	duplicate(InsideFlagsG4)	Bergel#11	722
+
+// Kafra Employee
+//============================================================
+gefg_cas04,59,70,3	duplicate(guildkafra)	Kafra Staff#gefg_cas04	117
+
+// Steward
+//============================================================
+gefg_cas04,73,46,3	duplicate(cm)	Kellvahni#gefg_cas04	55
+
+// Treasure Room Exit
+//============================================================
+gefg_cas04,116,123,0	script	#lever_G04	111,{
+	mes " ";
+	mes "有一個小槓桿。你會拉嗎？";
+	next;
+	if(select("拉動:不要。") == 1) {
+		close2;
+		warp "gefg_cas04",73,47;
+		end;
+	}
+	close;
+}
+
+// Guild Dungeon Switch
+//============================================================
+gefg_cas04,58,75,0	duplicate(gdlever)	#gefg_cas04	111
+
+// Guild Treasure Spawns
+//============================================================
+gefg_cas04,116,119,0	duplicate(Gld_Trea_Spawn)	Treasure#gefg_cas04	-1
+
+// AGIT Manager
+//============================================================
+gefg_cas04,174,178,0	duplicate(Gld_Agit_Manager)	Agit#gefg_cas04	-1
+
+// Guardians
+//============================================================
+gefg_cas04,73,46,3	duplicate(Gld_Guard_Template)	Guardian#gefg_cas04	-1

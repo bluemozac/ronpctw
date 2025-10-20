@@ -1,0 +1,139 @@
+﻿//===== rAthena Script ======================================= 
+//= Advance Class jobchanger after kRO Normals.
+//===== By: ==================================================
+//= Nana
+//= finished, optimized and tested by Lupus
+//===== Current Version: ===================================== 
+//= 1.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Advance Class jobchanger after kRO Normals.
+//===== Additional Comments: ================================= 
+//= 1.1 Made all into functions, additional checks, etc. [Lupus]
+//= 1.2 Made numbers into constants. [Vicious]
+//= 1.3 Now saves/restores all the quest skills [Lupus]
+//= 1.4 Creators did not get their homunculus skills [Lemongrass]
+//============================================================ 
+
+valkyrie,53,50,3	script	Biochemist#Valkyrie	122,{
+	if (Class == Job_Creator && bioeth == 13 && getskilllv("AM_BIOETHICS") == 0) {
+		mes "[生物化學家]";
+		mes "啊，你來嗎";
+		mes "取回記憶";
+		mes "失去了你？是的，你";
+		mes "必須在這裡";
+		mes "生活的秘密";
+		mes "曾經是你的...";
+		next;
+		if (select("是:否") == 1) {
+			mes "[生物化學家]";
+			mes "閉上眼睛";
+			mes "放心。";
+			mes "我們將回到您的";
+			mes "過去回憶起";
+			mes "你迷路的碎片";
+			mes "回憶。";
+			next;
+			mes "[生物化學家]";
+			mes "當你睜開眼睛時，";
+			mes "你會清楚地記得";
+			mes "生活的秘密。你會";
+			mes "還要記住";
+			mes "使用這些責任";
+			mes "右端的秘密...";
+			next;
+			skill "AM_BIOETHICS",1,SKILL_PERM;
+			mes "[生物化學家]";
+			mes "睜開眼睛...";
+			mes "現在你有";
+			mes "記得如何";
+			mes "創造人造生活，我只";
+			mes "問你對待所有";
+			mes "尊重的創造。";
+			close;
+		}
+		mes "[生物化學家]";
+		mes "如果你想";
+		mes "取回你的丟失";
+		mes "請記住";
+		mes "回到我身邊。";
+		mes "創建的秘訣";
+		mes "生活不是瑣碎的事情...";
+		close;
+	}
+	else if (ADVJOB == 0 || Upper != 1) {
+		set .@karma_d,rand(1,10);
+		if (.@karma_d > 4) {
+			mes "[生物化學家]";
+			mes "恭喜。";
+			mes "向勇士隊致敬！";
+			close;
+		}
+		mes "[生物化學家]";
+		mes "這很奇怪";
+		mes "像我這樣的人在這裡。";
+		mes "但是即使有人熟練";
+		mes "以科學的方式";
+		mes "可以設法成為英雄。";
+		next;
+		mes "[生物化學家]";
+		mes "在這種情況下，";
+		mes "不一定是";
+		mes "我用過的手段，但是";
+		mes "我的末端";
+		mes "戰鬥贏得了我";
+		mes "瓦爾哈拉的地方...";
+		close;
+	}
+	else if (ADVJOB == Job_Creator && Class == Job_Merchant_High && JobLevel > 39) {
+		mes "[生物化學家]";
+		mes "是的...";
+		mes "是時候了。";
+		mes "我們需要更多的天才";
+		mes "像你在Midgard上。";
+		next;
+		mes "[生物化學家]";
+		mes "你是否想要";
+		mes "成為生物化學家？";
+		next;
+		if (select("否:是的。") == 1) {
+			mes "[生物化學家]";
+			mes "準備好時，";
+			mes "隨時回來。";
+			mes "向勇士隊致敬！";
+			close;
+		}
+		if (SkillPoint) {
+			mes "[生物化學家]";
+			mes "您仍然可以學習更多技能。請使用";
+			mes "返回我之前，您剩下的所有技能點。";
+			close;
+		}
+		jobchange Job_Creator;
+		if (bioeth == 13)
+			skill "AM_BIOETHICS",1,SKILL_PERM;
+		set ADVJOB,0;
+		mes "[生物化學家]";
+		mes "恭喜！";
+		mes "作為生化主義者，";
+		mes "我希望你用你的";
+		mes "龐大的知識";
+		mes "正確的目的。";
+		close;
+	}
+	else {
+		mes "[生物化學家]";
+		mes "歡迎";
+		mes "到瓦爾哈拉，";
+		mes "榮譽大廳。";
+		next;
+		mes "[生物化學家]";
+		mes "請做";
+		mes "自己舒適";
+		mes "當你在這裡。";
+		mes "向勇士隊致敬！";
+		close;
+	}
+}
+

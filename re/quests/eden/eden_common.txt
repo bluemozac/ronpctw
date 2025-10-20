@@ -1,0 +1,438 @@
+﻿//===== rAthena Script ======================================= 
+//= Eden Group Quests - Common NPCs
+//===== By: ================================================== 
+//= L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 2.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Eden Group Headquarter NPC's.
+//===== Additional Comments: ================================= 
+//= 1.0 First Version.
+//= 1.1 Removed showevent use, and use of duplicates.
+//=     Commented out warps that should not be active.
+//= 1.2 Reduced 300+ copy-paste lines to 1 duplicated NPC. [Brian]
+//= 1.3 Some little optimization here and there. [Masao]
+//= 1.4 Updated to match the new Izlude Map. [Masao]
+//= 1.5 Added some missing Eden Group Teleport Officers. [Masao]
+//= 1.6 Added Izlude RE coordinates. [Euphy]
+//= 1.7 Added Malaya teleporter. [Euphy]
+//= 1.8 Updated to match the latest official script. [Euphy]
+//= 1.9 Added support to Para_Team_Mark_ in Eden Group. [AtlantisRO/Ragno]
+//= 2.0 Added use of F_HasEdenGroupMark function. [Ragno]
+//============================================================
+
+// Common NPCs :: lv_tre
+//============================================================
+moc_para01,27,35,5	script	Secretary Lime Evenor	4_F_EDEN_OFFICER,{
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 2000) {
+		mes "- 等一下 ！ ！ -";
+		mes "- 目前您正在攜帶 -";
+		mes "- 與您在一起太多。 -";
+		mes "- 請重試 -";
+		mes "- 減肥後。 -";
+		close;
+	}
+	if (countitem(6219) > 0) {
+		mes "[石灰均勻]";
+		mes "多虧了許多參觀我們伊甸園的冒險家，我們最近為訪客準備了新版本的伊甸園集團標記。";
+		mes "而且，也可以將舊版本的伊甸園組標記交換為新版本。";
+		next;
+		mes "[石灰均勻]";
+		mes "儘管時間延遲很小，但這種新版本的Eden組標記將使您回到當前保存的位置。";
+		mes "您想交換您的嗎？";
+		next;
+		if (select("當然:我很好。") == 2){
+			mes "[石灰均勻]";
+			mes "您會有什麼可能的原因...不交流？";
+			close;
+		}
+		delitem 6219,1;
+		getitem 22508,1;
+		mes "[石灰均勻]";
+		mes "你去。再回來~";
+		close;
+	}
+	mes "[石灰均勻]";
+	mes "跟隨自己的夢想和浪漫的人聽我的話。我們是名為“伊甸園”的天堂的代表。任何地方都沒有這樣的地方。";
+	mes "你好。我可以幫你嗎？";
+	next;
+	while (1) {
+		switch (select("什麼是 Eden 小組？ :加入 Eden 小組。 :註冊新任務。 :搜索任務。 :取消。")) {
+		case 1:
+			mes "[石灰均勻]";
+			mes "伊甸園集團（Eden Group）是一個幫助米德加德（Midgard）遇到困擾的人。";
+			next;
+			mes "[石灰均勻]";
+			mes "如果人們需要幫助，我們將案件提起公告委員會，並將其介紹給渴望幫助需要幫助的人的成員。";
+			next;
+			mes "[石灰均勻]";
+			mes "伊甸園成員將審查這些任務，並幫助那些發布這些任務的人。";
+			mes "成員執行這些任務以獲得獎勵。";
+			next;
+			mes "[石灰均勻]";
+			mes "如果您對Midgard不太熟悉，這是探索世界的好方法。";
+			mes "或者，如果您足夠成熟，則可以在執行任務時環遊世界並結交新朋友。您的名字將分佈在土地之間。";
+			next;
+			break;
+		case 2:
+			if (!callfunc("F_HasEdenGroupMark")) {
+				mes "[石灰均勻]";
+				mes "您只需向我註冊就可以成為伊甸園的成員。";
+				mes "您想加入Eden Group嗎？";
+				next;
+				switch (select("是的，我想加入。 :不，我不想加入。")) {
+				case 1:
+					mes "[石灰均勻]";
+					mes "Aright。出色的！請在這裡寫下您的名字。";
+					input .@input$;
+					next;
+					mes "[石灰均勻]";
+					mes "你完成了嗎？";
+					mes "讓我看看。";
+					next;
+					mes "[石灰均勻]";
+					mes "你的名字是 ^3131ffbo"+.@input$+"Ba^000000...? Is that right?";
+					mes "嗯？不是嗎？";
+					next;
+					emotion ET_SWEAT;
+					mes "[石灰均勻]";
+					mes "嗯，那不是你寫的嗎？";
+					mes "好的，嗯，看來很難閱讀。";
+					next;
+					mes "[石灰均勻]";
+					mes "你能再寫你的名字嗎？請寫 ^3131ffclearly ^000000。";
+					input .@input$;
+					next;
+					mes "[石灰均勻]";
+					mes "啊~ha。你是 ^3131ff"+strcharinfo(0)+"^000000.";
+					mes "這次我正確了。";
+					next;
+					emotion ET_BEST;
+					mes "[石灰均勻]";
+					mes "我們已經將您的名字放在列表中。";
+					mes "歡迎來到伊甸園的新成員！";
+					next;
+					mes "[石灰均勻]";
+					mes "希望您能作為伊甸園的成員做出色的工作。";
+					getitem 22508,1; //Para_Team_Mark_
+					next;
+					break;
+				case 2:
+					mes "[石灰均勻]";
+					mes "您還對伊甸園有疑問嗎？";
+					next;
+					break;
+				}
+			} else {
+				mes "[石灰均勻]";
+				mes "您已經是Eden Group的成員。";
+				next;
+			}
+			break;
+		case 3:
+			mes "[石灰均勻]";
+			mes "您想註冊一些您希望我們執行的任務嗎？";
+			next;
+			if(select("是的，我想註冊。 :不，我不想。") == 1) {
+				mes "[石灰均勻]";
+				mes "阿里。請在上面寫下您的名字。";
+				input .@input$;
+				next;
+				mes "[石灰均勻]";
+				mes "^3131FF"+strcharinfo(0)+"^000000.. Is that your name?";
+				mes "嗯，您的筆跡尚不清楚。我看不懂。它";
+				next;
+				mes "[石灰均勻]";
+				mes "^3131FF"+strcharinfo(0)+"^000000, tell me what you want to register for.";
+				mes "我們應該去哪個地圖？";
+				input .@input$;
+				next;
+				mes "[石灰均勻]";
+				mes "^3131ffmission地圖："+.@inputstr$+"^000000";
+				mes "哼，我會注意的。";
+				next;
+				mes "[石灰均勻]";
+				mes "請讓我知道您的任務是什麼樣的。";
+				mes "應該簡短地像“狩獵10個”。";
+				input .@input$;
+				next;
+				mes "[石灰均勻]";
+				mes "你完成了嗎？";
+				mes "讓我檢查。";
+				next;
+				mes "[石灰均勻]";
+				mes "嗯...........";
+				next;
+				mes "[石灰均勻]";
+				mes "哼..嗯？ .................................";
+				next;
+				emotion ET_THINK;
+				mes "[石灰均勻]";
+				mes "我認為您應該在執行新任務之前先完成我們的任務之一。";
+				next;
+				emotion ET_HNG;
+				mes "[石灰均勻]";
+				mes "^3131ffclient：石灰均勻^000000";
+				mes "^3131ffmission：練習一個月的筆跡。 ^000000";
+				mes "您的筆法真的很糟糕！";
+				next;
+				mes "[石灰均勻]";
+				mes "^3131ff任務:"+.@input$+"^000000";
+				mes "無論如何，您正在註冊新任務。";
+				next;
+				mes "[石灰均勻]";
+				mes "任務已預訂。您必須等待一個清理點。";
+				mes "請等到輪到你。";
+				next;
+			}
+			break;
+		case 4:
+			if (callfunc("F_HasEdenGroupMark")) {
+				mes "[石灰均勻]";
+				mes "想作為伊甸園成員嘗試一些任務嗎？";
+				next;
+				mes "[石灰均勻]";
+				mes "檢查公告板的右側，有各種各樣的任務在等您。";
+				mes "請仔細閱讀任務清單和資格，然後選擇其中之一。";
+				next;
+			}
+			else {
+				mes "[石灰均勻]";
+				mes "如果您想執行一些任務，則需要首先加入Eden Group。";
+				close;
+			}
+			break;
+		case 5:
+			mes "[石灰均勻]";
+			mes "如果您有任何疑問，請再次回來。";
+			close;
+		}
+	}
+	close;
+}
+
+-	script	Eden Teleport Officer#0::eto	-1,{
+	mes "[伊甸園傳送官]";
+	mes "那些漫無目的的眼睛在這個奇怪的世界中徘徊的人聽著我！";
+	mes "Eden Group在這里為您提供幫助，並將向您展示美好的未來。";
+	next;
+	mes "[伊甸園傳送官]";
+	mes "除了浪費時間，您無事可做嗎？";
+	mes "您渴望做一些好的事情，但沒人能為您提供工作嗎？";
+	mes "您想成為問題解決者嗎？";
+	mes "伊甸園集團在這裡解決您的問題。";
+	next;
+	switch (select("轉到伊甸集團:不想再說話了。")) {
+	case 1:
+		mes "[伊甸園傳送官]";
+		mes "讓我們去我們的秘密基地！";
+		set nak_warp,strnpcinfo(2);
+		close2;
+		warp "moc_para01",31,14;
+		end;
+	case 2:
+		mes "[伊甸園傳送官]";
+		mes "如果您不知道該如何為未來做什麼，請隨時告訴我。只是去和我說話！好的？";
+		close;
+	}
+}
+prontera,124,76,3	duplicate(eto)	Eden Teleport Officer#1	729
+moc_ruins,68,164,3	duplicate(eto)	Eden Teleport Officer#2	729
+geffen,132,66,3	duplicate(eto)	Eden Teleport Officer#3	729
+alberta,124,67,3	duplicate(eto)	Eden Teleport Officer#4	729
+aldebaran,133,119,5	duplicate(eto)	Eden Teleport Officer#5	729
+izlude_in,68,162,1	duplicate(eto)	Eden Teleport Officer#6	729
+prt_church,103,78,3	duplicate(eto)	Eden Teleport Officer#7	729
+geffen_in,160,104,5	duplicate(eto)	Eden Teleport Officer#8	729
+moc_prydb1,53,126,3	duplicate(eto)	Eden Teleport Officer#9	729
+alberta_in,75,39,3	duplicate(eto)	Eden Teleport Officer#10	729
+payon_in02,58,58,1	duplicate(eto)	Eden Teleport Officer#11	729
+payon,177,111,3	duplicate(eto)	Eden Teleport Officer#12	729
+que_ng,33,73,3	duplicate(eto)	Eden Teleport Officer#13	729
+que_ng,144,161,5	duplicate(eto)	Eden Teleport Officer#14	729
+yuno,144,189,5	duplicate(eto)	Eden Teleport Officer#15	729
+rachel,125,144,3	duplicate(eto)	Eden Teleport Officer#16	729
+comodo,202,151,4	duplicate(eto)	Eden Teleport Officer#17	729
+hugel,93,153,4	duplicate(eto)	Eden Teleport Officer#18	729
+veins,220,109,4	duplicate(eto)	Eden Teleport Officer#19	729
+einbroch,250,211,4	duplicate(eto)	Eden Teleport Officer#20	729
+lighthalzen,164,86,4	duplicate(eto)	Eden Teleport Officer#21	729
+amatsu,100,145,5	duplicate(eto)	Eden Teleport Officer#22	729
+ayothaya,221,191,3	duplicate(eto)	Eden Teleport Officer#23	729
+louyang,224,107,3	duplicate(eto)	Eden Teleport Officer#24	729
+gonryun,162,122,5	duplicate(eto)	Eden Teleport Officer#25	729
+moscovia,209,197,5	duplicate(eto)	Eden Teleport Officer#26	729
+brasilis,191,224,3	duplicate(eto)	Eden Teleport Officer#27	729
+dewata,192,193,5	duplicate(eto)	Eden Teleport Officer#28	729
+morocc,161,97,5	duplicate(eto)	Eden Teleport Officer#29	729
+izlude,131,148,4	duplicate(eto)	Eden Teleport Officer#30	729
+izlude_a,131,148,4	duplicate(eto)	Eden Teleport Officer#30::eto_iz_a	729
+izlude_b,131,148,4	duplicate(eto)	Eden Teleport Officer#30::eto_iz_b	729
+izlude_c,131,148,4	duplicate(eto)	Eden Teleport Officer#30::eto_iz_c	729
+izlude_d,131,148,4	duplicate(eto)	Eden Teleport Officer#30::eto_iz_d	729
+umbala,105,158,3	duplicate(eto)	Eden Teleport Officer#31	729
+malaya,225,218,1	duplicate(eto)	Eden Teleport Officer#32	729
+verus04,116,243,0	duplicate(eto)	Eden Teleport Officer#33	729
+
+moc_para01,30,10,0	script	#eden_out	45,1,1,{
+OnTouch:
+	switch (nak_warp) {
+		case 1: warp "prontera",116,72; end;
+		case 2: warp "moc_ruins",64,161; end;
+		case 3: warp "geffen",120,39; end;
+		case 4: warp "alberta",117,56; end;
+		case 5: warp "aldebaran",168,112; end;
+		case 6: warp "izlude_in",73,165; end;
+		case 7: warp "prt_church",99,78; end;
+		case 8: warp "geffen_in",162,99; end;
+		case 9: warp "moc_prydb1",51,118; end;
+		case 10: warp "alberta_in",73,43; end;
+		case 11: warp "payon_in02",64,60; end;
+		case 12: warp "payon",161,58; end;
+		case 13: warp "que_ng",33,63; end;
+		case 14: warp "que_ng",144,166; end;
+		case 15: warp "yuno",158,125; end;
+		case 16: warp "rachel",115,125; end;
+		case 17: warp "comodo",192,145; end;
+		case 18: warp "hugel",88,148; end;
+		case 19: warp "veins",216,104; end;
+		case 20: warp "einbroch",246,204; end;
+		case 21: warp "lighthalzen",159,95; end;
+		case 22: warp "amatsu",110,150; end;
+		case 23: warp "ayothaya",217,178; end;
+		case 24: warp "louyang",217,103; end;
+		case 25: warp "gonryun",155,120; end;
+		case 26: warp "moscovia",218,198; end;
+		case 27: warp "brasilis",190,220; end;
+		case 28: warp "dewata",192,182; end;
+		case 29: warp "morocc",161,97; end;
+		case 30: warp "izlude",134,118; end;	// Old coordinates: (127,142)
+		case 31: warp "umbala",94,154; end;
+		case 32: warp "malaya",234,199; end;
+		case 33: warp "verus04",115,243; end;
+		default: warp "prontera",116,72; end;
+	}
+	end;
+}
+
+moc_para01,47,39,3	script	#warp_2_pass	111,{
+	if (callfunc("F_HasEdenGroupMark")) {
+		mes "[石灰均勻]";
+		mes "哦，這是僅對伊甸園成員的獨家場所。";
+		mes "如果您是會員，則可以隨時隨地來！";
+		next;
+		switch (select("輸入:不要輸入。")) {
+		case 1:
+			mes "這扇門裝飾精美，但似乎太重了。";
+			close2;
+			warp "moc_para01",106,14;
+			end;
+		case 2:
+			mes "[石灰均勻]";
+			mes "好吧，如果您不感興趣。";
+			close;
+		}
+	}
+	mes "[石灰均勻]";
+	mes "哦，這是伊甸會員的獨家場所。";
+	mes "如果您想進去，則必須加入Eden組。";
+	close;
+}
+
+moc_para01,16,22,7	script	Old Adventurer#eden	900,{
+	mes "[老冒險家]";
+	mes "苛刻，即使我看起來很老，我也足夠堅強！她叫什麼名字？石灰均勻？她只是像我是一種老年老年混蛋一樣無視我。";
+	next;
+	mes "[老冒險家]";
+	mes "我來這裡加入了伊甸園！我不應該得到這個！";
+	mes "你還認為我看起來像老年人嗎？";
+	close;
+}
+
+moc_para01,182,48,3	script	Eden's Chief#eden	886,{
+	set .@eggf,rand(1,118);
+	set .@eggf_1,.@eggf + 1;
+	set .@eggf_2,.@eggf + 2;
+	set .@eggf_6,.@eggf + 6;
+	mes "[伊甸園的負責人]";
+	mes ""+.@eggf+".. "+.@eggf_1+"... "+.@eggf_2+".... "+.@eggf_6+"..?";
+	next;
+	emotion ET_CRY;
+	mes "[伊甸園的負責人]";
+	mes "哦，射擊！我做了幾個雞蛋？";
+	mes "噢！ ！ ！我完全忘記了！我必須再次數！";
+	next;
+	emotion ET_CRY;
+	mes "[伊甸園的負責人]";
+	mes "你為什麼要我這樣做？那是什麼任務？";
+	next;
+	emotion ET_CRY;
+	mes "[伊甸園的負責人]";
+	mes "所有這些油炸雞蛋你打算做什麼？我確定你不能吃所有的。你只想打擾我，對嗎？";
+	close;
+}
+
+moc_para01,172,28,5	script	Eden's Intern#eden	883,{
+	mes "[伊甸園的實習生]";
+	mes "實際上，我意識到了這一點。";
+	next;
+	mes "[伊甸園的實習生]";
+	mes "除非您想失敗，否則我們必須非常努力。";
+	next;
+	mes "[伊甸園的實習生]";
+	mes "但是，我還從未了解過藥物。";
+	next;
+	mes "[伊甸園的實習生]";
+	mes "我要失敗。我做不到。";
+	close;
+}
+
+moc_para01,20,35,5	script	Office Assistant Neede	814,{
+	mes "[需要]";
+	mes "幾年前，我成為伊甸園的成員，但感覺就像是昨天。";
+	mes "我一直在做很多工作，所以我什至沒有註意到我在這裡度過了多少年。";
+	next;
+	mes "[需要]";
+	mes "它使我想起這就像一場每天的戰爭。";
+	next;
+	mes "[需要]";
+	mes "^3131ff右側餐廳的負責人 ^000000";
+	mes "每次他做飯時都會使用過多的調味料，氣味遍布大廳。我們必須定期打開窗戶，因為我們無法忍受氣味！";
+	next;
+	mes "[需要]";
+	mes "而且，您在大廳的北側 ^3131ffgymnasium ^000000看到了 ^3131ffgymnasium ^000000嗎？他們總是在鍛煉時大喊大叫，我什至可以從這裡聽到他們的聲音！";
+	next;
+	emotion ET_ANGER;
+	mes "[需要]";
+	mes "此外， ^3131ff的怪異女孩二樓 ^000000一直在哭。她的哭聲讓我發瘋。";
+	next;
+	mes "[需要]";
+	mes "啊，那個怪異的女孩實際上是我們的老闆...";
+	next;
+	mes "[需要]";
+	mes "我不知道她在做什麼。但是她一直哭泣並大喊。哦，有時候我聽到“爆炸！”，聲音蓬勃發展...我不知道它來自哪裡。";
+	next;
+	emotion ET_HUK;
+	mes "[需要]";
+	mes "等待！";
+	mes "嗯！這是一個秘密，你不能告訴任何人！";
+	next;
+	mes "[需要]";
+	emotion ET_OHNO;
+	mes "我不信任偶數。她從未表現出自己的感受...她會告訴我我的老闆。";
+	next;
+	emotion ET_HNG, getnpcid(0, "Secretary Lime Evenor");
+	mes "[石灰均勻]";
+	mes "我不是那種女孩。";
+	next;
+	emotion ET_KEK;
+	mes "[需要]";
+	mes "嗯？你聽到了嗎？天哪~！";
+	close;
+}
+
+function	script	F_HasEdenGroupMark	{
+	return (countitem(6219) > 0 || countitem(22508) > 0);
+}

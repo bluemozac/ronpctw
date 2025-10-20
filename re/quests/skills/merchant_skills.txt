@@ -1,0 +1,153 @@
+﻿//===== rAthena Script =======================================
+//= Merchant Skills Quests
+//===== Description: =========================================
+//= [Official Conversion]
+//- NPC for skills Pushcart Decoration.
+//===== Changelogs: ==========================================
+//= 1.0 First version. [Capuche]
+//============================================================
+
+alberta,47,37,5	script	Cart Remodel Expert	4_M_REPAIR,{
+	.@max_skill_lvl = 1;
+	if (cart_remodel == 0) {
+		mes "[傑森]";
+		mes "原始的手推車很漂亮！";
+		next;
+		mes "[傑森]";
+		mes "實心灰色手套。";
+		next;
+		mes "[傑森]";
+		mes "我可以將其重塑為新的可愛設計。";
+		next;
+		switch( select( "What is Pushcart Decoration?", "Learn Pushcart Decoration", "End Dialog" ) ) {
+		case 1:
+			mes "[傑森]";
+			mes "我想完全重塑可憐的手推車。";
+			next;
+			mes "[傑森]";
+			mes "一些改建還不夠，您不同意嗎？";
+			next;
+			mes "[傑森]";
+			mes "因此，我發明了一些新設計。";
+			next;
+			mes "[傑森]";
+			mes "這是可愛又令人耳目一新的！";
+			close;
+		case 2:
+			if (BaseClass != Job_Merchant) {
+				mes "[傑森]";
+				mes "您為什麼要學習手推車的裝飾？不要打擾我！";
+				close;
+			}
+			if (countitem(6606) == 0) {
+				mes "[傑森]";
+				mes "學習手推車裝飾很難。";
+				next;
+				mes "[傑森]";
+				mes "如果您將 ^3131ffcute Cart Repodel Repodel Coupon ^000000帶給我，我會教您的。";
+				close;
+			}
+			mes "[傑森]";
+			mes "您帶來了可愛的購物車改型優惠券。您確定要學習手推車裝飾嗎？";
+			next;
+			if (select("YES", "NO") == 2) {
+				mes "[傑森]";
+				mes "改變主意後，再來！";
+				close;
+			}
+			mes "[傑森]";
+			mes "好吧！跟我來。";
+			next;
+			mes "[傑森]";
+			mes "這個設計";
+			mes "需要趕上手推車...";
+			next;
+			mes "[傑森]";
+			mes "這個設計";
+			mes "需要捕捉手推車。";
+			mes "然後添加此....";
+			mes "...";
+			next;
+			mes "[傑森]";
+			mes "你是個天才！你學到了它！";
+			next;
+			mes "[傑森]";
+			mes "現在輪到您去做了。";
+			mes "按Alt+S更換您的手推車！";
+			next;
+			mes "[傑森]";
+			mes "這是新的可愛設計手推車。您現在是我們家庭之一...！";
+			delitem 6606,1;	// P_Cart_C
+			cart_remodel = 1;
+			skill "MC_CARTDECORATE",1,SKILL_PERM;
+			close;
+		case 3:
+			close;
+		}
+	}
+	mes "[傑森]";
+	mes "您裝飾了手推車嗎？";
+	next;
+	switch( select( "Is there more to learn?", "I forgot how to decorate my pushcart" ) ) {
+	case 1:
+		if (cart_remodel == .@max_skill_lvl) {
+			mes "[傑森]";
+			mes "不，我仍在探索新設計。一旦我學到了它，我就會教你。";
+			close;
+		}
+		mes "[傑森]";
+		mes "我有東西要教，你想學習嗎？";
+		next;
+		mes "[傑森]";
+		mes "我需要一個 ^3131ffcute Cart Refodel Coupon ^000000。";
+		next;
+		if (select("I want to learn", "No") == 2) {
+			mes "[傑森]";
+			mes "您可以隨時回來。";
+			close;
+		}
+		if (countitem(6606) < 0) {
+			mes "[傑森]";
+			mes "您沒有任何可愛的購物車改型優惠券嗎？";
+			close;
+		}
+		mes "[傑森]";
+		mes "好，讓我們開始吧！";
+		next;
+		mes "[傑森]";
+		mes "這樣做是更好的。";
+		mes "也這樣做...";
+		next;
+		mes "[傑森]";
+		mes "...";
+		mes "我們開始做吧！";
+		next;
+		mes "[傑森]";
+		mes "我已經教了您技能，您可以立即嘗試。";
+		delitem 6606,1;	// P_Cart_C
+		cart_remodel++;
+		skill "MC_CARTDECORATE", cart_remodel ,SKILL_PERM;
+		close;
+	case 2:
+		mes "[傑森]";
+		mes "哦？讓我看看。";
+		next;
+		if (BaseClass != Job_Merchant) {
+			mes "[傑森]";
+			mes "在您可以使用手推車之後，請再來！";
+			close;
+		}
+		mes "[傑森]";
+		mes "你不記得我教給你什麼嗎？";
+		mes "我教了你這種方法。";
+		next;
+		mes "[傑森]";
+		mes "你已經忘記了嗎？";
+		mes "現在回想一下！";
+		next;
+		mes "[傑森]";
+		mes "仔細考慮，您會再次記住它。";
+		skill "MC_CARTDECORATE",1,SKILL_PERM;
+		close;
+	}
+}

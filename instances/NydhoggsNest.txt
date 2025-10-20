@@ -1,0 +1,2289 @@
+﻿//===== rAthena Script ======================================= 
+//= Nidhoggr's Nest
+//===== By: ================================================== 
+//= L0ne_W0lf, various sources
+//===== Current Version: ===================================== 
+//= 1.6
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Nidhoggr's Nest Instance
+//===== Additional Comments: ================================= 
+//= 1.0 First version.
+//= 1.1 Minor dialog updates.
+//= 1.2 No longer glitches when anyone but party leader talks to the first NPC.
+//= 1.3 Added 'instance_check_party' command to the script for proper checking if
+//=     the invoking party meets the requirements to join the Memorial Dungeon.
+//= 1.4 Cleaning. [Euphy]
+//= 1.5 Instance system rewrite. [Euphy]
+//= 1.6 Added GM management NPCs. [Euphy]
+//============================================================ 
+
+nyd_dun02,100,201,3	script	Yggdrasil Gatekeeper	111,8,8,{
+	if (ins_nyd == 0) {
+		mes "一個很棒的石門站在你面前。一條可怕的龍的雕塑散佈著其強大的翅膀。";
+		next;
+		mes "在大門的底部附近，拉芬部落婦女已經變成石頭，現在看起來像是大門的一部分。";
+		next;
+		switch(select("靠近一點仔細看看:退後一步。")) {
+		case 1:
+			specialeffect2 EF_HOLYHIT;
+			pushpc 3,3;
+			if (ep13_1_edq == 14)
+				set ep13_1_edq,15;
+			mes "神秘的力量使您無法靠近。看來門外有很強的東西...";
+			next;
+			mes "也許超越了預期，還有一個巨大的隱藏秘密。";
+			next;
+			mes "最好回到營地通知其他人並尋求幫助。";
+			if (ep13_1_edq != 15) {
+				next;
+				mes "您必須通過努力工作來獲得其他人對支出營的信任。";
+			}
+			set ins_nyd,1;
+			close;
+		case 2:
+			close;
+		}
+	} else if (ins_nyd == 1) {
+		mes "神秘的力量使您無法靠近。看來門外有很強的東西...";
+		next;
+		mes "也許超越了預期，還有一個巨大的隱藏秘密。";
+		next;
+		mes "最好回到營地通知其他人並尋求幫助。";
+		if (ep13_1_edq == 14 || ep13_1_edq == 15) {
+			set ep13_1_edq,15;
+			close;
+		}
+		next;
+		mes "您必須通過努力工作來獲得其他人對支出營的信任。";
+		close;
+	} else if (ins_nyd == 111 || ins_nyd == 112) {
+		specialeffect2 EF_CHANGECOLD;
+		mes "身體周圍的奇怪感覺消失了";
+		next;
+		mes "當您觸摸石頭大門時，您會聽到指揮聲音。";
+		next;
+		mes "[？ ？ ？ ？ ？ ？ ？ ]";
+		mes "無翅...我們應許的話...";
+		next;
+		switch(select("‘守護者咒語’！ :後退一步。")) {
+		case 1:
+			mes "[？ ？ ？ ？ ？ ？ ？ ]";
+			mes "承諾的話...守護者的咒語...證明其存在。";
+			next;
+			mes "[yggdrasil守門人]";
+			mes "以Yggdrasiliad的名義，我將接受您為監護人的僕人。";
+			next;
+			specialeffect2 EF_CHANGECOLD;
+			set ins_nyd,200;
+			mes "[yggdrasil守門人]";
+			mes "我接受您的入口通過監護人的門。現在，您被認為是衛報Nidhoggur的忠實僕人。";
+			next;
+			mes "聲音消失了，黑暗的力量從石門後面平靜下來。";
+			close;
+		case 2:
+			close;
+		}
+	} else if (ins_nyd == 131 || ins_nyd == 132 || ins_nyd > 199) {
+
+		set .@party_id,getcharid(1);
+		set .@md_name$,"Nidhoggur's Nest";
+
+		set .@ins_nyd_check,checkquest(3135,PLAYTIME); // 3 Day cooldown
+		set .@ins_nyd_check2,checkquest(3136,PLAYTIME); // 4 Hour play limit
+
+		mes "當我把手放在石頭上時，我內心深處發出的聲音。";
+		next;
+		if (.@ins_nyd_check == -1 && .@ins_nyd_check2 == -1) {
+			if (!instance_check_party(.@party_id,2,70)) {
+				mes "[yggdrasil守門人]";
+				mes "其他僕人在哪裡，所以您可以一起工作？每個僕人都不能單獨接納...";
+				next;
+				mes "[yggdrasil守門人]";
+				mes "至少還有1個僕人...只有政黨領導人才能接受Nidhoggur的巢穴。";
+				next;
+				mes "[yggdrasil守門人]";
+				mes "你們只有1位代表需要與我交談，所以不要惹惱我...";
+				close;
+			}
+			if (is_party_leader(.@party_id) == true) {
+				mes "[yggdrasil守門人]";
+				mes "監護人的忠實僕人...我能為您做什麼？";
+				next;
+				switch(select("請允許我進去。 :我想進去。 :我想離開。")) {
+				case 1:
+					if (instance_create(.@md_name$) < 0) {
+						mes "[yggdrasil守門人]";
+						mes "監護人似乎希望一個人。我會進去檢查，請在這裡等待。";
+						close;
+					}
+					mes "[yggdrasil守門人]";
+					mes "我已經錄製了您的要求，您準備進入室內嗎？";
+					next;
+					mes "[yggdrasil守門人]";
+					mes "如果您準備好，我將允許您輸入。";
+					close;
+				case 2:
+					goto L_Enter;
+				case 3:
+					close;
+				}
+			}
+			mes "[yggdrasil守門人]";
+			mes "如果您已經生成了地牢，則可以輸入它。";
+			next;
+			if(select("我想進去:我想離開。") == 2)
+				close;
+			goto L_Enter;
+		} else {
+			if (.@ins_nyd_check == 0 || .@ins_nyd_check == 1) {
+				if (ins_nyd2 == 3 || ins_nyd2 == 4) {
+					mes "[yggdrasil守門人]";
+					mes "隨著尼德霍格（Nidhoggur）的陰影的擊敗，伊格德拉西爾（Yggdrasil）的根源也受到影響。";
+					next;
+					mes "[yggdrasil守門人]";
+					mes "尼德霍格（Nidhoggur）的陰影消失後，穩定需要至少3天。";
+					close;
+				}
+				mes "[yggdrasil守門人]";
+				mes "如果您已經生成了地牢，則可以輸入它。";
+				next;
+				if(select("我想進去:我想離開。") == 2)
+					close;
+				goto L_Enter;
+			} else if (.@ins_nyd_check == 2) {
+				if (.@ins_nyd_check2 == 0 || .@ins_nyd_check2 == 1) {
+					mes "[yggdrasil守門人]";
+					mes "進入地牢的時間限制已過期。您必須等待世界樹在試圖重新進入之前穩定其力量。";
+					close;
+				} else if (.@ins_nyd_check2 == 2) {
+					mes "[yggdrasil守門人]";
+					mes "世界樹Yggdrasil穩定了。您想再次進入Nidhoggur的巢嗎？";
+					next;
+					mes "[yggdrasil守門人]";
+					mes "如果您想再次輸入，請向我註冊。";
+					erasequest 3135;
+					erasequest 3136;
+					set ins_nyd2,0;
+					close;
+				}
+			}
+		}
+		close;
+	} else {
+		mes "一個很棒的石門站在你面前。一條可怕的龍的雕塑散佈著其強大的翅膀。";
+		next;
+		mes "在大門的底部附近，拉芬部落婦女已經變成石頭，現在看起來像是大門的一部分。";
+		next;
+		switch(select("靠近一點仔細看看:退後一步。")) {
+		case 1:
+			specialeffect2 EF_HOLYHIT;
+			pushpc 3,3;
+			mes "神秘的力量使您無法靠近。看來門外有很強的東西...";
+			next;
+			mes "也許超越了預期，還有一個巨大的隱藏秘密。";
+			close;
+		case 2:
+			close;
+		}
+	}
+	close;
+
+L_Enter:
+	switch(instance_enter("Nidhoggur's Nest")) {
+	case IE_OTHER:
+		mes "[yggdrasil守門人]";
+		mes "發生了未知錯誤。";
+		close;
+	case IE_NOINSTANCE:
+		mes "[yggdrasil守門人]";
+		mes "您沒有要求被錄取...您應該在進入之前先接受入場費。";
+		close;
+	case IE_NOMEMBER:
+		mes "[yggdrasil守門人]";
+		mes "其他僕人在哪裡，所以您可以一起工作？每個僕人都不能單獨接納...";
+		close;
+	case IE_OK:
+		mapannounce "nyd_dun02", getpartyname(getcharid(1))+"'s party member "+strcharinfo(0)+" has entered Nidhoggur's Nest.",bc_map,"0x00ff99";
+		if (checkquest(3135) == -1) setquest 3135;
+		if (checkquest(3136) == -1) setquest 3136;
+		//warp "1@nyd",32,36;
+		close;
+	}
+
+OnTouch_:
+	if (ins_nyd == 0) {
+		specialeffect2 EF_CHANGECOLD;
+		specialeffect EF_CHANGECOLD;
+	}
+	end;
+}
+
+mid_camp,271,299,3	script	Historian Magnifier#edq	755,3,3,{
+	mes "[歷史學家放大器]";
+	if (ins_nyd == 1) {
+		mes "當然，大陸也有很多有趣的冒險……您好，我是放大器，是一位從Prontera皇家法院派遣的歷史學家。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "尋找另一項工作可能會帶來一項非常值得的工作，但是只有歷史學家才知道世界各地。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "這個世界是如何組織的……以及未來的方式！通過對過去和現在的研究，我們可以預測即將發生的事情。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "我們期望您有很多專家冒險家。因此，如果您發現任何東西...請告訴我。";
+		close;
+	} else if (ins_nyd == 2) {
+		mes "指揮官阿吉普想和我說話嗎？讓我們聽他的故事。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "您是否發現童話部落將其視為聖地的洞穴？你是一個非常艱難的餅乾。你找到了什麼？";
+		next;
+		mes "[歷史學家放大器]";
+		mes "...";
+		next;
+		mes "…………";
+		next;
+		mes "[歷史學家放大器]";
+		mes "等一下...我有一個絕妙的主意。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "讓我們看看...這本書...不...這個...？嗯...也許這個...";
+		next;
+		mes "[歷史學家放大器]";
+		mes "...";
+		next;
+		mes "[歷史學家放大器]";
+		mes "…………";
+		next;
+		mes "[歷史學家放大器]";
+		mes "哦，在這裡！世界樹Yggdrasil和上帝的部落...這是他們的書！";
+		next;
+		mes "[歷史學家放大器]";
+		mes "也許您找到了進入世界樹Yggdrasil的中心線！";
+		next;
+		mes "[歷史學家放大器]";
+		mes "如果這是真的，您已經找到了自從馬納（Mana）利用以來的最大發現。這不是令人興奮嗎？";
+		next;
+		mes "[歷史學家放大器]";
+		mes "但是我們需要更多的信息...他們拒絕您入學嗎？";
+		next;
+		mes "[歷史學家放大器]";
+		mes "我將向Prontera庫中的助手發送一條消息。因此，請幫助她找到更多信息。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "我一定會幫助您找到一種直接進入世界樹的方法，請相信我！好吧~!!";
+		set ins_nyd,3;
+		close;
+	} else if (ins_nyd == 3) {
+		mes "你為什麼站在那兒？去我的Prontera圖書館的助手！";
+		close;
+	} else if (ins_nyd == 4) {
+		mes "你回來了...好，娜奧米怎麼樣？實際上，我不必擔心她。她總是很開朗。哈哈。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "您看起來好像有很多想法...您的臉充滿了好奇心和問題。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "那麼，您是否讀過我準備的全部故事？";
+		next;
+		switch(select("還沒有:我讀了所有的故事。")) {
+		case 1:
+			mes "[歷史學家放大器]";
+			mes "Sheesh~我仔細為您準備了這些故事，但是您沒有費心檢查任何東西嗎？";
+			next;
+			mes "[歷史學家放大器]";
+			mes "如果您在閱讀所有內容後返回，那會更好。這是我們將來應該做什麼的非常基本的數據。";
+			close;
+		case 2:
+			mes "[歷史學家放大器]";
+			mes "嗯，幹得好。也許我不需要檢查其他任何東西，對嗎？";
+			next;
+			mes "[歷史學家放大器]";
+			mes "我派您找出我們前面的工作需要哪些基本材料。您應該帶上研究報告...";
+			next;
+			mes "[歷史學家放大器]";
+			mes "您可能會抱怨為什麼我什麼都沒帶來……那是因為我相信您的能力，永遠不要理所當然。";
+			next;
+			mes "[歷史學家放大器]";
+			mes "但是不久前，當您從指揮官阿吉普（Agip）到大陸的報告中，您丟失了這些報告...還記得嗎？";
+			next;
+			mes "[歷史學家放大器]";
+			mes "到目前為止，什麼都沒出現...有人攻擊了你嗎？";
+			next;
+			mes "[歷史學家放大器]";
+			mes "不知何故，事實將會出來，但是如果我們沒有通知，我們應該謹慎震驚當地人，而他們沒有為我們的到來做好準備。";
+			next;
+			mes "[歷史學家放大器]";
+			mes "我已經談論了太多...無論如何，正如您通過我的報告所知，您發現了一件很棒的事！";
+			next;
+			mes "[歷史學家放大器]";
+			mes "首先，我們應該了解有關這個地方的更多信息。我希望我們可以，但是...如果沒有別人的幫助，我們將無法做很多事情。";
+			next;
+			mes "[歷史學家放大器]";
+			mes "我聽說過最近試圖與部落聯繫的冒險家的探險……您聽說過任何消息嗎？";
+			next;
+			mes "[歷史學家放大器]";
+			mes "無論如何，讓我們先與他們聯繫，以清楚任何洞穴或寶藏。";
+			next;
+			mes "[歷史學家放大器]";
+			mes "現在，您嘗試聯繫Sapha和Laphine部落，並嘗試從中提取信息。";
+			next;
+			mes "[歷史學家放大器]";
+			mes "我也會繼續在這裡搜索。如果您發現任何東西，請回來讓我知道。";
+			set ins_nyd,5;
+			close;
+		}
+	} else if ((ins_nyd == 5) || (ins_nyd == 51) || (ins_nyd == 52)) {
+		mes "好吧，讓我們先與他們聯繫，以清楚任何洞穴或寶藏。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "目前，您嘗試聯繫Sapha和Laphine部落，並嘗試提取更多信息。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "我也會繼續在這裡搜索。如果您發現任何東西，請回來讓我知道。";
+		close;
+	} else if ((ins_nyd == 61) || (ins_nyd == 62)) {
+		mes "啊，你在適當的時候來了。我在尋找Arunafeltz的報告時發現了一個好奇的東西。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "現在，我們站在世界樹Yggdrasil的根源之一。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "這個斑點通過根連接到世界樹。我認為我們可以期望Sapha和Laphine最終在這裡對抗，您不認為嗎？";
+		next;
+		mes "[歷史學家放大器]";
+		mes "正如我所期望的，洞穴是進入Yggdrasil的根源之一的入口...";
+		next;
+		mes "[歷史學家放大器]";
+		mes "您是否發現有關Sapha和Laphine的任何信息？";
+		next;
+		mes "...";
+		next;
+		mes "…………";
+		next;
+		mes "[歷史學家放大器]";
+		mes "雙方都表現得模棱兩可，所以...我很擔心...";
+		next;
+		mes "[歷史學家放大器]";
+		mes "這兩個部落在他們的頂級領導人中遇到了一些麻煩。這不是官方的，但是...";
+		next;
+		mes "[歷史學家放大器]";
+		mes "讓我們向Agip指揮官報告到目前為止的情況。然後，我們等待他的決定。";
+		set ins_nyd,7;
+		close;
+	} else if ((ins_nyd == 7) || (ins_nyd == 8)) {
+		mes "向Hibba Agip指揮官報告我們發現的內容，因為時間取決於他的決定。";
+		close;
+	} else if ((ins_nyd == 121) || (ins_nyd == 122) || (ins_nyd == 131) || (ins_nyd == 132) || (ins_nyd ==14)) {
+		mes "所以就是這樣...我們對它的某些部分是正確的……這就是衛報的巢穴。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "今天我們已經獲得了大量知識，但是...";
+		next;
+		mes "[歷史學家放大器]";
+		mes "我們想出了什麼...這將如何影響人類？這是不可預測的...";
+		next;
+		mes "[歷史學家放大器]";
+		mes "這只是開始...從現在開始我們將很忙。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "首先，向指揮官Agip報告，然後根據情況採取行動。讓我組織研究結果...";
+		close;
+	} else {
+		mes "當然，大陸也有很多有趣的冒險……您好，我是放大器，是一位從Prontera皇家法院派遣的歷史學家。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "尋找另一項工作可能會帶來一項非常值得的工作，但是只有歷史學家才知道世界各地。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "這個世界是如何組織的……以及未來的方式！通過對過去和現在的研究，我們可以預測即將發生的事情。";
+		next;
+		mes "[歷史學家放大器]";
+		mes "我們期望您有很多專家冒險家。因此，如果您發現任何東西...請告訴我。";
+		close;
+	}
+}
+
+prt_in,171,94,3	script	Assistant Naomi#edq	893,3,3,{
+	mes "[助理Naomi]";
+	set .@name$,strcharinfo(0);
+	if (ins_nyd == 3) {
+		mes "醫生從未嘗試過回來，還有很多事情要做...我該怎麼做...";
+		next;
+		mes "[助理Naomi]";
+		mes "嘿，你。請移動這些書。將它們放入B架3行B。";
+		next;
+		mes "["+.@name$+"]";
+		mes "啊...嗯..我...我...";
+		next;
+		mes "[助理Naomi]";
+		mes "你不知道我太忙了嗎？不要猶豫。去做就對了。";
+		next;
+		switch(select("看起來很忙，然後退後一步:幫她一次。")) {
+		case 1:
+			mes "[助理Naomi]";
+			mes "天哪！在哪裡？在哪裡？啊!太困難了！";
+			close;
+		case 2:
+			mes "[助理Naomi]";
+			mes "啊...如果您完成了這些操作，那麼這些應該在3行B中進行。";
+			next;
+			mes "["+.@name$+"]";
+			mes "啊...我...看...";
+			next;
+			mes "[助理Naomi]";
+			mes "現在，我快要完成了...你是誰？您是Magnifier博士的新助手嗎？";
+			next;
+			mes "["+.@name$+"]";
+			mes "他要求我帶一些報告。他沒說什麼嗎？";
+			next;
+			mes "[助理Naomi]";
+			mes "嗯...一年多來我沒見過他！他現在在做什麼？";
+			next;
+			mes "["+.@name$+"]";
+			mes "他說他會向您發送消息...您不明白嗎？";
+			next;
+			mes "[助理Naomi]";
+			mes "資訊? ...讓我們看看...我沒想到他寫一條消息...";
+			next;
+			mes "[助理Naomi]";
+			mes "我將檢查郵箱，等一下。如果您感到無聊，請閱讀這些書。";
+			next;
+			mes "...";
+			next;
+			mes "…………";
+			next;
+			mes "由於許多堆疊的書籍和文件，這太凌亂了。 Magnifier博士看起來好像有很多報導。";
+			next;
+			mes "["+.@name$+"]";
+			mes "“世界的誕生”，“奧丁神話的小說”，“神之戰”，“部落的夢想”。有各種各樣的書...";
+			next;
+			mes "...";
+			next;
+			mes "[助理Naomi]";
+			mes "哦，對不起，我花了很長時間。郵件太多了，所以我花了一段時間才找到東西。";
+			next;
+			mes "[助理Naomi]";
+			mes "他已經給我發了20次郵件。我不知道...";
+			next;
+			mes "[助理Naomi]";
+			mes "啊，這是關於您的信息。據說他要分享有關研究和報告的信息。";
+			next;
+			mes "["+.@name$+"]";
+			mes "醫生的專業領域是什麼？";
+			next;
+			mes "[助理Naomi]";
+			mes "從5年前起，他就一直對世界的發展感到好奇，因此他開始尋找創造神。";
+			next;
+			mes "[助理Naomi]";
+			mes "他研究了奧丁與眾神之間的戰鬥，以及眾神的起源和生命。";
+			next;
+			mes "["+.@name$+"]";
+			mes "那麼，他是否已經知道撒旦摩洛哥的重生是以前發生的？";
+			next;
+			mes "[助理Naomi]";
+			mes "我不確定，但是他認為有一天會發生。不過，它比他預期的要早。";
+			next;
+			mes "["+.@name$+"]";
+			mes "但是符文米加特人批准了這項研究嗎？";
+			next;
+			mes "[助理Naomi]";
+			mes "我們的學者不是一種宗教。他們也對這個世界的歷史有好奇心。";
+			next;
+			mes "[助理Naomi]";
+			mes "奧丁（Odin）與眾神的戰鬥，神的兒子及其目的……醫生一生都研究了這一一生。";
+			next;
+			mes "["+.@name$+"]";
+			mes "但是這些報告還沒有出現。有嗎？";
+			next;
+			mes "[助理Naomi]";
+			mes "這就是為什麼他把你送到這裡。順便說一句，這不是我第一次聽到這一點。";
+			next;
+			mes "[助理Naomi]";
+			mes "在建立符文米加特斯王國和阿魯納菲爾茨之後，謠言已經秘密傳播了他們的部落，神話等。";
+			next;
+			mes "[助理Naomi]";
+			mes "無論如何，我應該確保您閱讀了所有這些書，我將繼續做我的工作。";
+			next;
+			mes "["+.@name$+"]";
+			mes "我不應該提交書嗎？";
+			next;
+			mes "[助理Naomi]";
+			mes "醫生說，他將通過另一個人來拿起書。此外，您不需要有關該怎麼做的基本信息嗎？";
+			next;
+			mes "[助理Naomi]";
+			mes "在回到醫生之前，您最好閱讀這些書。所以，我會回去上班。";
+			set ins_nyd,4;
+			close;
+		}
+	} else if (ins_nyd == 4) {
+		mes "瀏覽，看看書籍。";
+		next;
+		switch(select("異質性的發現:土著部落的報告")) {
+		case 1:
+			mes "撒旦摩洛哥（Satan Morocc）知道他沒有正常或自己復活。";
+			next;
+			mes "不斷，來自符文米加特人的冒險家攻擊了他，他正在慢慢失去力量。他將需要更多時間才能完全復活。";
+			next;
+			mes "撒但摩洛哥停下來摧毀了摩洛哥市，將其變成毀壞的沙漠，然後開始將世界撕裂。";
+			next;
+			mes "撒但摩洛哥（Satan Morocc）擔心那些會追逐的人，因此他創建了摩洛哥克隆人以保持觀察。";
+			next;
+			mes "以Morocc為基礎，它們的外觀使得很難解決時空差距。";
+			next;
+			mes "冒險家仍然追逐。他們來自世界各地，試圖接近尺寸峽谷。";
+			next;
+			mes "這些冒險家的報告已發送給所有王國的代表，並創建了一個探險團隊來了解更多信息。";
+			next;
+			mes "Schwarzwald的科學家使用在尺寸峽谷中發現的金屬碎片創造了一種組合金屬。";
+			next;
+			mes "施瓦茨瓦爾德共和國要求批准找到新金屬的來源，並且由於符文米達（Rune-Midgarts）無法自己完成考試，因此他們終於接受了。";
+			next;
+			mes "他們在一起聚集志願者。刺客公會是第一個自願的人。";
+			next;
+			mes "刺客與撒旦的摩洛哥有一個糟糕的過去，所以他們聚集了18名成員來追趕他。";
+			next;
+			mes "大約3小時後，所有18名成員毫無問題地返回，每個男人和女人都分享了他們收集的信息。";
+			next;
+			mes "他們發現了另一個具有完全不同的性質和環境的世界。確實，人們也可以住在那兒。";
+			next;
+			mes "最令人驚訝的是時間流。 18個刺客在那裡住了大約2週，但他們在出發後的3個小時內返回。";
+			next;
+			mes "要測試的最後一件事是派遣自願探索新世界的冒險家。";
+			next;
+			mes "有大量冒險家的應用。許多志願者在維度峽谷中消失了，他們帶回了新數據。";
+			next;
+			mes "新世界可以支持三個完全不同的生態系統，依賴於居住在那裡的人們的種族。";
+			next;
+			mes "為了在泰國世界與我們之間的關係下，需要對異質現象進行徹底研究。";
+			next;
+			mes "當期望不可能進入另一個世界時，新章的第一頁就已經打開了。";
+			close;
+		case 2:
+			mes "很久以前，沒有太陽，月亮或星星。只是空的地球...而伊米爾出生了。然後，伊米爾（Ymir）成長。";
+			next;
+			mes "但是，他的兒子們也成長了，他被奧丁，維利和VE殺死。 3個兄弟，神，從不同方面襲擊。";
+			next;
+			mes "在伊米爾（Ymir）的那個時候，他的鮮血淹沒了世界……殺死了一切。";
+			next;
+			mes "Sapha Tribe的只有Hvergelmir逃脫了這种血液。他在Jotunheim發誓報仇，裡面覆蓋著霧雪。";
+			next;
+			mes "目前，從尺寸峽谷之外發現了Sapha部落之一。";
+			next;
+			mes "除了Sapha部落外，還有一個超越時空間隙的部落，被稱為Laphine。";
+			next;
+			mes "拉芬部落也聚集在一起，進行了探險，以探索時間空間差距，並找出世界樹的奇怪症狀，並perharps一種治愈方法。";
+			next;
+			mes "拉平部落被控管理Yggdrasil，以建立靠近阿斯加德的土地，並保護Yggdrasil的魔力平衡。";
+			next;
+			mes "拉平部落從未與阿斯加德以外的任何人聯繫。但是由於他們發現Yggdrasil的力量弱了...";
+			next;
+			mes "他們宣布，自從眾神與魔術師的戰鬥結束以來，他們將在1000年的人類年代首次參加高等法院。";
+			close;
+		}
+	} else {
+		mes "醫生從未嘗試過回來，還有很多事情要做...我該怎麼做...";
+		next;
+		mes "[助理Naomi]";
+		mes "你不知道我太忙了嗎？不要劃著，就走！";
+		close;
+	}
+}
+
+splendide,198,178,3	script	Grumbling Soldier#edq	447,3,3,{
+	mes "[抱怨士兵]";
+	if (isequipped(2782) == 1) {
+		mes "如今，世界變得不穩定。我什至不能舒適地飛行。";
+		next;
+		if (ins_nyd == 5) {
+			switch(select("北方的洞穴是怎麼回事？ :薩法部落成員是誰？ :嗯。我們可以稍後再談。")) {
+			case 1:
+				mes "[抱怨士兵]";
+				mes "什麼？如果您在那裡徘徊...您可能會受傷返回。";
+				next;
+				mes "[抱怨士兵]";
+				mes "我不知道該如何解釋，但這就像心情不好。那裡有很多可怕的怪物。";
+				next;
+				mes "[抱怨士兵]";
+				mes "他們互相低語，所以...有東西...但是我不在乎...";
+				next;
+				mes "[抱怨士兵]";
+				mes "可能是...那些Sapha部落成員之前在山洞裡挖了...他們確實有特殊的挖掘才能。";
+				set ins_nyd,51;
+				close;
+			case 2:
+				mes "[抱怨士兵]";
+				mes "哦！正是由於他們，我們一直住在這裡，這是一個低落和骯髒的城市，已經有一百多年了。";
+				next;
+				mes "[抱怨士兵]";
+				mes "他們不在乎Yggdrasil是否有麻煩。";
+				next;
+				mes "[抱怨士兵]";
+				mes "他們肯定充滿了壞主意，所以……他們破壞了Yggdrasil的根源。";
+				next;
+				mes "[抱怨士兵]";
+				mes "我們在這裡確保Sapha不會使情況變得更糟。";
+				close;
+			case 3:
+				close;
+			}
+		} else {
+			mes "[抱怨士兵]";
+			mes "如今，世界變得不穩定。我什至不能舒適地飛行。";
+			next;
+			mes "[抱怨士兵]";
+			mes "當Manuk巨人開始挖掘世界以摧毀Yggdrasil時，您會期望什麼...";
+			next;
+			mes "[抱怨士兵]";
+			mes "最糟糕的是……奇怪的事情在城鎮的街道上奔跑...";
+			next;
+			mes "[抱怨士兵]";
+			mes "是的，您...您如何看待政府處理此問題的方式？";
+			next;
+			mes "[抱怨士兵]";
+			mes "儘管他們忽略了您的往績記錄，但仍然應該小心...";
+			close;
+		}
+	} else {
+		mes "塞勒斯馬爾·德·馬蒂斯維爾·塞穆沙沃爾";
+		close;
+	}
+}
+
+splendide,240,164,3	script	Sighing Soldier#edq	461,3,3,{
+	mes "[嘆氣士兵]";
+	if (isequipped(2782) == 1) {
+		mes "我們什麼時候將與Sapha一起完成這場戰鬥？ ugghhhh ...";
+		next;
+		if (ins_nyd == 5) {
+			switch(select("北方的洞穴是怎麼回事？ :薩法部落成員是誰？ :嗯。我們可以稍後再談。")) {
+			case 1:
+				mes "[嘆氣士兵]";
+				mes "好吧...我不確定，但是我們避免去那個地區。";
+				next;
+				mes "[嘆氣士兵]";
+				mes "有時，派遣的研究人員在這裡閒逛...我很難看不見...沒有任何原因...";
+				next;
+				mes "[嘆氣士兵]";
+				mes "但是指揮官確保那裡有一些隱藏的東西。";
+				next;
+				mes "[嘆氣士兵]";
+				mes "我們不知道那裡的怪物是否很強，所以我們從未檢查過。但是在個人層面上，沒有人願意去那裡...";
+				set ins_nyd,51;
+				close;
+			case 2:
+				mes "[嘆氣士兵]";
+				mes "我不知道別人對此有何看法...但是我們對Sapha部落的態度遇到了麻煩。";
+				next;
+				mes "[嘆氣士兵]";
+				mes "我們沒有試圖解決談話的問題。我們首先攻擊了他們。";
+				next;
+				mes "[嘆氣士兵]";
+				mes "也許...我們的指揮官不想接受與我們不同的其他物種...";
+				next;
+				mes "[嘆氣士兵]";
+				mes "不要誤會...最近，我們談論了您的特定物種，我們的指揮官對您感到感激。";
+				next;
+				mes "[嘆氣士兵]";
+				mes "無論如何...在這種毫無用處且令人不安的情況下，我只是精疲力盡...嘆息。";
+				close;
+			case 3:
+				close;
+			}
+		} else {
+			mes "[嘆氣士兵]";
+			mes "我們什麼時候將與Sapha一起完成這場戰鬥？ ugghhhh ...";
+			next;
+			mes "[嘆氣士兵]";
+			mes "坦白說，我不認為您或任何Sapha是我們的敵人。嘆...";
+			next;
+			mes "[嘆氣士兵]";
+			mes "是否可以通過溝通解決此問題？無用的戰鬥沒有意義！ geez。";
+			close;
+		}
+	} else {
+		mes "Vohllarsmar 有 dielcyatas";
+		close;
+	}
+}
+
+spl_in01,109,60,3	script	Commander Lebiordirr#edq	435,3,3,{
+	mes "[指揮官lebiordirr]";
+	if (isequipped(2782) == 1) {
+		if (ins_nyd == 51) {
+			mes "你是...？您是從我的士兵那裡收集信息的人嗎？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "你應該謹慎。我們的部落尊重您人類的存在，但...";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "我有很大的風險允許您進入這裡。所以要警惕。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "不要吸引太多關注，因為那會使您的人民看起來不好。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "現在，我們不需要談論太多，所以回去您來自哪裡。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "除非您有任何消息給我...？你的臉說你做...";
+			next;
+			if(select("不，什麼也沒有。我們可以稍後再談。 :我打算留下來。有充分的理由。")==1) close;
+			mes "[輝煌守衛]";
+			mes "先生，我現在可以將這個害蟲拖出。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "否。讓我們聽聽解釋。好的？現在，如果您想要...";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "我知道最近的時間已經打破了...所以，您在這裡探索解決方案，不是嗎？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "我們的部落尊重您，所以忘記了這裡的搜索和探索。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "我聽說您要在北部的封閉洞穴中尋找任何寶藏。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "該位置被甘芬派部落的命令禁止。因此，人們不能只有未經許可就去那裡。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "如果您不能遵守此規則，我將停止與您聯繫，並從這裡禁止所有人。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "我們仍然與Sapha有不穩定的關係，我們通常不必擔心局外人。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "現在，如果您理解這一點，請告知您的朋友。";
+			set ins_nyd,61;
+			close;
+		} else if (ins_nyd == 61) {
+			mes "如果您不能遵守此規則，我將停止與您聯繫，並從這裡禁止所有人。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "我們仍然與Sapha有不穩定的關係，我們通常不必擔心局外人。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "現在，如果您理解這一點，請告知您的朋友。";
+			close;
+		} else if (ins_nyd == 81) {
+			mes "你為什麼回來，局外人？";
+			next;
+			select("向拉菲恩人詢問有關探索的事情……");
+			mes "[指揮官lebiordirr]";
+			mes "探索什麼？明智地選擇您的話？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "我們彼此不了解嗎？你想要什麼？";
+			next;
+			select("我必須探索這個洞穴。");
+			mes "[指揮官lebiordirr]";
+			mes "那意味著...您無視我的警告？這是您的決定還是您只是遵循訂單？";
+			next;
+			select("我只是聽從命令");
+			mes "[指揮官lebiordirr]";
+			mes "您是否想故意侮辱我，局外人？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "您為什麼要探索？最好是一個很好的理由。";
+			next;
+			select("是關於放大鏡博士的報告……");
+			mes "[指揮官lebiordirr]";
+			mes "那麼...我關心局外人的報告？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "保護Yggdrasil！那就是葉片的命運。你能這麼說嗎？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "您有任何證據證明您的出生和Yggdrasil的祝福嗎？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "我不應該再說了。請不要把它視為粗魯，但請立即走！";
+			next;
+			select("然後我會向Sapha尋求幫助。");
+			mes "[指揮官lebiordirr]";
+			mes "你在說什麼，局外人？";
+			next;
+			mes "[輝煌守衛]";
+			mes "先生，如果您願意，我可以擺脫這個粗魯的局外人？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "不，等等... Sapha Tribesmen知道那個地方的含義嗎？您是否要求與他們交往？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "啊...多麼棘手...您正在測試我們嗎？";
+			next;
+			mes "[輝煌守衛]";
+			mes "先生，冷靜下來。我將把這個局外人扔進監獄。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "不...不，等等。好的，我會接受的。我可以接受您進入聖經的錄取。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "好的。如果您聲稱自己是Yggdrasil的僕人，我將允許您入學。但是我對您的行為不承擔任何責任。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "並確保如果您在那裡找到任何與眾不同的東西，您可以與我們分享！";
+			next;
+			select("但當然！");
+			mes "[指揮官lebiordirr]";
+			mes "所以...由於我同意允許您的探索... Arioss，幫助他們並取得結果。";
+			next;
+			mes "[助手Arioss]";
+			mes "先生...你確定嗎？這是對聖經的入侵...";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "入侵是一個苛刻的詞。我允許他們進入。比骯髒的巨人更好。它可能只是挽救我們的生命...";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "在這裡，局外人。 Arioss將與巨人一起解釋情況。與他交談...";
+			set ins_nyd,91;
+			close;
+		} else if ((ins_nyd == 91) || (ins_nyd == 101) || (ins_nyd == 111) || (ins_nyd == 200) || (ins_nyd == 201) || (ins_nyd == 202)) {
+			mes "局外人。阿里斯（Arioss）將在這裡解釋巨人隊的情況，與他交談...";
+			close;
+		} else if ((ins_nyd == 72) || (ins_nyd == 82) || (ins_nyd == 92) || (ins_nyd == 102) || (ins_nyd == 112) || (ins_nyd == 122) || (ins_nyd == 132)) {
+			mes "歡迎來到Splendide的Laphine營地，局外人...我是Lebiordirr。我在這裡負責。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "謹慎行事。我們已經對Sapha部落遇到了很多問題。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "如果您對自己的行為謹慎，我不會對您施加任何傷害。告別。";
+			close;
+		} else if (ins_nyd == 203) {
+			mes "我在等你。您安全回來，這是個好消息。你找到什麼嗎？";
+			next;
+			select("解釋一下守護者尼德霍古爾的休假。");
+			mes "[指揮官lebiordirr]";
+			mes "什麼？監護人不在他的巢中...？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "由於他的不安，監護人的陰影目前正在毀滅世界樹的根源……？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "這是令人難以置信的。您必須侮辱監護人和我們的驕傲。我沒有為您提供我們的幫助。";
+			next;
+			mes "[助手Arioss]";
+			mes "這不是那樣，指揮官，他們說實話。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "你在說什麼？ Arioss，不要忘記您作為監護人的牧師的位置。";
+			next;
+			mes "[助手Arioss]";
+			mes "即使我沒有用自己的眼睛看到它，這確實解釋了為什麼我們失去了與偉大的世界樹Yggdrasil的交流。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "不要說他的殿下，世界樹Yggdrasil的名字如此輕微。";
+			next;
+			select("傳遞世界樹Yggdrasil的話。");
+			mes "[指揮官lebiordirr]";
+			mes "他的殿下是世界樹Yggdrasil，這麼說？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "所有這些背後的原因...不是因為Sapha部落，而是因為監護人突然離開嗎？監護人放棄了他的身份？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "這必須報告...向阿爾夫海姆的大祭司報告...難以置信。";
+			next;
+			mes "[助手Arioss]";
+			mes "指揮官...我們需要提醒其餘部落...嗎？";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "您不必為此擔心，Arioss。作為指揮官，我將處理它。你只是假裝什麼都沒發生...";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "奇怪的一個，謝謝您在這種情況下的合作...請忘記今天發生的事情...";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "Arioss，請補償這個奇怪的幫助。我需要休息...";
+			next;
+			mes "[助手Arioss]";
+			mes "指揮官...";
+			set ins_nyd,121;
+			close;
+		} else if ((ins_nyd == 121) || (ins_nyd == 131)) {
+			mes "奇怪的一個，謝謝您在這種情況下的合作...請忘記今天發生的事情...";
+			close;
+		} else {
+			mes "歡迎來到Splendide的Laphine營地，局外人...我是Lebiordirr。我在這裡負責。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "謹慎行事。我們已經對Sapha部落遇到了很多問題。";
+			next;
+			mes "[指揮官lebiordirr]";
+			mes "如果您對自己的行為謹慎，我不會對您施加任何傷害。告別。";
+			close;
+		}
+	} else {
+		mes "索德蘭:烏拉曼杜斯的沙維爾迪亞茲……";
+		close;
+	}
+}
+
+spl_in01,104,56,3	script	Aide Arioss#edq	437,3,3,{
+	mes "[助手Arioss]";
+	if (isequipped(2782) == 1) {
+		if (ins_nyd == 91) {
+			mes "嘆了口氣，因為這是勒博迪爾指揮官的願望，我會和你合作...";
+			next;
+			mes "[助手Arioss]";
+			mes "您想去那裡找出那個地方是什麼？";
+			next;
+			mes "[助手Arioss]";
+			mes "好吧...正如您所假設的那樣，一個連接到世界樹的地方。這也是監護人的巢。";
+			next;
+			select("守護者之巢？");
+			mes "[助手Arioss]";
+			mes "是的，那是世界樹的守護者Nidhoggur的巢...";
+			next;
+			mes "[助手Arioss]";
+			mes "只允許來自拉平部落的明顯的監護人僕人進入。";
+			next;
+			mes "[助手Arioss]";
+			mes "這個地方最初與公眾關閉，但後來薩法部落的巨人扭轉了一切...";
+			next;
+			mes "[助手Arioss]";
+			mes "為了獲得更多的礦物質，他們開始瘋狂地挖掘。";
+			next;
+			mes "[助手Arioss]";
+			mes "最後，他們傷害了世界樹的一部分，它與他們的礦山非常接近，因此，世界樹病得很重。";
+			next;
+			mes "[助手Arioss]";
+			mes "在我們到達這裡知道事實之後，由於Sapha部落建造的許多工廠，世界樹已經處於非常糟糕的狀態。";
+			next;
+			mes "[助手Arioss]";
+			mes "即使很長一段時間以來，我們一直在攻擊Sapha部落，試圖迫使他們離開，但他們並不容易被擊敗，導致了這種僵局。";
+			next;
+			mes "[助手Arioss]";
+			mes "在這段時間裡，您的人民已經度過了時空差距到達這片土地。";
+			next;
+			mes "[助手Arioss]";
+			mes "由於這些出乎意料的原因，您的種族已經發現了旨在保持在地下深處的監護人的巢穴...";
+			next;
+			mes "[助手Arioss]";
+			mes "現在您了解了這種情況有多嚴重。由於有Sapha部落，我們不再能夠接近監護人，並尋求他的智慧教義。";
+			next;
+			mes "[助手Arioss]";
+			mes "這對我們的驕傲非常侮辱……但是，如果您可以幫助我們再次進入該位置，並與《衛報》交談，也許我們可以找到解決方案...";
+			next;
+			mes "[助手Arioss]";
+			mes "然後，我們將其留給您。至於您的要求，我會盡力合作。";
+			next;
+			mes "[助手Arioss]";
+			mes "我已經告訴過您您想知道的...如果您需要其他任何東西，請告訴我。";
+			set ins_nyd,101;
+			close;
+		} else if (ins_nyd == 101) {
+			mes "啊，你說有一種奇怪的力量阻止了監護人巢的入口，對嗎？";
+			next;
+			mes "[助手Arioss]";
+			mes "那是因為只有監護人選擇的人才能進入。";
+			next;
+			mes "[助手Arioss]";
+			mes "我們幾代人一直是監護人的僕人，從那以後一直在保護世界樹。";
+			next;
+			mes "[助手Arioss]";
+			mes "在我們被俘虜並帶到這里之前，包括我在內的3名僕人。我們的任務是治愈世界樹。";
+			next;
+			mes "[助手Arioss]";
+			mes "一個在我們與薩法部落的最後一場戰爭中被殺……另一個被俘虜。";
+			next;
+			mes "[助手Arioss]";
+			mes "我會給你我的證據。不用擔心，我只是暫時將您標記為監護人的僕人。";
+			specialeffect2 EF_HOLYHIT;
+			next;
+			mes "[助手Arioss]";
+			mes "另外，請記住這個咒語，需要打開監護人的大門。";
+			next;
+			mes "[助手Arioss]";
+			mes "阿諾馬杜哈奧蘇登維爾";
+			next;
+			mes "[助手Arioss]";
+			mes "返回。";
+			next;
+			mes "[助手Arioss]";
+			mes "talsehrdur so cyaremush di dielalawos即roffseriman即";
+			next;
+			mes "[助手Arioss]";
+			mes "去找到守衛大門的仙女，然後說這個咒語。";
+			next;
+			mes "[助手Arioss]";
+			mes "證明和咒語將確認您是監護人的僕人之一。";
+			next;
+			mes "[助手Arioss]";
+			mes "請遇到監護人，然後回答所有事物。我相信你。";
+			set ins_nyd,111;
+			close;
+		} else if ((ins_nyd == 101) || (ins_nyd == 111) || (ins_nyd == 200) || (ins_nyd == 201) || (ins_nyd == 202)) {
+			mes "請與監護人見面，並從他那裡得到明智的回答。我會相信你的。";
+			close;
+		} else if ((ins_nyd == 72) || (ins_nyd == 82) || (ins_nyd == 92) || (ins_nyd == 102) || (ins_nyd == 112)) {
+			mes "…………";
+			next;
+			mes "甚至不關心這一點嗎？多麼愚蠢的女人...";
+			close;
+		} else if (ins_nyd == 121) {
+			mes "事情實際上已經變得像這樣...作為監護人的牧師，這是我們的責任...";
+			next;
+			mes "[助手Arioss]";
+			mes "我代表整個腰pa骨部落，並向您表示感謝。對於我們的指揮官來說，這一切都必須非常困難...";
+			next;
+			mes "[助手Arioss]";
+			mes "它不能與您為我們付出的努力相提並論...但是請接受我們的友誼象徵。";
+			if (checkre(3))
+				getexp 1500000,350000;
+			else
+				getexp 150000,35000;
+			getitem 6081,10; //Splendide_Coin
+			set ins_nyd,131;
+			mes "[助手Arioss]";
+			mes "如果將來我們能為您提供任何幫助，我們將盡一切可能為您提供幫助。再一次，謝謝。";
+			close;
+		} else if (ins_nyd == 131) {
+			mes "如果將來我們能為您提供任何幫助，我們將盡一切可能為您提供幫助。再一次，謝謝。";
+			close;
+		} else {
+			mes "…………";
+			next;
+			mes "永遠不要注意...嗯...鈍的女人...";
+			close;
+		}
+	} else {
+		mes "阿曼維薩·達盧薩·穆雷";
+		close;
+	}
+}
+
+spl_in01,110,21,0	script	trap#s_edq	-1,10,10,{
+OnTouch_:
+	if ((isequipped(2782) == 1) && (ins_nyd == 51)) {
+		mes "[輝煌守衛]";
+		mes "該男子目前正在被捕。";
+		next;
+		mes "[輝煌守衛]";
+		mes "您最好表現，Aide Arioss說，不同的種族應以相同的方式對待。";
+		warp "spl_in01",109,58;
+		close;
+	}
+	end;
+}
+
+spl_in01,101,52,5	script	Splendide Guard#1_edq	447,1,1,{
+	mes "[輝煌守衛]";
+	if (isequipped(2782) == 1) mes "這是 Splendide 辦公室。不要做出不禮貌的行為。";
+	else mes "通薩杜蘭:Ra Sharveldiaz 和 Uoramandur y Nelosador y";
+	close;
+}
+
+spl_in01,118,52,3	script	Splendide Guard#2_edq	447,1,1,{
+	mes "[輝煌守衛]";
+	if (isequipped(2782) == 1) mes "這是 Splendide 辦公室。不要做出不禮貌的行為。";
+	else mes "通薩杜蘭:Ra Sharveldiaz 和 Uoramandur y Nelosador y";
+	close;
+}
+
+man_in01,311,57,3	script	Neat Etorr#edq	453,3,3,{
+	mes "[整潔的Etorr]";
+	if (isequipped(2782) == 1) {
+		if (ins_nyd == 52) {
+			mes "來自另一個世界的客人，請原諒我們的粗魯...";
+			next;
+			mes "[整潔的Etorr]";
+			mes "作為Sapha部落的負責人，我有一些非常重要的告訴您。這就是為什麼我要你...";
+			next;
+			mes "[整潔的Etorr]";
+			mes "不久前，您的比賽已經通過時空差距進入了這片土地。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "您應該已經看到正在發生的事情。我們已經與拉平部落戰爭了很長時間。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "最近，由於您不了解當前的情況，因此您做了一些我作為領導者，無法忽略的事情。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "我希望您的人民能夠確定您在這片土地上的行動，並終止任何不必要的干預措施。";
+			next;
+			if(select("悄悄離開:不知道他在說什麼，詢問詳情。")==1) close;
+			mes "[Manuk Field Elite士兵]";
+			mes "我們真的只是讓這些人在我們的土地上激發了問題之後就離開了嗎？";
+			next;
+			mes "[整潔的Etorr]";
+			mes "發生了什麼事，我認為他們不知道自己還能做什麼。讓我解釋一下。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "就目前而言，我們已經承認您的種族，並且對您的活動寬容。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "但是我們最近開始懷疑您是拉芬部落的眼睛和耳朵。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "不久前，我們聽說您發現北部一個廢棄的洞穴中發現了遺體，並一直在對其進行調查和研究。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "在上一場戰爭中，我們已經抓獲了一名腰雀部落神父，我們聽說您已經與所說的俘虜接觸。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "俘虜是我們部落的唯一參考，因此我們已經很好地照顧了她。她與您目前的調查有關。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "對於沒有直接聯繫的人來說，這不是一個滿足您的好奇心的地方。希望您停止調查，並介意自己的生意。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "如果您不接受我們的要求，那麼請不要期望我們的比賽將來有任何合作。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "由於與拉平部落的戰爭，一切都是一團糟。但是即使那樣，我們也不能讓外國種族干預。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "您已經聽到了所有聲音，現在請向您的比賽報告。";
+			set ins_nyd,62;
+			close;
+		} else if (ins_nyd == 62) {
+			mes "俘虜是我們部落的唯一參考，因此我們已經很好地照顧了她。她與您目前的調查有關。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "對於沒有直接聯繫的人來說，這不是滿足您好奇心的地方。希望您停止調查，並介意自己的生意。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "如果您不接受我們的要求，那麼請不要期望我們的比賽將來有任何合作。";
+			close;
+		} else if (ins_nyd == 72) {
+			mes "最近，由於您不了解當前的情況，因此您做了一些我作為領導者，無法忽略的事情。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "我希望您的人民能夠確定您在這片土地上的行動，並終止任何不必要的干預措施。";
+			close;
+		} else if (ins_nyd == 82) {
+			mes "你需要我做些奇怪的東西嗎？";
+			next;
+			select("收到薩法部落的邀請合作調查。");
+			mes "[整潔的Etorr]";
+			mes "合作和調查？你是什麼意思？";
+			next;
+			mes "[整潔的Etorr]";
+			mes "看來您不明白我說的話。你在想什麼？";
+			next;
+			select("請允許我調查一下這個洞穴。");
+			mes "[整潔的Etorr]";
+			mes "據我所知，您不尊重我的要求。這是您的意圖還是您的人民的意圖？";
+			next;
+			select("這是我們的意圖。");
+			mes "[整潔的Etorr]";
+			mes "啊，這不是一個容易的決定。你嚇到我。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "但是請問你為什麼要這樣做？";
+			next;
+			select("解釋放大鏡教授的理論。");
+			mes "[整潔的Etorr]";
+			mes "令人驚訝的是，您能夠獲得此類結果。我們也有類似的理論。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "至少我們還認為我們必須使用拉平囚犯獲取信息。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "這個問題一直是我們與拉平部落衝突的根源。當然，這也可能是解決它們的機會。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "因此，這更多的是依賴我們自己的力量的原因。沒有空間可以乾預。請放棄。";
+			next;
+			select("放棄請求，轉而向拉芬部落尋求幫助。");
+			mes "[Manuk Field Elite士兵]";
+			mes "您終於表現出了自己的臉。我知道您是蕾絲部落的間諜！";
+			next;
+			mes "[整潔的Etorr]";
+			mes "啊...你會這麼說。它將為您帶來什麼好處，幫助拉芬部落？";
+			next;
+			mes "[整潔的Etorr]";
+			mes "那些令人討厭的矮人冒犯了我們的生命權，並試圖擺脫我們。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "我們不允許任何人進入該站點的原因是因為它充滿了懷疑。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "好吧，我會贊成您的要求，並讓您調查拉芬部落隱藏在洞穴內的秘密。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "如果您保證分享所有研究結果和發現，我們將接受您的要求。";
+			next;
+			select("當然。");
+			mes "[整潔的Etorr]";
+			mes "好吧，從現在開始，我們將與您合作，並允許您直接與Laphine囚犯進行交流。";
+			next;
+			mes "[Manuk Field Elite士兵]";
+			mes "指揮官...您確定嗎？我們甚至不知道他們是朋友還是敵人...";
+			next;
+			mes "[整潔的Etorr]";
+			mes "只有我們的力量，就無法弄清楚葉片在做什麼。我認為過去已經證明了這一點。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "他們現在正在做的事情可能會導致我們達到解決方案。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "奇怪的是，我們希望我們的合作將是一個很好的合作。現在，請審問葉芬囚犯。";
+			set ins_nyd,92;
+			close;
+		} else if ((ins_nyd == 92) || (ins_nyd == 102) || (ins_nyd == 112) || (ins_nyd == 200) || (ins_nyd == 201) || (ins_nyd == 202)) {
+			mes "奇怪的是，我們希望我們的合作將是一個很好的合作。現在，請審問葉芬囚犯。";
+			close;
+		} else if ((ins_nyd == 71) || (ins_nyd == 81) || (ins_nyd == 91) || (ins_nyd == 101) || (ins_nyd == 111) || (ins_nyd == 121) || (ins_nyd == 131)) {
+			mes "局外人。歡迎來到Sapha村Manuk。我是它的代表，整潔的etorr。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "我們只是一個小村莊，沒什麼特別的...但是安息得很舒適。";
+			close;
+		} else if (ins_nyd == 203) {
+			mes "我在等你。很好，你安全。你找到什麼嗎？";
+			next;
+			select("解釋衛報的突然離開。");
+			mes "[整潔的Etorr]";
+			mes "所以...那是世界樹的守護者的巢穴，這是拉芬部落的神聖理由。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "但是由於監護人的憤怒休假，他的陰影在世界樹上造成了破壞嗎？";
+			next;
+			mes "[整潔的Etorr]";
+			mes "如果您的意思是真的，那麼我們就沒有更多理由繼續與Laphine Tribe作鬥爭...";
+			next;
+			mes "[整潔的Etorr]";
+			mes "這是一個巨大的發現...所以尼德霍格（Nidhoggur）不再是世界樹的守護者……？";
+			next;
+			mes "[整潔的Etorr]";
+			mes "Nidhoggur的陰影在這個世界上存在，並傷害了世界樹的根源……這是一場災難。";
+			next;
+			select("傳遞世界之樹Yggdrasil的訊息。");
+			mes "[整潔的Etorr]";
+			mes "那是監護人的牧師說的話嗎？";
+			next;
+			mes "[整潔的Etorr]";
+			mes "從現在開始，我們需要與Laphine Tribe談論這一點。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "但是，當然...我們不知道它們是否足夠合理……呵呵。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "這就是我們所需要的……剩下的就是我們與蘭芬部落之間的業務。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "感謝您幫助我們解決如此巨大的問題。您現在可能會忘記它。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "這並不多，但是請作為我們讚賞的象徵。";
+			if (checkre(3))
+				getexp 1500000,350000;
+			else
+				getexp 150000,35000;
+			getitem 6080,10; //Manuk_Coin
+			set ins_nyd,132;
+			close;
+		} else if (ins_nyd == 132) {
+			mes "奇怪的一個，謝謝您在需要時幫助我們。我永遠不會忘記你的好意。";
+			close;
+		} else {
+			mes "局外人。歡迎來到瑪克村Sapha。我是它的代表，整潔的etorr。";
+			next;
+			mes "[整潔的Etorr]";
+			mes "我們只是一個小村莊，沒什麼特別的...但是安息得很舒適。";
+			close;
+		}
+	} else {
+		mes "tkeh 好吧 ohek qekhlhkl pkedlioh。";
+		close;
+	}
+}
+
+man_in01,286,61,5	script	Manuk Guard#1_edq	450,1,1,{
+	mes "[馬努克守衛]";
+	if (isequipped(2782) == 1) mes "我正在看守這個拉菲因囚犯。請別打擾我。";
+	else mes "呼叫代碼 oi 主題淡入淡出即可。";
+	close;
+}
+
+man_in01,295,61,3	script	Manuk Guard#2_edq	450,1,1,{
+	mes "[馬努克守衛]";
+	if (isequipped(2782) == 1) mes "我正在看守這個拉菲因囚犯。請別打擾我。";
+	else mes "Liek QUEkdk Ohei Vue。";
+	close;
+}
+
+man_in01,291,62,3	script	Laphine Prisoner#edq	437,3,3,{
+	mes "[拉平囚犯]";
+	if (isequipped(2782) == 1) {
+		if (ins_nyd == 5) {
+			mes "您...不是Sapha部落...您是...局外人嗎？";
+			next;
+			mes "[拉平囚犯]";
+			mes "您是否曾經與Laphine Tribe接觸？你去過輝煌嗎？";
+			next;
+			mes "[拉平囚犯]";
+			mes "請在輝煌的情況下與我的人民交談。他們會來幫助我。";
+			next;
+			switch(select("你出了什麼事？ :北面的洞穴裡有什麼？ :告訴我關於你的部落的事。 :我不會打擾你。")) {
+			case 1:
+				mes "[拉平囚犯]";
+				mes "在與Sapha部落的最後一場戰鬥中，他們抓住了我並帶我囚徒。";
+				next;
+				mes "[拉平囚犯]";
+				mes "Sapha部落首先襲擊了。他們正在摧毀世界樹。";
+				next;
+				mes "[拉平囚犯]";
+				mes "這就是戰爭開始的原因。但是我不想再與薩法部落戰鬥了...";
+				next;
+				mes "[拉平囚犯]";
+				mes "如果不是那個...我不會在這裡生存...";
+				next;
+				mes "[拉平囚犯]";
+				mes "請。將此消息帶給所有輝煌。派人救我...否則他們可能會殺了我。";
+				close;
+			case 2:
+				mes "[拉平囚犯]";
+				mes "有...";
+				next;
+				mes "[拉平囚犯]";
+				mes "不...我不能告訴你...這是我們部落的秘密...";
+				next;
+				mes "[拉平囚犯]";
+				mes "我只想這樣說...如果Sapha Tribe侵犯了那個地方，我們將永遠不會原諒他們！";
+				set ins_nyd,52;
+				close;
+			case 3:
+				mes "[拉平囚犯]";
+				mes "Laphines幾代人保護了Yggdrasil世界樹。";
+				next;
+				mes "[拉平囚犯]";
+				mes "我們生活在……不同的時間，不同的土地...我們來探險。";
+				next;
+				mes "[拉平囚犯]";
+				mes "在我們從間諜那裡收到有關世界樹奇怪症狀的報告後，我們恢復了麥盧克的存在。";
+				next;
+				mes "[拉平囚犯]";
+				mes "他們正在採礦金屬，這樣做，破壞了世界樹的根源...";
+				next;
+				mes "[拉平囚犯]";
+				mes "因此，我們在這裡派遣了一次探險。很快，與Sapha的戰爭開始了...";
+				close;
+			case 4:
+				close;
+			}
+		} else if (ins_nyd == 92) {
+			mes "Sapha部落與一場未知的種族合作？";
+			next;
+			mes "[拉平囚犯]";
+			mes "您的目的是什麼？您為什麼想知道那個地方是什麼？";
+			next;
+			mes "[拉平囚犯]";
+			mes "好吧...正如您所假設的那樣，一個連接到世界樹的地方。這也是監護人的巢。";
+			next;
+			select("守護者之巢？");
+			mes "[拉平囚犯]";
+			mes "是的，那是世界樹的守護者Nidhoggur的巢...";
+			next;
+			mes "[拉平囚犯]";
+			mes "只允許來自拉平部落的明顯的監護人僕人進入。";
+			next;
+			mes "[拉平囚犯]";
+			mes "這個地方最初與公眾關閉，但後來薩法部落的巨人扭轉了一切...";
+			next;
+			mes "[拉平囚犯]";
+			mes "為了獲得更多的礦物質，他們開始瘋狂地挖掘。";
+			next;
+			mes "[拉平囚犯]";
+			mes "最後，他們傷害了世界樹的一部分，它與他們的礦山非常接近，因此，世界樹病得很重。";
+			next;
+			mes "[拉平囚犯]";
+			mes "在我們到達這裡知道事實之後，由於Sapha部落建造的許多工廠，世界樹已經處於非常糟糕的狀態。";
+			next;
+			mes "[拉平囚犯]";
+			mes "即使很長一段時間以來，我們一直在攻擊Sapha部落，試圖迫使他們離開，但他們並不容易被擊敗，導致了這種僵局。";
+			next;
+			mes "[拉平囚犯]";
+			mes "在這段時間裡，您的人民已經度過了時空差距到達這片土地。";
+			next;
+			mes "[拉平囚犯]";
+			mes "由於這些出乎意料的原因，您的種族已經發現了旨在保持在地下深處的監護人的巢穴...";
+			next;
+			mes "[拉平囚犯]";
+			mes "現在您了解了這種情況有多嚴重。由於有Sapha部落，我們不再能夠接近監護人，並尋求他的智慧教義。";
+			next;
+			mes "[拉平囚犯]";
+			mes "hmph ...即使我不合作，我知道您會找到其他手段來...";
+			next;
+			mes "[拉平囚犯]";
+			mes "看著蘭芬部落的當前情況，我們沒有足夠的力量來包圍曼努克田地，而是趕走了巨人。";
+			next;
+			mes "[拉平囚犯]";
+			mes "好的，如果它已經成為這樣，我會幫助您的。沒有死胡同。如果您繼續前進，您會找到解決方案。";
+			next;
+			mes "[拉平囚犯]";
+			mes "即使我什麼也沒說，我的情況也不會改變。";
+			next;
+			mes "[拉平囚犯]";
+			mes "我已經告訴過您您想听的一切。如果您還有其他要求，請告訴我。";
+			set ins_nyd,102;
+			close;
+		} else if (ins_nyd == 102) {
+			mes "啊，你說有一種奇怪的力量阻止了監護人巢的入口，對嗎？";
+			next;
+			mes "[拉平囚犯]";
+			mes "那是因為只有監護人選擇的人才能進入。";
+			next;
+			mes "[拉平囚犯]";
+			mes "我們幾代人一直是監護人的僕人，從那以後一直在保護世界樹。";
+			next;
+			mes "[拉平囚犯]";
+			mes "在我們被俘虜並帶到這里之前，包括我在內的3名僕人。我們的任務是治愈世界樹。";
+			next;
+			mes "[拉平囚犯]";
+			mes "在我們與Sapha部落的最後一場戰爭中，一個人被殺害了……我被俘虜了。";
+			next;
+			mes "[拉平囚犯]";
+			mes "我會給你我的證據。不用擔心，我只是暫時將您標記為監護人的僕人。";
+			specialeffect2 EF_HOLYHIT;
+			next;
+			mes "[拉平囚犯]";
+			mes "另外，請記住這個咒語，需要打開監護人的大門。";
+			next;
+			mes "[拉平囚犯]";
+			mes "阿諾馬杜哈奧蘇登維爾";
+			next;
+			mes "[拉平囚犯]";
+			mes "返回。";
+			next;
+			mes "[拉平囚犯]";
+			mes "talsehrdur so cyaremush di dielalawos即roffseriman即";
+			next;
+			mes "[拉平囚犯]";
+			mes "去找到守衛大門的仙女，然後說這個咒語。";
+			next;
+			mes "[拉平囚犯]";
+			mes "他證明和咒語將確認您是監護人的僕人之一。";
+			next;
+			mes "[拉平囚犯]";
+			mes "請遇到監護人，然後回答所有事物。並告訴答案...";
+			set ins_nyd,112;
+			close;
+		} else if ((ins_nyd == 71) || (ins_nyd == 81) || (ins_nyd == 91) || (ins_nyd == 101) || (ins_nyd == 111) || (ins_nyd == 121) || (ins_nyd == 131)) {
+			mes "…………";
+			next;
+			mes "[馬努克守衛]";
+			mes "嘿，局外人！遠離囚犯！";
+			close;
+		} else if (ins_nyd == 112) {
+			mes "請遇到監護人，然後回答所有事物。並告訴答案...";
+			close;
+		} else if (ins_nyd == 132) {
+			mes "是的...我聽到了您與Sapha Tribe的談話...";
+			next;
+			mes "[拉平囚犯]";
+			mes "如果我們的部落要真正信任Sapha部落...我不知道。";
+			next;
+			mes "[拉平囚犯]";
+			mes "我們對他們的仇恨已經達到異常的水平...";
+			next;
+			mes "[拉平囚犯]";
+			mes "那些巨人...他們真的可以受到信任嗎？";
+			next;
+			mes "[拉平囚犯]";
+			mes "這是...如果您不相信那個叫做Etorr的人，那就更好了……Sapha Tribe的思想是不可預測的。";
+			close;
+		} else {
+			mes "…………";
+			next;
+			mes "[馬努克守衛]";
+			mes "嘿，局外人！遠離囚犯！";
+			close;
+		}
+	} else {
+		mes "阿曼維薩·達盧薩·穆雷";
+		close;
+	}
+}
+
+man_in01,282,42,0	script	trap#edq2	-1,10,10,{
+OnTouch_:
+	if ((isequipped(2782) == 1) && (ins_nyd == 52)) {
+		mes "[Manuk Field Elite士兵]";
+		mes "這是整潔的Etorr訂單。請和我們一起去見他。";
+		next;
+		mes "[Manuk Field Elite士兵]";
+		mes "帶他到整潔的etorr。所有士兵都做好準備。";
+		warp "man_in01",311,54;
+		close;
+	}
+	end;
+}
+
+// First floor
+//============================================================
+1@nyd,213,277,5	script	Murdered Yggdrasilid#1F	437,5,5,{
+	if ('ins_nyd2 == 0) {
+		mes "當微弱的光進入您的心臟時，您的腦海中發出聲音。";
+		next;
+		mes "[世界樹世界樹Yggdrasil]";
+		mes "一切都在...監護人的僕人...快點離開這個地方。";
+		next;
+		while(1) {
+			switch(select("你是誰？ :什麼意思？")) {
+			case 1:
+				mes "[世界樹世界樹Yggdrasil]";
+				mes "我...我是Nidhoggur監護人的僕人的世界樹Yggdrasil，也是領導Laphine Tribe的大祭司。";
+				next;
+				mes "[世界樹世界樹Yggdrasil]";
+				mes "因此，您不是Laphine Tribe的女祭司...您是如何進入的？不，沒有時間回答。";
+				next;
+				mes "[世界樹世界樹Yggdrasil]";
+				mes "快點...離開...離開這個地方為時已晚。";
+				next;
+				break;
+			case 2:
+				mes "[世界樹世界樹Yggdrasil]";
+				mes "監護人...監護人出了點問題。我不知道是什麼讓他這樣。";
+				next;
+				mes "[世界樹世界樹Yggdrasil]";
+				mes "這...這不再是世界樹Yggdrasil的守護者的巢。";
+				next;
+				mes "[世界樹Yggdrasil]";
+				mes "黑暗接管了監護人並摧毀了所有生物……現在這個地方已成為被詛咒的怪物之家。";
+				next;
+				mes "[世界樹Yggdrasil]";
+				mes "現在，邪惡的尼德霍格（Nidhoggur）的影子在這裡造成了破壞...";
+				next;
+				mes "[世界樹Yggdrasil]";
+				mes "現在還不算太晚，快點走出去...告訴拉芬部落……告訴阿爾夫海姆的指揮官...";
+				next;
+				mes "[世界樹Yggdrasil]";
+				mes "我的靈魂...它被困在這裡。您是我現在唯一可以信任的人。";
+				next;
+				set .@exit,1;
+			}
+			if (.@exit) break;
+		}
+		select("尼德霍古爾的影子？");
+		mes "[世界樹Yggdrasil]";
+		mes "衛報尼德霍格（Nidhoggur）...他不在巢中。";
+		next;
+		mes "[世界樹Yggdrasil]";
+		mes "他...出於某種原因放棄了自己的陰影，離開了。";
+		next;
+		mes "[世界樹Yggdrasil]";
+		mes "剩下的就是Nidhoggur的守護者的醜陋陰影……這是生氣的陰影。";
+		next;
+		mes "[世界樹Yggdrasil]";
+		mes "陰影吸收了世界樹Yggdrasil的所有營養，當沒有更多的東西可以獲得時就發瘋了。現在，他想要這塊土地。";
+		next;
+		mes "[世界樹Yggdrasil]";
+		mes "一旦醜陋的影子離開這裡來竊取另一個世界Yggdrasil樹的權力，就會造成巨大破壞。這個世界將變成地獄。";
+		next;
+		mes "[世界樹Yggdrasil]";
+		mes "您必須...告訴阿爾夫海姆的指揮官，並提出一個計劃。只有他們...";
+		next;
+		select("我們還有什麼可以做的嗎？");
+		mes "[世界樹Yggdrasil]";
+		mes "有了我們目前的權力……不可能擊敗監護人。";
+		next;
+		mes "[世界樹Yggdrasil]";
+		mes "但是一個生氣的不是監護人，而是他的黑暗陰影...也許我們可以把他誘在這裡...";
+		next;
+		mes "[世界樹Yggdrasil]";
+		mes "您願意接受這個任務嗎？即使這意味著要付錢？";
+		next;
+		if(select("交給我們吧:我們做不到。") == 2)
+			close;
+		mes "[世界樹Yggdrasil]";
+		mes "非常感謝您的決定。我將利用我的力量剩下的東西來開闢通往監護人巢的道路。";
+		next;
+		mes "[世界樹Yggdrasil]";
+		if (is_party_leader() == true) {
+			mes "通往監護人巢的道路正越過北部的大世界樹Yggdrasil的瀑布。庇護所的防禦機制將立即開始。";
+			next;
+			mes "[世界樹Yggdrasil]";
+			mes "擊敗Nidhoggur的所有監護人，穿過瀑布進入巢穴……並在那裡停止Nidhoggur的陰影。";
+			next;
+			mes "[世界樹Yggdrasil]";
+			mes "大門將很快開放。去打敗所有的監護人...您必須在大門打開之前的30分鐘內將它們全部殺死...";
+			next;
+			mes "[世界樹Yggdrasil]";
+			mes "30分鐘...這就是我的力量的極限。請快點。";
+			next;
+			mes "[世界樹Yggdrasil]";
+			mes "然後...小心...小心陰影的力量。";
+			'ins_nyd2 = ins_nyd2 = 1;
+			donpcevent instance_npcname("ins_nyd_1f_timer")+"::OnEnable";
+			donpcevent instance_npcname("nyd_call_mon_1")+"::OnEnable";
+			close;
+		} else {
+			mes "通往監護人巢的道路正越過北部的大世界樹Yggdrasil的瀑布。防禦機制將立即開始。";
+			next;
+			mes "[世界樹Yggdrasil]";
+			mes "擊敗Nidhoggur的所有監護人，穿過瀑布進入巢穴……並在那裡停止Nidhoggur的陰影。";
+			next;
+			mes "[世界樹Yggdrasil]";
+			mes "大門將很快開放。去打敗所有的監護人...您必須在大門打開之前的30分鐘內將它們全部殺死...";
+			next;
+			mes "[世界樹Yggdrasil]";
+			mes "30分鐘...這就是我的力量的極限。請快點。";
+			next;
+			mes "[世界樹Yggdrasil]";
+			mes "然後...小心...小心陰影的力量。";
+			close;
+		}
+	} else if ('ins_nyd2 == 1) {
+		mes "[世界樹Yggdrasil]";
+		mes "通往監護人巢的道路正越過北部的大世界樹Yggdrasil的瀑布。防禦機制將立即開始。";
+		next;
+		mes "[世界樹Yggdrasil]";
+		mes "擊敗Nidhoggur的所有監護人，穿過瀑布進入巢穴……並在那裡停止Nidhoggur的陰影。";
+		next;
+		mes "[世界樹Yggdrasil]";
+		mes "大門將很快開放。去擊敗所有監護人。";
+		close;
+	} else if ('ins_nyd2 == 2) {
+		mes "[世界樹Yggdrasil]";
+		mes "通往監護人巢的道路正越過北部的大世界樹Yggdrasil的瀑布。";
+		next;
+		mes "[世界樹Yggdrasil]";
+		mes "使用您的力量...並破壞邪惡的陰影...";
+		next;
+		mes "[世界樹Yggdrasil]";
+		mes "這就是...我所能為你做的一切...";
+		close;
+	} else {
+		mes "[世界樹Yggdrasil]";
+		mes "那些想污染《衛報》神聖庇護所的人...離開。";
+		warp "mid_camp",100,100;
+	}
+	end;
+
+OnTouch:
+	if ('ins_nyd2 == 0) {
+		mes "Laphine Tribe的女人在這裡做什麼...";
+		next;
+		mes "發生了什麼事？讓我們去檢查一下。";
+		close;
+	}
+	end;
+
+OnInstanceInit: // Temporary fix for @reloadscript.
+	set 'ins_nyd2,0;
+	end;
+}
+
+1@nyd,1,1,0	script	nyd_call_mon_1	-1,{
+OnInstanceInit:
+	enablenpc instance_npcname("nyd_call_mon_1");
+	end;
+
+OnEnable:
+	set .@map$, instance_mapname("1@nyd");
+	monster .@map$,220,250,"Nidhoggur's Guardian#1",2020,1,instance_npcname("nyd_call_mon_1")+"::OnMyMobDead";
+	monster .@map$,220,252,"Nidhoggur's Guardian#2",2020,1,instance_npcname("nyd_call_mon_1")+"::OnMyMobDead";
+	monster .@map$,240,270,"Nidhoggur's Guardian#3",2020,1,instance_npcname("nyd_call_mon_1")+"::OnMyMobDead";
+	monster .@map$,240,272,"Nidhoggur's Guardian#4",2020,1,instance_npcname("nyd_call_mon_1")+"::OnMyMobDead";
+	monster .@map$,200,200,"Nidhoggur's Guardian#5",2020,1,instance_npcname("nyd_call_mon_1")+"::OnMyMobDead";
+	monster .@map$,210,210,"Nidhoggur's Guardian#6",2020,1,instance_npcname("nyd_call_mon_1")+"::OnMyMobDead";
+	monster .@map$,225,265,"Nidhoggur's Guardian#7",2021,1,instance_npcname("nyd_call_mon_1")+"::OnMyMobDead";
+	monster .@map$,225,270,"Nidhoggur's Guardian#8",2021,1,instance_npcname("nyd_call_mon_1")+"::OnMyMobDead";
+	monster .@map$,245,235,"Nidhoggur's Guardian#9",2021,1,instance_npcname("nyd_call_mon_1")+"::OnMyMobDead";
+	monster .@map$,255,255,"Nidhoggur's Guardian#10",2021,1,instance_npcname("nyd_call_mon_1")+"::OnMyMobDead";
+	monster .@map$,225,245,"Nidhoggur's Guardian#11",2021,1,instance_npcname("nyd_call_mon_1")+"::OnMyMobDead";
+	monster .@map$,230,280,"Nidhoggur's Guardian#12",2021,1,instance_npcname("nyd_call_mon_1")+"::OnMyMobDead";
+	mapannounce .@map$, "Nidhoggur's Guardian : Protect the Guardian's Sanctuary. Get rid of the intruders.",bc_map,"0x00ff99";
+	end;
+
+OnDisable:
+	killmonster instance_mapname("1@nyd"),instance_npcname("nyd_call_mon_1")+"::OnMyMobDead";
+	disablenpc instance_npcname("nyd_call_mon_1");
+	end;
+
+OnMyMobDead:
+	set .@map$, instance_mapname("1@nyd");
+	set .@mob_dead_num,mobcount(.@map$, instance_npcname("nyd_call_mon_1")+"::OnMyMobDead");
+	if (.@mob_dead_num < 1) {
+		mapannounce .@map$, "All of Nidhoggur's Guardians have been defeated!",bc_map,"0x00ff99";
+		donpcevent instance_npcname("ins_nyd_1f_timer")+"::OnDisable";
+		donpcevent instance_npcname("nyd_to2f_warp")+"::OnEnable";
+		'ins_nyd2 = ins_nyd2 = 2;
+	}
+	end;
+}
+
+1@nyd,1,2,0	script	ins_nyd_1f_timer	-1,{
+OnInstanceInit:
+	disablenpc instance_npcname("ins_nyd_1f_timer");
+	end;
+
+OnEnable:
+	enablenpc instance_npcname("ins_nyd_1f_timer");
+	initnpctimer;
+	end;
+
+OnDisable:
+	disablenpc instance_npcname("ins_nyd_1f_timer");
+	stopnpctimer;
+	killmonsterall instance_mapname("1@nyd");
+	end;
+
+OnTimer900000:
+	mapannounce instance_mapname("1@nyd"), "World Tree Yggdrasil : There's not much time left. Please hurry.",bc_map,"0xFFFF00";
+	end;
+
+OnTimer1200000:
+	mapannounce instance_mapname("1@nyd"), "World Tree Yggdrasil : My powers are slowly disappearing. Please hurry.",bc_map,"0xFFFF00";
+	end;
+
+OnTimer1500000:
+	mapannounce instance_mapname("1@nyd"), "World Tree Yggdrasil : I'm... almost at my limit... please hurry up.",bc_map,"0xFFFF00";
+	end;
+
+OnTimer1800000:
+	mapannounce instance_mapname("1@nyd"), "World Tree Yggdrasil : You've failed... but I will use what power I have left... to send you out of here.",bc_map,"0xFFFF00";
+	end;
+
+OnTimer1830000:
+	mapannounce instance_mapname("1@nyd"), "Opening of the Gate has failed.",bc_map,"0xFFFF00";
+	end;
+
+OnTimer1850000:
+	donpcevent instance_npcname("ins_nyd_1f_timer")+"::OnDisable";
+	donpcevent instance_npcname("nyd_call_mon_1")+"::OnDisable";
+	instance_warpall "mid_camp",310,150, instance_id();
+	stopnpctimer;
+	end;
+}
+
+1@nyd,195,320,0	script	nyd_to2f_warp	45,5,5,{
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("nyd_to2f_warp");
+	end;
+
+OnEnable:
+	enablenpc instance_npcname("nyd_to2f_warp");
+	end;
+
+OnTouch:
+	'ins_nyd2 = ins_nyd2 = 3;
+	warp instance_mapname("2@nyd"),200,10;
+	end;
+}
+
+1@nyd,1,1,0	script	ins_nyd1_spawn_mobs	-1,{
+OnInstanceInit:
+	set .@map$, instance_mapname("1@nyd");
+	monster .@map$,0,0,"Ancient Tree",2019,40,instance_npcname("ins_nyd1_spawn_mobs")+"::OnMyTreeDead";
+	monster .@map$,0,0,"Rhyncho",2020,30,instance_npcname("ins_nyd1_spawn_mobs")+"::OnMyRhynDead";
+	monster .@map$,0,0,"Phylla",2021,30,instance_npcname("ins_nyd1_spawn_mobs")+"::OnMyPhyDead";
+	monster .@map$,0,0,"Aqua Elemental",2016,30,instance_npcname("ins_nyd1_spawn_mobs")+"::OnMyAquaDead";
+	monster .@map$,0,0,"Dark Pinguicula",2015,30,instance_npcname("ins_nyd1_spawn_mobs")+"::OnMyPingDead";
+	end;
+
+OnMyTreeDead:
+	monster instance_mapname("1@nyd"),0,0,"Ancient Tree",2019,1,instance_npcname("ins_nyd1_spawn_mobs")+"::OnMyTreeDead";
+	end;
+
+OnMyRhynDead:
+	monster instance_mapname("1@nyd"),0,0,"Rhyncho",2020,1,instance_npcname("ins_nyd1_spawn_mobs")+"::OnMyRhynDead";
+	end;
+
+OnMyPhyDead:
+	monster instance_mapname("1@nyd"),0,0,"Phylla",2021,1,instance_npcname("ins_nyd1_spawn_mobs")+"::OnMyPhyDead";
+	end;
+
+OnMyAquaDead:
+	monster instance_mapname("1@nyd"),0,0,"Aqua Elemental",2016,1,instance_npcname("ins_nyd1_spawn_mobs")+"::OnMyAquaDead";
+	end;
+
+OnMyPingDead:
+	monster instance_mapname("1@nyd"),0,0,"Dark Pinguicula",2015,1,instance_npcname("ins_nyd1_spawn_mobs")+"::OnMyPingDead";
+	end;
+}
+
+// Second Floor
+//============================================================
+2@nyd,200,14,0	script	nyd_2f_enter	-1,6,6,{
+OnTouch_:
+	donpcevent instance_npcname("nyd_2f_enter_broad")+"::OnEnable";
+	disablenpc instance_npcname("nyd_2f_enter");
+	end;
+}
+
+2@nyd,1,1,0	script	nyd_2f_enter_broad	-1,{
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("nyd_2f_enter_broad");
+	end;
+
+OnEnable:
+	enablenpc instance_npcname("nyd_2f_enter_broad");
+	initnpctimer;
+	end;
+
+OnTimer12000:
+	mapannounce instance_mapname("2@nyd"), "Nidhoggur's Shadow : No more... I can't stand this anymore...",bc_map,"0xFFFF00";
+	end;
+
+OnTimer15000:
+	mapannounce instance_mapname("2@nyd"), "Nidhoggur's Shadow : I need... I need the World Tree Yggdrasil's powers...",bc_map,"0xFFFF00";
+	end;
+
+OnTimer18000:
+	mapannounce instance_mapname("2@nyd"), "Nidhoggur's Shadow : Destroy... everything...",bc_map,"0xFFFF00";
+	stopnpctimer;
+	disablenpc instance_npcname("nyd_2f_enter_broad");
+	end;
+}
+
+2@nyd,199,178,0	script	nyd_2f_ddr_control	-1,6,6,{
+OnTouch:
+	specialeffect2 EF_HOLYHIT;
+	mes "從華麗的石頭下面，微風奇怪。";
+	next;
+	mes "奇怪的力量逐漸圍繞著您的身體，維度開始改變。";
+	close2;
+	warp instance_mapname("2@nyd"),199,255;
+	end;
+}
+
+2@nyd,199,268,0	script	nyd_2f_boss_enter	-1,8,8,{
+OnTouch_:
+	if (is_party_leader() == true) {
+		donpcevent instance_npcname("nyd_2f_boss_enter_call")+"::OnEnable";
+		disablenpc instance_npcname("nyd_2f_boss_enter");
+		end;
+	}
+	end;
+}
+
+2@nyd,2,2,0	script	nyd_2f_boss_enter_call	-1,{
+OnInstanceInit:
+	disablenpc instance_npcname("nyd_2f_boss_enter_call");
+	end;
+
+OnEnable:
+	enablenpc instance_npcname("nyd_2f_boss_enter_call");
+	set .@map$, instance_mapname("2@nyd");
+	monster .@map$,199,327,"Nidhoggur's Shadow",2022,1,instance_npcname("nyd_2f_boss_enter_call")+"::OnMyMobDead";
+	mapannounce .@map$, "Nidhoggur's Shadow : I will devour all of you... you and the World Tree Yggdrasil.",bc_map,"0x00ff99";
+	//donpcevent instance_npcname("nyd_2f_boss_enter_call")+"::Ongo";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonster instance_mapname("2@nyd"),instance_npcname("nyd_2f_boss_enter_call")+"::OnMyMobDead";
+	disablenpc instance_npcname("nyd_2f_boss_enter_call");
+	end;
+
+OnTimer180000:
+	stopnpctimer;
+OnWarpColor:
+	set .@map$, instance_mapname("2@nyd");
+	switch(rand(1,4)) {
+	case 1:
+		mapannounce .@map$, "Nidhoggur's Shadow : In this chaos... your blood is just what I need.",bc_map,"0xFFFF00";
+		donpcevent instance_npcname("nyd_2f_white")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_yellow")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_green")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_red")+"::OnEnable";
+		instance_warpall .@map$,115,278, instance_id();
+		end;
+	case 2:
+		mapannounce .@map$, "Nidhoggur's Shadow : I will freeze every last drop of your blood.",bc_map,"0xFFFF00";
+		donpcevent instance_npcname("nyd_2f_red")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_yellow")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_green")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_white")+"::OnEnable";
+		instance_warpall .@map$,115,373, instance_id();
+		end;
+	case 3:
+		mapannounce .@map$, "Nidhoggur's Shadow : Sleep for eternity in an empty illusion.",bc_map,"0xFFFF00";
+		donpcevent instance_npcname("nyd_2f_red")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_white")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_green")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_yellow")+"::OnEnable";
+		instance_warpall .@map$,284,278, instance_id();
+		end;
+	case 4:
+		mapannounce .@map$, "Nidhoggur's Shadow : I'll let you enjoy the pain of dying slowly.",bc_map,"0xFFFF00";
+		donpcevent instance_npcname("nyd_2f_red")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_white")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_yellow")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_green")+"::OnEnable";
+		instance_warpall .@map$,284,374, instance_id();
+		end;
+	}
+	end;
+
+OnMyMobDead:
+	set .@map$, instance_mapname("2@nyd");
+	if (mobcount(.@map$,instance_npcname("nyd_2f_boss_enter_call")+"::OnMyMobDead") < 1) {
+		mapannounce .@map$, "Nidhoggur's Shadow : World Tree Yggdrasil's guardian... his powers are disappearing...",bc_map,"0x00ff99";
+		donpcevent instance_npcname("World Tree Yggdrasil#2F")+"::OnEnable";
+		donpcevent instance_npcname("nyd_2f_boss_enter_call")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_boss_enter_logic")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_red_c")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_white_c")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_yellow_c")+"::OnDisable";
+		donpcevent instance_npcname("nyd_2f_green_c")+"::OnDisable";
+		'ins_nyd2 = ins_nyd2 = 4;
+		end;
+	}
+	end;
+}
+
+2@nyd,2,4,0	script	nyd_2f_boss_enter_logic	-1,{
+OnInstanceInit:
+	disablenpc instance_npcname("nyd_2f_boss_enter_logic");
+	end;
+
+OnEnable:
+	stopnpctimer;
+	initnpctimer;
+	end;
+
+OnDisable:
+	stopnpctimer;
+	disablenpc instance_npcname("nyd_2f_boss_enter_logic");
+	end;
+
+OnTimer180000:
+	stopnpctimer;
+	donpcevent instance_npcname("nyd_2f_boss_enter_call")+"::OnWarpColor";
+	end;
+}
+
+2@nyd,202,324,5	script	World Tree Yggdrasil#2F	437,3,3,{
+	mes "[世界樹Yggdrasil]";
+	mes "謝謝。你是人類和甘菲恩部落的救世主。";
+	next;
+	mes "[世界樹Yggdrasil]";
+	mes "您已經擊敗了Nidhoggur的影子。但是...並非如此。它的力量只是入睡。";
+	next;
+	mes "[世界樹Yggdrasil]";
+	mes "但是您為我們贏得了很多時間。這很棒。";
+	next;
+	mes "[世界樹Yggdrasil]";
+	mes "請去向負責Splendide和Manuk負責的人報告。";
+	next;
+	mes "[世界樹Yggdrasil]";
+	mes "如您所見，Sapha Tribe和Laphine Tribe都沒有對世界樹的削弱有錯。這一切都是因為監護人的影子...";
+	next;
+	mes "[世界樹Yggdrasil]";
+	mes "監護人的精神錯亂……是由我們未知的力量引起的...您必須告訴所有人。";
+	next;
+	mes "[世界樹Yggdrasil]";
+	mes "現在...允許我護送您離開被詛咒的巢穴。";
+	next;
+	switch(select("請讓我出去:我想四處看看。")) {
+	case 1:
+		'ins_nyd2 = 0;
+		// ins_nyd2 = 0;
+		set ins_nyd,203;
+		//setquest 3135;
+		warp "nyd_dun02",98,196;
+		end;
+	case 2:
+		mes "[世界樹Yggdrasil]";
+		mes "就是這樣...如果您想離開，我會在附近。";
+		close;
+	}
+
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("World Tree Yggdrasil#2F");
+	end;
+
+OnEnable:
+	enablenpc instance_npcname("World Tree Yggdrasil#2F");
+	mapannounce instance_mapname("2@nyd"), "World Tree Yggdrasil : You did good. Have everyone go to the Magic Circle in the middle, and get ready for the destruction of the nest.",bc_map,"0x00ff99";
+	end;
+}
+
+2@nyd,115,278,0	script	nyd_2f_red	-1,5,5,{
+OnInstanceInit:
+	disablenpc();
+	end;
+
+OnEnable:
+	enablenpc();
+	donpcevent instance_npcname(strnpcinfo(0)+"_warp1")+"::OnEnable";
+	donpcevent instance_npcname(strnpcinfo(0)+"_warp2")+"::OnEnable";
+	donpcevent instance_npcname(strnpcinfo(0)+"_warp3")+"::OnEnable";
+	donpcevent instance_npcname(strnpcinfo(0)+"_c")+"::OnEnable";
+	initnpctimer;
+	end;
+
+OnDisable:
+	donpcevent instance_npcname(strnpcinfo(0)+"_warp1")+"::OnDisable";
+	donpcevent instance_npcname(strnpcinfo(0)+"_warp2")+"::OnDisable";
+	donpcevent instance_npcname(strnpcinfo(0)+"_warp3")+"::OnDisable";
+	disablenpc();
+	end;
+
+OnTouch:
+	if (compare(strnpcinfo(0),"red")) {
+		percentheal -50,0;
+		percentheal -30,0;
+		sc_start SC_BLEEDING,60000,0;
+	} else if (compare(strnpcinfo(0),"white")) {
+		percentheal -50,0;
+		sc_start SC_FREEZE,20000,0;
+	} else if (compare(strnpcinfo(0),"yellow")) {
+		percentheal 0,-50;
+		sc_start SC_SLEEP,20000,0;
+		sc_start SC_CONFUSION,60000,0;
+	} else if (compare(strnpcinfo(0),"green")) {
+		percentheal -50,-50;
+		sc_start SC_POISON,60000,0;
+	}
+	end;
+
+OnTimer10000:
+	disablenpc();
+	stopnpctimer;
+	end;
+}
+
+2@nyd,6,6,0	script	nyd_2f_red_c	-1,{
+OnInstanceInit:
+	disablenpc();
+	end;
+
+OnEnable:
+	enablenpc();
+	initnpctimer;
+	set .@map$, instance_mapname("2@nyd");
+	set .@label$, instance_npcname(strnpcinfo(0))+"::OnMyMobDead";
+	if (compare(strnpcinfo(0),"red")) {
+		monster .@map$,120,285,"Nidhoggur's Guardian#1",2020,1,.@label$;
+		monster .@map$,119,286,"Nidhoggur's Guardian#2",2020,1,.@label$;
+		monster .@map$,120,270,"Nidhoggur's Guardian#3",2020,1,.@label$;
+		monster .@map$,119,269,"Nidhoggur's Guardian#4",2021,1,.@label$;
+		monster .@map$,118,270,"Nidhoggur's Guardian#5",2021,1,.@label$;
+	} else if (compare(strnpcinfo(0),"white")) {
+		monster .@map$,120,380,"Nidhoggur's Guardian#1",2020,1,.@label$;
+		monster .@map$,119,381,"Nidhoggur's Guardian#2",2020,1,.@label$;
+		monster .@map$,120,367,"Nidhoggur's Guardian#3",2020,1,.@label$;
+		monster .@map$,119,366,"Nidhoggur's Guardian#4",2021,1,.@label$;
+		monster .@map$,118,365,"Nidhoggur's Guardian#5",2021,1,.@label$;
+	} else if (compare(strnpcinfo(0),"yellow")) {
+		monster .@map$,282,284,"Nidhoggur's Guardian#1",2020,1,.@label$;
+		monster .@map$,283,283,"Nidhoggur's Guardian#2",2020,1,.@label$;
+		monster .@map$,280,275,"Nidhoggur's Guardian#3",2020,1,.@label$;
+		monster .@map$,281,276,"Nidhoggur's Guardian#4",2021,1,.@label$;
+		monster .@map$,281,277,"Nidhoggur's Guardian#5",2021,1,.@label$;
+	} else if (compare(strnpcinfo(0),"green")) {
+		monster .@map$,282,378,"Nidhoggur's Guardian#1",2020,1,.@label$;
+		monster .@map$,283,377,"Nidhoggur's Guardian#2",2020,1,.@label$;
+		monster .@map$,280,368,"Nidhoggur's Guardian#3",2020,1,.@label$;
+		monster .@map$,281,368,"Nidhoggur's Guardian#4",2021,1,.@label$;
+		monster .@map$,281,367,"Nidhoggur's Guardian#5",2021,1,.@label$;
+	}
+	end;
+
+OnMyMobDead:
+	set .@map$, instance_mapname("2@nyd");
+	if (mobcount(.@map$,instance_npcname(strnpcinfo(0))+"::OnMyMobDead") < 1) {
+		mapannounce .@map$, "Nidhoggur's Shadow : You're not bad... but I will be your opponent this time.",bc_map,"0x00ff99";
+		donpcevent instance_npcname("nyd_2f_boss_enter_logic")+"::OnEnable";
+		donpcevent instance_npcname(strnpcinfo(0))+"::OnDisable";
+		end;
+	}
+	end;
+
+/*
+OnReset:	// Label not called.
+	killmonster instance_mapname("2@nyd"),instance_npcname(strnpcinfo(0))+"::OnMyMobDead";
+	donpcevent instance_npcname(strnpcinfo(0))+"::OnDisable";
+	end;
+*/
+
+OnDisable:
+	stopnpctimer;
+	killmonster instance_mapname("2@nyd"),instance_npcname(strnpcinfo(0))+"::OnMyMobDead"; //custom
+	donpcevent instance_npcname(substr(strnpcinfo(0),0,getstrlen(strnpcinfo(0))-3))+"::OnDisable";
+	disablenpc();
+	end;
+
+OnTimer180000:
+	killmonster instance_mapname("2@nyd"),instance_npcname(strnpcinfo(0))+"::OnMyMobDead";
+	stopnpctimer;
+	donpcevent instance_npcname("nyd_2f_boss_enter_call")+"::OnWarpColor";
+	end;
+}
+
+2@nyd,130,298,0	script	nyd_2f_red_warp1	-1,6,6,{
+OnInstanceInit:
+OnDisable:
+	disablenpc();
+	end;
+
+OnEnable:
+	enablenpc();
+	end;
+
+OnTouch:
+	if (compare(strnpcinfo(0),"red"))
+		warp instance_mapname("2@nyd"),115,278;
+	else if (compare(strnpcinfo(0),"white"))
+		warp instance_mapname("2@nyd"),115,373;
+	else if (compare(strnpcinfo(0),"yellow"))
+		warp instance_mapname("2@nyd"),284,278;
+	else if (compare(strnpcinfo(0),"green"))
+		warp instance_mapname("2@nyd"),284,374;
+	end;
+}
+2@nyd,142,296,0	duplicate(nyd_2f_red_warp1)	nyd_2f_red_warp2	-1,6,6
+2@nyd,145,283,0	duplicate(nyd_2f_red_warp1)	nyd_2f_red_warp3	-1,6,6
+
+2@nyd,115,373,0	duplicate(nyd_2f_red)	nyd_2f_white	-1,5,5
+2@nyd,6,7,0	duplicate(nyd_2f_red_c)	nyd_2f_white_c	-1
+2@nyd,127,354,0	duplicate(nyd_2f_red_warp1)	nyd_2f_white_warp1	-1,6,6,
+2@nyd,140,357,0	duplicate(nyd_2f_red_warp1)	nyd_2f_white_warp2	-1,6,6
+2@nyd,145,367,0	duplicate(nyd_2f_red_warp1)	nyd_2f_white_warp3	-1,6,6
+
+2@nyd,284,278,0	duplicate(nyd_2f_red)	nyd_2f_yellow	-1,5,5
+2@nyd,6,8,0	duplicate(nyd_2f_red_c)	nyd_2f_yellow_c	-1
+2@nyd,255,285,0	duplicate(nyd_2f_red_warp1)	nyd_2f_yellow_warp1	-1,6,6
+2@nyd,257,296,0	duplicate(nyd_2f_red_warp1)	nyd_2f_yellow_warp2	-1,6,6
+2@nyd,268,300,0	duplicate(nyd_2f_red_warp1)	nyd_2f_yellow_warp3	-1,6,6
+
+2@nyd,284,374,0	duplicate(nyd_2f_red)	nyd_2f_green	-1,5,5
+2@nyd,6,9,0	duplicate(nyd_2f_red_c)	nyd_2f_green_c	-1
+2@nyd,274,356,0	duplicate(nyd_2f_red_warp1)	nyd_2f_green_warp1	-1,6,6
+2@nyd,260,356,0	duplicate(nyd_2f_red_warp1)	nyd_2f_green_warp2	-1,6,6
+2@nyd,258,368,0	duplicate(nyd_2f_red_warp1)	nyd_2f_green_warp3	-1,6,6
+
+2@nyd,1,1,0	script	ins_nyd2_spawn_mobs	-1,{
+OnInstanceInit:
+	set .@map$, instance_mapname("2@nyd");
+	areamonster .@map$,20,12,380,172,"Rhyncho",2020,40,instance_npcname("ins_nyd2_spawn_mobs")+"::OnMyRhynDead";
+	areamonster .@map$,20,12,380,172,"Phylla",2021,40,instance_npcname("ins_nyd2_spawn_mobs")+"::OnMyPhyDead";
+	areamonster .@map$,20,12,380,172,"Dark Shadow",2023,40,instance_npcname("ins_nyd2_spawn_mobs")+"::OnMyDarkshaDead";
+	areamonster .@map$,20,12,380,172,"Dark Pinguicula",2015,40,instance_npcname("ins_nyd2_spawn_mobs")+"::OnMyPingDead";
+	end;
+
+OnMyRhynDead:
+	areamonster instance_mapname("2@nyd"),20,12,380,172,"Rhyncho",2020,1,instance_npcname("ins_nyd2_spawn_mobs")+"::OnMyRhynDead";
+	end;
+
+OnMyPhyDead:
+	areamonster instance_mapname("2@nyd"),20,12,380,172,"Phylla",2021,1,instance_npcname("ins_nyd2_spawn_mobs")+"::OnMyPhyDead";
+	end;
+
+OnMyDarkshaDead:
+	areamonster instance_mapname("2@nyd"),20,12,380,172,"Dark Shadow",2023,1,instance_npcname("ins_nyd2_spawn_mobs")+"::OnMyDarkshaDead";
+	end;
+
+OnMyPingDead:
+	areamonster instance_mapname("2@nyd"),20,12,380,172,"Dark Pinguicula",2015,1,instance_npcname("ins_nyd2_spawn_mobs")+"::OnMyPingDead";
+	end;
+}
+
+// GM Management NPCs
+//============================================================
+sec_in02,36,167,3	script	Nidhoggur Manager	447,1,1,{
+	callfunc "F_GM_NPC";
+	mes "輸入密碼。";
+	next;
+	if (callfunc("F_GM_NPC","1854",1) == 0) {
+		mes "密碼不正確。";
+		close;
+	}
+	mes "您需要做什麼？";
+	next;
+	switch(select("重置變量以允許進入 Nidhoggur:更改變量“ins_nyd”:刪除 3 天計時器 3135:確認變量編號")) {
+	case 1:
+		set ins_nyd,200;
+		set ins_nyd2,0;
+		erasequest 3135;
+		mes "INS_NYD設置為200 INS_NYD2設置為0";
+		mes "任務3135刪除。";
+		close;
+	case 2:
+		mes "您想更改哪個變量？";
+		next;
+		switch(select("ins_nyd:ins_nyd2")) {
+			case 1: set .@var$,"ins_nyd"; break;
+			case 2: set .@var$,"ins_nyd2"; break;
+		}
+		mes "輸入變量號";
+		next;
+		input .@input;
+		setd .@var$, .@input;
+		mes .@var$+"已設置為"+.@input+" .";
+		close;
+	case 3:
+		mes "關閉此對話框時，將刪除3天的計時器。";
+		next;
+		erasequest 3135;
+		mes "完成刪除任務計時器。";
+		close;
+	case 4:
+		mes "ins_nyd在"+ins_nyd+".";
+		mes "ins_nyd2在"+ins_nyd2+".";
+		close;
+	}
+}
+
+nyd_dun02,7,7,2	script	Purification Admin#nyd2	844,2,0,{
+	callfunc "F_GM_NPC";
+	mes "請輸入密碼";
+	set .@i, callfunc("F_GM_NPC","dragonslayer",1);
+	next;
+	if (.@i == 0) {
+		mes "準確輸入密碼。";
+		close;
+	}
+	switch(select("生成淨化石:移除淨化石:關閉入口 NPC:打開入口 NPC:取消")) {
+	case 1:
+		mes "已經創建了純化石材，並將持續30分鐘。";
+		donpcevent "Purification Stone#nyd2::OnEnable";
+		close;
+	case 2:
+		mes "純化石已被摧毀。";
+		donpcevent "Purification Stone#nyd2::OnDisable";
+		close;
+	case 3:
+		mes "NYD_DUN02 100 201的Yggdrasil守門人現已關閉。";
+		disablenpc "Yggdrasil Gatekeeper";
+		close;
+	case 4:
+		mes "NYD_DUN02 100 201的Yggdrasil守門人現已開始。";
+		enablenpc "Yggdrasil Gatekeeper";
+		close;
+	case 5:
+		close;
+	}
+}
+
+nyd_dun02,88,195,4	script	Purification Stone#nyd2	406,{
+	erasequest 3135;
+	erasequest 3136;
+	set ins_nyd,200;
+	set ins_nyd2,0;
+	mes "^0000ff與Nidhoggur巢相關的記錄和後效應已被刪除。您可以生成並再次輸入地牢。 ^000000";
+	close;
+OnInit:
+	disablenpc "Purification Stone#nyd2";
+	end;
+OnEnable:
+	initnpctimer;
+	end;
+OnDisable:
+	stopnpctimer;
+	disablenpc "Purification Stone#nyd2";
+	end;
+OnTimer1000:
+	enablenpc "Purification Stone#nyd2";
+	end;
+OnTimer1740000:
+	mapannounce "nyd_dun02","The Purification Stone will be destroyed in one minute.",bc_map,"0x00FF99",FW_NORMAL,12;
+	end;
+OnTimer1800000:
+	disablenpc "Purification Stone#nyd2";
+	end;
+}

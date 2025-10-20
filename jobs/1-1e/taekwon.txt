@@ -1,0 +1,417 @@
+﻿//===== rAthena Script =======================================
+//= Taekwon Job Quest
+//===== Description: =========================================
+//= [Official Conversion]
+//= Taekwon Job Change Quest
+//===== Changelogs: ==========================================
+//= 1.0 Replaced previous TK Job Quest with this one [Tsuyuki]
+//= 1.1 Rewrote to the Aegis Standars. [Samuray22]
+//= 1.2 Fixed position the npc is facing. [Kisuka]
+//= 1.3 Added Quest Log commands. [Kisuka]
+//= 1.4 Removed use of 'goto', and fixed some indentation. [L0ne_W0lf]
+//= 1.5 Split into renewal [Lemongrass]
+//============================================================
+
+-	script	Phoenix::PhoenixTKJobChange	-1,{
+	if(Upper == 2) {
+		mes "[鳳凰]";
+		mes "你好，孩子。";
+		close;
+	} else if(Class == Job_Taekwon) {
+		mes "[鳳凰]";
+		mes "您的訓練如何";
+		mes "來嗎？作為你";
+		mes "技術變得更多";
+		mes "精製或壯觀，";
+		mes "永遠不要忘記你可以";
+		mes "始終依靠基礎知識。";
+		close;
+	} else if(Class > Job_Novice) || (Class == Job_Novice && TK_Q == 0) {
+		mes "[鳳凰]";
+		mes "這塊土地。我們一次";
+		mes "美麗的世界已經";
+		mes "被邪惡染色：有";
+		mes "太多的人被腐敗";
+		mes "黑暗，太多的怪物";
+		mes "威脅無辜的...";
+		next;
+		mes "[鳳凰]";
+		mes "統治此處的破壞";
+		mes "世界太普通了";
+		mes "人類，不能忍受";
+		mes "為自己反對這種反對";
+		mes "壓倒性的賠率。仍然，一個";
+		mes "必須渴望與賠率作鬥爭。";
+		next;
+		mes "[鳳凰]";
+		mes "所以，我奉獻了";
+		mes "我自己變得更強壯。";
+		mes "我一直在訓練以實現";
+		mes "啟蒙，發展一種藝術來磨練身心";
+		mes "我想與世界分享。";
+		next;
+		mes "[鳳凰]";
+		mes "我可能無法改變";
+		mes "我自己的世界，但我會";
+		mes "永遠不要停止訓練自己";
+		mes "在精神和身體上。";
+		mes "我知道答案";
+		mes "會及時...";
+		next;
+		if (Class != Job_Novice) {
+			mes "[鳳凰]";
+			mes "貴族冒險家：";
+			mes "如果你認識任何人";
+			mes "沒有選擇他的道路";
+			mes "在生活中，請推薦";
+			mes "他對我如果有興趣，";
+			mes "我可以教他我的藝術...";
+			close;
+		}
+		mes "[鳳凰]";
+		mes "如果您沒有決定";
+		mes "您想訓練的道路";
+		mes "生活，我希望你考慮";
+		mes "成為我的從業者";
+		mes "藝術。這並不容易，但是它會帶您巨大的力量...";
+		next;
+if(select("好的，我會加入你。","不，謝謝。") == 1) {
+			if(!callfunc("F_CanChangeJob")) {
+				mes "[鳳凰]";
+				mes "多麼不幸！";
+				mes "你還沒有準備好";
+				mes "在我的下開始訓練";
+				mes "與您當前的指導";
+				mes "工作水平。當您達到9級或更高的工作時，請返回。";
+				close;
+			}
+			mes "[鳳凰]";
+			mes "很好...我接受你";
+			mes "作為我的學生。一開始";
+			mes "訓練，身體";
+			mes "必須首先在";
+			mes "為了執行技能";
+			mes "您將學習。";
+			next;
+			if(BaseLevel > 19) {
+				mes "[鳳凰]";
+				mes "嗯。我知道你有";
+				mes "經歷了足夠的身體";
+				mes "作為新手培訓。非常好。然後讓我們為您做準備";
+				mes "精神訓練。深入";
+				mes "呼吸，準備就緒時跟我說話。";
+				set TK_Q, 2;
+				setquest 6001;
+				close;
+			}
+			mes "[鳳凰]";
+			mes "頭腦不一定是";
+			mes "綁定到身體的極限，但您將永遠無法實現";
+			mes "真正的潛力而沒有整合思想和身體。去，獲得 ^ff00001更多";
+			mes "基礎級^000000，然後返回。";
+			next;
+			set TAEK_Q, BaseLevel;
+			set TK_Q, 1;
+			setquest 6000;
+			mes "[鳳凰]";
+			mes "我知道這不是";
+			mes "新手的簡單任務，但是你";
+			mes "必須為自己準備";
+			mes "這項工作的艱辛。我將";
+			mes "期望你變得更強壯";
+			mes "下次我們見面。";
+			close;
+		}
+		mes "[鳳凰]";
+		mes "我明白。一個人可以";
+		mes "走很多路，但是你可以";
+		mes "只選擇旅行";
+		mes "一次。我希望你工作";
+		mes "在你的啟蒙";
+		mes "冒險家。";
+		close;
+	}
+	switch(TK_Q) {
+	case 1:
+		if(BaseLevel > TAEK_Q) {
+			set TK_Q, 2;
+			changequest 6000,6001;
+			mes "[鳳凰]";
+			mes "好的。我感覺到你";
+			mes "與您更加吻合";
+			mes "內在力量。那就是";
+			mes "升級的自然結果。";
+			mes "我們準備繼續";
+			mes "下一部分培訓。";
+			close;
+		}
+		mes "[鳳凰]";
+		mes "您必須獲得 ^ff00001";
+		mes "基本級^000000以證明";
+		mes "你可以忍受困難";
+		mes "這需要這項工作。絕不";
+		mes "忽略您的培訓。";
+		close;
+	case 2:
+		mes "[鳳凰]";
+		mes "對於您的精神訓練，";
+		mes "我會問你一系列";
+		mes "要測試您的精神的問題。";
+		mes "放鬆。誠實地回答";
+		mes "盡可能。你的意志和";
+		mes "定罪將進行測試。";
+		next;
+		mes "[鳳凰]";
+		mes "作為我的從業者";
+		mes "藝術，快速的能力";
+		mes "做出最好的決定將";
+		mes "在戰鬥中有必要。現在，";
+		mes "我們將開始詢問。";
+		next;
+		mes "[鳳凰]";
+		mes "當您遇到時";
+		mes "巨大的困難，如何";
+		mes "你一般回應嗎？";
+		next;
+switch(select("我正面面對它。:以某種方式避免它。:重新組織並分析問題。")) {
+		case 1:
+			mes "[鳳凰]";
+			mes "是的，這就是答案";
+			mes "我想要。即使你不能";
+			mes "首先處理問題，我們";
+			mes "只能從中受益";
+			mes "堅定的決心。不";
+			mes "讓任何障礙阻止您。";
+			next;
+			mes "[鳳凰]";
+			mes "即使您失敗了";
+			mes "只能從";
+			mes "當你給予的經驗";
+			mes "你們全部。半心";
+			mes "嘗試很少屈服";
+			mes "富有成果的結果。";
+			next;
+			mes "[鳳凰]";
+			mes "看到你已經";
+			mes "了解重要性";
+			mes "一個人的遺囑，我們將繼續";
+			mes "下一個問題。";
+			next;
+			break;
+		case 2:
+			mes "[鳳凰]";
+			mes "傻子！你期望如何";
+			mes "如果你逃跑了";
+			mes "來自挑戰？恐懼可以";
+			mes "成為健康的反應";
+			mes "可以挽救您的生命，但真的";
+			mes "怯ward是卑鄙的。";
+			next;
+			mes "[鳳凰]";
+			mes "這讓我失望";
+			mes "聽到你這麼說。絕不";
+			mes "再次對我說這樣的事情。";
+			mes "嗯。考慮含義";
+			mes "勇氣和怯ward，以及";
+			mes "然後再次跟我說話。";
+			close;
+		case 3:
+			mes "[鳳凰]";
+			mes "重組？這樣做是一件好事";
+			mes "在您被擊敗之後。";
+			mes "但是最好面對問題";
+			mes "一旦遇到它們。";
+			mes "你不會總是";
+			mes "重組的奢侈。";
+			next;
+			mes "[鳳凰]";
+			mes "可以預測問題";
+			mes "並進行了分析，但我認為";
+			mes "立即撤退是不明智的。";
+			mes "考慮到您的恐懼，";
+			mes "以及您定義的";
+			mes "失敗。然後，回到我身邊。";
+			close;
+		}
+		mes "[鳳凰]";
+		mes "在您的旅行中，您將";
+		mes "遇到許多人";
+		mes "不同的背景和";
+		mes "觀點。不可避免地，你";
+		mes "會遇到一個人";
+		mes "生活方式你不能理解。";
+		next;
+		mes "[鳳凰]";
+		mes "同樣，這個人也會";
+		mes "不明白你的方式";
+		mes "生活。當您的兩個觀點";
+		mes "衝突，引起激烈的衝突，";
+		mes "您將如何回應？";
+		next;
+switch( select("堅持我是對的，無論如何:忽視衝突的觀點:接受差異並從中學習")) {
+		case 1:
+			mes "[鳳凰]";
+			mes "重要的是要有你的";
+			mes "自己的意見。但是，你";
+			mes "必須認識到你可能";
+			mes "是錯的，一個反對的";
+			mes "查看可能有一些優點。";
+			next;
+			mes "[鳳凰]";
+			mes "沒有人";
+			mes "答案和光";
+			mes "真理可以採用許多陰影。";
+			mes "這就是自然的方式。";
+			mes "對他人強行想法是";
+			mes "一種壓迫性的做法。";
+			next;
+			mes "[鳳凰]";
+			mes "不要限制自己";
+			mes "單一的視圖，做";
+			mes "不要扼殺您的成長";
+			mes "堅持一個真理。";
+			mes "考慮到這一點，";
+			mes "然後再次與我交談。";
+			close;
+		case 2:
+			mes "[鳳凰]";
+			mes "重要的是要";
+			mes "與他人一起";
+			mes "你不會帶來任何價值";
+			mes "沒有你的世界";
+			mes "自己的獨特貢獻，";
+			mes "思想和意見。";
+			next;
+			mes "[鳳凰]";
+			mes "理想的衝突，當";
+			mes "關於";
+			mes "你自己和他人，是一個";
+			mes "拓寬的絕佳機會";
+			mes "您對";
+			mes "對他人來說是世界。";
+			next;
+			mes "[鳳凰]";
+			mes "反思這個想法";
+			mes "與之建立和諧";
+			mes "自我和和諧與";
+			mes "其他的。然後，回到我身邊。";
+			close;
+		case 3:
+			mes "[鳳凰]";
+			mes "好的。你必須看到";
+			mes "他們的差異";
+			mes "真的是。你也必須";
+			mes "批評自己";
+			mes "寬限期和";
+			mes "真誠的考慮。";
+			next;
+			mes "[鳳凰]";
+			mes "不可能知道";
+			mes "這個世界上的一切。";
+			mes "不可能理解";
+			mes "每個觀點。但這不是";
+			mes "意味著您沒有的觀點";
+			mes "理解是無用的。";
+			next;
+			mes "[鳳凰]";
+			mes "你和你在一起的人";
+			mes "不同意可能有";
+			mes "回答你不知道。";
+			mes "在您的虛弱時代";
+			mes "這個人可能是你的";
+			mes "最大的幫助。記住這一點。";
+			next;
+		}
+		mes "[鳳凰]";
+		mes "我對";
+		mes "您給出的答案";
+		mes "我。請思考什麼";
+		mes "我們已經討論了一點";
+		mes "儘管。當你的頭腦平靜時";
+		mes "來跟我說話。";
+		set TK_Q, 3;
+		changequest 6001,6002;
+		close;
+	case 3:
+		mes "[鳳凰]";
+		mes "你感到鎮定嗎";
+		mes "和平？我會問的";
+		mes "您是一個非常重要的問題。";
+		mes "給我你的誠實答案。";
+		next;
+		mes "[鳳凰]";
+		mes "^ff0000，您準備專用";
+		mes "自己參加特殊藝術";
+		mes "我會教你，並堅持";
+		mes "其哲學的尊嚴？";
+		next;
+if( select( "是的。","否。") == 1) {
+			mes "[鳳凰]";
+			mes "很好。你不是";
+			mes "更長的學生。";
+			mes "您現在被委託";
+			mes "權力和責任";
+			mes "^ff0000taekwon的門徒do ^000000。";
+			next;
+			mes "[鳳凰]";
+			mes "“跆拳道”有意義";
+			mes "“打孔和踢”，";
+			mes "和'''有含義";
+			mes "“藝術”的武術是";
+			mes "專注於使用的技能";
+			mes "拳頭和腳。";
+			next;
+			mes "[鳳凰]";
+			mes "請使用此學科";
+			mes "磨練你的身心";
+			mes "並學習技能";
+			mes "最適合您。絕不";
+			mes "推翻您的培訓或帶來";
+			mes "對跆拳道感到羞恥。";
+			next;
+			completequest 6002;
+			callfunc "Job_Change",Job_Taekwon;
+			callfunc "F_ClearJobVar";
+			getitem 2101,1; // Guard[0]
+			mes "[鳳凰]";
+			mes "你還很年輕，所以";
+			mes "我想你想要一份工作";
+			mes "標題。毫米。在這種情況下，您";
+			if(Sex == SEX_FEMALE) {
+				mes "現在是 ^ff0000taekwon女孩 ^000000。";
+			} else {
+				mes "現在是 ^ff0000taekwon男孩 ^000000。";
+			}
+			mes "是的，聽起來不錯。";
+			next;
+			mes "[鳳凰]";
+			mes "請接受此培訓";
+			mes "制服和後衛套件：製作";
+			mes "充分利用這些禮物。作為";
+			mes "你旅行和訓練，啟發";
+			mes "其他關於我們的藝術的人，並從他們那裡了解您可以從他們那裡獲得什麼。";
+			next;
+			mes "[鳳凰]";
+			mes "現在是時候了";
+			mes "踏上自己的旅程";
+			mes "尋找新的挑戰";
+			mes "發展自己的力量。";
+			mes "自豪";
+			mes "作為跆拳道的從業者...";
+			next;
+			mes "[鳳凰]";
+			mes "很好。祝你好運。";
+			mes "我希望再次見到你";
+			mes "有時，"+strcharinfo(0)+".";
+			close;
+		}
+		mes "[鳳凰]";
+		mes "嗯，也許你不是";
+		mes "已經準備好從";
+		mes "您作為學生的地位";
+		mes "一個完整的門徒。";
+		mes "當您感到準備時";
+		mes "來跟我說話。";
+		close;
+	}
+}

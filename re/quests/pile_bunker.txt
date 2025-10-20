@@ -1,0 +1,124 @@
+﻿//===== rAthena Script ======================================= 
+//= Pile Bunker Quest
+//===== By: ================================================== 
+//= JayPee Mateo
+//===== Current Version: ===================================== 
+//= 2.2
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= 1.0 A Pile Bunker quest based on iRO WiKi. [JayPee Mateo]
+//= 2.0 Rewrited the Script a little so it looks a bit better. [Masao]
+//= 2.1 Switched to official script, coded by Gennosuke Kouga. [Euphy]
+//= 2.2 Updated to match the official script. [Euphy]
+//============================================================ 
+
+// Main NPC :: mech_book
+//============================================================
+yuno,179,174,4	script	Gomer	851,{
+	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 1000) {
+		mes "[歌篾]";
+		mes "你攜帶那麼多。放下一些行李，然後回到我身邊。";
+		close;
+	}
+	if (countitem(1549)) {
+		mes "[歌篾]";
+		mes "那麼那個PileBuncker如何為您鍛煉？";
+		close;
+	}
+	if (Class != Job_Mechanic && Class != Job_Mechanic_T && Class != Job_Baby_Mechanic) {
+		mes "[歌篾]";
+		mes "我是一個退休的機械師，我認為我沒有與您有任何生意。";
+		close;
+	}
+	mes "[歌篾]";
+	mes "所以？在madogear上感覺如何？";
+	mes "對於那些未能尋找自己的道路的人來說，這是不允許的。";
+	next;
+	mes "[歌篾]";
+	mes "我？我很久以前退休了。因為我發生了事故……受了重傷，無法再次騎車。我對此感到不高興。";
+	next;
+	mes "[歌篾]";
+	mes "因此，我決定留在這里為Madogear鍛造齒輪。";
+	mes "嗯？我並不是說我對這項工作有任何投訴。";
+	next;
+	mes "[歌篾]";
+	mes "被迫做自己不喜歡的事情，沒有什麼比這更痛苦的了。";
+	next;
+	mes "[歌篾]";
+	mes "您知道，有些人很高興成為道具，例如成為某人依靠的牆。";
+	next;
+	mes "[歌篾]";
+	mes "這讓我感覺很好，我將要製造新的裝備。我要你幫我。你怎麼說？";
+	next;
+	switch(select("我沒那麼感興趣。 :你要做什麼？ :你從哪裡得到材料？ :我帶來了材料。")) {
+	case 1:
+		mes "[歌篾]";
+		mes "我無能為力";
+		mes "然後。";
+		mes "下次見！";
+		close;
+	case 2:
+		mes "[歌篾]";
+		mes "嗯，一個巨大的金屬棒，可以一次打擊對手！";
+		next;
+		mes "[歌篾]";
+		mes "它看起來並不花哨，但是我已經設計了一個彈簧裝置來以極大的力量攻擊。";
+		next;
+		mes "[歌篾]";
+		mes "它被隱藏了，因此當您發現機會時，一槍可能會使對手處於危急狀態！";
+		mes "我迫不及待想看到它的行動！";
+		next;
+		mes "[歌篾]";
+		mes "如果您想像這種武器有多好，我將實現它。";
+		next;
+		mes "[歌篾]";
+		mes "給我帶來200鋼，30個柔性管和1個Brocca。我可以用這些材料製作剛才描述的東西。";
+		close;
+	case 3:
+		mes "[歌篾]";
+		mes "您應該能夠從諸如Kobolds之類的許多怪物那裡獲得鋼鐵。";
+		next;
+		mes "[歌篾]";
+		mes "柔性管更為罕見，被Einbroch和Lighthalzen周圍的金屬掉落。";
+		next;
+		mes "[歌篾]";
+		mes "最後，找到brocca非常困難，但是您應該能夠對此做些事情。哈哈，去吧！";
+		close;
+	case 4:
+		if (countitem(999) < 200 || countitem(7325) < 30 || countitem(1415) < 1) {
+			mes "[歌篾]";
+			mes "您沒有帶來我要求的所有材料。";
+			next;
+			mes "[歌篾]";
+			mes "我有一個習慣，即在靈感出現時放棄自己的作品，並試圖做新事物。";
+			mes "你最好快點！";
+			close;
+		} else {
+			mes "[歌篾]";
+			mes "哦，我一直在等待。您沒有準時來，所以我想知道您是否忘記了。請等一點。";
+			specialeffect EF_REPAIRWEAPON;
+			next;
+			mes "[歌篾]";
+			mes "完成了。你怎麼認為？還不錯，是嗎？儘管我自己做到了，但我不得不說這已經做得很好。";
+			next;
+			mes "[歌篾]";
+			mes "體重，體積和查看其顏色和光澤的結合。它吸引了我的心！";
+			next;
+			mes "[歌篾]";
+			mes "......................";
+			next;
+			mes "[歌篾]";
+			mes "嗯，有了幾乎沒有改進的情況，它可以批量生產和交付。我敢肯定，我可以做更多的事情，所以我會把它交給您。";
+			next;
+			mes "[歌篾]";
+			mes "哦，事實證明我畢竟不需要所有鋼。因此，在這裡，將其中的大部分收回。";
+			delitem 999,50; //Steel
+			delitem 7325,30; //Tube
+			delitem 1415,1; //Skewer
+			getitem 1549,1; //Pilebuncker
+			getitem 1360,1; //Two_Handed_Axe
+			close;
+		}
+	}
+}

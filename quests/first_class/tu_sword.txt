@@ -1,0 +1,2497 @@
+﻿//===== rAthena Script ======================================= 
+//= Swordman Class Tutorial and Job Specific Quest
+//===== By: ================================================== 
+//= Fix up by Jukka
+//===== Current Version: ===================================== 
+//= 1.6
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Swordman training quest.
+//===== Additional Comments: ================================= 
+//= 1.0 Fully working
+//= 1.1 optimized [Lupus]
+//= 1.2 Fixed a typo on NPC name. [SinSloth]
+//= 1.3 Fixed experience gains to match upcoming rate adjustments. [SinSloth]
+//= 1.4 Misc. updates. [L0ne_W0lf]
+//= 1.5 Added Renewal Izlude coordinates.
+//= 1.6 Added Pre-Renewal support. [Euphy]
+//============================================================ 
+
+// Shurank
+//============================================================
+izlude_in,82,163,3	script	Shurank	733,{
+	mes "[舒拉納克]";
+	if(Class == Job_Novice || Class == Job_Baby){
+		mes "仍然想知道";
+		mes "怎麼辦";
+		mes "你的未來，嗯？";
+		next;
+		mes "[舒拉納克]";
+		mes "如果我這麼大膽，";
+		mes "我建議你關注";
+		mes "力量路徑。";
+		mes "成為...劍客。";
+		next;
+		mes "[舒拉納克]";
+		mes "如果您想在劍的路上保持生命，請與左派代表的劍術協會交談。";
+		next;
+		mes "[舒拉納克]";
+		mes "無論您做什麼，";
+		mes "我希望您過著自己的生活而沒有任何遺憾。如果您碰巧成為劍客，";
+		mes "回到我...";
+		close;
+	}
+	if(BaseClass == Job_Swordman && (eaclass()&(EAJL_2|EAJL_UPPER|EAJL_THIRD))){
+		mes "從你的修剪，";
+		mes "我知道你是";
+		if(Sex == SEX_MALE)
+			mes "一個劍的人。";
+		else
+			mes "劍的女人。";
+		mes "你的眼睛告訴我";
+		mes "您已經看到了很多戰鬥。";
+		next;
+		mes "[舒拉納克]";
+		mes "我實際上沒有什麼可以教你的。但是，如果您知道有任何新劍客表現出潛力，請將它們引向我。";
+		close;
+	}
+	if(BaseClass != Job_Swordman){
+		mes "問候冒險家。";
+		mes "如果你碰巧知道";
+		mes "任何新劍客，";
+		mes "請把他們引向我。";
+		next;
+		mes "[舒拉納克]";
+		mes "我的專業恰好是向剛剛改變工作的綠色新兵教劍客的基本面。";
+		next;
+		mes "[舒拉納克]";
+		mes "儘管每個人都可以揮舞劍，那將是很棒的，但是";
+		mes "恐怕沒有我能有效地教你的。您的工作方法是...";
+		mes "對我來說很陌生。";
+		close;
+	}
+	switch(tu_swordman){
+	case 23:
+		mes "問候，我的朋友。";
+		mes "沒有什麼";
+		mes "我可以教你...";
+		next;
+		mes "[舒拉納克]";
+		mes "為了提高您的技能，";
+		mes "您必須探索這個廣闊的世界並體驗各種戰鬥情況。並始終致力於培訓。";
+		close;
+	case 22:
+		mes "這將是我的";
+		mes "最後講座給你。";
+		mes "請仔細聽";
+		mes "正如我告訴大家";
+		mes "大酒店。";
+		next;
+		mes "[舒拉納克]";
+		mes "Magnum Break掌握了技能10的掌握，需要 ^5d478Blevel 5 Bash ^000000。使用時，該技能會對施法者周圍的敵人造成飛濺傷害。";
+		next;
+		mes "[舒拉納克]";
+		mes "敵人被大酒店擊中";
+		mes "將被火災財產攻擊推回去。之後，您的武器將暫時通過火災財產攻擊造成20％的傷害。";
+		next;
+		mes "[舒拉納克]";
+		mes "大酒瓶休息是理想的使用";
+		mes "當被敵人包圍時，但也要記住，它也會對其施法者造成一點損害。";
+		next;
+		set .@chk_magnum, getskilllv("SM_MAGNUM");
+		if(.@chk_magnum > 5){
+			mes "[舒拉納克]";
+			mes "我看到您一直在使用Magnum Break的培訓。儘管這是一項很棒的技能，但不是每個劍客。儘管如此，學習它沒有任何傷害。";
+			next;
+			mes "[舒拉納克]";
+			mes "這是一個謙虛的回報";
+			mes "您的偉大努力。但是，不要讓您的才能允許您傲慢自大！";
+			set tu_swordman, 23;
+			completequest 8228;
+			if (checkre(3))
+				getexp 186,0;
+			else
+				getexp 1860,0;
+			getitem 1113,1; //Scimiter
+			next;
+			mes "[舒拉納克]";
+			mes "這就是我必須教您有關劍客技能的全部。希望我能夠清除您對您的工作和技能的了解。";
+			next;
+			mes "[舒拉納克]";
+			mes "至於有關的事情";
+			mes "那個兇手不再掌握在我們手中。目前，我們沒有任何有效的";
+			mes "做這件事。";
+			next;
+			mes "[舒拉納克]";
+			mes "但是，我想要";
+			mes "問你保留";
+			mes "您學到的信息";
+			mes "對自己。此事被認為是高度分類的...";
+			next;
+			mes "[舒拉納克]";
+			mes "無論如何，都不必再擔心了。但是，如果我們需要幫助，我會記得請您提供幫助。";
+			next;
+			mes "[舒拉納克]";
+			mes "你做得很好。繼續訓練，如果您達到 ^5d478bjob級別40 ^000000，則可以晉升為騎士或十字軍。";
+			next;
+			mes "[舒拉納克]";
+			mes "出色地...";
+			mes "我們劍客通常不容易受到感性，但我很高興認識您。盡力而為，成為出色的劍客。";
+			close;
+		}
+		mes "[舒拉納克]";
+		mes "這就是我必須教您有關劍客技能的全部。希望我能夠清除您對您的工作和技能的了解。";
+		next;
+		mes "[舒拉納克]";
+		mes "至於有關的事情";
+		mes "那個兇手不再掌握在我們手中。目前，我們無能為力。";
+		next;
+		mes "[舒拉納克]";
+		mes "但是，我想要";
+		mes "問你保留";
+		mes "您學到的信息";
+		mes "對自己。此事被認為是高度分類的...";
+		next;
+		mes "[舒拉納克]";
+		mes "無論如何，都不必再擔心了。但是，如果我們需要幫助，我會記得請您提供幫助。";
+		next;
+		mes "[舒拉納克]";
+		mes "你做得很好。繼續訓練，如果您達到 ^5d478bjob級別40 ^000000，則可以晉升為騎士或十字軍。";
+		next;
+		mes "[舒拉納克]";
+		mes "出色地...";
+		mes "我們劍客通常不容易受到感性，但我很高興認識您。盡力而為，成為出色的劍客。";
+		next;
+		mes "[舒拉納克]";
+		mes "在您出發之前，請接受。";
+		mes "我希望當您訓練變得越來越強大時，您會充分利用它。祝你好運。";
+		set tu_swordman, 23;
+		completequest 8228;
+		getitem 1113,1; //Scimiter
+		close;
+	case 21:
+		mes "啊，你回來了。我剛從";
+		mes "Dequ'ee。看來您一直在努力工作，並且已經充分利用了這一經驗。";
+		next;
+		mes "[舒拉納克]";
+		mes "目前，我相信您會從了解有關Swordman技能的更多信息中受益。首先，讓我告訴您有關劍術的更多信息。";
+		next;
+		mes "[舒拉納克]";
+		mes "有兩種不同的種類：";
+		mes "^5d478bone手工掌握劍^000000和";
+		mes "^5d478btwo手工掌握了劍^000000。兩個都";
+		mes "隨著這些技能的提高，可以提高您的攻擊能力的被動技能。";
+		next;
+		mes "[舒拉納克]";
+		mes "一把手精通劍";
+		mes "增加了匕首和一把劍的損壞，而兩把劍的掌握會增加兩把劍的傷害。";
+		next;
+		set .@chk_hanson, getskilllv("SM_SWORD");
+		set .@chk_yangson, getskilllv("SM_TWOHAND");
+		if((.@chk_hanson > 9) || (.@chk_yangson > 9)){
+			mes "[舒拉納克]";
+			mes "啊，從您處理劍的方式來看，我看到您已經掌握了一把劍。我給我留下了深刻的印象。";
+			next;
+			mes "[舒拉納克]";
+			mes "讓我給你";
+			mes "這個小的獎勵";
+			mes "認可";
+			mes "你的成就。";
+			set tu_swordman, 22;
+			changequest 8227,8228;
+			if (checkre(3))
+				getexp 186,0;
+			else
+				getexp 1860,0;
+			next;
+			mes "[舒拉納克]";
+			mes "下次，我會告訴您更多有關大酒瓶中斷技能的信息。";
+			mes "當您準備了解更多信息時，我會在這裡。";
+			close;
+		}
+		mes "[舒拉納克]";
+		mes "下次，我會告訴您更多有關大酒瓶中斷技能的信息。";
+		mes "當您準備了解更多信息時，我會在這裡。";
+		set tu_swordman, 22;
+		close;
+	case 13:
+		mes "您應該盡快離開，與Geffen見Dequ'ee。您記得在哪裡可以找到他，不是嗎？";
+		close;
+	case 12:
+		mes "那你怎麼樣";
+		mes "忍受訓練";
+		mes "技巧來了？";
+		next;
+		set .@chk_endure, getskilllv("SM_ENDURE");
+		if(.@chk_endure > 1){
+			mes "[舒拉納克]";
+			mes "從您的皮膚上的那種韌性的Gleen中，我現在看到我很愚蠢。做得好~";
+			set tu_swordman, 13;
+			erasequest 8221;
+			setquest 8222;
+			if (checkre(3))
+				getexp 126,0;
+			else
+				getexp 1260,0;
+			next;
+			mes "[舒拉納克]";
+			mes "啊，我再次有";
+			mes "您執行的另一項任務。請訪問Geffen的Dequ'ee，因為他似乎有東西";
+			mes "問你。";
+			next;
+			mes "[舒拉納克]";
+			mes "快點與Dequ'ee見面，並在完成他希望您做的一切時返回我。";
+			close;
+		} else {
+			mes "[舒拉納克]";
+			mes "唔...";
+			mes "你還不是";
+			mes "到那裡。在";
+			mes "同時，我鼓勵";
+			mes "您要加倍努力！";
+			close;
+		}
+	case 11:
+		mes "你也是";
+		mes "學會瞭如何使用";
+		mes "持久技巧了嗎？";
+		next;
+		set .@chk_endure, getskilllv("SM_ENDURE");
+		if((.@chk_endure > 0) && (.@chk_endure < 2)){
+			mes "[舒拉納克]";
+			mes "我看到你";
+			mes "知道如何使用";
+			mes "忍受技巧。不過，如果我查看有關其使用的基本細節，那不會受到傷害...";
+			next;
+			mes "[舒拉納克]";
+			mes "正如您注意到的那樣，受到任何損害會導致您痛苦中的痛苦，使您立即震驚。因此，迅速攻擊的敵人很危險，因為它很難反駁或逃脫。";
+			next;
+			mes "[順蘭克]";
+			mes "激活持久性使您能夠擺脫攻擊。您將受到傷害，但敵人的攻擊不會妨礙您。這意味著您可以應對敵人的攻擊或逃脫。";
+			next;
+			mes "[舒拉納克]";
+			mes "當然，您不能永遠使用持久。但是，您越增加持久水平";
+			mes "技能，更長的持久效果將持續下去。另外，請記住，忍耐也有技巧延遲。";
+			next;
+			mes "[舒拉納克]";
+			mes "由於您已經學會了持久的技能，因此我認為我不需要進一步解釋它。你做得很好。";
+			erasequest 8221;
+			setquest 8222;
+			set tu_swordman, 13;
+			next;
+			mes "[舒拉納克]";
+			mes "啊，我再次有";
+			mes "您執行的另一項任務。請訪問Geffen的Dequ'ee，因為他似乎有東西";
+			mes "問你。";
+			next;
+			mes "[舒拉納克]";
+			mes "快點與Dequ'ee見面，並在完成他希望您做的一切時返回我。";
+			close2;
+			end;
+		} else if(.@chk_endure > 1){
+			mes "[舒拉納克]";
+			mes "從您的皮膚上的那種韌性的Gleen中，我現在看到我很愚蠢。做得好~";
+			set tu_swordman, 13;
+			erasequest 8221;
+			setquest 8222;
+			if (checkre(3))
+				getexp 126,0;
+			else
+				getexp 1260,0;
+			next;
+			mes "[舒拉納克]";
+			mes "啊，我再次有";
+			mes "您執行的另一項任務。請訪問Geffen的Dequ'ee，因為他似乎有東西";
+			mes "問你。";
+			next;
+			mes "[舒拉納克]";
+			mes "快點與Dequ'ee見面，並在完成他希望您做的一切時返回我。";
+			close;
+		} else {
+			mes "[舒拉納克]";
+			mes "不...？";
+			mes "我建議您盡快學習。忍耐是任何劍客的寶貴技能！";
+			close;
+		}
+	case 10:
+		mes "時間到了";
+		mes "讓我告訴你";
+		mes "我所知道的";
+		mes "持久技巧。";
+		next;
+		set .@chk_endure, getskilllv("SM_ENDURE");
+		if(.@chk_endure == 0){
+			mes "[舒拉納克]";
+			mes "正如您注意到的那樣，受到任何損害會導致您痛苦中的痛苦，使您立即震驚。因此，迅速攻擊的敵人很危險，因為它很難反駁或逃脫。";
+			next;
+			mes "[順蘭克]";
+			mes "激活持久性使您能夠擺脫攻擊。您將受到傷害，但敵人的攻擊不會妨礙您。這意味著您可以應對敵人的攻擊或逃脫。";
+			next;
+			mes "[舒拉納克]";
+			mes "當然，您不能永遠使用持久。但是，您越增加持久水平";
+			mes "技能，更長的持久效果將持續下去。另外，請記住，忍耐也有技巧延遲。";
+			next;
+			mes "[舒拉納克]";
+			mes "好吧。現在，我希望您訓練使用持久技能。你可以成為偉大的劍客";
+			mes "如果您可以忍受攻擊";
+			mes "來自你的敵人！";
+			set tu_swordman, 11;
+			changequest 8220,8221;
+			close;
+		} else if((.@chk_endure > 0) && (.@chk_endure < 2)){
+			mes "[舒拉納克]";
+			mes "我看到你";
+			mes "知道如何使用";
+			mes "忍受技巧。不過，如果我查看有關其使用的基本細節，那不會受到傷害...";
+			next;
+			mes "[舒拉納克]";
+			mes "正如您注意到的那樣，受到任何損害會導致您痛苦中的痛苦，使您立即震驚。因此，迅速攻擊的敵人很危險，因為它很難反駁或逃脫。";
+			next;
+			mes "[舒拉納克]";
+			mes "激活持久性使您能夠擺脫攻擊。您將受到傷害，但敵人的攻擊不會妨礙您。這意味著您可以應對敵人的攻擊或逃脫。";
+			next;
+			mes "[舒拉納克]";
+			mes "當然，您不能永遠使用持久。但是，您越增加持久水平";
+			mes "技能，更長的持久效果將持續下去。另外，請記住，忍耐也有技巧延遲。";
+			next;
+			mes "[舒拉納克]";
+			mes "由於您已經學會了持久的技能，因此我認為我不需要進一步解釋它。你做得很好。";
+			set tu_swordman, 13;
+			erasequest 8221;
+			setquest 8222;
+			next;
+			mes "[舒拉納克]";
+			mes "啊，我再次有";
+			mes "您執行的另一項任務。請訪問Geffen的Dequ'ee，因為他似乎有東西";
+			mes "問你。";
+			next;
+			mes "[舒拉納克]";
+			mes "快點與Dequ'ee見面，並在完成他希望您做的一切時返回我。";
+			close;
+		} else if(.@chk_endure > 1){
+			mes "[舒拉納克]";
+			mes "嗯。但是，從您的皮膚上的韌性的Gleen來看，我想教您忍受的時間會浪費您的時間。做得好！";
+			set tu_swordman, 13;
+			erasequest 8221;
+			setquest 8222;
+			if (checkre(3))
+				getexp 126,0;
+			else
+				getexp 1260,0;
+			next;
+			mes "[舒拉納克]";
+			mes "啊，我再次有";
+			mes "您執行的另一項任務。請訪問Geffen的Dequ'ee，因為他似乎有東西";
+			mes "問你。";
+			next;
+			mes "[舒拉納克]";
+			mes "快點與Dequ'ee見面，並在完成他希望您做的一切時返回我。";
+			close;
+		}
+	case 9:
+		mes "所以你去過";
+		mes "了解更多有關";
+		mes "挑釁技能的使用？";
+		next;
+		set .@chk_provoke, getskilllv("SM_PROVOKE");
+		if((.@chk_provoke > 4) && (.@chk_provoke < 10)){
+			mes "[舒拉納克]";
+			mes "啊，我看到您對挑釁技能有很好的了解。讓我以這種小的方式獎勵您。";
+			set tu_swordman, 10;
+			if (checkre(3))
+				getexp 112,0;
+			else
+				getexp 1120,0;
+			next;
+			mes "[舒拉納克]";
+			mes "下次我們講話時，我會告訴您我對 ^5d478bendure ^000000技能的了解。當您準備學習時，請回到我身邊。";
+			close;
+		} else if(.@chk_provoke == 10){
+			mes "[舒拉納克]";
+			mes "是的，你已經掌握了";
+			mes "惹？感人的！";
+			mes "我知道你做了";
+			mes "振作起來";
+			mes "傑出的劍客。";
+			mes "這是一個很小的獎勵...";
+			set tu_swordman, 10;
+			if (checkre(3))
+				getexp 126,0;
+			else
+				getexp 1260,0;
+			next;
+			mes "[舒拉納克]";
+			mes "下次我們講話時，我會告訴您我對 ^5d478bendure ^000000技能的了解。當您準備學習時，請回到我身邊。";
+			close;
+		} else {
+			mes "[舒拉納克]";
+			mes "嗯，我承認";
+			mes "您的進度，但您還不到那兒。您必須在挑釁方面變得更熟練";
+			mes "我可以繼續講座。";
+			close;
+		}
+	case 8:
+		mes "啊，你回來了。";
+		mes "那麼您的培訓如何";
+		mes "在挑釁的使用中";
+		mes "技能進步了嗎？";
+		next;
+		set .@chk_provoke, getskilllv("SM_PROVOKE");
+		if((.@chk_provoke > 0) && (.@chk_provoke < 5)){
+			mes "[舒拉納克]";
+			mes "啊，現在我可以看到你";
+			mes "知道如何使用它。對於根本無法使用它，這是一個巨大的進步。讓我根據挑釁的詳細信息來介紹您。";
+			next;
+			mes "[舒拉納克]";
+			mes "為了有效使用挑釁，您必須了解";
+			mes "它的工作原理：挑釁您的對手，使他們成為";
+			mes "想攻擊你。";
+			next;
+			mes "[舒拉納克]";
+			mes "當受到挑釁時，敵人將具有更大的攻擊力量，使其更加危險，但也將減少防守，使您的敵人更容易擊敗。";
+			next;
+			mes "[舒拉納克]";
+			mes "理想情況下，當敵人被足夠削弱時，您可能希望對敵人使用挑釁，以便您可以更快地完成它們。但這取決於你。";
+			next;
+			mes "[舒拉納克]";
+			mes "同樣，使用的挑釁程度越高，目標的攻擊增加和防禦量越高。";
+			next;
+			mes "[舒拉納克]";
+			mes "作為一種積極的技能，挑釁會消耗少量的SP，就像Bash一樣。因此，使用此技能時請注意不要用完SP。";
+			next;
+			mes "[舒拉納克]";
+			mes "好吧，當您變得足夠熟練地使用挑釁時，請回到我身邊。同時，繼續培訓。";
+			set tu_swordman, 9;
+			close;
+		} else if((.@chk_provoke > 4) && (.@chk_provoke < 10)){
+			mes "[舒拉納克]";
+			mes "啊，我看到您對挑釁技能有很好的了解。讓我以這種小的方式獎勵您。";
+			set tu_swordman, 10;
+			if (checkre(3))
+				getexp 112,0;
+			else
+				getexp 1120,0;
+			next;
+			mes "[舒拉納克]";
+			mes "下次我們講話時，我會告訴您我對 ^5d478bendure ^000000技能的了解。當您準備學習時，請回到我身邊。";
+			close;
+		} else if(.@chk_provoke == 10){
+			mes "[舒拉納克]";
+			mes "是的，你已經掌握了";
+			mes "惹？感人的！";
+			mes "我知道你做了";
+			mes "振作起來";
+			mes "傑出的劍客。";
+			mes "這是一個很小的獎勵...";
+			set tu_swordman, 10;
+			if (checkre(3))
+				getexp 126,0;
+			else
+				getexp 1260,0;
+			next;
+			mes "下次我們講話時，我會告訴您我對 ^5d478bendure ^000000技能的了解。當您準備學習時，請回到我身邊。";
+			close;
+		} else {
+			mes "[舒拉納克]";
+			mes "仍然沒有學到的挑釁，是嗎？作為劍客，我相信至少您能夠使用挑釁很重要！";
+			close;
+		}
+	case 7:
+		mes "啊，你回來了。對於新的劍客，你做得很大";
+		mes "出色地。那是什麼消息";
+		mes "來自Dequ'ee？";
+		next;
+		mes "[舒拉納克]";
+		mes "我懂了...";
+		mes "好吧，現在我們照顧了";
+		mes "其中，讓我繼續您關於劍客技能的指導。這次，我們將掩蓋挑釁。";
+		next;
+		set .@chk_provoke, getskilllv("SM_PROVOKE");
+		if(.@chk_provoke == 0){
+			mes "[舒拉納克]";
+			mes "你沒有";
+			mes "學會了嗎？";
+			mes "嗯。更多的原因";
+			mes "那我應該向你解釋。";
+			next;
+			mes "[舒拉納克]";
+			mes "為了有效使用挑釁，您必須了解";
+			mes "它的工作原理：挑釁您的對手，使他們成為";
+			mes "想攻擊你。";
+			next;
+			mes "[舒拉納克]";
+			mes "當受到挑釁時，敵人將具有更大的攻擊力量，使其更加危險，但也將減少防守，使您的敵人更容易擊敗。";
+			next;
+			mes "[舒拉納克]";
+			mes "理想情況下，當敵人被足夠削弱時，您可能希望對敵人使用挑釁，以便您可以更快地完成它們。但這取決於你。";
+			next;
+			mes "[舒拉納克]";
+			mes "同樣，使用的挑釁程度越高，目標的攻擊增加和防禦量越高。";
+			next;
+			mes "[舒拉納克]";
+			mes "作為一種積極的技能，挑釁會消耗少量的SP，就像Bash一樣。因此，使用此技能時請注意不要用完SP。";
+			next;
+			mes "[舒拉納克]";
+			mes "現在，我要求您訓練自己的使用。回來";
+			mes "對我來說，當您對挑釁技能的使用有足夠的了解時。";
+			set tu_swordman, 8;
+			changequest 8217,8218;
+			close;
+		} else if((.@chk_provoke > 0) && (.@chk_provoke < 5)){
+			mes "[舒拉納克]";
+			mes "嗯。您似乎對挑釁有基本的了解，但讓我給您一些細節，以便您可以更好地了解該技能的使用。";
+			next;
+			mes "[舒拉納克]";
+			mes "為了有效使用挑釁，您必須了解";
+			mes "它的工作原理：挑釁您的對手，使他們成為";
+			mes "想攻擊你。";
+			next;
+			mes "[舒拉納克]";
+			mes "當受到挑釁時，敵人將具有更大的攻擊力量，使其更加危險，但也將減少防守，使您的敵人更容易擊敗。";
+			next;
+			mes "[舒拉納克]";
+			mes "理想情況下，當敵人被足夠削弱時，您可能希望對敵人使用挑釁，以便您可以更快地完成它們。但這取決於你。";
+			next;
+			mes "[舒拉納克]";
+			mes "同樣，使用的挑釁程度越高，目標的攻擊增加和防禦量越高。";
+			next;
+			mes "[舒拉納克]";
+			mes "作為一種積極的技能，挑釁會消耗少量的SP，就像Bash一樣。因此，使用此技能時請注意不要用完SP。";
+			next;
+			mes "[舒拉納克]";
+			mes "現在，我要求您訓練自己的使用。回來";
+			mes "對我來說，當您對挑釁技能的使用有足夠的了解時。";
+			set tu_swordman, 9;
+			changequest 8218,8219;
+			close;
+		} else if((.@chk_provoke > 4) && (.@chk_provoke < 10)){
+			mes "[舒拉納克]";
+			mes "啊，我看到您對挑釁技能有很好的了解。讓我以這種小的方式獎勵您。";
+			set tu_swordman, 10;
+			changequest 8219,8220;
+			if (checkre(3))
+				getexp 112,0;
+			else
+				getexp 1120,0;
+			next;
+			mes "[舒拉納克]";
+			mes "下次我們講話時，我會告訴您我對 ^5d478bendure ^000000技能的了解。當您準備學習時，請回到我身邊。";
+			close;
+		} else if(.@chk_provoke == 10){
+			mes "[舒拉納克]";
+			mes "是的，你已經掌握了";
+			mes "惹？感人的！";
+			mes "我知道你做了";
+			mes "振作起來";
+			mes "傑出的劍客。";
+			mes "這是一個很小的獎勵...";
+			set tu_swordman, 10;
+			completequest 8218;
+			completequest 8219;
+			completequest 8220;
+			setquest 8221;
+			if (checkre(3))
+				getexp 126,0;
+			else
+				getexp 1260,0;
+			next;
+			mes "[舒拉納克]";
+			mes "下次我們講話時，我會告訴您我對 ^5d478bendure ^000000技能的了解。當您準備學習時，請回到我身邊。";
+			close;
+		}
+	case 6:
+		mes "我希望您能找到一個名為 ^5d478bdequ'ee ^000000 In ^5d478bgeffen ^000000的騎士。仔細聽，這是消息";
+		mes "我要你給他。";
+		next;
+		mes "[舒拉納克]";
+		mes "^0000ff發生了什麼";
+		mes "致兇手？ ^000000";
+		mes "^0000ffdid您知道他是誰？如果您這樣做了，我們現在該怎麼辦？ ^000000";
+		next;
+		mes "[舒拉納克]";
+		mes "如果您使用這些確切的單詞，Dequ'ee將了解什麼";
+		mes "你在說。記住他的回答，讓我知道他的回答。";
+		next;
+		mes "[舒拉納克]";
+		mes "在去格芬的路上，不應該太艱難地與怪物打架，但是如果您遇到任何太強大的人，那就不會羞於逃跑。";
+		next;
+		mes "[舒拉納克]";
+		mes "但是現在我想了，可能需要您一段時間才能前往Geffen。我自己寄給你！祝你好運！";
+		next;
+		warp "gef_fild07",35,192;
+		close;
+	case 5:
+		mes "啊，你回來了。我知道我說我會教你我對挑釁技能的了解，但是...";
+		next;
+		mes "[舒拉納克]";
+		mes "我實際上有一個重要的任務，我希望您能夠執行。這不是很困難：您所要做的就是傳達信息。";
+		next;
+		mes "[舒拉納克]";
+		mes "我希望您能找到一個名為 ^5d478bdequ'ee ^000000 In ^5d478bgeffen ^000000的騎士。仔細聽，這是消息";
+		mes "我要你給他。";
+		next;
+		mes "[舒拉納克]";
+		mes "^0000ff發生了什麼";
+		mes "致兇手？ ^000000";
+		mes "^0000ffdid您知道他是誰？如果您這樣做了，我們現在該怎麼辦？ ^000000";
+		next;
+		mes "[舒拉納克]";
+		mes "如果您使用這些確切的單詞，Dequ'ee將了解什麼";
+		mes "你在說。記住他的回答，讓我知道他的回答。";
+		next;
+		mes "[舒拉納克]";
+		mes "在去格芬的路上，不應該太艱難地與怪物打架，但是如果您遇到任何太強大的人，那就不會羞於逃跑。";
+		next;
+		mes "[舒拉納克]";
+		mes "雖然有翹曲服務，但";
+		mes "我建議步行旅行。如果不測試自己的力量並練習技能，您將無法成長！";
+		set tu_swordman, 6;
+		changequest 8215,8216;
+		close;
+	case 4:
+		mes "由於您已經掌握了Bash，";
+		mes "我覺得您已經準備好了解有關劍客技能的更多信息。";
+		next;
+		mes "[舒拉納克]";
+		mes "現在，您必須熟悉 ^5d478bincrease HP恢復技能 ^000000。什麼時候";
+		mes "這是損壞的，你一定是";
+		mes "能夠將其拿出來。";
+		next;
+		set .@chk_hp, getskilllv("SM_RECOVERY");
+		if(.@chk_hp == 0){
+			mes "[舒拉納克]";
+			mes "但是從那以判斷";
+			mes "你的怪異框架，";
+			mes "看起來您根本沒有學會HP恢復技能的增加...！";
+			next;
+			mes "[舒拉納克]";
+			mes "HP恢復技能的提高";
+			mes "是一種被動的技能，總是有效，不會消耗";
+			mes "您的任何SP。";
+			next;
+			mes "[舒拉納克]";
+			mes "它使您能夠快速再生健康的兩倍。這似乎沒什麼大不了的，但這將減少您需要從戰鬥中休息的時間。";
+			next;
+			mes "[舒拉納克]";
+			mes "我強烈建議你";
+			mes "學習這個技能！當然，還有其他劍客技能同樣重要...";
+			set tu_swordman, 5;
+			next;
+		} else if(.@chk_hp == 10){
+			mes "[舒拉納克]";
+			mes "啊!那健康的光芒！";
+			mes "我看到您已經掌握了這項技能。讓我為您的辛勤訓練提供一點獎勵！";
+			set tu_swordman, 5;
+			if (checkre(3))
+				getexp 112,0;
+			else
+				getexp 1120,0;
+			next;
+		} else {
+			mes "[舒拉納克]";
+			mes "啊，我看到您已經學到了一些知識。但是，讓我簡要地告訴您有關增加HP恢復的更多信息。";
+			next;
+			mes "[舒拉納克]";
+			mes "HP恢復技能的提高";
+			mes "是一種被動的技能，總是有效，不會消耗";
+			mes "您的任何SP。";
+			next;
+			mes "[舒拉納克]";
+			mes "它使您能夠快速再生健康的兩倍。這似乎沒什麼大不了的，但這將減少您需要從戰鬥中休息的時間。";
+			next;
+			mes "[舒拉納克]";
+			mes "增加HP恢復是一項相當重要的技能，但是無論您是否想掌握這取決於您的能力。";
+			set tu_swordman, 5;
+			next;
+		}
+		setquest 8215;
+		mes "[舒拉納克]";
+		mes "到現在為止，我相信您對增加的HP恢復技能已經足夠了解。下次，我將教您我對挑釁技能的了解。";
+		close;
+	case 3:
+		mes "如果你想成為";
+		mes "能夠完整";
+		mes "狂歡技巧的力量，";
+		mes "你最好掌握它";
+		mes "如果你要我承認";
+		mes "你是劍客。";
+		next;
+		set .@chk_bash, getskilllv("SM_BASH");
+		if(.@chk_bash == 10){
+			mes "[舒拉納克]";
+			mes "那些老繭...！";
+			mes "只有狂歡技能的主人才有那種手。偉大的工作，劍客。我印象深刻。";
+			next;
+			mes "[舒拉納克]";
+			mes "這是一個小獎項，以表彰您到目前為止的努力。但是不要放鬆！在抓住之前，您還有很長的路要走";
+			mes "所有基礎知識。";
+			set tu_swordman, 4;
+			changequest 8213,8214;
+			if (checkre(3))
+				getexp 97,0;
+			else
+				getexp 970,0;
+			getitem 2503,1; //Muffler
+			close;
+		} else {
+			mes "[舒拉納克]";
+			mes "嗯，你也許可以";
+			mes "使用Bash非常好，但是您還不是大師。我鼓勵您掌握Bash，以釋放其真正的潛力！";
+			close;
+		}
+	case 2:
+		mes "我希望你去過";
+		mes "訓練自己使用";
+		mes "bash。如果您想成長為劍客，您將擁有很棒的";
+		mes "需要掌握這項技能。";
+		next;
+		set .@chk_bash, getskilllv("SM_BASH");
+		if((.@chk_bash > 4) && (.@chk_bash < 10)){
+			mes "[舒拉納克]";
+			mes "嗯。看起來您並沒有掌握狂歡，但似乎您正在努力。";
+			next;
+			mes "[舒拉納克]";
+			mes "讓我回顧一下Bash技能的使用。如果您以前聽過此消息，那將是一個很好的複習。";
+			next;
+			mes "[舒拉納克]";
+			mes "BASH是一項積極的技能，在10級掌握了10級，可讓您粉碎目標。本質上";
+			mes "這是一場高度破壞的攻擊！";
+			next;
+			mes "[舒拉納克]";
+			mes "由於這是一項積極的技能，因此每次Bash都會消耗SP";
+			mes "用過的。如果您不小心，您將立即離開SP ...！";
+			next;
+			mes "[舒拉納克]";
+			mes "這是您所有辛勤工作的一點點獎勵。希望您意識到將bash用作使用的重要性";
+			mes "你變得更強壯。";
+			set tu_swordman, 3;
+			changequest 8212,8213;
+			if (checkre(3))
+				getexp 83,0;
+			else
+				getexp 830,0;
+			close;
+		} else if(.@chk_bash == 10){
+			mes "[舒拉納克]";
+			mes "那些老繭...！";
+			mes "只有狂歡技能的主人才有那種手。偉大的工作，劍客。我印象深刻。";
+			next;
+			mes "[舒拉納克]";
+			mes "這是一個小獎項，以表彰您到目前為止的努力。但是不要放鬆！在抓住之前，您還有很長的路要走";
+			mes "所有基礎知識。";
+			set tu_swordman, 4;
+			changequest 8212,8214;
+			if (checkre(3))
+				getexp 97,0;
+			else
+				getexp 970,0;
+			getitem 2503,1; //Muffler
+			close;
+		} else {
+			mes "[舒拉納克]";
+			mes "嗯，你也許可以";
+			mes "使用Bash非常好，但是您還不是大師。我鼓勵您掌握Bash，以釋放其真正的潛力！";
+			close;
+		}
+	case 1:
+		mes "你一直在學習嗎";
+		mes "使用bash的藝術？我熱烈地相信，狂歡技巧是劍術的精緻！";
+		next;
+		set .@chk_bash, getskilllv("SM_BASH");
+		if((.@chk_bash > 0) && (.@chk_bash < 5)){
+			mes "[舒拉納克]";
+			mes "我看到你明白";
+			mes "關於狂歡技巧的一點。但是，這還不夠。讓我詳細解釋...";
+			next;
+			mes "[舒拉納克]";
+			mes "BASH是一項積極的技能，在10級掌握了10級，可讓您粉碎目標。本質上";
+			mes "這是一場高度破壞的攻擊！";
+			next;
+			mes "[舒拉納克]";
+			mes "由於這是一項積極的技能，因此每次Bash都會消耗SP";
+			mes "用過的。如果您不小心，您將立即離開SP ...！";
+			next;
+			mes "[舒拉納克]";
+			mes "好吧，這就是我現在可以告訴您的有關Bash的信息。至於它微妙的細微差別，您必須自己體驗它們";
+			mes "在戰鬥中。";
+			next;
+			mes "[舒拉納克]";
+			mes "不過，為了您的培訓，讓我給您一個謙虛的回報。但是請記住，我們還有更多";
+			mes "涵蓋基本面！";
+			set tu_swordman, 2;
+			changequest 8211,8212;
+			if (checkre(3))
+				getexp 58,0;
+			else
+				getexp 580,0;
+			close;
+		} else if((.@chk_bash > 4) && (.@chk_bash < 10)){
+			mes "[舒拉納克]";
+			mes "唔...";
+			mes "仍然沒有掌握bash，是嗎？好吧，無論如何，我認為您已經取得了一些進步。";
+			next;
+			mes "[舒拉納克]";
+			mes "讓我向您解釋使用Bash技能的使用。如果您以前聽過此消息，那將是一個很好的複習。";
+			next;
+			mes "[舒拉納克]";
+			mes "我看到你明白";
+			mes "關於狂歡技巧的一點。但是，這還不夠。讓我詳細解釋...";
+			next;
+			mes "[舒拉納克]";
+			mes "BASH是一項積極的技能，在10級掌握了10級，可讓您粉碎目標。本質上";
+			mes "這是一場高度破壞的攻擊！";
+			next;
+			mes "[舒拉納克]";
+			mes "由於這是一項積極的技能，因此每次Bash都會消耗SP";
+			mes "用過的。如果您不小心，您將立即離開SP ...！";
+			next;
+			mes "[舒拉納克]";
+			mes "好吧，這就是我現在可以告訴您的有關Bash的信息。至於它微妙的細微差別，您必須自己體驗它們";
+			mes "在戰鬥中。";
+			next;
+			mes "[舒拉納克]";
+			mes "為了您的努力和耐心，我為您提供了這個小的獎勵。請接受並變得更強壯...";
+			set tu_swordman, 3;
+			changequest 8211,8213;
+			if (checkre(3))
+				getexp 83,0;
+			else
+				getexp 830,0;
+			next;
+			mes "[舒拉納克]";
+			mes "我相信每個真正的劍客都應該掌握狂歡技巧。如果您曾經掌握劍客的技能，請回到我身邊。";
+			close;
+		} else if(.@chk_bash == 10){
+			mes "[舒拉納克]";
+			mes "那些老繭...！";
+			mes "只有狂歡技能的主人才有那種手。偉大的工作，劍客。我印象深刻。";
+			next;
+			mes "[舒拉納克]";
+			mes "這是一個小獎項，以表彰您到目前為止的努力。但是不要放鬆！在抓住之前，您還有很長的路要走";
+			mes "所有基礎知識。";
+			set tu_swordman, 4;
+			changequest 8211,8214;
+			if (checkre(3))
+				getexp 97,0;
+			else
+				getexp 970,0;
+			getitem 2503,1; //Muffler
+			close;
+		} else {
+			mes "[舒拉納克]";
+			mes "您甚至還不能使用bash ...？如果不粉碎東西，劍有什麼用？回到我身邊";
+			mes "一旦您學會瞭如何使用";
+			mes "那技巧！";
+			close;
+		}
+	case 0:
+		mes "啊，武裝的同志。";
+		mes "請允許我自我介紹。我是Shurank Chainlier，是為Prontera騎士精神服務的騎士。";
+		next;
+		mes "[舒拉納克]";
+		mes "我深切地擔心，今天的劍客可能無法真正理解劍的方式。並認為他們以後可能成為騎士...";
+		next;
+		mes "[舒拉納克]";
+		mes "你在訓練嗎";
+		mes "成為一名專業的劍客？";
+		mes "如果是這樣，您必須學習";
+		mes "基本面，第一個";
+		mes "這是 ^5d478bbash ^000000技能。";
+		next;
+		set .@chk_bash, getskilllv("SM_BASH");
+		if(.@chk_bash == 0){
+			mes "[舒拉納克]";
+			mes "^333333*喘氣*^000000";
+			mes "那些柔軟，精緻的手！您從未學會過如何使用bash，不是嗎？您如何期望在不知道bash的情況下進行戰鬥？";
+			next;
+			mes "[舒拉納克]";
+			mes "現在，如果您想成為真正的劍客，則必須學習BASH技能。毫無疑問：您必須了解這些基礎知識！接受這個，學習狂歡！";
+			set tu_swordman, 1;
+			if (checkre(3))
+				getexp 49,0;
+			else
+				getexp 490,0;
+			setquest 8211;
+			close;
+		} else if((.@chk_bash > 0) && (.@chk_bash < 5)){
+			mes "[舒拉納克]";
+			mes "我看到你明白";
+			mes "關於狂歡技巧的一點。但是，這還不夠。讓我詳細解釋...";
+			next;
+			mes "[舒拉納克]";
+			mes "BASH是一項積極的技能，在10級掌握了10級，可讓您粉碎目標。本質上";
+			mes "這是一場高度破壞的攻擊！";
+			next;
+			mes "[舒拉納克]";
+			mes "由於這是一項積極的技能，因此每次Bash都會消耗SP";
+			mes "用過的。如果您不小心，您將立即離開SP ...！";
+			next;
+			mes "[舒拉納克]";
+			mes "好吧，這就是我現在可以告訴您的有關Bash的信息。至於它微妙的細微差別，您必須自己體驗它們";
+			mes "在戰鬥中。";
+			next;
+			mes "[舒拉納克]";
+			mes "不過，為了您的培訓，讓我給您一個謙虛的回報。但是請記住，我們還有更多";
+			mes "涵蓋基本面！";
+			set tu_swordman, 2;
+			setquest 8212;
+			if (checkre(3))
+				getexp 58,0;
+			else
+				getexp 580,0;
+			close;
+		} else if((.@chk_bash > 4) && (.@chk_bash < 10)){
+			mes "[舒拉納克]";
+			mes "我看到您已經熟練了Bash技能。但是，這還不夠。讓我解釋一下...";
+			next;
+			mes "[舒拉納克]";
+			mes "BASH是一項積極的技能，在10級掌握了10級，可讓您粉碎目標。本質上";
+			mes "這是一場高度破壞的攻擊！";
+			next;
+			mes "[舒拉納克]";
+			mes "由於這是一項積極的技能，因此每次Bash都會消耗SP";
+			mes "用過的。如果您不小心，您將立即離開SP ...！";
+			next;
+			mes "[舒拉納克]";
+			mes "好吧，這就是我現在可以告訴您的有關Bash的信息。至於它微妙的細微差別，您必須自己體驗它們";
+			mes "在戰鬥中。";
+			next;
+			mes "[舒拉納克]";
+			mes "不過，為了您的培訓，讓我給您一個謙虛的回報。但是請記住，我們還有更多";
+			mes "涵蓋基本面！";
+			set tu_swordman, 3;
+			setquest 8213;
+			if (checkre(3))
+				getexp 83,0;
+			else
+				getexp 830,0;
+			next;
+			mes "[舒拉納克]";
+			mes "但是，如果您想成為我眼中的專家劍客，則必須掌握Bash！";
+			close;
+		} else if(.@chk_bash == 10){
+			mes "[舒拉納克]";
+			mes "那些老繭...！";
+			mes "只有狂歡技能的主人才有那種手。偉大的工作，劍客。我印象深刻。";
+			next;
+			mes "[舒拉納克]";
+			mes "這是一個小獎項，以表彰您到目前為止的努力。但是不要放鬆！在抓住之前，您還有很長的路要走";
+			mes "所有基礎知識。";
+			set tu_swordman, 4;
+			// completequest 8211;
+			// completequest 8212;
+			// completequest 8213;
+			setquest 8214;
+			if (checkre(3))
+				getexp 97,0;
+			else
+				getexp 970,0;
+			getitem 2503,1; //Muffler
+			close;
+		}
+	}
+	mes "...";
+	mes "......";
+	close;
+}
+
+// Daqu'ee
+//============================================================
+geffen,154,143,3	script	Dequ'ee	734,{
+	if(BaseJob == Job_Novice){
+		mes "[的去哦哦]";
+		mes "嘿。";
+		mes "沮喪";
+		mes "作為新手？";
+		mes "我知道，我知道，";
+		mes "我們都去過";
+		mes "曾經。";
+		next;
+		mes "[的去哦哦]";
+		mes "如果您想變得更強壯，";
+		mes "您為什麼不考慮成為劍客？這將需要您的紀律，但是這項工作將使您成為艱難的戰士。";
+		next;
+		mes "[的去哦哦]";
+		mes "最終是您的決定。";
+		mes "我不知道你想如何過自己的生活，但是你應該給劍客的工作認真思考...";
+		close;
+	}
+	if(BaseClass == Job_Swordman && (eaclass()&(EAJL_2|EAJL_UPPER))){
+		mes "[的去哦哦]";
+		mes "啊...";
+		mes "同伴劍威者！";
+		mes "你最近好嗎？";
+		next;
+		mes "[的去哦哦]";
+		mes "必須有很多人必須";
+		mes "取決於刀片的強度。這是一個很棒的責任，但我們永遠無法在戰鬥中讓盟友失望...";
+		close;
+	}
+	if(BaseClass != Job_Swordman){
+		mes "[的去哦哦]";
+		mes "你好呀。";
+		mes "不是劍的粉絲，是嗎？";
+		mes "好吧，如果你是，我們會";
+		mes "要談論的東西。";
+		next;
+		mes "[的去哦哦]";
+		mes "是的。";
+		mes "不多";
+		mes "對話";
+		mes "發生在這裡。";
+		mes "很無聊...";
+		close;
+	}
+	if(tu_swordman > 20){
+		mes "[的去哦哦]";
+		mes "我希望你繼續";
+		mes "訓練自己";
+		mes "劍的方式。";
+		mes "有一種藝術";
+		mes "揮舞刀片...";
+		close;
+	}
+	if(tu_swordman == 20){
+		mes "[的去哦哦]";
+		mes "嗯...？";
+		mes "你不應該";
+		mes "密切關注班克利？";
+		mes "發生了什麼？";
+		next;
+		mes "[的去哦哦]";
+		mes "自殺...？";
+		mes "你是認真的？ ！";
+		mes "但是沒有必要殺死";
+		mes "如果他懷疑自己已經被抓住了。這裡發生了一些陰暗的事情！";
+		next;
+		mes "[的去哦哦]";
+		mes "好吧，你做得很好。";
+		mes "至於其他三名犯罪嫌疑人，我將確保他們受劍客協會成員的監視。";
+		next;
+		mes "[的去哦哦]";
+		mes "不過，我認為我們不會從這三個學到任何新東西。";
+		mes "看來這種情況暫時關閉了。再次感謝您的幫助。";
+		next;
+		mes "[的去哦哦]";
+		mes "你為什麼不報告現在給舒蘭克？我想他還在";
+		mes "想向您展示劍術的繩索。";
+		set tu_swordman, 21;
+		changequest 8226,8227;
+		close2;
+		if (checkre(0))
+			warp "izlude",127,100;
+		else
+			warp "izlude",35,78;
+		end;
+	}
+	if(tu_swordman == 19){
+		mes "[的去哦哦]";
+		mes "這裡還在做什麼？";
+		mes "快點檢查班克利！";
+		mes "沒有告訴什麼";
+		mes "他可能要做！";
+		close;
+	}
+	if((tu_swordman == 17) || (tu_swordman == 18)){
+		mes "[的去哦哦]";
+		if(tu_swordman == 17){
+			mes "泰斯威瑟姆";
+			mes "孔班弗維迪希";
+			mes "維克利翁登塞姆";
+			mes "海克德菲德林德凱爾斯德";
+			next;
+		} else if(tu_swordman == 18){
+			mes "海克德菲德林德凱爾斯德";
+			mes "泰斯威瑟姆";
+			mes "孔班弗維迪希";
+			mes "維克利翁登塞姆";
+			next;
+		}
+		mes "[的去哦哦]";
+		mes "我現在明白了！";
+		mes "這是一個複雜的轉置密碼，我們從其餘部分中刪除一個人的代碼。所以你認為誰是";
+		mes "兇手？";
+		next;
+		switch(select("漢斯:班克利:蓋爾:穆特羅")) {
+		case 1:
+			mes "[的去哦哦]";
+			mes "漢斯...？";
+			mes "那是不對的。";
+			mes "它與";
+			mes "這個算法我只是";
+			mes "捏造。你有";
+			mes "再次嘗試！";
+			close;
+		case 2:
+			mes "[的去哦哦]";
+			mes "班克利...？";
+			mes "嘿，你可能是";
+			mes "正確的。讓我檢查...";
+			next;
+			mes "[的去哦哦]";
+			mes "是的，當您從其他內容中獲取Bankley的密碼並以正確的順序閱讀所有密碼...";
+			next;
+			mes "[的去哦哦]";
+			mes "好吧！看來班克利是兇手！儘管我們不能相信這100％，但這些證據是相當確定的。";
+			next;
+			mes "[的去哦哦]";
+			mes "趕緊去摩洛哥，並監視班克利（Bankley），以防他做任何絕望的事情。如果發生了什麼事，請立即向我報告！";
+			set tu_swordman, 19;
+			changequest 8224,8225;
+			if (checkre(3))
+				getexp 162,0;
+			else
+				getexp 1620,0;
+			close2;
+			warp "moc_fild07",359,201;
+			end;
+		case 3:
+			mes "[的去哦哦]";
+			mes "蓋爾...？";
+			mes "那是不對的。";
+			mes "它與";
+			mes "這個算法我只是";
+			mes "捏造。你有";
+			mes "再次嘗試！";
+			close;
+		case 4:
+			mes "[的去哦哦]";
+			mes "穆埃特羅...？";
+			mes "那是不對的。";
+			mes "它與";
+			mes "這個算法我只是";
+			mes "捏造。你有";
+			mes "再次嘗試！";
+			close;
+		}
+	}
+	if(tu_swordman == 16){
+		mes "[的去哦哦]";
+		mes "我猜這些代碼需要以一定順序排列，然後才能弄清楚其秘密。";
+		next;
+		mes "[的去哦哦]";
+		mes "嗯，您猜該命令，我將嘗試根據您的猜測來製定一個隱性分析。";
+		next;
+		switch(select("穆特羅:漢斯:蓋爾:班克利")) {
+		case 1:
+			mes "[的去哦哦]";
+			mes "好吧，穆特羅的";
+			mes "代碼是我們的";
+			mes "首先使用。現在，誰";
+			mes "您認為代碼嗎";
+			mes "應該第二嗎？";
+			next;
+			switch(select("漢斯:蓋爾:班克利")) {
+			case 1:
+				mes "[的去哦哦]";
+				mes "漢斯...？";
+				mes "好吧，那麼";
+				mes "與之相處的人";
+				mes "第三個代碼";
+				mes "會...嗎？";
+				next;
+				switch(select("蓋爾:班克利")) {
+				case 1:
+					mes "[的去哦哦]";
+					mes "Muetro，漢斯，";
+					mes "蓋爾和班克利。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "孔班弗維迪希";
+					mes "維克利翁登塞姆";
+					mes "泰斯威瑟姆";
+					mes "海克德菲德林德凱爾斯德";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				case 2:
+					mes "[的去哦哦]";
+					mes "Muetro，漢斯，";
+					mes "蓋爾和班克利。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "孔班弗維迪希";
+					mes "維克利翁登塞姆";
+					mes "海克德菲德林德凱爾斯德";
+					mes "泰斯威瑟姆";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				}
+			case 2:
+				mes "[的去哦哦]";
+				mes "蓋爾的...？";
+				mes "好吧，那麼";
+				mes "與之相處的人";
+				mes "第三個代碼";
+				mes "會...嗎？";
+				next;
+				switch(select("漢斯:班克利")) {
+				case 1:
+					mes "[的去哦哦]";
+					mes "穆特羅，號角，";
+					mes "漢斯和班克利。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "孔班弗維迪希";
+					mes "泰斯威瑟姆";
+					mes "維克利翁登塞姆";
+					mes "海克德菲德林德凱爾斯德";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				case 2:
+					mes "[的去哦哦]";
+					mes "穆特羅，號角，";
+					mes "班克利和漢斯。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "孔班弗維迪希";
+					mes "泰斯威瑟姆";
+					mes "海克德菲德林德凱爾斯德";
+					mes "維克利翁登塞姆";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				}
+			case 3:
+				mes "[的去哦哦]";
+				mes "班克利的...？";
+				mes "好吧，那麼";
+				mes "與之相處的人";
+				mes "第三個代碼";
+				mes "會...嗎？";
+				next;
+				switch(select("漢斯:酷")) {
+				case 1:
+					mes "[的去哦哦]";
+					mes "穆特羅，班克利，";
+					mes "漢斯和蓋爾。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "孔班弗維迪希";
+					mes "海克德菲德林德凱爾斯德";
+					mes "維克利翁登塞姆";
+					mes "泰斯威瑟姆";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				case 2:
+					mes "[的去哦哦]";
+					mes "穆特羅，班克利，";
+					mes "蓋爾和漢斯。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "孔班弗維迪希";
+					mes "海克德菲德林德凱爾斯德";
+					mes "泰斯威瑟姆";
+					mes "維克利翁登塞姆";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				}
+			}
+			break;
+		case 2:
+			mes "[的去哦哦]";
+			mes "好吧，漢斯的";
+			mes "代碼是我們的";
+			mes "首先使用。現在，誰";
+			mes "您認為代碼嗎";
+			mes "應該第二嗎？";
+			next;
+			switch(select("穆特羅:蓋爾:班克利")) {
+			case 1:
+				mes "[的去哦哦]";
+				mes "穆斯特羅的...？";
+				mes "好吧，那麼";
+				mes "與之相處的人";
+				mes "第三個代碼";
+				mes "會...嗎？";
+				next;
+				switch(select("真棒:班克利")) {
+				case 1:
+					mes "[的去哦哦]";
+					mes "漢斯，穆特羅，";
+					mes "蓋爾和班克利。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "維克利翁登塞姆";
+					mes "孔班弗維迪希";
+					mes "泰斯威瑟姆";
+					mes "海克德菲德林德凱爾斯德";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				case 2:
+					mes "[的去哦哦]";
+					mes "漢斯，穆特羅，";
+					mes "班克利和蓋爾。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "維克利翁登塞姆";
+					mes "孔班弗維迪希";
+					mes "海克德菲德林德凱爾斯德";
+					mes "泰斯威瑟姆";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				}
+			case 2:
+				mes "[的去哦哦]";
+				mes "蓋爾的...？";
+				mes "好吧，那麼";
+				mes "與之相處的人";
+				mes "第三個代碼";
+				mes "會...嗎？";
+				next;
+				switch(select("穆特羅:班克利")) {
+				case 1:
+					mes "[的去哦哦]";
+					mes "漢斯，蓋爾，";
+					mes "Muetro和Bankley。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "維克利翁登塞姆";
+					mes "泰斯威瑟姆";
+					mes "孔班弗維迪希";
+					mes "海克德菲德林德凱爾斯德";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				case 2:
+					mes "[的去哦哦]";
+					mes "漢斯，蓋爾，";
+					mes "班克利和穆特羅。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "維克利翁登塞姆";
+					mes "泰斯威瑟姆";
+					mes "海克德菲德林德凱爾斯德";
+					mes "孔班弗維迪希";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				}
+			case 3:
+				mes "[的去哦哦]";
+				mes "班克利的...？";
+				mes "好吧，那麼";
+				mes "與之相處的人";
+				mes "第三個代碼";
+				mes "會...嗎？";
+				next;
+				switch(select("穆特羅:熱")) {
+				case 1:
+					mes "[的去哦哦]";
+					mes "漢斯，班克利，";
+					mes "Muetro和Geil。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "維克利翁登塞姆";
+					mes "海克德菲德林德凱爾斯德";
+					mes "孔班弗維迪希";
+					mes "泰斯威瑟姆";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				case 2:
+					mes "[的去哦哦]";
+					mes "漢斯，班克利，";
+					mes "Geil和Muetro。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "維克利翁登塞姆";
+					mes "海克德菲德林德凱爾斯德";
+					mes "泰斯威瑟姆";
+					mes "孔班弗維迪希";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				}
+			}
+			break;
+		case 3:
+			mes "[的去哦哦]";
+			mes "好吧，蓋爾的";
+			mes "代碼是我們的";
+			mes "首先使用。現在，誰";
+			mes "您認為代碼嗎";
+			mes "應該第二嗎？";
+			next;
+			switch(select("穆特羅:漢斯:班克利")) {
+			case 1:
+				mes "[的去哦哦]";
+				mes "穆斯特羅的...？";
+				mes "好吧，那麼";
+				mes "與之相處的人";
+				mes "第三個代碼";
+				mes "會...嗎？";
+				next;
+				switch(select("漢斯:班克利")) {
+				case 1:
+					mes "[的去哦哦]";
+					mes "蓋爾，穆特羅，";
+					mes "漢斯和班克利。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "泰斯威瑟姆";
+					mes "孔班弗維迪希";
+					mes "維克利翁登塞姆";
+					mes "海克德菲德林德凱爾斯德";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試...等等！";
+					next;
+					mes "[的去哦哦]";
+					mes "我認為我們";
+					mes "可以理解這一點";
+					mes "事物！給我一會兒";
+					mes "制定算法！";
+					set tu_swordman, 17;
+					close;
+				case 2:
+					mes "[的去哦哦]";
+					mes "蓋爾，穆特羅，";
+					mes "班克利和漢斯。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "泰斯威瑟姆";
+					mes "孔班弗維迪希";
+					mes "海克德菲德林德凱爾斯德";
+					mes "維克利翁登塞姆";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				}
+			case 2:
+				mes "[的去哦哦]";
+				mes "漢...？";
+				mes "好吧，那麼";
+				mes "與之相處的人";
+				mes "第三個代碼";
+				mes "會...嗎？";
+				next;
+				switch(select("穆特羅:班克利")) {
+				case 1:
+					mes "[的去哦哦]";
+					mes "蓋爾，漢斯，";
+					mes "Muetro和Bankley。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "泰斯威瑟姆";
+					mes "維克利翁登塞姆";
+					mes "孔班弗維迪希";
+					mes "海克德菲德林德凱爾斯德";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				case 2:
+					mes "[的去哦哦]";
+					mes "蓋爾，漢斯，";
+					mes "班克利和穆特羅。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "泰斯威瑟姆";
+					mes "維克利翁登塞姆";
+					mes "海克德菲德林德凱爾斯德";
+					mes "孔班弗維迪希";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				}
+			case 3:
+				mes "[的去哦哦]";
+				mes "班克利的...？";
+				mes "好吧，那麼";
+				mes "與之相處的人";
+				mes "第三個代碼";
+				mes "會...嗎？";
+				next;
+				switch(select("穆特羅:漢斯")) {
+				case 1:
+					mes "[的去哦哦]";
+					mes "蓋爾，班克利，";
+					mes "Muetro和Hans。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "泰斯威瑟姆";
+					mes "海克德菲德林德凱爾斯德";
+					mes "孔班弗維迪希";
+					mes "維克利翁登塞姆";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				case 2:
+					mes "[的去哦哦]";
+					mes "蓋爾，班克利，";
+					mes "漢斯和穆特羅。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "泰斯威瑟姆";
+					mes "海克德菲德林德凱爾斯德";
+					mes "維克利翁登塞姆";
+					mes "孔班弗維迪希";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				}
+			}
+			break;
+		case 4:
+			mes "[的去哦哦]";
+			mes "好吧，班克利的";
+			mes "代碼是我們的";
+			mes "首先使用。現在，誰";
+			mes "您認為代碼嗎";
+			mes "應該第二嗎？";
+			next;
+			switch(select("穆特羅:漢斯:蓋爾")) {
+			case 1:
+				mes "[的去哦哦]";
+				mes "穆斯特羅的...？";
+				mes "好吧，那麼";
+				mes "與之相處的人";
+				mes "第三個代碼";
+				mes "會...嗎？";
+				next;
+				switch(select("漢斯:蓋爾")) {
+				case 1:
+					mes "[的去哦哦]";
+					mes "穆特羅·班克利，";
+					mes "漢斯和蓋爾。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "海克德菲德林德凱爾斯德";
+					mes "孔班弗維迪希";
+					mes "維克利翁登塞姆";
+					mes "泰斯威瑟姆";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				case 2:
+					mes "[的去哦哦]";
+					mes "穆特羅·班克利，";
+					mes "蓋爾和漢斯。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "海克德菲德林德凱爾斯德";
+					mes "孔班弗維迪希";
+					mes "泰斯威瑟姆";
+					mes "維克利翁登塞姆";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				}
+			case 2:
+				mes "[的去哦哦]";
+				mes "漢斯的...？";
+				mes "好吧，那麼";
+				mes "與之相處的人";
+				mes "第三個代碼";
+				mes "會...嗎？";
+				next;
+				switch(select("穆特羅:蓋爾")) {
+				case 1:
+					mes "[的去哦哦]";
+					mes "漢斯·班克利（Hans）";
+					mes "Muetro和Geil。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "海克德菲德林德凱爾斯德";
+					mes "維克利翁登塞姆";
+					mes "孔班弗維迪希";
+					mes "泰斯威瑟姆";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				case 2:
+					mes "[的去哦哦]";
+					mes "漢斯·班克利（Hans）";
+					mes "Geil和Muetro。";
+					mes "所以";
+					mes "代碼將是...";
+					mes " ";
+					mes "海克德菲德林德凱爾斯德";
+					mes "維克利翁登塞姆";
+					mes "泰斯威瑟姆";
+					mes "孔班弗維迪希";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				}
+			case 3:
+				mes "[的去哦哦]";
+				mes "蓋爾的...？";
+				mes "好吧，那麼";
+				mes "與之相處的人";
+				mes "第三個代碼";
+				mes "會...嗎？";
+				next;
+				switch(select("穆特羅:漢斯")) {
+				case 1:
+					mes "[的去哦哦]";
+					mes "蓋爾·班克利（Bankley）";
+					mes "Muetro和Hans。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "海克德菲德林德凱爾斯德";
+					mes "泰斯威瑟姆";
+					mes "孔班弗維迪希";
+					mes "維克利翁登塞姆";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試...等等！";
+					next;
+					mes "[的去哦哦]";
+					mes "我認為我們";
+					mes "可以理解這一點";
+					mes "事物！給我一會兒";
+					mes "制定算法！";
+					set tu_swordman, 18;
+					close;
+				case 2:
+					mes "[的去哦哦]";
+					mes "蓋爾·班克利（Bankley）";
+					mes "漢斯，穆特羅。";
+					mes "所以";
+					mes "代碼將是...";
+					next;
+					mes "[的去哦哦]";
+					mes " ";
+					mes "海克德菲德林德凱爾斯德";
+					mes "泰斯威瑟姆";
+					mes "維克利翁登塞姆";
+					mes "孔班弗維迪希";
+					next;
+					mes "[的去哦哦]";
+					mes "不...";
+					mes "沒有辦法";
+					mes "我可以解碼";
+					mes "現在的方式。讓我們";
+					mes "嘗試另一種組合。";
+					close;
+				}
+			}
+			break;
+		}
+	}
+	if(tu_swordman == 15){
+		set .@hans$, "victkleyundncem";
+		set .@bang$, "hekdlfiDrindkelsd";
+		set .@mutr$, "ConBanfoevidehi";
+		set .@geil$, "TheisWesomeof";
+		mes "[的去哦哦]";
+		mes "啊，你回來了。";
+		mes "我剛剛有一個新的";
+		mes "領導";
+		mes "殺手的身份。";
+		next;
+		mes "[的去哦哦]";
+		mes "我剛剛聽說我們所有的嫌疑人都有一些";
+		mes "一種代碼。如果我們可以將代碼放在一起並破譯，我們可以弄清楚兇手可能是誰。";
+		next;
+		mes "[的去哦哦]";
+		mes "你得到所有代碼了嗎";
+		mes "來自所有嫌疑人？第一的，";
+		mes "告訴我漢斯擁有的代碼。";
+		next;
+		input .@inputstr$;
+		if(.@inputstr$ == .@hans$){
+			mes "[的去哦哦]";
+			mes "Victkleyundcem？";
+			mes "當然是";
+			mes "奇怪的聲音。";
+			mes "現在，告訴我班克利的。";
+			next;
+			input .@inputstr$;
+			if(.@inputstr$ == .@bang$){
+				mes "[的去哦哦]";
+				mes "赫克德爾菲德林德凱爾斯德..";
+				mes "那到底是什麼...？";
+				mes "當然是神秘的。";
+				mes "那Muetro呢？";
+				next;
+				input .@inputstr$;
+				if(.@inputstr$ == .@mutr$){
+					mes "[的去哦哦]";
+					mes "Conbanfoevidhi。";
+					mes "這將要";
+					mes "難以想像";
+					mes "出去。好吧，現在";
+					mes "告訴我蓋爾的。";
+					next;
+					input .@inputstr$;
+					if(.@inputstr$ == .@geil$){
+						mes "[的去哦哦]";
+						mes "太棒了...";
+						mes "好吧，太好了。";
+						mes "現在我們必須";
+						mes "做什麼";
+						mes "所有這些意味著。";
+						next;
+						mes "[的去哦哦]";
+						mes "這將要";
+						mes "真的很困難。";
+						mes "你有什麼想法嗎？";
+						mes "我們必須弄清楚這個";
+						mes "出去，這是唯一的線索";
+						mes "我們有...";
+						set tu_swordman, 16;
+						changequest 8223,8224;
+						close;
+					} else {
+						mes "[的去哦哦]";
+						mes "...你確定你聽到了嗎";
+						mes "他對嗎？你為什麼不去再檢查一下？";
+						close;
+					}
+				} else {
+	
+					mes "[的去哦哦]";
+					mes "...你確定你聽到了嗎";
+					mes "他對嗎？你為什麼不去再檢查一下？";
+					close;
+	
+				}
+			} else {
+				mes "[的去哦哦]";
+				mes "...你確定你聽到了嗎";
+				mes "他對嗎？你為什麼不去再檢查一下？";
+				close;
+			}
+		} else {
+	
+			mes "[的去哦哦]";
+			mes "你確定是對的嗎？";
+			mes "不，不，我認為不是。";
+			mes "您會檢查該代碼並再次詢問犯罪嫌疑人嗎";
+			mes "如果需要？";
+			close;
+	
+		}
+	}
+	if(tu_swordman == 14){
+		mes "[的去哦哦]";
+		mes "我不是問你";
+		mes "詢問";
+		mes "懷疑在摩洛哥？";
+		mes "我們需要完成這個";
+		mes "調查很快";
+		mes "盡可能";
+		close;
+	}
+	if(tu_swordman == 13){
+		mes "[的去哦哦]";
+		mes "啊，你在這裡！";
+		mes "Shurank一定有";
+		mes "問你幫我。";
+		mes "我真的很感激。";
+		next;
+		mes "[的去哦哦]";
+		mes "正如您可能想出的那樣，我目前正在調查謀殺案。基本上，我希望您幫助我弄清楚殺手是誰。";
+		next;
+		mes "[的去哦哦]";
+		mes "至於受害者，那是分類的信息。你明白，不是嗎？";
+		next;
+		mes "[的去哦哦]";
+		mes "現在，我希望您去Morocc並審問四名嫌疑犯。他們的名稱為 ^5d478bmuetro ^000000， ^5d478bgeil ^000000， ^5d478bhans ^000000";
+		mes "和 ^5d478bbankley ^000000。這不應該太困難。";
+		next;
+		mes "[的去哦哦]";
+		mes "與所有人交談後，回來向我報告。尤其重要的是，您要記住或寫下您可能會得到的任何重要線索";
+		mes "來自我們的嫌疑人。";
+		next;
+		mes "[的去哦哦]";
+		mes "另外，請記住，這是Swordman協會的特殊任務。因此，請保留所有學習秘密的一切。理解？";
+		next;
+		mes "[的去哦哦]";
+		mes "現在去看看您是否可以從Muetro，Geil，Hans和Bankley那裡學到任何東西。我們必須盡快找出殺手的身份！";
+		next;
+		mes "[的去哦哦]";
+		mes "哦，等等...";
+		mes "摩洛哥有點遠。好吧，我會把你放在某個地方";
+		mes "在那個城市附近。";
+		next;
+		set tu_swordman, 14;
+		changequest 8222,8223;
+		warp "moc_fild07",359,201;
+		close;
+	}
+	if((tu_swordman > 7) && (tu_swordman < 13)){
+		mes "[的去哦哦]";
+		mes "唔...";
+		mes "仍在收到";
+		mes "特殊培訓";
+		mes "來自Shurank？";
+		next;
+		mes "[的去哦哦]";
+		mes "那太棒了。";
+		mes "如今，劍客越來越傾向於傾斜。有人必須將新人保持在他們的腳趾上！";
+		close;
+	}
+	if(tu_swordman == 7){
+		mes "[的去哦哦]";
+		mes "你是做什麼的";
+		mes "還在這裡嗎？";
+		mes "去交付我的";
+		mes "給Shurank的消息。";
+		next;
+		mes "[的去哦哦]";
+		mes "現在讓他不是";
+		mes "確定殺手的身份，";
+		mes "但是我們有嫌疑人清單。";
+		mes "遲早，我們會想";
+		mes "出去他是誰。";
+		close;
+	}
+	if(tu_swordman == 6){
+		mes "[的去哦哦]";
+		mes "啊...！";
+		mes "你是劍客嗎";
+		mes "由Shurank發送？好的，";
+		mes "我一直在等...";
+		next;
+		mes "[的去哦哦]";
+		mes "現在告訴我...";
+		mes "有什麼消息";
+		mes "Shurank為我有嗎？";
+		next;
+		switch(select("殺手...:兇手...")) {
+		case 1:
+			mes "[" + strcharinfo(0) + "]";
+			mes "發生了什麼";
+			mes "殺手？";
+			next;
+			switch(select("他是誰...:幕後是誰...")) {
+			case 1:
+				mes "[" + strcharinfo(0) + "]";
+				mes "你找到了";
+				mes "出來他是誰？";
+				mes "如果你做了...";
+				next;
+				switch(select("為什麼我們...:我們應該...")) {
+				case 1:
+					mes "[" + strcharinfo(0) + "]";
+					mes "為什麼坐著";
+					mes "周圍，什麼都不做？";
+					next;
+					mes "[的去哦哦]";
+					mes "所以Shurank問，";
+					mes "殺手怎麼了？";
+					mes "你知道他是誰嗎？如果您這樣做了，為什麼我們坐在身邊，什麼都不做？";
+					next;
+					mes "[的去哦哦]";
+					mes "唔...";
+					mes "似乎不是";
+					mes "成為我應該從Shurack收到的消息。我需要他的確切信息，或者我無法發送";
+					mes "回應...";
+					close;
+				case 2:
+					mes "[" + strcharinfo(0) + "]";
+					mes "我們是什麼";
+					mes "應該現在做嗎？";
+					next;
+					mes "[的去哦哦]";
+					mes "所以Shurank問，";
+					mes "殺手怎麼了？";
+					mes "你知道他是誰嗎？如果您這樣做了，我們現在應該做什麼？";
+					next;
+					mes "[的去哦哦]";
+					mes "唔...";
+					mes "似乎不是";
+					mes "成為我應該從Shurack收到的消息。我需要他的確切信息，或者我無法發送";
+					mes "回應...";
+					close;
+				}
+			case 2:
+				mes "[" + strcharinfo(0) + "]";
+				mes "你知道嗎";
+				mes "這一切背後是誰？";
+				mes "如果你做了...";
+				next;
+				switch(select("為什麼我們...:我們應該...")) {
+				case 1:
+					mes "[" + strcharinfo(0) + "]";
+					mes "為什麼坐著";
+					mes "周圍，什麼都不做？";
+					next;
+					mes "[的去哦哦]";
+					mes "所以Shurank問，";
+					mes "殺手怎麼了？";
+					mes "您是否知道這一切背後是誰？如果您這樣做了，為什麼我們坐在身邊，什麼都不做？";
+					next;
+					mes "[的去哦哦]";
+					mes "唔...";
+					mes "似乎不是";
+					mes "成為我應該從Shurack收到的消息。我需要他的確切信息，或者我無法發送";
+					mes "回應...";
+					close;
+				case 2:
+					mes "[" + strcharinfo(0) + "]";
+					mes "我們是什麼";
+					mes "應該現在做嗎？";
+					next;
+					mes "[的去哦哦]";
+					mes "所以Shurank問，";
+					mes "殺手怎麼了？";
+					mes "您是否知道這一切背後是誰？如果您這樣做了，我們現在應該做什麼？";
+					next;
+					mes "[的去哦哦]";
+					mes "唔...";
+					mes "似乎不是";
+					mes "成為我應該從Shurack收到的消息。我需要他的確切信息，或者我無法發送";
+					mes "回應...";
+					close;
+				}
+			}
+			break;
+		case 2:
+			mes "[" + strcharinfo(0) + "]";
+			mes "發生了什麼";
+			mes "兇手？";
+			next;
+			switch(select("他是誰...:幕後黑手是誰...")) {
+			case 1:
+				mes "[" + strcharinfo(0) + "]";
+				mes "你找到了";
+				mes "出來他是誰？";
+				mes "如果你做了...";
+				next;
+				switch(select("為什麼我們...:我們應該...")) {
+				case 1:
+					mes "[" + strcharinfo(0) + "]";
+					mes "為什麼坐著";
+					mes "周圍，什麼都不做？";
+					next;
+					mes "[的去哦哦]";
+					mes "所以Shurank問，";
+					mes "''發生了什麼事";
+					mes "兇手？你找到了";
+					mes "出來他是誰？如果你做到了，";
+					mes "我們為什麼坐在身邊";
+					mes "什麼都不做？";
+					next;
+					mes "[的去哦哦]";
+					mes "唔...";
+					mes "似乎不是";
+					mes "成為我應該從Shurack收到的消息。我需要他的確切信息，或者我無法發送";
+					mes "回應...";
+					close;
+				case 2:
+					mes "[" + strcharinfo(0) + "]";
+					mes "我們是什麼";
+					mes "應該現在做嗎？";
+					next;
+					mes "[的去哦哦]";
+					mes "所以Shurank問，";
+					mes "''發生了什麼事";
+					mes "兇手？你找到了";
+					mes "出來他是誰？如果你做到了，";
+					mes "我們現在應該做什麼？";
+					next;
+					mes "[的去哦哦]";
+					mes "唔...";
+					mes "我明白";
+					mes "他的擔心。";
+					mes "好吧，現在";
+					mes "給他這個答案。";
+					next;
+					mes "[的去哦哦]";
+					mes "我們還沒有找到";
+					mes "出去誰兇手";
+					mes "確定。然而，";
+					mes "我們有嫌疑人清單";
+					mes "我們很快就會解決。";
+					next;
+					mes "[的去哦哦]";
+					mes "感謝您帶來這麼遠的麻煩。讓我從一些經驗點獎勵您。";
+					set tu_swordman, 7;
+					changequest 8216,8217;
+					if (checkre(3))
+						getexp 112,0;
+					else
+						getexp 1120,0;
+					next;
+					mes "[的去哦哦]";
+					mes "小心";
+					mes "你自己，";
+					mes "勇敢的劍曼。";
+					next;
+					if (checkre(0))
+						warp "izlude",127,100;
+					else
+						warp "izlude",35,78;
+					close;
+				}
+			case 2:
+				mes "[" + strcharinfo(0) + "]";
+				mes "你知道嗎";
+				mes "這一切背後是誰？";
+				mes "如果你做了...";
+				next;
+				switch(select("為什麼我們...:我們應該...")) {
+				case 1:
+					mes "[" + strcharinfo(0) + "]";
+					mes "為什麼坐著";
+					mes "周圍，什麼都不做？";
+					next;
+					mes "[的去哦哦]";
+					mes "所以Shurank問，";
+					mes "''發生了什麼事";
+					mes "兇手？你想知道嗎？";
+					mes "所有這些背後是誰？";
+					mes "如果您這樣做了，為什麼我們坐在身邊，什麼都不做？";
+					next;
+					mes "[的去哦哦]";
+					mes "唔...";
+					mes "似乎不是";
+					mes "成為我應該從Shurack收到的消息。我需要他的確切信息，或者我無法發送";
+					mes "回應...";
+					close;
+				case 2:
+					mes "[" + strcharinfo(0) + "]";
+					mes "我們是什麼";
+					mes "應該現在做嗎？";
+					next;
+					mes "[的去哦哦]";
+					mes "所以Shurank問，";
+					mes "''發生了什麼事";
+					mes "兇手？你想知道嗎？";
+					mes "所有這些背後是誰？";
+					mes "如果你做到了，我們是什麼";
+					mes "應該現在做嗎？";
+					next;
+					mes "[的去哦哦]";
+					mes "唔...";
+					mes "似乎不是";
+					mes "成為我應該從Shurack收到的消息。我需要他的確切信息，或者我無法發送";
+					mes "回應...";
+					close;
+				}
+			}
+			break;
+		}
+	}
+	
+	mes "唔...？";
+	mes "你有什麼嗎";
+	mes "和我一起生意嗎？";
+	close;
+}
+
+// Geil
+//============================================================
+morocc_in,51,101,3	script	Geil	89,{
+	mes "[蓋爾]";
+	if(tu_swordman == 15){
+		mes "您是由當局發送的嗎？退出給我這麼困難！我不是兇手！我什至不知道誰被殺。我不是您想要的！";
+		next;
+		mes "[蓋爾]";
+		mes "當然，有些很奇怪";
+		mes "蓋伊告訴我一些";
+		mes "與所有這些有關的代碼，僅此而已！這就是我所知道的！我不是殺手，我不是配件，什麼都沒有！";
+		next;
+		mes "[蓋爾]";
+		mes "^5d478btheiswesomeof^000000";
+		mes "那是代碼。我不敢相信我無法忘記這一點。";
+		mes "我的意思是，我想我喝醉了";
+		mes "當那個傢伙告訴我的時候。";
+		next;
+		mes "[蓋爾]";
+		mes "該代碼有什麼重要的重要性，為什麼你們一直對謀殺案的責任追捕我？";
+		close;
+	}
+	if(tu_swordman == 14){
+		mes "您是由當局發送的嗎？退出給我這麼困難！我不是兇手！我什至不知道誰被殺。我不是您想要的！";
+		next;
+		mes "[蓋爾]";
+		mes "當然，有些很奇怪";
+		mes "蓋伊告訴我一些";
+		mes "與所有這些有關的代碼，僅此而已！這就是我所知道的！我不是殺手，我不是配件，什麼都沒有！";
+		next;
+		mes "[蓋爾]";
+		mes "^5d478btheiswesomeof^000000";
+		mes "那是代碼。我不敢相信我無法忘記這一點。";
+		mes "我的意思是，我想我喝醉了";
+		mes "當那個傢伙告訴我的時候。";
+		next;
+		mes "[蓋爾]";
+		mes "該代碼有什麼重要的重要性，為什麼你們一直對謀殺案的責任追捕我？";
+		set tu_swordman, 15;
+		close;
+	}
+	mes "我們應該所有人";
+	mes "努力生活";
+	mes "和平與和諧";
+	mes "和我們的同胞。";
+	next;
+	mes "[蓋爾]";
+	mes "但是，恐懼，不信任和恐慌似乎總是妨礙了世界事件。我們必須找到自己的內心才能與他人相處。你不同意嗎？";
+	close;
+}
+
+// Meutro
+//============================================================
+morocc,82,292,5	script	Muetro	84,{
+	mes "[穆特羅]";
+	if(tu_swordman == 15){
+		mes "你只是";
+		mes "像其他所有人一樣。";
+		mes "您想要代碼";
+		mes "我知道，對吧？";
+		next;
+		mes "[穆特羅]";
+		mes "^5D478BCONBANFOEVIDEHI^000000";
+		mes "現在開心嗎？現在";
+		mes "讓我一個人";
+		mes "抓住兇手。";
+		close;
+	}
+	if(tu_swordman == 14){
+		mes "你只是";
+		mes "像其他所有人一樣。";
+		mes "您想要代碼";
+		mes "我知道，對吧？";
+		next;
+		mes "[穆特羅]";
+		mes "^5D478BCONBANFOEVIDEHI^000000";
+		mes "現在開心嗎？現在";
+		mes "讓我一個人";
+		mes "抓住兇手。";
+		set tu_swordman, 15;
+		close;
+	}
+	mes "^666666*嘆氣*^000000";
+	mes "我嘗試並嘗試，但是有時會發生荒謬的事情，並且";
+	mes "我對他們無能為力。";
+	next;
+	mes "[穆特羅]";
+	mes "我想這是命運。沒有我無法逃脫的東西";
+	mes "希望控製或理解。";
+	close;
+}
+
+// Hans
+//============================================================
+morocc,240,72,3	script	Hans	86,{
+	mes "[漢斯]";
+	if(tu_swordman == 15){
+		mes "幫我！";
+		mes "請幫我！";
+		mes "我不是兇手！";
+		mes "我幾乎是";
+		mes "無害！";
+		next;
+		mes "[漢斯]";
+		mes "^5d478bvictkleyundncem^000000";
+		mes "這是我知道的代碼。";
+		mes "一些奇怪的人";
+		mes "早些時候告訴我，說";
+		mes "我需要盡快知道！";
+		next;
+		mes "[漢斯]";
+		mes "他說這個代碼";
+		mes "會挽救我的生命。第一的，";
+		mes "我以為他瘋了，但是";
+		mes "我不能忘記它。";
+		next;
+		mes "[漢斯]";
+		mes "就像他用魔術或其他東西使它在我的大腦中伸出。請讓我一個人，這就是我所知道的！";
+		close;
+	}
+	if(tu_swordman == 14){
+		mes "幫我！";
+		mes "請幫我！";
+		mes "我不是兇手！";
+		mes "我幾乎是";
+		mes "無害！";
+		next;
+		mes "[漢斯]";
+		mes "^5d478bvictkleyundncem^000000";
+		mes "這是我知道的代碼。";
+		mes "一些奇怪的人";
+		mes "早些時候告訴我，說";
+		mes "我需要盡快知道！";
+		next;
+		mes "[漢斯]";
+		mes "他說這個代碼";
+		mes "會挽救我的生命。第一的，";
+		mes "我以為他瘋了，但是";
+		mes "我不能忘記它。";
+		next;
+		mes "[漢斯]";
+		mes "就像他用魔術或其他東西使它在我的大腦中伸出。請讓我一個人，這就是我所知道的！";
+		set tu_swordman, 15;
+		close;
+	}
+	mes "對不起...";
+	mes "但是我認為我對您沒有任何幫助。現在，看來我有自己的問題...";
+	close;
+}
+
+// Bankley
+//============================================================
+morocc_in,12,156,3	script	Bankley	97,{
+	if(tu_swordman > 19){
+		mes "^3355ffbankley有一個可憐的";
+		mes "臉上的表情。 ^000000";
+		mes "^3355ffhis身體完全沒有生命。他的胸部有一個長而深的傷口，右手握緊了一把鮮血的刀。 ^000000";
+		close;
+	}
+	if(tu_swordman == 19){
+		mes "...";
+		mes "......";
+		next;
+		mes "^3355ffhe的死亡！ ^000000";
+		next;
+		mes "^3355ffbankley的臉上表現得很悲傷，可憐。由於顏色仍然是新鮮的臉頰，他就在不久前去世了。";
+		mes "^3355ffthere是他的胸部長而深的傷口，右手握緊了一把鮮血的刀。 ^000000";
+		set tu_swordman, 20;
+		changequest 8225,8226;
+		close;
+	}
+	mes "[班克利]";
+	if(tu_swordman == 15){
+		mes "我沒有殺人...！";
+		mes "我是無辜的，不要";
+		mes "有什麼要隱藏的！";
+		next;
+		mes "[班克利]";
+		mes "但是看...";
+		mes "如果有幫助，讓我給你這個奇怪的代碼，一個奇怪的傢伙給了我。我想這應該是某種線索。";
+		next;
+		mes "[班克利]";
+		mes "^5d478bhekdlfidrindkelsd^000000";
+		mes "你了解什麼嗎";
+		mes "這意味著？我不知道，但是";
+		mes "我告訴你我所知道的一切！";
+		next;
+		mes "[班克利]";
+		mes "我覺得很侵犯！";
+		mes "一旦您證明我是無辜的，您是否要補償我";
+		mes "我的精神痛苦！ ？";
+		next;
+		mes "[班克利]";
+		mes "別再打擾我了";
+		mes "浪費時間。";
+		mes "你最好狩獵";
+		mes "對於真正的罪魁禍首！";
+		close;
+	}
+	if(tu_swordman == 14){
+		mes "我沒有殺人...！";
+		mes "我是無辜的，不要";
+		mes "有什麼要隱藏的！";
+		next;
+		mes "[班克利]";
+		mes "但是看...";
+		mes "如果有幫助，讓我給你這個奇怪的代碼，一個奇怪的傢伙給了我。我想這應該是某種線索。";
+		next;
+		mes "[班克利]";
+		mes "^5d478bhekdlfidrindkelsd^000000";
+		mes "你了解什麼嗎";
+		mes "這意味著？我不知道，但是";
+		mes "我告訴你我所知道的一切！";
+		next;
+		mes "[班克利]";
+		mes "我覺得很侵犯！";
+		mes "一旦您證明我是無辜的，您是否要補償我";
+		mes "我的精神痛苦！ ？";
+		next;
+		mes "[班克利]";
+		mes "別再打擾我了";
+		mes "浪費時間。";
+		mes "你最好狩獵";
+		mes "對於真正的罪魁禍首！";
+		set tu_swordman, 15;
+		close;
+	}
+	mes "即使我現在負擔不起，我的夢想是環遊世界並參觀其所有大城市！";
+	next;
+	mes "[班克利]";
+	mes "總有一天，我確定我會有機會實現夢想";
+	mes "實現。但是就目前而言，我必須盡力而為。";
+	close;
+}

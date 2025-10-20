@@ -1,0 +1,1415 @@
+﻿//===== rAthena Script =======================================
+//= Enchants and exchange NPCs.
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Exchangers and enchanters NPCs on Verus.
+//===== Additional Comments: =================================
+//= 1.0 Added NPCs coming along Charleston instance. [Capuche]
+//= 1.1 Added Excellion Wing/Suit trader and enchant NPCs. [Capuche]
+//============================================================
+
+// Charleston
+verus04,69,108,5	script	Mass Charleston#1	4_F_CHARLESTON01,{
+	if (!checkweight(1201,1) || (MaxWeight - Weight) < 1000) {
+		mes "^ff0000 you攜帶太多物品，請減少它並稍後再回來。 ^000000";
+		close;
+	}
+	cutin "dalle01.bmp",2;
+	if (countitem(6752) < 10) {
+		if (isbegin_quest(13186) == 0) {
+			mes "[大眾查爾斯頓]";
+			mes "我不知道您可以在哪裡找到Charleston組件，";
+			next;
+			mes "[大眾查爾斯頓]";
+			mes "但是，如果您有10個或更多，那麼我可以將它們與工廠產品交換。";
+			close3;
+		}
+		mes "[大眾查爾斯頓]";
+		mes "在開發大規模版的查爾斯頓之前，進行了一系列試驗和錯誤。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "我並不是要貶值自己，但是大眾版本是質量版本。它們具有成本效益和實用性，但從未像高端版本那樣出色。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "一些查爾斯頓（Charlestons），尤其是在開發階段，配備了更高級的功能。要研究它們，我需要更多的組件。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "如果您有10個或更多的Charleston組件，那麼我可以將它們與工廠產品交換。";
+		close3;
+	}
+	mes "[大眾查爾斯頓]";
+	mes "你有一些不錯的部分！您想將其與工廠生產的商品換成嗎？";
+	next;
+	mes "[大眾查爾斯頓]";
+	mes "是商品中查爾斯頓優勢的集合，但如果帶帶好的零件可以為您交換，則不能單獨出售。";
+	next;
+	.@s = select( "Quit.", "Exchange Reinforced parts", "Exchange Supplementary device" ) - 2;
+	if (.@s == -1) {
+		mes "[大眾查爾斯頓]";
+		mes "下次見！";
+		close3;
+	}
+	setarray .@job_aft$[0], "Reinforced parts", "Supplementary device";
+	mes "[大眾查爾斯頓]";
+	mes "哪一部分" + .@job_aft$[.@s] + " do you want to select?";
+	next;
+	switch(.@s) {
+	case 0:
+		setarray .@item[0],
+			20733,	// Upgrade_Part_Engine
+			22044,	// Upgrade_Part_Booster
+			2996;	// Upgrade_Part_Gun_Barrel
+		break;
+	case 1:
+		setarray .@item[0],
+			20732,	// Supplement_Part_Con
+			22043,	// Supplement_Part_Agi
+			2995;	// Supplement_Part_Dex
+		break;
+	default:
+		mes "[大眾查爾斯頓]";
+		mes "下次見！";
+		close;
+	}
+	// custom translation from here
+	.@index = select( "Quit.", getitemname(.@item[0]) + " (garment)", getitemname(.@item[1]) + " (Shoes)", getitemname(.@item[2]) + " (Accessory)" ) - 2;
+	if (.@index == -1) {
+		mes "[大眾查爾斯頓]";
+		mes "下次見！";
+		close3;
+	}
+	if (countitem(6752) < 10) {
+		mes "[大眾查爾斯頓]";
+		mes "如果您發現足夠多的查爾斯頓（Charleston）零件，您可以再次來找我嗎？";
+		close3;
+	}
+	delitem 6752,10;	// Charleston_Parts
+	getitem .@item[.@index],1;
+	mes "[大眾查爾斯頓]";
+	mes "交換10" + getitemname(6752) + " for " + .@job_aft$[.@s] + ". If you find more part, come to me again!";
+	close3;
+}
+
+verus04,71,106,5	script	Mass Charleston#2	4_F_CHARLESTON01,{
+	disable_items;
+	if (!checkweight(1201,1)) {
+		mes "您有太多類型的物品。首先減輕您的庫存。";
+		close;
+	}
+	if ((MaxWeight - Weight) < 10000) {
+		mes "庫存中的物品使您重視。首先減輕體重。";
+		close;
+	}
+	cutin "dalle01.bmp",2;
+	mes "[大眾查爾斯頓]";
+	mes "我可以升級查爾斯頓工廠產品。讓我知道您是否有興趣。";
+	next;
+	switch( select( "More information.", "Add abilities to your product.", "Reset product." ) ) {
+	case 1:
+		mes "[大眾查爾斯頓]";
+		mes "每次升級/重置嘗試的費用為100,000 Zeny和1個Charleston組件。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "我還為Charleston設備提供了更廣泛的升級選項，該設備在 ^ff0000+9 ^000000或更高版本中提供了選擇。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "請放心，我的升級技術不涉及對物品升級級別或設備齊全的卡的意外損壞。";
+		close3;
+	case 2:
+		.@type_action = 1;
+		.@string$ = "Upgrading";
+		break;
+	case 3:
+		.@type_action = 2;
+		.@string$ = "Resetting";
+		break;
+	}
+	if (Zeny < 100000 || countitem(6752) < 1) {
+		mes "[大眾查爾斯頓]";
+		mes "" + .@string$ + " a Charleston product costs 1 Charleston Component and 100,000 zeny. Please know that all the expenses go into " + strtolower(.@string$) + " your product.";
+		close3;
+	}
+	mes "[大眾查爾斯頓]";
+	mes "請確保您配備了要升級的設備。";
+	next;
+	.@s = select( "Let me go equip it.", "Footgear", "Garment", "Clothes", "Accessory" ) - 2;
+	if (.@s == -1) {
+		mes "[大眾查爾斯頓]";
+		mes "當然，請在您這樣做後回來。";
+		close3;
+	}
+	if (Zeny < 100000 || countitem(6752) < 1) {
+		mes "[大眾查爾斯頓]";
+		mes "商品升級所需的事情似乎不足！";
+		close3;
+	}
+	setarray .@eq_num[0], EQI_SHOES, EQI_GARMENT, EQI_ARMOR, EQI_ACC_R;
+
+	.@part = .@eq_num[.@s];
+	.@item_id = getequipid(.@part);
+	.@refine = getequiprefinerycnt(.@part);
+	setarray .@card_saved[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+	copyarray .@card[0], .@card_saved[0], 4;
+
+	switch(.@item_id) {
+	case -1:
+		mes "[大眾查爾斯頓]";
+		mes "因為它是定制的升級，請務必佩戴設備。";
+		close3;
+	case 15111:	// Upgrade_Part_Plate
+		.@en_type = 3;
+		.@en_type_9 = 1;
+		.@max_slot = 1;
+		break;
+	case 20733:	// Upgrade_Part_Engine
+		.@en_type = 4;
+		.@en_type_9 = 5;
+		.@max_slot = 1;
+		break;
+	case 22044:	// Upgrade_Part_Booster
+		.@en_type = 6;
+		.@en_type_9 = 7;
+		.@max_slot = 1;
+		break;
+	case 2996:	// Upgrade_Part_Gun_Barrel
+		.@en_type = 8;
+		.@en_type_9 = 8;
+		.@max_slot = 2;
+		break;
+	case 15110:	// Supplement_Part_Str
+		.@en_type = 3;
+		.@en_type_9 = 2;
+		.@max_slot = 1;
+		break;
+	case 20732:	// Supplement_Part_Con
+		.@en_type = 4;
+		.@en_type_9 = 5;
+		.@max_slot = 1;
+		break;
+	case 22043:	// Supplement_Part_Agi
+		.@en_type = 6;
+		.@en_type_9 = 7;
+		.@max_slot = 1;
+		break;
+	case 2995:	// Supplement_Part_Dex
+		.@en_type = 8;
+		.@en_type_9 = 8;
+		.@max_slot = 2;
+		break;
+	default:
+		mes "[大眾查爾斯頓]";
+		mes "^990099" + getequipname(.@part) + "^000000??";
+		mes "我對此設備不感興趣。";
+		close3;
+	}
+
+	switch(.@type_action) {
+	case 1:	// Add abilities
+		if (.@refine >= 9) {
+			setarray .@menu_en_type$[1],
+				"Attack enhancement",
+				"Defense enhancement",
+				"Acceleration enhancements",
+				"Garment upgrade",
+				"Advanced Garment upgrade",
+				"Shoes upgrade",
+				"Advanced Shoes upgrade",
+				"Accessory upgrade";
+			if (.@menu_en_type$[.@en_type] == "" || .@menu_en_type$[.@en_type_9] == "") {
+				mes "[大眾查爾斯頓]";
+				mes "有什麼不對的！";
+				close3;
+			}
+			mes "[大眾查爾斯頓]";
+			mes "這是一個相當大的增強設備，這種類型可以提供增強的擴展性能，從以下一系列的理想選擇來加強它！";
+			next;
+			if (select( .@menu_en_type$[.@en_type], .@menu_en_type$[.@en_type_9] ) == 2)
+				.@en_type = .@en_type_9;
+		}
+		if (.@card[3] < 1 && .@max_slot < 4) {
+			.@slot = 4;
+			mes "[大眾查爾斯頓]";
+			mes "我將升級第一個功能。現有的升級級別和卡不會損壞。你想繼續嗎？";
+			next;
+			if (select( "I'll come back later.", "Continue." ) == 1) {
+				mes "[大眾查爾斯頓]";
+				mes "沒問題。如果您改變主意，請回來。";
+				close3;
+			}
+		}
+		else if (.@card[2] < 1 && .@max_slot < 3) {
+			.@slot = 3;
+			mes "[大眾查爾斯頓]";
+			mes "我將升級第二功能。現有的升級級別和卡不會損壞。";
+			next;
+			mes "[大眾查爾斯頓]";
+			mes "儘管失敗的可能性很小，但在這種情況下，現有的升級級別將被重置。你想做什麼？";
+			next;
+			if (select( "I'll come back later.", "Continue." ) == 1) {
+				mes "[大眾查爾斯頓]";
+				mes "沒問題。如果您改變主意，請回來。";
+				close3;
+			}
+		}
+		else if (.@card[1] < 1 && .@max_slot < 2) {
+			.@slot = 2;
+			mes "[大眾查爾斯頓]";
+			mes "我將升級第三能力。這個最高的升級階段會使設備 ^990000 ddestroy或重置其現有升級水平。 ^000000您想繼續嗎？";
+			next;
+			if (select( "I'll come back later.", "Continue." ) == 1) {
+				mes "[大眾查爾斯頓]";
+				mes "沒問題。如果您改變主意，請回來。";
+				close3;
+			}
+		}
+		else if (.@card[0] < 1 && .@max_slot < 1)
+			.@slot = 1;
+		else {
+			cutin "dalle02.bmp",2;
+			mes "[大眾查爾斯頓]";
+			mes "該設備已升級到最大水平。請帶其他東西。";
+			close3;
+		}
+		switch(.@en_type) {
+		case 1:
+			if (.@slot == 4) {
+				.@en_brk1 = 1;
+				.@en_brk2 = 100;
+			}
+			else if (.@slot == 3) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 200;
+			}
+			else if (.@slot == 2) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 300;
+			}
+			else {
+				mes "[大眾查爾斯頓]";
+				mes "發生了未知錯誤。";
+				close3;
+			}
+			.@r = rand( .@en_brk1, .@en_brk2 );
+			if (.@r < 11) .@en_name = 4700;	// Strength1
+			else if (.@r < 21) .@en_name = 4720;	// Dexterity1
+			else if (.@r < 36) .@en_name = 4832;	// Expert_Archer1
+			else if (.@r < 51) .@en_name = 4811;	// Fighting_Spirit1
+			else if (.@r < 61) .@en_name = 4701;	// Strength2
+			else if (.@r < 71) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 86) .@en_name = 4833;	// Expert_Archer2
+			else if (.@r < 101) .@en_name = 4810;	// Fighting_Spirit2
+			else if (.@r < 111) .@en_name = 4700;	// Strength1
+			else if (.@r < 121) .@en_name = 4720;	// Dexterity1
+			else if (.@r < 132) .@en_name = 4832;	// Expert_Archer1
+			else if (.@r < 143) .@en_name = 4811;	// Fighting_Spirit1
+			else if (.@r < 151) .@en_name = 4701;	// Strength2
+			else if (.@r < 159) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 167) .@en_name = 4833;	// Expert_Archer2
+			else if (.@r < 175) .@en_name = 4810;	// Fighting_Spirit2
+			else if (.@r < 182) .@en_name = 4702;	// Strength3
+			else if (.@r < 189) .@en_name = 4722;	// Dexterity3
+			else if (.@r < 190) .@en_name = 4834;	// Expert_Archer3
+			else if (.@r < 191) .@en_name = 4809;	// Fighting_Spirit3
+			else if (.@r < 201) .@en_name = 0;
+			else if (.@r < 207) .@en_name = 4700;	// Strength1
+			else if (.@r < 213) .@en_name = 4720;	// Dexterity1
+			else if (.@r < 221) .@en_name = 4832;	// Expert_Archer1
+			else if (.@r < 229) .@en_name = 4811;	// Fighting_Spirit1
+			else if (.@r < 238) .@en_name = 4701;	// Strength2
+			else if (.@r < 247) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 260) .@en_name = 4810;	// Fighting_Spirit2
+			else if (.@r < 273) .@en_name = 4833;	// Expert_Archer2
+			else if (.@r < 280) .@en_name = 4702;	// Strength3
+			else if (.@r < 287) .@en_name = 4722;	// Dexterity3
+			else if (.@r < 289) .@en_name = 4834;	// Expert_Archer3
+			else if (.@r < 291) .@en_name = 4809;	// Fighting_Spirit3
+			else if (.@r < 296) .@en_name = 0;
+			else if (.@r < 301) .@en_name = 9;
+			else .@en_name = 0;
+			break;
+		case 2:
+			if (.@slot == 4) {
+				.@en_brk1 = 1;
+				.@en_brk2 = 100;
+			}
+			else if (.@slot == 3) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 200;
+			}
+			else if (.@slot == 2) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 310;
+			}
+			else {
+				mes "[大眾查爾斯頓]";
+				mes "發生了未知錯誤。";
+				close3;
+			}
+			.@r = rand( .@en_brk1, .@en_brk2 );
+			if (.@r < 11) .@en_name = 4740;	// Vitality1
+			else if (.@r < 21) .@en_name = 4791;	// Def3
+			else if (.@r < 36) .@en_name = 4933;	// Tolerance_Not1
+			else if (.@r < 51) .@en_name = 4861;	// MHP1
+			else if (.@r < 61) .@en_name = 4741;	// Vitality2
+			else if (.@r < 71) .@en_name = 4792;	// Def6
+			else if (.@r < 86) .@en_name = 4934;	// Tolerance_Not2
+			else if (.@r < 101) .@en_name = 4862;	// MHP2
+			else if (.@r < 111) .@en_name = 4740;	// Vitality1
+			else if (.@r < 121) .@en_name = 4791;	// Def3
+			else if (.@r < 132) .@en_name = 4933;	// Tolerance_Not1
+			else if (.@r < 143) .@en_name = 4861;	// MHP1
+			else if (.@r < 151) .@en_name = 4741;	// Vitality2
+			else if (.@r < 159) .@en_name = 4792;	// Def6
+			else if (.@r < 167) .@en_name = 4934;	// Tolerance_Not2
+			else if (.@r < 173) .@en_name = 4862;	// MHP2
+			else if (.@r < 179) .@en_name = 4742;	// Vitality3
+			else if (.@r < 185) .@en_name = 4793;	// Def9
+			else if (.@r < 188) .@en_name = 4935;	// Tolerance_Not3
+			else if (.@r < 191) .@en_name = 4867;	// MHP3
+			else if (.@r < 201) .@en_name = 0;
+			else if (.@r < 207) .@en_name = 4740;	// Vitality1
+			else if (.@r < 213) .@en_name = 4791;	// Def3
+			else if (.@r < 221) .@en_name = 4933;	// Tolerance_Not1
+			else if (.@r < 229) .@en_name = 4861;	// MHP1
+			else if (.@r < 238) .@en_name = 4741;	// Vitality2
+			else if (.@r < 247) .@en_name = 4792;	// Def6
+			else if (.@r < 258) .@en_name = 4934;	// Tolerance_Not2
+			else if (.@r < 269) .@en_name = 4862;	// MHP2
+			else if (.@r < 276) .@en_name = 4742;	// Vitality3
+			else if (.@r < 283) .@en_name = 4793;	// Def9
+			else if (.@r < 287) .@en_name = 4867;	// MHP3
+			else if (.@r < 291) .@en_name = 4935;	// Tolerance_Not3
+			else if (.@r < 296) .@en_name = 0;
+			else if (.@r < 301) .@en_name = 9;
+			else .@en_name = 0;
+			break;
+		case 3:
+			if (.@slot == 4) {
+				.@en_brk1 = 1;
+				.@en_brk2 = 100;
+			}
+			else if (.@slot == 3) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 200;
+			}
+			else if (.@slot == 2) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 310;
+			}
+			else {
+				mes "[大眾查爾斯頓]";
+				mes "發生了未知錯誤。";
+				close3;
+			}
+			.@r = rand( .@en_brk1, .@en_brk2 );
+			if (.@r < 11) .@en_name = 4860;	// Evasion3
+			else if (.@r < 21) .@en_name = 4750;	// Luck1
+			else if (.@r < 36) .@en_name = 4869;	// Attack_Delay_1
+			else if (.@r < 51) .@en_name = 4730;	// Agility1
+			else if (.@r < 61) .@en_name = 4762;	// Evasion6
+			else if (.@r < 71) .@en_name = 4751;	// Luck2
+			else if (.@r < 86) .@en_name = 4872;	// Attack_Delay_2
+			else if (.@r < 101) .@en_name = 4731;	// Agility2
+			else if (.@r < 111) .@en_name = 4860;	// Evasion3
+			else if (.@r < 121) .@en_name = 4750;	// Luck1
+			else if (.@r < 132) .@en_name = 4869;	// Attack_Delay_1
+			else if (.@r < 143) .@en_name = 4730;	// Agility1
+			else if (.@r < 151) .@en_name = 4762;	// Evasion6
+			else if (.@r < 159) .@en_name = 4751;	// Luck2
+			else if (.@r < 166) .@en_name = 4872;	// Attack_Delay_2
+			else if (.@r < 173) .@en_name = 4731;	// Agility2
+			else if (.@r < 180) .@en_name = 4763;	// Evasion12
+			else if (.@r < 187) .@en_name = 4752;	// Luck3
+			else if (.@r < 191) .@en_name = 4732;	// Agility3
+			else if (.@r < 201) .@en_name = 0;
+			else if (.@r < 207) .@en_name = 4860;	// Evasion3
+			else if (.@r < 213) .@en_name = 4750;	// Luck1
+			else if (.@r < 221) .@en_name = 4869;	// Attack_Delay_1
+			else if (.@r < 229) .@en_name = 4730;	// Agility1
+			else if (.@r < 239) .@en_name = 4762;	// Evasion6
+			else if (.@r < 249) .@en_name = 4751;	// Luck2
+			else if (.@r < 261) .@en_name = 4872;	// Attack_Delay_2
+			else if (.@r < 273) .@en_name = 4731;	// Agility2
+			else if (.@r < 280) .@en_name = 4763;	// Evasion12
+			else if (.@r < 287) .@en_name = 4752;	// Luck3
+			else if (.@r < 291) .@en_name = 4732;	// Agility3
+			else if (.@r < 296) .@en_name = 0;
+			else if (.@r < 301) .@en_name = 9;
+			else .@en_name = 0;
+			break;
+		case 4:
+			if (.@slot == 4) {
+				.@en_brk1 = 1;
+				.@en_brk2 = 100;
+			}
+			else if (.@slot == 3) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 200;
+			}
+			else if (.@slot == 2) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 310;
+			}
+			else {
+				mes "[大眾查爾斯頓]";
+				mes "發生了未知錯誤。";
+				close3;
+			}
+			.@r = rand( .@en_brk1, .@en_brk2 );
+			if (.@r < 8) .@en_name = 4700;	// Strength1
+			else if (.@r < 17) .@en_name = 4701;	// Strength2
+			else if (.@r < 24) .@en_name = 4720;	// Dexterity1
+			else if (.@r < 33) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 40) .@en_name = 4730;	// Agility1
+			else if (.@r < 47) .@en_name = 4731;	// Agility2
+			else if (.@r < 54) .@en_name = 4740;	// Vitality1
+			else if (.@r < 63) .@en_name = 4741;	// Vitality2
+			else if (.@r < 69) .@en_name = 4750;	// Luck1
+			else if (.@r < 77) .@en_name = 4751;	// Luck2
+			else if (.@r < 83) .@en_name = 4710;	// Inteligence1
+			else if (.@r < 91) .@en_name = 4711;	// Inteligence2
+			else if (.@r < 101) .@en_name = 4832;	// Expert_Archer1
+			else if (.@r < 111) .@en_name = 4700;	// Strength1
+			else if (.@r < 121) .@en_name = 4701;	// Strength2
+			else if (.@r < 131) .@en_name = 4720;	// Dexterity1
+			else if (.@r < 141) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 149) .@en_name = 4730;	// Agility1
+			else if (.@r < 158) .@en_name = 4731;	// Agility2
+			else if (.@r < 164) .@en_name = 4740;	// Vitality1
+			else if (.@r < 170) .@en_name = 4741;	// Vitality2
+			else if (.@r < 177) .@en_name = 4750;	// Luck1
+			else if (.@r < 184) .@en_name = 4751;	// Luck2
+			else if (.@r < 187) .@en_name = 4710;	// Inteligence1
+			else if (.@r < 190) .@en_name = 4711;	// Inteligence2
+			else if (.@r < 192) .@en_name = 4832;	// Expert_Archer1
+			else if (.@r < 201) .@en_name = 0;
+			else if (.@r < 207) .@en_name = 4700;	// Strength1
+			else if (.@r < 213) .@en_name = 4701;	// Strength2
+			else if (.@r < 220) .@en_name = 4720;	// Dexterity1
+			else if (.@r < 227) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 237) .@en_name = 4730;	// Agility1
+			else if (.@r < 247) .@en_name = 4731;	// Agility2
+			else if (.@r < 257) .@en_name = 4740;	// Vitality1
+			else if (.@r < 267) .@en_name = 4741;	// Vitality2
+			else if (.@r < 271) .@en_name = 4750;	// Luck1
+			else if (.@r < 276) .@en_name = 4751;	// Luck2
+			else if (.@r < 281) .@en_name = 4710;	// Inteligence1
+			else if (.@r < 286) .@en_name = 4711;	// Inteligence2
+			else if (.@r < 291) .@en_name = 4832;	// Expert_Archer1
+			else if (.@r < 296) .@en_name = 0;
+			else if (.@r < 301) .@en_name = 9;
+			else .@en_name = 0;
+			break;
+		case 5:
+			if (.@slot == 4) {
+				.@en_brk1 = 1;
+				.@en_brk2 = 100;
+			}
+			else if (.@slot == 3) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 200;
+			}
+			else if (.@slot == 2) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 310;
+			}
+			else {
+				mes "[大眾查爾斯頓]";
+				mes "發生了未知錯誤。";
+				close3;
+			}
+			.@r = rand( .@en_brk1, .@en_brk2 );
+			if (.@r < 9) .@en_name = 4701;	// Strength2
+			else if (.@r < 16) .@en_name = 4702;	// Strength3
+			else if (.@r < 25) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 32) .@en_name = 4722;	// Dexterity3
+			else if (.@r < 41) .@en_name = 4731;	// Agility2
+			else if (.@r < 46) .@en_name = 4732;	// Agility3
+			else if (.@r < 55) .@en_name = 4741;	// Vitality2
+			else if (.@r < 62) .@en_name = 4742;	// Vitality3
+			else if (.@r < 70) .@en_name = 4751;	// Luck2
+			else if (.@r < 76) .@en_name = 4752;	// Luck3
+			else if (.@r < 84) .@en_name = 4711;	// Inteligence2
+			else if (.@r < 90) .@en_name = 4712;	// Inteligence3
+			else if (.@r < 95) .@en_name = 4832;	// Expert_Archer1
+			else if (.@r < 101) .@en_name = 4833;	// Expert_Archer2
+			else if (.@r < 111) .@en_name = 4701;	// Strength2
+			else if (.@r < 121) .@en_name = 4702;	// Strength3
+			else if (.@r < 131) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 141) .@en_name = 4722;	// Dexterity3
+			else if (.@r < 149) .@en_name = 4731;	// Agility2
+			else if (.@r < 157) .@en_name = 4732;	// Agility3
+			else if (.@r < 163) .@en_name = 4741;	// Vitality2
+			else if (.@r < 169) .@en_name = 4742;	// Vitality3
+			else if (.@r < 176) .@en_name = 4751;	// Luck2
+			else if (.@r < 183) .@en_name = 4752;	// Luck3
+			else if (.@r < 185) .@en_name = 4711;	// Inteligence2
+			else if (.@r < 187) .@en_name = 4712;	// Inteligence3
+			else if (.@r < 189) .@en_name = 4833;	// Expert_Archer2
+			else if (.@r < 191) .@en_name = 4834;	// Expert_Archer3
+			else if (.@r < 201) .@en_name = 0;
+			else if (.@r < 207) .@en_name = 4701;	// Strength2
+			else if (.@r < 213) .@en_name = 4702;	// Strength3
+			else if (.@r < 220) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 227) .@en_name = 4722;	// Dexterity3
+			else if (.@r < 237) .@en_name = 4731;	// Agility2
+			else if (.@r < 247) .@en_name = 4732;	// Agility3
+			else if (.@r < 257) .@en_name = 4741;	// Vitality2
+			else if (.@r < 261) .@en_name = 4742;	// Vitality3
+			else if (.@r < 266) .@en_name = 4751;	// Luck2
+			else if (.@r < 271) .@en_name = 4752;	// Luck3
+			else if (.@r < 276) .@en_name = 4711;	// Inteligence2
+			else if (.@r < 281) .@en_name = 4712;	// Inteligence3
+			else if (.@r < 286) .@en_name = 4832;	// Expert_Archer1
+			else if (.@r < 291) .@en_name = 4833;	// Expert_Archer2
+			else if (.@r < 296) .@en_name = 0;
+			else if (.@r < 301) .@en_name = 9;
+			else .@en_name = 0;
+			break;
+		case 6:
+			if (.@slot == 4) {
+				.@en_brk1 = 1;
+				.@en_brk2 = 100;
+			}
+			else if (.@slot == 3) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 200;
+			}
+			else if (.@slot == 2) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 310;
+			}
+			else {
+				mes "[大眾查爾斯頓]";
+				mes "發生了未知錯誤。";
+				close3;
+			}
+			.@r = rand( .@en_brk1, .@en_brk2 );
+			if (.@r < 11) .@en_name = 4700;	// Strength1
+			else if (.@r < 21) .@en_name = 4701;	// Strength2
+			else if (.@r < 31) .@en_name = 4720;	// Dexterity1
+			else if (.@r < 41) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 51) .@en_name = 4730;	// Agility1
+			else if (.@r < 61) .@en_name = 4731;	// Agility2
+			else if (.@r < 71) .@en_name = 4740;	// Vitality1
+			else if (.@r < 81) .@en_name = 4741;	// Vitality2
+			else if (.@r < 91) .@en_name = 4869;	// Attack_Delay_1
+			else if (.@r < 101) .@en_name = 4815;	// Spell1
+			else if (.@r < 111) .@en_name = 4700;	// Strength1
+			else if (.@r < 121) .@en_name = 4701;	// Strength2
+			else if (.@r < 132) .@en_name = 4720;	// Dexterity1
+			else if (.@r < 143) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 151) .@en_name = 4730;	// Agility1
+			else if (.@r < 159) .@en_name = 4731;	// Agility2
+			else if (.@r < 169) .@en_name = 4740;	// Vitality1
+			else if (.@r < 179) .@en_name = 4741;	// Vitality2
+			else if (.@r < 185) .@en_name = 4869;	// Attack_Delay_1
+			else if (.@r < 191) .@en_name = 4815;	// Spell1
+			else if (.@r < 201) .@en_name = 0;
+			else if (.@r < 209) .@en_name = 4700;	// Strength1
+			else if (.@r < 217) .@en_name = 4701;	// Strength2
+			else if (.@r < 225) .@en_name = 4720;	// Dexterity1
+			else if (.@r < 233) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 244) .@en_name = 4730;	// Agility1
+			else if (.@r < 255) .@en_name = 4731;	// Agility2
+			else if (.@r < 265) .@en_name = 4740;	// Vitality1
+			else if (.@r < 275) .@en_name = 4741;	// Vitality2
+			else if (.@r < 283) .@en_name = 4869;	// Attack_Delay_1
+			else if (.@r < 291) .@en_name = 4815;	// Spell1
+			else if (.@r < 296) .@en_name = 0;
+			else if (.@r < 301) .@en_name = 9;
+			else .@en_name = 0;
+			break;
+		case 7:
+			if (.@slot == 4) {
+				.@en_brk1 = 1;
+				.@en_brk2 = 100;
+			}
+			else if (.@slot == 3) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 200;
+			}
+			else if (.@slot == 2) {
+				.@en_brk1 = 101;
+				.@en_brk2 = 310;
+			}
+			else {
+				mes "[大眾查爾斯頓]";
+				mes "發生了未知錯誤。";
+				close3;
+			}
+			.@r = rand( .@en_brk1, .@en_brk2 );
+			if (.@r < 11) .@en_name = 4702;	// Strength3
+			else if (.@r < 21) .@en_name = 4701;	// Strength2
+			else if (.@r < 31) .@en_name = 4722;	// Dexterity3
+			else if (.@r < 41) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 51) .@en_name = 4732;	// Agility3
+			else if (.@r < 61) .@en_name = 4731;	// Agility2
+			else if (.@r < 71) .@en_name = 4742;	// Vitality3
+			else if (.@r < 81) .@en_name = 4741;	// Vitality2
+			else if (.@r < 86) .@en_name = 4869;	// Attack_Delay_1
+			else if (.@r < 91) .@en_name = 4872;	// Attack_Delay_2
+			else if (.@r < 96) .@en_name = 4815;	// Spell1
+			else if (.@r < 101) .@en_name = 4814;	// Spell2
+			else if (.@r < 111) .@en_name = 4702;	// Strength3
+			else if (.@r < 121) .@en_name = 4701;	// Strength2
+			else if (.@r < 132) .@en_name = 4722;	// Dexterity3
+			else if (.@r < 143) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 151) .@en_name = 4732;	// Agility3
+			else if (.@r < 159) .@en_name = 4731;	// Agility2
+			else if (.@r < 169) .@en_name = 4742;	// Vitality3
+			else if (.@r < 179) .@en_name = 4741;	// Vitality2
+			else if (.@r < 182) .@en_name = 4869;	// Attack_Delay_1
+			else if (.@r < 185) .@en_name = 4815;	// Spell1
+			else if (.@r < 188) .@en_name = 4872;	// Attack_Delay_2
+			else if (.@r < 191) .@en_name = 4814;	// Spell2
+			else if (.@r < 201) .@en_name = 0;
+			else if (.@r < 209) .@en_name = 4702;	// Strength3
+			else if (.@r < 217) .@en_name = 4701;	// Strength2
+			else if (.@r < 225) .@en_name = 4722;	// Dexterity3
+			else if (.@r < 233) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 244) .@en_name = 4732;	// Agility3
+			else if (.@r < 255) .@en_name = 4731;	// Agility2
+			else if (.@r < 265) .@en_name = 4742;	// Vitality3
+			else if (.@r < 275) .@en_name = 4741;	// Vitality2
+			else if (.@r < 279) .@en_name = 4869;	// Attack_Delay_1
+			else if (.@r < 283) .@en_name = 4815;	// Spell1
+			else if (.@r < 287) .@en_name = 4872;	// Attack_Delay_2
+			else if (.@r < 291) .@en_name = 4814;	// Spell2
+			else if (.@r < 296) .@en_name = 0;
+			else if (.@r < 301) .@en_name = 9;
+			else .@en_name = 0;
+			break;
+		case 8:
+			if (.@slot == 4) {
+				.@en_brk1 = 1;
+				.@en_brk2 = 100;
+			}
+			else if (.@slot == 3) {
+				.@en_brk1 = 1;
+				.@en_brk2 = 111;
+			}
+			else if (.@slot == 2) {
+				.@en_brk1 = 1;
+				.@en_brk2 = 111;
+			}
+			else {
+				mes "[大眾查爾斯頓]";
+				mes "發生了未知錯誤。";
+				close3;
+			}
+			.@r = rand( .@en_brk1, .@en_brk2 );
+			if (.@r < 11) .@en_name = 4700;	// Strength1
+			else if (.@r < 21) .@en_name = 4701;	// Strength2
+			else if (.@r < 31) .@en_name = 4720;	// Dexterity1
+			else if (.@r < 41) .@en_name = 4721;	// Dexterity2
+			else if (.@r < 50) .@en_name = 4730;	// Agility1
+			else if (.@r < 59) .@en_name = 4731;	// Agility2
+			else if (.@r < 69) .@en_name = 4740;	// Vitality1
+			else if (.@r < 79) .@en_name = 4741;	// Vitality2
+			else if (.@r < 89) .@en_name = 4710;	// Inteligence1
+			else if (.@r < 99) .@en_name = 4711;	// Inteligence2
+			else if (.@r < 100) .@en_name = 4869;	// Attack_Delay_1
+			else if (.@r < 101) .@en_name = 4815;	// Spell1
+			else .@en_name = 0;
+			break;
+		default:
+			mes "[大眾查爾斯頓]";
+			mes "發生了未知錯誤。";
+			close3;
+		}
+		if (Zeny < 100000 || countitem(6752) < 1) {
+			mes "[大眾查爾斯頓]";
+			mes "商品升級所需的事情似乎不足！";
+			close3;
+		}
+
+		// anti-hack
+		if (callfunc("F_IsEquipIDHack", .@part, .@item_id) ||
+				callfunc("F_IsEquipCardHack", .@part, .@card_saved[0], .@card_saved[1], .@card_saved[2], .@card_saved[3]) ||
+				callfunc("F_IsEquipRefineHack", .@part, .@refine)) {
+			mes "[大眾查爾斯頓]";
+			mes "發生了未知錯誤。";
+			close3;
+		}
+
+		.@card[.@slot-1] = .@en_name;
+		delitem 6752,1;	// Charleston_Parts
+		Zeny -= 100000;
+		delequip .@part;
+
+		switch(.@en_name) {
+		case 0:
+			cutin "dalle02.bmp",2;
+			specialeffect2 EF_SHIELDCHARGE;
+			mes "[大眾查爾斯頓]";
+			mes "由於功率平衡不匹配，因此給定的現有能力已被破壞。很不幸，但是下次請重試。";// unknown text
+			getitem2 .@item_id,1,1,.@refine,0, .@card[0], .@card[1], .@card[2], .@card[3];
+			close3;
+		case 9:
+			cutin "dalle04.bmp",2;
+			specialeffect2 EF_SUI_EXPLOSION;
+			mes "[大眾查爾斯頓]";
+			mes "這！";
+			mes "對不起，但是設備已被摧毀。";// unknown text
+			close3;
+		default:
+			specialeffect2 EF_REPAIRWEAPON;
+			mes "[大眾查爾斯頓]";
+			mes "^990000插座" + .@slot + "^000000 will be Upgrade.";
+			getitem2 .@item_id,1,1,.@refine,0, .@card[0], .@card[1], .@card[2], .@card[3];
+			close3;
+		}
+	case 2:	// Reset
+		// Note: the NPC doesn't check if the equipment is already enhanced
+		if (getiteminfo(.@card[0], ITEMINFO_SUBTYPE) == CARD_ENCHANT) .@card[0] = 0;
+		if (getiteminfo(.@card[1], ITEMINFO_SUBTYPE) == CARD_ENCHANT) .@card[1] = 0;
+		if (getiteminfo(.@card[2], ITEMINFO_SUBTYPE) == CARD_ENCHANT) .@card[2] = 0;
+		if (getiteminfo(.@card[3], ITEMINFO_SUBTYPE) == CARD_ENCHANT) .@card[3] = 0;
+		specialeffect2 EF_REPAIRWEAPON;
+		mes "[大眾查爾斯頓]";
+		mes "重置產品的能力。";
+		delitem 6752,1;	// Charleston_Parts
+		Zeny -= 100000;
+		delequip .@part;
+		getitem2 .@item_id,1,1,.@refine,0, .@card[0], .@card[1], .@card[2], .@card[3];
+		close3;
+	dfault:
+		mes "[大眾查爾斯頓]";
+		mes "發生了未知錯誤。";
+		close3;
+	}
+	end;
+}
+
+verus04,63,112,4	script	Mass Charleston#3	4_F_CHARLESTON01,{
+	if (!checkweight(1201,1) || (MaxWeight - Weight) < 1000) {
+		mes "^ff0000 you攜帶太多物品，請減少它並稍後再回來。 ^000000";
+		close;
+	}
+	cutin "dalle03.bmp",2;
+	mes "[大眾查爾斯頓]";
+	mes "嗯，我有客戶嗎？激活推銷員模式...";
+	next;
+	cutin "dalle01.bmp",2;
+	mes "[大眾查爾斯頓]";
+	mes "查爾斯頓工廠的最暢銷物品： ^ff0000upgrade零件板 ^000000和 ^ff0000supplement part str ^000000現在開始出售！";
+	next;
+	mes "[大眾查爾斯頓]";
+	mes "僅 ^ff00003,999,999 ^000000 Zeny！為自己提供超績效動作齒輪！";
+	next;
+	mes "[大眾查爾斯頓]";
+	mes "還提供 ^ff0000pilebuncker ^000000 ^ff0000upgrade ^000000服務！";
+	next;
+	switch( select( "Talk.", "Exchange Upgrade Parts.", "Exchange Supplementary devices.", "Upgrade Pilebuncker." ) ) {
+	case 1:
+		if (isbegin_quest(13186) == 0) {
+			mes "[大眾查爾斯頓]";
+			mes "查爾斯頓工廠關閉了，但其技術和產品仍與我們同在。";
+			next;
+			mes "[大眾查爾斯頓]";
+			mes "哦，你沒聽到這個消息嗎？糟糕，我不好。請忘了我這麼說。";
+			close3;
+		}
+		cutin "dalle03.bmp",2;
+		mes "[大眾查爾斯頓]";
+		mes "我是大眾版查爾斯頓。我什至沒有給出序列號。誰知道我製作了多少份？可能是一百，甚至可能是一千。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "最初的查爾斯頓站在那兒，但是...";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "當查爾斯頓1和2逃脫了工廠時，它們已受到嚴重損壞。那天發生的戰鬥令人難以置信。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "我仍然記得查爾斯頓1和2摧毀了Ve博士的眾多生物，就像昨天一樣。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "他們還摧毀了由Ve博士修改為他的競標的大眾Charlestons。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "當然，還有其他人 - 就像我們在這裡正在從事產品升級的工作 - 幸運的是逃脫了Ve博士的離合器並與Charleston 1遇到了Charleston 1，後者拯救了我們所有人。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "在經過改裝的查爾斯頓3逃脫後，我們來到這裡。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "就這樣，當我們到達時，這個地方已經混亂了。我們與它的破壞無關。也許...";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "對不起，我陷入了困境。無論如何，這是問題所在。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "查爾斯頓1和2被摧毀到損害的地方。他們試圖互相維修，無濟於事。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "他們意識到它們受到了損害，無法修復。他們挽救了他們能做的多個部分，並用一個操作系統建造了一個身體。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "那是新建的身體。他們指責自己破壞了工廠，並想解決它。恐怕他們的數據被損壞或缺少重要的內存。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "數據的特徵顯示了Charleston 2的更多特徵，而OS的訪問方法與Charleston 1更相似。 Charleston1總是更感性的。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "我不知道新的查爾斯頓是查爾斯頓1還是2。我什至無法說出它想念或記得最多。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "她一直責怪自己失去數據，讓她失望的朋友。每當我們試圖安慰她時，";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "她會說她沒有心臟或大腦要記住或知道。我想知道她是否知道";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "人類的記憶消失了，隨著時間的流逝而扭曲或榮耀。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "人類從自己的錯誤和失敗中學習。我從工廠中的那些名為 ^ff0000books ^000000的紙記憶設備中讀到。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "在工廠的 ^ff00000000 ^000000的 ^ff00000000中進行了一項小型研究。後來，它變成了機器人開發室。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "也許查爾斯頓更像人類，而不是我們其他人。我只是希望她不必那麼難過。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "我在操作系統中感到非常擁擠，以至於我咆哮著。也許我需要碎裂我的記憶。";
+		close3;
+	case 2:
+		mes "[大眾查爾斯頓]";
+		mes "升級零件板";
+		mes "班級：盔甲，堅不可摧。";
+		mes "中小型怪物受到-10％的傷害。";
+		mes "升級到+7時，大型怪物的損壞為-10％。";
+		mes "升級到+9時，中小型怪物造成的額外損壞。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "重量：300";
+		mes "所需水平：100";
+		callsub S_Buy, 15111;	// Upgrade_Part_Plate
+	case 3:
+		mes "[大眾查爾斯頓]";
+		mes "補充零件str";
+		mes "攻擊力+5％！";
+		mes "每4個升級水平增加ATK +1％。";
+		mes "與活力/敏捷/敏捷性補充設備一起使用，以獲得最佳效果。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "重量：200";
+		mes "所需水平：100";
+		callsub S_Buy, 15110;	// Supplement_Part_Str
+	case 4:
+		mes "[大眾查爾斯頓]";
+		mes "查爾斯頓工廠的最後傑作！您在其他任何地方都找不到這樣的優質設備。";
+		next;
+		mes "[大眾查爾斯頓]";
+		mes "升級PileBuncker，";
+		mes "^ff00001堆地堡^000000，";
+		mes "^ff0000300凹陷的鐵板^000000，";
+		mes "和 ^ff000015損壞的發動機 ^000000。";
+		next;
+		switch( select( "Pilebuncker S", "Pilebuncker P", "Pilebuncker T" ) ) {
+		case 1:
+			mes "[大眾查爾斯頓]";
+			mes "皮爾邦克";
+			mes "班級：鈍武器";
+			mes "攻擊力:400";
+			mes "每2個升級級別攻擊速度獎金。";
+			next;
+			mes "[大眾查爾斯頓]";
+			mes "重量：300";
+			mes "武器水平：4";
+			mes "必需級別：130";
+			mes "僅機械師。帶有1張卡插座。";
+			.@item_id = 16030;	// Pilebuncker_S
+			break;
+		case 2:
+			mes "[大眾查爾斯頓]";
+			mes "皮爾邦克 p";
+			mes "班級：鈍武器";
+			mes "攻擊力:450";
+			mes "ATK +5每個升級級別。";
+			next;
+			mes "[大眾查爾斯頓]";
+			mes "重量：400";
+			mes "武器水平：4";
+			mes "必需級別：130";
+			mes "僅機械師。";
+			.@item_id = 16031;	// Pilebuncker_P
+			break;
+		case 3:
+			mes "[大眾查爾斯頓]";
+			mes "皮爾巴克特";
+			mes "班級：鈍武器";
+			mes "攻擊力:400";
+			mes "SP每個升級水平的成本為-1％。";
+			next;
+			mes "[大眾查爾斯頓]";
+			mes "重量：350";
+			mes "武器水平：4";
+			mes "必需級別：130";
+			mes "僅機械師。帶有1張卡插座。";
+			.@item_id = 16032;	// Pilebuncker_T
+			break;
+		}
+		break;
+	}
+	next;
+	mes "[大眾查爾斯頓]";
+	mes "您真的想升級 ^ff0000" + getitemname(.@item_id) + "^000000?";
+	next;
+	if (select( "I suggest you reconsider.", "Buy." ) == 1) {
+		mes "[大眾查爾斯頓]";
+		mes "這是一個很好的購買，但是您仍然需要仔細做出決定。";
+		close;
+	}
+	if (countitem(6751) > 299 && countitem(6750) > 14 && countitem(1549) > 0) {
+		mes "[大眾查爾斯頓]";
+		mes "你不會後悔的！她是查爾斯頓工廠！";
+		delitem 6751,300;	// Distorted_Iron_Plate
+		delitem 6750,15;	// Wrong_Engine
+		delitem 1549,1;		// Pilebuncker
+		getitem .@item_id,1;
+		close3;
+	}
+	mes "[大眾查爾斯頓]";
+	mes "沒有足夠的材料來升級。";
+	close3;
+
+S_Buy:
+	.@item_id = getarg(0);
+	mes "^ff0000機電^000000";
+	mes "^ff0000價格:3,999,999 Zeny^000000";
+	next;
+	mes "[大眾查爾斯頓]";
+	mes "你真的想買 ^ff0000嗎" + getitemname(.@item_id) + "^000000?";
+	next;
+	if (select( "I suggest you reconsider.", "Buy." ) == 1) {
+		mes "[大眾查爾斯頓]";
+		mes "這是一個很好的購買，但是您仍然需要仔細做出決定。";
+		close3;
+	}
+	//if (Zeny >= 3999998) {// typo?
+	if (Zeny >= 3999999) {
+		mes "[大眾查爾斯頓]";
+		mes "你不會後悔的！她是查爾斯頓工廠！";
+		Zeny -= 3999999;
+		getitem .@item_id,1;
+		close3;
+	}
+	mes "[大眾查爾斯頓]";
+	mes "良好的商品價值並不少見，請確認您的口袋深度！";
+	close3;
+}
+
+
+// Excellion
+verus04,161,222,4	script	Grandpa picking up scrap iron	1_M_HOF,{
+	switch( isbegin_quest(12368) ) {
+	case 0:
+		mes "[爺爺拿起廢鐵]";
+		mes "有兩塊廢鐵，我看到不斐波那契的價值要撿起並出售給回收箱，結果不願意與我打交道。";
+		next;
+		mes "[爺爺拿起廢鐵]";
+		mes "因為不是鐵？每個資源回收都不願意購買，這是令人不安的！";
+		close;
+	case 1:
+		mes "[爺爺拿起廢鐵]";
+		mes "嘿！你只是和那塊垃圾說話嗎？還是我失去了視線？";
+		close;
+	case 2:
+		mes "[爺爺拿起廢鐵]";
+		mes "我的天啊！那不能賣給回收箱！";
+		close;
+	}
+}
+
+verus04,163,219,4	script	PLUTO_09#pa0829	4_SCR_AT_ROBOTS,{
+	disable_items;
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 10000) {
+		mes "^ff0000 you攜帶太多物品，請減少它並稍後再回來。 ^000000";
+		close;
+	}
+	if (isbegin_quest(12368) < 2) {
+		mes "^0000 fflaL lcd仍然昏暗，但似乎不再起作用。 ^000000";
+		close;
+	}
+	mes "^0000ff當出現奇怪的恐龍圖案時，轉到介紹屏幕。 ^000000";
+	next;
+	mes "[冥王星_09]";
+	mes "" + strcharinfo(0) + ",";
+	mes "你好。我怎麼幫你？";
+	next;
+	switch( select( "Note", "Old Fuel and Huge Metal Scrap to exchange for gear.", "Design drawings for the production of Enchantment" ) ) {
+	case 1:
+		mes "出現^0000ffdinosaur前屏幕，並描述可愛的女孩聲音。 ^000000";
+		next;
+		mes "[冥王星_09]";
+		mes "這是自新Pluto_09的起源以來的100年。";
+		next;
+		mes "[冥王星_09]";
+		mes "帶上巨大的金屬廢料和舊燃料可以幫助您對設備有用，哦~";
+		next;
+		mes "[冥王星_09]";
+		mes "您想製作結界設備嗎？你帶坦克！我可以為您設計迷人。哦，祝你好運。";
+		next;
+		mes "[冥王星_09]";
+		mes "這是出現在恐龍童話中的霸王龍，非常美麗...（繼續出現無聊的恐龍故事）";
+		next;
+		mes "^0000ffin屏幕簡介，假定機器人製造商的心理狀態非常不穩定。 ^000000";
+		close;
+	case 2:
+		setarray .@id[0],20773,15128; // Excelion_Wing, Excelion_Suit
+		mes "[冥王星_09]";
+		mes "生產設備需要 ^0000FF10巨大的金屬廢料和5個舊燃料 ^000000。";
+		next;
+		switch( select( "Quit.", "Making the " + getitemname(.@id[0]), "Making the " + getitemname(.@id[1]) ) ) {
+		case 1:
+			mes "^0000ffdinosaurs凝視著這裡的圖片。 ^000000";
+			close;
+		case 2:
+			.@item_id = .@id[0];
+			break;
+		case 3:
+			.@item_id = .@id[1];
+			break;
+		}
+		if (countitem(6961) < 10 || countitem(6962) < 5) {
+			mes "[冥王星_09]";
+			mes "我已經談論過生產設備需求 ^0000FF10" + getitemname(6961) + " and 5 " + getitemname(6962) + "^000000, you don't have enough.";
+			close;
+		}
+		specialeffect EF_SPELLBREAKER;
+		delitem 6962,5;// OldTank
+		delitem 6961,10;// LargeScrap
+		getitem .@item_id,1;
+		mes "[冥王星_09]";
+		mes "您的設備已經準備好了。讓我們看看是否合適。";
+		close;
+	case 3:
+		while(1) {
+			if (countitem(6962) < 5)
+				.@string$ = "^aaaaaaInsufficient fuel for making design drawings.^000000";
+			else
+				.@string$ = "Production design (^ff0000 success rate 30%^000000)";
+			mes "[冥王星_09]";
+			mes "如果你給我5" + getitemname(6962) + ", I can do the production of design drawings look!";
+			mes "------------";
+			mes "^0000 fflittle恐龍在屏幕上跑來跑去。 ^000000";
+			next;
+			if (select( "Quit.", .@string$ ) == 1) {
+				mes "^0000ffit在表明恐龍正在塞滿自己之後結束。 ^000000";
+				close;
+			}
+			.@fail = false;
+			.@reac_rnd = rand(1,10000);
+			if (.@reac_rnd < 26)		.@en_name = 6977;	// Reactor_A_STR_
+			else if (.@reac_rnd < 51)	.@en_name = 6978;	// Reactor_A_INT_
+			else if (.@reac_rnd < 251)	.@en_name = 6979;	// Reactor_A_DEF_
+			else if (.@reac_rnd < 326)	.@en_name = 6981;	// Reactor_A_ATK_
+			else if (.@reac_rnd < 401)	.@en_name = 6982;	// Reactor_A_MATK_
+			else if (.@reac_rnd < 601)	.@en_name = 6980;	// Reactor_A_AVOI_
+			else if (.@reac_rnd < 801)	.@en_name = 6983;	// Reactor_A_MHP_
+			else if (.@reac_rnd < 1001)	.@en_name = 6984;	// Reactor_A_MSP_
+			else if (.@reac_rnd < 1151)	.@en_name = 6986;	// Reactor_A_ASPD_
+			else if (.@reac_rnd < 1401)	.@en_name = 6975;	// Reactor_Cure_201_
+			else if (.@reac_rnd < 1551)	.@en_name = 6976;	// Reactor_Cure_202_
+			else if (.@reac_rnd < 1751)	.@en_name = 6973;	// Reactor_Cure_101_
+			else if (.@reac_rnd < 1851)	.@en_name = 6974;	// Reactor_Cure_102_
+			else if (.@reac_rnd < 1901)	.@en_name = 6985;	// Reactor_A_FROZ_
+			else if (.@reac_rnd < 2101)	.@en_name = 6970;	// Reactor_T_WATER_
+			else if (.@reac_rnd < 2301)	.@en_name = 6971;	// Reactor_T_GROUND_
+			else if (.@reac_rnd < 2501)	.@en_name = 6969;	// Reactor_T_FIRE_
+			else if (.@reac_rnd < 2701)	.@en_name = 6972;	// Reactor_T_WIND_
+			else if (.@reac_rnd < 2776)	.@en_name = 6966;	// Reactor_P_WATER_
+			else if (.@reac_rnd < 2851)	.@en_name = 6967;	// Reactor_P_GROUND_
+			else if (.@reac_rnd < 2926)	.@en_name = 6965;	// Reactor_P_FIRE_
+			else if (.@reac_rnd < 3001)	.@en_name = 6968;	// Reactor_P_WIND_
+			else {
+				.@fail = true;
+				.@reac_rnd2 = rand(1,13000);
+				if (.@reac_rnd2 < 2)
+					.@en_name = 969;	// Gold
+				else if (.@reac_rnd2 < 1002)
+					.@en_name = 999;	// Steel
+				else if (.@reac_rnd2 < 3002)
+					.@en_name = 998;	// Iron
+				else if (.@reac_rnd2 < 8002)
+					.@en_name = 1002;	// Iron_Ore
+				else
+					.@en_name = 7054;	// Brigan
+			}
+			if (countitem(6962) < 5)
+				mes "^0000ff，圖片顯示恐龍默默地看著空碗，當材料不足時，這可能是一個錯誤消息！ ^000000";
+			else {
+				specialeffect EF_SPELLBREAKER;
+				delitem 6962,5;// OldTank
+				getitem .@en_name,1;
+				mes "[冥王星_09]";
+				if (.@fail)
+					mes "可惜的是，設計失敗了。";
+				else
+					mes "太好了，設計了。";
+			}
+			next;
+		}
+		end;
+	default:
+		mes "^0000FFA屏幕顯示恐龍可能不了解命令的how叫。 ^000000";
+		close;
+	}
+	end;
+}
+
+verus04,165,217,4	script	MARS_01#pa0829	4_SCR_MT_ROBOTS,{
+	disable_items;
+	if (checkweight(1201,1) == 0 || (MaxWeight - Weight) < 10000) {
+		mes "^ff0000 you攜帶太多物品，請減少它並稍後再回來。 ^000000";
+		close;
+	}
+	switch( isbegin_quest(12368) ) {
+	case 0:
+		mes "模糊的LCD屏幕可能會受到恐懼，快樂和強烈的顫抖，這可能是由於缺乏力量而無法完成演示。";
+		next;
+		if (select( "Just ignore it.", "Press every button." ) == 1) {
+			mes "它可能是一個前爆炸機器人，到處都是常見的，不需要太多關注。";
+			close;
+		}
+		mes "[？ ？ ？ ？ ？ ？ ？ ]";
+		mes "你好！我是Mars_01，一個探索機器人。目前，我已經輸入了Hibernation模式以節省電源。相關功能設置為如下。";
+		next;
+		if (select( "Interrupt the machine", "Supply of fuel" ) == 1) {
+			mes "淡淡的聲音後，機器人重新進入冬眠模式。";
+			close;
+		}
+		mes "[MARS_01]";
+		mes "我們是超級強制機器人，只要舊的石油1允許我和同伴冥王星擁有超過90％的功率。";
+		next;
+		mes "[MARS_01]";
+		mes "如果發現舊燃料，請將燃料插入屏幕底部的口中，以便您可以舉起冬眠模式。";
+		setquest 12368;	// Operate the old robot
+		close;
+	case 1:
+		if (countitem(6962) < 1) {
+			mes "[MARS_01]";
+			mes "如果您發現1" + getitemname(6962) + ", please insert the fuel into the mouth of the bottom of the screen, so you can lift the hibernation mode.";
+			close;
+		}
+		mes "也許當我們去尋找燃料時，我們用完了電力。我們應該放入燃料嗎？";
+		next;
+		if (select( "Quit.", "Put in the fuel" ) == 1) {
+			mes "舊的機器人可能沒有電力，根本沒有做出響應。";
+			close;
+		}
+		mes "放入燃料時，聲屏會打開。";
+		npctalk "Whoa, whoa?! It moves!!!", "Grandpa picking up scrap iron";
+		next;
+		mes "[MARS_01]";
+		mes "啟動檢查系統並確認每個部分的損壞。";
+		next;
+		mes "[MARS_01]";
+		mes "功率計10％，儀表板正常，身體骨架13％，表現良好。";
+		next;
+		mes "[MARS_01]";
+		mes "Pluto_09開始注入採礦輔助機器人的能量。";
+		npctalk "Energy response confirmed. It's working.", "PLUTO_09#pa0829";
+		next;
+		mes "[MARS_01]";
+		mes "感謝您讓我入門，我將重設成為我成為經理的人。";
+		next;
+		select("輸入名稱。");
+		mes "[MARS_01]";
+		mes "" + strcharinfo(0) + ",";
+		mes "你好！燃料已充滿電。";
+		delitem 6962,1;// OldTank
+		completequest 12368;
+		close;
+	case 2:
+		break;
+	}
+	mes "[MARS_01]";
+	mes "" + strcharinfo(0) + ",";
+	mes "你好！我可以幫你嗎？";
+	next;
+	switch( select( "Note", "Enhanced " + getitemname(20773), "Enhanced " + getitemname(15128) ) ) {	// Excelion_Wing, Excelion_Suit
+	case 1:
+		mes "^0000ffsoon再次指示。 ^000000";
+		next;
+		mes "[MARS_01]";
+		mes "在等待新所有者時，我們繼續更新到最新版本。";
+		next;
+		mes "[MARS_01]";
+		mes "如果您帶上Aak Seri Wong推進翼，Aak Seri Wong夾克設備並加強設計，我將根據設計加強設備。";
+		next;
+		mes "[MARS_01]";
+		mes "根據操作的標准設計圖，該設備在此過程中不會損壞，但是最大升級的數量將根據設備的類型而變化。";
+		next;
+		mes "[MARS_01]";
+		mes "歡迎再次回來~";
+		close;
+	case 2:
+		.@part = EQI_GARMENT;
+		break;
+	case 3:
+		.@part = EQI_ARMOR;
+		break;
+	}
+	// <item ID required>, <item enchant ID>, <max number of this enchant on armor>, <max number of this enchant on garment>, <enchant on first slot only>
+	setarray .@list[0],
+		6965, 4970, 1,0,3,	// Reactor_P_FIRE_		Reactor_P_FIRE
+		6966, 4971, 1,0,3,	// Reactor_P_WATER_		Reactor_P_WATER
+		6967, 4972, 1,0,3,	// Reactor_P_GROUND_	Reactor_P_GROUND
+		6968, 4973, 1,0,3,	// Reactor_P_WIND_		Reactor_P_WIND
+		6969, 4974, 0,3,0,	// Reactor_T_FIRE_		Reactor_T_FIRE
+		6970, 4975, 0,3,0,	// Reactor_T_WATER_		Reactor_T_WATER
+		6971, 4976, 0,3,0,	// Reactor_T_GROUND_	Reactor_T_GROUND
+		6972, 4977, 0,3,0,	// Reactor_T_WIND_		Reactor_T_WIND
+		6973, 4978, 3,3,0,	// Reactor_Cure_101_	Reactor_Cure_101
+		6974, 4979, 3,3,0,	// Reactor_Cure_102_	Reactor_Cure_102
+		6975, 4980, 3,3,0,	// Reactor_Cure_201_	Reactor_Cure_201
+		6976, 4981, 3,3,0,	// Reactor_Cure_202_	Reactor_Cure_202
+		6977, 4982, 1,0,0,	// Reactor_A_STR_		Reactor_A_STR
+		6978, 4983, 1,0,0,	// Reactor_A_INT_		Reactor_A_INT
+		6979, 4984, 3,3,0,	// Reactor_A_DEF_		Reactor_A_DEF
+		6980, 4985, 1,1,0,	// Reactor_A_AVOI_		Reactor_A_AVOI
+		6981, 4986, 3,3,0,	// Reactor_A_ATK_		Reactor_A_ATK
+		6982, 4987, 3,3,0,	// Reactor_A_MATK_		Reactor_A_MATK
+		6983, 4988, 3,3,0,	// Reactor_A_MHP_		Reactor_A_MHP
+		6984, 4989, 3,3,0,	// Reactor_A_MSP_		Reactor_A_MSP
+		6985, 4990, 1,0,0,	// Reactor_A_FROZ_		Reactor_A_FROZ
+		6986, 4991, 1,1,0;	// Reactor_A_ASPD_		Reactor_A_ASPD
+	.@size = getarraysize(.@list);
+
+	for ( .@i = 0; .@i < .@size; .@i += 5 ) {
+		if (countitem(.@list[.@i]) < 1)
+			.@menu$ += sprintf( "^aaaaaa%s (Missing)^000000:", getitemname(.@list[.@i]) );
+		else
+			.@menu$ += sprintf( "%s:", getitemname(.@list[.@i]) );
+	}
+	mes "[MARS_01]";
+	mes "" + strcharinfo(0) + ",";
+	mes "選擇要使用的附魔！";
+	next;
+	.@s = select("Quit.:" + .@menu$) - 2;
+	if (.@s < 0) {
+		mes "[MARS_01]";
+		mes "迄今為止。";
+		close;
+	}
+	.@s *= 5;
+	.@item_req = .@list[.@s];
+	.@item_enchant_id = .@list[.@s+1];
+	.@first_slot_only = .@list[.@s+4];
+
+	.@equip_id = getequipid(.@part);
+	.@equip_refine = getequiprefinerycnt(.@part);
+	setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+
+	if (countitem(.@item_req) < 1) {
+		mes "[MARS_01]";
+		mes "迄今為止。";
+		close;
+	}
+	if (.@part == EQI_ARMOR)
+		.@max_num_enchant = .@list[.@s+2];
+	else if (.@part == EQI_GARMENT)
+		.@max_num_enchant = .@list[.@s+3];
+	else {
+		mes "[MARS_01]";
+		mes "請聯繫管理員。";
+		close;
+	}
+
+	// anti-hack
+	if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3]) || callfunc("F_IsEquipRefineHack", .@part, .@equip_refine)) {
+		mes "[MARS_01]";
+		mes "你卸下了裝備嗎？";
+		close;
+	}
+
+	if (.@card[0] > 0 && .@item_enchant_id == .@card[0]) { .@slot_sum++; }
+	if (.@card[1] > 0 && .@item_enchant_id == .@card[1]) { .@slot_sum++; }
+	if (.@card[2] > 0 && .@item_enchant_id == .@card[2]) { .@slot_sum++; }
+	if (.@card[3] > 0 && .@item_enchant_id == .@card[3]) { .@slot_sum++; }
+
+	if (.@max_num_enchant < 1) {
+		mes "[MARS_01]";
+		mes "您選擇的設計與設備不兼容。";
+		close;
+	}
+	if (.@first_slot_only > 0 && .@card[3] != 0) {
+		mes "[MARS_01]";
+		mes "這種設計僅是第一次加強使用，但是設備具有其他性能，請使用其他設計來加強它！";
+		close;
+	}
+	if (.@slot_sum >= .@max_num_enchant) {
+		mes "[MARS_01]";
+		mes "最大封裝數為" + .@max_num_enchant + ". The item has reached the upper limit.";
+		close;
+	}
+	if (.@card[1] != 0) {
+		mes "[MARS_01]";
+		mes "設備數量已達到極限。";
+		close;
+	}
+
+	// anti-hack
+	if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3]) || callfunc("F_IsEquipRefineHack", .@part, .@equip_refine)) {
+		mes "[MARS_01]";
+		mes "如果將拆除設備，請特別注意。";
+		close;
+	}
+
+	switch( .@equip_id ) {
+	case 20773:	// Excelion_Wing
+	case 15128:	// Excelion_Suit
+		break;
+	default:
+		mes "[MARS_01]";
+		mes "該產品沒有序列號，無法符合產品的規格。";
+		close;
+	}
+	mes "[MARS_01]^0000FF";
+	mes "選擇" + getequipname(.@part) + " + " + getitemname(.@item_req) + ",";
+	mes "^000000 ------------------------------------";
+	mes "您選擇的設計可以升級到設備限制 ^0000FF" + .@max_num_enchant + " the same design, ^000000so far, enhanced ^0000ff" + .@slot_sum + " times^000000, do you want to continue?";
+	next;
+	if (select( "I'll think about it...", "Go on." ) == 1) {
+		mes "[MARS_01]";
+		mes "下次您需要我回來~";
+		close;
+	}
+
+	// anti-hack
+	if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3]) || callfunc("F_IsEquipRefineHack", .@part, .@equip_refine))
+		close;
+
+	if (.@card[3] == 0) {
+		.@enchant_count = 1;
+		.@card[3] = .@item_enchant_id;
+	}
+	else if (.@card[2] == 0) {
+		.@enchant_count = 2;
+		.@card[2] = .@item_enchant_id;
+	}
+	else if (.@card[1] == 0) {
+		.@enchant_count = 3;
+		.@card[1] = .@item_enchant_id;
+	}
+	else {
+		mes "[MARS_01]";
+		mes "設備已達到加強Hello的上限！";
+		close;
+	}
+	specialeffect2 EF_REPAIRWEAPON;
+	mes "[MARS_01]";
+	if (.@enchant_count < 5)
+		mes "第一個設備已升級 ^990000" + .@enchant_count + " times^000000.";
+	else
+		mes "有關其他性能設備 ^990000 ^000000升級。";	// never displayed
+
+	delitem .@item_req, 1;
+	delequip .@part;
+	getitem2 .@equip_id,1,1,.@equip_refine,0,.@card[0],.@card[1],.@card[2],.@card[3];
+	close;
+}

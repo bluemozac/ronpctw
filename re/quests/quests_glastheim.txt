@@ -1,0 +1,82 @@
+﻿//===== rAthena Script =======================================
+//= NPCs related to Glastheim (Nightmare)
+//===== By: ==================================================
+//= Ridley8819
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Additional Comments: =================================
+//= 1.0 Initial release [Ridley8819]
+//= 1.1 Dialogue cleanup [Aleos]
+//============================================================
+
+glast_01,195,273,3	script	Hugin's follower#1	2_F_MAGICMASTER,{
+	mes "[Hugin的追隨者]";
+	mes "我不能在休格大師等時間和尺寸之間移動，但我可以假裝。";
+	next;
+	mes "[Hugin的追隨者]";
+	mes "是什麼導致這種鏡頭的海姆充滿瞭如此強大的黑暗力量？";
+	next;
+	if( select("我不在乎:這很有趣，請告訴我更多") == 2 ){
+		mes "[Hugin的追隨者]";
+		mes "多虧了Hugin，我找到了進入這種古老的Glast Heim的道路，這是由如此強大的黑暗力量所吸引的。";
+		next;
+		mes "[Hugin的追隨者]";
+		mes "你怎麼說？您想在那裡探索嗎？";
+		next;
+		if( select("對我來說沒有探索:我真的很想探索！") == 2 ){
+			mes "[Hugin的追隨者]";
+			mes "當然，但這不是免費服務！我必須得到一些回報。 Hoho ...";
+			next;
+			mes "[Hugin的追隨者]";
+			mes "我可以將您送到兩個地方。您要我送您哪個地方？";
+			next;
+			switch( select("取消:修道院墓地（Lv100~130）- 5000z:二樓走廊（Lv140以上）- 10000z") ){
+				case 1:
+					mes "[Hugin的追隨者]";
+					mes "好吧，每當您改變主意時，請回來。我認為您會和我談論很多...";
+					close;
+				case 2:
+					.@map$ = "gl_chyard_";
+					.@x = 148;
+					.@y = 144;
+					.@zeny = 5000;
+					break;
+				case 3:
+					.@map$ = "gl_cas02_";
+					.@x = 104;
+					.@y = 31;
+					.@zeny = 10000;
+					break;
+			}
+			if( Zeny < .@zeny ){
+				mes "[Hugin的追隨者]";
+				mes "什麼？您期望這項服務免費嗎？";
+				close;
+			}
+			Zeny -= .@zeny;
+			warp .@map$, .@x, .@y;
+			end;
+		}
+	}
+	mes "[Hugin的追隨者]";
+	mes "好吧，如果您對此不感興趣，請不要介意。";
+	close;
+}
+
+gl_chyard_,148,149,4	script	Hugin's Follower#n_gh1	123,{
+	mes "[Hugin的追隨者]";
+	mes "你想回來嗎？";
+	mes "好的，讓我們離開這裡。";
+	next;
+	if( select("我不是故意跟你說話的:請帶我離開這裡") == 1 ){
+		mes "[Hugin的追隨者]";
+		mes "好吧，只要您想離開時，請告訴我。";
+		close;
+	}
+	warp "glast_01", 210, 269;
+	end;
+}
+
+gl_cas02_,104,36,4	duplicate(Hugin's Follower#n_gh1)	Hugin's Follower#n_gh2	123

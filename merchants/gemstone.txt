@@ -1,0 +1,119 @@
+﻿//===== rAthena Script ======================================= 
+//= Gemstone Trader
+//===== By: ================================================== 
+//= L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 1.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Trade various colors of gemstones for other color gemstones.
+//===== Additional Comments: ================================= 
+//= 1.0 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//=     Any notes pertaining to the prior trader may be found
+//=     in the cities/payon.txt
+//= 1.1 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 1.2 Updated input with min/max values. [L0ne_W0lf]
+//=     Added a checkweight. 
+//= 1.3 Fixed checks. [Euphy]
+//============================================================ 
+
+payon,173,238,5	script	Jade#pay	754,{
+	if (checkweight(1201,1) == 0) {
+		mes "^3355FFWAIT第二秒！現在，您隨身攜帶太多物品。將您的一些東西放入Kafra存儲後，請回來。 ^000000";
+		close;
+	}
+	mes "[玉]";
+	mes "給我兩個";
+	mes "寶石";
+	mes "同樣的顏色，我會";
+	mes "將它們更改為寶石";
+	mes "不同的顏色。";
+	next;
+	switch(select("藍色寶石換成紅色寶石!:紅色寶石換成黃色寶石!:黃色寶石換成藍色寶石!")) {
+	case 1: callsub S_TradeGems,717,716;
+	case 2: callsub S_TradeGems,716,715;
+	case 3: callsub S_TradeGems,715,717;
+	}
+
+S_TradeGems:
+	.@item_req = getarg(0);
+	.@item_id = getarg(1);
+
+	if (countitem(.@item_req) < 2) {
+		mes "[玉]";
+		mes "哈...！";
+		mes "你在開玩笑，對嗎？";
+		mes "我不能為你提供這個";
+		mes "服務如果您不這樣做";
+		mes "至少給我";
+		mes "2"+ getitemname(.@item_req) +"s!";
+		close;
+	}
+	else {
+		.@gems = countitem(.@item_req) /2;
+		mes "[玉]";
+		mes "我相信我可以創建";
+		mes "總共"+ .@gems +" "+ getitemname(.@item_id) +"s";
+		mes "使用"+ getitemname(.@item_req) +"s";
+		mes "您目前有。";
+		mes "你想讓我做什麼？";
+		next;
+		switch(select("給我盡可能多的數量.:我想要設定數量.:我退出.")) {
+		case 1:
+			delitem .@item_req,.@gems * 2;
+			getitem .@item_id,.@gems;
+			break;
+		case 2:
+			mes "[玉]";
+			mes "那麼多少";
+			mes "你想要？";
+			mes "最大數字";
+			mes "您可以輸入100。";
+			next;
+			while(1) {
+				input .@input,0,101;
+				if (.@input == 0) {
+					mes "[玉]";
+					mes "根本沒有嗎？";
+					mes "我猜你";
+					mes "改變了主意...";
+					close;
+				}
+				else if (.@input > 100) {
+					mes "[玉]";
+					mes "錯誤...";
+					mes "我要你進入";
+					mes "金額不大";
+					mes "超過100，還記得...嗎？";
+					next;
+				}
+				else if (.@gems < .@input) {
+					// Custom dialogue
+					mes "[玉]";
+					mes "錯誤...";
+					mes "你沒有那個";
+					mes "許多寶石可以交易...";
+					next;
+				}
+				else break;
+			}
+			delitem .@item_req,.@input * 2;
+			getitem .@item_id,.@input;
+			break;
+		case 3:
+			mes "[玉]";
+			mes "當然，沒問題。";
+			mes "隨時回來。";
+			close;
+		}
+		mes "[玉]";
+		mes "你去。";
+		mes "隨意來";
+		mes "隨時回來。";
+		mes "嗯，那是什麼？";
+		mes "我臉上有東西嗎？";
+		close;
+	}
+}

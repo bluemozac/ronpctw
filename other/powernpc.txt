@@ -1,0 +1,293 @@
+﻿//===== rAthena Script =======================================
+//= Official Kunlun Power Arena
+//===== By: ==================================================
+//= KarLaeda
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= rAthena Project; SVN r9000+
+//===== Additional Comments: =================================
+//= [Official Conversion]
+//= 1.1 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 1.2 Cleaning. [Euphy]
+//============================================================
+
+gonryun,180,118,4	script	Iron man#gnp	85,{
+	if (checkweight(1201,1) == 0) {
+		mes "- 等一下 ！ ！ -";
+		mes "- 目前您正在攜帶 -";
+		mes "- 與您在一起太多。 -";
+		mes "- 請重試 -";
+		mes "- 減肥後。 -";
+		close;
+	}
+	if (BaseJob == Job_Novice) {
+		mes "[松木杜]";
+		mes "兒童不允許在這裡。";
+		close;
+	}
+	if (in_battle == 3) set in_battle,1;
+	if (in_battle < 1) {
+		mes "[松木杜]";
+		mes "嘿嘿~這不是什麼";
+		mes "您每天都可以看到。";
+		mes "哦~你看起來很強壯！";
+		mes "想嘗試嗎？";
+		next;
+		switch(select("為什麼不呢？ :？ ？ ？ :不，謝謝。")){
+		case 1:
+			mes "[松木杜]";
+			mes "哈哈~我知道你會嘗試的。";
+			mes "如果你能提起它，";
+			mes "我會告訴你一些有趣的東西。";
+			mes "準備好？";
+			next;
+			mes "^0000ffsongmoodoo指向一塊岩石";
+			mes "並要求您舉起它。";
+			if (BaseJob < Job_Knight) callsub L_Lifting,690;
+			else if (BaseClass == Job_Swordman || BaseClass == Job_Thief || BaseClass == Job_Merchant || BaseJob == Job_Monk) callsub L_Lifting,1100;
+			else callsub L_Lifting,730;
+			break;
+		case 2:
+			mes "[松木杜]";
+			mes "這沒什麼大不了的。";
+			mes "如果您相信自己很堅強，";
+			mes "這可能是體驗的好機會";
+			mes "新事物。想嘗試嗎？";
+			break;
+		case 3:
+			mes "[松木杜]";
+			mes "我想不是...";
+			emotion ET_HNG;
+			break;
+		}
+	} else if (in_battle == 1) {
+		mes "[松木杜]";
+		mes "很高興再次見到你！";
+		mes "想去嗎？";
+		next;
+		if (select("當然:也許下次吧") == 1) {
+			mes "[松木杜]";
+			mes "好的！哈哈。";
+			mes "我喜歡你的信心。";
+			mes "祝你好運~";
+			close2;
+			warp "gon_test",53,6;
+			end;
+		} else {
+			mes "[松木杜]";
+			mes "好吧...好吧。";
+			mes "下次我見。";
+		}
+	} else {
+		mes "[松木杜]";
+		mes "你從那裡逃走了嗎？";
+		mes "猜猜你不夠強！";
+		mes "我給你另一個機會。";
+		mes "再見。";
+		emotion ET_HNG;
+		set in_battle,1;
+	}
+	close;
+
+L_Lifting:
+	if (checkweight(7049,getarg(0))) {
+		mes "您輕輕抬起石頭。 ^000000";
+		set in_battle,1;
+		getitem 7049, getarg(0); // Stone
+		next;
+		emotion ET_BEST;
+		mes "[松木杜]";
+		mes "哇~好~";
+		mes "我帶你到一個不錯的地方";
+		mes "下次我見到你。";
+		mes "見ya~";
+	} else {
+		mes "看起來太重了。 ^000000";
+		next;
+		mes "[松木杜]";
+		mes "您缺乏培訓。";
+		mes "練習後回來。";
+	}
+	return;
+}
+
+gon_test,50,14,4	script	Administrator#gnp	780,{
+	mes "[行政人員]";
+	if (BaseJob == Job_Novice) {
+		mes "兒童不允許在這裡。";
+		close;
+	}
+	if ($@in_battle) {
+		mes "抱歉，戰鬥領域";
+		mes "現在被佔領。";
+		mes "稍後再試。";
+		close;
+	}
+	mes "你準備好了嗎？";
+	mes " ";
+	mes "記住，你必須付款";
+	mes "500Z打架。";
+	next;
+	if (select("是的，讓我戰鬥吧！ :請稍等。") == 2) {
+		mes "[行政人員]";
+		mes "好的，稍後再見。";
+		close;
+	}
+	if (Zeny < 500) {
+		mes "[行政人員]";
+		mes "對不起，但是您沒有足夠的Zeny。";
+		close;
+	}
+	set Zeny,Zeny - 500;
+	set in_battle,1;
+	warp "gon_test",42,86;
+	set $@in_battle,1;
+	setnpctimer 0,"Summoner#gnp";
+	startnpctimer "Summoner#gnp";
+	end;
+}
+
+gon_test,42,89,4	script	Summoner#gnp	774,{
+	mes "[松延宇]";
+	if (in_battle == 3) {
+		mes "註冊後請回來。";
+		close;
+	} else if (in_battle == 2) {
+		mes "您已經進行了一場比賽。";
+		mes "您可以一次參加比賽。";
+		mes "如果您想要比賽，請重新輸入";
+		mes "與其他怪物。";
+		close;
+	}
+	mes "歡迎。";
+	mes "您會記得哪個怪物？";
+	next;
+	set .@gnpGroup, select("組1:組2:組3:組4:組5:組6:組7:組8:組9:組10:組11");
+	set .@gnpGroupMob$,.gnpMobsName$[(.@gnpGroup-1)*6];
+	for (set .@i,1; .@i < 6; set .@i, .@i+1)
+		set .@gnpGroupMob$, .@gnpGroupMob$ + ":" + .gnpMobsName$[(.@gnpGroup-1)*6 + .@i];
+	set .@gnpMob, select(.@gnpGroupMob$);
+	mes "[松延宇]";
+	mes "讓戰鬥開始！";
+	close2;
+	set in_battle,2;
+	if (getnpctimer(0) < 180000) monster "gon_test",56,86,.gnpMobsName$[(.@gnpGroup-1)*6 + .@gnpMob - 1],.gnpMobsId[(.@gnpGroup-1)*6 + .@gnpMob - 1],1,"Summoner#gnp::OnGnpMobDead";
+	end;
+OnInit:
+	initnpctimer;
+	stopnpctimer;
+	setarray .gnpMobsName$[0],"Leather ribbon","Sitotoxism","Certificate of blood donation","Tarantulla","DangRangKwon","Molar of Desert";
+	setarray .gnpMobsId[0],1419,1428,1434,1430,1457,1432;
+	setarray .gnpMobsName$[6],"Hog Skeleton","Cannibal Bear","Miner","Fighting Dog","Mermaid Princess","Only Son";
+	setarray .gnpMobsId[6],1462,1442,1469,1460,1425,1472;
+	setarray .gnpMobsName$[12],"SamYeupchoom","Hunting Dog","Nutcracker","Sea Horse","JAKK","Corpse";
+	setarray .gnpMobsId[12],1454,1455,1443,1426,1436,1423;
+	setarray .gnpMobsName$[18],"Marduk","Onion Stem","Worm","Autodoll","Girl with Matches","Red Evil";
+	setarray .gnpMobsId[18],1458,1440,1429,1459,1444,1422;
+	setarray .gnpMobsName$[24],"Naga","Mold","Tracing Missiles","Aryong","Abiryong","Bacterium";
+	setarray .gnpMobsId[24],1421,1481,1424,1465,1466,1433;
+	setarray .gnpMobsName$[30],"Winning System","Fat Archer","Little black goat","Perverted","Treasure Box","Greenhorn";
+	setarray .gnpMobsId[30],1427,1473,1431,1446,1474,1471;
+	setarray .gnpMobsName$[36],"Hurricane","External Hog","Landlord of Maze","Knight of grudge","Archer of grudge","Papillon";
+	setarray .gnpMobsId[36],1450,1439,1461,1467,1453,1479;
+	setarray .gnpMobsName$[42],"Lip","Wendigo","E Card","Tentacle Monster","Muscular Alarm","Devil Cross";
+	setarray .gnpMobsId[42],1451,1475,1437,1441,1476,1435;
+	setarray .gnpMobsName$[48],"Maggot","Large Frame","Season of reading","Shining Fingers","Handbag","Major knight of grudge";
+	setarray .gnpMobsId[48],1477,1448,1478,1489,1488,1438;
+	setarray .gnpMobsName$[54],"Queen","Man of Fire","Sword of Executor","Mutant Dragon","Mixed Soup","Great Sword";
+	setarray .gnpMobsId[54],1482,1464,1487,1449,1456,1486;
+	setarray .gnpMobsName$[60],"Monster Bird","Torturer","Warrior","Vice-Torturer","Huge Sword";
+	setarray .gnpMobsId[60],1447,1483,1490,1484,1485;
+	end;
+
+OnTimer120000:
+	areaannounce "gon_test",41,81,74,92,"1 min. left",0;
+	end;
+
+OnTimer180000:
+	killmonster "gon_test","Summoner#gnp::OnGnpMobDead";
+	end;
+
+OnTimer182000:
+	areaannounce "gon_test",41,81,74,92,"Time Over.",0;
+	end;
+
+OnGnpMobDead:
+	setnpctimer 0;
+	set in_battle,1;
+	areaannounce "gon_test",41,81,74,92,"Thank you. Please come again.",0;
+	sleep 4000;
+OnTimer184000:
+	stopnpctimer;
+	areawarp "gon_test",41,81,74,92,"gon_test",44,4;
+	set $@in_battle,0;
+	end;
+}
+
+gon_test,46,14,3	script	Guide of field of fight	770,{
+	mes "[松熙妍]";
+	mes "…………";
+	mes "嗨，那裡~";
+	mes "這是一個戰場。";
+	mes "有任何問題嗎？";
+	next;
+	switch(select("戰場？ :你有一個分鐘女士嗎？ :進來。 :出去。 :不。")){
+	case 1:
+		mes "[松熙妍]";
+		mes "就像這個地方的名字一樣，";
+		mes "這是比賽的領域。";
+		mes "我們有各種各樣的怪物";
+		mes "在不同的級別。";
+		next;
+		mes "[松熙妍]";
+		mes "一流的老闆怪物正在準備中間。";
+		mes "我們向您收取少量費用進入此處。";
+		break;
+	case 2:
+		mes "[松熙妍]";
+		mes "嗯....對不起？";
+		mes "啊，恐怕我現在必須工作...";
+		mes "對不起...";
+		break;
+	case 3:
+		mes "[松熙妍]";
+		mes "是的，謝謝。";
+		mes "玩的很開心。";
+		close2;
+		set in_battle,3;
+		warp "gon_test",25,98;
+		end;
+	case 4:
+		mes "[松熙妍]";
+		mes "謝謝。";
+		mes "請再來。";
+		close2;
+		warp "gonryun",177,112;
+		end;
+	case 5:
+		mes "[松熙妍]";
+		mes "…………";
+		mes "再見...";
+		break;
+	}
+	close;
+}
+
+gon_test,70,103,3	script	ChowAnAn#gnp	773,{
+	mes "[喬瓦南]";
+	mes "想回去嗎？";
+	next;
+	if (select("是的。 :沒有。") == 1) {
+		mes "[喬瓦南]";
+		mes "謝謝。";
+		mes "請再來。";
+		close2;
+		set in_battle,1;
+		warp "gon_test",44,4;
+		end;
+	}
+	mes "[喬瓦南]";
+	mes "謝謝。";
+	close;
+}

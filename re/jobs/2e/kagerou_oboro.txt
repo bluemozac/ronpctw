@@ -1,0 +1,2883 @@
+﻿//===== rAthena Script =======================================
+//= Kagerou/Oboro Job Quest
+//===== By: ==================================================
+//= M45T3R, Dastgir Pojee, Euphy
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Job change Quest from Ninja -> Kagerou/Oboro.
+//===== Additional Comments: =================================
+//= 1.0 First version. Uses official script structure and text
+//=     from iRO (ripped by M45T3R/Dastgir Pojee). [Euphy]
+//============================================================
+
+// Starting the Quest
+//============================================================
+que_ng,28,156,0	script	Start#ko	139,1,1,{
+	end;
+OnTouch:
+	if (BaseLevel >= 99 && JobLevel >= 70 && job_kagero == 0 && Class == Job_Ninja) {
+		mes "秘密通過 ^25c18dninja guild ^25c18d";
+		mes "您會聽到熟悉的聲音互相交談。";
+		next;
+		mes "[未知的聲音A]";
+		mes "長時間，看不到。你好嗎？您的孩子怎麼樣？";
+		next;
+		mes "[未知的聲音b]";
+		mes "我必須把它交給你。您已經選擇了一些競爭力。";
+		next;
+		mes "[未知的聲音A]";
+		mes "聽起來像是我耳邊的音樂。被空氣污染送往外國土地已經很糟糕了，現在對這個地方的回憶困擾著...";
+		next;
+		mes "[未知的聲音A]";
+		mes "你怎麼認為？我們現在應該旋轉嗎？";
+		next;
+		mes "[未知的聲音b]";
+		mes "還沒有放棄，有YA。您真的認為他會批准嗎？";
+		next;
+		mes "[未知的聲音A]";
+		mes "無需苦。嘿！來這裡來到這裡的孩子是否找到了 ^bd0408place ^bd0408？";
+		next;
+		mes "[未知的聲音b]";
+		mes "由於找到隱藏的地方也是測試的一部分。";
+		next;
+		mes "[未知的聲音A]";
+		mes "你和我第一次見到你一樣固執。這只是某個地方的牆...";
+		next;
+		mes "[未知的聲音b]";
+		mes "shssh！我認為有人在竊聽。匆忙！回到任務區。";
+		next;
+		mes "談話突然停止了。隱藏的地方？牆？測試的一部分？這是什麼意思？";
+		setquest 5131;
+		set job_kagero,1;
+		close;
+	} else if (BaseJob != Job_Ninja && job_kagero > 0) {
+		for (set .@i,5131; .@i<=5146; set .@i,.@i+1)
+			if (isbegin_quest(.@i)) erasequest .@i;
+		set job_kagero,0;
+	}
+	end;
+}
+
+que_ng,21,76,0	script	Wall with a Drawing#ko	844,{
+	if (Class == Job_Oboro || Class == Job_Kagerou) {
+		mes "您不應再使用此秘密段落。";
+		close;
+	} else if (job_kagero == 1 && Class == Job_Ninja) {
+		mes "您找到了一個類似於隱藏位置的位置。";
+		next;
+		mes "從那以後，這堵牆就在這裡。我怎麼沒有註意到它？";
+		next;
+		mes "現在我知道這是一段秘密，我該怎麼辦？";
+		next;
+		if(select("撕下圖紙:用手觸摸圖紙") == 1) {
+			mes "我無法將其撕下，因為我不擁有它。";
+			close;
+		}
+		mes "您用手尖來觸摸圖紙，並感到突然被拉動的感覺。";
+		close2;
+		warp "job_ko",26,111;
+		end;
+	} else if (job_kagero > 1 && Class == Job_Ninja) {
+		mes "^25c18dninja guild ^000000藏身處的入口。";
+		next;
+		if(select("進入:不要進入") == 2)
+			close;
+		mes "觸摸圖紙時，您會得到被拉動的感覺..."; //custom translation
+		close2;
+		warp "job_ko",26,111;
+		end;
+	} else {
+		mes "上面有一堵牆，上面有很棒的繪畫。";
+		close;
+	}
+	end;
+}
+
+job_ko,25,115,4	script	Old Man#ko	588,{
+	if (MaxWeight - Weight < 1000 || checkweight(1201,1) == 0) {
+		mes "[與月亮的蓋]";
+		mes "您不需要攜帶那麼多的東西。"; //custom translation
+		close;
+	}
+	if (BaseJob != Job_Ninja) {
+		for (set .@i,5131; .@i<=5146; set .@i,.@i+1)
+			if (isbegin_quest(.@i)) erasequest .@i;
+		set job_kagero,0;
+		mes "[與月亮的蓋]";
+		mes "您不在忍者的氏族中。";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	if (job_kagero == 1) {
+		cutin "job_ko03",2;
+		mes "^1a95e6an老人看著黑爾和豐盛的人坐著並凝視著。 ^1a95e6";
+		next;
+		if(select("忽略:與他交談") == 1) {
+			close2;
+			cutin "",255;
+			end;
+		}
+		mes "["+strcharinfo(0)+"]";
+		mes "打擾一下...";
+		next;
+		mes "^1a95e6 You試圖與老人說話，但沒有回應。就在您即將轉身...^1A95E6";
+		next;
+		mes "[老人]";
+		mes "最後，一個客戶！嗯...還有一個活著的！";
+		next;
+		select("打擾一下...我在哪裡？");
+		mes "[老人]";
+		mes "^1A95E6E一直在說話，並且不會停止回答您的問題。 ^1A95E6";
+		next;
+		mes "[老人]";
+		mes "曾經有一個安靜的氏族生活在古代阿馬圖時代，在歷史書籍或故事中從未提及過。";
+		next;
+		mes "[老人]";
+		mes "他們住在陰影下，但總是像向日葵一樣渴望燦爛的陽光。";
+		next;
+		mes "[老人]";
+		mes "一個忠於他們的主的氏族，他們是燦爛的陽光。";
+		next;
+		mes "[老人]";
+		mes "...一個非常值得信賴的氏族...";
+		next;
+		mes "[老人]";
+		mes "....忠於他們的核心...";
+		next;
+		mes "[老人]";
+		mes "...誠信的氏族...";
+		next;
+		select("他們發生了什麼事？");
+		mes "^1a95e6老人用憂鬱的臉看著你。 ^1a95e6";
+		next;
+		mes "[老人]";
+		mes "您為什麼對一個被其主拋棄並從歷史本身消失的氏族感興趣？";
+		next;
+		if(select("我是忍者:我很無聊") == 2) {
+			mes "[老人]";
+			mes "很高興認識你。";
+			close2;
+			warp "amatsu",147,136;
+			end;
+		}
+		cutin "job_ko02",2;
+		mes "[老人]";
+		mes "忍者！曾經有一段時間，氏族也被稱為忍者。";
+		next;
+		erasequest 5131;
+		setquest 5132;
+		set job_kagero,2;
+		mes "[老人]";
+		mes "您必須藉給我您的耳朵，因為我有很多事情要告訴您有關氏族故事的信息。";
+		close2;
+		cutin "",255;
+		end;
+	} else if (job_kagero == 2) {
+		cutin "job_ko01",2;
+		mes "^1a95e6老人以一種非常舒緩的語氣開始故事，好像他在告訴孫子一個故事。 ^1a95e6";
+		next;
+		mes "[老人]";
+		mes "這可以追溯到遠古時代，在阿瑪蘇（Amatsu）中沒有人會記得這一點。";
+		next;
+		mes "[老人]";
+		mes "氏族在幕後工作，基本上為他們的主生活。";
+		next;
+		mes "[老人]";
+		mes "他們在做主的要求做的任何事物都非常忠誠。";
+		next;
+		mes "[老人]";
+		mes "忍者，氏族被稱為黑暗氏族，但這並不意味著他們想隱藏在黑暗中。";
+		next;
+		mes "[老人]";
+		mes "他們足夠忠誠，可以作為主的僕人感到滿意，但他們的忠誠成為問題。";
+		next;
+		select("問題？");
+		mes "[老人]";
+		mes "他們是一個秘密組織，甚至主都不了解。";
+		next;
+		mes "[老人]";
+		mes "少數了解氏族存在的人試圖調查它們，但沒有人能夠揭示其真實身份。";
+		next;
+		mes "[老人]";
+		mes "這就是為什麼這個氏族從忠實的僕人成長為一個擔心其秘密的團體的原因。";
+		next;
+		mes "[老人]";
+		mes "主迴避氏族，不再為他們的服務打電話，但他們從不背叛他。";
+		next;
+		select("他們真的是忠誠的人");
+		cutin "job_ko03",2;
+		mes "[老人]";
+		mes "是的，他們是。非常忠誠。";
+		next;
+		erasequest 5132;
+		setquest 5133;
+		set job_kagero,3;
+		mes "^1a95e6老人看起來更加孤單。 ^1a95e6";
+		close2;
+		cutin "",255;
+		end;
+	} else if (job_kagero == 3) {
+		cutin "job_ko03",2;
+		mes "[老人]";
+		mes "自過去以來，該氏族就一直躲藏了很長時間。現任主甚至不知道他們的存在。";
+		next;
+		select("…………");
+		cutin "job_ko01",2;
+		mes "[老人]";
+		mes "我是黑暗忍者氏族的最後一位領袖吉恩（Gion）。";
+		next;
+		if(select("我認為你的時間已經結束了:我需要你的教導") == 1) {
+			cutin "job_ko04",2;
+			mes "[領袖吉恩]";
+			mes "您是結束這個老人生命的刺客嗎？";
+			next;
+			mes "[領袖吉恩]";
+			mes "這就是為什麼您對我的氏族表現出興趣的原因。我不會輕易放棄。";
+			next;
+			percentheal -99,0;
+			mes "戰俘!!";
+			mes "^1a95e6 You失去了良心的良心。 ^000000";
+			close2;
+			warp "amatsu",147,136;
+			end;
+		}
+		cutin "job_ko02",2;
+		mes "[領袖吉恩]";
+		mes "教學...";
+		mes "自從我上次聽到這個詞以來已經很久了。";
+		next;
+		mes "[領袖吉恩]";
+		mes "我想這次小訪問不是偶然的，而是一個連接的開始。";
+		next;
+		mes "[領袖吉恩]";
+		mes "抱歉，我不是老師。但！";
+		next;
+		mes "[領袖吉恩]";
+		mes "我可以在選擇的路徑上為您提供幫助， ^33cc71"+((Sex == SEX_MALE)?"Kagerou":"Oboro")+"^000000 path.";
+		next;
+		mes "^1a95e6你溜走時，你會微弱地聽到領導者的聲音。 ^1a95e6";
+		next;
+		erasequest 5133;
+		setquest 5134;
+		set job_kagero,4;
+		mes "[領袖吉恩]";
+		mes "如果您準備跟隨我，Leader Gion，"+((Sex == SEX_MALE)?"Kagerou":"Oboro")+" path, we will meet again.";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	} else if (job_kagero == 4) {
+		cutin "job_ko02",2;
+		mes "[領袖吉恩]";
+		mes "我以為你害怕 ^33cc71"+((Sex == SEX_MALE)?"Kagerou":"Oboro")+"^33CC71 and wouldn't come back.";
+		next;
+		mes "[領袖吉恩]";
+		mes "但是從你的眼睛看，我想我誤判你了。";
+		next;
+		mes "[領袖吉恩]";
+		mes "您將不得不訓練自己的思想和身體在未知世界中穩步行走，而永遠不要陷入誘惑之中。";
+		next;
+		mes "[領袖吉恩]";
+		mes "我們的祖先進行了4項測試來訓練我們的人民。";
+		next;
+		select("4個測試？");
+		cutin "job_ko01",2;
+		mes "[領袖吉恩]";
+		mes "是的，有4個測試。";
+		mes "我的祖先通過4個涉及 ^087ff8知識 ^000000， ^087ff8survival ^000000， ^087ff8weapons ^000000和 ^087ff8battle ^000000訓練了我的人。";
+		next;
+		mes "[領袖吉恩]";
+		mes "我知道您很好奇這些測試是什麼。讓我一一解釋。";
+		next;
+		while(1) {
+			set .@i, select("知識測試:生存測試:武器測試:戰鬥測試");
+			set .@test, .@test | (1<<(.@i-1));
+			switch (.@i) {
+			case 1:
+				mes "[領袖吉恩]";
+				mes "為了幫助主，我們需要知識淵博。此測試是為此目的。";
+				next;
+				mes "[領袖吉恩]";
+				mes "如果您成功解決了10個問題中的9個以上，則可以通過測試。";
+				next;
+				if (.@test != 15) {
+					mes "[領袖吉恩]";
+					mes "如果您在學習中穩定，則該測試將很容易通過。現在您對其他測試感到好奇？";
+					next;
+				}
+				break;
+			case 2:
+				mes "[領袖吉恩]";
+				mes "任務並不總是那麼容易安全。這就是為什么生存本能對我們至關重要的原因。";
+				next;
+				mes "[領袖吉恩]";
+				mes "我的祖先稱此測試為骰子測試。根據骰子結果，這是一項前進的測試。";
+				next;
+				mes "[領袖吉恩]";
+				mes "將其視為人們玩的簡單骰子遊戲。";
+				next;
+				mes "[領袖吉恩]";
+				mes "但是，在測試期間切勿讓您的警衛失望，因為它並沒有將其稱為“生存測試”。";
+				next;
+				mes "[領袖吉恩]";
+				mes "會有一些塊可以幫助您，而有些塊會打斷您。";
+				next;
+				if (.@test != 15) {
+					mes "[領袖吉恩]";
+					mes "如果您明智地處理各種情況，您將能夠通過測試。現在您對其他測試感到好奇？";
+					next;
+				}
+				break;
+			case 3:
+				mes "[領袖吉恩]";
+				mes "我的氏族以使用我們創建的獨特武器而聞名。";
+				next;
+				mes "[領袖吉恩]";
+				mes "如果您創建自己的獨特武器，您將被認為是有福的。";
+				next;
+				mes "[領袖吉恩]";
+				mes "為自己創建武器並完善它是該測試的目的。";
+				next;
+				if (.@test != 15) {
+					mes "[領袖吉恩]";
+					mes "希望您能有福，並為自己找到最好的武器。現在您對其他測試感到好奇？";
+					next;
+				}
+				break;
+			case 4:
+				mes "[領袖吉恩]";
+				mes "任務並不總是一個人完成。您通常會在2或3的團隊中進行共同的目標。";
+				next;
+				mes "[領袖吉恩]";
+				mes "戰鬥測試僅適用於那些通過知識，生存和武器測試的人。所以！這是最後的測試。";
+				next;
+				mes "[領袖吉恩]";
+				mes "與單獨完成的其他三個測試不同，您將必須在最終測試中與其他測試競爭。";
+				next;
+				mes "[領袖吉恩]";
+				mes "只有一個目標！ ！";
+				mes "只有第一個進入目標的人才能通過測試。";
+				next;
+				mes "[領袖吉恩]";
+				mes "如果您在考試期間沒有競爭對手，您會很幸運。";
+				next;
+				if (.@test != 15) {
+					mes "[領袖吉恩]";
+					mes "挑戰比解釋一百次更好。實際的經歷使您變得更好。";
+					next;
+				}
+				break;
+			}
+			if (.@test == 15) break;
+		}
+		cutin "job_ko02",2;
+		mes "[領袖吉恩]";
+		mes "看到是相信的，所以繼續挑戰。"; //custom translation
+		next;
+		erasequest 5134;
+		setquest 5135;
+		set job_kagero,5;
+		mes "[領袖吉恩]";
+		mes "讓我們在準備工作後立即開始。";
+		close2;
+		cutin "",255;
+		end;
+	} else if (job_kagero == 5) {
+		set .@ko_test_01, isbegin_quest(5136);
+		set .@ko_test_02, isbegin_quest(5137);
+		set .@ko_test_03, isbegin_quest(5138);
+		set .@ko_test, .@ko_test_01 + .@ko_test_02 + .@ko_test_03;
+		if (.@ko_test == 0) {
+			cutin "job_ko03",2;
+			mes "[領袖吉恩]";
+			mes "已經有一段時間了。";
+			next;
+			mes "[領袖吉恩]";
+			mes "既然我感到很高興。看到像您這樣的年輕人以一條新的道路挑戰自己，我感到年輕而充滿活力。";
+			next;
+			mes "[領袖吉恩]";
+			mes "我們已經完成了有關測試的解釋，現在我應該告訴你我的氏族故事嗎？";
+			next;
+			cutin "job_ko01",2;
+			mes "[領袖吉恩]";
+			mes "我的氏族從兩個戰士開始。";
+			next;
+			mes "[領袖吉恩]";
+			mes "卡格魯（Kagerou），像太陽舞的戰士一樣。";
+			next;
+			mes "[領袖吉恩]";
+			mes "奧伯羅（Oboro），像薄霧般的月光這樣的戰士。";
+			next;
+			mes "[領袖吉恩]";
+			mes "太陽和月亮。";
+			mes "陽光明媚的陽光照亮了整個夜晚的月光。兩者都非常相似，但戰士不同。";
+			next;
+			mes "[領袖吉恩]";
+			mes "兩位戰士之間有一段時間。";
+			next;
+			mes "[領袖吉恩]";
+			mes "但是他們很快就成為一個氏族。";
+			next;
+		select("後來怎麼樣了？");
+			cutin "job_ko02",2;
+			mes "[領袖吉恩]";
+			mes "哈哈哈。一次聽整個故事永遠不會很有趣，不是嗎？通過測試後回來，我將繼續我的故事。";
+			next;
+			mes "[領袖吉恩]";
+			mes "您將選擇哪個測試作為第一次測試？";
+			next;
+			callsub L_StartTest,select("知識測試:生存測試:武器測試"),1;
+			end;
+		} else if (.@ko_test == 2) {
+			cutin "job_ko01",2;
+			mes "[領袖吉恩]";
+			if (.@ko_test_01 == 2) {
+				set .@menu$,":Test of Survival:Test of Weaponry";
+				mes "您已經通過了知識考驗。";
+				next;
+				mes "[領袖吉恩]";
+				mes "我的朋友不容易同意別人，但我想他喜歡你。";
+				next;
+			} else if (.@ko_test_02 == 2) {
+				set .@menu$,"Test of Knowledge::Test of Weaponry";
+				mes "您已經通過了生存的考驗。";
+				next;
+				mes "[領袖吉恩]";
+				mes "看起來您經歷了這次測試。";
+				next;
+			} else if (.@ko_test_03 == 2) {
+				set .@menu$,"Test of Knowledge:Test of Survival:";
+				mes "您已經通過了武器的測試。";
+				next;
+				mes "[領袖吉恩]";
+				mes "我想知道喬是否對您的表現感到滿意。";
+				next;
+			}
+			select("請繼續講部落的故事。");
+			cutin "job_ko02",2;
+			mes "[領袖吉恩]";
+			mes "看起來您很想听到更多。我在哪裡離開...啊！我記得。";
+			next;
+			mes "[領袖吉恩]";
+			mes "卡格魯（Kagerou），像太陽舞的戰士一樣。";
+			next;
+			mes "[領袖吉恩]";
+			mes "奧伯羅（Oboro），像薄霧般的月光這樣的戰士。";
+			next;
+			mes "[領袖吉恩]";
+			mes "兩位勇士一開始都不關閉，因為個性和其他一切彼此完全相反。";
+			next;
+			mes "[領袖吉恩]";
+			mes "他們遇到的第一個地方是戰場。而且您知道敵人如何在戰場上互相打招呼。";
+			next;
+			mes "[領袖吉恩]";
+			mes "他們最終互相嚴重傷害。";
+			next;
+			mes "[領袖吉恩]";
+			mes "但是你能做什麼？戰爭是一場戰爭。";
+			next;
+			mes "[領袖吉恩]";
+			mes "您昨天和您一起笑的朋友是一個敵人，您今天必須與之抗爭。";
+			next;
+			mes "[領袖吉恩]";
+			mes "因此，戰爭期間沒有人能與任何人相處。";
+			next;
+			mes "[領袖吉恩]";
+			mes "在您通過另一個測試後，我將繼續故事。";
+			next;
+			mes "[領袖吉恩]";
+			mes "您將選擇哪種測試進行第二次測試？";
+			next;
+			callsub L_StartTest,select(.@menu$),2;
+			end;
+		} else if (.@ko_test == 4) {
+			cutin "job_ko04",2;
+			mes "[領袖吉恩]";
+			if (.@ko_test_01 == 2 && .@ko_test_02 == 2) {
+				set .@last_test,3;
+				mes "您已經通過了知識和生存的 ^339ccctests ^000000！";
+			} else if (.@ko_test_01 == 2 && .@ko_test_03 == 2) {
+				set .@last_test,2;
+				mes "您已經通過了知識和武器的 ^339ccctests ^000000！";
+			} else if (.@ko_test_02 == 2 && .@ko_test_03 == 2) {
+				set .@last_test,1;
+				mes "您已經通過了生存和武器的 ^339ccctests ^000000！";
+			}
+			next;
+			mes "[領袖吉恩]";
+			mes "您已經完成了兩個測試。希望您從他們那裡學到了很多東西。";
+			next;
+			cutin "job_ko01",2;
+			mes "[領袖吉恩]";
+			mes "我們可以繼續這個故事嗎？";
+			next;
+			mes "[領袖吉恩]";
+			mes "卡格魯（Kagerou），像太陽舞的戰士一樣。";
+			next;
+			mes "[領袖吉恩]";
+			mes "奧伯羅（Oboro），像薄霧般的月光這樣的戰士。";
+			next;
+			mes "[領袖吉恩]";
+			mes "我想，當兩個戰士在戰場上以敵人的身份相遇時，我離開了。";
+			next;
+			mes "[領袖吉恩]";
+			mes "漫長的戰爭最終結束了，但是倖存下來的人的傷口和痛苦才剛剛開始。";
+			next;
+			mes "[領袖吉恩]";
+			mes "因此，這兩個戰士開始擁抱和治愈戰爭傷口，並成為一人。";
+			next;
+			mes "[領袖吉恩]";
+			mes "有一個男人出現在他們面前的背景故事，並贏得了兩位戰士的忠誠。";
+			next;
+		select("這個男人是誰？");
+			mes "[領袖吉恩]";
+			mes "對這個男人不了解。僅簡短地提到了兩位戰士承諾效忠。";
+			next;
+			mes "[領袖吉恩]";
+			mes "也許像我這樣的幾代人是現任阿瑪蘇主的祖先？但這只是一個假設。";
+			next;
+			mes "[領袖吉恩]";
+			mes "我快要結束了我的氏族故事。您通過了第三次測試後回來，我會告訴您其餘的。";
+			next;
+			callsub L_StartTest,.@last_test,3;
+			end;
+		} else if (.@ko_test == 6) {
+			cutin "job_ko01",2;
+			mes "[領袖吉恩]";
+			mes "您已經進行了三項測試，只有一項可以通過。";
+			next;
+			mes "[領袖吉恩]";
+			mes "正如我之前告訴過您的那樣，最後一個測試是不同的，因為您必須與他人競爭。";
+			next;
+		select("你會繼續這個故事嗎？");
+			cutin "job_ko02",2;
+			mes "[領袖吉恩]";
+			mes "哈哈哈。我將結束這個故事。";
+			next;
+			mes "[領袖吉恩]";
+			mes "卡格魯（Kagerou），像太陽舞的戰士一樣。";
+			next;
+			mes "[領袖吉恩]";
+			mes "奧伯羅（Oboro），像薄霧般的月光這樣的戰士。";
+			next;
+			mes "[領袖吉恩]";
+			mes "有人告訴那個贏得了兩個戰士忠誠的人是一個幽默的人。";
+			next;
+			mes "[領袖吉恩]";
+			mes "他比爭吵更喜歡笑話和對話，並且喜歡女人而不是男人。";
+			next;
+			mes "[領袖吉恩]";
+			mes "嗯...我不知道為什麼這些年的故事都活著，但是這個人想把這兩個戰士聚集在一起。";
+			next;
+			mes "[領袖吉恩]";
+			mes "戰後，兩位戰士都在一起旅行，但彼此保持尷尬的距離。";
+			next;
+			mes "[領袖吉恩]";
+			mes "他們一定有自己的理由，但是他們的主會把他們帶到一個艱難的任務中，將他們放在一個秘密的房間裡，在一起各種情況。";
+			next;
+		select("聽起來像個奇怪的人");
+			mes "[領袖吉恩]";
+			mes "是的，他是。由於兩位戰士最終結識並結婚，他的努力並沒有徒勞。";
+			next;
+			mes "[領袖吉恩]";
+			mes "這就是氏族開始的方式。";
+			next;
+		select("後來發生了什麼？");
+			mes "[領袖吉恩]";
+			mes "可悲的是，故事的下一部分是故意中斷的。";
+			next;
+			mes "[領袖吉恩]";
+			mes "我認為這是因為有人希望我們放開過去並前進。";
+			next;
+			mes "[領袖吉恩]";
+			mes "就是這樣。現在，您不應該為上次測試做準備嗎？";
+			next;
+			set job_kagero,6;
+			mes "[領袖吉恩]";
+			mes "但是到目前為止，您必須從所有測試中感到疲倦。休息。";
+			close2;
+			cutin "",255;
+			end;
+		} else if (.@ko_test == 1 || .@ko_test == 3 || .@ko_test == 5) {
+			cutin "job_ko04",2;
+			if (.@ko_test_01 == 1)
+				set .@test_ko$, "Knowledge";
+			else if (.@ko_test_02 == 1)
+				set .@test_ko$, "Survival";
+			else if (.@ko_test_03 == 1)
+				set .@test_ko$, "Weaponry";
+			mes "[領袖吉恩]";
+			mes "您不是參加考驗" + .@test_ko$ + " just now?"; //custom translation
+			next;
+			switch(select("我想回到測試地點:啊...不是")) {
+			case 1:
+				mes "[領袖吉恩]";
+				mes "測試" + .@test_ko$ + " site is over here."; //custom translation(?)
+				close2;
+				if (.@ko_test_01 == 1)
+					warp "job_ko",72,128;
+				else if (.@ko_test_02 == 1)
+					warp "job_ko",62,16;
+				else if (.@ko_test_03 == 1)
+					warp "job_ko",121,129;
+				end;
+			case 2:
+				mes "[領袖吉恩]";
+				mes "村莊在這裡。";
+				close2;
+				warp "amatsu",147,136;
+				end;
+			}
+		}
+	} else if (job_kagero == 6) {
+		cutin "job_ko01",2;
+		mes "[領袖吉恩]";
+		mes "你已經回來了嗎？您可以休息更多。有急促的理由嗎？";
+		next;
+		input .@inputstr$;
+		cutin "job_ko03",2;
+		mes "[領袖吉恩]";
+		mes "因為 ^B24E59" + .@inputstr$ + "^000000?";
+		next;
+		mes "[領袖吉恩]";
+		mes "我必須承認，我現在不了解你。";
+		next;
+		mes "[領袖吉恩]";
+		mes "但是，由於您經歷了很多事情，我相信您會在最終測試中做得很好。";
+		next;
+		cutin "job_ko01",2;
+		mes "[領袖吉恩]";
+		mes "現在！不再閒聊。我會讓您知道戰鬥測試的目標是什麼。";
+		next;
+		mes "[領袖吉恩]";
+		mes "目標是一個稱為 ^ff0000clan Secret ^000000的怪物。";
+		next;
+		mes "[領袖吉恩]";
+		mes "您必須小心，因為在測試地點中有許多相似形狀和命名的怪物。";
+		next;
+		mes "[領袖吉恩]";
+		mes "如果幸運的話，將會有其他針對怪物的人。";
+		next;
+		mes "[領袖吉恩]";
+		mes "願'" + ((Sex == SEX_MALE)?"Kagerou, dancing sun":"Oboro, misty moonlight") + "' be with you.";
+		next;
+		setquest 5146;
+		set job_kagero,7;
+		mes "[領袖吉恩]";
+		mes "然後，讓我們去戰鬥測試領域。";
+		close2;
+		switch(rand(3)) {
+			case 0: warp "job_ko",142,20; break;
+			case 1: warp "job_ko",141,80; break;
+			case 2: warp "job_ko",107,60; break;
+		}
+		end;
+	} else if (job_kagero == 7 || job_kagero == 8) {
+		cutin "job_ko03",2;
+		mes "[領袖吉恩]";
+		mes "我看到您處於戰鬥的 ^339ccctest的中間。您會回到測試網站嗎？";
+		next;
+		switch(select("回到測試地點:訪問村莊")) {
+		case 1:
+			mes "[領袖吉恩]";
+			mes "測試網站在這裡。"; //custom translation(?)
+			close2;
+			switch(rand(3)) {
+				case 0: warp "job_ko",142,20; break;
+				case 1: warp "job_ko",141,80; break;
+				case 2: warp "job_ko",107,60; break;
+			}
+			end;
+		case 2:
+			mes "[領袖吉恩]";
+			mes "村莊在這裡。";
+			close2;
+			cutin "",255;
+			end;
+		}
+	} else {
+		cutin "job_ko03",2;
+		mes "[領袖吉恩]";
+		mes "你不應該在這裡。離開！";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	end;
+
+//callsub L_StartTest,<1=Knowledge,2=Survival,3=Weaponry>,<test number [1..3]>;
+L_StartTest:
+	switch (getarg(1)) {
+		case 1: set .@str$,"You are starting with the ^339CCCTest of %s^000000? "; break;
+		case 2: set .@str$,"You are taking the ^339CCCTest of %s^000000 as the second test? "; break; //custom translation
+		case 3: set .@str$,"Your third test is the ^339CCCTest of %s^000000! "; break;
+	}
+	mes "[領袖吉恩]";
+	switch (getarg(0)) {
+	case 1:
+		mes sprintf(.@str$ + "然後，我將在這麼長時間後看到一張熟悉的面孔...","Knowledge");
+		next;
+		select("熟悉的面孔？");
+		setquest 5136;
+		mes "[領袖吉恩]";
+		mes "哈哈哈。您會知道我們什麼時候到達那裡。知識的考驗已在這裡接管。";
+		close2;
+		warp "job_ko",72,128;
+		end;
+	case 2:
+		mes sprintf(.@str$ + "這是您必須獨自面對的寂寞測試。","Survival");
+		next;
+		setquest 5137;
+		mes "[領袖吉恩]";
+		mes "但是我相信您可以處理它。生存的考驗已在這裡接受。";
+		close2;
+		warp "job_ko",62,16;
+		end;
+	case 3:
+		mes sprintf(.@str$ + "我去之前有東西要給你。","Weaponry");
+		next;
+		setquest 5138;
+		getitem 1002,5; //Iron_Ore
+		getitem 1010,1; //Phracon
+		mes "您會收到5個鐵礦石和1個句子。";
+		next;
+		mes "[領袖吉恩]";
+		mes "您會發現這些有用。武器的測試已在這裡接管。";
+		close2;
+		warp "job_ko",121,129;
+		end;
+	}
+}
+
+// Test of Knowledge
+//============================================================
+job_ko,81,124,4	script	Kuuga Gai#ko	730,{
+	if (BaseJob != Job_Ninja) {
+		for (set .@i,5131; .@i<=5146; set .@i,.@i+1)
+			if (isbegin_quest(.@i)) erasequest .@i;
+		set job_kagero,0;
+		mes "[與月亮的蓋]";
+		mes "抱歉，您的氏族與我們的氏族不同，有問題嗎？";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	if (job_kagero != 5) {
+		goto L_Kick;
+	}
+	if (MaxWeight - Weight < 1000 || checkweight(1201,1) == 0) {
+		mes "[與月亮的蓋]";
+		mes "這是對知識的考驗，那麼為什麼要帶這麼多東西？"; //custom translation
+		close;
+	}
+	set .@ko_test_01, isbegin_quest(5136);
+	set .@ko_test_01_1, isbegin_quest(5139);
+	if (.@ko_test_01 == 1 && .@ko_test_01_1 == 0) {
+		mes "[與月亮的蓋]";
+		mes "已經有一段時間了。";
+		next;
+		select("你不是...");
+		mes "[與月亮的蓋]";
+		mes "我記得您從尋找忍者的方式之前。";
+		next;
+		mes "[與月亮的蓋]";
+		mes "你已經變得如此強大了嗎？";
+		next;
+		mes "[與月亮的蓋]";
+		mes "哈哈哈 -";
+		mes "一個真正堅定的年輕人！我喜歡那個。";
+		next;
+		mes "[與月亮的蓋]";
+		mes "好的！您要接受的測試是 ^339ccctest知識 ^000000。";
+		next;
+		mes "[與月亮的蓋]";
+		mes "希望您在專注於變得更強壯的同時對學業沒有懶惰？";
+		next;
+		switch(select("是:否")) {
+		case 1:
+			setquest 5139;
+			mes "[與月亮的蓋]";
+			mes "這是一種解脫。讓我知道何時準備開始測試。";
+			close;
+		case 2:
+			setquest 5139;
+			mes "[與月亮的蓋]";
+			mes "所以你們都在說話嗎？好吧，讓我知道你什麼時候準備好了。";
+			close;
+		}
+	} else if (.@ko_test_01 == 1 && .@ko_test_01_1 == 1) {
+		mes "[與月亮的蓋]";
+		mes "我準備好了。您準備好測試了嗎？";
+		next;
+		if(select("是:否") == 2) {
+			mes "[與月亮的蓋]";
+			mes "好吧，我該怎麼辦，但要等你。";
+			close;
+		}
+		mes "[與月亮的蓋]";
+		mes "這不是您的第一次測試，是嗎？";
+		next;
+		mes "[與月亮的蓋]";
+		mes "您只需要為我的問題選擇正確的答案即可。";
+		next;
+		mes "[與月亮的蓋]";
+		mes "讓我們開始。";
+		next;
+
+		set .@questions,10;  // number of questions to ask
+
+		// shuffle array an array of questions to be asked
+		freeloop(1);
+		setarray .@n[0],
+			1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,
+			26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50;
+		for (set .@i,getarraysize(.@n)-1; .@i>0; set .@i,.@i-1) {
+			set .@rand, rand(.@i);
+			set .@tmp, .@n[.@i];
+			set .@n[.@i], .@n[.@rand];
+			set .@n[.@rand], .@tmp;
+		}
+		deletearray .@n[10],getarraysize(.@n) - .@questions;
+		freeloop(0);
+
+		set @job_ko_Kuuga,0;
+		for (set .@i,1; .@i<=.@questions; set .@i,.@i+1) {
+			mes "[與月亮的蓋]";
+			mes (.@i < .@questions)?"問題編號"+.@i+":":"Last question:";
+			switch (.@n[.@i-1]) {
+				case 1: callsub L_Question,"What is the DEX + LUK total for a Job Master?",2,"8:10:12:14"; break;
+				case 2: callsub L_Question,"What is the highest job level for a ninja?",1,"70:50:99:100"; break;
+				case 3: callsub L_Question,"How many skill points do you need to master the Throw Coins skill?",3,"25:30:35:37"; break;
+				case 4: callsub L_Question,"Which of the following is the correct number of Evasion and effect duration for Mirror Image level 10?",4,"Up to 7 and 200 seconds:Up to 5 and 220 seconds:Up to 6 and 240 seconds:Up to 5 and 240 seconds"; break;
+				case 5: callsub L_Question,"How many skill points do you need to master the Cicada Skin Shed?",1,"5:3:1:4"; break;
+				case 6: callsub L_Question,"If Dagger Throwing Practice is at 7, how much ATK is added to Shuriken attacks?",2,"18:21:27:30"; break;
+				case 7: callsub L_Question,"What is the basic attack range for Throw Shuriken?",3,"7 blocks:8 blocks:9 blocks:10 blocks"; break;
+				case 8: callsub L_Question,"What is the maximum moving range of Shadow Leap?",4,"6 blocks:7 blocks:8 blocks:9 blocks"; break;
+				case 9: callsub L_Question,"How much money is used for Throw Coins level 6?",4,"2000-8000:1000-6000:3000-8000:3000-6000"; break;
+				case 10: callsub L_Question,"What is the most important aspect of increasing ATK for the Killing Strike skill?",2,"VIT:MAXHP:INT:MAXSP"; break;
+				case 11: callsub L_Question,"What is not the effect you get after reaching the STR status?",3,"Close range attack increase:Weight limit increase:Magic attack increase:Weapon attack increase"; break;
+				case 12: callsub L_Question,"What is not the effect you get after reaching the INT status?",4,"MAXSP increase:MATK increase:Magic damage increase:Staff attack increase"; break;
+				case 13: callsub L_Question,"What is not the effect you get after reaching the DEX status?",2,"Casting time decrease:Evasion increase:Accuracy increase:Long range attack increase"; break;
+				case 14: callsub L_Question,"What is not the effect you get after reaching the AGI status?",1,"Accuracy increase:Flee increase:Attack speed increase:Delay after attack decrease"; break;
+				case 15: callsub L_Question,"What is not the effect you get after reaching the VIT status?",4,"Weapon defense increase:MAXHP increase:Magic defense increase:Attack increase"; break;
+				case 16: callsub L_Question,"What is not the effect you get after reaching the LUK status?",3,"Accuracy increase:Complete evasion increase:Magic damage decrease:Critical rate increase"; break;
+				case 17: callsub L_Question,"You need to equip a card to your shoes to enhance Killing Strike attack. Which of the following is the appropriate card to equip?",2,"Gold Acidus Card:Matyr Card:Odium of Thantos Card:Eddga Card"; break;
+				case 18: callsub L_Question,"You need a catalyst to use ninja skills. Which of the following skills does not need a catalyst?",3,"Blaze Shield:Watery Evasion:Flaming Petals:Snow Flake Draft"; break;
+				case 19: callsub L_Question,"How much does STR/INT go up when Ninja Aura level 5 is used?",2,"4:5:6:7"; break;
+				case 20: callsub L_Question,"You are hunting the Orc Warrior. Which Kunai would you use? ",1,"Heat Wave Kunai:Icicle Kunai:Fell Poison Kunai:High Wind Kunai"; break;
+				case 21: callsub L_Question,"Which village is the Ninja Guild located in?",2,"Lutie:Amatsu:Dewata:Comodo"; break;
+				case 22: callsub L_Question,"How do Ninjas get promoted?",3,"By Val Kiwi:By Randgris:None:By Valkyrie"; break;
+				case 23: callsub L_Question,"What was next to me when you first met me?",4,"A cushion:A folding screen:A flowerpot:A brazier"; break;
+				case 24: callsub L_Question,"What is the level of Dagger Throwing Practice you have to reach to learn the Killing Strike skill?",1,"7:5:6:8"; break;
+				case 25: callsub L_Question,"How many hits does a Throw Kunai give to a monster?",2,"2:3:4:5"; break;
+				case 26: callsub L_Question,"When your First Wind is at level 4, what will go with the MATK and range?",3,"MATK400, 8 blocks:MATK500, 7 blocks:MATK500, 8 blocks:MATK400, 7 blocks"; break;
+				case 27: callsub L_Question,"Which of the following skills can't you learn at Dagger Throwing Practice level 7?",4,"Throw Kunai:Throw Huuma Shuriken:Killing Strike:Throw Coins"; break;
+				case 28: callsub L_Question,"What level do you have to be in Dagger Throwing Practice in order to learn the Throw Coins skill?",4,"4:6:8:10"; break;
+				case 29: callsub L_Question,"What is the attack range for the Exploding Dragon?",3,"3*3:4*4:5*5:6*6"; break;
+				case 30: callsub L_Question,"How long is the effect time for the Watery Evasion level 7 skill?",2,"40 seconds:45 seconds:50 seconds:55 seconds"; break;
+				case 31: callsub L_Question,"What is the attack effect for Haze Slasher level 4?",1,"140%:150%:160%:170%"; break;
+				case 32: callsub L_Question,"How much power is in the Huuma Blaze Shuriken weapon?",1,"Fireball 5 , DEX-2:Fireball 5 , DEX-3:Fireball 4 , DEX-2:Fireball 4 , DEX-3"; break;
+				case 33: callsub L_Question,"How much power is in the Murasame weapon?",2,"Human attack 10%:Human critical +10:Demon attack 10%:Demon critical +10"; break;
+				case 34: callsub L_Question,"What is the maximum hit number for Blaze Shield level 10?",3,"7:8:9:10"; break;
+				case 35: callsub L_Question,"What is the property of the Lightning Jolt?",4,"Fire:Water:Ground:Wind"; break;
+				case 36: callsub L_Question,"You are creating a weapon for small monsters. What is the best card to use?",4,"Hydra Card:Minorous Card:Skel Woker Card:Desert Wolf Card"; break;
+				case 37: callsub L_Question,"You are creating a weapon for mid-sized monsters. What is the best card to use?",3,"Hydra Card:Minorous Card:Skel Woker Card:Desert Wolf Card"; break;
+				case 38: callsub L_Question,"You are creating a weapon for huge monsters. What is the best card to use?",2,"Hydra Card:Minorous Card:Skel Woker Card:Desert Wolf Card"; break;
+				case 39: callsub L_Question,"Which NPC promotes you?",1,"Valkyrie:Val Kiwi:Balp Hiri:Elephant"; break;
+				case 40: callsub L_Question,"Which catalyst do you need to use the Blaze Shield skill?",2,"Ice Stone:Flame Stone:Wind Stone:Earth Stone"; break;
+				case 41: callsub L_Question,"Which of the following is not an effect of the Watery Evasion skill?",4,"Movement speed decrease:Waterball availability:Holy Water craftability:VIT decrease"; break;
+				case 42: callsub L_Question,"Which of the following matches are incorrect for skill and property?",3,"Flaming Petals-Fire:Snow Flake Draft-Water:Freezing Spear-Ground:Lightning Jolt-Wind"; break;
+				case 43: callsub L_Question,"Which of the following is the best skill to use when attacking a ground property enemy?",2,"First Wind:Exploding Dragon:Snow Flake Draft:Wind Blade"; break;
+				case 44: callsub L_Question,"Which Ninja Mastery skill level do you need to learn the Exploding Dragon skill?",1,"10:9:8:1"; break;
+				case 45: callsub L_Question,"What is the attack range when you master Flip Tatami?",3,"5:7:3:1"; break;
+				case 46: callsub L_Question,"What weapon cannot be made by the blacksmith Khaibara?",4,"Khukri:Murasame:Hakujin:Humma Wing Shuriken"; break;
+				case 47: callsub L_Question,"Which of the following correctly matches material needed to make a Icicle Kunai?",2,"4 Nimbus Shuriken, 2 Ice Stone:8 Nimbus Shuriken, 2 Ice Stone:2 Nimbus Shuriken, 1 Ice Stone:1 Nimbus Shuriken, 2 Ice Stone"; break;
+				case 48: callsub L_Question,"Which of the following Kunai will give the most damage to the ground property monster, Porcellio?",1,"Heat Wave Kunai:Icicle Kunai:Fell Poison Kunai:High Wind Kunai"; break;
+				case 49: callsub L_Question,"Which of the following blacksmiths do not create ninja items?",2,"Khaibara:Aiku:Tetsu:Toshu"; break;
+				case 50: callsub L_Question,"What is the name of the suspicious man you can meet during the Ninja job change quest?",3,"Red Leopard Jack:Black Leopard Jack:Red Leopard Joe:Black Leopard Joe"; break;
+				default:
+					mes "[與月亮的蓋]";
+					mes "發生了未知錯誤。";
+					mes "請聯繫客戶服務。";
+					close;
+			}
+		}
+		mes "[與月亮的蓋]";
+		mes "您遇到了所有10個問題。還不錯！重要部分現在開始。";
+		next;
+		mes "[與月亮的蓋]";
+		mes "…………";
+		next;
+		if (@job_ko_Kuuga < 90) {
+			mes "[與月亮的蓋]";
+			mes "你傻瓜！";
+			mes "您甚至無法解決這些？";
+			next;
+			mes "[與月亮的蓋]";
+			mes "不敢相信一個正在走新道路的人會如此可悲。";
+			next;
+			mes "[與月亮的蓋]";
+			mes "我給你另一個機會。";
+			mes "您將再次提出新問題進行測試。這次最好通過。";
+		} else {
+			mes "[與月亮的蓋]";
+			mes "唔。" + (@job_ko_Kuuga) + "?";
+			next;
+			mes "[與月亮的蓋]";
+			mes "好吧，看來您對學業並不懶惰。";
+			next;
+			mes "[與月亮的蓋]";
+			mes "什麼？為解決這些問題而感到自豪？";
+			next;
+			mes "[與月亮的蓋]";
+			mes "您還有很長的路要走，這只是其中的一小部分。";
+			next;
+			mes "[與月亮的蓋]";
+			mes "好吧...我很好奇您的堅強能力可以帶您通過其他測試。";
+			next;
+			completequest 5136;
+			erasequest 5139;
+			mes "[與月亮的蓋]";
+			mes "我現在讓你走，所以請回到領導者的結果。";
+			close2;
+			warp "job_ko",16,113;
+			end;
+		}
+		set @job_ko_Kuuga,0;
+		close;
+	} else if (.@ko_test_01 == 2 && .@ko_test_01_1 == 0) {
+		mes "[與月亮的蓋]";
+		mes "我現在讓你走，所以請回到領導者的結果。";
+		close2;
+		warp "job_ko",16,113;
+		end;
+	} else {  //custom translation
+	L_Kick:
+		mes "[與月亮的蓋]";
+		mes "你是怎麼到達這裡的？";
+		next;
+		mes "[與月亮的蓋]";
+		mes "擺脫你是我的責任。";
+		mes "^000099（他是一個短而沉默的人。）^000000";
+		mes "這會把你推回去！";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	end;
+
+//callsub L_Question,"<Question>",<correct answer choice>,"<Choice 1>:<Choice 2>:<Choice 3>:<Choice 4>";
+L_Question:
+	mes getarg(0);
+	next;
+	if(select(getarg(2)) == getarg(1))
+		set @job_ko_Kuuga, @job_ko_Kuuga + 10;
+	return;
+}
+
+// Test of Survival
+//============================================================
+
+// -----------------------------------------------------------
+//  Functions
+// -----------------------------------------------------------
+function	script	F_KO_Survival_mes	{
+	mes "[不。" + getarg(0) + "]";
+	mes "^1a95e6其他字母太小而無法閱讀。讓我們近距離抬頭。 ^000000";
+	close;
+}
+
+function	script	F_KO_Survival_warp	{
+	close2;
+	switch (getarg(0)) {
+		case  0: warp "job_ko",63,16; break;
+		case  1: warp "job_ko",54,16; break;
+		case  2: warp "job_ko",46,16; break;
+		case  3: warp "job_ko",38,16; break;
+		case  4: warp "job_ko",30,16; break;
+		case  5: warp "job_ko",22,16; break;
+		case  6: warp "job_ko",17,19; break;
+		case  7: warp "job_ko",17,27; break;
+		case  8: warp "job_ko",17,35; break;
+		case  9: warp "job_ko",17,43; break;
+		case 10: warp "job_ko",17,51; break;
+		case 11: warp "job_ko",17,60; break;
+		case 12: warp "job_ko",25,60; break;
+		case 13: warp "job_ko",33,60; break;
+		case 14: warp "job_ko",41,60; break;
+		case 15: warp "job_ko",49,60; break;
+		case 16: warp "job_ko",57,60; break;
+		case 17: warp "job_ko",62,56; break;
+		case 18: warp "job_ko",62,48; break;
+		case 19: warp "job_ko",62,40; break;
+		case 20: warp "job_ko",62,32; break;
+		case 21: warp "job_ko",62,23; break;
+		case 22: warp "job_ko",54,23; break;
+		case 23: warp "job_ko",46,23; break;
+		case 24: warp "job_ko",38,23; break;
+		case 25: warp "job_ko",30,23; break;
+		case 26: warp "job_ko",25,27; break;
+		case 27: warp "job_ko",25,35; break;
+		case 28: warp "job_ko",25,43; break;
+		case 29: warp "job_ko",25,52; break;
+		case 30: warp "job_ko",33,52; break;
+		case 31: warp "job_ko",41,52; break;
+		case 32: warp "job_ko",49,52; break;
+		case 33: warp "job_ko",54,48; break;
+		case 34: warp "job_ko",54,40; break;
+		case 35: warp "job_ko",54,31; break;
+		case 36: warp "job_ko",46,31; break;
+		case 37: warp "job_ko",38,31; break;
+		case 38: warp "job_ko",33,35; break;
+		case 39: warp "job_ko",33,44; break;
+		case 40: warp "job_ko",41,44; break;
+	}
+	end;
+}
+
+//callfunc "F_KO_Survival_dice",<location>{,<LP (default:1)>{,<0:auto-warp (default), 1:do not warp>}}
+//Return: dice value [1..6] ONLY IF arg2 = 1
+function	script	F_KO_Survival_dice	{
+	mes "地點：" + getarg(0);
+	mes "總LP：" + job_kagero_lp;
+	mes "要擲骰子，您需要消費" + getarg(1,1) + " ^FD0260LP^000000.";
+	next;
+	select("擲骰子。");
+	if (job_kagero_lp < getarg(1,1)) {
+		mes "由於 ^fd0260lp ^000000不足，您將返回到起始位置。";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+	set job_kagero_lp, job_kagero_lp - getarg(1,1);
+	set .@dice, rand(1,6);
+	emotion ET_OTL + .@dice, playerattached();
+	mes "骰子出來了" + .@dice + ".";
+	if (getarg(2,0))
+		return .@dice;
+	else {
+		mes "按關閉以前進" + .@dice + " blocks.";
+		callfunc "F_KO_Survival_warp", .@dice + getarg(0);
+		end;
+	}
+}
+
+//callfunc "F_KO_Survival_dice2",<location>{,<LP (default:2)>}
+function	script	F_KO_Survival_dice2	{
+	mes "地點：" + getarg(0);
+	mes "總LP：" + job_kagero_lp;
+	mes "要擲骰子，您需要消費" + getarg(1,2) + " ^FD0260LP^000000.";
+	next;
+	select("擲第一個骰子。");
+	if (job_kagero_lp < getarg(1,2)) {
+		mes "由於 ^fd0260lp ^000000不足，您將返回到起始位置。";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+	set job_kagero_lp, job_kagero_lp - getarg(1,2);
+	mes "<二手" + getarg(1,2) + " LP >";
+	next;
+	set @job_ko_dice1, rand(1,6);
+	emotion ET_OTL + @job_ko_dice1, playerattached();
+	mes "第一個骰子結果是" + @job_ko_dice1 + ". Do you want to roll the second dice?";
+	next;
+	select("擲第二個骰子。");
+	set @job_ko_dice2, rand(1,6);
+	emotion ET_OTL + @job_ko_dice2, playerattached();
+	return;
+}
+
+//Return: 1:win, 0:draw, -1:lose
+function	script	F_KO_Survival_rps	{
+	setarray .@rps$[1], "Scissors", "Rock", "Paper";
+	setarray .@emote[1], ET_SCISSOR, ET_ROCK, ET_WRAP;  //might be iRO custom(?)
+
+	mes "岩石！紙！剪刀！";
+	next;
+	set .@pc, select("給剪刀:給石頭。 :給布。");
+	set .@npc, rand(1,3);
+	emotion .@emote[.@pc], playerattached();
+	emotion .@emote[.@npc];
+	mes "=遊戲結果=";
+	mes "機器：" + .@rps$[.@npc] + ".";
+	mes "你：" + .@rps$[.@pc] + ".";
+	next;
+	if ((.@npc == 1 && .@pc == 2) || (.@npc == 2 && .@pc == 3) || (.@npc == 3 && .@pc == 1)) {
+		mes "你贏了";
+		return 1;
+	} else if (.@pc == .@npc) {
+		mes "畫";
+		return 0;
+	} else if ((.@npc == 1 && .@pc == 3) || (.@npc == 2 && .@pc == 1) || (.@npc == 3 && .@pc == 2)) {
+		mes "你輸了";
+		return -1;
+	} else {
+		mes "發生了未知錯誤。";
+		mes "請聯繫客戶服務。";
+		close;
+	}
+}
+
+// -----------------------------------------------------------
+//  Templates
+// -----------------------------------------------------------
+-	script	Sight#ko_trap	-1,{
+	callfunc "F_KO_Survival_mes", atoi(substr(strnpcinfo(2),3,4));
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	switch (atoi(substr(strnpcinfo(2),3,4))) {
+		case  2: set .@id,0; break;
+		case  7: set .@id,5; break;
+		case 11: set .@id,9; break;
+		case 23: set .@id,18; break;
+		case 26: set .@id,20; break;
+		case 30: set .@id,9; break;
+		case 35: set .@id,29; break;
+	}
+	mes "該塊有一個陷阱。";
+	mes "按Closs返回到Block" + .@id + ".";
+	callfunc "F_KO_Survival_warp", .@id;
+	end;
+}
+
+-	script	Sight#ko_trap2	-1,{
+	callfunc "F_KO_Survival_mes", atoi(substr(strnpcinfo(2),3,4));
+	end;
+OnTouch:
+	set .@id, atoi(substr(strnpcinfo(2),3,4));
+	switch (.@id) {
+		case 10: set .@var$, "$20110808_vko01"; break;
+		case 28: set .@var$, "$20110808_vko03"; break;
+		//case 38: set .@var$, "$20110808_vko04"; break;
+	}
+	mes "標牌上有很小的字母。";
+	next;
+	mes "如果您不想被抓住，請安裝陷阱。";
+	next;
+	if (getd(.@var$) == 0) {
+		mes "目前沒有安裝陷阱。";
+		next;
+		mes "您是否要使用10 ^fd0260lp ^000000安裝陷阱？";
+		next;
+		if(select("安裝陷阱。 :擲骰子。") == 1) {
+			if (job_kagero_lp > 9) {
+				mes "<用過10 lp>";
+				set job_kagero_lp, job_kagero_lp - 10;
+				setd .@var$,1;
+				next;
+				mes "陷阱已安裝。請擲骰子。";
+				next;
+			} else {
+				mes "<沒有使用10 lp>";
+				mes "^fd0260lp^000000不足！請擲骰子。";
+				next;
+			}
+		}
+	} else {
+		set job_kagero_lp,0;
+		setd .@var$,0;
+		mes "您被安裝的陷阱捕獲。";
+		mes "按Closs返回到Block 0。";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+	callfunc "F_KO_Survival_dice",.@id;
+	end;
+}
+
+-	script	Sight#ko_heal	-1,{
+	callfunc "F_KO_Survival_mes", atoi(substr(strnpcinfo(2),3,4));
+	end;
+OnTouch:
+	set .@id, atoi(substr(strnpcinfo(2),3,4));
+	mes "標牌上有很小的字母。";
+	next;
+	mes "這個街區是幸運的。";
+	mes "生命點恢復7 ^FD0260LP ^000000。";
+	mes "不能超過100 ^FD0260LP ^000000。";
+	next;
+	mes "<恢復" + ((job_kagero_lp + 7 > 100) ? "" : "7") + " LP >";
+	next;
+	set job_kagero_lp, ((job_kagero_lp + 7 > 100) ? 100 : job_kagero_lp + 7);
+	callfunc "F_KO_Survival_dice",.@id;
+	end;
+}
+
+-	script	Sight#ko_curse	-1,{
+	callfunc "F_KO_Survival_mes", atoi(substr(strnpcinfo(2),3,4));
+	end;
+OnTouch:
+	set .@id, atoi(substr(strnpcinfo(2),3,4));
+	set .@playtime, checkquest(5141,PLAYTIME);
+	if (.@playtime == -1) {
+		mes "標牌上有很小的字母。";
+		next;
+		mes "如果您不支付5 ^fd0260lp ^000000，則將被詛咒和固定2分鐘。";
+		next;
+		if(select("使用5 LP:不付費。") == 1) {
+			if (job_kagero_lp > 4) {
+				set job_kagero_lp, job_kagero_lp - 5;
+				mes "<使用了5 lp>";
+				mes "你可以擲骰子。";
+				next;
+				callfunc "F_KO_Survival_dice",.@id;
+				end;
+			} else {
+				mes "<沒有使用5 lp>";
+				mes "無法承受詛咒。";  //custom translation
+				next;
+			}
+		}
+		setquest 5141;
+		mes "您被詛咒，不能搬到其他街區2分鐘。";
+		close;
+	} else if (.@playtime == 0 || .@playtime == 1) {
+		mes "您被詛咒，不能搬到其他街區2分鐘。";
+		close;
+	} else if (.@playtime == 2) {
+		mes "固定的詛咒持續了2分鐘，然後被去除。";
+		next;
+		erasequest 5141;
+		callfunc "F_KO_Survival_dice",.@id;
+		end;
+	} else {
+		erasequest 5141;
+		mes "發生了未知錯誤。";
+		mes "請聯繫客戶服務。";
+		close;
+	}
+}
+
+-	script	Sight#ko_gravity	-1,{
+	callfunc "F_KO_Survival_mes", atoi(substr(strnpcinfo(2),3,4));
+	end;
+OnTouch:
+	set .@id, atoi(substr(strnpcinfo(2),3,4));
+	mes "標牌上有很小的字母。";
+	next;
+	mes "面積為正常重力的10倍。您將需要10 ^fd0260lp ^000000才能滾動骰子。";
+	next;
+	callfunc "F_KO_Survival_dice",.@id,10;
+	end;
+}
+
+// -----------------------------------------------------------
+//  Blocks (00-40)
+// -----------------------------------------------------------
+
+job_ko,57,16,4	script	Sight#ko_00	858,1,1,{
+	callfunc "F_KO_Survival_mes",0;
+	end;
+OnTouch:
+	if (job_kagero != 5) {
+		mes "你不應該在這裡。";  //custom translation
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	if (isbegin_quest(5137) == 1 && isbegin_quest(5140) == 0) {
+		mes "標牌上有很小的字母。";
+		next;
+		callsub L_Description;
+		setquest 5140;
+		set job_kagero_lp,100;
+		mes "您已經獲得了100點（LP）。";
+		next;
+	} else {
+		if (checkquest(5141,PLAYTIME) > -1)
+			erasequest 5141;
+		set job_kagero_lp,100;
+		mes "您已經返回第一個塊。您的LP已恢復。";
+		next;
+		callsub L_Description;
+	}
+	callfunc "F_KO_Survival_dice",0;
+	end;
+
+L_Description:
+	while (1) {
+		if(select("閱讀說明:開始測試。") == 2)
+			break;
+		mes "生存的測試從這裡開始，您使用 ^fd0260100生命點（LP） ^000000，然後滾動骰子通過測試前進。";
+		next;
+		mes "整個測試從塊0到40塊開始，您獲得的每個塊都可以給出或獲得LP。";
+		next;
+		mes "您需要有一些 ^fd0260lp ^000000，直到最後到達到達塊才能通過測試。";
+		next;
+		mes "但！如果您到達到達塊時，您的 ^fd0260lp ^000000將變為0，您仍然通過測試。";
+		next;
+		mes "遊戲說明在這裡結束。祝你好運。";
+		next;
+	}
+	return;
+}
+
+job_ko,49,16,4	script	Sight#ko_01	858,1,1,{
+	callfunc "F_KO_Survival_mes",1;
+	end;
+OnTouch:
+	set .@life_p, job_kagero_lp;
+	mes "標牌上有很小的字母。";
+	next;
+	mes "您真的很擅長擲骰子。從一開始如何獲得1？如果您在此塊中支付10 LP，則可以移至9塊。";
+	next;
+	if(select("使用 10 LP:擲骰子。") == 1) {
+		if (job_kagero_lp > 9) {
+			set .@reset_p, .@life_p - 10;
+			set job_kagero_lp, .@reset_p;
+			mes "<用過10 lp>";
+			mes "按關閉以移至第9塊。";
+			callfunc "F_KO_Survival_warp",9;
+			end;
+		} else {
+			mes "<沒有使用10 lp>";
+			mes "^fd0260lp^000000不足！";
+			next;
+		}
+	}
+	mes "擲骰子。";
+	next;
+	callfunc "F_KO_Survival_dice",1;
+	end;
+}
+
+job_ko,41,16,4	duplicate(Sight#ko_trap)	Sight#ko_02	858,1,1
+
+job_ko,33,16,4	script	Sight#ko_03	858,1,1,{
+	callfunc "F_KO_Survival_mes",3;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "使用了5 lp，因此您必須抵抗在前進之前通過幾代人傳遞的詛咒。";
+	next;
+	select("使用 5 LP");
+	if (job_kagero_lp > 4) {
+		mes "<二手5 lp>";
+		set job_kagero_lp, job_kagero_lp - 5;
+		callfunc "F_KO_Survival_dice",3;
+	} else {
+		mes "<沒有使用5 lp>";
+		mes "^fd0260lp^000000不足！返回開始位置。";
+		callfunc "F_KO_Survival_warp",0;
+	}
+	end;
+}
+
+job_ko,25,16,4	script	Sight#ko_04	858,1,1,{
+	callfunc "F_KO_Survival_mes",4;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	if ($20110808_sko01$ != "") {
+		mes "^0000ff" + $20110808_sko01$ +" was here.^000000";
+		next;
+	}
+	mes "自參加考試是一個特殊的場合以來，我應該離開我的名字嗎？";
+	next;
+	if(select("使用5 LP並留下你的名字。 :繼續擲骰子。") == 1) {
+		if (job_kagero_lp > 4) {
+			mes "<二手5 lp>";
+			set job_kagero_lp, job_kagero_lp - 5;
+			next;
+			set $20110808_sko01$, strcharinfo(0);
+			mes strcharinfo(0)+"在這裡。";
+			mes "你留下了名字。";
+			next;
+		} else {
+			mes "<沒有使用5 lp>";
+			mes "^fd0260lp^000000不足！你可以擲骰子。";
+			next;
+		}
+	}
+	callfunc "F_KO_Survival_dice",4;
+	end;
+}
+
+job_ko,17,16,4	duplicate(Sight#ko_curse)	Sight#ko_05	858,1,1
+
+job_ko,17,24,4	duplicate(Sight#ko_heal)	Sight#ko_06	858,1,1
+
+job_ko,17,32,4	duplicate(Sight#ko_trap)	Sight#ko_07	858,1,1
+
+job_ko,17,40,4	script	Sight#ko_08	858,1,1,{
+	callfunc "F_KO_Survival_mes",8;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "岩紙剪式機器：";
+	mes "如果您獲勝，請移至第15塊。";
+	mes "如果是抽籤，請擲骰子。";
+	mes "如果您輸了，請移至Block 0。";
+	next;
+	switch (callfunc("F_KO_Survival_rps")) {
+	case 1:
+		mes "按關閉以移動到15塊。";
+		callfunc "F_KO_Survival_warp",15;
+		end;
+	case 0:
+		mes "領帶，擲骰子！";
+		next;
+		callfunc "F_KO_Survival_dice",8;
+		end;
+	case -1:
+		mes "按關閉以移動到塊0。";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+}
+
+job_ko,17,48,4	script	Sight#ko_09	858,1,1,{
+	callfunc "F_KO_Survival_mes",9;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "請繼續。";
+	next;
+	callfunc "F_KO_Survival_dice",9;
+	end;
+}
+
+job_ko,17,56,4	duplicate(Sight#ko_trap2)	Sight#ko_10	858,1,1
+
+job_ko,22,60,4	duplicate(Sight#ko_trap)	Sight#ko_11	858,1,1
+
+job_ko,30,60,4	script	Sight#ko_12	858,1,1,{
+	callfunc "F_KO_Survival_mes",12;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "岩紙剪式機器：";
+	mes "如果您獲勝，請移至20塊。";
+	mes "如果是抽籤，請擲骰子。";
+	mes "如果您輸了，請移至第9塊。";
+	next;
+	switch (callfunc("F_KO_Survival_rps")) {
+	case 1:
+		mes "按接近移動到20塊。";
+		callfunc "F_KO_Survival_warp",20;
+		end;
+	case 0:
+		mes "領帶，擲骰子！";
+		next;
+		callfunc "F_KO_Survival_dice",12;
+		end;
+	case -1:
+		mes "按關閉以移至第9塊。";
+		callfunc "F_KO_Survival_warp",9;
+		end;
+	}
+}
+
+job_ko,38,60,4	duplicate(Sight#ko_heal)	Sight#ko_13	858,1,1
+
+job_ko,46,60,4	duplicate(Sight#ko_curse)	Sight#ko_14	858,1,1
+
+job_ko,54,60,4	script	Sight#ko_15	858,1,1,{
+	callfunc "F_KO_Survival_mes",15;
+	end;
+OnTouch:
+	set .@playtime, checkquest(5141,PLAYTIME);
+	if (.@playtime == -1) {
+		mes "標牌上有很小的字母。";
+		next;
+		mes "您將被強大的重力詛咒所詛咒，使您固定2分鐘。";
+		setquest 5141;
+		close;
+	} else if (.@playtime == 0 || .@playtime == 1) {
+		mes "您被詛咒，不能搬到其他街區2分鐘。";
+		close;
+	} else if (.@playtime == 2) {
+		mes "固定的詛咒持續了2分鐘，然後被去除。";
+		next;
+		erasequest 5141;
+		callfunc "F_KO_Survival_dice",15;
+		end;
+	} else {
+		erasequest 5141;
+		mes "發生了未知錯誤。";
+		mes "請聯繫客戶服務。";
+		close;
+	}
+}
+
+job_ko,62,60,4	script	Sight#ko_16	858,1,1,{
+	callfunc "F_KO_Survival_mes",16;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "消耗2 ^fd0260lp ^000000，並將骰子滾動兩次。";
+	mes "如果獲得相同的數字，則可以移動到塊30，如果數字不同，請消耗2 lp以再次滾動...直到獲得相同的數字為止。";
+	next;
+	while (1) {
+		callfunc "F_KO_Survival_dice2",16;
+		if (@job_ko_dice1 == @job_ko_dice2) break;
+		else {
+			mes "第二骰子結果是" + @job_ko_dice2 + ", which is not the same number.";  //custom translation
+			next;
+		}
+	}
+	set @job_ko_dice1,0;
+	set @job_ko_dice2,0;
+	//mes "第二個骰子的結果是" + @job_ko_dice2 + ", which is the same number. Press Close to move block 30.";
+	mes "您有相同的數字。按接近移動30。";
+	callfunc "F_KO_Survival_warp",30;
+	end;
+}
+
+job_ko,62,51,4	duplicate(Sight#ko_gravity)	Sight#ko_17	858,1,1
+
+job_ko,62,43,4	script	Sight#ko_18	858,1,1,{
+	callfunc "F_KO_Survival_mes",18;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "消耗2 ^fd0260lp ^000000，並將骰子滾動兩次。";
+	next;
+	mes "如果兩個骰子的數字總和低於5，則移至30塊，如果高於5，則移至塊19。";
+	next;
+	callfunc "F_KO_Survival_dice2",18;
+	mes "第二骰子結果是" + @job_ko_dice2 + ".";
+	next;
+	set .@dice_sum, @job_ko_dice1 + @job_ko_dice2;
+	mes @job_ko_dice1 + " + " + @job_ko_dice2 + " = " + .@dice_sum;
+	set @job_ko_dice1,0;
+	set @job_ko_dice2,0;
+	if (.@dice_sum < 5) {
+		mes "您總數低於5。按接近移至塊30。";
+		callfunc "F_KO_Survival_warp",30;
+		end;
+	} else {
+		mes "您總數大於5。按接近移至塊19。";
+		callfunc "F_KO_Survival_warp",19;
+		end;
+	}
+}
+
+job_ko,62,35,4	script	Sight#ko_19	858,1,1,{
+	callfunc "F_KO_Survival_mes",19;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "前進。";
+	next;
+	callfunc "F_KO_Survival_dice",19;
+	end;
+}
+
+job_ko,62,27,4	duplicate(Sight#ko_heal)	Sight#ko_20	858,1,1
+
+job_ko,57,23,4	duplicate(Sight#ko_gravity)	Sight#ko_21	858,1,1
+
+job_ko,49,23,4	script	Sight#ko_22	858,1,1,{
+	callfunc "F_KO_Survival_mes",22;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "留下所有剩餘的 ^fd0260lp ^000000，然後返回塊0，然後將兌換下一個人。";
+	next;
+	if ($20110808_vko02 == 0) {
+		mes "您要離開 ^fd0260lp ^000000嗎？";
+		mes "如果您離開 ^fd0260lp ^000000，那麼到達塊的下一個測試將自動通過測試。";
+		next;
+		if(select("留下你所有的LP:繼續擲骰子。") == 1) {
+			set job_kagero_lp,0;
+			set $20110808_vko02,1;
+			mes "在此處保留所有剩餘的 ^fd0260lp ^000000。按下關閉，然後返回到0。";
+			callfunc "F_KO_Survival_warp",0;
+			end;
+		}
+	} else if ($20110808_vko02 == 1) {
+		set $20110808_vko02,0;
+		mes "在您犧牲所有 ^fd0260lp ^000000之前的人之前，請按下關閉並轉到最後一個塊。"; //custom translation
+		callfunc "F_KO_Survival_warp",40;
+		end;
+	} else {
+		mes "發生了未知錯誤。";
+		mes "請聯繫客戶服務。";
+		close;
+	}
+	callfunc "F_KO_Survival_dice",22;
+	end;
+}
+
+job_ko,41,23,4	duplicate(Sight#ko_trap)	Sight#ko_23	858,1,1
+
+job_ko,33,23,4	script	Sight#ko_24	858,1,1,{
+	callfunc "F_KO_Survival_mes",24;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "消耗2 ^fd0260lp ^000000，並將骰子滾動兩次。";
+	next;
+	mes "如果兩個骰子的數字總和大於8，則可以移至25至30之間的任何街區。但是！如果總和低於8，則必須返回到第19塊。";
+	next;
+	callfunc "F_KO_Survival_dice2",24;
+	mes "第二骰子結果是" + @job_ko_dice2 + ".";
+	next;
+	set .@dice_sum, @job_ko_dice1 + @job_ko_dice2;
+	if (.@dice_sum > 8) {
+		mes @job_ko_dice1 + " + " + @job_ko_dice2 + " = " + .@dice_sum;
+		set @job_ko_dice1,0;
+		set @job_ko_dice2,0;
+		mes "您總數大於8。請選擇一個塊以在25到30塊之間移動。";
+		callfunc "F_KO_Survival_warp", select("移至塊 25:移至塊 26:移至塊 27:移至塊 28:移至塊 29:移至塊 30") + 24;
+		end;
+	} else {
+		set @job_ko_dice1,0;
+		set @job_ko_dice2,0;
+		mes "您的總數低於8。按接近移至塊19。";
+		callfunc "F_KO_Survival_warp",19;
+		end;
+	}
+}
+
+job_ko,25,23,4	script	Sight#ko_25	858,1,1,{
+	callfunc "F_KO_Survival_mes",25;
+	end;
+OnTouch:
+	set .@playtime, checkquest(5141,PLAYTIME);
+	if (.@playtime == -1) {
+		mes "標牌上有很小的字母。";
+		next;
+		mes "這是la腳。";
+		mes "無法閱讀寫作。應該有一種閱讀它的方法。";
+		next;
+		switch(select("嘗試一下:什麼也不做。")) {
+		case 1:
+			specialeffect2 EF_TALK_FROSTJOKE;
+			mes "嘗試了一個最近的Prontera笑話來做某事。";
+			next;
+			setquest 5141;
+			mes "被詛咒並固定了2分鐘。";
+			close;
+		case 2:
+			if (rand(1,10) == 4) {
+				mes "這是一個明智的決定，什麼都不做。";
+				next;
+			} else {
+				mes "什麼都沒有發生。仍然需要做某事。";
+				close;
+			}
+			break;
+		}
+	} else if (.@playtime == 0 || .@playtime == 1) {
+		mes "由於被詛咒而無法移動。";
+		close;
+	} else if (.@playtime == 2) {
+		mes "固定的詛咒持續了2分鐘，然後被去除。";
+		next;
+		erasequest 5141;
+	} else {
+		erasequest 5141;
+		mes "發生了未知錯誤。";
+		mes "請聯繫客戶服務。";
+		close;
+	}
+	callfunc "F_KO_Survival_dice",25;
+	end;
+}
+
+job_ko,25,32,4	duplicate(Sight#ko_trap)	Sight#ko_26	858,1,1
+
+job_ko,25,40,4	duplicate(Sight#ko_heal)	Sight#ko_27	858,1,1
+
+job_ko,25,48,4	duplicate(Sight#ko_trap2)	Sight#ko_28	858,1,1
+
+job_ko,30,52,4	script	Sight#ko_29	858,1,1,{
+	callfunc "F_KO_Survival_mes",29;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "出去。";
+	next;
+	callfunc "F_KO_Survival_dice",29;
+	end;
+}
+
+job_ko,38,52,4	duplicate(Sight#ko_trap)	Sight#ko_30	858,1,1
+
+job_ko,46,52,4	duplicate(Sight#ko_curse)	Sight#ko_31	858,1,1
+
+job_ko,54,52,4	script	Sight#ko_32	858,1,1,{
+	callfunc "F_KO_Survival_mes",32;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "岩紙剪式機器：";
+	mes "如果您獲勝，則可以移至33至38之間的任何街區；如果您輸了或是抽獎，則必須移至Block 0。";
+	next;
+	switch (callfunc("F_KO_Survival_rps")) {
+	case 1:
+		mes "請選擇一個塊以在33到38塊之間移動。";
+		next;
+		callfunc "F_KO_Survival_warp", select("移至塊 33:移至塊 34:移至塊 35:移至塊 36:移至塊 37:移至塊 38") + 32;
+		end;
+	case 0:
+	case -1:
+		mes "按關閉以移動到塊0。";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+}
+
+job_ko,54,43,4	script	Sight#ko_33	858,1,1,{
+	callfunc "F_KO_Survival_mes",33;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "如果您支付所有積分，則可以移至第39塊，除了最後1 ^fd0260lp ^000000上一次擲骰子。";
+	next;
+	switch(select("Pay LP.:一次一點地前進。")) {
+	case 1:
+		set .@sell_p, job_kagero_lp - 1;
+		set job_kagero_lp,1;
+		mes "<二手" + .@sell_p + " LP >";
+		next;
+		mes "按關閉以移動到39塊。";
+		callfunc "F_KO_Survival_warp",39;
+		end;
+	case 2:
+		mes "請擲骰子。";
+		next;
+		break;
+	}
+	callfunc "F_KO_Survival_dice",33;
+	end;
+}
+
+job_ko,54,35,4	duplicate(Sight#ko_heal)	Sight#ko_34	858,1,1
+
+job_ko,49,31,4	duplicate(Sight#ko_trap)	Sight#ko_35	858,1,1
+
+job_ko,41,31,4	script	Sight#ko_36	858,1,1,{
+	callfunc "F_KO_Survival_mes",36;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "直到最後一個街區只剩下4個街區。";
+	next;
+	mes "規則1（正常骰子卷）"; //iRO custom dialogue(?)
+	mes "如果您獲得4或以上，您可以通過，但沒人知道骰子卷會帶來什麼。";
+	next;
+	mes "規則2"; //iRO custom dialogue(?)
+	mes "如果獲得1、2或3，則直接移至到達點；如果您得到4、5或6，則可以選擇移至第29塊。";
+	next;
+	switch(select("換個方式試試:遵守規則。")) {
+	case 1:
+		//mes "另一種方式（第二條規則）"; //iRO custom dialogue(?)
+		set .@dodoripo,0;
+		break;
+	case 2:
+		set .@dodoripo,1;
+		break;
+	}
+	set .@dice, callfunc("F_KO_Survival_dice",36,1,1);
+	if (.@dodoripo == 0) {
+		if (.@dice <= 3) {
+			mes "按接近移動到末端。";
+			callfunc "F_KO_Survival_warp",40;
+			end;
+		} else {
+			mes "按關閉以移至第29塊。";
+			callfunc "F_KO_Survival_warp",29;
+			end;
+		}
+	} else {
+		mes "按關閉以向前移動" + .@dice + " blocks.";
+		callfunc "F_KO_Survival_warp", ((.@dice <= 3) ? .@dice + 36 : 40);
+		end;
+	}
+}
+
+job_ko,33,31,4	script	Sight#ko_37	858,1,1,{
+	callfunc "F_KO_Survival_mes",37;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "終點線只剩下3個街區，但是您不能這麼輕鬆地走。";
+	next;
+	mes "如果您得到1、3或5，則移至到達點；如果獲得2、4或6，請返回起點。";
+	next;
+	set .@dice, callfunc("F_KO_Survival_dice",37,1,1);
+	if (.@dice % 2) {
+		mes "按關閉以移至最後一個塊。";
+		callfunc "F_KO_Survival_warp",40;
+		end;
+	} else {
+		mes "按關閉以移至起點。";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+}
+
+job_ko,33,40,4	script	Sight#ko_38	858,1,1,{
+	callfunc "F_KO_Survival_mes",38;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "留下1 LP並投資剩餘的LP來安裝陷阱，以降低其他玩家！";
+	next;
+	if ($20110808_vko04 == 0) {
+		mes "目前沒有安裝陷阱。您想安裝陷阱嗎？";
+		next;
+		switch(select("安裝陷阱。 :不安裝。")) {
+		case 1:
+			set .@reset_p, job_kagero_lp - 1;
+			set job_kagero_lp,1;
+			set $20110808_vko04,1;
+			mes "<二手" + .@reset_p + " LP >";
+			next;
+			mes "陷阱已安裝。請擲骰子。";
+			next;
+			break;
+		case 2:
+			mes "沒有設置陷阱。請擲骰子。";
+			next;
+			break;
+		}
+	} else {
+		set $20110808_vko04,0;
+		set job_kagero_lp,0;
+		mes "您被安裝的陷阱捕獲。按Closs返回到Block 0。";
+		callfunc "F_KO_Survival_warp",0;
+		end;
+	}
+	set .@dice, callfunc("F_KO_Survival_dice",38,1,1);
+	mes "按關閉以前進" + .@dice + " blocks.";
+	callfunc "F_KO_Survival_warp", ((.@dice == 1) ? .@dice + 38 : 40);
+	end;
+}
+
+job_ko,38,44,4	script	Sight#ko_39	858,1,1,{
+	callfunc "F_KO_Survival_mes",39;
+	end;
+OnTouch:
+	mes "標牌上有很小的字母。";
+	next;
+	mes "現在只剩1個街區，直到結束。恭喜您所經歷的一切。";
+	next;
+	mes "但是你不能這麼容易。如果獲得3，則將返回3塊。";
+	next;
+	set .@dice, callfunc("F_KO_Survival_dice",39,1,1);
+	if (.@dice == 3) {
+		mes "按關閉以移至第三塊。";
+		callfunc "F_KO_Survival_warp",3;
+		end;
+	} else {
+		mes "按關閉以移至到達點。";
+		callfunc "F_KO_Survival_warp",40;
+		end;
+	}
+}
+
+job_ko,46,41,4	script	Sight#ko_40	858,1,1,{
+	callfunc "F_KO_Survival_mes",40;
+	end;
+OnTouch:
+	if (job_kagero != 5) {
+		mes "你不應該在這裡。";  //custom translation
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	if (isbegin_quest(5137) != 1 || isbegin_quest(5140) != 1) {
+		mes "您必須錯誤地在這裡。";  //custom translation
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	mes "標牌上有很小的字母。";
+	next;
+	mes "對於那些準備新轉彎的人...";
+	mes "開始好了一半。但是，請務必記住這不是終點。";
+	next;
+	completequest 5137;
+	erasequest 5140;
+	if (isbegin_quest(5141)) erasequest 5141;
+	set job_kagero_lp,0;
+	mes "讓我們閱讀標誌上的所有寫作。";
+	mes "您覺得自己被移至另一個地方。";
+	close2;
+	warp "job_ko",35,113;
+	end;
+}
+
+// Test of Weaponry
+//============================================================
+job_ko,127,125,4	script	Red Leopard Joe#ko	730,{
+	if (MaxWeight - Weight < 1000 || checkweight(1201,1) == 0) {
+		mes "[紅豹喬]";
+		mes "減輕體重！該測試太難了...";  //custom translation
+		close;
+	}
+	if (BaseJob != Job_Ninja) {
+		for (set .@i,5131; .@i<=5146; set .@i,.@i+1)
+			if (isbegin_quest(.@i)) erasequest .@i;
+		set job_kagero,0;
+		mes "[紅豹喬]";
+		mes "抱歉，您的氏族與我們的氏族不同，有問題嗎？";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	if (job_kagero != 5) {  //custom translation
+		mes "[紅豹喬]";
+		mes "你不應該在這裡...";
+		mes "擺脫你是我的責任，";
+		mes "所以我現在把你送回來！";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	set .@ko_test_03_1, isbegin_quest(5138);
+	set .@ko_test_03_2, isbegin_quest(5142);
+	set .@ko_test_03_3, isbegin_quest(5143);
+	set .@ko_test_03_4, isbegin_quest(5144);
+	set .@ko_test_03_5, isbegin_quest(5145);
+	if (.@ko_test_03_1 == 1 && .@ko_test_03_2 == 0 && .@ko_test_03_3 == 0 && .@ko_test_03_4 == 0 && .@ko_test_03_5 == 0) {
+		mes "[紅豹喬]";
+		mes "已經有一段時間了！";
+		next;
+		select("確實很久了，喬。");
+		mes "[紅豹喬]";
+		mes "你並不感到驚訝，我在這裡。您是否遇到了 ^0237fdkuuga gai ^000000？";
+		next;
+		mes "[紅豹喬]";
+		mes "不喜歡我不是您參觀過的第一個，但這並不重要。";
+		next;
+		mes "[紅豹喬]";
+		mes "好吧，" + strcharinfo(0) + "!";
+		mes "歡迎來到為氏族創建武器的車間。";
+		next;
+		mes "[紅豹喬]";
+		mes "自古以來，我們的氏族一直在創建和使用獨特的武器來服務我們的秘密任務。";
+		next;
+		select("真的嗎？在艾因布洛赫？");
+		mes "[紅豹喬]";
+		mes "唔？你不像我想的那樣慢！";
+		next;
+		mes "[紅豹喬]";
+		mes "是的。埃因布羅奇（Einbroch）被稱為工業城市，偉大的鐵匠市創造了新技術。";
+		next;
+		mes "[紅豹喬]";
+		mes "我的任務是分析他們的技術並向氏族報告。";
+		next;
+		mes "[紅豹喬]";
+		mes "我的講話比我想的要多。";
+		next;
+		mes "[紅豹喬]";
+		mes "您是否帶來了足夠的 ^6848B7RIORN礦石，鐵，鋼，短語，Emveretaron，Rough Oridecon和Rough Elnium ^000000？";
+		next;
+		mes "[紅豹喬]";
+		mes "現在讓我們創建一個新的原型武器。";
+		next;
+		specialeffect EF_GUIDEDATTACK,AREA,"Crafting Tools#ko_01";
+		mes "[紅豹喬]";
+		mes "可以隨意使用此處的工具，然後...";
+		next;
+		specialeffect EF_GUIDEDATTACK,AREA,"Crafting Tools#ko_02";
+		mes "[紅豹喬]";
+		mes "...那裡...";
+		next;
+		specialeffect EF_GUIDEDATTACK,AREA,"Crafting Tools#ko_03";
+		setquest 5142;
+		mes "[紅豹喬]";
+		mes "...以及其他任何地方。現在讓我們開始！";
+		close;
+	} else if (.@ko_test_03_1 == 1 && .@ko_test_03_2 == 1 && .@ko_test_03_3 == 0 && .@ko_test_03_4 == 0 && .@ko_test_03_5 == 0) {
+		callsub L_Weapon,":";
+		end;
+	} else if (.@ko_test_03_1 == 1 && .@ko_test_03_2 == 0 && (.@ko_test_03_3 == 1 || .@ko_test_03_4 == 1) && .@ko_test_03_5 == 0) {
+		callsub L_Weapon,":Yes, I'm done.";
+		if (countitem(13074)) {
+			mes "[紅豹喬]";
+			mes "嗯...有趣的是...是kunai形狀的匕首嗎？";
+			next;
+			mes "[紅豹喬]";
+		} else if (countitem(13312)) {
+			mes "[紅豹喬]";
+			mes "嗯...這是普通的胡瑪嗎？";
+			next;
+			mes "[紅豹喬]";
+			mes "啊，它不是一個普通的胡瑪。";
+		} else {
+			mes "[紅豹喬]";
+			mes "啊，怎麼可能？你沒有武器嗎？也許您配備了它？";
+			close;
+		}
+		mes "非常有創造力。我確實看到了改進的餘地，但是武器本身會在稍微撫平一點後會出現。";
+		next;
+		mes "[紅豹喬]";
+		mes "好的。我認為你已經準備好了。";
+		next;
+		mes "[紅豹喬]";
+		mes "現在該升級了嗎？";
+		mes "我兩邊都有改進工具。用這些來完善武器並回來。";
+		next;
+		mes "[紅豹喬]";
+		mes "我自己付出了巨大的努力來創建精煉工具，因此使用它們不會遇到任何麻煩。";
+		next;
+		setquest 5145;
+		mes "[紅豹喬]";
+		mes "啊...但是以防萬一";
+		mes "^ff0000 be小心不要通過在此外向鐵匠展示這些鐵匠來引起麻煩。 ^000000";
+		close;
+	} else if (.@ko_test_03_1 == 1 && .@ko_test_03_2 == 0 && (.@ko_test_03_3 == 1 || .@ko_test_03_4 == 1) && .@ko_test_03_5 == 1) {
+		disable_items;
+		mes "[紅豹喬]";
+		mes "您取得了成功的結果嗎？";
+		next;
+		switch(select("還沒有。 :在這裡。 :實際上...")) {
+		case 1:
+			mes "[紅豹喬]";
+			mes "首先獲得令人滿意的結果並不容易。";
+			close;
+		case 2:
+			break;
+		case 3:
+			mes "[紅豹喬]";
+			mes "即使在我的警告中，您也失去了武器。";
+			next;
+			mes "[紅豹喬]";
+			mes "我們無能為力。等待！";
+			next;
+			mes "紅色豹喬喃喃自語，突然所有武器都沒有配備。";
+			next;
+			nude;
+			if (countitem(13074) || countitem(13312)) {
+				mes "[紅豹喬]";
+				mes "這是什麼？您仍然有原型。停止玩。";
+				close;
+			}
+			mes "[紅豹喬]";
+			mes "哦！你真的丟了它。";
+			next;
+			setquest 5142;
+			if (isbegin_quest(5143)) erasequest 5143;
+			if (isbegin_quest(5144)) erasequest 5144;
+			erasequest 5145;
+			mes "[紅豹喬]";
+			mes "出色地！讓我們嘗試再次實現！";
+			close;
+		}
+		mes "[紅豹喬]";
+		mes "看起來您有一些結果。";
+		next;
+		set .@part, EQI_HAND_R;
+		if (!getequipisequiped(.@part)) {
+			mes "[紅豹喬]";
+			mes "啊！您還沒有裝備任何武器！";
+			close;
+		} else {
+			set .@equip_id, getequipid(.@part);
+			set .@equip_refine, getequiprefinerycnt(.@part);
+			if (.@equip_id == 13074 || .@equip_id == 13312) {
+				mes "[紅豹喬]";
+				mes "那是你的武器嗎？讓我看看。";
+				next;
+			} else {  //custom translation
+				mes "[紅豹喬]";
+				mes "您確定那是武器嗎？";
+				next;
+				mes "[紅豹喬]";
+				mes "你打算欺騙我嗎？再次！ ！";
+				close;
+			}
+		}
+		mes "喬徹底看了印章。";
+		next;
+		if (.@equip_refine < 7) {
+			mes "[紅豹喬]";
+			mes "你那麼低嗎？";
+			mes "我一定誤判你。您可能已經滿足自己，但我不滿意。再做一次！";
+			close;
+		} else if (.@equip_refine > 6 && .@equip_refine < 9) {
+			mes "[紅豹喬]";
+			mes "嗯...這是您的限制嗎？";
+			mes "您剛剛接近傳球。我會再問一次，您滿意嗎？";
+			next;
+			if(select("是:否") == 2) {
+				mes "[紅豹喬]";
+				mes "你還在這裡。為什麼？";
+				close;
+			}
+			mes "[紅豹喬]";
+			mes "您的能力就足夠了。";
+			next;
+		} else if (.@equip_refine > 8 && .@equip_refine < 13) {  //custom translation(?)
+			mes "[紅豹喬]";
+			mes "啊，正如我所期望的。";
+			mes "我仍然相信您不會停在這裡。";
+			next;
+			if(select("我想停下來:我想繼續。") == 2) {
+				mes "[紅豹喬]";
+				mes "我將期待您的結果。";
+				close;
+			}
+			mes "[紅豹喬]";
+			mes "您的能力就足夠了。";
+			next;
+		} else {  //custom translation(?)
+			mes "[紅豹喬]";
+			mes "比預期的要好。";
+			next;
+			mes "[紅豹喬]";
+			mes "對於初學者來說，很好。該測試對您可能不重要，但是您的能力就足夠了。";
+			next;
+		}
+		mes "[紅豹喬]";
+		mes "我能感覺到。";
+		mes "我會拿這把武器給它一些最後的修飾。";
+		next;
+
+		// anti-hack
+		if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipRefineHack", .@part, .@equip_refine))
+			close;
+
+		delequip .@part;
+		erasequest 5145;
+		completequest 5138;
+		if (isbegin_quest(5143) == 1) completequest 5143;
+		if (isbegin_quest(5144) == 1) completequest 5144;
+		mes "[紅豹喬]";
+		mes "'" + strcharinfo(0) + "'";
+		mes "通過了武器測試！ ！";
+		close;
+	} else if (.@ko_test_03_1 == 2 && .@ko_test_03_2 == 0 && (.@ko_test_03_3 == 2 || .@ko_test_03_4 == 2) && .@ko_test_03_5 == 0) {
+		mes "[紅豹喬]";
+		mes "哦，我差點忘了。";
+		mes "去將測試結果報告給Gion！";
+		close2;
+		warp "job_ko",26,104;
+		end;
+	} else {  //custom translation
+		mes "[紅豹喬]";
+		mes "你不應該來這裡...";
+		mes "擺脫你是我的責任。";
+		mes "這會把你推回去！";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	end;
+
+L_Weapon:
+	mes "[紅豹喬]";
+	mes "您完成了新武器的原型嗎？";
+	next;
+	switch(select("Crafting tools?:I don't have enough materials.:How do you expect me to make a weapon?" + getarg(0))) {
+	case 1:
+		specialeffect EF_GUIDEDATTACK,AREA,"Crafting Tools#ko_01";
+		mes "[紅豹喬]";
+		mes "可以隨意使用此處的工具，然後...";
+		next;
+		specialeffect EF_GUIDEDATTACK,AREA,"Crafting Tools#ko_02";
+		mes "[紅豹喬]";
+		mes "...那裡...";
+		next;
+		specialeffect EF_GUIDEDATTACK,AREA,"Crafting Tools#ko_03";
+		mes "[紅豹喬]";
+		mes "...以及其他任何地方。";
+		close;
+	case 2:
+		mes "[紅豹喬]";
+		mes "您沒有帶來足夠的材料？";
+		next;
+		specialeffect EF_GUIDEDATTACK,AREA,"Drawer#ko";
+		mes "[紅豹喬]";
+		mes "然後，我們將不得不去村莊參觀。在那兒嘗試 ^ff0000 drawer ^000000。它將帶您去村莊。";
+		close;
+	case 3:
+		mes "[紅豹喬]";
+		mes "嗯...猜想我期望太多嗎？讓我解釋一下。";
+		next;
+		mes "[紅豹喬]";
+		mes "您首先必須融化用於武器的礦石。獲得高純度金屬的最佳方法是融化相同的材料。";
+		next;
+		mes "[紅豹喬]";
+		mes "例如，鐵礦石，鐵和鋼具有相似的特性，因此您可以從中獲得高純度金屬。";
+		next;
+		mes "[紅豹喬]";
+		mes "一旦融化了高純度金屬，就將其倒入模具中以獲得武器的形狀，然後通過磨削和響射使其牢固。";
+		next;
+		mes "[紅豹喬]";
+		mes "順便說一句，您將通過徹底旋轉，研磨和響應獲得最佳效果。";
+		next;
+		mes "[紅豹喬]";
+		mes "我認為這足以讓您入門，您不覺得嗎？現在去研究該原型！ ！";
+		close;
+	case 4:
+		return;
+	}
+}
+
+job_ko,117,128,0	script	Drawer#ko	844,{
+	mes "抽屜上有某種設備。";
+	next;
+	if(select("停止:嘗試操作。") == 2) {
+		mes "浮躁的叮噹聲";
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+	close;
+}
+
+job_ko,131,124,0	script	Crafting Tools#ko_01	844,{
+	if (MaxWeight - Weight < 1000 || checkweight(1201,1) == 0) {
+		mes "太重了！請減輕體重。";  //custom translation
+		close;
+	}
+	if (isbegin_quest(5138) == 1 && isbegin_quest(5142) == 1 && isbegin_quest(5143) == 0 && isbegin_quest(5144) == 0 && isbegin_quest(5145) == 0) {
+		// fall through
+	} else {
+		mes "製作工具。";
+		mes "現在真的不需要它。";
+		close;
+	}
+	mes "創建武器的工具。";
+	next;
+
+	// Part 1: Melting Metal
+	// Input similar materials to proceed to next step.
+	mes "首先需要融化諸如鐵礦石之類的金屬來創建武器。";
+	next;
+	callsub L_CheckMaterials;
+	while(1) {
+		switch(select("熔化鐵礦石。 :熔化鐵。 :熔化鋼。 :熔化Phracon。 :熔化Emveretarcon。 :熔化粗糙的Oridecon。 :熔化粗糙的Elunium。 :停止。")) {
+			case 1: set .@item,1002; setarray .@val[0],1,0,0; break;  //Iron_Ore
+			case 2: set .@item, 998; setarray .@val[0],2,0,0; break;  //Iron
+			case 3: set .@item, 999; setarray .@val[0],3,0,0; break;  //Steel
+			case 4: set .@item,1010; setarray .@val[0],0,1,0; break;  //Phracon
+			case 5: set .@item,1011; setarray .@val[0],0,2,0; break;  //Emveretarcon
+			case 6: set .@item, 756; setarray .@val[0],0,3,0; break;  //Oridecon_Stone
+			case 7: set .@item, 757; setarray .@val[0],0,0,5; break;  //Elunium_Stone
+			case 8: close;
+		}
+		if (countitem(.@item)) {
+			delitem .@item,1;
+			if (.@val[0]) {			//Iron Ore, Iron, Steel
+				set .@ston_t01, .@ston_t01 + .@val[0];
+				if (.@ston_t02 > 0)
+					set .@ston_t02, .@ston_t02 - .@val[0];
+			} else if (.@val[1]) {	//Phracon, Emveretarcon, Rough Oridecon
+				set .@ston_t02, .@ston_t02 + .@val[1];
+				if (.@ston_t01 > 0)
+					set .@ston_t01, .@ston_t01 - .@val[1];
+			} else if (.@val[2]) {	//Rouch Elunium
+				if (.@ston_t01 > 0)
+					set .@ston_t01, .@ston_t01 - .@val[2];
+				if (.@ston_t02 > 0)
+					set .@ston_t02, .@ston_t02 - .@val[2];
+			}
+			specialeffect EF_DEMONSTRATION;
+			mes "融化" + getitemname(.@item) + " in high temperature.";
+			next;
+			if (.@ston_t01 > 49 || .@ston_t02 > 49)
+				break;
+		} else {
+			mes "沒有" + getitemname(.@item) + ".";
+			next;
+		}
+		callsub L_CheckMaterials;
+		mes "接下來，哪種金屬將融化？";
+		next;
+	}
+	set .@boll_01, ((.@ston_t01 > 49) ? .@ston_t01 : .@ston_t02);
+
+	// Part 2: Forging
+	// Grind and temper a weapon.
+	mes "現在，金屬被融化用於製造武器。";
+	next;
+	mes "接下來是通過將其倒入模具中來製造熔化的金屬公司。您將使用哪種黴菌形狀？";
+	next;
+	switch(select("匕首模具:手裡劍模具")) {
+	case 1:
+		set .@weapon_who,0;
+		mes "將融化的金屬倒入匕首模具中。";
+		break;
+	case 2:
+		set .@weapon_who,1;
+		mes "將融化的金屬倒入Shuriken模具中。";
+		break;
+	}
+	next;
+	progressbar "ffff00",3;
+	mes "看起來金屬正在形成。現在接下來呢？";
+	next;
+	set @job_ko_forge,0;
+	set @job_ko_lastaction,0;
+	callsub L_ForgeWeapon,":";
+	while(1) {
+		mes "現在接下來呢？";
+		next;
+		if (callsub(L_ForgeWeapon,":Final Touches") == 0)
+			break;
+	}
+	set .@boll_02, @job_ko_forge;
+	set @job_ko_forge,0;
+	set @job_ko_lastaction,0;
+
+	// Part 3: Create the Weapon
+	// Success rate based on previous two parts.
+	set .@boll_00, .@boll_01 + .@boll_02;
+	mes "開始使用磨石來磨練工具，以進行修飾。";
+	next;
+	progressbar "ffff00",3;
+	set .@success_pp, rand(1,100);
+	if (.@boll_00 < 100) {
+		if (.@success_pp == 77) set .@success,1;
+	} else {
+		if (.@success_pp != 44) set .@success,1;
+	}
+	if (.@success) {
+		specialeffect2 EF_PERFECTION;
+		erasequest 5142;
+		if (.@weapon_who == 0) {
+			setquest 5143;
+			getitem 13074,1; //Ninja_Cutter
+		} else {
+			setquest 5144;
+			getitem 13312,1; //Huuma_Job_Test
+		}
+		mes "該武器成功地創建了。";
+		next;
+		mes "讓我們把它帶到Red Leopard Joe。";
+		close;
+	} else {
+		specialeffect2 EF_SUI_EXPLOSION;
+		mes "武器在完成完成時被摧毀。";
+		next;
+		mes "創建武器時一定有一些東西。這件事非常遺憾，但是您必須重新開始。";
+		close;
+	}
+	end;
+
+L_CheckMaterials:
+	if (!countitem(1002) && !countitem(998) && !countitem(999) && !countitem(1010) && !countitem(1011) && !countitem(756) && !countitem(757)) {
+		mes "但是您沒有更多的金屬可以融化。獲得更多金屬後，讓我們再試一次。";
+		close;
+	}
+	return;
+
+L_ForgeWeapon:
+	set .@i, select("Grind the weapon:Temper the weapon" + getarg(0));
+	switch (.@i) {
+	case 1:
+		specialeffect2 EF_DETOXICATION;
+		mes "將武器紮根。";
+		break;
+	case 2:
+		specialeffect2 EF_REPAIRWEAPON;
+		mes "恢復了武器。";
+		break;
+	case 3:
+		return 0;
+	}
+	next;
+	if (@job_ko_lastaction == .@i)
+		set @job_ko_forge, @job_ko_forge + 1;
+	else
+		set @job_ko_forge, @job_ko_forge + 2;
+	set @job_ko_lastaction, .@i;
+	return 1;
+}
+job_ko,129,129,0	duplicate(Crafting Tools#ko_01)	Crafting Tools#ko_02	844
+job_ko,116,124,0	duplicate(Crafting Tools#ko_01)	Crafting Tools#ko_03	844
+
+job_ko,121,121,0	script	Refinement Tools#ko_01	844,{
+	if (isbegin_quest(5138) == 1 && isbegin_quest(5142) == 0 && (isbegin_quest(5143) == 1 || isbegin_quest(5144) == 1) && isbegin_quest(5145) == 1) {
+		disable_items;
+	} else {
+		mes "此工具可幫助您自動完善武器。但是，您現在不需要這個。";
+		close;
+	}
+	mes "您打開改進工具。";
+	mes "設備以令人愉悅的振動開始。";
+	next;
+	mes "看起來您可以立即使用該工具進行改進，因為它在其中包含大量的Elunium和Oridecon。";
+	next;
+	if(select("開始精煉:不開始精煉。") == 2) {
+		mes "您關閉了工具。";
+		close;
+	}
+	set .@part, EQI_HAND_R;
+	if (!getequipisequiped(.@part)) {
+		mes "嗡嗡聲";
+		mes "該工具發出警告嗶嗶聲。";
+		next;
+		mes "[紅豹喬]";
+		mes "如果沒有裝備的物品可以完善，該設備就無法正常工作。";
+		close;
+	} else {
+		set .@equip_id, getequipid(.@part);
+		set .@equip_refine, getequiprefinerycnt(.@part);
+		setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+		if (.@equip_id == 13074 || .@equip_id == 13312) {
+			mes "分析武器。";
+			next;
+		} else {
+			mes "[紅豹喬]";
+			mes "等等...這種武器不是定制的武器。";
+			next;
+			mes "[紅豹喬]";
+			mes "您為什麼不使用那些熱頭的鐵匠來完善它？";
+			close;
+		}
+	}
+	if (!getequipisenableref(.@part)) {
+		mes "嗡嗡聲";
+		mes "該工具發出警告嗶嗶聲。";
+		next;
+		mes "[紅豹喬]";
+		mes "該武器無法完善。你從哪裡得到的？";  //custom translation
+		close;
+	}
+	if (.@equip_refine >= 20) {
+		mes "嗡嗡聲";
+		mes "該工具發出警告嗶嗶聲。";
+		next;
+		mes "[紅豹喬]";
+		mes "該設備完美完美。自己保留！";  //custom translation
+		close;
+	}
+	if (getequippercentrefinery(.@part) < 100) {
+		mes "這是非常精緻的設備。你想繼續嗎？如果細化失敗，精煉技能會降低1。";
+		next;
+		if(select("繼續:停止。") == 2) {
+			mes "您關閉了工具。";
+			close;
+		}
+	} else {
+		mes "開始完善。";  //custom translation
+		next;
+	}
+	progressbar "ffff00",1;
+	set .@rand, rand(1,100);
+	if (.@equip_refine < 5) {			// 0>5 100%
+		set .@wlevel_up,1;
+	} else if (.@equip_refine == 5) {	// 5>6  40%
+		if (.@rand < 41) set .@wlevel_up,1;
+	} else if (.@equip_refine == 6) {	// 6>7  30%
+		if (.@rand < 31) set .@wlevel_up,1;
+	} else if (.@equip_refine == 7) {	// 7>8  20%
+		if (.@rand < 21) set .@wlevel_up,1;
+	} else if (.@equip_refine == 8) {	// 8>9  10%
+		if (.@rand < 11) set .@wlevel_up,1;
+	} else if (.@equip_refine == 9) {	// 9>10  5%
+		if (.@rand < 6) set .@wlevel_up,1;
+	} else {							// 10>20 2%
+		if (.@rand < 3) set .@wlevel_up,1;
+	}
+
+	// anti-hack
+	if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3]) || callfunc("F_IsEquipRefineHack", .@part, .@equip_refine))
+		close;
+
+	if (.@wlevel_up) {
+		successrefitem .@part;
+		mes "成功精煉了。";
+		mes "關閉了精煉工具。";
+		close;
+	} else {
+		downrefitem .@part;
+		mes "未能完善。";
+		mes "您的武器精煉技巧下降了1。";
+		mes "關閉了精煉工具。";
+		close;
+	}
+	end;
+}
+job_ko,127,121,0	duplicate(Refinement Tools#ko_01)	Refinement Tools#ko_02	844
+
+// Test of Battle
+//============================================================
+job_ko,148,46,4	script	Leader Gion#ko2	588,{
+	if (MaxWeight - Weight < 2000 || checkweight(1201,1) == 0) {
+		mes "[領袖吉恩]";
+		mes "您現在不需要那麼多的事情了！"; //custom translation
+		close;
+	}
+	if (job_kagero == 7) {
+		cutin "job_ko01",2;
+		mes "[領袖吉恩]";
+		mes "看起來您還沒有照顧目標。";
+		next;
+		mes "[領袖吉恩]";
+		mes "我再告訴你。目標是 ^ff0000clan Secret ^000000。";
+		next;
+		mes "[領袖吉恩]";
+		mes "當然，這條路將很困難，因此請繼續搜索！"; //custom translation
+		close2;
+		cutin "",255;
+		end;
+	} else if (job_kagero == 8) {
+		cutin "job_ko02",2;
+		mes "[領袖吉恩]";
+		mes "看起來您已經照顧了目標。唔。";
+		next;
+
+		//custom translations
+		if (ismounting()) {
+			mes "[領袖吉恩]";
+			mes "但是請從青蛙那裡下車。否則我將無法繼續！";
+			close2;
+			cutin "",255;
+			end;
+		}
+		if (BaseLevel < 99 || JobLevel < 70) {
+			mes "[領袖吉恩]";
+			mes "你是怎麼變得弱的？一旦您恢復了以前的水平，就會回來。";
+			close2;
+			cutin "",255;
+			end;
+		}
+		if (SkillPoint != 0) {
+			mes "[領袖吉恩]";
+			mes "使用所有技能點後，請回來。";
+			close2;
+			cutin "",255;
+			end;
+		}
+
+		mapannounce "job_ko","[Gion] Interrupting the Test of Battle.",bc_map;
+		cutin "job_ko04",2;
+		mes "[領袖吉恩]";
+		mes "戰鬥的考驗將推遲一段時間。不用擔心，因為這不會影響其他測試。";
+		next;
+		mapannounce "job_ko","[Gion] My Friend " + strcharinfo(0) + " made it to " + ((Sex == SEX_MALE)?"Kagerou":"Oboro") + " Path. Congratulations!!",bc_map;
+		mes "[領袖吉恩]";
+		mes "我的朋友" + strcharinfo(0) + " made it to " + ((Sex == SEX_MALE)?"Kagerou":"Oboro") + " Path. Congratulations!!";
+		next;
+		cutin "job_ko02",2;
+		mes "[領袖吉恩]";
+		mes "遇到一個正在穿越一條新道路的年輕人真是令人愉快。";
+		next;
+		mes "[某人的聲音]";
+		mes "等待一會兒，吉恩。";
+		next;
+		donpcevent "Kuuga Gai#ko2::OnEnable";
+		donpcevent "Red Leopard Joe#ko2::OnEnable";
+		cutin "job_ko04",2;
+		mes "[領袖吉恩]";
+		mes "對不起，我幾乎忘記了你們兩個。你有什麼要分享的嗎" + strcharinfo(0) + "?";
+		next;
+		cutin "",255;
+		mes "[與月亮的蓋]";
+		mes "嗯...尷尬...突然說話...";
+		next;
+		mes "[與月亮的蓋]";
+		mes strcharinfo(0) + "，您現在是我們氏族的驕傲成員。始終高高地頭和...";
+		next;
+		mes "[與月亮的蓋]";
+		mes "^777777（Gai的聲音淡出。）^000000。";
+		mes "對不起，當我們第一次見面時，我勒死了你。";
+		next;
+		donpcevent "Kuuga Gai#ko2::OnDisable";
+		mes "[紅豹喬]";
+		mes "puhahaha！蓋都在談論。我知道我對你來說比那個gai很有價值。";
+		next;
+		if (isbegin_quest(5143) == 2) {
+			set .@item,13075; //Kurenai
+			set .@weapon$,"dagger";
+		} else {
+			set .@item,13311; //Huuma_Shadow
+			set .@weapon$,"shuriken";
+		}
+		mes "[紅豹喬]";
+		mes "我在原型上做了一些工作" + .@weapon$ + " you made.";
+		next;
+		mes "[紅豹喬]";
+		mes getitemname(.@item) + "現在，我完成了最後的觸摸後，閃閃發光的光芒很漂亮。";
+		next;
+		mes "[紅豹喬]";
+		mes "我自己命名您的武器，但我知道您會喜歡這個名字。";
+		next;
+		mes "[紅豹喬]";
+		mes "領袖吉恩，請繼續。";
+		next;
+		cutin "job_ko01",2;
+		donpcevent "Red Leopard Joe#ko2::OnDisable";
+		mes "[領袖吉恩]";
+		mes "我沒有太多要補充的，因為Gai和Joe說了一切。";
+		next;
+		mes "[領袖吉恩]";
+		mes "很抱歉，所有這些測試的環境對我們的後期來說可能會更好。";
+		next;
+		mes "[領袖吉恩]";
+		mes "您只需要期待而永遠不會回頭。";
+		next;
+		for (set .@i,5131; .@i<=5146; set .@i,.@i+1)
+			if (isbegin_quest(.@i)) erasequest .@i;
+		set job_kagero,9;
+		getnameditem .@item,strcharinfo(0);
+		jobchange (Sex == SEX_MALE)?Job_Kagerou:Job_Oboro;
+		donpcevent "Summon Target#ko::OnEnable";
+		mes "[領袖吉恩]";
+		mes "我希望Kagerou，Dancing Sun和Oboro的祝福，Misty Moonlight將與您一起前進。";
+		close2;
+		warp "que_ng",21,71;
+		end;
+	} else if (job_kagero == 9) {
+		cutin "job_ko01",2;
+		mes "[領袖吉恩]";
+		mes "我希望Kagerou，Dancing Sun和Oboro的祝福，Misty Moonlight將與您一起前進。";
+		close2;
+		warp "que_ng",21,71;
+		end;
+	} else {
+		cutin "job_ko01",2;
+		mes "[領袖吉恩]";
+		mes "你不應該在這裡。請離開！"; //custom translation
+		close2;
+		warp "amatsu",147,136;
+		end;
+	}
+}
+
+job_ko,151,47,4	script	Kuuga Gai#ko2	730,{
+	mes "[與月亮的蓋]";
+	mes "恭喜您選擇了發展之路！";
+	close;
+OnInit:
+OnDisable:
+	disablenpc "Kuuga Gai#ko2";
+	end;
+OnEnable:
+	enablenpc "Kuuga Gai#ko2";
+	end;
+}
+
+job_ko,145,47,6	script	Red Leopard Joe#ko2	730,{
+	mes "[紅豹喬]";
+	mes "您還沒有找到目標嗎？繼續搜索它。";
+	close;
+OnInit:
+OnDisable:
+	disablenpc "Red Leopard Joe#ko2";
+	end;
+OnEnable:
+	enablenpc "Red Leopard Joe#ko2";
+	end;
+}
+
+job_ko,1,1,4	script	Summon Target#ko	844,{
+	end;
+OnInit:
+OnTimer180000:
+	donpcevent "Summon Target#ko::OnEnable";
+	end;
+OnEnable:
+	stopnpctimer;
+	switch (rand(1,7)) {
+		case 1: set .@mob,1002; break;
+		case 2: set .@mob,1031; break;
+		case 3: set .@mob,1113; break;
+		case 4: set .@mob,1063; break;
+		case 5: set .@mob,1010; break;
+		case 6: set .@mob,1049; break;
+		case 7: set .@mob,1050; break;
+	}
+	areamonster "job_ko",120,30,160,70,"Clan Secret",.@mob,1,"Summon Target#ko::OnMyMobDead";
+	end;
+OnDisable:
+	initnpctimer;
+	end;
+OnMyMobDead:
+	if (mobcount("job_ko","Summon Target#ko::OnMyMobDead") < 1) {
+		if (job_kagero == 7) {
+			donpcevent "Summon Target#ko::OnDisable";
+			set job_kagero,8;
+		} else
+			donpcevent "Summon Target#ko::OnEnable";
+	}
+	end;
+}
+
+job_ko,1,2,4	script	Summon Fake#ko	844,{
+	end;
+OnInit:
+	donpcevent "Summon Fake#ko::OnEnable";
+	end;
+OnEnable:
+	areamonster "job_ko",120,30,160,70,"Clan's Legacy",1002,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Memory",1002,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Memory",1002,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Clan's Mistake",1031,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Mistake",1031,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Mistake",1031,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Clan's Memory",1113,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Past",1113,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Past",1113,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Clan's Legacy",1063,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Legacy",1063,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Legacy",1063,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Clan's Mistake",1010,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Memory",1010,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Memory",1010,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Clan's Past",1049,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Mistake",1049,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Mistake",1049,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Clan's Memory",1050,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Oboro's Past",1050,5,"Summon Fake#ko::OnMyMobDead";
+	areamonster "job_ko",120,30,160,70,"Kagerou's Past",1050,5,"Summon Fake#ko::OnMyMobDead";
+	end;
+OnDisable:
+	killmonster "job_ko","Summon Fake#ko::OnMyMobDead";
+	end;
+OnMyMobDead:
+	if (mobcount("job_ko","Summon Fake#ko::OnMyMobDead") < 100) {
+		donpcevent "Summon Fake#ko::OnDisable";
+		donpcevent "Summon Fake#ko::OnEnable";
+		warp "job_ko",16,113;
+	}
+	end;
+}
+
+// GM Control Panel (custom translations)
+//============================================================
+job_ko,3,1,4	script	Battle Test Control#ko	588,{
+	callfunc "F_GM_NPC";
+	if (callfunc("F_GM_NPC",1854,0) == 1) {
+		mes "這是戰鬥測試控制NPC。";
+		next;
+	} else {
+		mes "密碼不正確。";
+		close;
+	}
+	switch(select("召喚目標:召喚目標禁用:召喚假冒:召喚假冒禁用")) {
+	case 1:
+		donpcevent "Summon Target#ko::OnEnable";
+		mes "召喚目標激活。";
+		break;
+	case 2:
+		donpcevent "Summon Target#ko::OnDisable";
+		mes "召喚目標禁用。";
+		break;
+	case 3:
+		donpcevent "Summon Fake#ko::OnEnable";
+		mes "召喚假的偽造。";
+		break;
+	case 4:
+		donpcevent "Summon Fake#ko::OnDisable";
+		mes "召喚假殘疾。";
+		break;
+	}
+	next;
+	mes "控制已經完成。";
+	close;
+}
+
+job_ko,4,1,4	script	Guide#ko_helper	588,{
+	callfunc "F_GM_NPC";
+	if (callfunc("F_GM_NPC",1854,0) == 1) {
+		mes "這是Kagerou and Oboro Job Change助理NPC。";
+		next;
+	} else {
+		mes "密碼不正確。";
+		close;
+	}
+	mes "我可以解決工作變更任務中的任何問題。";
+	next;
+	switch(select("當前狀態:測試集:預傳輸:初始化")) {
+	case 1:
+		mes "可變狀態（當前/最大值）";
+		mes "b_wersing 第一" + job_kagero + "/9)";
+		mes "b_pp ¼" + job_kagero_lp + "/100)";
+		next;
+		mes "任務狀態（當前/最大）";
+		mes "5131（" + isbegin_quest(5131) + "/1)";
+		mes "5132（" + isbegin_quest(5132) + "/1)";
+		mes "5133（" + isbegin_quest(5133) + "/1)";
+		mes "5134（" + isbegin_quest(5134) + "/1)";
+		mes "5135（" + isbegin_quest(5135) + "/1)";
+		mes "5136（" + isbegin_quest(5136) + "/2)";
+		mes "5139（" + isbegin_quest(5139) + "/1)";
+		mes "5137（" + isbegin_quest(5137) + "/2)";
+		mes "5140（" + isbegin_quest(5140) + "/1)";
+		mes "5141（" + checkquest(5141,PLAYTIME) + "/1)";
+		mes "5138（" + isbegin_quest(5138) + "/2)";
+		mes "5142（" + isbegin_quest(5142) + "/1)";
+		mes "5143（" + isbegin_quest(5143) + "/2)";
+		mes "5144（" + isbegin_quest(5144) + "/2)";
+		mes "5145（" + isbegin_quest(5145) + "/1)";
+		mes "5146（" + isbegin_quest(5146) + "/1)";
+		close;
+	case 2:
+		mes "您想將哪個測試設置為完成？";
+		mes "在更換工作之前，必須完成三個測試。如果您想達到工作變更狀態，請直接從上一個菜單中選擇[預先傳輸]！";
+		next;
+		switch(select("知識完整測試:生存完整測試:武器裝備完整測試")) {
+		case 1:
+			set job_kagero,5;
+			setquest 5136;
+			completequest 5136;
+			mes "知識測試已設置為完整。我希望您已經完成了初始化。";
+			break;
+		case 2:
+			set job_kagero,5;
+			set job_kagero_lp,0;
+			setquest 5137;
+			completequest 5137;
+			mes "生存的測試已設置為完整。我希望您已經完成了初始化。";
+			break;
+		case 3:
+			set job_kagero,5;
+			setquest 5138;
+			completequest 5138;
+			mes "武器的測試已設置為完整。我希望您已經完成了初始化。";
+			break;
+		}
+		close;
+	case 3:
+		mes "我會將您的任務狀態更改為預先轉移，但是在此之前...";
+		next;
+		mes "請選擇武器。";
+		next;
+		switch(select("匕首:手裡劍")) {
+			case 1: set .@quest,5143; break;
+			case 2: set .@quest,5144; break;
+		}
+		setquest 5136;
+		completequest 5136;
+		setquest 5137;
+		completequest 5137;
+		setquest 5138;
+		completequest 5138;
+		setquest .@quest;
+		completequest .@quest;
+		setquest 5146;
+		set job_kagero,8;
+		mes "我設置了轉移狀態。祝你好運！ ！";
+		close;
+	case 4:
+		set job_kagero,0;
+		set job_kagero_lp,0;
+		for (set .@i,5131; .@i<=5146; set .@i,.@i+1)
+			if (isbegin_quest(.@i)) erasequest .@i;
+		mes "初始化的任務已完成。您可以通過[當前狀態]選項確認這一點！";
+		close;
+	}
+	end;
+}

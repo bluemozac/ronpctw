@@ -1,0 +1,150 @@
+﻿//===== rAthena Script ======================================= 
+//= Gym Pass Cash Item NPC
+//===== By: ================================================== 
+//= Kisuka
+//===== Current Version: ===================================== 
+//= 1.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Exchange Gym Passes to learn "Enlarge Weight Limit"
+//= iRO NPC situated in Payon beside Kafra Shop.
+//===== Additional Comments: ================================= 
+//= 1.0 First version [L0ne_W0lf]
+//= 1.1 Fixed the NPC saying you "00" [L0ne_W0lf]
+//= 1.2 Replaced effect numerics with constants. [Samuray22]
+//= 1.3 Updated script, and fixed potential errors. [L0ne_W0lf]
+//============================================================ 
+
+payon,173,141,4	script	Ripped Cabus#GymPass	899,{
+	mes "[撕裂]";
+	mes "嘿。人們不是";
+	mes "像他們一樣活躍";
+	mes "曾經是。即使你打架";
+	mes "為生，你的身體可能";
+	mes "在某些人中變得虛弱";
+	mes "區域。知道我的意思嗎？";
+	next;
+	mes "[撕裂]";
+	mes "嘿，和我一起訓練，我可以";
+	mes "確保你能";
+	mes "舉起和攜帶更多";
+	mes "東西。只要給你";
+	mes "^ff0000健身房通行證^000000，";
+	mes "我們會很好。";
+	next;
+	mes "[撕裂]";
+	mes "但是不要太興奮：";
+	mes "不管多少培訓";
+	mes "我帶你完成，你可以";
+	mes "過度了。你聽說過";
+	mes "有人太拋光了嗎？";
+	mes "那是因為他們死了。看？";
+	next;
+	mes "[撕裂]";
+	mes "我會說這是安全的";
+	mes "讓您認真訓練";
+	mes "和我一起增加你的";
+	mes "物品承載能力 ^ff000010 times ^000000。";
+	mes "所以...你準備好出汗了嗎？";
+	next;
+	switch(select("是:否:嗯，我的鍛煉逐漸消失了。")) {
+	case 1:
+		if (gympassmemory < 10) {
+			set .@add_carry,gympassmemory + 1;
+			set .@remain_carry,10 - .@add_carry;
+			if (countitem(7776) > 0) {
+				mes "[撕裂]";
+				mes "哦，太棒了，我見到你";
+				mes "帶來了您的健身房通行證。";
+				mes "好吧，只是做我做的事，";
+				mes "並嘗試感覺到燒傷。";
+				mes "準備好？讓我們這樣做。";
+				next;
+				specialeffect2 EF_EARTHSPIKE;
+				next;
+				specialeffect2 EF_DEVIL;
+				next;
+				specialeffect2 EF_COIN;
+				next;
+				specialeffect2 EF_SIGHTRASHER;
+				next;
+				mes "[撕裂]";
+				mes "在那裡，你應該能夠";
+				mes "隨身攜帶更多東西。";
+				mes "讓我們看看，我們可以增加";
+				mes "您的物品承載能力";
+				mes "^ff00000" + .@remain_carry + "^000000 more times if we continue";
+				mes "這樣一起訓練。";
+				delitem 7776,1; //Max_Weight_Up_Scroll
+				set gympassmemory,.@add_carry;
+				skill "ALL_INCCARRY",.@add_carry,SKILL_PERM_GRANT;
+				close;
+			}
+			else {
+				mes "[撕裂]";
+				mes "杜德，我告訴你什麼？";
+				mes "你必須帶我";
+				mes "^ff0000gym Pass^000000如果您想";
+				mes "鍛煉並建立您的";
+				mes "攜帶肌肉的物品。";
+				close;
+			}
+		}
+		else {
+			mes "[撕裂]";
+			mes "杜德，我認為我們不能";
+			mes "建立您的物品攜帶";
+			mes "肌肉不止於此。";
+			mes "這對您來說太危險了";
+			mes "如果我們甚至嘗試過，身體！來吧，";
+			mes "我告訴過您的限制。";
+			close;
+		}
+	case 2:
+		mes "[撕裂]";
+		mes "噢，太糟糕了。";
+		mes "好吧，如果你回來";
+		mes "改變主意。告訴";
+		mes "你關於我的朋友：";
+		mes "如果他們很放鬆，我會幫忙";
+		mes "使它們保持身體狀態。";
+		close;
+	case 3:
+		if (gympassmemory > 0) {
+			mes "[撕裂]";
+			mes "發生了什麼？";
+			mes "你讓你的物品攜帶";
+			mes "肌肉只是萎縮？幸運的";
+			mes "對你來說，有這樣的事情";
+			mes "作為肌肉記憶。不接受";
+			mes "只要建立返回...";
+			next;
+			specialeffect2 EF_EARTHSPIKE;
+			next;
+			specialeffect2 EF_DEVIL;
+			next;
+			specialeffect2 EF_COIN;
+			next;
+			specialeffect2 EF_SIGHTRASHER;
+			next;
+			mes "[撕裂]";
+			mes "那呢？";
+			mes "您的物品攜帶";
+			mes "肌肉恢復了";
+			mes "就是這樣！盡量不要";
+			mes "再次出去，好嗎？";
+			skill "ALL_INCCARRY",gympassmemory,SKILL_PERM_GRANT;
+			close;
+		}
+		else {
+			mes "[撕裂]";
+			mes "嗯...";
+			mes "我們沒有鍛煉";
+			mes "一起。";
+			mes "我敢肯定。";
+			close;
+		}
+	}
+}

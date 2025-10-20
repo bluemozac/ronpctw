@@ -1,0 +1,252 @@
+﻿//===== rAthena Script =======================================
+//= Buying Shop Scripts
+//===== By: ==================================================
+//= Kisuka
+//===== Current Version: =====================================
+//= 1.1b
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Buying Shop licenses.
+//===== Additional Comments: =================================
+//= 1.0 First version. [Kisuka]
+//= 1.1 Added Catalog Magician. [Euphy]
+//= 1.1a Moved Catalog Magician to Renewal path. [Euphy]
+//= 1.1b Added missing weight checks. [Euphy]
+//============================================================ 
+
+// Black Marketeer (Buy Licenses - Non-Merchant Classes) :: qskill_buy_store
+//============================================================ 
+que_job01,68,84,1	script	Black Marketeer#Buying	881,{
+	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 2400) {
+		mes "[先生。 JASS]";
+		mes "即使與像我這樣的人相比，您也太貪婪了！";
+		mes "你為什麼不先將書包減輕？";
+		close;
+	}
+	if (getskilllv("ALL_BUYING_STORE") == 1) {
+		mes "[先生。 JASS]";
+		mes "嘿，您已經與休簽了合同。";
+		mes "我沒有任何生意。";
+		close;
+	}
+	mes "[先生。 JASS]";
+	mes "您必須很難找到我。";
+	mes "你想要什麼？";
+	next;
+	switch(select("批量買家商店許可證:你是誰?:沒事，沒事!")) {
+	case 1:
+		mes "[先生。 JASS]";
+		mes "我就知道！";
+		mes "當然，我可以為您做。";
+		mes "我的看起來就像商人從那個混蛋休先生那裡得到的真實的人！";
+		next;
+		mes "[先生。 JASS]";
+		mes "我的執照更好“因為您不需要ta”學習任何技能。";
+		mes "你想要幾個？";
+		next;
+		mes "[先生。 JASS]";
+		mes "只是您知道，我只能一次少量地製作它們。";
+		mes "每個人的價格為500 Zeny。";
+		next;
+		while(1) {
+			input .@input;
+			mes "[先生。 JASS]";
+			if (.@input == 0) {
+				mes "您不需要這些許可證嗎？";
+				close;
+			} else if (.@input > 10) {
+				mes "我知道，我只能最多彌補10個。";
+				next;
+			} else {
+				mes "它將花費"+(.@input*500)+" zeny.";
+				if (Zeny < (.@input*500)) {
+					mes "但是你沒有足夠的錢。";
+					next;
+					mes "[先生。 JASS]";
+					mes "您不知道業務的基礎知識嗎？一切都有代價。";
+					mes "如果您想要什麼，您必須為此付出代價。";
+				} else {
+					mes "哈...哈哈哈！";
+					mes "休先生，我將接管您的許可業務。你會看到的！";
+					mes "*咯咯笑*";
+					getitem 12548,.@input; //Buy_Market_Permit2
+					set Zeny,Zeny-(.@input*500);
+				}
+				close;
+			}
+		}
+	case 2:
+		mes "[先生。 JASS]";
+		mes "很久以前，我離開了家鄉。";
+		mes "問我是誰是毫無意義的，因為我現在剩下的就是我的仇恨。";
+		next;
+		mes "[先生。 JASS]";
+		mes "...";
+		mes "休是一個腐敗的商人，沒有商業道德感。";
+		mes "我人生中的唯一目的是摧毀休。";
+		next;
+		mes "[先生。 JASS]";
+		mes "噢，我喝了太多...（*hic*）";
+		mes "那隻是阿洛霍爾說話。";
+		mes "請忘記我說的一切。";
+		close;
+	case 3:
+		mes "[先生。 JASS]";
+		mes "好吧，好吧！你不必大喊大叫。";
+		mes "如果您沒有和我有生意，請別管我。";
+		close;
+	}
+}
+
+// Purchasing Team (Learn Skill - Merchant Classes)
+//============================================================ 
+alberta_in,58,52,4	script	Purchasing Team#Buying	59,{
+	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 2400) {
+		mes "- 您無法交談或執行任務，因為您攜帶了太多項目。 -";
+		close;
+	}
+	mes "[先生。休]";
+	if (BaseClass == Job_Merchant && getskilllv("MC_VENDING") >= 1) {
+		if (getskilllv("ALL_BUYING_STORE") == 1) {
+			mes "我是購買團隊的休。";
+			mes "今天我該如何幫助您？";
+			next;
+		if(select("購買批量買家商店許可證:離開") == 2) {
+				mes "[先生。休]";
+				mes "請隨時問我是否需要任何散裝買家商店許可證。";
+				mes "再來~";
+				close;
+			}
+			mes "[先生。休]";
+			mes "每個散裝買家商店許可證都是200個Zeny，您可以一次最多購買50個。";
+			mes "您需要多少個許可證？";
+			next;
+			while(1) {
+				input .@input;
+				mes "[先生。休]";
+				if (.@input == 0) {
+					mes "您已經取消了交易。";
+					mes "祝你有美好的一天。";
+					close;
+				} else if (.@input > 50) {
+					mes "請輸入50或以下的值。";
+					next;
+				} else {
+					mes "它將花費"+(.@input*200)+" zeny for "+.@input+" licenses.";
+					if (Zeny < (.@input*200)) {
+						mes "但是您似乎沒有足夠的錢。";
+					} else {
+						mes "謝謝您的讚助。";
+						getitem 6377,.@input; //Buy_Market_Permit
+						set Zeny,Zeny-(.@input*200);
+					}
+					close;
+				}
+			}
+		} else {
+			mes "我是來自艾伯塔省商人協會採購團隊的Hugh。";
+			mes "你是...";
+			next;
+			mes "[先生。休]";
+			mes "你可知道？我們的公會已頒發許可證，允許個人從他人那裡購買商品。";
+			next;
+		select("我從未遇到購買物品的問題...");
+			mes "[先生。休]";
+			mes "您是對的，但請考慮一下：";
+			mes "您不是很難批量購買嗎？";
+			mes "您必須找到並與每個擁有所需物品的人交談。";
+			mes "不便，不是嗎？";
+			next;
+			mes "[先生。休]";
+			mes "由於批量購買對美國商人來說是一個重要的問題";
+			mes "根據我在購買購買的10年經驗，我為我們的公會提出了創新計劃。";
+			next;
+			mes "[先生。休]";
+			mes "'讓個人開放";
+			mes "散裝的買家商店！";
+			mes "那是我提議的標題。";
+			mes "您會看到，當您閱讀時...";
+			next;
+			mes "[先生。休]";
+			mes "...";
+			mes "...（Hugh Yammers先生不斷詳細介紹。）";
+			next;
+		select("好吧，你的重點是什麼?");
+			mes "[先生。休]";
+			mes "哦是的。總之，";
+			mes "您可以通過自動售貨機大量購買某些物品。";
+			next;
+			mes "[先生。休]";
+			mes "為了開設批量買方商店，您需要從商業協會頒發的許可證。";
+			next;
+			mes "[先生。休]";
+			mes "每次開店時，您都需要它。我們預計通過這種新的許可將大幅提高利潤。";
+			next;
+			mes "[先生。休]";
+			mes "這就是我的提議的重點！";
+			mes "我們的總統很高興得知我們將賺大錢！";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "請指出這一點！";
+			next;
+			mes "[先生。休]";
+			mes "不要那麼急躁，好嗎？";
+			mes "我的意思是，如果您學會了自動售貨機，我們可以讓您開設批量買家商店。";
+			next;
+			mes "[先生。休]";
+			mes "當然，我們將10,000 Zeny作為一次性註冊費。";
+			mes "每次開設商店時，您都需要 ^4A4AFBULK買家商店許可證 ^000000。";
+			next;
+			mes "[先生。休]";
+			mes "說，您想現在註冊嗎？";
+			mes "如果您這樣做，我將教您如何開設散裝買家商店。";
+			next;
+		if(select("學習如何開設批量買家商店:取消") == 2) {
+				mes "[先生。休]";
+				mes "伙計，這很令人失望！";
+				mes "使用此批量買家選項可以以多種方式使您的業務受益，但這是您的電話。";
+				mes "我總是開放諮詢！";
+				close;
+			}
+			mes "[先生。休]";
+			if (Zeny < 10000) {
+				mes "註冊費為10,000 Zeny。";
+				mes "請先準備好費用。";
+				close;
+			} else {
+				mes "你做出了一個很好的決定。";
+				mes "請給我註冊費，然後在這裡簽名。";
+				next;
+				input .@name$;
+				mes "[先生。休]";
+				mes .@name$+"...";
+				mes "我喜歡你的筆跡。";
+				mes "好的，您現在被批准開設散裝買家商店。";
+				set Zeny,Zeny-10000;
+				getitem 6377,5; //Buy_Stall_Permit
+				skill "ALL_BUYING_STORE",1,SKILL_PERM_GRANT;
+				next;
+				mes "[先生。休]";
+				mes "當前，只有普通項目 ^8C2121EXCEPT ^000000設備，某些藥水和手工製作的物品可以批量購買，但根據您的使用方式，這仍然對您非常有益。";
+				next;
+				mes "[先生。休]";
+				mes "哦，您至少需要要在庫存中購買的物品之一，因為您必須通過商店向其他物品展示。";
+				next;
+				mes "[先生。休]";
+				mes "現在，您的技能應該在您的技能窗口中註冊。如果看不到它，則可能必須最大程度地減少您的技能列表並檢查第三作業選項卡。";
+				next;
+				mes "[先生。休]";
+				mes "我已經為您提供了5個散裝買家商店許可證。";
+				mes "享受購物！";
+				close;
+			}
+		}
+	}
+	mes "我是來自艾伯塔省商人協會採購團隊的Hugh。";
+	mes "我很想聊天，但目前我太忙了。";
+	next;
+	mes "[先生。休]";
+	mes "我的時間僅專門用於商人行業的客戶。";
+	close;
+}

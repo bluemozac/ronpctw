@@ -1,0 +1,487 @@
+﻿//===== rAthena Script =======================================
+//= Swordsman Skills Quests
+//===== By: ==================================================
+//= kobra_k88
+//===== Current Version: =====================================
+//= 1.9
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Quests for skills: Fatal Blow, Mobile HP Recovery,
+//  Auto-Berserk
+//===== Additional Comments: =================================
+//= 1.6 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//= 1.7 Updated to latest available official file. [Masao]
+//= 1.8 Fixed JobLevel requirements. [Euphy]
+//= 1.9 Moved Izlude NPC to pre-re/re paths. [Euphy]
+//=     Updated "Knight De Thomas" NPC to latest version.
+//============================================================
+
+-	script	::KnightDeThomas	98,4,4,{
+	if ((BaseClass == Job_Swordman) && (JobLevel >= 35 || (BaseJob == Job_Knight || BaseJob == Job_Crusader))) {
+		if (getskilllv("SM_MOVINGRECOVERY") == 1) {
+			mes "[來自托馬斯]";
+			mes "哦，是你嗎？";
+			mes "長時間看不到！";
+			mes "您看起來比以前更健康。";
+			mes "哈哈哈！";
+			mes "小心！再次見！";
+			close;
+		} else if (countitem(713) >= 200 && countitem(1058) >= 1) {
+			mes "[來自托馬斯]";
+			mes "歡迎回來...";
+			mes "您準備好學習身體嗎？";
+			next;
+			switch (select("是的。:不，我還沒準備好。")) {
+			case 1:
+				mes "[來自托馬斯]";
+				mes "讓我們來看看.....";
+				next;
+				mes "[來自托馬斯]";
+				mes "好的！我現在要教你...";
+				mes "...身體的技巧！";
+				next;
+				delitem 713,200; //Empty_Bottle
+				delitem 1058,1; //Wing_Of_Moth
+				skill "SM_MOVINGRECOVERY",1,SKILL_PERM;
+				mes "[來自托馬斯]";
+				mes "你去！";
+				mes "自己嘗試。";
+				mes "但是不要過度。";
+				next;
+				mes "[來自托馬斯]";
+				mes "哦，是的，我不需要你";
+				mes "盔甲，因此您可以保留它。";
+				mes "現在祝你好運！";
+				close;
+			case 2:
+				mes "[來自托馬斯]";
+				mes "是這樣嗎？";
+				mes "然後在準備好時來。";
+				close;
+			}
+		} else {
+			mes "[來自托馬斯]";
+			mes "嗯...他是劍客...";
+			mes "你知道我是托馬斯·卡洛斯（De Thomas Carlos），對嗎？";
+			mes "Prontera的第三圈騎士。";
+			mes "作者:托馬斯·卡洛斯！";
+			next;
+			mes "[來自托馬斯]";
+
+			// bug: official script always states that job level is too low
+			//mes "等一下，您的工作級別不高於^00880035^000000！";
+			//mes "到時候就回來吧。";
+
+			// custom: old dialog
+			mes "您沒有我要的所有物品。";
+			next;
+			mes "[來自托馬斯]";
+			mes "請記住，我需要 ^008800200空瓶 ^000000，您的裝甲和A ^008800Moth Wing ^000000。當您擁有一切時，請回來。";
+			close;
+		}
+	} else {
+		mes "[來自托馬斯]";
+		mes "我叫de Thomas Carlos。";
+		mes "Prontera的第三圈騎士。";
+		mes "這些天我有一定的職責。";
+		mes "EHEM！我需要說更多。";
+		close;
+	}
+	end;
+
+OnTouch:
+	if ((BaseClass == Job_Swordman) && (JobLevel >= 35 || (BaseJob == Job_Knight || BaseJob == Job_Crusader))) {
+		mes "[來自托馬斯]";
+		mes "哦，不！你一定受傷了！你還好嗎？";
+		mes "您必須努力遭受如此嚴重的傷害。";
+		mes "成為劍客必須承擔很多責任和犧牲。";
+		next;
+		mes "[來自托馬斯]";
+		if (Sex == SEX_MALE)
+			mes "對於這些劍客和騎士來說，有一項很棒的技能。";
+		else
+			mes "對於這些劍術和騎士來說，有一位出色的技能小姐。";
+		mes "我向您介紹 - 搬家時HP恢復！";
+		mes "身體移動是一項出色的技能";
+		mes "這使您能夠恢復力量（HP）";
+		mes "當你搬家時！";
+		next;
+		mes "[來自托馬斯]";
+		mes "它目前正在開發中";
+		mes "因此，它可能不會恢復太多，";
+		mes "但這會有所幫助。";
+		mes "你怎麼認為？您想學習這項技能嗎？";
+		next;
+			switch (select("多棒的技能！我想學習它！:不，謝謝。")) {
+		case 1:
+			mes "[來自托馬斯]";
+			mes "很好。我會告訴您學習此技能需要什麼。";
+			mes "首先，您的工作水平必須高於 ^00880035 ^000000。";
+			mes "您還需要 ^008800200空瓶 ^000000。";
+			mes "為什麼？因為這證明了您施加了許多藥水的鬥爭。";
+			next;
+			mes "[來自托馬斯]";
+			mes "另外，您在戰鬥中使用的盔甲。";
+			mes "這也是經驗豐富的戰鬥機的證明。";
+			mes "對於盔甲...您的盔甲是完美的！";
+			mes "帶上盔甲！";
+			mes "最後但並非最不重要的一點...帶我一個 ^008800的機翼 ^000000。";
+			next;
+			select("呃？你也需要那個嗎？");
+			mes "[來自托馬斯]";
+			mes "不是真的..我真的不需要它。";
+			mes "只是我的侄女在暑假期間已經開始了一個假期任務。";
+			mes "當然！我自己得到它會容易得多。";
+			mes "但是我必須一直在這里工作，所以我沒有時間出去得到它。";
+			next;
+			mes "[來自托馬斯]";
+			mes "您不認為我每天不得不呆在一個地方，無法出門是可憐的嗎？";
+			mes "拜託，找到我一個...*sniffsniff*";
+			mes "如果你不...";
+			close;
+		case 2:
+			mes "[來自托馬斯]";
+			mes "...";
+			close;
+		}
+	}
+	end;
+}
+
+prt_in,75,88,5	script	Leon Von Frich	85,3,3,{
+	if ((BaseClass == Job_Swordman) && (JobLevel >= 25 || (BaseJob == Job_Knight || BaseJob == Job_Crusader))) {
+		if (getskilllv("SM_FATALBLOW") == 1) {
+			mes "[萊昂]";
+			mes "嗯？";
+			mes "我想知道那是誰！";
+			mes "為什麼是您以前的！";
+			mes "很高興再次見到你！你好嗎？";
+			mes "當心！哈哈哈！";
+			close;
+		}
+		else if ((countitem(1752) > 9) && (countitem(1751) > 9) && (countitem(532) > 0) && (countitem(962) > 29) && (countitem(526) > 4)) {
+			mes "[萊昂]";
+			mes "哦！你已經準備好了";
+			mes "學習致命的打擊！";
+			mes "那怎麼樣？您想學習嗎？";
+			next;
+			switch (select("是的！:不，我不想學。:但是，什麼是致命一擊？")) {
+			case 1:
+				mes "[萊昂]";
+				mes "好的，讓我們開始！";
+				next;
+				delitem 1752,10; //Fire_Arrow
+				delitem 1751,10; //Silver_Arrow
+				delitem 532,1; //Banana_Juice
+				delitem 962,30; //Tentacle
+				delitem 526,5; //Royal_Jelly
+				skill "SM_FATALBLOW",1,SKILL_PERM;
+				mes "[萊昂]";
+				mes "成功！";
+				mes "去利用您的新技能發揮其全部潛力。";
+				mes "哈哈哈哈哈哈哈！";
+				close;
+			case 2:
+				mes "[萊昂]";
+				mes "我不喜歡你！";
+				close;
+			case 3:
+				mes "[萊昂]";
+				mes "我最近發展了這項技能。";
+				mes "當您使用bash時，取決於";
+				mes "在您的水平上，您可以昏迷";
+				mes "你的對手。 。";
+				mes "你學到了狂歡，不是嗎？";
+				next;
+				mes "[萊昂]";
+				mes "你怎麼認為。 Stun是";
+				mes "一種非常有用的技術。您不覺得這項技能很有吸引力嗎？";
+				mes "當您認為自己這樣做時，就回到我身邊！";
+				close;
+			}
+		}
+		mes "[萊昂]";
+		mes "哦！年輕而堅強的劍客！";
+		next;
+		mes "[萊昂]";
+		mes "哇，看到你的手臂，你必須喜歡使用bash嗎？";
+		next;
+		select("呃，我……只是……");
+		mes "[萊昂]";
+		if (Sex == SEX_FEMALE) {
+			mes "無需感到驚訝。";
+			mes "如果您使用劍，當然，您應該有一隻好的手臂！";
+		}
+		else {
+			mes "沒有什麼可尷尬的。";
+			mes "即使您是女性，您也需要強壯的手臂來使用劍！";
+		}
+		mes "在只有無用和懶惰的年輕人時期，";
+		mes "我很高興我遇到了像你這樣堅強的人。";
+		next;
+		mes "[萊昂]";
+		mes "是的，我想給像您這樣的劍客提供禮物。";
+		next;
+			switch (select("什麼禮物？:沒關係。")) {
+		case 1:
+			mes "[萊昂]";
+			mes "哈哈沒什麼特別的，而是一種攻擊重要點的技巧！";
+			next;
+		case 2:
+			mes "[萊昂]";
+			mes "...哈哈沒什麼特別的，只是針對重要地點的技能！";
+			next;
+		}
+		mes "[萊昂]";
+		mes "這是我最近開發的技能。";
+		mes "當您使用bash時，取決於";
+		mes "您的水平，您的對手可以";
+		mes "被驚呆了。";
+		mes "你學到了狂歡，不是嗎？";
+		next;
+		mes "[萊昂]";
+		mes "當我像你這樣的劍客時，";
+		mes "我曾經喜歡使用bash。每次，我都想";
+		mes "- 也許攻擊會更強大";
+		mes "如果我同時使用眩暈。";
+		next;
+		mes "[萊昂]";
+		mes "我從戰場上撤回了研究";
+		mes "最後，我發展了這項出色的新技能！";
+		mes "您想學習這項技能嗎？";
+		next;
+			switch (select("是的。:不。:你有吃壽司的建議嗎？")) {
+		case 1:
+			mes "[萊昂]";
+			mes "好的。我會告訴你要求。";
+			mes "首先，您需要具有5級狂歡。";
+			mes "您還需要準備10個火箭，10枚銀色箭頭，1瓶香蕉汁，30張觸手和5瓶皇家果凍。";
+			mes "它們有點像成分。";
+			next;
+			mes "[萊昂]";
+			mes "一旦您擁有所有材料，請再次來找我。";
+			mes "那我們會說話。";
+			close;
+		case 2:
+			mes "[萊昂]";
+			mes "哈哈哈哈哈哈哈哈哈！";
+			mes "...";
+			mes "...";
+			mes "...";
+			mes "我失去了話！ ？";
+			close;
+		case 3:
+			mes "[壽司國王萊昂]";
+			mes "吃壽司的最好方法是";
+			mes "用手。";
+			mes "那是基本。";
+			mes "浸入魚，而不是米飯，";
+			mes "在醬油中。";
+			next;
+			mes "[壽司國王萊昂]";
+			mes "這樣，您就會獲得更豐富的風味。";
+			mes "另外，始終吃那種季節的種類。";
+			mes "然後用白魚的順序進食";
+			mes "藍色的魚會使它的味道更好！";
+			mes "嗯！我喜歡壽司~~！";
+			close;
+		}
+	}
+	mes "[萊昂]";
+	mes "哦，不！我什麼都沒有給你！";
+	mes "我不能對任何人說好又有趣的話";
+	mes "除了劍客！";
+	mes "在一個更好的世界中見！";
+	close;
+
+OnTouch_:
+	mes "[萊昂]";
+	mes "哈哈哈哈哈哈！";
+	mes "哈哈哈哈哈哈！";
+	close;
+}
+
+prt_in,94,57,3	script	Juan	85,4,4,{
+	if (BaseClass == Job_Swordman) {
+		if (getskilllv("SM_AUTOBERSERK") == 1) {
+			mes "[胡安]";
+			mes "嗯？長時間看不到！";
+			mes "你好嗎？";
+			mes "你比以前更強大。";
+			mes "許多人期待您的偉大事物。";
+			mes "你可以做到。";
+			close;
+		}
+		else if (JobLevel < 10 && (BaseJob != Job_Knight && BaseJob != Job_Crusader)) {
+			mes "[？ ]";
+			mes "你是做什麼的？";
+			mes "嗯，仍然是初學者。";
+			mes "我很忙，所以去訓練更多";
+			mes "回來之前。";
+			close;
+		}
+		else if (JobLevel < 30 && (BaseJob != Job_Knight && BaseJob != Job_Crusader)) {
+			mes "[胡安]";
+			mes "哦，很高興認識你。";
+			mes "你可以上路。 （笑臉~）";
+			close;
+		}
+		else if ((countitem(924) > 34) && (countitem(958) > 9) && (countitem(957) > 9) && (countitem(518) > 9)) {
+			mes "[胡安]";
+			mes "哦。年輕的劍客！";
+			mes "您準備學習";
+			mes "最新技能，自動狂！";
+			next;
+			switch (select("呵呵，我想現在學習它。:那是什麼？")) {
+			case 1:
+				mes "[胡安]";
+				mes "好的。然後...";
+				next;
+				delitem 924,35; //Powder_Of_Butterfly
+				delitem 958,10; //Horrendous_Mouth
+				delitem 957,10; //Decayed_Nail
+				delitem 518,10; //Honey
+				skill "SM_AUTOBERSERK",1,SKILL_PERM;
+				mes "[胡安]";
+				mes "你剛成為劍客";
+				mes "可以使用自動狂。";
+				mes "你可以去";
+				mes "並取得偉大的成就！";
+				next;
+				mes "[胡安]";
+				mes "祝你好運！";
+				next;
+				mes "[胡安]";
+				mes "..............................................................哦。";
+				mes "我忘了說些什麼。";
+				mes "您必須牢記一些事情。";
+				next;
+				mes "[胡安]";
+				mes "一旦您恢復健康，";
+				mes "這個技能將消退。";
+				mes "另外，實際上沒有時間限制";
+				mes "但是當它仍然可以消失時";
+				mes "它的技能可以";
+				mes "無效的挑釁。";
+				next;
+				mes "[胡安]";
+				mes "如果您不記得這些特徵，";
+				mes "您可能會在戰場上遇到一些問題";
+				mes "當技能突然消失時。";
+				next;
+				mes "[胡安]";
+				mes "然後...再見真實~";
+				close;
+			case 2:
+				mes "[胡安]";
+				mes "自動狂歡？";
+				mes "這是戰場上至關重要的技能。";
+				mes "當您的健康狀況良好時";
+				mes "您隱藏的潛力會引起自己的挑釁";
+				mes "在戰鬥中為您提供幫助。";
+				next;
+				mes "[胡安]";
+				mes "它非常適合那些";
+				mes "像火一樣在戰場上戰鬥！";
+				mes "憑著你的能力，你可以學習";
+				mes "現在這項技能。";
+				mes "然後，我將告訴您必要的材料。";
+				next;
+				mes "[胡安]";
+				mes "您需要35粉蝴蝶。";
+				mes "宏偉的能量";
+				mes "蝴蝶的翅膀會";
+				mes "幫助您收集力量！";
+				mes "和10個可怕的嘴。";
+				mes "10個腐爛的指甲。";
+				mes "最後但並非最不重要的...";
+				mes "10蜂蜜！";
+				next;
+				mes "[胡安]";
+				mes "你把所有的東西都倒了嗎？";
+				mes "和往常一樣，請回來";
+				mes "準備好時。";
+				mes "我期待再次見到你。";
+				close;
+			}
+		}
+		mes "[胡安]";
+		mes "哦，不，你受傷更多";
+		mes "自從我上次見到你以來。";
+		mes "你像這樣參加戰鬥了嗎？";
+		mes "好像你在緊張自己。";
+		next;
+		mes "[胡安]";
+		mes "即使您可能有很多力量";
+		mes "達到極限時，你做不到太多";
+		mes "不要高估您的力量。";
+		mes "當然，您總是可以使用";
+		mes "我們開發了克服這些限制的技能。";
+		next;
+		switch (select("呃！你在說什麼？:哈哈，不可能有這種事。:Keuuuuuuuh！")) {
+		case 1:
+			mes "[胡安]";
+			mes "該技能稱為狂戰。";
+			mes "它被認為是戰場的花。";
+			mes "當您的健康紅色時";
+			mes "您隱藏的潛力是您自己的挑釁";
+			mes "在戰鬥中為您提供幫助。";
+			next;
+			mes "[胡安]";
+			mes "它非常適合那些";
+			mes "像火一樣在戰場上戰鬥！";
+			mes "憑著你的能力，你可以學習";
+			mes "現在這項技能。";
+			mes "然後，我將告訴您必要的材料。";
+			next;
+			mes "[胡安]";
+			mes "您需要35粉蝴蝶。";
+			mes "宏偉的能量";
+			mes "蝴蝶的翅膀會";
+			mes "幫助您收集力量！";
+			mes "和10個可怕的嘴。";
+			mes "10個腐爛的指甲。";
+			mes "最後但並非最不重要的...";
+			mes "10個蜂蜜！";
+			next;
+			mes "[胡安]";
+			mes "你把所有的東西都倒了嗎？";
+			mes "和往常一樣，請回來";
+			mes "準備好時。";
+			mes "我期待再次見到你。";
+			close;
+		case 2:
+			mes "[胡安]";
+			mes "布萊，你一生都愚弄了嗎？";
+			mes "我不知道。不要跟我說話。";
+			close;
+		case 3:
+			mes "[胡安]";
+			mes "愛Puuuuuhu.uuuu。";
+			mes "嗚嗚嗚嗚嗚嗚水。";
+			mes "啊啊啊啊啊啊！";
+			close;
+		}
+	}
+	mes "[胡安]";
+	mes "您喜歡旅行嗎？";
+	mes "希望您有美好的一天。";
+	mes "啊，我只是一個善良的騎士胡安。";
+	mes "不用擔心我太多。哈哈哈...";
+	close;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= Fully working
+//= 1.0a Now using functions found in "Global_Functions.txt"
+//=     for class checks.
+//= 1.1 Added missing delitem [Lupus]
+//= 1.2 Added Baby Class Support [Lupus]
+//= 1.3 Removed callfunc Is_####_Class in favor of baseClass [Silentdragon]
+//= 1.4 Updated the NPC to allow subclasses of swordsman to learn the skills, [MasterOfMuppets]
+//= 1.5 Fixed exploits [Lupus]
+//= 1.5a Fixed some typos [IVBela]
+//============================================================

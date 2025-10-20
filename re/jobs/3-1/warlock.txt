@@ -1,0 +1,1112 @@
+﻿//===== rAthena Script ======================================= 
+//= Warlock Job Quest
+//===== By: ================================================== 
+//= Muad_Dib, Gepard & L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 1.5
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job change Quest from Wizard / High Wizard -> Warlock.
+//===== Additional Comments: ================================= 
+//= 1.0 First version. [Masao]
+//= 1.1 Fixed some conversion mistakes, replaced numbers with
+//=     constants, added item names in comments.
+//= 1.2 Fixed the problem where NPC are not enabled and chamber
+//=     will never open for the second try or use.
+//= 1.2a Fixed a typo. [Euphy]
+//= 1.3 Updated script, optimized. [Euphy]
+//= 1.3a Added temporary coordinate fix #distorted_space_1-1. [Euphy]
+//= 1.3b Added official coordinates. [Euphy]
+//= 1.4 Added GM management function. [Euphy]
+//= 1.5 Added VIP features. [Euphy]
+//============================================================
+
+-	script	#distorted_space_	-1,{
+OnTouch_:
+	if (job_wl > 1) {
+		mes "- 這裡有一個奇怪的失真 -";
+		if (strnpcinfo(0) == "#distorted_space_1" && (Class == Job_Warlock || Class == Job_Warlock_T || Class == Job_Baby_Warlock)) {
+			close2;
+			if (countitem(6153) > 0)
+				warp "spl_in02",79,102;
+			end;
+		}
+		next;
+		switch(select("伸出你的手:忽略它。")) {
+		case 1:
+			mes "- 我的手臂伸展時，猛烈的聲音在我的耳朵上產生共鳴，涼爽的波浪環繞著我 -";
+			close2;
+			warp "spl_in02",79,102;
+			end;
+		case 2:
+			mes "- 您忽略了失真。 -";
+			close;
+		}
+	}
+	if (BaseLevel > 94 && (strnpcinfo(0) == "#distorted_space_2" || BaseJob == Job_Wizard)) {
+		mes "- 這裡有一個奇怪的失真 -";
+		next;
+		switch(select("搜索該區域。 :忽略它。")) {
+		case 1:
+			mes "- 這裡似乎什麼都沒有。但是我絕對可以在這裡感受到一些東西...";
+			next;
+			switch(select("伸出手臂:別管它。")) {
+			case 1:
+				mes "- 我的手臂伸展時，猛烈的聲音在我的耳朵上產生共鳴，涼爽的波浪環繞著我 -";
+				close2;
+				warp "spl_in02",79,102;
+				end;
+			case 2:
+				mes "- 您決定不理會它。 -";
+				close;
+			}
+		case 2:
+			mes "- 您忽略了它。 -";
+			close;
+		}
+	}
+	end;
+}
+//morocc,103,144,0	duplicate(#distorted_space_)	#distorted_space_1	139,1,1
+morocc,95,132,0	duplicate(#distorted_space_)	#distorted_space_1	139,1,1
+splendide,141,284,0	duplicate(#distorted_space_)	#distorted_space_2	139,1,1
+
+function	script	F_Warlock	{
+	mes "[助手]";
+	mes "嗯！ ！ ！人類！ ？ ！";
+	mes "您是如何進入這裡的？";
+	mes "這僅與特殊的大門相連！";
+	next;
+	mes "[助手]";
+	mes "我不知道怎麼...";
+	mes "但是我們應該離開我的主人...！";
+	next;
+	mes "[？ ？ ？ ]";
+	mes "那裡有什麼聲音？";
+	mes "我警告他們在冥想時要安靜。";
+	next;
+	mes "[助手]";
+	mes "嗯！ ？ ！";
+	mes "掌握...";
+	mes "沒什麼...";
+	next;
+	mes "[掌握]";
+	mes "哦~我面前有一個人。";
+	next;
+	mes "[助手]";
+	mes "哦，這東西嗎？";
+	mes "我只是帶領它。";
+	next;
+	mes "[掌握]";
+	mes "是的！ ！ ！";
+	next;
+	mes "[是的]";
+	mes "是的... !!";
+	next;
+	mes "[掌握]";
+	mes "您還有您的翹曲門戶...這是一種幻想嗎？";
+	next;
+	mes "[是的]";
+	mes "對不起！ ！ ！";
+	mes "這是我的錯誤...";
+	next;
+	mes "[掌握]";
+	mes "傻子...";
+	mes "您將人送走後，我會與您打交道。";
+	next;
+	mes "[掌握]";
+	mes "穆什薩爾塔斯·埃爾·恰馬爾";
+	mes "烏登洛";
+	if (BaseJob == Job_Wizard) {
+		next;
+		mes "- 帶有綠色頭髮的仙女呼喚咒語。 -";
+		mes "- 我覺得我周圍有一些特別的東西。 -";
+		specialeffect2 EF_DISPELL;
+		next;
+		mes "[掌握]";
+		mes "哦，這很有趣。";
+		mes "你怎麼敢抵抗我人類？";
+		next;
+		if (BaseLevel > 98 && JobLevel > 49) {
+			select("我不知道。你是誰？");
+			mes "[掌握]";
+			mes "我是 ^000077Warlock ^000000S的負責人。";
+			mes "'^000077Sila egnoloria^000000'";
+			mes "如果您是巫師，那麼您可以記住我的名字是一件好事。";
+			next;
+			select("什麼是^000077術士^000000？");
+			mes "[Egnoloria大師]";
+			mes "哦...你有興趣嗎？";
+			next;
+			mes "[Egnoloria大師]";
+			mes "A ^000077Warlock ^000000是使用Jotunheim巨人的魔力的人。";
+			mes "它不能用任何其他詞來定義。";
+			next;
+			mes "[Egnoloria大師]";
+			mes "只有強大的魔法才能解釋它。";
+			next;
+			select("我可以成為術士嗎？");
+			mes "[Egnoloria大師]";
+			mes "你？";
+			mes "你想成為術士嗎？";
+			mes "哈哈哈";
+			next;
+			mes "[Egnoloria大師]";
+			mes "你真有趣。";
+			mes "人類很難成為術士。";
+			mes "強大的力量會在您的身體弱的身體上gna。";
+			next;
+			mes "[Egnoloria大師]";
+			mes "如果您敢於面對死亡，則可以嘗試成為一個。";
+			next;
+			switch(select("我需要做什麼？ :取消。")) {
+			case 1:
+				if (VIP_SCRIPT) {
+					callfunc "VIP_Third_Class";
+					set job_wl,2;
+					setquest 11106;
+					next;
+				}
+				mes "[Egnoloria大師]";
+				mes "你是認真的？";
+				mes "你渴望權力你不是人類。";
+				next;
+				mes "[Egnoloria大師]";
+				mes "強烈的強大渴望使您的靈魂更加美麗。";
+				next;
+				mes "[Egnoloria大師]";
+				mes "但是，我需要檢查您是否有資格。";
+				next;
+				mes "[Egnoloria大師]";
+				mes "是的！";
+				next;
+				mes "[是的]";
+				mes "是的！";
+				next;
+				mes "[Egnoloria大師]";
+				mes "把這個交給人類。";
+				next;
+				mes "[Egnoloria大師]";
+				mes "和那個怪異的頭髮的傢伙交談。";
+				mes "他會讓你知道你應該做什麼。";
+				set job_wl,2;
+				setquest 11106;
+				close;
+			case 2:
+				mes "[Egnoloria大師]";
+				mes "好的。";
+				mes "你是一個人，所以這是給你的。";
+				set job_wl,1;
+				close2;
+				warp "splendide",200,100;
+				end;
+			}
+		}
+		mes "[掌握]";
+		mes "您仍然太低了，甚至無法考慮這一點。";
+	}
+	close2;
+	warp "splendide",200,100;
+	end;
+}
+
+spl_in02,77,107,5	script	Assistant#Warlock1	446,{
+	if (job_wl == 0) {
+		callfunc "F_Warlock";
+		end;
+	} else if (job_wl == 1) {
+		mes "[是的]";
+		mes "你...我們以前見面了。";
+		mes "您能想像我的主人對我有多嚴重？";
+		mes "如果您和我有任何生意，那就走開！";
+		next;
+		switch(select("離開:留下。")) {
+		case 1:
+			mes "[是的]";
+			mes "請別打擾我...！";
+			close2;
+			warp "splendide",200,100;
+			end;
+		case 2:
+			mes "[是的]";
+			mes "什麼？ ！";
+			mes "只是做你想做的...";
+			mes "那我的主人會和你打交道。";
+			close;
+		}
+	} else if (job_wl == 2 || job_wl == 3) {
+		mes "[是的]";
+		if (job_wl == 2) {
+			mes "親愛的，主人！我的馬尾巴看起來很有趣嗎？";
+			mes "哦，但是我花了很多時間！";
+			next;
+			mes "[Egnoloria大師]";
+			mes "太吵了。";
+			mes "我需要冥想";
+			mes "正如我所說的那樣。";
+			next;
+			mes "[是的]";
+			mes "嗯..";
+			mes "哦，是的！";
+			next;
+			mes "[是的]";
+			mes "嘿，人！";
+			mes "你是否想要";
+			mes "成為術士？";
+			next;
+		}
+		if (SkillPoint != 0) {
+			mes "首先，在繼續之前，請使用所有剩餘的工作技能點。";
+			set job_wl,3;
+			close;
+		}
+		mes "這是主人的";
+		mes "決定，請告訴我。";
+		next;
+		mes "[是的]";
+		mes "我們需要測試您的身體是否可以承受術士。";
+		mes "因此，您需要收集材料來證明自己。";
+		next;
+		mes "[是的]";
+		mes "請收集 ^000077GLittering Crystal ^000000s和 ^0000777零的Bradium Fragment ^000000。";
+		next;
+		callsub L_Quest,1;
+		close;
+	} else if (job_wl == 4) {
+		if (countitem(6152) == 0 || countitem(6151) == 0)
+			callsub L_Quest,0;
+		else {
+			mes "[是的]";
+			mes "我不能在這裡執行任務。我需要去我的實驗室。";
+			mes "我的實驗室位於Splendide的西北部。";
+		}
+		close;
+	} else if (job_wl == 5) {
+		mes "[是的]";
+		mes "這塊石頭製作得很好。";
+		mes "請去找我的主人。";
+		close;
+	} else {
+		mes "[是的]";
+		mes "魔術材料是由魔術材料創建的。";
+		next;
+		mes "[是的]";
+		mes "根據原材料及其處理方式，這種組合的石材形成不同。";
+		next;
+		mes "[是的]";
+		mes "但是大多數石頭都是非常相似的！";
+		mes "我們不能輕易區分它們。";
+		next;
+		mes "[是的]";
+		mes "甚至我都不知道這一切如何工作。";
+		close;
+	}
+
+L_Quest:
+	mes "[是的]";
+	mes "您必須戴上這些神奇的石戒指才能在狩獵時獲取這些物品。";
+	mes "您需要在戴上這些戒指時狩獵Naga和Bradium Golems。";
+	next;
+	if (getarg(0)) {
+		mes "[是的]";
+		mes "告訴我們你有多強大。而且不要忘記穿這個。";
+		set job_wl,4;
+		getitem 2796,1; //Magical_Stone
+		getitem 2797,1; //Magical_Stone_
+		changequest 11106,11107;
+		next;
+	}
+	mes "[是的]";
+	mes "帶上這些石頭，否則您將無法返回！";
+	mes "當心！";
+	next;
+	mes "[是的]";
+	mes "如果您與他交談，我主人旁邊的人會讓您出去。";
+	next;
+	mes "[是的]";
+	mes "我的實驗室位於Splendide的西北部。當您收集它們時，將這些帶給我。";
+	return;
+}
+
+spl_in02,60,231,5	script	Yoop#Warlock	446,{
+	mes "[是的]";
+	if (job_wl < 4) {
+		mes "你是誰？";
+		mes "離開這裡！";
+		close;
+	} else if (job_wl == 4) {
+		mes "你回來了嗎？";
+		next;
+		switch(select("我帶來了材料。 :我丟失了魔法石。 :什麼也沒有。")) {
+		case 1:
+			mes "[是的]";
+			if (countitem(6152) == 0 || countitem(6151) == 0) {
+				mes "......";
+				mes "......在哪裡？";
+				mes "不要打擾我！";
+				next;
+				mes "[是的]";
+				mes "我們需要測試您的身體是否可以承受術士。";
+				mes "因此，您需要收集材料來證明自己。";
+				next;
+				mes "[是的]";
+				mes "請收集 ^000077GLittering Crystal ^000000s和 ^0000777零的Bradium Fragment ^000000。";
+				next;
+				mes "[是的]";
+				mes "您必須戴上這些神奇的石戒指才能在狩獵時獲取這些物品。";
+				mes "您需要在戴上這些戒指時狩獵Naga和Bradium Golems。";
+				next;
+				mes "[是的]";
+				mes "帶上這些石頭，否則您將無法返回！";
+				mes "當心！";
+				close;
+			} else if (countitem(6152) && countitem(6151)) {
+				if (isequipped(2796) || isequipped(2797)) {
+					mes "帶我回來神奇的石頭。";
+					close;
+				}
+				if (countitem(2796) == 0 || countitem(2797) == 0) {
+					mes "看來你沒有嗎？";
+					mes "你丟了嗎？";
+					next;
+					mes "[是的]";
+					mes "請找到那塊石頭，然後回到我身邊。";
+					close;
+				}
+				mes "好吧！所有的材料都準備好了！";
+				mes "當我專注於這塊石頭上時。你能回到我的主人嗎？";
+				mes "完成後，我將跟進。";
+				delitem 2796,countitem(2796); //Magical_Stone
+				delitem 2797,countitem(2797); //Magical_Stone_
+				delitem 6152,countitem(6152); //Glittering_Crystal
+				delitem 6151,countitem(6151); //Peice_Of_Great_Bradium
+				set job_wl,5;
+				changequest 11107,11108;
+				close;
+			}
+		case 2:
+			mes "[是的]";
+			mes "什麼？ ！";
+			mes "我要求您仔細檢查一下，並確保您穿了！";
+			next;
+			mes "[是的]";
+			mes "請檢查您是否放錯了位置，或者是否已經配備了它。";
+			next;
+			switch(select("我找到了。 : 沒有。")) {
+			case 1:
+				mes "[是的]";
+				mes "不要逗我！";
+				mes "不難區分您是否有！";
+				close;
+			case 2:
+				if ((isequipped(2796) == 0 && countitem(2796) == 0) || (isequipped(2797) == 0 && countitem(2797) == 0)) {
+					if (countitem(732) > 0) {
+						switch(select("給3克拉鑽石。 :戒掉吧。")) {
+						case 1:
+							mes "[是的]";
+							mes "我會忽略你的錯。";
+							mes "請小心。";
+							delitem 732,1; //Crystal_Jewel__
+							if (isequipped(2796) == 0 && countitem(2796) == 0)
+								getitem 2796,1; //Magical_Stone
+							if (isequipped(2797) == 0 && countitem(2797) == 0)
+								getitem 2797,1; //Magical_Stone_
+							close;
+						case 2:
+							mes "[是的]";
+							mes "只是告訴我你的真誠！";
+							close;
+						}
+					}
+					mes "[是的]";
+					mes "你怎麼能這麼說？";
+					mes "^000077，道歉^000000！";
+					mes "我想如果你給我說3克拉鑽石，我可以給你更多的石頭...";
+					close;
+				}
+				mes "[是的]";
+				if (isequipped(2796) || isequipped(2797)) {
+					mes "請檢查您的設備窗口...";
+					mes "你確定沒有嗎？";
+					close;
+				}
+				mes "那你現在拿著什麼...？";
+				close;
+			}
+		case 3:
+			mes "[是的]";
+			mes "什麼...？";
+			mes "不要打擾我，我很忙。";
+			close;
+		}
+	} else {
+		mes "我專注於冥想。";
+		mes "這樣我就可以創造魔術。";
+		next;
+		mes "[是的]";
+		mes "而且...您似乎比常規法師擁有更多的才能。";
+		mes "也許如果我成為煉金術士，我可能會比現在更好嗎？";
+		next;
+		mes "[是的]";
+		mes "我正在學習改善自己。";
+		next;
+		mes "[是的]";
+		mes "如果在“時間和魔術房間”的內部，我將趕上您的力量！";
+		mes "哈哈哈哈...";
+		close;
+	}
+}
+
+spl_in02,84,103,3	script	Assistant#Warlock2	439,{
+	if (job_wl == 0) {
+		callfunc "F_Warlock";
+		end;
+	} else if (job_wl == 1) {
+		mes "[助手]";
+		mes "人類！你想要什麼？";
+		close;
+	} else if (job_wl < 6) {
+		mes "[助手]";
+		mes "您目前正在尋找不是我。";
+		close;
+	} else if (job_wl == 6) {
+		if (checkweight(1201,1) == 0 || MaxWeight - Weight < 3500) {
+			mes "您正在瀏覽太多的物品。";
+			mes "您最好最大程度地減少體重。";
+			close;
+		}
+		mes "[是的]";
+		mes "測試並不難。";
+		mes "我們可以在魔術室裡創建魔石。";
+		next;
+		mes "[是的]";
+		mes "小心測試室中的怪物。";
+		mes "這些是用術士的魔力密封的彩虹紅寶石。";
+		mes "在測試期間使用這些。";
+		next;
+		mes "[是的]";
+		mes "我將引導您進入魔術室。";
+		set job_wl,7;
+		changequest 11109,11110;
+		getitem 12384,5; //Rainbow_Ruby_Water
+		getitem 12386,5; //Rainbow_Ruby_Wind
+		getitem 12387,5; //Rainbow_Ruby_Earth
+		getitem 12385,5; //Rainbow_Ruby_Fire
+		close2;
+		warp "job3_war01",23,20;
+		end;
+	} else if (job_wl == 7) {
+		if (checkweight(1201,1) == 0 || MaxWeight - Weight < 3500) {
+			mes "您正在瀏覽太多的物品。";
+			mes "您最好最大程度地減少體重。";
+			close;
+		}
+		mes "[是的]";
+		mes "您想再次嘗試嗎？";
+		mes "讓我給你更多紅寶石。";
+		next;
+		if (countitem(12384)) delitem 12384,countitem(12384); //Rainbow_Ruby_Water
+		if (countitem(12386)) delitem 12386,countitem(12386); //Rainbow_Ruby_Wind
+		if (countitem(12387)) delitem 12387,countitem(12387); //Rainbow_Ruby_Earth
+		if (countitem(12385)) delitem 12385,countitem(12385); //Rainbow_Ruby_Fire
+		getitem 12384,5; //Rainbow_Ruby_Water
+		getitem 12386,5; //Rainbow_Ruby_Wind
+		getitem 12387,5; //Rainbow_Ruby_Earth
+		getitem 12385,5; //Rainbow_Ruby_Fire
+		close2;
+		warp "job3_war01",23,20;
+		end;
+	} else if (job_wl == 8) {
+		mes "[是的]";
+		mes "您已經成功地結晶了空心石頭。";
+		mes "對不起，我懷疑你。";
+		if (countitem(12384)) delitem 12384,countitem(12384); //Rainbow_Ruby_Water
+		if (countitem(12386)) delitem 12386,countitem(12386); //Rainbow_Ruby_Wind
+		if (countitem(12387)) delitem 12387,countitem(12387); //Rainbow_Ruby_Earth
+		if (countitem(12385)) delitem 12385,countitem(12385); //Rainbow_Ruby_Fire
+		next;
+		mes "[是的]";
+		mes "所有測試均已完成。現在與恩格洛里亞大師交談。";
+		mes "我很高興您成功了。";
+		set job_wl,9;
+		changequest 11111,11112;
+		close;
+	} else if (job_wl == 9) {
+		mes "[是的]";
+		mes "所有測試均已完成。現在與恩格洛里亞大師交談。";
+		mes "我很高興您成功了。";
+		close;
+	} else {
+		mes "[是的]";
+		mes "我能感覺到你有強大的魔力。";
+		mes "我羨慕你。";
+		next;
+		mes "[是的]";
+		mes "它值得特別的東西。";
+		mes "不要濫用它。";
+		close;
+	}
+}
+
+spl_in02,78,110,5	script	Assistant#Warlock3	437,{
+	if (job_wl == 0) {
+		callfunc "F_Warlock";
+		end;
+	}
+	mes "[助手]";
+	mes "......";
+	switch(job_wl) {
+		case 1: mes "如果你沒有什麼話要對我說的話，你就走吧？"; break;
+		case 2: mes "我沒有馬尾辮..."; break;
+		default: mes "我師父打坐時請保持安靜。"; break;
+	}
+	next;
+	switch(select("離開:留下")) {
+	case 1:
+		mes "[助手]";
+		mes "然後小心。";
+		close2;
+		warp "splendide",200,100;
+		end;
+	case 2:
+		mes "[助手]";
+		mes "......";
+		close;
+	}
+}
+
+spl_in02,80,108,5	script	Guild Master#Warlock	465,{
+	if (job_wl == 0) {
+		callfunc "F_Warlock";
+		end;
+	} else if (job_wl == 1) {
+		mes "[Egnoloria大師]";
+		mes "你有什麼要問我嗎？";
+		next;
+		switch(select("我怎樣才能成為術士？ :取消。")) {
+		case 1:
+			if (VIP_SCRIPT) {
+				callfunc "VIP_Third_Class";
+				set job_wl,2;
+				setquest 11106;
+				next;
+			}
+			mes "[Egnoloria大師]";
+			mes "你是認真的？";
+			mes "你渴望權力你不是人類。";
+			next;
+			mes "[Egnoloria大師]";
+			mes "強烈的強大渴望使您的靈魂更加美麗。";
+			next;
+			mes "[Egnoloria大師]";
+			mes "但是，我需要檢查您是否有資格。";
+			next;
+			mes "[Egnoloria大師]";
+			mes "是的！";
+			next;
+			mes "[是的]";
+			mes "是的！";
+			next;
+			mes "[Egnoloria大師]";
+			mes "把這個交給人類。";
+			next;
+			mes "[Egnoloria大師]";
+			mes "和那個怪異的頭髮的傢伙交談。";
+			mes "他會讓你知道你應該做什麼。";
+			set job_wl,2;
+			setquest 11106;
+			close;
+		case 2:
+			mes "[Egnoloria大師]";
+			mes "好的。";
+			mes "你是一個人，所以這是給你的。";
+			close2;
+			warp "splendide",200,100;
+			end;
+		}
+	} else if (job_wl == 2) {
+		mes "[Egnoloria大師]";
+		mes "我正在冥想，我說與Yoop Ok交談。";
+		mes "yoop有一個有趣的小馬尾巴。";
+		mes "不要打擾我。";
+		close;
+	} else if (job_wl == 3 || job_wl == 4) {
+		mes "[Egnoloria大師]";
+		mes "......";
+		next;
+		mes "[助手]";
+		mes "主人正在冥想。";
+		mes "安靜。";
+		close;
+	} else if (job_wl == 5) {
+		mes "[Egnoloria大師]";
+		mes "我從Yoop聽到可以創建非常有用的石頭。";
+		next;
+		mes "[Egnoloria大師]";
+		mes "它可以用來製作可以施放強大魔法的魔法珠寶。";
+		next;
+		mes "[Egnoloria大師]";
+		mes "是的。";
+		next;
+		mes "[是的]";
+		mes "是的，主人！";
+		next;
+		mes "[Egnoloria大師]";
+		mes "請帶他去神奇的房間。";
+		next;
+		mes "[是的]";
+		mes "是的，大師。";
+		mes "請跟隨我。";
+		emotion ET_AHA, getnpcid(0, "Assistant#Warlock2");
+		set job_wl,6;
+		changequest 11108,11109;
+		close;
+	} else if (job_wl < 9) {
+		mes "[Egnoloria大師]";
+		mes "......";
+		next;
+		mes "[是的]";
+		mes "我的主人現在正在冥想，請關注我。";
+		close;
+	} else if (job_wl == 9) {
+		if (BaseLevel < 99 || BaseJob != Job_Wizard) {
+			mes "[Egnoloria大師]";
+			mes "嗯...？";
+			mes "你是怎麼走這麼遠的...";
+			close;
+		}
+		if (checkweight(1201,1) == 0 || MaxWeight - Weight < 3500) {
+			mes "你有太多的物品。";
+			mes "減少您的物品數量後，請回來。";
+			close;
+		}
+		mes "[Egnoloria大師]";
+		if (SkillPoint != 0) {
+			mes "除非您喜歡當前的工作，否則應該使用所有技能點。";
+			close;
+		}
+		if (ismounting()) {
+			mes "你在騎寵物上，";
+			mes "因此，您無法改變工作。";
+			mes "請取消騎行寵物，然後重試！";
+			close;
+		}
+		mes "美麗的光...";
+		mes "不要讓我對你失望...";
+		next;
+		mes "[Egnoloria大師]";
+		mes "您已經成為術士的成員。";
+		mes "驕傲。";
+		next;
+		if (SkillPoint != 0) {
+			mes "^0000ffyou仍然離開了技能點，請使用所有技能點，然後嘗試重新開始！ ^000000";
+			close;
+		}
+		mes "[Egnoloria大師]";
+		mes "這種結晶的神奇石將使您安全。";
+		if (Class == Job_High_Wizard) {
+			if (JobLevel > 69) set job_wl,13;
+			else if (JobLevel > 59) set job_wl,12;
+			else set job_wl,11;
+		}
+		else set job_wl,10;
+		jobchange roclass(eaclass()|EAJL_THIRD);
+		completequest 11112;
+		getitem 5753,1; //Magic_Stone_Hat
+		getitem 2795,1; //Green_Apple_Ring
+		close;
+	} else if (job_wl > 9) {
+		mes "[Egnoloria大師]";
+		mes "您如何適應術士的力量？";
+		mes "如果您粗心大意，您將被自己的力量推翻。";
+		close;
+	}
+}
+
+job3_war01,22,22,7	script	Yoop#WRR	439,{
+	mes "[是的]";
+	mes "如果您要求Ebein被送往神奇的房間，他會把您送到那裡。";
+	mes "等待隊列進入魔法會議廳。";
+	close;
+}
+
+job3_war01,29,25,0	script	Ebein#WRR	437,{
+	mes "[埃本]";
+	mes "您想參加考試嗎？";
+	mes "如果您站在候診室，您將能夠進入魔術室。";
+	next;
+	mes "[埃本]";
+	mes "如果房間裡有其他人，您只需要等待一會兒即可。";
+	next;
+	switch(select("去候診室:出去。")) {
+	case 1:
+		mes "[埃本]";
+		mes "然後請自己進入房間。";
+		mes "確保您有足夠的藥水可以在測試中生存，因為怪物在室內非常強大。";
+		close;
+	case 2:
+		mes "[埃本]";
+		mes "......";
+		mes "那我會把你送到外面。";
+		mes "再見...";
+		close2;
+		warp "spl_in02",79,102;
+		end;
+	}
+}
+
+job3_war01,29,25,5	script	The chamber of magic#1	437,{
+	end;
+OnInit:
+	//disablenpc  "The chamber of magic#1";
+	hideonnpc "The chamber of magic#1";
+	waitingroom "The chamber of magic",20,"The chamber of magic#1::OnStartArena",1;
+	enablewaitingroomevent;
+	end;
+OnStartArena:
+	warpwaitingpc "job3_war02",29,25;
+	donpcevent "The chamber of magic#2::OnEnable";
+	initnpctimer;
+	disablewaitingroomevent;
+	end;
+OnTimer10000:
+	if (getmapusers("job3_war02") == 0) {
+		donpcevent "The chamber of magic#2::OnReset";
+		donpcevent "The chamber of magic#2::OnDisable";
+		stopnpctimer "The chamber of magic#2";
+		donpcevent "The chamber of magic#3::OnReset";
+		donpcevent "The chamber of magic#3::OnDisable";
+		stopnpctimer "The chamber of magic#3";
+		donpcevent "The chamber of magic#4::OnReset";
+		donpcevent "The chamber of magic#4::OnDisable";
+		stopnpctimer "The chamber of magic#4";
+		donpcevent "Hollow Stone#Warlock::OnReset";
+		donpcevent "Hollow Stone#Warlock::OnDisable";
+		stopnpctimer "Hollow Stone#Warlock";
+		stopnpctimer;
+		enablewaitingroomevent;
+		end;
+	}
+	initnpctimer;
+	end;
+OnEnable:
+	enablewaitingroomevent;
+	end;
+OnDisable:
+	disablewaitingroomevent;
+	end;
+}
+
+-	script	The chamber of magic#2	-1,{
+OnInit:
+	disablenpc();
+	end;
+OnEnable:
+	enablenpc();
+	monster "job3_war02",23,32,"Magic Monster",2047,1,strnpcinfo(0)+"::OnMyMobDead";
+	monster "job3_war02",23,21,"Magic Monster",2048,1,strnpcinfo(0)+"::OnMyMobDead";
+	monster "job3_war02",34,32,"Magic Monster",2049,1,strnpcinfo(0)+"::OnMyMobDead";
+	monster "job3_war02",34,21,"Magic Monster",2050,1,strnpcinfo(0)+"::OnMyMobDead";
+	monster "job3_war02",23,32,"Magic Monster",2047,1,strnpcinfo(0)+"::OnMyMobDead";
+	monster "job3_war02",23,21,"Magic Monster",2048,1,strnpcinfo(0)+"::OnMyMobDead";
+	monster "job3_war02",34,32,"Magic Monster",2049,1,strnpcinfo(0)+"::OnMyMobDead";
+	monster "job3_war02",34,21,"Magic Monster",2050,1,strnpcinfo(0)+"::OnMyMobDead";
+	initnpctimer;
+	end;
+OnReset:
+	killmonster "job3_war02",strnpcinfo(0)+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc();
+	end;
+OnMyMobDead:
+	if (mobcount("job3_war02",strnpcinfo(0)+"::OnMyMobDead") < 1) {
+		stopnpctimer;
+		mapannounce "job3_war02","The Monster Invasion has been stopped.",bc_map;
+		set .@str$, "The chamber of magic#"+((strnpcinfo(0) == "The chamber of magic#2")?"3":"4");
+		donpcevent .@str$+"::OnEnable";
+	}
+	end;
+OnTimer3000:
+	if (strnpcinfo(0) != "The chamber of magic#2") end;
+	mapannounce "job3_war02","A Magical Power fragment has been created in the Magic Chamber Room.",bc_map;
+	end;
+OnTimer4000:
+	mapannounce "job3_war02","Defend this room from monsters for 5 minutes.",bc_map;
+	end;
+OnTimer5000:
+	mapannounce "job3_war02","Destroy all the monsters, and the Chamber will stabilize.",bc_map;
+	end;
+OnTimer63000:
+	mapannounce "job3_war02","There's 4 min left to stabilize the chamber...",bc_map;
+	end;
+OnTimer123000:
+	mapannounce "job3_war02","There's 3 min left to stabilize the chamber...",bc_map;
+	end;
+OnTimer183000:
+	mapannounce "job3_war02","There's 2 min left to stabilize the chamber...",bc_map;
+	end;
+OnTimer243000:
+	mapannounce "job3_war02","There's 1 min left to stabilize the chamber...",bc_map;
+	end;
+OnTimer273000:
+	mapannounce "job3_war02","There's 30 seconds left to stabilize the chamber...",bc_map;
+	end;
+OnTimer283000:
+	mapannounce "job3_war02","There's 20 seconds left to stabilize the chamber...",bc_map;
+	end;
+OnTimer293000:
+	mapannounce "job3_war02","There's 10 seconds left to stabilize the chamber...",bc_map;
+	end;
+OnTimer303000:
+	mapannounce "job3_war02","The magic stabilization has failed.",bc_map;
+	donpcevent "The chamber of magic#2::OnReset";
+	donpcevent "The chamber of magic#3::OnReset";
+	donpcevent "The chamber of magic#4::OnReset";
+	end;
+OnTimer304000:
+	mapwarp "job3_war02","spl_in02",79,102;
+	end;
+OnTimer305000:
+	donpcevent "The chamber of magic#2::OnDisable";
+	donpcevent "The chamber of magic#3::OnDisable";
+	donpcevent "The chamber of magic#4::OnDisable";
+	donpcevent "The chamber of magic#1::OnEnable";
+	stopnpctimer;
+	end;
+}
+-	duplicate(The chamber of magic#2)	The chamber of magic#3	-1
+
+-	script	The chamber of magic#4	-1,{
+OnInit:
+	disablenpc "The chamber of magic#4";
+	end;
+OnEnable:
+	enablenpc "The chamber of magic#4";
+	monster "job3_war02",23,32,"Magic Monster",1002,1,"The chamber of magic#4::OnMyMobDead";
+	monster "job3_war02",23,21,"Magic Monster",1002,1,"The chamber of magic#4::OnMyMobDead";
+	monster "job3_war02",34,32,"Magic Monster",1002,1,"The chamber of magic#4::OnMyMobDead";
+	monster "job3_war02",34,21,"Magic Monster",1002,1,"The chamber of magic#4::OnMyMobDead";
+	monster "job3_war02",23,32,"Magic Monster",1002,1,"The chamber of magic#4::OnMyMobDead";
+	monster "job3_war02",23,21,"Magic Monster",1002,1,"The chamber of magic#4::OnMyMobDead";
+	monster "job3_war02",34,32,"Magic Monster",1002,1,"The chamber of magic#4::OnMyMobDead";
+	monster "job3_war02",34,21,"Magic Monster",1002,1,"The chamber of magic#4::OnMyMobDead";
+	initnpctimer;
+	end;
+OnReset:
+	killmonster "job3_war02","The chamber of magic#4::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc "The chamber of magic#4";
+	end;
+OnMyMobDead:
+	if (mobcount("job3_war02","The chamber of magic#4::OnMyMobDead") < 1) {
+		mapannounce "job3_war02","Once it's stabilized, the fragments are toward the center.",bc_map;
+		stopnpctimer;
+		donpcevent "Hollow Stone#Warlock::OnEnable";
+	}
+	end;
+OnTimer4000:
+	mapannounce "job3_war02","Defend this room from monsters for 1 min.",bc_map;
+	end;
+OnTimer5000:
+	mapannounce "job3_war02","Destroy all the monsters, and the Chamber will stabilize.",bc_map;
+	end;
+OnTimer33000:
+	mapannounce "job3_war02","There's 30 seconds left to stabilize the chamber....",bc_map;
+	end;
+OnTimer43000:
+	mapannounce "job3_war02","There's 20 seconds left to stabilize the chamber....",bc_map;
+	end;
+OnTimer53000:
+	mapannounce "job3_war02","There's 10 seconds left to stabilize the chamber....",bc_map;
+	end;
+OnTimer58000:
+	mapannounce "job3_war02","There's 5 seconds left to stabilize the chamber....",bc_map;
+	end;
+OnTimer63000:
+	mapannounce "job3_war02","The magic stabilization has failed. The fragment has lost its power.",bc_map;
+	donpcevent "The chamber of magic#2::OnReset";
+	donpcevent "The chamber of magic#3::OnReset";
+	donpcevent "The chamber of magic#4::OnReset";
+	end;
+OnTimer64000:
+	mapwarp "job3_war02","spl_in02",79,102;
+	end;
+OnTimer65000:
+	donpcevent "The chamber of magic#2::OnDisable";
+	donpcevent "The chamber of magic#3::OnDisable";
+	donpcevent "The chamber of magic#4::OnDisable";
+	donpcevent "The chamber of magic#1::OnEnable";
+	stopnpctimer;
+	end;
+}
+
+-	script	Hollow Stone#Warlock	-1,{
+OnInit:
+	disablenpc "Hollow Stone#Warlock";
+	end;
+OnEnable:
+	enablenpc "Hollow Stone#Warlock";
+	donpcevent "The chamber of magic#2::OnReset";
+	donpcevent "The chamber of magic#2::OnDisable";
+	donpcevent "The chamber of magic#3::OnReset";
+	donpcevent "The chamber of magic#3::OnDisable";
+	donpcevent "The chamber of magic#4::OnReset";
+	donpcevent "The chamber of magic#4::OnDisable";
+	monster "job3_war02",29,27,"Hollow Stone",2035,1,"Hollow Stone#Warlock::OnMyMobDead";
+	initnpctimer;
+	end;
+OnReset:
+	killmonster "job3_war02","Hollow Stone#Warlock::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc "Hollow Stone#Warlock";
+	end;
+OnMyMobDead:
+	if (mobcount("job3_war02","Hollow Stone#Warlock::OnMyMobDead") < 1) {
+		mapannounce "job3_war02","The Hollow Stone is crystallized with enough magic power.",bc_map;
+		set job_wl,8;
+		changequest 11110,11111;
+		donpcevent "Hollow Stone#Warlock::OnReset";
+		donpcevent "Hollow Stone#Warlock::OnDisable";
+		stopnpctimer;
+		donpcevent "Ebein#E1::OnEnable";
+		donpcevent "Ebein#E2::OnEnable";
+	}
+	end;
+OnTimer1000:
+	mapannounce "job3_war02","The Hollow Stone needs to be crystallized with magic.",bc_map;
+	end;
+OnTimer2000:
+	mapannounce "job3_war02","The Hollow Stone will absorb any magic thrown at it.",bc_map;
+	end;
+OnTimer3000:
+	mapannounce "job3_war02","You have 10 minutes to crystallize the Hollow Stone with your magic.",bc_map;
+	end;
+OnTimer303000:
+	mapannounce "job3_war02","There's 5 min left to crystallize the stone....",bc_map;
+	end;
+OnTimer363000:
+	mapannounce "job3_war02","There's 4 min left to crystallize the stone....",bc_map;
+	end;
+OnTimer423000:
+	mapannounce "job3_war02","There's 3 min left to crystallize the stone....",bc_map;
+	end;
+OnTimer483000:
+	mapannounce "job3_war02","There's 2 min left to crystallize the stone....",bc_map;
+	end;
+OnTimer543000:
+	mapannounce "job3_war02","There's 1 min left to crystallize the stone....",bc_map;
+	end;
+OnTimer573000:
+	mapannounce "job3_war02","There's 30 seconds left to crystallize the stone....",bc_map;
+	end;
+OnTimer583000:
+	mapannounce "job3_war02","There's 20 seconds left to crystallize the stone....",bc_map;
+	end;
+OnTimer593000:
+	mapannounce "job3_war02","There's 10 seconds left to crystallize the stone....",bc_map;
+	end;
+OnTimer603000:
+	mapannounce "job3_war02","The Hollow Stone Crystalization has failed.",bc_map;
+	donpcevent "Hollow Stone#Warlock::OnReset";
+	end;
+OnTimer605000:
+	mapwarp "job3_war02","spl_in02",79,102;
+	end;
+OnTimer607000:
+	donpcevent "Hollow Stone#Warlock::OnDisable";
+	stopnpctimer;
+	donpcevent "The chamber of magic#1::OnEnable";
+	end;
+}
+
+-	script	Ebein#E1	-1,{
+OnInit:
+	disablenpc "Ebein#E1";
+	end;
+OnEnable:
+	initnpctimer;
+	end;
+OnDisable:
+	disablenpc "Ebein#E1";
+	end;
+OnTimer2000:
+	mapannounce "job3_war01","Congratulations! You've succeeded in creating a magic crystal.",bc_map;
+	end;
+OnTimer3000:
+	mapannounce "job3_war01","The Magic Chamber is starting to fill with magic power.",bc_map;
+	end;
+OnTimer6000:
+	donpcevent "Ebein#E1::OnDisable";
+	stopnpctimer;
+	donpcevent "The chamber of magic#1::OnEnable";
+	end;
+}
+
+-	script	Ebein#E2	-1,{
+OnInit:
+	disablenpc "Ebein#E2";
+	end;
+OnEnable:
+	initnpctimer;
+	end;
+OnDisable:
+	disablenpc "Ebein#E2";
+	end;
+OnTimer3000:
+	mapannounce "job3_war02","Congratulations! You've succeeded in creating a magic crystal.",bc_map;
+	end;
+OnTimer5000:
+	mapannounce "job3_war02","The Magic Chamber is starting to fill with magic power.",bc_map;
+	mapwarp "job3_war02","spl_in02",79,102;
+	end;
+OnTimer6000:
+	donpcevent "Ebein#E2::OnDisable";
+	stopnpctimer;
+	end;
+}
+
+job3_war01,1,2,0	script	Button Girl#wl	66,{
+	callfunc "F_GM_NPC";
+	switch(select("打開競技場:關閉競技場:打開魔法密室:關閉魔法密室:空心石 開啟:空心石 關閉:取消")) {
+	case 1:
+		mes "打開競技場。";
+		donpcevent "The chamber of magic#1::OnEnable";
+		close;
+	case 2:
+		mes "關閉競技場。";
+		donpcevent "The chamber of magic#1::OnDisable";
+		close;
+	case 3:
+		mes "打開魔法會議廳。";
+		donpcevent "The chamber of magic#2::OnEnable";
+		close;
+	case 4:
+		mes "關閉魔術會議廳。";
+		donpcevent "The chamber of magic#2::OnReset";
+		donpcevent "The chamber of magic#2::OnDisable";
+		donpcevent "The chamber of magic#3::OnReset";
+		donpcevent "The chamber of magic#3::OnDisable";
+		donpcevent "The chamber of magic#4::OnReset";
+		donpcevent "The chamber of magic#4::OnDisable";
+		close;
+	case 5:
+		mes "招募空心石。";
+		donpcevent "Hollow Stone#Warlock::OnEnable";
+		close;
+	case 6:
+		mes "禁用空心石。";
+		donpcevent "Hollow Stone#Warlock::OnReset";
+		donpcevent "Hollow Stone#Warlock::OnDisable";
+		close;
+	case 7:
+		close;
+	}
+}
+
+spl_fild02,0,0	monster	Bradium Golem	2049,20,5000
+spl_fild02,0,0	monster	Naga	2047,20,5000

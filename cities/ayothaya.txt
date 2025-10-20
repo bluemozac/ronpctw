@@ -1,0 +1,312 @@
+﻿//===== rAthena Script =======================================
+//= Ayothaya Town
+//===== By: ==================================================
+//= MasterOfMuppets
+//===== Current Version: =====================================
+//= 1.9
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Ayothaya Town Script
+//===== Additional Comments: =================================
+//= 1.6 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//= 1.7 Fixed character's anme bugs [Lupus]
+//= 1.8 Moved Alberta NPC to pre-re/re paths. [Euphy]
+//= 1.9 Updated Renewal warp coordinates.
+//============================================================
+
+// Ayothaya Transportation
+//============================================================
+-	script	::Aibakthing_ayothaya	-1,{
+	mes "[ABC]";
+	mes "哦！啊！哦！啊！";
+	mes "讓我帶你去";
+	mes "一個遙遠的精神場所，";
+	mes "一個異國情調的土地，";
+	mes "我的家鄉阿約塔亞！";
+	next;
+	switch(select("關於Ayothaya.:前往Ayothaya.:取消.")) {
+	case 1:
+		mes "[ABC]";
+		mes "我們的艾奧薩人是一個虔誠的人，珍視和平與誠意。我們努力領導簡單而高尚的生活與自然和諧相處。";
+		next;
+		mes "[ABC]";
+		mes "我們的傳統美食是世界著名的。當我們提供由蝦，檸檬和辣椒製成的湯姆·尤姆·岡（Tom Yum Goong）之類的菜餚時，這也就不足為奇了。";
+		next;
+		mes "[ABC]";
+		mes "對於那些渴望冒險的人來說，有一個關於Sa-Mhing Tiger的古老故事，這是一種邪惡的生物，困擾著我們的寺廟廢墟。";
+		next;
+		mes "[ABC]";
+		mes "哦！哈！哦！哈！";
+		mes "沒有人活著可以抵抗";
+		mes "這個美麗的土地的呼喚。";
+		mes "中間人是";
+		mes "總是歡迎！";
+		close;
+	case 2:
+		mes "[ABC]";
+		mes "啊，你必須支付10,000 Zeny";
+		mes "如果您想參觀Ayothaya。";
+		mes "如果你準備好了，我們可以離開";
+		mes "現在~";
+		next;
+		if (select("我準備好了，我們走吧！:不.") == 1) {
+			if (Zeny > 9999) {
+				mes "[ABC]";
+				mes "哦！啊！哦！啊！";
+				mes "讓我們離開！回到我的";
+				mes "美麗的Ayothaya！";
+				close2;
+				set Zeny, Zeny-10000;
+				warp "ayothaya",149,71;
+				end;
+			}
+			mes "[ABC]";
+			mes "很抱歉，但是您沒有10,000 Zeny前往Ayothaya。與等待您的經驗相比，這樣的價格毫無意義！";
+			close;
+		}
+	case 3:
+		mes "[ABC]";
+		mes "你夢dream以求";
+		mes "一個美麗的地方";
+		mes "有精神上的寧靜？你";
+		mes "一定在做夢";
+		mes "我的朋友Ayothaya的。";
+		close;
+	}
+}
+
+ayothaya,152,68,1	script	Aibakthing#ayo2	843,{
+	mes "[ABC]";
+	mes "哦！啊！唔！啊！";
+	mes "那麼，您喜歡Ayothaya嗎？您有機會嘗試Tom Yum Goong嗎？準備好後，我會帶您回家。";
+	next;
+	if (select("返回艾伯塔省.:取消.") == 1) {
+		mes "[ABC]";
+		mes "隨時歡迎您回來。我希望我們很快就會再次見面。謝謝~";
+		close2;
+		if (checkre(0))
+			warp "alberta",235,45;
+		else
+			warp "alberta",238,22;
+		end;
+	}
+	mes "[ABC]";
+	mes "啊，是的。我知道很難離開如此美麗的地方。不用擔心";
+	mes "並花點時間。";
+	close;
+}
+
+// Generic Ayothaya NPCs
+//============================================================
+ayothaya,189,120,3	script	Young Man#Thang	843,{
+	mes "[唐]";
+	mes "有一個古老的";
+	mes "可怕的建築";
+	mes "Ayothaya沒有人";
+	mes "在這裡敢於...";
+	next;
+	mes "[唐]";
+	mes "過去，儘管有恐怖的故事，但一些好奇的人還是從未回來的。那個地方內部可能發生什麼？";
+	next;
+	mes "[唐]";
+	mes "但是，如果您想證明自己對他人的勇氣，那麼面對內心的危險可能對冒險家來說是一個值得的挑戰。";
+	mes "我認為。";
+	close;
+}
+
+ayothaya,171,152,5	script	Girl#Lalitha	838,{
+	set .@sit,rand(1,5);
+	if (.@sit > 0 && .@sit < 3) {
+		mes "[優雅的]";
+		mes "你好！";
+		mes "我不認為";
+		mes "我們以前見面了。";
+		next;
+		mes "[優雅的]";
+		mes "你一定是";
+		mes "來自Midgard。";
+		mes "畢竟，我知道每個住在這個村莊的人。";
+		mes "呵呵~";
+		next;
+		mes "[優雅的]";
+		mes "唔...";
+		mes "我可以問你的土地嗎";
+		mes "來自？我很好奇";
+		mes "外界很多事情。";
+		next;
+		mes "[優雅的]";
+		mes "您知道，就像女士在其他國家 /地區穿著的禮服和珠寶一樣，無論男人好看，您擁有什麼樣的歌曲，那裡的男孩喜歡什麼樣的女孩...";
+		emotion ET_QUESTION;
+		next;
+		mes "[" +strcharinfo(0)+ "]";
+		mes "…………";
+		next;
+		mes "[優雅的]";
+		mes "…………";
+		emotion ET_SWEAT;
+		next;
+		mes "[優雅的]";
+		mes "好吧~！";
+		mes "保重";
+		mes "享受您的旅行！";
+		close;
+	}
+	else if (.@sit > 2 && .@sit < 6) {
+		mes "[優雅的]";
+		mes "當你從這個地方向東";
+		mes "村，您將到達一個古老的神社的廢墟。現在";
+		mes "一個充滿可怕怪物的巢。";
+		next;
+		mes "[優雅的]";
+		mes "如果您打算冒險穿越這些廢墟，最好準備";
+		mes "盡可能多！";
+		next;
+		mes "[優雅的]";
+		mes "啊...";
+		mes "我想知道哪裡";
+		mes "我的黑騎士是~";
+		emotion ET_THROB;
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "你的意思不是...";
+		mes "騎士穿著閃亮的盔甲";
+		mes "騎白馬？";
+		next;
+		mes "[優雅的]";
+		mes "唔...？";
+		mes "那好吧...";
+		mes "我會帶他們兩個！";
+		mes "呵呵~！";
+		close;
+	}
+	mes "[優雅的]";
+	mes "嗯...？";
+	mes "這是怎麼回事？";
+	close;
+}
+
+ayothaya,143,102,5	script	Old Man#ayothaya	842,{
+	mes "[村民]";
+	mes "嗯。";
+	mes "嗯...";
+	mes "嗯...？";
+	next;
+	mes "[村民]";
+	mes "你一定是";
+	mes "一個局外人。";
+	mes "是的。是的，的確。";
+	next;
+	mes "[村民]";
+	mes "你只是問嗎";
+	mes "我要去哪裡？";
+	mes "為什麼，到釣魚點";
+	mes "就在前方。就是這樣";
+	mes "我們老人願意：魚。";
+	next;
+	mes "[村民]";
+	mes "嗯...";
+	mes "你想听嗎";
+	mes "有趣嗎？我聽說有人在裡面找到了戒指";
+	mes "他抓到的一條魚";
+	mes "釣魚點。";
+	next;
+	mes "[村民]";
+	mes "據說，有很多關於人們在那裡捕捉到的魚體內的貴重物品的故事。";
+	next;
+	mes "[村民]";
+	mes "如果你很幸運，";
+	mes "你甚至可能成為";
+	mes "百萬富翁。";
+	mes "呵呵呵呵~";
+	next;
+	mes "[村民]";
+	mes "...！ ？";
+	mes "啊，我來到魚市場！ ^666666*嘆氣*^000000，看來我走了錯誤的方式。釣魚點位於這個村莊的另一側。";
+	next;
+	mes "[村民]";
+	mes "既然我在這裡，那不是";
+	mes "環顧四周的壞主意。這個市場上的所有海鮮都是新鮮和美味的。如果您不嘗試一些海鮮，您會後悔的";
+	mes "至少一次。";
+	close;
+}
+
+ayothaya,197,189,5	script	Young Man#1ayothaya	841,{
+	mes "[關]";
+	mes "PH，不是";
+	mes "今天太熱了嗎？";
+	next;
+	mes "[關]";
+	mes "你一定是";
+	mes "來自Midgard，是嗎？";
+	mes "我見過很多遊客";
+	mes "最近從那裡來。";
+	next;
+	mes "[關]";
+	mes "如果您在村莊外旅行，最好要小心。無論您做什麼，都不要進入";
+	mes "一個古老的神社的廢墟";
+	mes "在森林裡。";
+	next;
+	mes "[關]";
+	mes "那個地方也很遠";
+	mes "危險的參觀。不過，我聽說如果您有某種護身符，您可以去那裡";
+	mes "少一點擔心...";
+	next;
+	mes "[關]";
+	mes "好吧，無論如何，遠離那個地方仍然是一個很好的主意。希望您喜歡參觀Ayothaya，並保持安全~";
+	close;
+}
+
+ayothaya,214,142,5	script	Young Man#5ayothaya	843,{
+	mes "[說]";
+	mes "在Ayothaya，我們有自己的傳統武術。我們是村莊的年輕人，練習我們的傳統武術以變得堅強。";
+	next;
+	mes "[說]";
+	mes "您為什麼不學習我們的武術？我保證它將在旅途中極大地幫助您。";
+	close;
+}
+
+ayothaya,241,264,5	script	Young Man#5ayothaya2	843,{
+	mes "[橡木]";
+	mes "嘿...";
+	mes "你看起來很強壯";
+	mes "你想挑戰";
+	mes "我參加比賽？";
+	next;
+	if (select("當然！:不要~") == 1) {
+		mes "[橡木]";
+		mes "嗚嗚！";
+		mes "我只是";
+		mes "開玩笑，伙計！";
+		next;
+		mes "[橡木]";
+		mes "我不太無禮，以至於無緣無故與陌生人打架！";
+		emotion ET_KEK;
+		close;
+	}
+	mes "[橡木]";
+	mes "在與其他人進行了數千場比賽之後，開發了真正的力量。所以，不要害怕戰鬥，好嗎？";
+	emotion ET_HNG;
+	close;
+}
+
+//============================================================
+// Old changelog
+//============================================================
+//= 0.1 Added a Sailor NPC to get back to Alberta [ZoDIaC]
+//= 0.2 fixed coords, dialogues
+//= 0.3 Fixed Warp name, ayotaya doesn't exist, even though iRO
+//=     decided to call it Ayotaya, it really is Ayothaya, like
+//=     that Yuno/Juno thing
+//= 0.4 Added the official warp npc for Ayothaya. [MasterOfMuppets]
+//= 1.0 Added most of the official npcs. The following quests were added: [MasterOfMuppets]
+//=     Tom Yum Goong quest, Holy Threads quest and Holier threads quest.
+//= 1.0a some checks, optimization [Lupus]
+//= 1.1 Missing delitem fixed by Poki#3 [Lupus]
+//= 1.1a Fixed a typo and clarified a comment at the bottom of the script [MasterOfMuppets]
+//= 1.2 Fixed exploits [Lupus]
+//= 1.3 Removed Duplicates [Silent]
+//= 1.4 Moved quests to quests/quests_ayothaya.txt [Evera]
+//= 1.5 Moved a few NPC's to quests/quests_ayothaya.txt [MasterOfMuppets]
+//============================================================

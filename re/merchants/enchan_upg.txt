@@ -1,0 +1,281 @@
+﻿//===== rAthena Script =======================================
+//= Upgrade Weapon Enchants
+//===== By: ==================================================
+//= Skorm
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Adds enchantments to Upgrade weapons.
+//===== Additional Comments: =================================
+//= 1.0 First version.
+//= 1.1 Standardizing, grammar and bug fixes. [Euphy]
+//= 1.2 Moved to Cash Mall [Lemongrass]
+//============================================================
+
+// Main NPC :: 201105_luk_enc
+//============================================================
+itemmall,29,71,3	script	Devil Enchant Master#prq	63,{
+	disable_items;
+	if (checkweight(1201,1) == 0) {
+		mes "您攜帶太多物品，請減少它，然後再回來！";
+		close;
+	}
+	if (MaxWeight - Weight < 10000) {
+		mes "您的體重限制超過了，請減少它並再次回來！";
+		close;
+	}
+	mes "[魔鬼魔法大師]";
+	mes "是的？";
+	mes "你在找我嗎？";
+	next;
+	switch(select("這是第一次見到你！ :聽說你是最棒的！ :請初始化附魔。")) {
+	case 1:
+		mes "[魔鬼魔法大師]";
+		mes "哈哈~當然，我不是那種與人打交道的人。";
+		next;
+		mes "[魔鬼魔法大師]";
+		mes "包括你！即使您為我提供了很多錢，我也不會簡單地吸引您！";
+		next;
+		mes "[魔鬼魔法大師]";
+		mes "你看過我的頭銜嗎？很少有人有這個標題是有原因的！";
+		next;
+		mes "[魔鬼魔法大師]";
+		mes "我只有在帶上 ^0000flenchant書 ^000000的情況下才會著迷！";
+		next;
+		mes "[魔鬼魔法大師]";
+		mes "否則，我不會為您著迷。";
+		close;
+	case 2:
+		if (!countitem(6484)) {
+			mes "[魔鬼魔法大師]";
+			mes "你在聽我嗎？如果您攜帶《魔法書》，我只會為您做！";
+			close;
+		}
+		set .@select,1;
+		break;
+	case 3:
+		mes "[魔鬼魔法大師]";
+		if (Zeny < 100000) {
+			mes "初始化將花費100,000 Zeny。看來您沒有足夠的Zeny ...";
+			close;
+		}
+		mes "初始化將花費100,000 Zeny，並確認該武器是否迷住了！";
+		next;
+		if (select("讓我考慮一下:現在就初始化吧！") == 1) {
+			mes "[魔鬼魔法大師]";
+			mes "確認後回來！";
+			close;
+		}
+		set .@select,2;
+		break;
+	}
+	set .@part, EQI_HAND_R;
+
+	mes "[魔鬼魔法大師]";
+	if (!getequipisequiped(.@part)) {
+		mes "您是否要拆除附魔設備？";
+		close;
+	}
+	setarray .@equip_card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+	// if (!getequipisequiped(.@part)) {
+	// 	mes "在附魔過程中移除裝備是危險的！";
+	// 	close;
+	// }
+	set .@equip_id, getequipid(.@part);
+	.@equip_refine = getequiprefinerycnt(.@part);
+	set .@item$, "|1292|1394|1491|1585|2015|13071|13115|16019|18112|21000|";
+	if (!compare(.@item$,"|"+.@equip_id+"|")) {
+		mes "我現在不想觸摸您的設備！";
+		close;
+	}
+
+	if (.@select == 1) {
+		if (!countitem(6484)) {
+			mes "你在聽我嗎？如果您攜帶《魔法書》，我只會為您做！";
+			close;
+		}
+		mes "您想迷戀哪種類型的效果？";
+		next;
+		switch(select("讓我想想:物理系列:魔法系列")) {
+		case 1:
+			mes "[魔鬼魔法大師]";
+			mes "改變主意後再次回來！";
+			close;
+		case 2:
+			set .@enc_type,1;
+			break;
+		case 3:
+			set .@enc_type,2;
+			break;
+		}
+		mes "[魔鬼魔法大師]";
+		if (.@equip_card[3]) {
+			mes "這個設備被迷住了！您需要先初始化，然後才能再次附魔。";
+			close;
+		}
+		mes "附魔過程可能會失敗， ^ff0000It將降低部分優化水平 ^000000，但開槽的卡和武器不會被打破！您確定要繼續嗎？";
+		next;
+		if (select("下次！ :現在開始！") == 1) {
+			mes "[魔鬼魔法大師]";
+			mes "決定後再次回來！";
+			close;
+		}
+		if (.@equip_card[3]) {
+			mes "[魔鬼魔法大師]";
+			mes "看來有問題，讓我看看。";
+			close;
+		}
+
+		if (.@enc_type == 1) { // Physical Series
+			set .@i, rand(1,1300);
+			     if (.@i < 51)    set .@enchant,4734; //Agility5
+			else if (.@i < 76)    set .@enchant,4735; //Agility6
+			else if (.@i < 88)    set .@enchant,4736; //Agility7
+			else if (.@i < 93)    set .@enchant,4737; //Agility8
+			else if (.@i < 95)    set .@enchant,4738; //Agility9
+			else if (.@i < 96)    set .@enchant,4739; //Agility10
+			else if (.@i < 146)   set .@enchant,4724; //Dexterity5
+			else if (.@i < 171)   set .@enchant,4725; //Dexterity6
+			else if (.@i < 183)   set .@enchant,4726; //Dexterity7
+			else if (.@i < 188)   set .@enchant,4727; //Dexterity8
+			else if (.@i < 190)   set .@enchant,4728; //Dexterity9
+			else if (.@i < 191)   set .@enchant,4729; //Dexterity10
+			else if (.@i < 291)   set .@enchant,4704; //Strength5
+			else if (.@i < 341)   set .@enchant,4705; //Strength6
+			else if (.@i < 366)   set .@enchant,4706; //Strength7
+			else if (.@i < 378)   set .@enchant,4707; //Strength8
+			else if (.@i < 383)   set .@enchant,4708; //Strength9
+			else if (.@i < 384)   set .@enchant,4709; //Strength10
+			else if (.@i < 434)   set .@enchant,4754; //Luck5
+			else if (.@i < 459)   set .@enchant,4755; //Luck6
+			else if (.@i < 471)   set .@enchant,4756; //Luck7
+			else if (.@i < 476)   set .@enchant,4757; //Luck8
+			else if (.@i < 478)   set .@enchant,4758; //Luck9
+			else if (.@i < 479)   set .@enchant,4759; //Luck10
+			else if (.@i < 679)   set .@enchant,4744; //Vitality5
+			else if (.@i < 779)   set .@enchant,4745; //Vitality6
+			else if (.@i < 829)   set .@enchant,4746; //Vitality7
+			else if (.@i < 854)   set .@enchant,4747; //Vitality8
+			else if (.@i < 866)   set .@enchant,4748; //Vitality9
+			else if (.@i < 867)   set .@enchant,4749; //Vitality10
+			else if (.@i < 967)   set .@enchant,4808; //Fighting_Spirit4
+			else if (.@i < 992)   set .@enchant,4820; //Fighting_Spirit5
+			else if (.@i < 1092)  set .@enchant,4835; //Expert_Archer4
+			else if (.@i < 1117)  set .@enchant,4836; //Expert_Archer5
+			else if (.@i < 1217)  set .@enchant,4835; //Expert_Archer4
+			else if (.@i < 1242)  set .@enchant,4836; //Expert_Archer5
+			else set .@enchant,0;
+		} else if (.@enc_type == 2) { // Magical Series
+			set .@i, rand(1,1200);
+			     if (.@i < 51)    set .@enchant,4714; //Inteligence5
+			else if (.@i < 76)    set .@enchant,4715; //Inteligence6
+			else if (.@i < 88)    set .@enchant,4716; //Inteligence7
+			else if (.@i < 93)    set .@enchant,4717; //Inteligence8
+			else if (.@i < 95)    set .@enchant,4718; //Inteligence9
+			else if (.@i < 96)    set .@enchant,4719; //Inteligence10
+			else if (.@i < 146)   set .@enchant,4724; //Dexterity5
+			else if (.@i < 171)   set .@enchant,4725; //Dexterity6
+			else if (.@i < 183)   set .@enchant,4726; //Dexterity7
+			else if (.@i < 188)   set .@enchant,4727; //Dexterity8
+			else if (.@i < 190)   set .@enchant,4728; //Dexterity9
+			else if (.@i < 191)   set .@enchant,4729; //Dexterity10
+			else if (.@i < 291)   set .@enchant,4734; //Agility5
+			else if (.@i < 341)   set .@enchant,4735; //Agility6
+			else if (.@i < 366)   set .@enchant,4736; //Agility7
+			else if (.@i < 378)   set .@enchant,4737; //Agility8
+			else if (.@i < 383)   set .@enchant,4738; //Agility9
+			else if (.@i < 384)   set .@enchant,4739; //Agility10
+			else if (.@i < 484)   set .@enchant,4754; //Luck5
+			else if (.@i < 534)   set .@enchant,4755; //Luck6
+			else if (.@i < 559)   set .@enchant,4756; //Luck7
+			else if (.@i < 571)   set .@enchant,4757; //Luck8
+			else if (.@i < 576)   set .@enchant,4758; //Luck9
+			else if (.@i < 577)   set .@enchant,4759; //Luck10
+			else if (.@i < 777)   set .@enchant,4744; //Vitality5
+			else if (.@i < 877)   set .@enchant,4745; //Vitality6
+			else if (.@i < 927)   set .@enchant,4746; //Vitality7
+			else if (.@i < 952)   set .@enchant,4747; //Vitality8
+			else if (.@i < 964)   set .@enchant,4748; //Vitality9
+			else if (.@i < 969)   set .@enchant,4749; //Vitality10
+			else if (.@i < 1069)  set .@enchant,4812; //Spell4
+			else if (.@i < 1094)  set .@enchant,4826; //Spell5
+			else if (.@i < 1119)  set .@enchant,4761; //Matk2
+			else if (.@i < 1124)  set .@enchant,4806; //Matk3
+			else set .@enchant,0;
+		} else {
+			mes "[魔鬼魔法大師]";
+			mes "唔！這個項目有問題，請再次檢查！";
+			close;
+		}
+		mes "[魔鬼魔法大師]";
+		if (.@equip_card[3]) {
+			mes "這個項目很迷人！";
+			close;
+		}
+		if (!countitem(6484)) {
+			mes "你在聽我嗎？如果您攜帶《魔法書》，我只會為您做！";
+			close;
+		}
+		if (.@enchant == 0) {
+			specialeffect EF_SHIELDCHARGE;
+			mes "哦！難以置信！ ！它失敗了！ ！請再來！";
+			set .@lost_refine, rand(0,.@equip_refine);
+			set .@equip_refine, .@equip_refine - .@lost_refine;
+		} else {
+			specialeffect EF_REPAIRWEAPON;
+			mes "插槽 ^9900004 ^000000被迷住了！";
+		}
+		delitem 6484,1; //Enchant_Book
+
+		// anti-hack
+		if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipRefineHack", .@part, .@equip_refine) || 
+		    callfunc("F_IsEquipCardHack", .@part, .@equip_card[0], .@equip_card[1], .@equip_card[2], .@equip_card[3]))
+			close;
+
+		delequip .@part;
+
+//		GetNonSlotItemSock2 .@equip_refine .@equip_id .@equip_card[0] .@equip_card[1] .@equip_card[2] .@enchant
+		getitem2 .@equip_id,1,1,.@equip_refine,0,.@equip_card[0],.@equip_card[1],.@equip_card[2],.@enchant;
+
+		if (.@lost_refine) {
+			next;
+			mes "[魔鬼魔法大師]";
+			mes "失敗減少了完善"+callfunc("F_InsertPlural",.@lost_refine,"level")+"! Don't be depressed!";
+		}
+		close;
+	} else if (.@select == 2) {
+		if (Zeny < 100000) {
+			mes "您需要帶一些錢來初始化！ ！";
+			close;
+		}
+		if (getiteminfo(.@equip_card[3], ITEMINFO_SUBTYPE) != CARD_ENCHANT) {
+			mes "這個項目不魅力！";
+			close;
+		}
+		if (!getequipisequiped(.@part)) {
+			mes "你現在沒有裝備了嗎？";
+			close;
+		}
+		specialeffect EF_REPAIRWEAPON;
+		mes "我初始化了附魔的效果。";
+		set Zeny, Zeny - 100000;
+
+		// anti-hack
+		if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipRefineHack", .@part, .@equip_refine) || 
+		    callfunc("F_IsEquipCardHack", .@part, .@equip_card[0], .@equip_card[1], .@equip_card[2], .@equip_card[3]))
+			close;
+
+		delequip .@part;
+
+//		GetNonSlotItemSock2 .@equip_refine .@equip_id .@equip_card[0] .@equip_card[1] .@equip_card[2] 0
+		getitem2 .@equip_id,1,1,.@equip_refine,0,.@equip_card[0],.@equip_card[1],.@equip_card[2],0;
+
+		close;
+	} else {
+		mes "看來您選擇了錯誤的工作？";
+		close;
+	}
+}

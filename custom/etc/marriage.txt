@@ -1,0 +1,937 @@
+﻿//===== rAthena Script =======================================
+//= Wedding Script
+//===== By: ==================================================
+//= AppleGirl, Evera
+//===== Current Version: =====================================
+//= 2.9
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Fully working wedding script for all kind of weddings
+//===== Additional Comments: =================================
+// 1.1 Lesbian and Gay Weddings [ShadowLady]
+// 2.0 Complete Rewrite [Skotlex]
+// 2.9 Somewhat iRO-official NPC names [DracoRPG]
+//============================================================
+
+// Configuration Variables: 
+-	script	marriage_init	-1,{
+OnInit:
+	set $@wed_allow, 0;	//If 1, allows same sex marriages.
+	set $@wed_veil, 0;	//Set to 0 to disable veil check on the bride
+
+//Id of the item that is traded for the wedding ring (use 0 to disable):
+	set $@wed_ring, 2613;
+
+	set $@wed_groom_reg, 1300000;	//Registration cost for the Groom
+	set $@wed_bride_reg, 1200000; //Registration cost for the Bride
+	set $@wed_divorce_fee, 50000;	//Divorcing fee
+	set $@wedding_effect, 1; //On who to display the FX: 0: Priest, 1: Bride, 2: Groom
+	end;
+}
+
+// Other Configuration:
+// Line 61,62: Priest location, sprite and name.
+// Line 437,438: Registration location, sprite and name. 
+// Line 813,814: Divorcing location, sprite and name.
+
+// Variable Notes:
+// $wed_progress	Signals that there is a wedding in progress
+// $wed_groom$ - Groom's name storage
+// $wed_groom_sex - Groom's gender (for same marriage ring giving)
+// $wed_bride$ - Bride's name storage
+// $wed_bride_sex - Groom's gender (for same marriage ring giving)
+// $wed_groom_progress - Notes the progress on the groom's part
+// $wed_bride_progress - Notes the progress on the bride's part
+// 0: Not registered. 1: Registered. 2: Accepted the partner. 3: Ready to
+// Retrieve the ring. 4: Retrieved the ring. 5: All set to be wed. 6: Already
+// a couple.
+// ceremony.
+// $wedding_effect_id - When wedding_effect is enabled, sets the ID of the
+// player to show the effect on.
+// $divorce_progress	signals that there is a divorce in progress
+// $@divorcer$ name of the person who requested divorce
+// $@divorcee id of the partner, who has to accept the divorce and pay.
+
+//The Priest - official iRO sprite & in-dialog name (on-map name not confirmed)
+prt_church,100,123,4	script	Vomars	60,{
+	set @name$,"Vomars";
+
+	function SF_wed_end;
+	function SF_equip_check;
+	function SF_Groom;
+	function SF_Bride;
+	function SF_AcceptGroom;
+	function SF_AcceptBride;
+	function SF_RetrieveRingM;
+	function SF_RetrieveRingF;
+	function SF_RingsAccepted;
+	function SF_StartCeremony;
+	
+	if (getpartnerid() > 0) {
+		mes "["+@name$+"]";
+		mes "你有我的祝福，有美好的婚姻生活。";
+		close;
+	}
+	if ($wed_progress == 0) { // Official iRO dialog
+		mes "["+@name$+"]";
+		mes "你必須申請";
+		mes "結婚結婚";
+		mes "在結婚之前。";
+		mes "結婚快樂會讓你知道";
+		mes "您還需要做什麼";
+		mes "為結婚做準備";
+		close;
+	} // End official iRO dialog
+	
+	if (strcharinfo(0) == $wed_groom$) {
+		SF_Groom();
+		end;
+	}
+	if (strcharinfo(0) == $wed_bride$) {
+		SF_Bride();
+		end;
+	}
+	mes "["+@name$+"]";
+	if ($wed_groom_progress == 0 || $wed_bride_progress == 0) {
+		mes "計劃婚禮。如果您不打擾我，我會很感激。";
+		close;
+	}
+	if ($wed_groom_progress == 6) {
+		mes "我是婚禮"+$wed_groom$+" and "+$wed_bride$+", and it's already too late to object. Please let me continue.";
+		close;
+	}
+	mes "我要結婚"+$wed_groom$+" and "+$wed_bride$+", do you have an objection to it?";
+	if (select("Sorry, please go on.","Yes, I actually do.") == 2) {
+		//Abort
+		npctalk @name$ +" : Ladies and gentlemen, "+strcharinfo(0)+" has an objection to the wedding!";
+		SF_wed_end();
+		mes "為什麼他們不應該結婚？";
+		input $@msg$;
+		npctalk @name$ +" : "+ strcharinfo(0) +"'s objection is: "+$@msg$;
+		emotion ET_CRY;
+		mes "我懂了...";
+	} else
+		mes "很好，去坐下來享受儀式。";
+	close;
+
+function SF_Groom {
+	if ($wed_bride_progress == 0) {
+		mes "["+@name$+"]";
+		mes "看起來您的新娘尚未到達並註冊。";
+		close;
+	}
+	if (SF_equip_check() == 0)
+		close;
+
+	switch($wed_groom_progress) {
+	case 1:
+		SF_AcceptBride();
+		break;
+	case 2:
+		mes "["+@name$+"]";
+		mes "我正在等待您的伴侶接受您開始儀式。";
+		close;
+	case 3:
+		SF_RetrieveRingM();
+		break;
+	case 4:
+		mes "["+@name$+"]";
+		mes "您伴侶的結婚戒指尚未檢索。儀式將在你們倆聲稱自己的戒指上開始。";
+		close;
+	case 5:
+		mes "["+@name$+"]";
+		SF_StartCeremony();
+		break;
+	default:
+		mes "["+@name$+"]";
+		mes "請不要現在打擾我。";
+		close;
+	}
+}
+
+function SF_Bride {
+	if ($wed_groom_progress == 0) {
+		mes "["+@name$+"]";
+		mes "看起來您的新郎尚未到達並註冊。";
+		close;
+	}
+
+	if (SF_equip_check() == 0)
+		close;
+
+	switch ($wed_bride_progress) {
+	case 1:
+		SF_AcceptGroom();
+		break;
+	case 2:
+		mes "["+@name$+"]";
+		mes "我正在等待您的伴侶接受您開始儀式。";
+		close;
+	case 3:
+		SF_RetrieveRingF();
+		break;
+	case 4:
+		mes "["+@name$+"]";
+		mes "您伴侶的結婚戒指尚未檢索。儀式將在你們倆聲稱自己的戒指上開始。";
+		close;
+	case 5:
+		mes "["+@name$+"]";
+		SF_StartCeremony();
+		break;
+	default:
+		mes "["+@name$+"]";
+		mes "請不要現在打擾我。";
+		close;
+	}
+}
+
+function SF_AcceptGroom {
+	mes "["+@name$+"]";
+	mes $wed_bride$+"，，，，"+$wed_groom$+" has requested to be your husband for the rest of your life. Do you accept?";
+	next;
+	switch(select("I need time to think about it.","No, I don't!","Yes, I do!")) {
+	case 1:
+		mes "["+@name$+"]";
+		mes "你什麼！ ？";
+		mes "錯誤.. *咳嗽 * *咳嗽 *很好...下定決心後回來。";
+		emotion ET_ANGER;
+		close;
+	case 2:
+		mes "["+@name$+"]";
+		mes "!!";
+		mes "啊...錯誤...嗯...好吧。你們兩個似乎有一些差異要首先解決。";
+		close2;
+		emotion ET_HUK;
+		npctalk @name$ +" : Ladies and gentlemen, "+$wed_bride$+" has rejected to marry "+$wed_groom$+"!";
+		SF_wed_end();
+		break;
+	case 3:
+		set $wed_bride_progress,2;
+		if ($wed_groom_progress == 2) {
+			SF_RingsAccepted();
+			break;
+		}
+		emotion ET_OK;
+		mes "["+@name$+"]";
+		mes "新郎批准後，您將獲得戒指，儀式將開始，您將正式結婚。";
+		close;
+	}
+}
+
+function SF_AcceptBride {
+	mes "["+@name$+"]";
+	mes $wed_groom$+"，，，，"+$wed_bride$+" has requested to be your wife for the rest of your life. Do you accept?";
+	next;
+	switch(select("I need time to think about it.","No, I don't!","Yes, I do!")) {
+	case 1:
+		mes "["+@name$+"]";
+		mes "你什麼！ ？";
+		mes "錯誤.. *咳嗽 * *咳嗽 *很好...下定決心後回來。";
+		emotion ET_ANGER;
+		close;
+	case 2:
+		mes "["+@name$+"]";
+		mes "!!";
+		mes "啊...錯誤...嗯...好吧。你們兩個似乎有一些差異要首先解決。";
+		emotion ET_HUK;
+		close2;
+		npctalk @name$ +" : Ladies and gentlemen, "+$wed_groom$+" has rejected to marry "+$wed_bride$+"!";
+		SF_wed_end();
+		break;
+	case 3:
+		set $wed_groom_progress,2;
+		if ($wed_bride_progress == 2) {
+			SF_RingsAccepted();
+			break;
+		}
+		emotion ET_OK;
+		mes "["+@name$+"]";
+		mes "新娘批准後，您將獲得戒指，儀式將開始，您將正式結婚。";
+		close;
+	}
+}
+
+function SF_RingsAccepted {
+	mes "["+@name$+"]";
+	mes "現在你們倆都接受了，婚禮將開始。請出來，您和您的伴侶，取回您的戒指。";
+	set $wed_bride_progress,3;
+	set $wed_groom_progress,3;
+	announce $wed_groom$+" and "+$wed_bride$+"'s wedding ceremony will be held at the church!",8;
+	close2;
+	emotion ET_THROB;
+	npctalk @name$ +" : May the groom and bride please step forward and retrieve their rings?";
+}
+
+function SF_RetrieveRingM {
+	mes "["+@name$+"]";
+	if ($@wed_ring && countitem($@wed_ring) < 1) {
+		mes "你怎麼了"+getitemname($@wed_ring)+"? You didn't lose it... did you? We need it to continue with the ceremony!";
+		close;
+	}
+	if ($wed_bride_sex)
+		set @item, 2634;	//Groom's wedding ring
+	else
+		set @item, 2635;	//Bride's wedding ring
+	if (getnameditem(@item,$wed_groom$) == 0) {
+		mes "您似乎沒有足夠的空間來攜帶戒指...釋放一些空間，然後回來回收伴侶的戒指。";
+		close;
+	}
+	mes "這是新娘的結婚戒指。";
+	if ($@wed_ring) delitem $@wed_ring,1;
+	set $wed_groom_progress,4;
+	
+	if ($wed_bride_progress == 4)
+		SF_StartCeremony();
+	else {
+		mes "一旦新娘取回戒指，儀式就會開始。";
+		close;
+	}
+}
+
+function SF_RetrieveRingF {
+	mes "["+@name$+"]";
+	if ($@wed_ring && countitem($@wed_ring) < 1) {
+		mes "你怎麼了"+getitemname($@wed_ring)+"? You didn't lose it... did you? We need it to continue with the ceremony!";
+		close;
+	}
+	if ($wed_groom_sex)
+		set @item, 2634;	//Groom's wedding ring
+	else
+		set @item, 2635;	//Bride's wedding ring
+
+	if (getnameditem(@item,$wed_bride$) == 0) {
+		mes "您似乎沒有足夠的空間來攜帶戒指...釋放一些空間，然後回來回收伴侶的戒指。";
+		close;
+	}
+	mes "這是您的新郎的結婚戒指。";
+	if ($@wed_ring) delitem $@wed_ring,1;
+	set $wed_bride_progress,4;
+
+	if ($wed_groom_progress == 4)
+		SF_StartCeremony();
+	else {
+		mes "一旦您的新郎取回戒指，儀式就會開始。";
+		close;
+	}
+}
+
+function SF_StartCeremony {
+	mes "我現在將開始婚禮，您將被宣佈為丈夫和妻子。";
+	set $wed_bride_progress,5;
+	set $wed_groom_progress,5;
+	set $@msg$,$wed_groom$;
+	if (strcharinfo(0) == $wed_groom$)
+		set $@msg$,$wed_bride$;
+	if (marriage($@msg$) == 0) {
+		next;
+		mes "["+@name$+"]";
+		mes "在哪裡"+$@msg$+"?? I can't marry you both if one is missing...";
+		close;
+	}
+	set $wed_bride_progress,6;
+	set $wed_groom_progress,6;
+	initnpctimer;
+	close;
+}
+
+OnTimer1000:
+	npctalk @name$ +" : Ladies and Gentlemen, We will now join in holy matrimony these two lovers.";
+	end;
+	
+OnTimer5000:
+	npctalk @name$ +" : Now more than ever, will both of your lives be entwined together as so will be your souls.";
+	end;
+
+OnTimer10000:
+	npctalk @name$ +" : You will both honor and cherish each other through the best and worst of times.";
+	end;
+	
+OnTimer15000:
+	npctalk @name$ +" : The safety and well being of your other will now also be your responsibility.";
+	end;
+	
+OnTimer20000:
+	npctalk @name$ +" : May in sickness or good health, your love burn bright like no force can extinguish it.";
+	end;
+	
+OnTimer25000:
+	npctalk @name$ +" : Those here stand witness to these vows bestowed upon you, you must act accordingly to them.";
+	end;
+	
+OnTimer30000:
+	npctalk @name$ +" : Understanding that, we are nothing more but mortals on this earth, but this is our triumph.";
+	end;
+	
+OnTimer35000:
+	npctalk @name$ +" : We here will now join these two mortal entities, and create an immortal love.";
+	end;
+	
+OnTimer40000:
+	npctalk @name$ +" : "+ $wed_groom$ +", you have accepted to take "+$wed_bride$+" as your lawfully wedded wife,";
+	end;
+	
+OnTimer45000:
+	npctalk @name$ +" : and you, "+$wed_bride$+", have accepted take "+$wed_groom$+" as your lawfully wedded husband.";
+	end;
+
+OnTimer50000:
+	npctalk @name$ +" : And as such, now, by the powers vested in me...";
+	end;
+
+OnTimer55000:
+	npctalk @name$ +" : I pronounce you Husband and Wife, you may kiss the bride and exchange rings.";
+	if ($wedding_effect_id && isloggedin($wedding_effect_id))
+	{
+		attachrid($wedding_effect_id);
+		wedding;
+		detachrid;
+	} else
+		wedding;
+	SF_wed_end();
+	stopnpctimer;
+	end;
+
+//Subfunction: Checks that the groom/bride is still wearing their stuff.
+function SF_equip_check {
+	if (Sex == SEX_MALE && getequipid(EQI_ARMOR) != 7170) {
+		mes "["+@name$+"]";
+		mes "孩子，你對你做了什麼"+getitemname(7170)+"?";
+		emotion ET_THINK;
+		return 0;
+	}
+	if (Sex == SEX_FEMALE && getequipid(EQI_ARMOR) != 2338) {
+		mes "["+@name$+"]";
+		mes "孩子，你應該穿"+getitemname(2338)+" at all times during the ceremony...";
+		emotion ET_THINK;
+		return 0;
+	}
+	if (Sex == SEX_FEMALE && $@wed_veil && getequipid(EQI_HEAD_TOP) != 2206) {
+		mes "["+@name$+"]";
+		mes "孩子，你不能脫下你的"+getitemname(2206)+" yet....";
+		emotion ET_THINK;
+		return 0;
+	}
+	return 1;
+}
+
+//Subfunction: Resets wedding variables.
+function SF_wed_end {
+	set $wed_groom$,"";
+	set $wed_groom_sex, 0;
+	set $wed_bride$,"";
+	set $wed_bride_sex, 0;
+	set $wed_groom_progress,0;
+	set $wed_bride_progress,0;
+	set $wed_progress,0;
+	set $wedding_effect_id,0;
+}
+
+OnInit:
+	if ($wed_groom_progress==6) {
+		SF_wed_end();
+	}
+	end;
+}
+
+//Registration & Status
+prt_church,106,99,3	script	Happy Marry	67,{
+	set @name$,"Marry";
+	if (getpartnerid() > 0) {
+		mes "["+@name$+"]";
+		mes "婚姻不是美麗嗎？";
+		close;
+	}
+	
+	function SF_WedProgress;
+	function SF_Principles;
+	function SF_Procedure;
+	function SF_Register;
+	function SF_TryRegister;
+
+	if ($wed_progress) {
+		SF_WedProgress();
+		end;
+	}
+	
+	do {
+		mes "["+@name$+"]";
+		mes "婚姻...真是一件美麗的事情。";
+		mes "您想和某人結婚嗎？";
+		next;
+		set @menu, select(
+			"I'll be single forever!",
+			"Explain the principles of marriage.",
+			"Explain the marriage procedure.",
+			"I want to get married with someone."
+		);
+		switch (@menu) {
+		case 1: //Quit
+			mes "["+@name$+"]";
+			mes "在這種情況下，享受您的單身漢的生活。";
+			close;
+		case 2: //Principles
+			SF_Principles();
+			break;
+		case 3: //Procedure
+			SF_Procedure();
+			break;
+		case 4: //Register
+			SF_Register();
+			break;
+		}
+	} while (@menu > 1);
+	end;
+
+function SF_Register {
+	if ($@wed_allow) { //Role select
+		mes "["+@name$+"]";
+		mes "很好，您想註冊誰？";
+		next;
+		set @submenu, select("Groom","Bride","Cancel");
+	} else if (Sex == SEX_MALE) { //Groom
+		mes "["+@name$+"]";
+		mes "很好，您會註冊為新郎嗎？";
+		next;
+		if (select("Yes","I've changed my mind.")==1)
+			set @submenu, 1;
+		else
+			set @submenu, 3;
+	} else { //Bride
+		mes "["+@name$+"]";
+		mes "很好，您會註冊為新娘嗎？";
+		next;
+		if (select("Yes","I've changed my mind.")==1)
+			set @submenu, 2;
+		else
+			set @submenu, 3;
+	}
+	switch (@submenu) {
+	case 1: //Groom
+		SF_TryRegister(0);
+		set $wed_progress,1;
+		mes "["+@name$+"]";
+		mes "您現在已註冊為新郎。";
+		mes "告訴新娘盡快註冊。";
+		emotion ET_SCRATCH;
+		initnpctimer;
+		close;
+	case 2: //Bride
+		SF_TryRegister(1);
+		set $wed_progress,1;
+		mes "["+@name$+"]";
+		mes "您現在已註冊為新娘。";
+		mes "告訴您的新郎盡快註冊。";
+		emotion ET_SCRATCH;
+		initnpctimer;
+		close;
+	default: //Cancel
+		mes "["+@name$+"]";
+		mes "準備好後回來。";
+		close;
+	}
+}
+	
+function SF_WedProgress {
+	if (strcharinfo(0) == $wed_groom$) {
+		mes "["+@name$+"]";
+		if ($wed_bride_progress > 0)
+			mes "牧師將處理其餘的儀式。";
+		else
+			mes "告訴您的新娘註冊，花了這麼長時間？時間用完了。";
+		close;
+	}
+	if (strcharinfo(0) == $wed_bride$) {
+		mes "["+@name$+"]";
+		if ($wed_groom_progress > 0) 
+			mes "牧師將處理其餘的儀式。";
+		else
+			mes "告訴您的新郎註冊，花了這麼長時間？時間用完了。";
+		close;
+	}
+	if (($wed_groom_progress == 0) && (Sex == SEX_MALE || $@wed_allow == 1)) {
+		mes "["+@name$+"]";
+		mes $wed_bride$+"正在等待新郎註冊。您是來新郎註冊的人嗎？";
+		next;
+		if (select("Yes, I am.","Sorry, you got the wrong person.") == 1) {
+			SF_TryRegister(0);
+			stopnpctimer;
+			set $wed_groom_progress,1;
+			mes "["+@name$+"]";
+			mes "很好，現在去牧師重申您的誓言，儀式將開始。"; 
+			emotion ET_BEST;
+			close2;
+			npctalk @name$ +" : Registration finished. "+$wed_groom$+" and "+$wed_bride$+", please reaffirm your vows with the Priest.";
+			emotion ET_BEST;
+			end;
+		} else {
+			mes "["+@name$+"]";
+			mes "我懂了。很抱歉打擾您。";
+			close;
+		}
+
+	}
+	if (($wed_bride_progress == 0) && (Sex == SEX_FEMALE || $@wed_allow == 1)) {
+		mes "["+@name$+"]";
+		mes $wed_groom$+"正在等待新娘註冊。您是來新娘註冊的人嗎？";
+		next;
+		if(select("Yes, I am.","Sorry, you got the wrong person.") == 1) {
+			SF_TryRegister(1);
+			stopnpctimer;
+			mes "["+@name$+"]";
+			mes "很好，現在去牧師重申您的誓言，儀式將開始。"; 
+			emotion ET_BEST;
+			close2;
+			npctalk @name$ +" : Registration finished. "+$wed_groom$+" and "+$wed_bride$+", please reaffirm your vows with the Priest.";
+			emotion ET_BEST;
+			end;
+		} else {
+			mes "["+@name$+"]";
+			mes "我懂了。很抱歉打擾您。";
+			close;
+		}
+	}
+	mes "["+@name$+"]";
+	mes "有一場婚禮。";
+	mes "您想知道上述婚禮的進度嗎？";
+	next;
+	if (select("Yes","No") != 1) {
+		mes "["+@name$+"]";
+		mes "享受婚禮。";
+		close;
+	}
+	//Display Progress
+	mes "["+@name$+"]";
+	switch ($wed_groom_progress) {
+	case 0:
+		mes "新郎尚未註冊。";
+		break;
+	case 1:
+		mes "新郎，"+$wed_groom$+", has yet to accept the bride.";
+		break;
+	case 2:
+		mes "新郎，"+$wed_groom$+", is waiting for the bride's acceptance.";
+		break;
+	case 3:
+		mes "新郎，"+$wed_groom$+", has yet to retrieve the ring.";
+		break;
+	case 4:
+		mes "新郎，"+$wed_groom$+", is waiting for the bride to retrieve the ring.";
+		break;
+	}
+	switch ($wed_bride_progress) {
+	case 0:
+		mes "新娘尚未註冊。";
+		break;
+	case 1:
+		mes "新娘，"+$wed_bride$+", has yet to confirm the groom.";
+		break;
+	case 2:
+		mes "新娘，"+$wed_bride$+", is waiting for the groom's acceptance.";
+		break;
+	case 3:
+		mes "新娘，"+$wed_bride$+", has yet to retrieve the ring.";
+		break;
+	case 4:
+		mes "新娘，"+$wed_bride$+", is waiting for the groom to retrieve the ring.";
+		break;
+	case 5:
+		mes "我們只是在等待"+$wed_groom$+" and "+$wed_bride$+" to be together to marry them.";
+		break;
+	case 6:
+		mes $wed_groom$+"和"+$wed_bride$+"'s wedding ceremony is already well on it's way.";
+		break;
+	}
+	mes "享受婚禮的剩餘。";
+	close;
+}
+
+OnInit:
+	if ($wed_groom_progress + $wed_bride_progress == 1)
+		initnpctimer;
+	end;
+
+OnTimer60000:
+	//Registration failed.
+	if ($wed_bride_progress == 1)
+		set $@msg$, $wed_bride$;
+	else
+		set $@msg$, $wed_groom$;
+
+	npctalk @name$ +" : Registration timed out. Is there no one who wants to marry "+$@msg$+"..?";
+	emotion ET_SCRATCH;
+	
+	set $wed_groom$,"";
+	set $wed_groom_sex, 0;
+	set $wed_bride$,"";
+	set $wed_bride_sex, 0;
+	set $wed_groom_progress,0;
+	set $wed_bride_progress,0;
+	set $wed_progress,0;
+	stopnpctimer;
+	end;
+
+//Subfunction SF_TryRegister (int bride)
+function SF_TryRegister {
+	set @bride, getarg(0);
+	set @type$, "groom";
+	if (@bride)
+		set @type$, "bride";
+		
+	mes "["+@name$+"]";
+	mes "在註冊之前"+@type$+", let me check if you meet all the requirements...";
+	next;
+	if (Upper == 2) {
+		mes "["+@name$+"]";
+		mes "哦，親愛的，你太年輕了，無法想到婚姻！";
+		emotion ET_SURPRISE;
+		close;
+	}
+	if (Sex == SEX_MALE)
+		set @item, 7170;
+	else
+		set @item, 2338;
+	
+	if (getequipid(EQI_ARMOR) != @item) {
+		mes "["+@name$+"]";
+		mes "你應該穿著"+getitemname(@item)+" if you want to get married.";
+		close;
+	}
+	if (Sex == SEX_FEMALE && $@wed_veil && getequipid(EQI_HEAD_TOP) != 2206) {
+		mes "["+@name$+"]";
+		mes "你在哪裡"+getitemname(2206)+"? It's a necessary complement to your dress.";
+		close;
+	}
+	if ($@wed_ring && countitem($@wed_ring) < 1) {
+		mes "["+@name$+"]";
+		mes "戒指在哪裡？您需要一個"+getitemname($@wed_ring)+" for the ring exchange, dear.";
+		close;
+	}
+	if (@bride)
+		set @cost, $@wed_bride_reg;
+	else 
+		set @cost, $@wed_groom_reg;
+
+	if (Zeny < @cost) {
+		mes "["+@name$+"]";
+		mes "很抱歉，您沒有足夠的錢支付註冊費。";
+		mes "收集後回來"+@cost+"z."; 
+		close;
+	}
+	set Zeny,Zeny-@cost;
+	sc_start SC_Wedding,3600000,1; //Start Wedding Effect (SC_WEDDING)
+	if (@bride) {
+		set $wed_bride_progress,1;
+		set $wed_bride$,strcharinfo(0);
+		set $wed_bride_sex, Sex;
+		if ($@wedding_effect == 1) //Store account id for effect.
+			set $wedding_effect_id, getcharid(3);
+	} else {
+		set $wed_groom_progress,1;
+		set $wed_groom$,strcharinfo(0);
+		set $wed_groom_sex, Sex;
+		if ($@wedding_effect == 2) //Store account id for effect.
+			set $wedding_effect_id, getcharid(3);
+	}
+}
+
+//Explain wedding principles...
+function SF_Principles {
+	mes "["+@name$+"]";
+	mes "婚禮是由我們當地的牧師舉行的，目的是促進愛心夫婦之間的愛與和平。";
+	next;
+	mes "["+@name$+"]";
+	mes "該提議必須通過審慎和禮貌來完成，一旦提出了結婚，就無法撤消。";
+	next;
+	mes "["+@name$+"]";
+	mes "婚姻加入的兩個人必須永遠在一起，直到死亡使他們分開。";
+	next;
+	mes "["+@name$+"]";
+	if ($@wed_allow == 1)
+		mes "儘管通常只有男性可以與女性結婚（反之亦然），但我們的當地牧師比這更開放，他允許所有配對，無論性別如何。";
+	else
+		mes "男性只能與女性結婚，而女性只能與男性結婚，教會不會同意其他任何類型的伙伴關係。";
+	next;
+	mes "["+@name$+"]";
+	mes "如果您想和其他重要的人一起度過餘生，那就不要害羞地提出建議。";
+	next;
+	mes "["+@name$+"]";
+   mes "我希望對希望過上幸福過的夫妻祝福...";
+	next;
+}
+
+//Explain the wedding procedure...
+function SF_Procedure {
+	mes "["+@name$+"]";
+	mes "首先，新郎和新娘都必須向我註冊。";
+	next;
+	if ($@wed_allow == 1) {
+		mes "["+@name$+"]";
+		mes "註冊要求是：";
+		mes "- 男性一定穿著"+getitemname(7170)+".";
+		mes "- 女性必須穿著"+getitemname(2338)+".";
+		if ($@wed_veil) mes "- 女性也必須穿著"+getitemname(2206)+".";
+		if ($@wed_ring) mes "- 兩人都必須擁有"+getitemname($@wed_ring)+" each.";
+		if ($@wed_groom_reg > 0) mes "- 新郎的登記費為"+$@wed_groom_reg+"z.";
+		if ($@wed_bride_reg > 0) mes "- 新娘的登記費為"+$@wed_bride_reg+"z.";
+	} else {
+		mes "["+@name$+"]";
+		mes "新郎的註冊要求是：";
+		mes "- 穿著"+getitemname(7170)+".";
+		if ($@wed_ring) mes "- 擁有一個"+getitemname($@wed_ring)+".";
+		if ($@wed_groom_reg > 0) mes "- 支付註冊費"+$@wed_groom_reg+"z.";
+		next;
+		mes "["+@name$+"]";
+		mes "新娘的註冊要求是：";
+		mes "- 穿著"+getitemname(2338)+".";
+		if ($@wed_veil) mes "- 穿著"+getitemname(2206)+".";
+		if ($@wed_ring) mes "- 擁有一個"+getitemname($@wed_ring)+".";
+		if ($@wed_bride_reg > 0) mes "- 支付註冊費"+$@wed_bride_reg+"z.";
+	}
+	next;
+	mes "["+@name$+"]";
+	mes "我不需要提及這一點，但是收養的孩子太年輕，無法結婚。";
+	mes "新郎和新娘都必須在彼此的一分鐘內註冊，否則婚禮將被取消。因此，請確保您都準備好並事先滿足註冊要求。";
+	next;
+	mes "["+@name$+"]";
+	mes "兩者都向我註冊後，您必須向牧師保證誓言並接受您的註冊合作夥伴。如果由於某種原因您拒絕您的註冊合作夥伴，婚禮將被取消...";
+	next;
+	mes "["+@name$+"]";
+	mes "如果你們倆互相接受，那麼婚禮已經決定，儀式將開始。";
+	if ($@wed_ring) {
+		mes "但是首先，您需要準備好戒指。";
+		next;
+		mes "["+@name$+"]";
+		mes "再次與牧師交談，他將交流您"+getitemname($@wed_ring)+" for a wedding ring. After you both have claimed the rings for exchanging, the ceremony will begin.";
+	}
+	next;
+	mes "["+@name$+"]";
+	mes "如果有多個夫妻希望結婚，那麼您應該保持秩序，因為牧師只能一次處理一場婚禮。";
+	next;
+}
+}
+
+prt_church,94,99,4	script	Sister Lisa	79,{
+	set @name$,"Lisa";
+
+	function SF_DivorceEnd;
+	function SF_InProgress;
+	
+	if ($@divorce_progress==1) {
+		goto SF_InProgress;
+		end;
+	}
+	
+	do {
+		mes "["+@name$+"]";
+		mes "離婚可能是一個可悲的事件...";
+		if (getpartnerid() == 0) {
+			mes "人們不應該向他人宣誓貴族，您不認為嗎？";
+			close;
+		}
+		mes "您不想有機會離婚嗎？";
+		next;
+		set @menu, select(
+			"I am happy as I am, thank you.",
+			"Explain the divorce.",
+			"Explain Requirements.",
+			"I want to divorce."
+		);
+		switch (@menu) {
+		case 1:
+			mes "["+@name$+"]";
+			mes "很高興聽到。";
+			close;
+		case 2: //Explanation
+			mes "["+@name$+"]";
+			mes "即使據說一旦結婚了，就無法撤消它們，有時有必要撤消過去的錯誤。";
+			next;
+			mes "["+@name$+"]";
+			mes "這是可悲的，但是真的。如果您碰巧與錯誤的人結婚，則可以離婚，而不是與錯誤的人一起度過餘生。";
+			next;
+			break;
+		case 3: //Requirement
+			mes "["+@name$+"]";
+			mes "為了申請離婚，我需要你們倆都同意。";
+			mes "申請離婚後，您的配偶有一分鐘的同意，然後你們倆都將離婚。";
+			if ($@wed_divorce_fee > 0) mes "費用為"+$@wed_divorce_fee+"z and is paid by the person who confirms the divorce, so plan ahead of time how you will divide the costs.";
+			next;
+			break;
+		case 4: //Divorce
+			mes "["+@name$+"]";
+			mes "您不應該後悔生活中做出的選擇。";
+			mes "您是否確定要離婚？";
+			next;
+			if (select("Wait... I need to think about it.","Absolutely") != 2) {
+				mes "["+@name$+"]";
+				mes "您應該考慮一下。";
+				close;
+			} 
+			mes "["+@name$+"]";
+			set $@divorcee,getpartnerid();
+			set $@divorcer$,strcharinfo(0);
+			set $@divorce_progress,1;
+			initnpctimer;
+			mes "很好，請您的伴侶確認，然後我將收取離婚的費用。";
+			close;
+		}
+	} while (@menu > 1);
+end;
+
+function SF_InProgress {
+	if (strcharinfo(0) == $@divorcer$) { 
+		mes "["+@name$+"]";
+		mes "...我仍在等待您的伴侶確認離婚程序。";
+		close;
+	}
+	if (getcharid(0) != $@divorcee) {
+		mes "["+@name$+"]";
+		mes "我正在離婚"+$@divorcer$+".";
+		mes "你知道配偶是誰嗎？";
+		close;
+	}
+	//Confirm...
+	mes "["+@name$+"]";
+	mes $@divorcer$+"要求與您離婚。如果您接受，並有費用"+$@wed_divorce_fee+"z at hand, I will proceed to divorce you two.";
+	mes "那麼，我應該繼續離婚嗎？";
+	next;
+	if (select("I don't want to divorce....","Yes, we have agreed to this.")!=2) {
+		mes "["+@name$+"]";
+		mes "希望您能解決問題。";
+		emotion ET_GOODBOY;
+		goto SF_DivorceEnd;
+		close;
+	}
+	if (Zeny < $@wed_divorce_fee) {
+		mes "["+@name$+"]";
+		mes "好吧，我不能提交離婚，因為您沒有足夠的費用。讓您的伴侶借給您嗎？";
+		close;
+	}
+	if (!(divorce())) {
+		mes "["+@name$+"]";
+		mes "在哪裡"+$@divorcer$+" gone to? I can't divorce you unless you both are here...";
+		emotion ET_PROFUSELY_SWEAT;
+		close;
+	}
+	set Zeny,Zeny-$@wed_divorce_fee;
+	announce $@divorcer$+" has just divorced "+strcharinfo(0)+"...", 8;
+	mes "["+@name$+"]";
+	mes "您的離婚已提交。你不再是結婚了。";
+	emotion ET_CRY;
+	goto SF_DivorceEnd;
+	close;
+}
+
+function SF_DivorceEnd {
+	stopnpctimer;
+	set $@divorce_progress,0;
+	set $@divorcee,0;
+	set $@divorcer$,"";
+}
+
+OnTimer60000:
+	npctalk @name$ +" : Divorce confirmation time's is up. Where did "+$@divorcer$+"'s spouse go...";
+	emotion ET_QUESTION;
+	SF_DivorceEnd();
+	end;
+}

@@ -1,0 +1,158 @@
+﻿//===== rAthena Script =======================================
+//= Valentine's Day Event (2012)
+//===== By: ==================================================
+//= Rikimaru
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= The full Valentine's Day NPCs of the Valentine's Day
+//= Event 2012 (account-based).
+//===== Additional Comments: =================================
+//= 1.0 First version. [Rikimaru]
+//= 1.1 Standardized and fixed. [Euphy]
+//============================================================
+
+mosk_in,21,246,5	script	Pinkamenia	71,{
+	set .@n$,"^0000FF[Pinkamenia]^000000";
+	if (#V_QUE12==3) {
+		set .@LFlowerID,7864;
+		setarray .@SweetsID[0],538,558,539,573,559,560,12062,596,597,12414,12319;
+		setarray .@SweetsCost[0],1,2,5,10,10,10,15,15,15,20,20;
+		mes .@n$;
+		mes "你好"+strcharinfo(0)+", do";
+		mes "您想購買一些物品嗎？";
+		mes "你必須給我愛";
+		mes "當然要為他們花！";
+		next;
+		if(select("Yes, sure!","No, never mind.") == 2) close;
+		next;
+		mes .@n$;
+		mes "選擇一個項目。";
+		mes "您需要的愛花在括號中。";
+		for(set .@i,0; .@i < getarraysize(.@SweetsID); set .@i,.@i+1)
+			set .@menu$, .@menu$+"^00AA00["+.@SweetsCost[.@i]+"]^000000 "+getitemname(.@SweetsID[.@i])+":";
+		next;
+		set .@choice, select(.@menu$)-1;
+		mes .@n$;
+		if (countitem(.@LFlowerID) < .@SweetsCost[.@choice]) {
+			mes "如果需要的話，您需要更多的愛花！";
+			close;
+		}
+		mes "您確定要交易 ^00AA00"+.@SweetsCost[.@choice]+"x Love Flower ^000000 for ^0055FF"+getitemname(.@SweetsID[.@choice])+"^000000?";
+		if(select("不，我改變主意了:是的，交易！") == 1) close;
+		set .@new, .@LFlowerID - .@SweetsCost[.@choice];
+		if (.@new < 0) set .@new, 0;
+		delitem .@LFlowerID, .@SweetsCost[.@choice];
+		getitem .@SweetsID[.@choice],1;
+		mes "玩得開心！";
+		close;
+	} else if (#V_QUE12==2) {
+		mes .@n$;
+		if (countitem(7864) < 15) {
+			mes "你必須帶我15朵愛花！";
+			close;
+		}
+		mes "非常感謝";
+		mes "取回我們的花！";
+		delitem 7864,15;
+		next;
+		mes .@n$;
+		mes "把這個";
+		mes "'謝謝'。";
+		getexp 500000,400000;
+		getitem 617,1;
+		getitem 12319,2;
+		next;
+		mes .@n$;
+		mes "如果你得到更多的愛";
+		mes "花，你可以交換";
+		mes "他們在這裡吃一些糖果。";
+		mes "再見！";
+		set #V_QUE12,3;
+		close;
+	} else if (#V_QUE12==1) {
+		mes .@n$;
+		mes "請帶+8蛋糕帽";
+		mes "給貝克非凡的";
+		mes "站在我旁邊！";
+		close;
+	} else if (BaseLevel >= 45) {
+		mes .@n$;
+		mes "你好"+strcharinfo(0)+", it's";
+		mes "情人節，我們";
+		mes "喜歡送甜甜";
+		mes "巧克力。";
+		next;
+		mes .@n$;
+		mes "我們的問題是我們";
+		mes "需要一個堅強的人";
+		mes "像你可以幫助的人";
+		mes "我們，但是首先你有";
+		mes "帶+8蛋糕帽";
+		mes "致麵包師的非凡者";
+		mes "站在我旁邊！";
+		set #V_QUE12,1;
+		close;
+	}
+	mes .@n$;
+	mes "你好"+strcharinfo(0)+"!";
+	close;
+
+OnInit:
+	// Unknown item drop rate (currently set at 5%)
+	setitemscript 5105,"{ bonus bDex,1; bonus bMaxSP,80; bonus3 bAddMonsterDropItem,7864,RC_DemiHuman,500; }",0;
+	end;
+}
+
+mosk_in,21,244,3	script	Baker Extraordinaire	410,{
+	set .@n$,"^0000FF[Baker Extraordinaire]^000000";
+	if(#V_QUE12==3) {
+		mes .@n$;
+		mes "用Pinkamenia交換您的愛花！";
+		close;
+	} else if(#V_QUE12==2) {
+		mes .@n$;
+		mes "帶15朵愛花給Pinkamenia！";
+		close;
+	} else if(#V_QUE12==1) { 
+		mes .@n$;
+		if (getequipid(EQI_HEAD_TOP) == 5024 && getequiprefinerycnt(EQI_HEAD_TOP) >= 8) {
+			mes "啊，粉紅色的人告訴你";
+			mes "給我+8蛋糕";
+			mes "帽子。現在我要去";
+			mes "交換+8蛋糕";
+			mes "另一個蛋糕帽的帽子。";
+			next;
+			mes .@n$;
+			delitem 5024,1;
+			getitem 5105,1;
+			equip 5105;
+			mes "現在，如果你穿";
+			mes "新蛋糕帽，那裡";
+			mes "是機會";
+			mes "Demi-Human Monsters會";
+			mes "放一朵愛花！";
+			next;
+			mes .@n$;
+			mes "暴民偷了我們的花，";
+			mes "我們需要創建";
+			mes "我們的巧克力。現在得到";
+			mes "15個愛花，帶來";
+			mes "他們去平克梅尼亞！";
+			set #V_QUE12,2;
+			close;
+		} else {
+			mes "對不起，但是你在哪裡";
+			mes "+8蛋糕帽？帶來";
+			mes "對我來說，記住";
+			mes "配備它！";
+			close;
+		}
+	} else {
+		mes .@n$;
+		mes "你好，"+strcharinfo(0)+"!";
+		close;
+	}
+}

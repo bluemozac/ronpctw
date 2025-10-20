@@ -1,0 +1,85 @@
+﻿//===== rAthena Script ======================================= 
+//= Lighthalzen Airport Staff
+//===== By: ================================================== 
+//= L0ne_W0lf, Muad_Dib
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Lighthalzen Airport Staff
+//===== Additional Comments: ================================= 
+//= 1.0 First version.
+//============================================================ 
+
+lhz_airport,143,43,5	script	Airport Staff#lhz_air1a::lhz_airport1	90,{
+	mes "[機場工作人員]";
+	mes "歡迎來到";
+	mes "Lighthalzen機場，";
+	mes "我們不停地提供的地方";
+	mes "飛往Einbroch，Juno和Hugel的航班。";
+	next;
+	if (select("登上飛艇:取消。") == 1) {
+		mes "[機場工作人員]";
+		mes "登機費是";
+		mes "1200 Zeny，但您可以";
+		mes "如果您贖回，請免除費用";
+		mes "免費飛艇的免費門票。";
+		next;
+		if (select("是:否") == 1) {
+			if (countitem(7311) > 0) {
+				delitem 7311,1; //Free_Flying_Ship_Ticket
+				warp "lhz_airport",148,51;
+				end;
+			}
+			if (Zeny >= 1200) {
+				set Zeny, Zeny - 1200;
+				warp "lhz_airport",148,51;
+				end;
+			}
+			mes "[飛艇工作人員]";
+			mes "對不起，但是你沒有";
+			mes "有1,200 Zeny付款";
+			mes "登機費。";
+			close;
+		}
+	}
+	mes "[機場工作人員]";
+	mes "謝謝，";
+	mes "請再來。";
+	mes "祝你有美好的一天~";
+	close;
+}
+
+lhz_airport,158,43,5	duplicate(lhz_airport1)	Airship Staff#lhz_air1b	90
+lhz_airport,126,43,5	duplicate(lhz_airport1)	Airship Staff#lhz_air1c	90
+
+lhz_airport,143,49,3	script	Arrival Staff#lhz_air2a::lhz_airport2	90,{
+	mes "[到達人員]";
+	mes "歡迎來到Lighthalzen機場。";
+	mes "請讓我指導您";
+	mes "主終端如果您從航班到達。否則，請";
+	mes "登上出發的飛艇以到達您的預定目的地。";
+	next;
+	if (select("退出到主終端。 :取消。") == 1) {
+		mes "[到達人員]";
+		mes "進入主要終端后，您將需要再次支付費用";
+		mes "登上飛艇。你應該";
+		mes "僅在燈塔是您的目的地時退出。我們可以";
+		mes "繼續前往主碼頭？";
+		next;
+		if (select("是:否") == 1) {
+			warp "lhz_airport",142,40;
+			end;
+		}
+	}
+	mes "[到達人員]";
+	mes "好吧，謝謝";
+	mes "為了您的光顧";
+	mes "我希望你有";
+	mes "宜人的航班~";
+	close;
+}
+
+lhz_airport,126,51,3	duplicate(lhz_airport2)	Arrival Staff#lhz_air2b	90
+lhz_airport,158,50,3	duplicate(lhz_airport2)	Arrival Staff#lhz_air2c	90

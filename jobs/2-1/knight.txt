@@ -1,0 +1,2507 @@
+﻿//===== rAthena Script ======================================= 
+//= Knight Job Quest
+//===== By: ================================================== 
+//= PGRO TEAM (Aegis).
+//= Converted by kobra_k88
+//= Further bugfixed and tested by Lupus
+//===== Current Version: ===================================== 
+//= 3.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job Change quest for Knight class.
+//===== Additional Comments: ================================= 
+//= 1.0 Fully working.  Please comment out any pre-existing warps for the
+//= test rooms in any other files so that the ones specified here can work.
+//= 1.1 Fixed a major bug.  Now using the initnpctimer command,
+//= donpcevent, and new waitingroom event commands.  No more addtimer
+//= spamming.  No longer have to talk to the npc to take the test.  Just enter the chat room.
+//= 1.2 More bug fixes.  Changed global variable names to unique ones.
+//= Added second set of items to first test. Added Awake pots award for job change.
+//= 1.3 Added Baby Class support [Lupus]
+//= 1.5 Fixed possible EXP abuse [Lupus]
+//= 1.6 Added a func which prevent advanced classes passing
+//= 2nd Job Quests again. It also guides adv classes where
+//= to go. [Lupus]
+//= 2.0 Changed numbers to constants. [Vicious]
+//= 2.1 Merged JFunc [Lupus]
+//= 2.2 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//= 2.3 Several bugfixes with the help of Barron-Monster. [L0ne_W0lf]
+//= 2.4 Minor fixes to timer#knt. [L0ne_W0lf]
+//= 2.5 Fixes a small bug with making claymores. [L0ne_W0lf]
+//=     Corrected usages of killmonster and killmonsterall.
+//= 2.6 Corrected an improper areawarp destination. [L0ne_W0lf]
+//= 2.7 Deleted unused variables. [Samuray22]
+//= 2.7a Corrected a Typo error ";;". [Samuray22]
+//= 2.8 Now uses enable and disable waitingroomevent. [L0ne_W0lf]
+//= 2.9 Added Quest Log commands. [Kisuka]
+//= 3.0 Removed the need for use of 'goto.' [L0ne_W0lf]
+//= 3.1 Modified the quest to renewal. [Vali] (Thanks to Muad_Dib for the necessary info).
+//= 3.2 More Renewal updates and some optimization. [Euphy]
+//= 3.3 Fixed missing changequest. [Joseph]
+//============================================================ 
+
+prt_in,88,101,4	script	Chivalry Captain#knt	56,{
+	mes "[赫爾曼上尉]";
+	if (Upper == 1) {
+		mes "嗯？你...你是怎麼回事？很長一段時間以來，我一直是一個光榮的騎士，但是我無法理解我從你那裡得到的感覺...";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "願上帝保佑你的身體和靈魂，戰士。希望您能表現出您的勇氣，並保護那些比您弱的人。";
+		close;
+	}
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) {
+			mes "啊，我們的騎士成員。";
+			mes "我希望您能達到我的期望。即使死亡臨近，我們也誓言要為我們的王國堅強...";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "歡迎，";
+			mes "這是";
+			mes "priontera騎士精神。";
+			mes "是什麼把你帶到這裡？";
+			next;
+			switch(select("我想轉職為劍士。 :我想轉職為騎士。 :只是來訪。")) {
+			case 1:
+				mes "[赫爾曼上尉]";
+				mes "啊哈~";
+				mes "你說的劍客？";
+				mes "對不起，"+((Sex==SEX_MALE)?"lad":"lass")+", but you've";
+				mes "來到錯誤的地方！";
+				next;
+				mes "[赫爾曼上尉]";
+				mes "這不是劍客協會，而是Prontera騎士！如果您想成為一名劍客，請訪問位於伊茲盧德的劍客公會。";
+				close;
+			case 2:
+				mes "[赫爾曼上尉]";
+				mes "啊，我看到你有很大的野心。但是您必須先成為劍客";
+				mes "騎士。一次一步...";
+				next;
+				mes "[赫爾曼上尉]";
+				mes "首先，訪問Izlude的劍客協會。然後，一旦您成為經驗豐富的劍客，請再次拜訪我們。";
+				close;
+			case 3:
+				mes "[赫爾曼上尉]";
+				mes "啊哈~";
+				mes "您必須有很多空閒時間。您為什麼不去狩獵一些怪物而不是漫無目的地徘徊？";
+				close;
+			}
+		}
+		else {
+			mes "歡迎。我們的驕傲的騎士騎士將為國王和國家獻出生命！請享受您的住宿。";
+			close;
+		}
+	}
+	if (KNIGHT_Q == 0) {
+		mes "歡迎，這是";
+		mes "Printera騎士精神。";
+		mes "是什麼把你帶到這裡？";
+		next;
+		if (select("我想轉職為騎士。 :只是來拜訪。") == 1) {
+			mes "[赫爾曼上尉]";
+			mes "哦...";
+			mes "年輕"+((Sex==SEX_MALE)?"man":"lady")+" who wishes";
+			mes "成為騎士！";
+			mes "我們的Printera騎士精神";
+			mes "會幫助您。";
+			next;
+			mes "[赫爾曼上尉]";
+			mes "首先，我是Prontera騎士的隊長Herman Phon Efesirsus。我很高興認識渴望加入Printera騎士精神的年輕人。";
+			next;
+			mes "[赫爾曼上尉]";
+			mes "我們只接受劍客";
+			mes "誰至少是工作級別40。";
+			mes "我們不能認為尚未經歷足夠的申請人成為騎士。";
+			next;
+			mes "[赫爾曼上尉]";
+			mes "申請後，我們發現";
+			mes "您符合條件，我們將開始工作變更過程。你會嗎";
+			mes "喜歡現在申請嗎？";
+			next;
+			if (select("是的，我想申請。 :我想考慮一下。") == 1) {
+				mes "[赫爾曼上尉]";
+				if (JobLevel < 40) {
+					mes "啊，您還沒有準備好成為騎士！我不是特別提及40級要求嗎？";
+					next;
+					mes "[赫爾曼上尉]";
+					mes "當然，我了解您對加入我們的強烈願望，但現在不是時候了。出去戰鬥更多怪物。我們將在這裡等待。";
+					close;
+				}
+				if (SkillPoint) {
+					mes "啊...！";
+					mes "如果您剩下未使用的技能點，則無法更改工作。當您使用時返回";
+					mes "您所有的技能點。";
+					close;
+				}
+				set KNIGHT_Q,1;
+				setquest 9000;
+				mes "讓我看看...";
+				mes "你的名字是";
+				mes strcharinfo(0) + "...";
+				mes "那對嗎？";
+				next;
+				mes "[赫爾曼上尉]";
+				mes "讓我解釋工作變更程序。您必須參觀一系列騎士並通過";
+				mes "他們的測試。";
+				next;
+				mes "[赫爾曼上尉]";
+				mes "所有測試完成後，參與測試的每個騎士都會收集並討論您的表現。";
+				next;
+				mes "[赫爾曼上尉]";
+				mes "騎士必須一致贊成您，然後才能加入Prontera騎士精神。如果只有一個人，您必須";
+				mes "重新開始。";
+				next;
+				mes "[赫爾曼上尉]";
+				mes "但是我相信，如果您堅持不懈地堅持，您將被騎士所承認，並最終被認為是我們騎士的成員。";
+				next;
+				mes "[赫爾曼上尉]";
+				mes "因此，讓我們不要再浪費時間說話！去見這些騎士並開始考驗。完成所有測試後，請回到我身邊。";
+				close;
+			}
+			mes "[赫爾曼上尉]";
+			mes "哦...！";
+			mes "好吧，我不想給你施加壓力。花點時間思考。準備好時返回";
+			mes "改變工作，因為我們將在等待。";
+			close;
+		}
+		mes "[赫爾曼上尉]";
+		mes "想一想，你不是劍客嗎？看起來您在戰鬥中遇到了許多敵人。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "您應該考慮將工作換成騎士。如果您有興趣，請快來和我談談。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "請服用";
+		mes "你的時間";
+		mes "環顧四周。";
+		mes "再會。";
+		close;
+	}
+	else if (KNIGHT_Q == 1) {
+		mes "嗯？";
+		mes strcharinfo(0) + "，，，，";
+		mes "我能為你做什麼？";
+		mes "啊，你不知道";
+		mes "誰去看？";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "我相信負責測試的騎士已經設定了您必須訪問他們的命令。我想這有助於測試過程。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "首先，去參觀";
+		mes "安德魯爵士參加了您的第一次測試。不要太緊張，一旦你與他交談，他會解釋一切。";
+		close;
+	}
+	else if (KNIGHT_Q == 2) callsub L_Mission,0;
+	else if (KNIGHT_Q == 3) callsub L_Mission,0;
+	else if (KNIGHT_Q == 4) {
+		callsub L_Mission,1;
+		mes "看來您已經完成了一個測試。讓我們來看看。安德魯爵士，接下來這只劍客必須誰去？";
+		next;
+		mes "[安德魯爵士]";
+		mes "我對";
+		mes "訪問Siracuse爵士。";
+		mes "有趣，我以為我告訴";
+		mes "你。我忘了...嗎？";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "你聽到了嗎？";
+		mes "去Siracuse爵士接受考試。完成他的測試後，請不要忘記您也應該去下一步訪問誰。";
+		close;
+	}
+	else if (KNIGHT_Q == 5) callsub L_Mission,0;
+	else if (KNIGHT_Q == 6) {
+		callsub L_Mission,1;
+		mes "讓我們來看看...";
+		mes "您已經完成了兩個測試。";
+		mes "Siracuse爵士，接下來這只劍客必須誰去？";
+		next;
+		mes "[Siracuse爵士]";
+		mes "哦...！";
+		mes "嗯，誰是誰...？";
+		mes "正確的！溫莎爵士！";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "前往";
+		mes "溫莎·本尼迪克特爵士參加了您的下一次考試。仔細聆聽負責測試的騎士，這樣您就不會迷路了，好嗎？";
+		close;
+	}
+	else if (KNIGHT_Q == 7) callsub L_Mission,0;
+	else if (KNIGHT_Q == 8) {
+		callsub L_Mission,1;
+		mes "溫多爵士...？";
+		mes "必須誰";
+		mes "劍客訪問";
+		mes "下一個？";
+		next;
+		mes "[溫莎爵士]";
+		mes "...";
+		next;
+		mes "[溫莎爵士]";
+		mes "...";
+		mes "......";
+		next;
+		mes "[溫莎爵士]";
+		mes "...艾米·比阿特麗斯（Amy Beatrice）。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "啊，去參觀";
+		mes "艾米夫人接受考試。確保您注意必須去下一個測試的人。";
+		close;
+	}
+	else if (KNIGHT_Q == 9) callsub L_Mission,0;
+	else if (KNIGHT_Q == 10) {
+		callsub L_Mission,1;
+		mes "讓我們來看看...";
+		mes "艾米夫人，誰";
+		mes "必須這個劍客";
+		mes "訪問下一步？";
+		next;
+		mes "[艾米夫人]";
+		mes "哦...";
+		mes "我說要去";
+		mes "埃德蒙爵士！";
+		mes "發球嘿~";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "現在，去說話";
+		mes "給埃德蒙爵士。他會的";
+		mes "負責你的";
+		mes "下一個測試。";
+		close;
+	}
+	else if (KNIGHT_Q == 11) callsub L_Mission,0;
+	else if (KNIGHT_Q == 12) {
+		callsub L_Mission,1;
+		mes "您不需要再拜訪一個人嗎？騎士進來";
+		mes "最終測試的費用";
+		mes "是格雷·普羅菲羅爵士。";
+		next;
+		mes "[埃德蒙爵士]";
+		mes "這個世界是按照";
+		mes "符合因果法則。";
+		mes "所有這些都將在最後被揭示。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "保持警惕";
+		mes "你最好的";
+		mes "是最後一個測試。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "回到我身邊";
+		mes "有了";
+		mes "完成了";
+		mes "最終測試。";
+		close;
+	}
+	else if (KNIGHT_Q == 13) {
+		mes "完成最後一個測試。";
+		mes "一旦完成，您的測試中涉及的所有騎士都將聚集，我們將評估您的表現。";
+		close;
+	}
+	else if (KNIGHT_Q == 14) {
+		if (SkillPoint) {
+			mes "哦...！";
+			mes "如果您剩下未使用的技能點，則無法更改工作。分發所有技能點後，返回。";
+			close;
+		}
+		mes "哦，您完成了所有測試嗎？但是並不是每個完成測試的人都可以";
+		mes "成為騎士。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "在測試期間，我們看到了您的忠誠，光榮和強大。我們還看看您是否有禮貌，以及您是否知道謙虛和崇敬的價值。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "通過此過程，我還觀察到了您的行動。我們的所有意見都將反映在您的工作變更決定中。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "然後...";
+		mes "我們會聽";
+		mes "對每個人的想法！";
+		mes "安德魯，你怎麼看？";
+		next;
+		mes "[安德魯爵士]";
+		if (JobLevel == 50) {
+			mes "我能說什麼？";
+			mes "我批准！";
+			mes "活著";
+			mes "劍客";
+			mes "到目前為止";
+			mes "足夠了。";
+		}
+		else {
+			mes "這個有";
+			mes "收集的物品";
+			mes "很麻煩";
+			mes "獲得。我批准！";
+			mes "我相信"+((Sex==SEX_MALE)?"":"s")+"he will continue to be loyal after becoming a Knight.";
+		}
+		next;
+		mes "[赫爾曼上尉]";
+		mes "唔。";
+		mes "多麼好的評論。";
+		mes "Siracuse，您的想法是什麼？";
+		next;
+		mes "[Siracuse爵士]";
+		mes "嘿，很好。不完全是什麼";
+		mes "我想要，但希望將來會變得更好。";
+		next;
+		mes "[Siracuse爵士]";
+		mes "成為騎士之後，您必須通過榮譽建立良好的聲譽。嗯...我批准。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "好的...";
+		mes "溫莎，";
+		mes "你呢？";
+		next;
+		mes "[溫莎爵士]";
+		mes "...";
+		next;
+		mes "[溫莎爵士]";
+		mes "...";
+		mes "......";
+		next;
+		mes "[溫莎爵士]";
+		mes "....得到正式認可的。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "我不認為";
+		mes "他不贊成。";
+		mes "然後，讓我們聽";
+		mes "對艾米的看法。";
+		next;
+		mes "[艾米夫人]";
+		if (Sex == SEX_MALE) {
+			mes "嗯~他是如此有禮貌！";
+			mes "他會成長為一個很棒的騎士。而且他有這麼可愛的widdle cheeek~呵呵呵呵！";
+		}
+		else {
+			mes "嗯~她應該很棒！";
+			mes "她非常有禮貌，也很可愛，所以還有幾分！嘿~";
+			mes "我不應該說這樣的話！";
+		}
+		next;
+		mes "[赫爾曼上尉]";
+		mes "出色地...";
+		mes "一個奇怪的評論，";
+		mes "但是我相信";
+		mes "她批准。";
+		mes "埃德蒙，說話";
+		mes "你的想法。";
+		next;
+		mes "[埃德蒙爵士]";
+		if (Sex == SEX_MALE) {
+			mes "他看起來有些粗糙，但是他內心有些光明。憑藉波蘭和精緻，他的真實價值將閃耀";
+			mes "作為太陽。";
+		}
+		else {
+			mes "很難看到，但是她內心有一種精神上的美。憑藉波蘭和精緻，她的真實價值將閃閃發光";
+			mes "作為月亮。";
+		}
+		next;
+		mes "[赫爾曼上尉]";
+		mes "最後...";
+		mes "灰色的。我想";
+		mes "聽你的想法。";
+		next;
+		mes "[灰色的]";
+		mes "年輕"+((Sex==SEX_MALE)?"gentleman":"lady")+" coming here with the determination to become a Knight is enough...";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "每個人";
+		mes "已批准。";
+		mes "沒有人反對。";
+		mes "那我會告訴";
+		mes "你我的意見。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "我的決定是...";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "我批准。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "您可能沒有完美地完成所有測試，但是您擁有所有必要的素質";
+		mes "騎士。";
+		next;
+		completequest 9012;
+		callfunc "Job_Change",Job_Knight;
+		callfunc "F_ClearJobVar"; // Clears all job variables for the current player
+		mes "[赫爾曼上尉]";
+		mes "我特此聲明";
+		mes "你是";
+		mes "Printera騎士精神。";
+		mes "保護弱和";
+		mes "與榮譽同住。";
+		next;
+		getitem 656,7; //Awakening_Potion
+		mes "[赫爾曼上尉]";
+		mes "哦...";
+		mes "我們已經準備了一份小禮物，以祝賀您的工作變化。在戰鬥中，請在光榮保護他人時使用它。";
+		next;
+		mes "[赫爾曼上尉]";
+		mes "走吧！";
+		mes "未來";
+		mes "符文中";
+		mes "休息一下";
+		mes "肩膀！";
+		close;
+	}
+L_Mission:
+	mes "嗯？";
+	mes "劍客" + strcharinfo(0) + ".";
+	mes "測試如何？";
+	if (getarg(0)) {
+		mes "啊~你不知道";
+		mes "接下來要去誰？";
+		next;
+		mes "[赫爾曼上尉]";
+		return;
+	} else {
+		mes "這可能很困難，";
+		mes "但是盡力而為。";
+		close;
+	}
+}
+
+prt_in,75,107,4	script	Sir Andrew#knt	65,{
+	mes "[安德魯爵士]";
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) {
+			mes "你一定是";
+			mes "一個成員";
+			mes "騎士。";
+			mes "你好嗎？";
+			next;
+			mes "[安德魯爵士]";
+			mes "您必須努力工作以收集食物，並保存Zeny購買設備。保存一切";
+			mes "在戰鬥中找到，甚至是最小的果凍。";
+			next;
+			mes "[安德魯爵士]";
+			mes "但這不是很好";
+			mes "太貪婪了。";
+			mes "畢竟，我們是騎士。";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "嘿，";
+			mes "小新手。";
+			mes "歡迎來到";
+			mes "priontera騎士精神。";
+			next;
+			mes "[安德魯爵士]";
+			mes "你可能是你";
+			mes "現在很弱，但是有一天";
+			mes "你會變得更強壯。";
+			next;
+			mes "[安德魯爵士]";
+			mes "夢想著光明的未來，並期待您選擇走的道路。";
+			close;
+		}
+		else {
+			mes "我們，成員";
+			mes "Printera騎士精神正在為保護這個世界的和平所做的最大努力。";
+			next;
+			mes "[安德魯爵士]";
+			mes "即使在我們每天都面對的戰鬥中，我們也夢想著";
+			mes "即將到來的光明的未來。";
+			close;
+		}
+	}
+	if (KNIGHT_Q == 0) {
+		mes "我們，成員";
+		mes "Printera騎士精神正在為保護這個世界的和平所做的最大努力。";
+		next;
+		mes "[安德魯爵士]";
+		mes "即使在我們每天都面對的戰鬥中，我們也夢想著";
+		mes "即將到來的光明的未來。";
+		close;
+	}
+	else if (KNIGHT_Q == 1) {
+		mes "再會。";
+		mes "我可以幫你嗎";
+		mes "有什麼東西？";
+		next;
+		if (select("我想參加考試。 :哦，沒什麼。") == 1) {
+			mes "[安德魯爵士]";
+			mes "啊...";
+			mes "你希望";
+			mes "成為騎士。";
+			mes "你的名字是";
+			mes strcharinfo(0) + "，，，，";
+			mes "正確的？";
+			next;
+			mes "[安德魯爵士]";
+			mes "我是一個騎士";
+			mes "Printera騎士精神，";
+			mes "安德魯·夏洛克（Andrew Shylock）。";
+			mes "我負責";
+			mes "您的第一個測試。";
+			next;
+			mes "[安德魯爵士]";
+			mes "我將測試您的忠誠感。每個騎士都必須擁有這種美德。對於本考試，您將從";
+			mes "戰場。";
+			next;
+			if (JobLevel == 50) {
+				mes "[安德魯爵士]";
+				mes "嗯...？";
+				mes "抓住那裡。";
+				mes "你看起來像";
+				mes "掌握的存在";
+				mes "劍客。";
+				next;
+				mes "[安德魯爵士]";
+				mes "感人的...！";
+				mes "第二次思考，";
+				mes "我不認為你";
+				mes "忠誠度需要";
+				mes "進行測試。";
+				next;
+				mes "[安德魯爵士]";
+				mes "請去我的騎士Siracuse爵士，因為他會給您下一個測試。掌握劍客的工作做得很好。";
+				set KNIGHT_Q,4;
+				changequest 9000,9003;
+				close;
+			}
+			mes "[安德魯爵士]";
+			mes "沒有";
+			mes "進一步的ADO，";
+			mes "讓我們開始吧！";
+			mes "去聚集";
+			mes "以下項目...";
+			next;
+			mes "[安德魯爵士]";
+			switch(rand(1,2)) {
+			//Elder_Pixie's_Beard, Wing_Of_Red_Bat, Orcish_Voucher, Moth_Dust, Reptile_Tongue, Wild_Boar's_Mane
+			case 1: setarray .@items[0], 1040,5, 7006,5, 931,5, 1057,5, 903,5, 1028,5, 2; break;
+			//Short_Leg, Heart_Of_Mermaid. Blossom_Of_Maneater, Flesh_Of_Clam, Old_Frying_Pan, Snail's_Shell
+			case 2: setarray .@items[0], 1042,5, 950,5, 1032,5, 966,5, 7031,5, 946,5, 3; break;
+			}
+			set KNIGHT_Q,.@items[12];
+			if (KNIGHT_Q == 2) changequest 9000,9001;
+			else changequest 9000,9002;
+			mes "^236b8e"+.@items[1]+" "+getitemname(.@items[0])+"^000000,";
+			mes "^236b8e"+.@items[3]+" "+getitemname(.@items[2])+"^000000,";
+			mes "^236b8e"+.@items[5]+" "+getitemname(.@items[4])+"^000000,";
+			mes "^236b8e"+.@items[7]+" "+getitemname(.@items[6])+"^000000,";
+			mes "^236b8e"+.@items[9]+" "+getitemname(.@items[8])+"^000000 and";
+			mes "^236b8e"+.@items[11]+" "+getitemname(.@items[10])+"^000000,";
+			next;
+			mes "[安德魯爵士]";
+			mes "我會的";
+			mes "在這裡等待";
+			mes "你帶來";
+			mes "我列出的項目。";
+			mes "很快見~";
+			close;
+		}
+		else {
+			mes "[安德魯爵士]";
+			mes "好吧，那...";
+			mes "再會。";
+			close;
+		}
+	}
+	else if (KNIGHT_Q == 2 || KNIGHT_Q == 3) {
+		mes "歡迎回來~";
+		mes "你聚集了嗎？";
+		mes "所有物品？";
+		mes "讓我們檢查一下...";
+		next;
+		switch(KNIGHT_Q) {
+		//Elder_Pixie's_Beard, Wing_Of_Red_Bat, Orcish_Voucher, Moth_Dust, Reptile_Tongue, Wild_Boar's_Mane
+		case 2: setarray .@items[0], 1040,5, 7006,5, 931,5, 1057,5, 903,5, 1028,5, 0; break;
+		//Short_Leg, Heart_Of_Mermaid. Blossom_Of_Maneater, Flesh_Of_Clam, Old_Frying_Pan, Snail's_Shell
+		case 3: setarray .@items[0], 1042,5, 950,5, 1032,5, 966,5, 7031,5, 946,5, 0; break;
+		}
+		if (countitem(.@items[0]) >= .@items[1] && countitem(.@items[2]) >= .@items[3] && countitem(.@items[4]) >= .@items[5] && countitem(.@items[6]) >= .@items[7] && countitem(.@items[8]) >= .@items[9] && countitem(.@items[10]) >= .@items[11]) {
+			mes "[安德魯爵士]";
+			mes "完美的！感謝您在收集這些物品方面的努力。 Thesee將用於支持騎士的財務狀況。";
+			next;
+			delitem .@items[0],.@items[1];
+			delitem .@items[2],.@items[3];
+			delitem .@items[4],.@items[5];
+			delitem .@items[6],.@items[7];
+			delitem .@items[8],.@items[9];
+			delitem .@items[10],.@items[11];
+			if (KNIGHT_Q == 2) changequest 9001,9003;
+			else changequest 9002,9003;
+			set KNIGHT_Q,4;
+			mes "[安德魯爵士]";
+			mes "請參觀我的同伴Siracuse爵士，並以您今天向我展示的奉獻精神和忠誠繼續進行測試。";
+			close;
+		}
+		mes "[安德魯爵士]";
+		mes "等待，等等...";
+		mes "我想你";
+		mes "仍然缺少一些";
+		mes "專案.如果你";
+		mes "忘了，讓我";
+		mes "提醒你...";
+		next;
+		mes "[安德魯爵士]";
+		mes "^236b8e"+.@items[1]+" "+getitemname(.@items[0])+"^000000,";
+		mes "^236b8e"+.@items[3]+" "+getitemname(.@items[2])+"^000000,";
+		mes "^236b8e"+.@items[5]+" "+getitemname(.@items[4])+"^000000,";
+		mes "^236b8e"+.@items[7]+" "+getitemname(.@items[6])+"^000000,";
+		mes "^236b8e"+.@items[9]+" "+getitemname(.@items[8])+"^000000 and";
+		mes "^236b8e"+.@items[11]+" "+getitemname(.@items[10])+"^000000,";
+		next;
+		mes "[安德魯爵士]";
+		mes "現在，請認真對待這項測試。";
+		mes "現在，我會等你";
+		mes "完成此任務。";
+		close;
+	}
+	else if (KNIGHT_Q == 4) {
+		mes "您是否需要問我的事情？您應該去參加下一個測試。快點，Siracuse爵士在等您~";
+		close;
+	}
+	else if (KNIGHT_Q == 14) {
+		mes "您必須完成所有測試。好工作！您應該去看看我們的隊長，以便我們都可以進行評估。";
+		close;
+	}
+	else {
+		mes "您是否需要問我的東西？您應該去參加下一個測試。盡力。";
+		mes "我知道你可以做到！";
+		close;
+	}
+}
+
+prt_in,71,91,0	script	Sir Siracuse#knt	65,{
+	mes "[Siracuse爵士]";
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) {
+			mes "嘿！";
+			mes "你好嗎？";
+			mes "騎士一直是";
+			mes "做得很好。";
+			next;
+			mes "[Siracuse爵士]";
+			mes "我們去過了";
+			mes "測試新成員，";
+			mes "但不是所有人";
+			mes "表現出盡可能多的希望";
+			mes "作為你。";
+			next;
+			mes "[Siracuse爵士]";
+			mes "我希望這些新兵都行事，不要";
+			mes "為騎士帶來羞恥。";
+			next;
+			mes "[Siracuse爵士]";
+			mes "如果您抓住任何新的傢伙以一種不對的騎士表演的方式行事，請為我責罵他們嗎？";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "哦？";
+			mes "什麼是新手";
+			mes "在這裡嗎？";
+			next;
+			mes "[Siracuse爵士]";
+			mes "您有興趣成為騎士嗎？您知道，您只是無法從新手變成騎士。";
+			next;
+			mes "[Siracuse爵士]";
+			mes "首先，你有";
+			mes "成為井";
+			mes "經驗豐富的劍客";
+			mes "在考慮之前";
+			mes "成為騎士。";
+			close;
+		}
+		else {
+			mes "進攻和防守。";
+			mes "有沒有辦法在不損害一個或另一個的情況下兩者都可以？";
+			next;
+			mes "[Siracuse爵士]";
+			mes "雙手武器非常大";
+			mes "改善您的進攻，但會減少防禦能力。有什麼可以克服這一弱點的東西嗎？";
+			next;
+			mes "[Siracuse爵士]";
+			mes "武器或某種";
+			mes "這樣的技術";
+			mes "會大大幫助騎士...";
+			close;
+		}
+	}
+	if (KNIGHT_Q == 0) {
+		mes "進攻和防守。";
+		mes "有沒有辦法在不損害一個或另一個的情況下兩者都可以？";
+		next;
+		mes "[Siracuse爵士]";
+		mes "雙手武器非常大";
+		mes "改善您的進攻，但會減少防禦能力。有什麼可以克服這一弱點的東西嗎？";
+		next;
+		mes "[Siracuse爵士]";
+		mes "武器或某種";
+		mes "這樣的技術";
+		mes "會大大幫助騎士...";
+		close;
+	}
+	else if (KNIGHT_Q == 1) {
+		mes "嗯？";
+		mes "你有";
+		mes "有東西";
+		mes "問我？";
+		next;
+		if (select("我想參加考試換工作:哦，沒什麼。") == 1) {
+			mes "[Siracuse爵士]";
+			mes "哦，成為";
+			mes "騎士？來";
+			mes "想想，不是";
+			mes "你"+((Sex==SEX_MALE)?"guy":"girl")+" that";
+			mes "剛申請？";
+			next;
+			mes "[Siracuse爵士]";
+			mes "讓我們來看看...";
+			mes "你的名字是";
+			mes strcharinfo(0) + "。";
+			next;
+			mes "[Siracuse爵士]";
+			mes "但是，在您來找我之前，您必須拜訪其他人。道路";
+			mes "我明白了，您還沒有證明您知道基礎知識。但是我會的";
+			mes "重新考慮一次";
+			mes "通過第一個測試。";
+			close;
+		}
+		mes "[Siracuse爵士]";
+		mes "嗯...？";
+		mes "好吧。";
+		mes "就是這樣";
+		mes "你有那個";
+		mes "看你";
+		mes "臉。";
+		close;
+	}
+	else if (KNIGHT_Q == 2 || KNIGHT_Q == 3) {
+		mes "嗯？";
+		mes "你有";
+		mes "有東西";
+		mes "問我？";
+		next;
+		if (select("我想參加考試換工作:哦，沒什麼。") == 1) {
+			mes "[Siracuse爵士]";
+			mes "哈哈哈~！";
+			mes "您不應該參加安德魯的考試嗎？你知道，你知道，你知道！我們所有的測試都很重要。";
+			next;
+			mes "[Siracuse爵士]";
+			mes "首先與安德魯爵士交談。";
+			mes "完成他的考試後，我的測試將是來的。";
+			close;
+		}
+		mes "[Siracuse爵士]";
+		mes "嗯...？";
+		mes "好吧。";
+		mes "就是這樣";
+		mes "你有那個";
+		mes "看你";
+		mes "臉。";
+		close;
+	}
+	else if (KNIGHT_Q == 4 || KNIGHT_Q == 5) {
+		if (KNIGHT_Q == 4) {
+			mes "哦？";
+			mes "你有";
+			mes "有東西";
+			mes "問我？";
+			next;
+			if (select("安德魯爵士派我去參加你的測試。 :哦，沒什麼。") == 1) {
+				mes "[Siracuse爵士]";
+				mes "我知道，您通過了第一個測試。很好，我會為您騰出一些時間。讓我自我介紹。我叫詹姆斯·西拉克塞（James Siracuse）。";
+				next;
+				mes "[Siracuse爵士]";
+				mes "該測試將衡量您對騎士的了解多少。更重要的是，我想知道您對榮譽的想法。";
+				next;
+				mes "[Siracuse爵士]";
+				mes "不要緊張，我不會讓你持續太久。這些將是快速的問題。另外，您仍然必須看到其他人，對嗎？";
+				next;
+				mes "[Siracuse爵士]";
+				mes "好吧，那，";
+				mes "讓我們開始。";
+				mes "請回答";
+				mes "及時。";
+				next;
+			}
+			else {
+				mes "[Siracuse爵士]";
+				mes "嗯...？";
+				mes "好吧。";
+				mes "就是這樣";
+				mes "你有那個";
+				mes "看你";
+				mes "臉。";
+				close;
+			}
+		}
+		else if (KNIGHT_Q == 5) {
+			mes "什麼...";
+			mes "你又來了嗎？";
+			next;
+			if (select("我想再考一次:哦，沒什麼。") == 1) {
+				mes "[Siracuse爵士]";
+				mes "那對嗎？";
+				mes "你確定你是";
+				mes "這次準備了嗎？";
+				next;
+				mes "[Siracuse爵士]";
+				mes "好吧，那，";
+				mes "又來了...";
+				next;
+			}
+			else {
+				mes "[Siracuse爵士]";
+				mes "嗯...？";
+				mes "好吧。";
+				mes "就是這樣";
+				mes "你有那個";
+				mes "看你";
+				mes "臉。";
+				close;
+			}
+		}
+		mes "[Siracuse爵士]";
+		mes "騎士必須擁有強大的力量，防守，速度以及揮舞雙手劍的技巧。以下哪種武器不受兩隻手加速技能的影響？";
+		next;
+		if (select("武士刀:殺手:大刀:火焰") != 4) {
+			set KNIGHT_Q,5;
+			mes "[Siracuse爵士]";
+			mes "錯誤的！";
+			mes "那是一把雙手劍！";
+			mes "您確定要成為騎士嗎？您甚至都不知道基本知識...";
+			next;
+			mes "[Siracuse爵士]";
+			mes "如果您不確定任何事情，請進城問任何騎士。在申請工作之前，您需要了解有關騎士的更多信息！";
+			close;
+		}
+		mes "[Siracuse爵士]";
+		mes "好，現在讓我詢問一些技能。學習保齡球狂歡不需要以下哪項？";
+		next;
+		if (select("雙手劍精通 Lv.5: 萬能破壞 Lv.3: 挑釁 Lv.10: 猛擊 Lv.10") != 3) {
+			set KNIGHT_Q,5;
+			mes "[Siracuse爵士]";
+			mes "錯誤的！";
+			mes "您需要學習保齡球！在申請工作之前，您應該了解有關騎士課程的更多信息！";
+			close;
+		}
+		mes "[Siracuse爵士]";
+		mes "騎士也可以使用長矛，與其他工作不同，並且具有與長矛有關的技能。學習技巧揮舞的長矛沒有必要的技能？";
+		next;
+		if (select("皮爾斯 Lv.5:矛刺 Lv.3:矛迴旋鏢 Lv.3:佩科佩科騎 Lv.1") != 3) {
+			set KNIGHT_Q,5;
+			mes "[Siracuse爵士]";
+			mes "錯誤的！您需要學習這一點才能學習Brandish Spear！如果您想成為一個騎士，您怎麼不知道騎士？";
+			next;
+			mes "[Siracuse爵士]";
+			mes "如果您不確定任何事情，請進城問任何騎士";
+			mes "尋求幫助。在您了解了更多有關騎士的信息之後，回來了。";
+			close;
+		}
+		mes "[Siracuse爵士]";
+		mes "有些長矛也具有神奇的屬性，就像咒語一樣。在以下內容中，哪個可以攻擊噩夢，哪個具有幽靈屬性？";
+		next;
+		if (select("Zephyrus:蘭斯:比爾·吉沙美:新月鐮刀") != 1) {
+			set KNIGHT_Q,5;
+			mes "[Siracuse爵士]";
+			mes "錯誤的！這種類型的長矛絕對不會造成傷害！在您了解了有關騎士的更多信息之後，回來了！";
+			next;
+			mes "[Siracuse爵士]";
+			mes "如果您有疑問，只需問鎮上的任何騎士即可。這對我們來說是基本知識！";
+			close;
+		}
+		mes "[Siracuse爵士]";
+		mes "當您成為騎士時，您可以騎Peco Peco。但是，一旦安裝在Peco Peco上，您的攻擊速度就會降低。";
+		next;
+		mes "[Siracuse爵士]";
+		mes "但是，當您學習騎士精通技能時，您可以對抗這種速度降低。學習3級騎士精通後，您將擁有多少正常攻擊速度？";
+		next;
+		if (select("普通攻擊速度的70%:普通攻擊速度的80%:普通攻擊速度的90%:普通攻擊速度的100%") != 2) {
+			set KNIGHT_Q,5;
+			mes "[Siracuse爵士]";
+			mes "錯誤的！";
+			mes "如果您不知道騎士的精通，請不要打擾騎Peco Peco！";
+			next;
+			mes "[Siracuse爵士]";
+			mes "在學到更多有關騎士的知識之後，您最好回來！";
+			close;
+		}
+		mes "[Siracuse爵士]";
+		mes "好，很好...";
+		mes "我敢肯定，您知道騎士的體面數量。現在，讓我問您一些有關騎士的個人問題。";
+		next;
+		mes "[Siracuse爵士]";
+		mes "當您遇到新手尋求幫助時該怎麼辦？";
+		next;
+		switch(select("告訴新手一個合理的狩獵區域。 :讓新手在你承受傷害的時候戰鬥。 :給新手一堆 Zeny 和物品。")) {
+		case 1:
+			mes "[Siracuse爵士]";
+			mes "當然，即使是新手也需要學習如何獨立。為新手提供良好的指導是我們能做的最好的事情之一。";
+			next;
+			break;
+		case 2:
+			set KNIGHT_Q,5;
+			mes "[Siracuse爵士]";
+			mes "你的想法錯誤。您真的相信這對新手有幫助嗎？給男人一條魚，他會吃一天。教他釣魚，他會用一輩子吃飯！";
+			close;
+		case 3:
+			set KNIGHT_Q,5;
+			mes "[Siracuse爵士]";
+			mes "您真的相信這會真正幫助貧窮的新手嗎？它很慷慨，但是，在他們自己賺錢之前，他們不會知道Zeny和項目的真實價值。";
+			close;
+		}
+		mes "[Siracuse爵士]";
+		mes "好吧...";
+		mes "現在，應該如何";
+		mes "你在裡面行動";
+		mes "聚會？";
+		next;
+		switch(select("保護戰鬥前線的所有人。 :收集怪物並立即消滅它們。 :不惜一切代價獲取盡可能多的物品。")) {
+		case 1:
+			mes "[Siracuse爵士]";
+			mes "就是這樣！我們的力量和攻擊在聚會中非常重要。所有騎士都應該與這種心態進行戰鬥。";
+			next;
+			break;
+		case 2:
+			set KNIGHT_Q,5;
+			mes "[Siracuse爵士]";
+			mes "你瘋了？您不知道這種思想的缺陷嗎？您無法控制大型暴民。如果他們殺了你怎麼辦？誰會保護無辜者？";
+			close;
+		case 3:
+			set KNIGHT_Q,5;
+			mes "[Siracuse爵士]";
+			mes "我看到你的貪婪，我們在這裡一無所有！看來您並不真正在乎別人！";
+			mes "迷路！";
+			close;
+		}
+		mes "[Siracuse爵士]";
+		mes "最後...";
+		mes "最多";
+		mes "重要價值";
+		mes "騎士一定有？";
+		next;
+		switch(select("榮譽:財富:地位")) {
+		case 1:
+			mes "[Siracuse爵士]";
+			mes "對，最重要的是，騎士必須是光榮的！我們為榮譽而死！始終牢記這一點。";
+			next;
+			break;
+		case 2:
+			set KNIGHT_Q,5;
+			mes "[Siracuse爵士]";
+			mes "你是敗類！您努力成為個人財富的騎士嗎？迷路！我們不會在我們的騎士中接受像您這樣的人！";
+			close;
+		case 3:
+			set KNIGHT_Q,5;
+			mes "[Siracuse爵士]";
+			mes "因此，您想通過騎士而聞名？那很可悲。我們不會在我們的騎士中接受像您這樣的人！";
+			close;
+		}
+		set KNIGHT_Q,6;
+		changequest 9003,9004;
+		mes "[Siracuse爵士]";
+		mes "好吧，那，";
+		mes "這是";
+		mes "我的測試結束。";
+		next;
+		mes "[Siracuse爵士]";
+		mes "為你的下一個";
+		mes "測試，請去";
+		mes "見溫莎爵士。";
+		mes "他很安靜，";
+		mes "但是不要讓那";
+		mes "得到你。";
+		close;
+	}
+	else if (KNIGHT_Q == 6) {
+		mes "哦？";
+		mes "你有";
+		mes "有東西";
+		mes "問我？";
+		next;
+		if (select("我想參加考試換工作:哦，沒什麼。") == 1) {
+			mes "[Siracuse爵士]";
+			mes "嘿...";
+			mes "You already took my test, didn't you?你在這裡完成了。 You should go visit Sir Windsor now...";
+			close;
+		}
+		mes "[Siracuse爵士]";
+		mes "嗯...？";
+		mes "好吧。";
+		mes "就是這樣";
+		mes "你有那個";
+		mes "看你";
+		mes "臉。";
+		close;
+	}
+	else if (KNIGHT_Q == 14) {
+		mes "嗯...？";
+		mes "你完成了";
+		mes "其他人的";
+		mes "也測試嗎？";
+		next;
+		mes "[Siracuse爵士]";
+		mes "好吧，那，";
+		mes "去看";
+		mes "隊長。我們所有人";
+		mes "在那裡評估";
+		mes "您的表現。";
+		close;
+	}
+	else {
+		mes "嘿。";
+		mes "你需要什麼嗎？";
+		mes "對不起，但是我現在很忙。您應該去完成其餘的測試。";
+		close;
+	}
+}
+
+prt_in,79,94,4	script	Sir Windsor#knt	733,{
+	mes "[溫莎爵士]";
+	mes "...";
+	next;
+	mes "[溫莎爵士]";
+	mes "...";
+	mes "......";
+	next;
+	mes "[溫莎爵士]";
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) mes "保護。";
+		else if (BaseClass == Job_Novice) {
+			mes "...去玩";
+			mes "外部。";
+		}
+		else mes "……哼。";
+		close;
+	}
+	if (KNIGHT_Q == 0) {
+		mes "...什麼？";
+		close;
+	}
+	else if (KNIGHT_Q >= 1 && KNIGHT_Q <= 5) {
+		mes "...什麼？";
+		next;
+		if (select("我想參加考試換工作:哦，沒什麼。") == 1) {
+			mes "[溫莎爵士]";
+			mes "...";
+			next;
+			mes "[溫莎爵士]";
+			mes "...";
+			mes "......";
+			next;
+			mes "[溫莎爵士]";
+			mes "...還不到我了。";
+			close;
+		}
+		mes "[溫莎爵士]";
+		mes "...";
+		close;
+	}
+	else if (KNIGHT_Q == 6 || KNIGHT_Q == 7) {
+		if (KNIGHT_Q == 6) {
+			set .@mes$,"Sir Siracuse sent me to you.:Oh, nothing.";
+			mes ".....什麼？";
+			next;
+		}
+		else {
+			set .@mes$,"I want to try again!:...";
+			next;
+		}
+		if (select(.@mes$) == 1) {
+			mes "[溫莎爵士]";
+			mes "...";
+			next;
+			set KNIGHT_Q,7;
+			if (checkquest(9004) != -1) {
+				changequest 9004,9005;
+			}
+			mes "[溫莎爵士]";
+			mes "...";
+			mes "......";
+			next;
+			mes "[溫莎爵士]";
+			if (KNIGHT_Q == 6) 
+				mes "...跟我來。";
+			else {
+				mes "...美好的。";
+				next;
+				mes "[溫莎爵士]";
+				mes "...這邊走。";
+			}
+			close2;
+			if(checkquest(9006) == -1) changequest 9005,9006;
+			warp "job_knt",89,101;
+			end;
+		}
+		mes "[溫莎爵士]";
+		mes "...";
+		close;
+	}
+	else if (KNIGHT_Q == 14) {
+		mes "...談談";
+		mes "隊長。";
+		close;
+	}
+	else {
+		mes "...你";
+		mes "在這裡完成。";
+		close;
+	}
+}
+
+// Test 2 part 1
+//==========================================================
+job_knt,89,106,4	script	Knight Windsor#knt	733,{
+	mes "[溫莎爵士]";
+	mes "...";
+	next;
+	mes "[溫莎爵士]";
+	mes "...";
+	mes "......";
+	next;
+	mes "[溫莎爵士]";
+	mes "...問題？";
+	next;
+	set .@i, select("這是什麼考試？ :我該如何參加考試？ :我想離開。 :不。");
+	mes "[溫莎爵士]";
+	mes "...";
+	if (.@i == 4) close;
+	next;
+	mes "[溫莎爵士]";
+	mes "...";
+	mes "......";
+	switch(.@i) {
+	case 1:
+		next;
+		mes "[溫莎爵士]";
+		mes "...你打架怪物。";
+		next;
+		mes "[溫莎爵士]";
+		mes "...殺死他們。";
+		next;
+		mes "[溫莎爵士]";
+		mes "...";
+		next;
+		mes "[溫莎爵士]";
+		mes "...三個階段。";
+		mes "擊敗他們。";
+		next;
+		mes "[溫莎爵士]";
+		mes "...... 3分鐘";
+		mes "對於每個階段。";
+		next;
+		mes "[溫莎爵士]";
+		mes "…………";
+		close;
+	case 2:
+		next;
+		mes "[溫莎爵士]";
+		mes "...進入";
+		mes "候診室。";
+		next;
+		mes "[溫莎爵士]";
+		mes "...然後";
+		mes "將開始。";
+		next;
+		mes "[溫莎爵士]";
+		mes "...";
+		next;
+		mes "[溫莎爵士]";
+		mes "...你必須等待";
+		mes "如果有人在測試。";
+		next;
+		mes "[溫莎爵士]";
+		mes "...你可以進去";
+		mes "在那個人之後。";
+		next;
+		mes "[溫莎爵士]";
+		mes "...";
+		close;
+	case 3:
+		close2;
+		warp "prt_in",80,100;
+		end;
+	}
+}
+
+job_knt,89,106,4	script	Windsor Benedict#knt	733,{
+	end;
+
+OnInit:
+	//disablenpc  "Windsor Benedict#knt";
+	hideonnpc "Windsor Benedict#knt";
+	waitingroom "Waiting Room",20,"Windsor Benedict#knt::OnStartArena",1;
+	enablewaitingroomevent;
+	end;
+
+OnStartArena:
+	killmonster "job_knt", "Knight1::OnMyMobDead";
+	killmonster "job_knt", "Knight2::OnMyMobDead";
+	killmonster "job_knt", "Knight3::OnMyMobDead";
+	warpwaitingpc "job_knt",43,146;
+	donpcevent "Knight1::OnEnable";
+	disablewaitingroomevent;
+	end;
+
+OnStart:
+	enablewaitingroomevent;
+	end;
+}
+
+-	script	Knight1	-1,{
+OnInit:
+	disablenpc "Knight1";
+	end;
+
+OnEnable:
+	enablenpc "Knight1";
+	if (!checkre(0)) {
+		set .MyMobs,12;
+		monster "job_knt",39,150,"Dustiness",1114,1,"Knight1::OnMyMobDead";
+		monster "job_knt",47,150,"Dustiness",1114,1,"Knight1::OnMyMobDead";
+		monster "job_knt",39,142,"Dustiness",1114,1,"Knight1::OnMyMobDead";
+		monster "job_knt",47,142,"Dustiness",1114,1,"Knight1::OnMyMobDead";
+	}
+	else
+		set .MyMobs,8;
+	monster "job_knt",43,137,"Piere",1160,1,"Knight1::OnMyMobDead";
+	monster "job_knt",43,137,"Andre",1095,1,"Knight1::OnMyMobDead";
+	monster "job_knt",43,137,"Deniro",1105,1,"Knight1::OnMyMobDead";
+	monster "job_knt",43,155,"Piere",1160,1,"Knight1::OnMyMobDead";
+	monster "job_knt",43,155,"Andre",1095,1,"Knight1::OnMyMobDead";
+	monster "job_knt",43,155,"Deniro",1105,1,"Knight1::OnMyMobDead";
+	monster "job_knt",35,146,"Argos",1100,1,"Knight1::OnMyMobDead";
+	monster "job_knt",52,146,"Argos",1100,1,"Knight1::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonster "job_knt", "Knight1::OnMyMobDead";
+	disablenpc "Knight1";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mes "[溫莎爵士]";
+		mes "...";
+		next;
+		mes "[溫莎爵士]";
+		mes "...去";
+		mes "下一個級別。";
+		close2;
+		warp "job_knt",43,52;
+		donpcevent "Knight1::OnDisable";
+		donpcevent "Knight2::OnEnable";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer180000:
+	donpcevent "Knight1::OnDisable";
+	end;
+
+OnTimer181000:
+	areawarp "job_knt", 24, 126, 63, 165, "prt_in",80,100;
+	end;
+
+OnTimer182000:
+	stopnpctimer;
+	donpcevent "Knight1::OnDisable";
+	donpcevent "Windsor Benedict#knt::OnStart";
+	end;
+}
+
+// Test 2 part 2
+//==========================================================
+-	script	Knight2	-1,{
+OnInit:
+	disablenpc "Knight2";
+	end;
+
+OnEnable:
+	enablenpc "Knight2";
+	if (!checkre(0)) {
+		set .MyMobs,12;
+		monster "job_knt",43,42,"Desert Wolf",1106,1,"Knight2::OnMyMobDead";
+		monster "job_knt",43,62,"Desert Wolf",1106,1,"Knight2::OnMyMobDead";
+		monster "job_knt",60,68,"Anacondaq",1030,1,"Knight2::OnMyMobDead";
+		monster "job_knt",27,68,"Anacondaq",1030,1,"Knight2::OnMyMobDead";
+		monster "job_knt",60,35,"Anacondaq",1030,1,"Knight2::OnMyMobDead";
+		monster "job_knt",27,35,"Anacondaq",1030,1,"Knight2::OnMyMobDead";
+	}
+	else
+		set .MyMobs,6;
+	monster "job_knt",53,52,"Frilldora",1119,1,"Knight2::OnMyMobDead";
+	monster "job_knt",34,52,"Frilldora",1119,1,"Knight2::OnMyMobDead";
+	monster "job_knt",58,52,"Drainliar",1111,1,"Knight2::OnMyMobDead";
+	monster "job_knt",58,52,"Drainliar",1111,1,"Knight2::OnMyMobDead";
+	monster "job_knt",29,52,"Drainliar",1111,1,"Knight2::OnMyMobDead";
+	monster "job_knt",29,52,"Drainliar",1111,1,"Knight2::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonster "job_knt", "Knight2::OnMyMobDead";
+	disablenpc "Knight2";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mes "[溫莎爵士]";
+		mes "...唔。";
+		next;
+		mes "[溫莎爵士]";
+		mes "...還剩一個階段。";
+		close2;
+		warp "job_knt",143,152;
+		donpcevent "Knight2::OnDisable";
+		donpcevent "Knight3::OnEnable";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer180000:
+	donpcevent "Knight2::OnDisable";
+	end;
+
+OnTimer181000:
+	areawarp "job_knt", 24, 32, 63, 71, "prt_in",80,100;
+	end;
+
+OnTimer182000:
+	stopnpctimer;
+	donpcevent "Knight2::OnDisable";
+	donpcevent "Windsor Benedict#knt::OnStart";
+	end;
+}
+
+// Test 2 part 3
+//==========================================================
+-	script	Knight3	-1,{
+OnInit:
+	disablenpc "Knight3";
+	end;
+
+OnEnable:
+	enablenpc "Knight3";
+	if (!checkre(0)) {
+		set .MyMobs,7;
+		monster "job_knt",147,167,"Goblin Archer",1258,1,"Knight3::OnMyMobDead";
+		monster "job_knt",136,158,"Steam Goblin",1280,1,"Knight3::OnMyMobDead";
+	}
+	else
+		set .MyMobs,5;
+	monster "job_knt",136,152,"Goblin",1122,1,"Knight3::OnMyMobDead";
+	monster "job_knt",150,152,"Goblin",1123,1,"Knight3::OnMyMobDead";
+	monster "job_knt",143,145,"Goblin",1124,1,"Knight3::OnMyMobDead";
+	monster "job_knt",143,167,"Goblin",1125,1,"Knight3::OnMyMobDead";
+	monster "job_knt",139,167,"Goblin",1126,1,"Knight3::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonster "job_knt", "Knight3::OnMyMobDead";
+	disablenpc "Knight3";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mes "[溫莎爵士]";
+		mes "...";
+		next;
+		mes "[溫莎爵士]";
+		mes "...非常好。";
+		next;
+		mes "[溫莎爵士]";
+		mes "...去談談";
+		mes "艾米·比阿特麗斯現在。";
+		close2;
+		set KNIGHT_Q,8;
+		if(checkquest(9007) == -1) {
+			changequest 9006,9007;
+		}
+		warp "prt_in",80,100;
+		donpcevent "Knight3::OnDisable";
+		donpcevent "Windsor Benedict#knt::OnStart";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer180000:
+	donpcevent "Knight3::OnDisable";
+	end;
+
+OnTimer181000:
+	areawarp "job_knt", 124, 132, 163, 171, "prt_in",80,100;
+	end;
+
+OnTimer182000:
+	stopnpctimer;
+	donpcevent "Knight3::OnDisable";
+	donpcevent "Windsor Benedict#knt::OnStart";
+	end;
+}
+
+// Test 3 (Manners)
+//==========================================================
+prt_in,69,107,6	script	Lady Amy#knt	728,{
+	mes "[艾米夫人]";
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) {
+			mes "哦...！";
+			mes "我想知道，為什麼";
+			mes "你來嗎";
+			mes "拜訪我？";
+			next;
+			mes "[艾米夫人]";
+			mes "你沒有";
+			mes "作為騎士的麻煩，";
+			mes "你是？好吧，我想";
+			mes "你做得好~";
+			next;
+			mes "[艾米夫人]";
+			mes "當然~";
+			mes "你是成員";
+			mes "Prontera騎士~";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "噢~";
+			mes "多麼可愛";
+			mes "小新手！";
+			mes "太可愛了！";
+			next;
+			mes "[艾米夫人]";
+			mes "呵呵...";
+			mes "你有興趣嗎？";
+			mes "成為騎士";
+			mes "以後？你會的";
+			mes "偉大的騎士~";
+			next;
+			mes "[艾米夫人]";
+			mes "記住，你";
+			mes "要成為騎士，";
+			mes "好吧？承諾？";
+			close;
+		}
+		else {
+			mes "歡迎來";
+			mes "Prontera騎士~";
+			next;
+			mes "[艾米夫人]";
+			mes "我們只是騎士，";
+			mes "但希望你喜歡";
+			mes "你在這裡留下來。";
+			mes "呵呵~";
+			close;
+		}
+	}
+	if (KNIGHT_Q == 0) {
+		mes "哦，你";
+		mes "劍客...？";
+		mes "你來了嗎";
+		mes "將工作更改為";
+		mes "騎士？";
+		next;
+		mes "[艾米夫人]";
+		mes "要申請，說話";
+		mes "給隊長";
+		mes "一路";
+		mes "那裡。呵呵~";
+		close;
+	}
+	else if (KNIGHT_Q >= 1 && KNIGHT_Q <= 7) {
+		mes "嗯？";
+		mes "你為什麼";
+		mes "來艾米嗎？";
+		next;
+		if (select("我想參加考試換工作:哦，沒什麼。") == 1) {
+			mes "[艾米夫人]";
+			mes "嗯~";
+			mes "您申請了換工作！好的！您很快就會成為一個決心的騎士！";
+			next;
+			mes "[艾米夫人]";
+			mes "但...";
+			mes "你必須去";
+			mes "給其他騎士";
+			mes "在與艾米交談之前。";
+			next;
+			mes "[艾米夫人]";
+			mes "我想測試";
+			mes "你從一開始，";
+			mes "但是我不允許。";
+			mes "呵呵~";
+			close;
+		}
+		mes "[艾米夫人]";
+		mes "噢~";
+		mes "好吧...";
+		close;
+	}
+	else if ((KNIGHT_Q == 8) || (KNIGHT_Q == 9)){
+		if (KNIGHT_Q == 8) {
+			mes "嗯？";
+			mes "你為什麼";
+			mes "來艾米嗎？";
+			next;
+			if (select("溫莎爵士告訴我——:哦，沒什麼。") == 1) {
+				if(checkquest(9008) == -1) changequest 9007,9008;
+				mes "[艾米夫人]";
+				mes "哦！";
+				mes "不需要說";
+				mes "還有更多。";
+				mes "歡迎！是時候了";
+				mes "參加艾米的考試！";
+				next;
+				mes "[艾米夫人]";
+				mes "我叫艾米·比阿特麗斯（Amy Beatrice），";
+				mes "Prontera騎士精神的驕傲女士騎士。艾米的測試將測試您的禮節作為騎士~";
+				next;
+				mes "[艾米夫人]";
+				mes "我會告訴你一個故事，您隨時選擇答案";
+				mes "我問一個問題。您的禮節將根據您的答案進行判斷。";
+				next;
+				mes "[艾米夫人]";
+				mes "所以仔細聽";
+				mes "並回答好像你";
+				mes "已經是騎士了，好嗎？";
+				next;
+				mes "[艾米夫人]";
+				mes "然後，";
+				mes "讓我們開始吧！";
+				next;
+			}
+			else {
+				mes "[艾米夫人]";
+				mes "噢...";
+				mes "好吧~";
+				close;
+			}
+		}
+		else if (KNIGHT_Q == 9) {
+			mes "嗯？";
+			mes "你為什麼";
+			mes "來艾米嗎？";
+			next;
+			if (select("我想參加考試換工作:哦，沒什麼。") == 1) {
+				mes "[艾米夫人]";
+				mes "嗯~？";
+				mes "你學到了嗎？";
+				mes "你做錯了什麼";
+				mes "上次？如果你";
+				mes "再次失敗，我要去";
+				mes "生氣！";
+				next;
+				mes "[艾米夫人]";
+				mes "所以仔細聽";
+				mes "並好像你一樣";
+				mes "是騎士。";
+				mes "好吧，那，";
+				mes "讓我們開始吧！";
+				next;
+				mes "[艾米夫人]";
+				mes "您是騎士，您正在尋找摩洛哥的聚會。";
+				mes "您將如何去做？";
+				next;
+			}
+			else {
+				mes "[艾米夫人]";
+				mes "噢...";
+				mes "好吧~";
+				close;
+			}
+		}
+		mes "您是騎士，您正在尋找摩洛哥的聚會。";
+		mes "您將如何去做？";
+		next;
+		if (select("大聲喊出您正在尋找聚會。 :打開聊天室並等待。 :尋找尋找騎士的人。") != 1)
+			set .@knight_t,.@knight_t+10;
+		mes "[艾米夫人]";
+		mes "您已經組成了一個具有平等水平的球員的聚會。有一個牧師，一個巫師，一個獵人，一個刺客和一個鐵匠...";
+		next;
+		mes "[艾米夫人]";
+		mes "你們六個人決定去狩獵，並決定去金字塔。";
+		next;
+		mes "[艾米夫人]";
+		mes "您達到4級";
+		mes "金字塔";
+		mes "與您的聚會。";
+		mes "你該怎麼辦？";
+		next;
+		if (select("檢查該區域並提前計劃。 :為你的隊伍成員收集怪物。 :在前面緩慢地帶領隊伍。") != 2)
+			set .@knight_t,.@knight_t+10;
+		mes "[艾米夫人]";
+		mes "但是一些粗魯的球員帶來了一群怪物，消失了！你該怎麼辦？";
+		next;
+		if (select("阻止怪物到達隊伍。 :在隊伍撤退時進行防禦。 :騎著你的 Peco Peco 逃跑。") != 3)
+			set .@knight_t,.@knight_t+10;
+		mes "[艾米夫人]";
+		mes "幸運的是，你們都經歷了危機。但是，當您走路時，您會發現一個不在您的聚會中的人倒在地面上。";
+		next;
+		mes "[艾米夫人]";
+		mes "該人有禮貌地尋求幫助。你該怎麼辦？";
+		next;
+		if (select("請你隊伍的牧師幫忙。 :說你會為 Zeny 提供幫助。 :忽略並繼續前進。") == 1)
+			set .@knight_t,.@knight_t+10;
+		mes "[艾米夫人]";
+		mes "您必須向您的黨員告別，因為您必須去其他地方。";
+		next;
+		mes "[艾米夫人]";
+		mes "但是你發現";
+		mes "在";
+		mes "戰鬥。什麼";
+		mes "你應該做嗎？";
+		next;
+		if(select("把它給最值得的人。 :假裝什麼都沒發生並保留它。 :與得到它的一方決定。") != 2)
+			set .@knight_t,.@knight_t+10;
+		mes "[艾米夫人]";
+		mes "您最終會拿到物品，然後去Prontera出售它。有很多有商店和聊天室的人開業。";
+		next;
+		mes "[艾米夫人]";
+		mes "你應該什麼";
+		mes "賣掉你的物品？";
+		next;
+		if (select("大聲向大家喊。 :打開聊天室等待。 :詢問是否有人感興趣。") != 1)
+			set .@knight_t,.@knight_t+10;
+		mes "[艾米夫人]";
+		mes "當你在等待時";
+		mes "有人來乞求";
+		mes "對於物品和Zeny。";
+		mes "你做什麼工作？";
+		next;
+		if (select("給他們一些 Zeny 和物品。 :忽略他們。 :給狩獵地點的建議。") == 3)
+			set .@knight_t,.@knight_t+10;
+		mes "[艾米夫人]";
+		mes "現在，您決定自己去隱藏的寺廟。您很樂意騎peco peco。";
+		next;
+		mes "[艾米夫人]";
+		mes "但是你遇到了";
+		mes "失去的人。";
+		mes "你該怎麼辦？";
+		next;
+		if(select("告訴此人如何到達出口。 :引導此人到出口。 :給一個蝴蝶翅膀。") != 3)
+			set .@knight_t,.@knight_t+10;
+		mes "[艾米夫人]";
+		mes "您已經狩獵了一段時間，現在您的HP很低！";
+		mes "現在是紅色的，這是非常危險的。";
+		next;
+		mes "[艾米夫人]";
+		mes "啊，然後是牧師";
+		mes "碰巧走過。";
+		mes "你怎麼問";
+		mes "牧師治愈？";
+		next;
+		if (select("請問可以治愈嗎？ :我可以治愈嗎？ :請治愈！ ！") == 1)
+			set .@knight_t,.@knight_t+10;
+		mes "[艾米夫人]";
+		mes "你現在非常";
+		mes "筋疲力盡，是時候了";
+		mes "回到城鎮。";
+		next;
+		mes "[艾米夫人]";
+		mes "然後您找到";
+		mes "一個罕見的物品";
+		mes "街。";
+		mes "應該什麼";
+		mes "你做？";
+		next;
+		if (select("撿起來並保留它。 :四處打聽以找到失主。 :只是走過去。") != 1)
+			set .@knight_t,.@knight_t+10;
+		mes "[艾米夫人]";
+		mes "好的，";
+		mes "那就是";
+		mes "我的測試結束！";
+		next;
+		mes "[艾米夫人]";
+		if (.@knight_t == 100) {
+			set KNIGHT_Q,10;
+			changequest 9008,9009;
+			mes "做得好，騎士需要這種心態！對於您的下一個測試，請訪問Edmond爵士~";
+			next;
+			mes "[艾米夫人]";
+			mes "我對您的船長有很好的評論。在您剩下的測試中做得好，好嗎？";
+			close;
+		}
+		else if (.@knight_t == 90) {
+			set KNIGHT_Q,10;
+			changequest 9008,9009;
+			mes "好吧，這不是完美的，";
+			mes "但我認為你已經足夠了";
+			mes "關於禮節";
+			mes "一個很好的騎士。";
+			next;
+			mes "[艾米夫人]";
+			mes "現在，是時候讓您去埃德蒙爵士接受下一次考試了。在其餘的測試中做得好。你最好保證~";
+			close;
+		}
+		set KNIGHT_Q,9;
+		mes "嗯...";
+		mes "老實說，我認為您的態度還不夠好，可以成為騎士。";
+		next;
+		mes "[艾米夫人]";
+		mes "如果您真的這樣做，每個人都會認為騎士很粗魯！考慮一下您如何回答我的問題，然後再來。";
+		next;
+		mes "[艾米夫人]";
+		mes "如果你想，";
+		mes "我讓你";
+		mes "重新測試，好嗎？";
+		close;
+	}
+	else if (KNIGHT_Q == 10) {
+		mes "嗯？";
+		mes "你為什麼";
+		mes "來艾米嗎？";
+		next;
+		mes "[艾米夫人]";
+		mes "你必須去";
+		mes "埃德蒙爵士為你";
+		mes "下一個測試，好嗎？";
+		close;
+	}
+	else if (KNIGHT_Q == 14) {
+		mes "哇~";
+		mes "現在是時候了";
+		mes "每個人都可以決定";
+		mes "在您的工作變更上！";
+		next;
+		mes "[艾米夫人]";
+		mes "讓我們去和我們談談";
+		mes "隊長。不用擔心";
+		mes "太多了。它應該";
+		mes "沒關係。";
+		close;
+	}
+	else {
+		mes "嗯？";
+		mes "你為什麼";
+		mes "來艾米嗎？";
+		next;
+		mes "[艾米夫人]";
+		mes "你還有";
+		mes "其他測試要進行。";
+		mes "快點完成~";
+		close;
+	}
+}
+
+// Test 4 (patience)
+//==========================================================
+prt_in,70,99,6	script	Sir Edmond#knt	734,{
+	mes "[埃德蒙爵士]";
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) {
+			mes "想想你";
+			mes "介意好像是";
+			mes "活水。";
+			next;
+			mes "[埃德蒙爵士]";
+			mes "活水";
+			mes "避免障礙，";
+			mes "前進...";
+			next;
+			mes "[埃德蒙爵士]";
+			mes "騎士必須是";
+			mes "能夠通過事物，";
+			mes "像平靜的水一樣";
+			mes "任何情況。";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "深根的樹木不會隨風而搖擺。必須基於強大的基礎知識建立強大技能的事實是不變的...";
+			next;
+			mes "[埃德蒙爵士]";
+			mes "你的未來";
+			mes "甚至可以";
+			mes "現在決定...";
+			close;
+		}
+		else {
+			mes "這個世界上的一切都與和諧相處。生活而不會破壞這種和諧是生活的正確方法。";
+			close;
+		}
+	}
+	if (KNIGHT_Q == 0) {
+		mes "那些有不祥思想的人只會夢想這樣的夢。完全沒有夢想比擁有悲傷和絕望的夢想更好。";
+		close;
+	}
+	else if (KNIGHT_Q >= 1 && KNIGHT_Q <= 9) {
+		mes "是什麼...";
+		mes "徘徊的劍客？";
+		next;
+		if (select("我想參加考試換工作:哦，沒什麼。") == 1) {
+			mes "[埃德蒙爵士]";
+			mes "種子必須首先坐著";
+			mes "在種子之前，在地球上發芽。然後，發芽必須長出葉子，然後芽開成花。";
+			next;
+			mes "[埃德蒙爵士]";
+			mes "如果不...";
+			mes "花願意";
+			mes "不完整。";
+			next;
+			mes "[埃德蒙爵士]";
+			mes "去別人";
+			mes "首先，讓你";
+			mes "可能會找到您的道路...";
+			close;
+		}
+		mes "[埃德蒙爵士]";
+		mes "你的生活";
+		mes "想要很快";
+		mes "在你眼前。";
+		mes "一切都會";
+		mes "進來完美";
+		mes "命令。";
+		close;
+	}
+	else if (KNIGHT_Q == 10) {
+		mes "是什麼...";
+		mes "流浪的劍客。";
+		next;
+		if (select("艾米女士發給我的:哦，沒什麼。") == 1) {
+			mes "[埃德蒙爵士]";
+			mes "現在是時候參加我的考試了。如您在其他測試中所做的那樣，請盡力而為。";
+			next;
+			mes "[埃德蒙爵士]";
+			mes "我的名字是";
+			mes "埃德蒙·格羅斯特（Edmond Groster）。";
+			mes "我是";
+			mes "Printera騎士精神。";
+			next;
+			mes "[埃德蒙爵士]";
+			mes "騎士處於其他人的位置。因此，您必須適度考慮世界的秩序，並具有適合您將要扮演的角色的個性。";
+			next;
+			mes "[埃德蒙爵士]";
+			mes "您不能做出粗心的決定。當情況要求時，您的意願應該像蘆葦一樣彎曲，或者像石頭一樣堅定。";
+			next;
+			mes "[埃德蒙爵士]";
+			mes "您絕對不能無緣無故地殺死怪物，也不會為此感到高興。花時間悄悄地自己思考一下...";
+			next;
+			mes "[埃德蒙爵士]";
+			mes "然後，我們將";
+			mes "開始測試。";
+			mes "記住";
+			mes "品質";
+			mes "尊敬。";
+			close2;
+			set KNIGHT_Q,11;
+			changequest 9009,9010;
+			warp "job_knt",143,57;
+			end;
+		}
+		mes "[埃德蒙爵士]";
+		mes "你想要的生活";
+		mes "很快就會";
+		mes "你的眼睛。";
+		close;
+	}
+	else if (KNIGHT_Q == 11) {
+		mes "是什麼...";
+		mes "徘徊的劍客？";
+		next;
+		if (select("對不起，我不是故意的……:哦，沒什麼。") == 1) {
+			mes "[埃德蒙爵士]";
+			mes "您在上次測試中太粗心了。存在騎士的劍是為了保護他人，而不是折磨較弱的怪物。";
+			next;
+			mes "[埃德蒙爵士]";
+			mes "在一個和諧相處的世界中，您不能沒有目的而不斷破壞人類。該原則適用於現實世界，而不是僅此測試。";
+			next;
+			mes "[埃德蒙爵士]";
+			mes "測試";
+			mes "將開始。";
+			mes "告訴我你";
+			mes "耐心...";
+			close2;
+			warp "job_knt",143,57;
+			end;
+		}
+		mes "[埃德蒙爵士]";
+		mes "你的生活";
+		mes "想要很快";
+		mes "在你眼前。";
+		mes "一切都會";
+		mes "進來完美";
+		mes "命令。";
+		close;
+	}
+	else if (KNIGHT_Q == 12 || KNIGHT_Q == 13) {
+		mes "我已經看到了你的角色。現在是您進行最後測試的時候了。去說話";
+		mes "格雷爵士...";
+		close;
+	}
+	else {
+		mes "去說話";
+		mes "給我們的隊長。";
+		mes "時間到了";
+		mes "為我們所有人";
+		mes "評估您的";
+		mes "表現。";
+		close;
+	}
+}
+
+job_knt,1,1,1	script	Timer#knt	107,{
+OnTimer300000:
+	enablenpc "Warp#knt";
+	end;
+
+OnTimer300500:
+	donpcevent "Timer#knt::OnDisable";
+	disablenpc "Warp#knt";
+	end;
+
+OnTimer301500:
+	stopnpctimer;
+	donpcevent "Timer#knt::OnEnable";
+	end;
+
+OnInit:
+OnEnable:
+	enablenpc "Timer#knt";
+	monster "job_knt",141,57,"Poring",1002,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",145,57,"Poring",1002,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",143,55,"Poring",1002,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",143,59,"Poring",1002,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",141,55,"Lunatic",1063,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",141,59,"Lunatic",1063,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",145,55,"Lunatic",1063,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",145,59,"Lunatic",1063,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",139,57,"Chonchon",1011,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",147,57,"Chonchon",1011,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",143,53,"Chonchon",1011,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",143,61,"Chonchon",1011,1,"Timer#knt::OnMyMobDead";
+	//These monsters were out of bounds. Adjusted to put them in bounds.
+	monster "job_knt",165,54,"Mushroom",1182,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",165,57,"Mushroom",1182,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",122,54,"Mushroom",1182,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",122,57,"Mushroom",1182,1,"Timer#knt::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonster "job_knt","Timer#knt::OnMyMobDead";
+	disablenpc "Timer#knt";
+	disablenpc "Warp#knt";
+	end;
+
+OnMyMobDead:
+	warp "prt_fild05",353,251;
+	end;
+}
+
+job_knt,143,57,1	script	Warp#knt	107,22,22,{
+OnInit:
+	disablenpc "Warp#knt";
+	end;
+OnTouch_:
+	set KNIGHT_Q,12;
+	changequest 9010,9011;
+	warp "prt_in",80,100;
+	end;
+}
+
+// Test 5, and creates Claymores for knights
+//==========================================================
+prt_in,87,92,4	script	Sir Gray#knt	119,{
+	mes "[格雷爵士]";
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) {
+			mes "光線";
+			mes "那閃閃發光的刀片不能說出來。這是每個騎士必須擁有的武器。";
+			next;
+			mes "[格雷爵士]";
+			mes "是的...";
+			mes "^3355ff粘土更多^000000！";
+			mes "每個騎士";
+			mes "想要一個！";
+			next;
+			switch(select("關於^3355FFClaymore^000000:購買Claymore:結束對話")) {
+			case 1:
+				mes "[格雷爵士]";
+				mes "克萊莫爾（Claymore），是您可以在符文米加特斯（Rune-Midgarts）的Prontera中獲得的著名劍之一！當騎士考慮時，它的價值是無價的。";
+				next;
+				mes "[格雷爵士]";
+				mes "現在，Printera騎士製造了這些神話般的粘土式。對於騎士，他們只有 ^3355ff74,000 ^000000 Zeny。";
+				next;
+				mes "[格雷爵士]";
+				mes "但不僅如此，您還需要";
+				mes "1 ^3355ffsteel ^000000由於Claymore的特徵。如果您願意，我可以為您創建一個。為了尊敬Printera騎士精神！";
+				close;
+			case 2:
+				if (MaxWeight - Weight < 1800) {
+					mes "[格雷爵士]";
+					mes "哦，不...";
+					mes "看來您攜帶太多的東西。您的庫存中沒有足夠的空間來容納濃重的粘土。";
+					next;
+					mes "[格雷爵士]";
+					mes "你為什麼不";
+					mes "去組織";
+					mes "您的物品首先。";
+					close;
+				}
+				else {
+					if ((Zeny > 73999) && (countitem(999) > 0) && (BaseJob == Job_Knight)) {
+						mes "[格雷爵士]";
+						mes "你準備好了！";
+						mes "你必須知道";
+						mes "真實價值的";
+						mes "克萊莫爾！";
+						mes "我會做的";
+						mes "現在就！";
+						next;
+						mes "[格雷爵士]";
+						mes "基礎知識";
+						mes "製作克萊莫爾";
+						mes "很容易。看~！";
+						next;
+						mes "^3355ff*攪拌*^000000";
+						mes "^3355ff*高高*^000000";
+						next;
+						mes "[格雷爵士]";
+						mes "好吧，已經準備好了！";
+						mes "每個騎士的驕傲：";
+						mes "罰款 ^3355ffclaymore ^000000。";
+						mes "您獲得了可靠的物品。";
+						mes "這將是您冒險的好伴侶。";
+						delitem 999,1; //Steel
+						set Zeny, Zeny - 74000;
+						getitem 1163,1; //Claymore
+						close;
+					}
+					mes "[格雷爵士]";
+					mes "我意識到您可能真的想要一個克萊莫爾（Claymore），但是沒有材料，我無法做到。";
+					mes "^3355ff74,000 Zeny^000000和^3355ff1鋼！ ^000000。";
+					next;
+					mes "[格雷爵士]";
+					mes "什麼時候回來";
+					mes "你有一切";
+					mes "準備好。我會的";
+					mes "等待...";
+					close;
+				}
+			case 3:
+				mes "[格雷爵士]";
+				mes "任何騎士都應該能夠揮舞黏土，好像它是他們身體的延伸一樣。我曾經期待在戰鬥中揮舞我的克萊莫爾...";
+				close;
+			}
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "相信它";
+			mes "還是不是，我是";
+			mes "曾經是新手";
+			mes "也是如此。";
+			next;
+			mes "[格雷爵士]";
+			mes "我從來沒有真正打算成為騎士，但我確實決定成為一個堅強的人。不知何故，在我的旅途中，我最終加入了Prontera騎士精神。哈哈哈！";
+			close;
+		}
+		mes "年輕一個，";
+		mes "用你的時間";
+		mes "明智地。";
+		next;
+		mes "[格雷爵士]";
+		mes "沒有意義";
+		mes "遺憾";
+		mes "一旦過去了。";
+		close;
+	}
+	if (KNIGHT_Q == 0) {
+		mes "年輕一個，";
+		mes "用你的時間";
+		mes "明智地。";
+		next;
+		mes "[格雷爵士]";
+		mes "沒有意義";
+		mes "遺憾";
+		mes "一旦過去了。";
+		close;
+	}
+	else if ((KNIGHT_Q == 12) || (KNIGHT_Q == 13)) {
+		if (KNIGHT_Q == 12) {
+			mes "哦...";
+			mes "年輕的劍客。";
+			mes "是的，可以";
+			mes "我為你做嗎？";
+			next;
+			if (select("我想參加考試換工作:哦，沒什麼。") == 1) {
+				mes "[格雷爵士]";
+				mes "霍霍，我明白了。";
+				mes "所以你拿走了";
+				mes "其他人的";
+				mes "測試？";
+				next;
+				mes "[格雷爵士]";
+				mes "然後";
+				mes "我們開始我的？";
+				mes "不是真的";
+				mes "測試。";
+				next;
+				mes "[格雷爵士]";
+				mes "讓我們談談";
+				mes "隨便";
+				mes "我們可以？";
+				next;
+				mes "[格雷爵士]";
+				mes "第一的...";
+				mes "你為什麼";
+				mes "決定成為";
+				mes "騎士？";
+				next;
+			}
+			else {
+				mes "[格雷爵士]";
+				mes "小心！";
+				close;
+			}
+		}
+		else if (KNIGHT_Q == 13) {
+			mes "啊，你又來了。";
+			mes "帶給你的是什麼";
+			mes "大部頭書？";
+			next;
+			if (select("我想了很多。 :哦，沒什麼。") == 1) {
+				mes "[格雷爵士]";
+				mes "是這樣嗎...";
+				mes "我想知道你是否";
+				mes "真正有...";
+				next;
+				mes "[格雷爵士]";
+				mes "然後...";
+				mes "就像上次";
+				mes "我會再次問...";
+				next;
+				mes "[格雷爵士]";
+				mes "第一的...";
+				mes "你為什麼";
+				mes "決定成為";
+				mes "騎士？";
+				next;
+			}
+			else {
+				mes "[格雷爵士]";
+				mes "小心！";
+				mes "健康是";
+				mes "每個人的";
+				mes "寶藏！";
+				close;
+			}
+		}
+		switch(select("為了變得更強...:為了幫助我的公會...:因為我對現在的自己不滿意...")) {
+		case 1:
+			mes "[格雷爵士]";
+			mes "你說要變得更強壯？";
+			mes "是的，騎士確實很強大。";
+			mes "但是為什麼要增強力量呢？";
+			next;
+			mes "[格雷爵士]";
+			mes "是要向他人炫耀嗎？獲得名望？還是您有不同的原因？您認為獲得騎士的力量有什麼好處？";
+			next;
+			switch(select("獲得財富和名譽。 :我可以保護自己。 :我可以保護別人。")) {
+			case 1:
+				set .@knight_t,.@knight_t+10;
+				mes "[格雷爵士]";
+				mes "當然，財富和名望在世界上佔有一席之地。但是，我們作為騎士必須生活在更高的美德中。";
+				next;
+				break;
+			case 2:
+				mes "[格雷爵士]";
+				mes "好思考。您必須首先能夠保護自己以保護他人。為此，您必須不斷訓練，永遠不要屈服於懶惰。";
+				next;
+				break;
+			case 3:
+				mes "[格雷爵士]";
+				mes "啊，一個很棒的主意。必須使用騎士的力量來保護弱者並捍衛正義。";
+				next;
+				mes "[格雷爵士]";
+				mes "可悲的是，有一些騎士通過忘記了應該是基礎的理想來羞辱我們的...";
+				next;
+				break;
+			}
+			break;
+		case 2:
+			mes "[格雷爵士]";
+			mes "啊，為了幫助您的行會，甚至是您的聚會。我們的明智而仁慈的國王特里斯蘭（Tristram）第三次給我們這些金色的話...";
+			next;
+			mes "[格雷爵士]";
+			mes "^8B7500BEYOND在平靜的河流中，是危險的瀑布。因此，您必須始終為一切做好準備...^000000";
+			next;
+			mes "[格雷爵士]";
+			mes "那你怎麼";
+			mes "認為您可以";
+			mes "幫助您的行會？";
+			next;
+			switch(select("我的公會需要我。 :我可以幫助為我的公會籌集資金。 :我可以保護我的公會成員。")) {
+			case 1:
+				mes "[格雷爵士]";
+				mes "這個世界上任何地方的人，";
+				mes "有一個需要它們的地方。即使他不是公會成員，也永遠不要忽略有需要的人。";
+				next;
+				break;
+			case 2:
+				set .@knight_t,.@knight_t+10;
+				mes "[格雷爵士]";
+				mes "當然，財富很重要。";
+				mes "但是我們騎士必須活著以提高美德。";
+				next;
+				break;
+			case 3:
+				mes "[格雷爵士]";
+				mes "啊，一個很棒的主意。必須使用騎士的力量來保護弱者並捍衛正義。";
+				next;
+				mes "[格雷爵士]";
+				mes "可悲的是，有一些騎士通過忘記了應該是基礎的理想來羞辱我們的...";
+				next;
+				break;
+			}
+			break;
+		case 3:
+			set .@knight_t,.@knight_t+5;
+			mes "[格雷爵士]";
+			mes "滿足感，你說。";
+			mes "好像你是";
+			mes "已經是一把精美的劍客。";
+			mes "您想成為騎士嗎？";
+			next;
+			mes "[格雷爵士]";
+			mes "我不知道";
+			mes "劍客，但騎士不允許自我放縱。有些人痴迷於獲得力量，以至於無法控制自己。";
+			next;
+			mes "[格雷爵士]";
+			mes "所以...";
+			mes "你自己的哪一部分";
+			mes "你不滿意嗎";
+			mes "現在嗎？";
+			next;
+			switch(select("技能:目標:外表。")) {
+			case 1:
+				set .@knight_t,.@knight_t+5;
+				mes "[格雷爵士]";
+				mes "技能是您作為騎士的經驗而獲得的。這不是您的最高目標。否則，您將永遠不會作為騎士感到滿意。";
+				next;
+				break;
+			case 2:
+				set .@knight_t,.@knight_t-5;
+				mes "[格雷爵士]";
+				mes "我懂了...";
+				mes "始終實現目標非常重要。成為騎士時，您可能充滿了想法，但這可能會隨著時間而改變。";
+				next;
+				break;
+			case 3:
+				set .@knight_t,.@knight_t+5;
+				mes "[格雷爵士]";
+				mes "哦，不...";
+				mes "您看到的不是真正重要的。劍客可能比騎士強，甚至騎士變得懶惰，也可能會變得虛弱。";
+				next;
+				break;
+			}
+			break;
+		}
+		mes "[格雷爵士]";
+		mes "我了解你的想法，";
+		mes "但是有些人希望";
+		mes "不思考就成為騎士。";
+		next;
+		mes "[格雷爵士]";
+		mes "那些是煽動問題並羞辱騎士的榮譽，帶來不可逆轉的結果的人。";
+		next;
+		mes "[格雷爵士]";
+		mes "您也是如此。一旦成為騎士，您就再也不會成為劍客了。騎士的職責和責任將永遠與您同在。";
+		next;
+		mes "[格雷爵士]";
+		mes "如果您馬上成為騎士，您將首先做什麼？";
+		next;
+		switch(select("我要直接去戰鬥了。 :還有人在等著我。 :我會更多地了解騎士。")) {
+		case 1:
+			mes "[格雷爵士]";
+			mes "戰鬥...？";
+			mes "進而？";
+			next;
+			switch(select("我會在短時間內成長。 :我想測試一下我作為騎士的能力。 :我想去更有挑戰性的地方。")) {
+			case 1:
+				set .@knight_t,.@knight_t+10;
+				mes "[格雷爵士]";
+				mes "不要急於變得堅強。即使你成為";
+				mes "騎士，你仍然是你自己。";
+				next;
+				break;
+			case 2:
+				mes "[格雷爵士]";
+				mes "測試自己是一件好事。可以為自己的變化感到高興，但不要忘記成為騎士的真實品質。";
+				next;
+				break;
+			case 3:
+				mes "[格雷爵士]";
+				mes "即使您成為騎士，也不會改變內在的自我。無需過度勞累。";
+				mes "放鬆並逐步進行事情。";
+				next;
+				break;
+			}
+			break;
+		case 2:
+			mes "[格雷爵士]";
+			mes "誰是";
+			mes "等你？";
+			next;
+			switch(select("我的朋友:我的公會成員:我的愛人。")) {
+			case 1:
+				mes "[格雷爵士]";
+				mes "我明白，他們會分享您的成就的樂趣。永遠不要失去善良的心，並始終為朋友提供幫助。";
+				next;
+				break;
+			case 2:
+				mes "[格雷爵士]";
+				mes "那些會分享您的幸福和艱辛的人。作為騎士，您必須始終保護他們。";
+				next;
+				break;
+			case 3:
+				mes "[格雷爵士]";
+				mes "哦，青年！";
+				mes "成為騎士";
+				mes "為您的心愛！";
+				mes "總是保護"+((Sex==SEX_MALE)?"her":"him")+"...";
+				mes "即使在犧牲中";
+				mes "自己的生活！";
+				next;
+				mes "[格雷爵士]";
+				mes "也...";
+				mes "永遠愛他們。";
+				mes "真誠的感情";
+				mes "很難找到。";
+				next;
+				break;
+			}
+			break;
+		case 3:
+			mes "[格雷爵士]";
+			mes "好態度...";
+			mes "你計劃什麼";
+			mes "學習？";
+			next;
+			switch(select("騎士去的舒適的地方...:騎士的不同道路...:作為騎士獲得更多錢的方法...")) {
+			case 1:
+				set .@knight_t,.@knight_t+5;
+				mes "[格雷爵士]";
+				mes "在這個世界上，有很多地方舒適或不舒服。但是騎士必須";
+				mes "能夠在任何地方生存。";
+				next;
+				break;
+			case 2:
+				mes "[格雷爵士]";
+				mes "世界以外有許多類似的騎士。將他們視為您的前輩，並提出許多問題。";
+				next;
+				break;
+			case 3:
+				set .@knight_t,.@knight_t+15;
+				mes "[格雷爵士]";
+				mes "哦，不。您是否將財富視為成為騎士的優先事項？我們並不是那樣的。當你想到的時候再來";
+				mes "有關它的更多...";
+				next;
+				break;
+			}
+			break;
+		}
+		mes "[格雷爵士]";
+		mes "哦，不，我們去過";
+		mes "說太多...";
+		mes "我道歉";
+		mes "留在這裡";
+		mes "這麼久。";
+		next;
+		if (.@knight_t == 0) {
+			set KNIGHT_Q,14;
+			changequest 9011,9012;
+			mes "[格雷爵士]";
+			mes "我喜歡和你說話。你讓我想起自己是一個年輕的新兵。我們可以與船長交談並決定您的";
+			mes "改變工作？";
+			next;
+			mes "[格雷爵士]";
+			mes "別擔心";
+			mes "很多，我有一個";
+			mes "你的高度看法。";
+			mes "現在，去~";
+			close;
+		}
+		else if (.@knight_t == 5) {
+			set KNIGHT_Q,14;
+			changequest 9011,9012;
+			mes "[格雷爵士]";
+			mes "我很喜歡和你說話。一旦成為騎士，您就可以更多地考慮騎士的原則。";
+			next;
+			mes "[格雷爵士]";
+			mes "然後，我們應該去船長做出決定嗎？不要擔心太多。你足夠好，可以成為騎士！";
+			close;
+		}
+		else if (.@knight_t == 10) {
+			set KNIGHT_Q,14;
+			changequest 9011,9012;
+			mes "[格雷爵士]";
+			mes "我喜歡和你說話。雖然有一些";
+			mes "困擾我的事情...";
+			next;
+			mes "[格雷爵士]";
+			mes "你應該去";
+			mes "給隊長";
+			mes "所以我們可以決定";
+			mes "在您的工作變更上。";
+			next;
+			mes "[格雷爵士]";
+			mes "不用擔心，參加我的考試意味著其他人也認識到您。";
+			mes "現在去...！";
+			close;
+		}
+		else {
+			set KNIGHT_Q,13;
+			mes "[格雷爵士]";
+			mes "對話";
+			mes "與年輕人";
+			mes "總是很愉快...";
+			next;
+			mes "[格雷爵士]";
+			mes "但是似乎您的夢想在其他地方，或者您的注意力是朦朧的。花更多的時間作為劍客，然後回來";
+			mes "以後對我。";
+			next;
+			mes "[格雷爵士]";
+			mes "如果您真的希望成為騎士，則必須先更改前景。然後，我們將看到。";
+			close;
+		}
+	}
+	else if (KNIGHT_Q == 14) {
+		mes "我告訴你了";
+		mes "去";
+		mes "隊長。";
+		next;
+		mes "[格雷爵士]";
+		mes "每個人都會";
+		mes "小心地做";
+		mes "他們的決定，";
+		mes "所以現在就去吧！";
+		close;
+	}
+	else {
+		mes "哦...";
+		mes "年輕的劍客。";
+		mes "我能為你做什麼？";
+		next;
+		if (select("我想參加考試換工作:哦，沒什麼。") == 1) {
+			mes "[格雷爵士]";
+			mes "興奮~";
+			mes "有許多";
+			mes "其他年輕";
+			mes "騎士在這裡。";
+			next;
+			mes "[格雷爵士]";
+			mes "如果你說話";
+			mes "對他們所有人，";
+			mes "我可以評論";
+			mes "你也是。";
+			close;
+		}
+		mes "[格雷爵士]";
+		mes "小心！";
+		mes "健康是";
+		mes "每個人的";
+		mes "寶藏！";
+		close;
+	}
+}

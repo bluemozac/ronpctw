@@ -1,0 +1,427 @@
+﻿//===== rAthena Script ======================================= 
+//= Sorcerer Job Quest
+//===== By: ================================================== 
+//= Muad_Dib
+//===== Current Version: ===================================== 
+//= 1.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job change Quest from Sage / Professor -> Sorcerer.
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. [Masao]
+//= 1.1 Cleaning. [Euphy]
+//= 1.2 Updated script, optimized. [Euphy]
+//= 1.3 Added VIP features. [Euphy]
+//============================================================
+
+gef_tower,102,34,5	script	Merito	742,{
+	mes "[優點]";
+	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 1000) {
+		mes "您在包裡包裝了很多東西。清空書包後再試一次。";
+		close;
+	}
+	if (Class == Job_Sorcerer || Class == Job_Sorcerer_T || Class == Job_Baby_Sorcerer) {
+		mes "請很好地與雪橇進行~你應該~！";
+		close;
+	}
+	if (BaseLevel < 99 || JobLevel < 50 || SkillPoint != 0) {
+		mes "哇~你是一個年輕的冒險家。我羨慕你。";
+		close;
+	}
+	if (BaseJob != Job_Sage) {
+		mes "啊~我認為您不需要與我交談。";
+		close;
+	}
+	if (job_soc == 0) {
+		mes "歡迎。我能為您提供什麼幫助？";
+		next;
+		select("你了解魔法師嗎？");
+		mes "[優點]";
+		mes "作為學者生活會不會更舒服嗎？巫師正忙著與精神交流，沒有太多時間閱讀書籍...";
+		next;
+		mes "[優點]";
+		mes "是什麼讓您想成為巫師？";
+		next;
+		if(select("火之靈帶領我來到這裡。 :水之靈帶領我來到這裡。 :土之靈帶領我來到這裡:肉之靈帶領我來到這裡。") == 4) {
+			mes "[優點]";
+			mes "這種精神不存在！";
+			close;
+		}
+		mes "[優點]";
+		mes "我懂了。";
+		mes "您必須天生具有自然的能力，可以看到您已經與精神交流，否則您必須成為一個出色的騙子。";
+		next;
+		mes "[優點]";
+		mes "嗯...首先，您可以在此列表上寫下您的名字嗎？";
+		next;
+		if(select("寫名字:我不會。") == 2) {
+			mes "[優點]";
+			mes "好吧，好吧。有機會時再次見。";
+			close;
+		}
+		mes "[優點]";
+		mes "所以，你是[" + strcharinfo(0) + "].";
+		next;
+		mes "[優點]";
+		mes "給我一秒鐘以註冊您的名字。";
+		mes "一秒鐘再次與我交談。";
+		set job_soc,1;
+		close;
+	} else if (job_soc == 1) {
+		mes "很好，那我會給你一個簡短的解釋。";
+		next;
+		mes "[優點]";
+		mes "[" + strcharinfo(0) + "], can you handle magic skillfully?";
+		next;
+		if(select("是的，我可以。 :不，我不太擅長。") == 2) {
+			mes "[優點]";
+			mes "什麼！ ？您不知道如何使用魔術嗎？";
+			mes "那你在這裡做什麼？離開這裡。現在！";
+			close;
+		}
+		mes "[優點]";
+		mes "好的，這應該很明顯。";
+		mes "當然，巫師也使用魔術。但是，您知道巫師與其他神奇工作的主要不同嗎？";
+		next;
+		switch(select("他們會唱歌。 :他們都是老頑固。 :他們能對付鬼魂。")) {
+		case 1:
+			mes "[優點]";
+			mes "好吧，也許有些，但這不是主要區別。";
+			close;
+		case 2:
+			mes "[優點]";
+			mes "什麼！你怎麼敢！ ？ ！";
+			close;
+		case 3:
+			break;
+		}
+		mes "[優點]";
+		mes "這是正確的。這是巫師擁有的最明顯的功能。";
+		next;
+		mes "[優點]";
+		mes "當想要成為巫師的人來時，我們要做的第一件事就是檢查他們是否可以與精神交流。";
+		next;
+		mes "[優點]";
+		mes "因此，這就是基本的介紹，因此您只需要決定是否要參加資格測試即可。";
+		next;
+		mes "[優點]";
+		mes "好吧，這一切取決於您。你會怎樣做？";
+		next;
+		switch(select("我要參加考試:我稍後再做。")) {
+		case 1:
+			if (VIP_SCRIPT) {
+				callfunc "VIP_Third_Class";
+				set job_soc,2;
+				setquest 12096;
+				next;
+			}
+			mes "[優點]";
+			mes "好的。";
+			mes "然後，我將其交給4樓的卡拉卡斯（Karacas）。他將指導您完成測試過程。";
+			set job_soc,2;
+			setquest 12096;
+			close;
+		case 2:
+			mes "[優點]";
+			mes "什麼？我確定您想成為一名巫師。";
+			close;
+		}
+	} else {
+		mes "您的測試怎麼樣？好吧，卡拉卡斯有點懶惰，所以可能會打擾您... KKK";
+		close;
+	}
+}
+
+gef_tower,113,161,5	script	Karacas	754,{
+	mes "[加拉加斯]";
+	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 1000) {
+		mes "哦，看來你太重了。清空您的書包，然後再來。";
+		close;
+	}
+	if (Class == Job_Sorcerer || Class == Job_Sorcerer_T || Class == Job_Baby_Sorcerer) {
+		mes "你看起來很高興。有一個很棒的旅程。";
+		close;
+	}
+	if (BaseLevel < 99 || JobLevel < 50 || SkillPoint != 0) {
+		mes "我可以為您做什麼？";
+		close;
+	}
+	if (BaseJob != Job_Sage) {
+		mes "我屬於巫師協會。我認為您對我有任何生意。";
+		close;
+	}
+	if (job_soc < 2) {
+		mes "這些天，越來越多的人正在訪問Geffen塔。";
+		close;
+	} else if (job_soc == 2) {
+		mes "...";
+		next;
+		select("啊……不好意思啊~");
+		mes "[加拉加斯]";
+		mes "...（z z Z~）";
+		next;
+		select("嗯嗯！ ！ ！ ~");
+		mes "[加拉加斯]";
+		mes "啊啊！";
+		mes "哦，我的...";
+		next;
+		mes "[加拉加斯]";
+		mes "WH ...您來自哪裡？";
+		next;
+		select("梅里托叫我來拜訪你。");
+		mes "[加拉加斯]";
+		mes "我明白了，給我一點。";
+		mes "清單...已經到了。";
+		next;
+		mes "[加拉加斯]";
+		mes "所以，你是[" + strcharinfo(0) + "]... right?";
+		next;
+		if(select("是的，我是。 :不，我不是！") == 2) {
+			mes "[加拉加斯]";
+			mes "哦，我認為列表中一定有一些錯誤。你以後再來嗎？";
+			close;
+		}
+		mes "[加拉加斯]";
+		mes "在參加巫師測試之前，讓我給您基本信息。";
+		next;
+		mes "[加拉加斯]";
+		mes "獲得巫師註冊票的方法真的很簡單。您只需要去找到散佈在世界各地的每種精神，然後將其力量轉化為某種材料的形狀即可。";
+		next;
+		mes "[加拉加斯]";
+		mes "聽起來很容易，對吧？";
+		next;
+		select("啊……先生。這真的可能嗎？");
+		mes "[加拉加斯]";
+		mes "好吧，不可能自己滿足每個精神。您需要非常努力地訓練自己，以使精神形成，並通過您的眼睛清楚地看到它們。";
+		next;
+		mes "[加拉加斯]";
+		mes "因此，通常我們會朝著我們可以感受到精神的地方進行特定的儀式遊行。";
+		next;
+		mes "[加拉加斯]";
+		mes "我會告訴你如何做。所以仔細聽。";
+		next;
+		mes "[加拉加斯]";
+		mes "通常，我們看不到眼睛的靈魂，但是有一種方法可以通過一種特殊的媒介實現精神的一部分。";
+		next;
+		mes "[加拉加斯]";
+		mes "例如，如果您參觀風的精神以一定程度的綠化來保持，則可以放大聖靈的反應。";
+		next;
+		mes "[加拉加斯]";
+		mes "同樣，如果您接近在有一定量的紅血時似乎停留的火焰精神的地方，那麼精神就會表現出不利的反應。";
+		next;
+		mes "[加拉加斯]";
+		mes "巫師使用這一基本原則，這是巫師需要達到精神的基本知識。";
+		next;
+		select("所以與靈魂交流...");
+		mes "[加拉加斯]";
+		mes "對~";
+		mes "這項工作基於精神的力量。";
+		next;
+		mes "[加拉加斯]";
+		mes "嗯，但是對於像您這樣的人只專注於閱讀書籍的人可能很難...";
+		next;
+		mes "[加拉加斯]";
+		mes "首先，您需要攜帶以下測試所需的材料。";
+		next;
+		mes "[加拉加斯]";
+		mes "3個翠綠風。";
+		mes "3晶體藍色。";
+		mes "3個紅血。";
+		mes "3綠色現場。";
+		next;
+		mes "[加拉加斯]";
+		mes "當您帶上這些材料時，我會告訴您下一步。";
+		set job_soc,3;
+		changequest 12096,12097;
+		close;
+	} else if (job_soc == 3) {
+		if (countitem(992) > 2 && countitem(991) > 2 && countitem(990) > 2 && countitem(993) > 2) {
+			mes "哦，你有所有的材料。";
+			next;
+			select("接下來我應該做什麼？");
+			mes "[加拉加斯]";
+			mes "我現在告訴你。首先，我會告訴您測試的地方。你最好寫下來。";
+			next;
+			mes "[加拉加斯]";
+			mes "1。冰洞的1樓";
+			mes "2。雷神火山地牢的1樓";
+			mes "3。 MjolnirDead Pit的3樓";
+			mes "Kunlun地下城的4。";
+			next;
+			mes "[加拉加斯]";
+			mes "我們已經在這四個地方設置了檢測桿，以便普通百姓可以與精神交流。";
+			next;
+			mes "[加拉加斯]";
+			mes "請注意，僅當您擁有超過一定量的屬性石時，才會激活這些檢測極。";
+			next;
+			mes "[加拉加斯]";
+			mes "您需要為每個物業準備至少3個小石頭。例如，您需要翠綠的風，而不是大風。";
+			next;
+			select("所以我需要屬性石...");
+			mes "[加拉加斯]";
+			mes "是的，您有智慧！";
+			next;
+			mes "[加拉加斯]";
+			mes "一旦將石頭帶到電線桿上，就將其放入固定在桿上的屬性分解機器中。檢測桿將被激活，您可以與精神進行交流。";
+			next;
+			mes "[加拉加斯]";
+			mes "如果成功，您可以將精神的一部分作為試劑提取。如果您失敗了，財產石將分解。";
+			next;
+			mes "[加拉加斯]";
+			mes "當然，如果您足夠幸運，如果您失敗了，可以將一片斑駁的風變成狂風……好吧，這不是一個普遍的情況，所以讓我們現在將其排除在討論之外。";
+			next;
+			select("如果我的石頭用完了怎麼辦？");
+			mes "[加拉加斯]";
+			mes "啊哈哈哈...如果您用完了財產石，您只需要得到更多即可。";
+			next;
+			mes "[加拉加斯]";
+			mes "因此，參加此測試的人通常從盡可能多的物業開始。我告訴你得到的金額只是最低限度。";
+			next;
+			mes "[加拉加斯]";
+			mes "如果您是高級巫師，則可以在不再次經歷此過程的情況下與精神交談。但是初學者需要使用這種媒介與他們交談。";
+			next;
+			select("那麼試劑是……？");
+			mes "[加拉加斯]";
+			mes "我們不知道哪種試劑將是由烈酒製成的。它因精神狀態而有所不同。";
+			next;
+			mes "[加拉加斯]";
+			mes "當您成功獲得3種不同類型的試劑時，您可以回來。";
+			next;
+			mes "[加拉加斯]";
+			mes "一種精神不會超過兩種的試劑，因此，如果您要製作3種試劑，我建議您在幾個地方逛逛。";
+			next;
+			mes "[加拉加斯]";
+			mes "有任何疑問嗎？";
+			next;
+			if(select("否:請再解釋一下。") == 2) {
+				mes "[加拉加斯]";
+				mes "哈哈，那我可以喝一杯水一分鐘嗎？請稍後再找到我。";
+				next;
+			}
+			mes "[加拉加斯]";
+			mes "然後，我會寫下我很快總結的進度。等待...";
+			next;
+			mes "^000099您收到了一篇論文，以此寫了與精神交流的方式。有關更多信息，請打開您的任務窗口^000000。";
+			set job_soc,4;
+			changequest 12097,12098;
+			close;
+		}
+		mes "在我讓您知道進度的方式之前，您需要帶一些必需的材料。";
+		next;
+		mes "[加拉加斯]";
+		mes "3個翠綠風。";
+		mes "3晶體藍色。";
+		mes "3個紅血。";
+		mes "3綠色現場。";
+		next;
+		mes "[加拉加斯]";
+		mes "當您帶來這些基本的東西時，我將指導您下一步。";
+		close;
+	} else if (job_soc == 4) {
+		if (countitem(6276) && countitem(6278) && countitem(6277)) {
+			mes "哇~你的技能很好。";
+			mes "我以為您會被精神淹沒，但您已經設法獲得了有效的藥物！";
+			next;
+			select("這就是我需要做的全部嗎？");
+			mes "[加拉加斯]";
+			mes "做得好。首先，我將組織奇蹟般的藥物，所以請等一下。";
+			delitem 6276,1; //Clear_Reagent
+			delitem 6278,1; //Black_Reagent
+			delitem 6277,1; //Red_Reagent
+			set job_soc,5;
+			completequest 12098;
+			close;
+		}
+		mes "通過與精神交流獲得所需效果並不是一件容易的事。";
+		next;
+		mes "[加拉加斯]";
+		mes "不要放棄，繼續嘗試~";
+		close;
+	} else if (job_soc == 5) {
+		mes "最初，我的老師需要檢查巫師的工作改變，但是他出去尋找魚的精神後，我看不到他。所以我自己檢查一下。";
+		next;
+		mes "[加拉加斯]";
+		mes "親愛的 [" + strcharinfo(0) + "],";
+		mes "您繞著粗糙的荒野作為巫師打開門，並通過了我們學院給出的所有要求。";
+		next;
+		mes "[加拉加斯]";
+		mes "當然，這只是一個開始，我們不知道您將要與哪種精神交流或等待您的困難。";
+		next;
+		mes "[加拉加斯]";
+		mes "但是，到目前為止，您已經表現出的能力，您將有能力做任何事情。親愛的 [" + strcharinfo(0) + "]";
+		next;
+		mes "[力量]";
+		if (BaseLevel < 99 || JobLevel < 50 || SkillPoint) {
+			mes "在我任命您需要工作之前，請檢查自己的身體狀況。";
+			next;
+			mes "[力量]";
+			mes "在接受新工作之前，您必須現在擁有工作的禮節！";
+			close;
+		}
+		if (ismounting()) {
+			mes "很好，在我們開始之前...";
+			mes "請取消您的騎行寵物~";
+			close;
+		}
+		mes "此外，我正式承認您已經完成了巫師學院的所有工作轉移測試。";
+		next;
+		mes "[加拉加斯]";
+		mes "恭喜，[" + strcharinfo(0) + "]";
+		jobchange roclass(eaclass()|EAJL_THIRD);
+		getitem 5756,1; //Wind_Whisper
+		getitem 2795,1; //Green_Apple_Ring
+		next;
+		mes "[加拉加斯]";
+		mes "我希望您從現在開始就可以與精神獲得更多的交流。";
+		close;
+	}
+}
+-	script	Spirit Detecting Staff#0	-1,{
+
+	if (strnpcinfo(4) == "thor_v01") setarray .@id[0],990,994,6276,6278;
+	else if (strnpcinfo(4) == "ice_dun01") setarray .@id[0],991,995,6278,6276;
+	else if (strnpcinfo(4) == "mjo_dun03") setarray .@id[0],993,997,6277,6276;
+	else if (strnpcinfo(4) == "gon_dun02") setarray .@id[0],992,996,6277,6278;
+
+	if (job_soc == 4 && countitem(.@id[0]) > 2) {
+		progressbar "ffff00",5;
+		delitem .@id[0],3; //Boody_Red,Crystal_Blue,Yellow_Live,Wind_Of_Verdure
+		set .@soc_ran, rand(1,70);
+		if (.@soc_ran < 10) {
+			if (countitem(.@id[2]) == 0) {
+				mes "您通過與看不見的精神進行交流而獲得了試劑。";
+				getitem .@id[2],1; //Clear_Reagent,Black_Reagent,Red_Reagent
+				close;
+			}
+			mes "似乎您從精神上沒有什麼特別的東西。";
+			close;
+		} else if (.@soc_ran > 9 && .@soc_ran < 16) {
+			if (countitem(.@id[3]) == 0) {
+				mes "您通過與看不見的精神進行交流而獲得了試劑。";
+				getitem .@id[3],1; //Clear_Reagent,Black_Reagent,Red_Reagent
+				close;
+			}
+			mes "似乎您從精神上沒有什麼特別的東西。";
+			close;
+		} else if (.@soc_ran == 56) {
+			mes "聖靈將財產石頭結合成一塊巨大的財產石。";
+			getitem .@id[1],1; //Flame_Heart,Mistic_Frozen,Great_Nature,Rough_Wind
+			close;
+		} else {
+			mes "您使用了屬性石頭，但看起來您沒有與精神交流。";
+			close;
+		}
+	}
+	mes "我可以看到巫師聯盟安裝的檢測人員與精神交流。";
+	if (job_soc == 4 && countitem(.@id[0]) < 3) {
+		next;
+		mes "如果您擁有合適的財產石，則應該能夠與精神交流。";
+	}
+	close;
+}
+thor_v01,64,252,0	duplicate(Spirit Detecting Staff#0)	Spirit Detecting Staff#1	836
+ice_dun01,274,274,0	duplicate(Spirit Detecting Staff#0)	Spirit Detecting Staff#2	836
+mjo_dun03,200,141,0	duplicate(Spirit Detecting Staff#0)	Spirit Detecting Staff#3	836
+gon_dun02,195,190,0	duplicate(Spirit Detecting Staff#0)	Spirit Detecting Staff#4	836

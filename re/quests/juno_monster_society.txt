@@ -1,0 +1,3846 @@
+﻿//===== rAthena Script =======================================
+//= Juno Monster Society
+//===== Description: =========================================
+//= [Walkthrough Conversion]
+//= NPCs that give hunting quests in exchange for experience.
+//===== Changelog: ===========================================
+//= 1.0 First version. [Capuche]
+//============================================================
+
+-	marketshop	market_soda	-1,1000374:50000:-1
+
+rachel,142,155,3	script	Carbonated Water Vending Machine#ra	4_VENDING_MACHINE2,{
+	.@item_name$ = getitemname(1000374);
+
+	mes "[碳酸水自動售貨機]";
+	mes "<Font color = 2eccfa>清潔</font>通過您的<font color = df0101>狹窄" + .@item_name$ + "</b>!";
+	mes "它對緊迫性，暴飲暴食和消化不良具有出色的效果</b>。";
+	next;
+	mes "[碳酸水自動售貨機]";
+	mes "<font size = 10，color = df0101>謹慎：有一份報告稱，由於其強碳化效應而導致累積疲勞狀態的產品過量消耗可能會導致暫時的記憶喪失。 </font>";
+	next;
+	callshop "market_soda";
+	end;
+}
+prontera,170,125,3	duplicate(Carbonated Water Vending Machine#ra)	Carbonated Water Vending Machine#prt	4_VENDING_MACHINE2
+alberta,127,59,3	duplicate(Carbonated Water Vending Machine#ra)	Carbonated Water Vending Machine#alb	4_VENDING_MACHINE2
+einbroch,249,186,3	duplicate(Carbonated Water Vending Machine#ra)	Carbonated Water Vending Machine#ein	4_VENDING_MACHINE2
+geffen,153,70,3	duplicate(Carbonated Water Vending Machine#ra)	Carbonated Water Vending Machine#gef	4_VENDING_MACHINE2
+yuno,177,182,3	duplicate(Carbonated Water Vending Machine#ra)	Carbonated Water Vending Machine#yu	4_VENDING_MACHINE2
+veins,218,122,3	duplicate(Carbonated Water Vending Machine#ra)	Carbonated Water Vending Machine#ve	4_VENDING_MACHINE2
+lighthalzen,173,108,3	duplicate(Carbonated Water Vending Machine#ra)	Carbonated Water Vending Machine#lig	4_VENDING_MACHINE2
+
+
+function	script	F_Brilliant_Soda	{
+	next;
+	switch( select( "Level 70-79", "Level 80-89", "Level 90+", "Cancel" ) ) {
+	case 1:
+		callsub( S_Menu,
+			70, "Einbroch Northeast Field", "ein_fild06", 253,351,
+			71, "Geffen Northwest Field", "gef_fild06",214,31,
+			71, "Lighthalzen North Field", "lhz_fild01", 240,103,
+			75, "Turtle Island", "tur_dun01",155,46,
+			75, "In front of Thanatos Tower", "hu_fild01", 137,157,
+			75, "Starlight Coral Zone", "mal_dun01",146,126,
+			76, "Einbroch Northwest Field", "ein_fild03",135,50,
+			77, "Lighthalzen East Field", "lhz_fild03", 167,340
+		);
+		return;
+	case 2:
+		// Official menu text seems wrong
+		callsub( S_Menu,
+			// 80, "Turtle Island Dungeon", "ra_fild08",164,47,
+			80, "Rachel Northeast", "ra_fild08",164,47,
+			80, "Ice dungeon", "ice_dun01",158,18,
+			// 80, "Rachel East Ida Plain", "ra_fild03",363,183,
+			80, "Rachel North Ida Plain", "ra_fild03",363,183,
+			85, "Rachel Northeast of the plain", "ra_fild04", 269,69,
+			// 85, "Rachel Ice Cave 1st Floor", "ve_fild07",158,350,
+			85, "Veins South", "ve_fild07",158,350,
+			86, "Rachel's North Ida Plain", "ra_fild05", 53,356,
+			86, "Rachel Northeast North Audumrah Grassland", "ra_fild01", 229,319,
+			// 86, "Veins South Field", "ra_fild12", 54,219,
+			86, "Rachel East Field", "ra_fild12", 54,219,
+			// 87, "Rachel North North East Audumla Grassland", "tur_dun03", 130,186,
+			// 88, "Rachel North East North Audumla Grassland", "tur_dun02", 146,256
+			87, "Turtle Island Dungeon 2", "tur_dun03", 130,186,
+			88, "Turtle Island Dungeon 3", "tur_dun02", 146,256
+		);
+		return;
+	case 3:
+		callsub( S_Menu,
+			// 90, "Rachel Southwest Field", "ve_fild01", 354,276,
+			90, "Veins North North Field", "ve_fild01", 354,276,
+			90, "Veins North Field", "ve_fild04", 52,247,
+			93, "Lighthalzen North Porto Luna", "ra_fild06", 287,39,
+			95, "In front of Thor Volcano", "ve_fild03", 348,226
+		);
+		return;
+	case 4:
+		return;
+	}
+	end;
+
+S_Menu:
+	.@count = getargcount();
+	.@cancel_index = .@count / 5;
+
+	for ( .@i = 0; .@i < .@count; .@i += 5 )
+		.@menu$ += "[" + getarg(.@i) + "] " + getarg(.@i+1) + ":";
+	.@menu$ += "Cancel";
+
+	.@s = select(.@menu$) - 1;
+	if (.@s == .@cancel_index)	// cancel
+		return;
+	.@s = .@s * 5;
+	if (BaseLevel < getarg(.@s)) {
+		mes "- 僅適用於高於高於" + getarg(.@s) + " - ";
+		close;
+	}
+	delitem 1000374,1;	// Brilliant_Soda
+	warp getarg(.@s+2), getarg(.@s+3),getarg(.@s+4);
+	end;
+}
+
+rachel,142,152,5	script	Assistant Mumuz#ra	4_M_CRU_HEAD,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (isbegin_quest(16547) == 0) {
+		mes .@npc_name$;
+		mes "您想參加由Juno Monster Society主持的怪物征服活動嗎？";
+		mes "我們將直接帶您到您想要的位置！";
+		next;
+		mes .@npc_name$;
+		mes "我是Mumuz，Juno Monster Society的助理校長。";
+		mes "我在這裡向您推廣怪物征服活動。";
+		next;
+		select( "Monster subjugation?", "Juno Monster Society?" );	// note: same text
+		mes .@npc_name$;
+		mes "朱諾怪獸學會（Juno Monster Society）實際上是一個會議，研究和研究朱諾（Juno）作為基礎的怪物。";
+		mes "如今，一些當地的怪物變得過於兇猛或數量很大。";
+		next;
+		mes .@npc_name$;
+		mes "這就是為什麼我們將地圖考官派往各個地方以征服怪物的原因。";
+		next;
+		mes .@npc_name$;
+		mes "我的任務是協助地圖審查員促進城市中的怪物協會並管理" + .@item_name$ + " vending machines.";
+		mes "是的，我可以帶您去檢查員的位置";
+		setquest 16547;
+		completequest 16547;
+		next;
+	}
+	mes .@npc_name$;
+	mes "嘿，我是朱諾怪獸協會的助手Mumuz。";
+	mes "我怎麼幫你？";
+	next;
+	if (select( "Guide to the Map Examiner's place.", "Listen to the work of the Juno Monster Association." ) == 2) {
+		mes .@npc_name$;
+		mes "朱諾怪獸學會實際上是朱諾的怪物研究機構。";
+		next;
+		mes .@npc_name$;
+		mes "該協會最近確定一些區域怪物變得過於兇猛或增加了數量。";
+		mes "這就是為什麼我們將地圖考官派往各個地方以征服怪物的原因。";
+		next;
+		mes .@npc_name$;
+		mes "我促進了城市中怪物協會的工作，以協助地圖審查員...";
+		mes "我負責管理碳酸含水機或引導您到檢查員所在的地方。";
+		close;
+	}
+	mes .@npc_name$;
+	mes "好吧，這有點困難...";
+	mes "是的，如果您給我買了一瓶" + .@item_name$ + ", I will warp it in a cool and refreshing way.";
+	next;
+	if (select( "Give me a bottle of " + .@item_name$ + ".", "I refuse." ) == 2) {
+		mes .@npc_name$;
+		mes "你不去嗎？哎呀，對不起..";
+		close;
+	}
+	if (countitem(1000374) < 1) {
+		mes .@npc_name$;
+		mes "您似乎已經喝完了" + .@item_name$ + "?";
+		mes "Jaja，您可以購買更多" + .@item_name$ + " by using this vending machine right next to me.";
+		close;
+	}
+	mes .@npc_name$;
+	mes "嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚嗚！";
+	mes "現在，我們要帶您去哪裡？";
+	callfunc( "F_Brilliant_Soda" );
+	mes .@npc_name$;
+	mes "你不去嗎？赫克，我還給你" + .@item_name$ + ". You haven't drank it yet.";
+	close;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+	end;
+}
+
+alberta,124,59,5	script	Assistant Dunea#alb	4_M_CRU_HEAD,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (isbegin_quest(16547) == 0) {
+		mes .@npc_name$;
+		mes "您想參加由Juno Monster Society主持的怪物征服活動嗎？";
+		mes "我們將直接帶您到您想要的位置！";
+		next;
+		mes .@npc_name$;
+		mes "我是朱諾怪獸協會助理校長Dunea。";
+		mes "我在這裡向您推廣怪物征服活動。";
+		next;
+		select( "Monster subjugation?", "Juno Monster Society?" );	// note: same text
+		mes .@npc_name$;
+		mes "朱諾怪獸學會（Juno Monster Society）實際上是一個會議，研究和研究朱諾（Juno）作為基礎的怪物。";
+		mes "如今，一些當地的怪物變得過於兇猛或數量很大。";
+		next;
+		mes .@npc_name$;
+		mes "這就是為什麼我們將地圖考官派往各個地方以征服怪物的原因。";
+		next;
+		mes .@npc_name$;
+		mes "我的任務是協助地圖審查員促進城市中的怪物協會並管理" + .@item_name$ + " vending machines.";
+		mes "是的，我可以帶您去檢查員的位置";
+		setquest 16547;
+		completequest 16547;
+		next;
+	}
+	mes .@npc_name$;
+	mes "我，Dunea，Juno Monster Society的助理！";
+	mes "為了世界，我將協助冒險家。";
+	next;
+	if (select( "Guide to the Map Examiner's place.", "Listen to the work of the Juno Monster Association." ) == 2) {
+		mes .@npc_name$;
+		mes "朱諾怪獸學會（Juno Monster Society）實際上是一個會議，研究和研究朱諾（Juno）作為基礎的怪物。";
+		mes "如今，一些當地的怪物變得過於兇猛或數量很大。";
+		next;
+		mes .@npc_name$;
+		mes "這就是為什麼我們將地圖考官派往各個地方以征服怪物的原因。";
+		next;
+		mes .@npc_name$;
+		mes "我的任務是協助地圖審查員促進城市中的怪物協會並管理" + .@item_name$ + " vending machines.";
+		mes "是的，我可以帶您去檢查員的位置";
+		close;
+	}
+	mes .@npc_name$;
+	mes "嗯，我想馬上接你，但我有點不知所措。";
+	mes "我可以喝一瓶嗎" + .@item_name$ + "?";
+	next;
+	if (select( "Give me a bottle of " + .@item_name$ + ".", "I refuse." ) == 2) {
+		mes .@npc_name$;
+		mes "是給世界的，你不去嗎？";
+		close;
+	}
+	if (countitem(1000374) < 1) {
+		mes .@npc_name$;
+		mes "你沒有" + .@item_name$ + ".";
+		mes "這是蘇打水的自動售貨機！您可以在這裡重新填充！";
+		close;
+	}
+	mes .@npc_name$;
+	mes "我只是通過接收而感到精神煥發" + .@item_name$ + ".";
+	mes "我可以帶你去哪裡？";
+	callfunc( "F_Brilliant_Soda" );
+	mes .@npc_name$;
+	mes "是給世界的，你不去嗎？";
+	mes "我無能為力。我會歸還" + .@item_name$ + " here.";
+	close;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+	end;
+}
+
+einbroch,246,186,5	script	Assistant Remain#ein	4_M_CRU_HEAD,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (isbegin_quest(16547) == 0) {
+		mes .@npc_name$;
+		mes "您想參加由Juno Monster Society主持的怪物征服活動嗎？";
+		mes "我們將直接帶您到您想要的位置！";
+		next;
+		mes .@npc_name$;
+		mes "我仍然是朱諾怪獸協會的助理校長。";
+		mes "我在這裡向您推廣怪物征服活動。";
+		next;
+		select( "Monster subjugation?", "Juno Monster Society?" );	// note: same text
+		mes .@npc_name$;
+		mes "朱諾怪獸學會（Juno Monster Society）實際上是一個會議，研究和研究朱諾（Juno）作為基礎的怪物。";
+		mes "如今，一些當地的怪物變得過於兇猛或數量很大。";
+		next;
+		mes .@npc_name$;
+		mes "這就是為什麼我們將地圖考官派往各個地方以征服怪物的原因。";
+		next;
+		mes .@npc_name$;
+		mes "我的任務是協助地圖審查員促進城市中的怪物協會並管理" + .@item_name$ + " vending machines.";
+		mes "是的，我可以帶您去檢查員的位置";
+		setquest 16547;
+		completequest 16547;
+		next;
+	}
+	mes .@npc_name$;
+	mes "朱諾怪獸協會的助手仍然存在！";
+	mes "我怎麼幫你？";
+	next;
+	if (select( "Guide to the Map Examiner's place.", "Listen to the work of the Juno Monster Association." ) == 2) {
+		mes .@npc_name$;
+		mes "朱諾怪獸學會實際上是朱諾的怪物研究機構。";
+		mes "根據最近的調查，已經發現一些區域怪物變得過於兇猛或增加了數量。";
+		next;
+		mes .@npc_name$;
+		mes "這就是為什麼我們將地圖檢查人員發送到這樣的區域來製服怪物的原因。";
+		mes "我是地圖審查員的助手Lemaine！";
+		next;
+		mes .@npc_name$;
+		mes "促進朱諾怪獸學會為義人從城市提供的工作...";
+		mes "我將將碳酸水自動售貨機指南推廣到檢查員所在的地方！";
+		close;
+	}
+	mes .@npc_name$;
+	mes "只發送有點困難...我無法賺錢。";
+	mes "是的，給我一瓶" + .@item_name$ + " and I'll give you a warp service!";
+	next;
+	if (select( "Give me a bottle of " + .@item_name$ + ".", "I refuse." ) == 2) {
+		mes .@npc_name$;
+		mes "嗯，你現在不去嗎？那你不會服務" + .@item_name$ + ". I'm sorry.";
+		close;
+	}
+	if (countitem(1000374) < 1) {
+		mes .@npc_name$;
+		mes "" + .@item_name$ + " is sold at this vending machine that looks cool and refreshing.";
+		mes "您只需要購買一些酷" + .@item_name$ + " and give it to me.";
+		close;
+	}
+	mes .@npc_name$;
+	mes "哇！謝謝。一瓶" + .@item_name$ + " will take away your fatigue.";
+	mes "那我們要帶你去哪裡？";
+	callfunc( "F_Brilliant_Soda" );
+	mes .@npc_name$;
+	mes "哦，你現在不去嗎？那我將退還" + .@item_name$ + ".";
+	close;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+	end;
+}
+
+geffen,151,68,5	script	Assistant Kihana#gef	4_M_CRU_HEAD,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (isbegin_quest(16547) == 0) {
+		mes .@npc_name$;
+		mes "您想參加由Juno Monster Society主持的怪物征服活動嗎？";
+		mes "我們將直接帶您到您想要的位置！";
+		next;
+		mes .@npc_name$;
+		mes "我是基哈娜（Kihana），朱諾怪獸協會（Juno Monster Society）的助理校長。";
+		mes "我在這裡向您推廣怪物征服活動。";
+		next;
+		select( "Monster subjugation?", "Juno Monster Society?" );	// note: same text
+		mes .@npc_name$;
+		mes "朱諾怪獸學會（Juno Monster Society）實際上是一個會議，研究和研究朱諾（Juno）作為基礎的怪物。";
+		mes "如今，一些當地的怪物變得過於兇猛或數量很大。";
+		next;
+		mes .@npc_name$;
+		mes "這就是為什麼我們將地圖考官派往各個地方以征服怪物的原因。";
+		next;
+		mes .@npc_name$;
+		mes "我的任務是協助地圖審查員促進城市中的怪物協會並管理" + .@item_name$ + " vending machines.";
+		mes "是的，我可以帶您去檢查員的位置";
+		setquest 16547;
+		completequest 16547;
+		next;
+	}
+	mes .@npc_name$;
+	mes "我，基哈娜（Juno Monster Society）的助手基哈娜（Kihana）！";
+	mes "很高興見到你。我怎麼幫你？";
+	next;
+	if (select( "Guide to the Map Examiner's place.", "Listen to the work of the Juno Monster Association." ) == 2) {
+		mes .@npc_name$;
+		mes "朱諾怪獸學會（Juno Monster Society）實際上是一個會議，研究和研究朱諾（Juno）作為基礎的怪物。";
+		mes "如今，一些當地的怪物變得過於兇猛或數量很大。";
+		next;
+		mes .@npc_name$;
+		mes "這就是為什麼我們將地圖考官派往各個地方以征服怪物的原因。";
+		next;
+		mes .@npc_name$;
+		mes "我的任務是協助地圖審查員促進城市中的怪物協會並管理" + .@item_name$ + " vending machines.";
+		mes "是的，我可以帶您去檢查員的位置";
+		close;
+	}
+	mes .@npc_name$;
+	mes "哎呀，我只是無法發送！";
+	mes "如果你給我一瓶" + .@item_name$ + ", I will provide you with a warp!";
+	next;
+	if (select( "Give me a bottle of " + .@item_name$ + ".", "I refuse." ) == 2) {
+		mes .@npc_name$;
+		mes "你的意思是你不去嗎？嗯，那麼您無能為力！";
+		close;
+	}
+	if (countitem(1000374) < 1) {
+		mes .@npc_name$;
+		mes "你沒有" + .@item_name$ + " in your bag!";
+		mes "請使用我旁邊的碳酸水自動售貨機！";
+		close;
+	}
+	mes .@npc_name$;
+	mes "啊，一瓶" + .@item_name$ + ", well received!";
+	mes "我可以帶你去哪裡？";
+	callfunc( "F_Brilliant_Soda" );
+	mes .@npc_name$;
+	mes "你是說你不會沒有給我" + .@item_name$ + "?";
+	mes "嗯，那你不能接受這個！";
+	close;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+	end;
+}
+
+yuno,177,179,3	script	Assistant Avery#yu	4_M_CRU_HEAD,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (isbegin_quest(16547) == 0) {
+		mes .@npc_name$;
+		mes "您想參加由Juno Monster Society主持的怪物征服活動嗎？";
+		mes "我們將直接帶您到您想要的位置！";
+		next;
+		mes .@npc_name$;
+		mes "我是Avery，Juno Monster Society的助理總監。";
+		mes "我在這裡向您推廣怪物征服活動。";
+		next;
+		select( "Monster subjugation?", "Juno Monster Society?" );	// note: same text
+		mes .@npc_name$;
+		mes "朱諾怪獸學會（Juno Monster Society）實際上是一個會議，研究和研究朱諾（Juno）作為基礎的怪物。";
+		mes "如今，一些當地的怪物變得過於兇猛或數量很大。";
+		next;
+		mes .@npc_name$;
+		mes "這就是為什麼我們將地圖考官派往各個地方以征服怪物的原因。";
+		next;
+		mes .@npc_name$;
+		mes "我的任務是協助地圖審查員促進城市中的怪物協會並管理" + .@item_name$ + " vending machines.";
+		mes "是的，我可以帶您去檢查員的位置";
+		setquest 16547;
+		completequest 16547;
+		next;
+	}
+	mes .@npc_name$;
+	mes "這是艾弗里（Avery），朱諾怪獸協會的助手！";
+	mes "嘿，我該如何幫助您？";
+	next;
+	if (select( "Guide to the Map Examiner's place.", "Listen to the work of the Juno Monster Association." ) == 2) {
+		mes .@npc_name$;
+		mes "朱諾怪獸學會（Juno Monster Society）實際上是一個會議，研究和研究朱諾（Juno）作為基礎的怪物。";
+		mes "如今，一些當地的怪物變得過於兇猛或數量很大。";
+		next;
+		mes .@npc_name$;
+		mes "這就是為什麼我們將地圖考官派往各個地方以征服怪物的原因。";
+		next;
+		mes .@npc_name$;
+		mes "我的任務是協助地圖審查員促進城市中的怪物協會並管理" + .@item_name$ + " vending machines.";
+		mes "是的，我可以帶您去檢查員的位置";
+		close;
+	}
+	mes .@npc_name$;
+	mes "哦，對不起。它不是免費的...";
+	mes "好吧，你能給我一瓶嗎" + .@item_name$ + "? Then I'll warp you!";
+	next;
+	if (select( "Give me a bottle of " + .@item_name$ + ".", "I refuse." ) == 2) {
+		mes .@npc_name$;
+		mes "你不要去嗎？這是為了公共利益！";
+		close;
+	}
+	if (countitem(1000374) < 1) {
+		mes .@npc_name$;
+		mes "你沒有" + .@item_name$ + " in your bag.";
+		mes "如果您需要更多，請在此處使用清爽的碳酸水自動售貨機。";
+		close;
+	}
+	mes .@npc_name$;
+	mes "啊!清爽" + .@item_name$ + "!";
+	mes "您應該很少喝...嗯，我應該帶您去哪裡？";
+	callfunc( "F_Brilliant_Soda" );
+	mes .@npc_name$;
+	mes "你不要去嗎？這是為了公共利益！";
+	mes "gh ...我會返回" + .@item_name$ + "...";
+	close;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+	end;
+}
+
+veins,215,122,5	script	Assistant Eureka#ve	4_M_CRU_HEAD,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (isbegin_quest(16547) == 0) {
+		mes .@npc_name$;
+		mes "您想參加由Juno Monster Society主持的怪物征服活動嗎？";
+		mes "我們將直接帶您到您想要的位置！";
+		next;
+		mes .@npc_name$;
+		mes "我是尤里卡（Eureka），朱諾怪獸協會（Juno Monster Society）的助理校長。";
+		mes "我在這裡向您推廣怪物征服活動。";
+		next;
+		select( "Monster subjugation?", "Juno Monster Society?" );	// note: same text
+		mes .@npc_name$;
+		mes "朱諾怪獸學會（Juno Monster Society）實際上是一個會議，研究和研究朱諾（Juno）作為基礎的怪物。";
+		mes "如今，一些當地的怪物變得過於兇猛或數量很大。";
+		next;
+		mes .@npc_name$;
+		mes "這就是為什麼我們將地圖考官派往各個地方以征服怪物的原因。";
+		next;
+		mes .@npc_name$;
+		mes "我的任務是協助地圖審查員促進城市中的怪物協會並管理" + .@item_name$ + " vending machines.";
+		mes "是的，我可以帶您去檢查員的位置";
+		setquest 16547;
+		completequest 16547;
+		next;
+	}
+	mes .@npc_name$;
+	mes "這是尤里卡（Eureka），朱諾怪獸協會的助手。";
+	mes "我怎麼幫你？";
+	next;
+	if (select( "Guide to the Map Examiner's place.", "Listen to the work of the Juno Monster Association." ) == 2) {
+		mes .@npc_name$;
+		mes "如今，一些當地的怪物變得過於兇猛或數量增加。";
+		mes "因此，我們來到Juno Monster Society進行協調。";
+		next;
+		mes .@npc_name$;
+		mes "Juno Monster Society是位於Juno的怪物研究機構。";
+		mes "我們正在將地圖考官派往各個地方以征服怪物。";
+		next;
+		mes .@npc_name$;
+		mes "你好嗎？你有興趣嗎？";
+		mes "我負責促進朱諾怪獸協會的工作，管理" + .@item_name$ + " vending machines, and guiding you to the places where the Map Examiners connect.";
+		close;
+	}
+	mes .@npc_name$;
+	mes "我很難發送它，但我什至無法賺錢...";
+	mes "好吧，你能給我一杯嗎" + .@item_name$ + "? I'll warp it right away.";
+	next;
+	if (select( "Give me a bottle of " + .@item_name$ + ".", "I refuse." ) == 2) {
+		mes .@npc_name$;
+		mes "你不要去嗎？";
+		close;
+	}
+	if (countitem(1000374) < 1) {
+		mes .@npc_name$;
+		mes "我管理" + .@item_name$ + " vending machine.";
+		mes "WKI，您可以使用我旁邊的碳酸水自動售貨機購買盡可能多的東西。";
+		close;
+	}
+	mes .@npc_name$;
+	mes "啊，令人耳目一新，很酷，真的很好。";
+	mes "現在，我們要帶您去哪裡？";
+	callfunc( "F_Brilliant_Soda" );
+	mes .@npc_name$;
+	mes "你不要去嗎？然後，" + .@item_name$ + "... Here, I'll return it.";
+	close;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+	end;
+}
+
+lighthalzen,171,106,5	script	Assistant Staff#lig	4_M_CRU_HEAD,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (isbegin_quest(16547) == 0) {
+		mes .@npc_name$;
+		mes "您想參加由Juno Monster Society主持的怪物征服活動嗎？";
+		mes "我們將直接帶您到您想要的位置！";
+		next;
+		mes .@npc_name$;
+		mes "我是Juno Monster Society的助理校長。";
+		mes "我在這裡向您推廣怪物征服活動。";
+		next;
+		select( "Monster subjugation?", "Juno Monster Society?" );	// note: same text
+		mes .@npc_name$;
+		mes "朱諾怪獸學會（Juno Monster Society）實際上是一個會議，研究和研究朱諾（Juno）作為基礎的怪物。";
+		mes "如今，一些當地的怪物變得過於兇猛或數量很大。";
+		next;
+		mes .@npc_name$;
+		mes "這就是為什麼我們將地圖考官派往各個地方以征服怪物的原因。";
+		next;
+		mes .@npc_name$;
+		mes "我的任務是協助地圖審查員促進城市中的怪物協會並管理" + .@item_name$ + " vending machines.";
+		mes "是的，我可以帶您去檢查員的位置";
+		setquest 16547;
+		completequest 16547;
+		next;
+	}
+	mes .@npc_name$;
+	mes "工作人員，朱諾怪獸協會的助手！ ！ ！";
+	mes "你需要我的幫助！ ！ ！";
+	next;
+	if (select( "Guide to the Map Examiner's place.", "Listen to the work of the Juno Monster Association." ) == 2) {
+		mes .@npc_name$;
+		mes "朱諾怪獸學會實際上是研究怪物的會議！ ！ ！";
+		mes "...在朱諾。";
+		next;
+		mes "最近，一些當地的怪物變得過於兇猛，或者他們的人數增加了！ ！ ！";
+		mes "這就是為什麼派遣到不同地方的地圖審查員為冒險家尋求制服怪物的原因！ ！ ！";
+		next;
+		mes .@npc_name$;
+		mes "我是你的助手，員工！";
+		next;
+		mes .@npc_name$;
+		mes "促進城市中怪物協會的工作，聚集冒險家...";
+		mes "而且，我們扭曲了來到地圖審查員所在的地方的冒險家！ ！ ！";
+		close;
+	}
+	mes .@npc_name$;
+	mes "好的！ ！ ！價格是一瓶" + .@item_name$ + "!!!";
+	mes "你不認為我一無所獲！ ！ ！";
+	next;
+	if (select( "Give me a bottle of " + .@item_name$ + ".", "I refuse." ) == 2) {
+		mes .@npc_name$;
+		mes "什麼...？我不會屈服！ ！ ！";
+		close;
+	}
+	if (countitem(1000374) < 1) {
+		mes .@npc_name$;
+		mes "如果需要的話" + .@item_name$ + ", face this vending machine that I manage!!!";
+		mes "付出代價並獲勝！ ！ ！";
+		close;
+	}
+	mes .@npc_name$;
+	mes "你的" + .@item_name$ + ", I gladly received it!!!";
+	mes "現在，您想在哪裡潛入怪物征服！ ！ ！";
+	callfunc( "F_Brilliant_Soda" );
+	mes .@npc_name$;
+	mes "什麼...？我不會屈服！ ！ ！";
+	mes "不要用一隻嘴說兩個單詞！ ！ ！ ...我還給你" + .@item_name$ + ".";
+	close;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+	end;
+}
+
+prontera,168,125,5	script	Assistant Alonzo#prt	4_M_CRU_HEAD,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (isbegin_quest(16547) == 0) {
+		mes .@npc_name$;
+		mes "您想參加由Juno Monster Society主持的怪物征服活動嗎？";
+		mes "我們將直接帶您到您想要的位置！";
+		next;
+		mes .@npc_name$;
+		mes "我是Juno Monster Society的助理總監Alonzo。";
+		mes "我在這裡向您推廣怪物征服活動。";
+		next;
+		select( "Monster subjugation?", "Juno Monster Society?" );	// note: same text
+		mes .@npc_name$;
+		mes "朱諾怪獸學會（Juno Monster Society）實際上是一個會議，研究和研究朱諾（Juno）作為基礎的怪物。";
+		mes "如今，一些當地的怪物變得過於兇猛或數量很大。";
+		next;
+		mes .@npc_name$;
+		mes "這就是為什麼我們將地圖考官派往各個地方以征服怪物的原因。";
+		next;
+		mes .@npc_name$;
+		mes "我的任務是協助地圖審查員促進城市中的怪物協會並管理" + .@item_name$ + " vending machines.";
+		mes "是的，我可以帶您去檢查員的位置";
+		setquest 16547;
+		completequest 16547;
+		next;
+	}
+	mes .@npc_name$;
+	mes "這是朱諾怪獸協會的助理Alonzo！";
+	mes "我怎麼幫你？";
+	next;
+	if (select( "Guide to the Map Examiner's place.", "Listen to the work of the Juno Monster Association." ) == 2) {
+		mes .@npc_name$;
+		mes "朱諾怪獸學會（Juno Monster Society）實際上是一個會議，研究和研究朱諾（Juno）作為基礎的怪物。";
+		mes "如今，一些當地的怪物變得過於兇猛或數量很大。";
+		next;
+		mes .@npc_name$;
+		mes "這就是為什麼我們將地圖考官派往各個地方以征服怪物的原因。";
+		next;
+		mes .@npc_name$;
+		mes "我的任務是協助地圖審查員促進城市中的怪物協會並管理" + .@item_name$ + " vending machines.";
+		mes "是的，我可以帶您去檢查員的位置";
+		close;
+	}
+	mes .@npc_name$;
+	mes "發送它有點困難。我也很累。";
+	mes "你能給我一瓶嗎" + .@item_name$ + "? That will give me energy.";
+	next;
+	if (select( "Give me a bottle of " + .@item_name$ + ".", "I refuse." ) == 2) {
+		mes .@npc_name$;
+		mes "哦，你要去嗎？";
+		close;
+	}
+	if (countitem(1000374) < 1) {
+		mes .@npc_name$;
+		mes "如果你沒有" + .@item_name$ + ", you can purchase it.";
+		mes "請在此處使用碳酸水自動售貨機。";
+		close;
+	}
+	mes .@npc_name$;
+	mes "好的，" + .@item_name$ + " will definitely give you energy.";
+	mes "我可以帶你去哪裡？";
+	callfunc( "F_Brilliant_Soda" );
+	mes .@npc_name$;
+	mes "哦，你要去嗎？";
+	mes "那我將退還" + .@item_name$ + ".";
+	close;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+	end;
+}
+
+
+// Quests
+
+ein_fild06,257,351,4	script	Map Examiner Bast#yma	4_F_CHNDRESS1,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 70) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(5917,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "法國國民黨因勞累過度而感到疲倦，所以請明天來。征服任務只能每天進行一次。";
+		next;
+		switch( select( "You look tired. Would you like a drink?", "Teleport to a nearby city." ) ) {
+		case 1:
+			if (countitem(1000374) < 3) {
+				mes .@npc_name$;
+				mes "在哪裡" + .@item_name$ + "? Hing- It's good. I thought I'd get about three.";
+				close;
+			}
+			delitem 1000374,3;	// Brilliant_Soda
+			erasequest 5917;
+			mes .@npc_name$;
+			mes "謝謝。我很累，但解決了。";
+			next;
+			npctalk "gulp-gulp-", "", bc_self;
+			sleep2 500;
+			specialeffect EF_FLASHER;
+			mes .@npc_name$;
+			mes "嗯？我一定已經睡著了。我告訴過征服任務嗎？喚醒我後，你能再次和我說話嗎？";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "我可以將其移至Einbroch嗎？給我一個" + mesitemlink( 1000374 ) + " and I can teleport you.";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "你沒有" + .@item_name$ + ", but why did the Juno Monster Society ask you to get this? It's just a drink.";
+				close;
+			}
+			mes .@npc_name$;
+			mes "再見~下次見。";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "einbroch",239,197;
+			end;
+		}
+		end;
+	case 2:
+		erasequest 5917;
+		mes .@npc_name$;
+		mes "您可以再次進行征服任務。";
+		close;
+	}
+	switch( checkquest(5916,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "您好~冒險家~我是朱諾怪獸協會的INPU。";
+		next;
+		switch( select( "Receive a subjugation quest.", "Subjugation quest?", "Teleport to a nearby city.", "Greetings." ) ) {
+		case 1:
+			setquest 5916;
+			mes .@npc_name$;
+			mes "哇！真的嗎？任務很簡單。這是關於在Einbroch領域捕捉80個怪物。";
+			next;
+			mes .@npc_name$;
+			mes "如果您是冒險家，您可以輕鬆解決它並回來嗎？我很期待。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "最近，我們發現了怪物殖民地的擴展。";
+			next;
+			mes .@npc_name$;
+			mes "我認為這是因為怪物的數量有所增加，但我認為這是因為我沒有像以前那樣征服怪物。";
+			next;
+			mes .@npc_name$;
+			mes "為了防止進一步擴展怪物殖民地，朱諾怪獸協會計劃進行大規模的征服。";
+			next;
+			mes .@npc_name$;
+			mes "如果人口增加的菌落碰撞，則可能會對附近的居民造成損害。";
+			close;
+		case 3:
+			mes .@npc_name$;
+			mes "我可以將其移至Einbroch嗎？給我一個" + mesitemlink( 1000374 ) + " and I can teleport you.";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "你沒有" + .@item_name$ + ", but why did the Juno Monster Society ask you to get this? It's just a drink.";
+				close;
+			}
+			mes .@npc_name$;
+			mes "再見~下次見。";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "einbroch",239,197;
+			end;
+		case 4:
+			mes .@npc_name$;
+			mes "很高興見到你。您認為如果您接受征服任務會更加愉快？";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "您要做的就是在Einbroch領域抓住80個怪物。當您抓住所有人之後，請回到我身邊並獲得回報。";
+		close;
+	case 2:
+		getexp 121320,110520;
+		erasequest 5916;
+		setquest 5917;
+		mes .@npc_name$;
+		mes "謝謝你，你努力工作。";
+		mes "這些天，他們批評我無法表現良好。它很累，很難從這個荒涼的地方出來。";
+		next;
+		mes .@npc_name$;
+		mes "對不起。非常感謝您，我試圖抱怨一段時間。如果您明天幫助我，我將對我表示感謝，請照顧我。";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_CLICKME, QMARK_YELLOW, "(checkquest(5917,PLAYTIME) == 0 || checkquest(5917,PLAYTIME) == 1) && countitem(1000374) > 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 70 && checkquest(5916,HUNTING) == -1 && checkquest(5917,PLAYTIME) == -1" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(5916,HUNTING) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(5917,PLAYTIME) == 2" );
+	end;
+}
+
+gef_fild06,209,31,6	script	Map Examiner Gefil#yma	4_M_MIDDLE,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 71) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(5921,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "您明天可以再次執行征服任務。您必須累，所以回到城市休息。";
+		next;
+		switch( select( "You look tired. Would you like a drink?", "Teleport to a nearby city." ) ) {
+		case 1:
+			if (countitem(1000374) < 3) {
+				mes .@npc_name$;
+				mes "你沒有" + .@item_name$ + ". Only three drinks.";
+				close;
+			}
+			delitem 1000374,3;	// Brilliant_Soda
+			erasequest 5921;
+			mes .@npc_name$;
+			mes "啊!是這個" + .@item_name$ + " popular these days? I'll drink it well.";
+			next;
+			npctalk "gulp-gulp-", "", bc_self;
+			specialeffect EF_FLASHER;
+			mes .@npc_name$;
+			mes "嗯？ ！你在哪裡？啊!你睡著了嗎？你有客人。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "給我1" + mesitemlink( 1000374 ) + " and I can teleport you to Geffen.";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "你沒有" + .@item_name$ + ". It's just a drink.";
+				close;
+			}
+			mes .@npc_name$;
+			mes "下次見。旅行愉快..";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "geffen",119,37;
+			end;
+		}
+	case 2:
+		erasequest 5921;
+		mes .@npc_name$;
+		mes "您可以再次進行征服任務。";
+		close;
+	}
+	switch( checkquest(5920,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "朱諾怪獸協會正在尋找人們提交征服任務。";
+		next;
+		switch( select( "Receive a subjugation quest.", "Subjugation quest?", "Teleport to a nearby city.", "You seem to be able to afford it?" ) ) {
+		case 1:
+			setquest 5920;
+			mes .@npc_name$;
+			mes "謝謝。您要做的就是在Geffen Field抓住80個怪物。如果您全部抓住它們，請來向我報告。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "最近，怪物的數量正在增加。";
+			next;
+			mes .@npc_name$;
+			mes "隨著怪物數量的增加，殖民地擴大了，如果怪物碰撞力量，人類可以避免它們。";
+			next;
+			mes .@npc_name$;
+			mes "這是預防水平。";
+			close;
+		case 3:
+			mes .@npc_name$;
+			mes "給我1" + mesitemlink( 1000374 ) + " and I can teleport you to Geffen.";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "你沒有" + .@item_name$ + ". It's just a drink.";
+				close;
+			}
+			mes .@npc_name$;
+			mes "下次見。旅行愉快..";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "geffen",119,37;
+			end;
+		case 4:
+			mes .@npc_name$;
+			mes "啊!你看到了嗎？您是那種總是很累的人。也許是因為您放下一切並接受了疲倦？我到底在說什麼？";
+			next;
+			mes .@npc_name$;
+			mes "我很累，所以我說了一切。";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "在Geffen Field抓住80個怪物，然後來向我報告。";
+		close;
+	case 2:
+		getexp 64133,57253;
+		erasequest 5920;
+		setquest 5921;
+		mes .@npc_name$;
+		mes "你努力工作。我再次放心了一段時間。我現在可以休息。征服任務明天可以再次提供，因此，如果您有時間，請再次放棄。";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_CLICKME, QMARK_YELLOW, "(checkquest(5921,PLAYTIME) == 0 || checkquest(5921,PLAYTIME) == 1) && countitem(1000374) > 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 71 && checkquest(5920,HUNTING) == -1 && checkquest(5921,PLAYTIME) == -1" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(5920,HUNTING) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(5921,PLAYTIME) == 2" );
+	end;
+}
+
+lhz_fild01,240,107,4	script	Map Examiner Lipiri#yma	4_M_HUBOY,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 71) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(5919,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "您可以明天再次進行Lighthalzen Field征服任務。你必須累，進去休息。我也有點累。";
+		next;
+		switch( select( "You look tired. Would you like a drink?", "Teleport to a nearby city." ) ) {
+		case 1:
+			if (countitem(1000374) < 3) {
+				mes .@npc_name$;
+				mes "哇...我還是很累，所以不要取笑我。我想如果我喝三杯，我會減少累。";
+				close;
+			}
+			delitem 1000374,3;	// Brilliant_Soda
+			erasequest 5919;
+			mes .@npc_name$;
+			mes "真的嗎？ ！我只聽說過它，我從未嘗試過，但是我聽說它效果很好。";
+			next;
+			npctalk "Gulp- ??- Kyaa~", "", bc_self;
+			sleep2 500;
+			specialeffect EF_FLASHER;
+			mes .@npc_name$;
+			mes "嗯？ ！哦，是的。您在兼職嗎？啊!這是朱諾怪獸協會。歡迎！";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "如果是附近的城市，那就是燈塔。給我一個" + mesitemlink( 1000374 ) + " and I can teleport you.";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "嗯？在哪裡" + .@item_name$ + "?";
+				close;
+			}
+			mes .@npc_name$;
+			mes "下次見~";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "lighthalzen",192,314;
+			end;
+		}
+		end;
+	case 2:
+		erasequest 5919;
+		mes .@npc_name$;
+		mes "您可以再次進行征服任務。";
+		close;
+	}
+	switch( checkquest(5918,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "這是朱諾怪物協會。";
+		next;
+		switch( select( "Receive a subjugation quest.", "Subjugation quest?", "Teleport to a nearby city.", "Why are you so blunt?" ) ) {
+		case 1:
+			setquest 5918;
+			mes .@npc_name$;
+			mes "您只需要在這裡的Lighthalzen領域抓住80個怪物即可。";
+			next;
+			mes .@npc_name$;
+			mes "謝謝，謝謝。它在工作。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "我也從事兼職工作。我不知道細節。";
+			next;
+			mes .@npc_name$;
+			mes "當我開始解釋有關怪物殖民地和個人數量時，我聽到了。";
+			next;
+			mes .@npc_name$;
+			mes "聽取解釋時，我有點困倦。這太難解釋了。";
+			next;
+			mes .@npc_name$;
+			mes "在燈塔領域抓住怪物並獲得獎勵並不重要嗎？";
+			close;
+		case 3:
+			mes .@npc_name$;
+			mes "如果是附近的城市，那就是燈塔。給我一個" + mesitemlink( 1000374 ) + " and I can teleport you.";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "嗯？在哪裡" + .@item_name$ + "?";
+				close;
+			}
+			mes .@npc_name$;
+			mes "下次見~";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "lighthalzen",192,314;
+			end;
+		case 4:
+			mes .@npc_name$;
+			mes "對不起。我很困。我有一份兼職工作，因為工資很好";
+			next;
+			mes .@npc_name$;
+			mes "沒有替代品..我將整天保持它。";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "您所要做的就是在Lighthalzen田地捕捉80個怪物。如果您全部抓住它們，請我確認並獲得您的獎勵。";
+		close;
+	case 2:
+		getexp 81120,74560;
+		erasequest 5918;
+		setquest 5919;
+		mes .@npc_name$;
+		mes "你努力工作。嗯..由於個人數量的問題，您只能每天進行一次征服任務，因此明天可以再做一次。";
+		next;
+		mes .@npc_name$;
+		mes "哦，我很累。我希望我能得到一些替代品...";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_CLICKME, QMARK_YELLOW, "(checkquest(5919,PLAYTIME) == 0 || checkquest(5919,PLAYTIME) == 1) && countitem(1000374) > 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 71 && checkquest(5920,HUNTING) == -1 && checkquest(5921,PLAYTIME) == -1" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(5918,HUNTING) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(5919,PLAYTIME) == 2" );
+	end;
+}
+
+mal_dun01,141,126,4	script	Map Examiner Mother One#yma	4_F_TAEKWON,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 75) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(5927,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "明天可以做征服任務嗎？我很累，所以請不要和我說話？";
+		next;
+		switch( select( "You look tired. Would you like a drink?", "Teleport to a nearby city." ) ) {
+		case 1:
+			if (countitem(1000374) < 3) {
+				mes .@npc_name$;
+				mes "什麼？我的3個在哪裡" + .@item_name$ + " go?";
+				close;
+			}
+			delitem 1000374,3;	// Brilliant_Soda
+			erasequest 5927;
+			mes .@npc_name$;
+			mes "真的嗎？稍後再說嗎？";
+			next;
+			npctalk "Ugh~ Exciting..", "", bc_self;
+			sleep2 500;
+			specialeffect EF_FLASHER;
+			mes .@npc_name$;
+			mes "啊!她...她再說一遍。是的，你在說什麼？";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "馬蘭多？如果你想去，給我一個" + .@item_name$ + ". But isn't it better to walk from here?";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "一" + .@item_name$ + ". But I recommend just walking.";
+				close;
+			}
+			mes .@npc_name$;
+			mes "好的！再見~下次再見~";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "malangdo",141,118;
+			end;
+		}
+	case 2:
+		erasequest 5927;
+		mes .@npc_name$;
+		mes "啊!我可以再次進行征服任務。是時候我工作了嗎？";
+		close;
+	}
+	switch( checkquest(5926,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "因為我現在很忙。只有那些想與我進行征服任務的人。";
+		next;
+		switch( select( "Receive a subjugation quest.", "Subjugation quest?", "Teleport to a nearby city.", "What are you doing?" ) ) {
+		case 1:
+			setquest 5926;
+			mes .@npc_name$;
+			mes "你是客人嗎？那你應該友善。";
+			mes "您所要做的就是在星光珊瑚區捕捉80個怪物，因為即使您捕獲了貝類，螃蟹和酯，它們也不算在內！您不必抓住它們。然後，辛勤工作！";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "啊？ ！你再次打擾我。您仍然可以成為客人，所以請友善。";
+			next;
+			mes .@npc_name$;
+			mes "這是在星光珊瑚中捕捉怪物以控制個體數量的追求。";
+			next;
+			mes .@npc_name$;
+			mes "蛤，螃蟹和酯不需要捕獲，因為沒有必要控制人群。";
+			next;
+			mes .@npc_name$;
+			mes "不要問為什麼。我不知道，因為我兼職工作。顧客！";
+			close;
+		case 3:
+			mes .@npc_name$;
+			mes "馬蘭多？如果你想去，給我一個" + .@item_name$ + ". But isn't it better to walk from here?";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "一" + .@item_name$ + ". But I recommend just walking.";
+				close;
+			}
+			mes .@npc_name$;
+			mes "好的！再見~下次再見~";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "malangdo",141,118;
+			end;
+		case 4:
+			mes .@npc_name$;
+			mes "啊？ ！真的嗎！ ！他們真令人不安。你看到以斯帖站在那邊嗎？您必須能夠說話，但是當我與您交談時，您不回答嗎？";
+			next;
+			mes .@npc_name$;
+			mes "顯然，當您看到冒險家經過時，您似乎正在進行對話。你害羞嗎？你為什麼不和我說話？";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "如果您在星光珊瑚區抓住80個怪物，請與我交談。";
+		next;
+		mes .@npc_name$;
+		mes "即使您抓住了蛤，螃蟹和酯，也不會計算出它們，因此請不要來稍後問它們。";
+		close;
+	case 2:
+		getexp 90880,85440;
+		erasequest 5926;
+		setquest 5927;
+		mes .@npc_name$;
+		mes "哦！你做得很好。征服任務也可以明天完成。無論您是否有空時，您是否來。";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_CLICKME, QMARK_YELLOW, "(checkquest(5927,PLAYTIME) == 0 || checkquest(5927,PLAYTIME) == 1) && countitem(1000374) > 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 75 && checkquest(5926,HUNTING) == -1 && checkquest(5927,PLAYTIME) == -1" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(5926,HUNTING) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(5927,PLAYTIME) == 2" );
+	end;
+}
+
+hu_fild01,133,157,6	script	Map Examiner Huf#yma	4_MAL_CAPTAIN,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 75) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(5925,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "我已經一個人站在這里呆了幾天，我希望有人會接管明天。";
+		next;
+		switch( select( "You look tired. Would you like a drink?", "Teleport to a nearby city." ) ) {
+		case 1:
+			if (countitem(1000374) < 3) {
+				mes .@npc_name$;
+				mes "你不是要給我3" + .@item_name$ + "?";
+				close;
+			}
+			delitem 1000374,3;	// Brilliant_Soda
+			erasequest 5925;
+			mes .@npc_name$;
+			mes "這是您的第一次飲料嗎？嘗試新口味總是很有趣。謝謝。";
+			next;
+			npctalk "Wow- oh! It's quite tasty..", "", bc_self;
+			sleep2 500;
+			specialeffect EF_FLASHER;
+			mes .@npc_name$;
+			mes "嗯？ ！客人一瞥。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "你要回家嗎？休格爾是最近的城市。我需要一塊" + mesitemlink( 1000374 ) + ".";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "最近的城市需要1" + .@item_name$ + ".";
+				close;
+			}
+			mes .@npc_name$;
+			mes "旅行愉快。";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "hugel",97,154;
+			end;
+		}
+		end;
+	case 2:
+		erasequest 5925;
+		mes .@npc_name$;
+		mes "您可以再次執行征服任務。";
+		close;
+	}
+	switch( checkquest(5924,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "朱諾怪獸協會正在進行征服。";
+		next;
+		switch( select( "Receive a subjugation quest.", "Subjugation quest?", "Teleport to a nearby city.", "Are you from Port Malaya?" ) ) {
+		case 1:
+			setquest 5924;
+			mes .@npc_name$;
+			mes "您可以在這個地方的塔納托斯塔前面抓住80個怪物。抓住所有人後，向我報告。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "這是減少塔納托斯面前怪物數量的征服追求。";
+			next;
+			mes .@npc_name$;
+			mes "怪物的數量可能會增加並可能發生損害，因此似乎旨在減少怪物的數量。";
+			next;
+			mes .@npc_name$;
+			mes "在兼職工作之前，我認為怪物社會只是一場比賽，但似乎在起作用。";
+			close;
+		case 3:
+			mes .@npc_name$;
+			mes "你要回家嗎？休格爾是最近的城市。我需要一塊" + mesitemlink( 1000374 ) + ".";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "最近的城市需要1" + .@item_name$ + ".";
+				close;
+			}
+			mes .@npc_name$;
+			mes "旅行愉快。";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "hugel",97,154;
+			end;
+		case 4:
+			mes .@npc_name$;
+			mes "哈哈哈..你知道馬來亞港嗎？這是一個好地方。";
+			next;
+			mes .@npc_name$;
+			mes "如果您誤解了，我不是馬來亞港口的上尉。";
+			next;
+			mes .@npc_name$;
+			mes "這款船長的衣服太酷了，所以我想穿它，但是如果我在那兒戴上它，它就會模仿。我只是離開家鄉穿它。";
+			next;
+			mes .@npc_name$;
+			mes "啊..我想突然回家。當我母親離開家時，她說她很難過，但確實如此。";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "在塔納托斯大廈（Thanatos Tower）面前捕捉80個怪物，並向我報告。";
+		close;
+	case 2:
+		getexp 110760,104040;
+		erasequest 5924;
+		setquest 5925;
+		mes .@npc_name$;
+		mes "你努力工作。征服任務每天都可以使用，因此，如果您有時間，請再次來。";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_CLICKME, QMARK_YELLOW, "(checkquest(5925,PLAYTIME) == 0 || checkquest(5925,PLAYTIME) == 1) && countitem(1000374) > 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 75 && checkquest(5924,HUNTING) == -1 && checkquest(5925,PLAYTIME) == -1" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(5924,HUNTING) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(5925,PLAYTIME) == 2" );
+	end;
+}
+
+tur_dun01,159,46,4	script	Map Examiner Tural#yma	4_M_BRZ_MAN1,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 75) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(5923,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "明天您可以再次進行烏龜島征服任務。我什麼時候可以回到廚師？";
+		next;
+		switch( select( "You look tired. Would you like a drink?", "Teleport to a nearby city." ) ) {
+		case 1:
+			if (countitem(1000374) < 3) {
+				mes .@npc_name$;
+				mes "你沒有" + .@item_name$ + ". You'll have to give it three to get tired.";
+				close;
+			}
+			delitem 1000374,3;	// Brilliant_Soda
+			erasequest 5923;
+			mes .@npc_name$;
+			mes "哦！" + .@item_name$ + "?! I heard that the person who made this made a lot of money, I'll drink it well.";
+			next;
+			npctalk "Wow.. it's thrilling.", "", bc_self;
+			specialeffect EF_FLASHER;
+			mes .@npc_name$;
+			mes "呵呵..我認為這是一個怪物。你為什麼站在那裡沒有跡象？";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "給我一個" + mesitemlink( 1000374 ) + " and I can teleport you to Alberta.";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "如果你給我" + .@item_name$ + ", I will teleport you to Alberta.";
+				close;
+			}
+			mes .@npc_name$;
+			mes "我也想去。再見。";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "alberta",117,55;
+			end;
+		}
+	case 2:
+		erasequest 5923;
+		mes .@npc_name$;
+		mes "您可以再次進行烏龜島征服任務。";
+		close;
+	}
+	switch( checkquest(5922,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "嘿，嘿..我認為這是一個怪物。您來收到征服任務了嗎？";
+		next;
+		switch( select( "Receive a subjugation quest.", "Subjugation quest?", "Teleport to a nearby city.", "Are you not a cook?" ) ) {
+		case 1:
+			setquest 5922;
+			mes .@npc_name$;
+			mes "除了塔拉青蛙外，您還可以在海龜島上抓住80個怪物。如果您抓住了所有人，請來找我並獲得獎勵。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "這是一個要求您在Turtle Island上捕捉80個怪物的任務。";
+			next;
+			mes .@npc_name$;
+			mes "啊!順便說一句，即使您抓住了塔拉青蛙，也不算在內。如果您什麼都不碰，那是一個溫和的怪物，因此您可以避免它。";
+			close;
+		case 3:
+			mes .@npc_name$;
+			mes "給我一個" + mesitemlink( 1000374 ) + " and I can teleport you to Alberta.";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "如果你給我" + .@item_name$ + ", I will teleport you to Alberta.";
+				close;
+			}
+			mes .@npc_name$;
+			mes "我也想去。再見。";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "alberta",117,55;
+			end;
+		case 4:
+			mes .@npc_name$;
+			mes "我是。我是廚師。我從下班累了，我現在不習慣，所以我不記得了。";
+			next;
+			mes .@npc_name$;
+			mes "我覺得我在文檔中寫道，我肯定正在尋找作為廚房助理的兼職工作。當我醒來時，我以某種方式是在這裡作為征服的地圖檢查員工作。";
+			next;
+			mes .@npc_name$;
+			mes "真的為什麼？我不能大致做到這一點，我會很激動。";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "除了塔拉青蛙外，在海龜島上抓住80個怪物，並來找我獲得獎勵。";
+		close;
+	case 2:
+		getexp 86920,80660;
+		erasequest 5922;
+		setquest 5923;
+		mes .@npc_name$;
+		mes "這是應許的獎勵。征服任務可以明天恢復，因此，如果您有時間，請來。";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_CLICKME, QMARK_YELLOW, "(checkquest(5925,PLAYTIME) == 0 || checkquest(5925,PLAYTIME) == 1) && countitem(1000374) > 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 75 && checkquest(5922,HUNTING) == -1 && checkquest(5923,PLAYTIME) == -1" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(5922,HUNTING) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(5923,PLAYTIME) == 2" );
+	end;
+}
+
+// note: all mobs increase the hunt count
+ein_fild03,135,46,5	script	Map Examiner Tailing#tailing	1_M_YOUNGKNIGHT,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 76) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(3472,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "啊，這足以容納今天的征服！";
+		next;
+		mes .@npc_name$;
+		mes "如果您明天再來並幫助征服怪物，我將不勝感激！ ！";
+		next;
+		if (select( "Send " + .@item_name$ + ".", "Do not pass." ) == 2)
+			end;
+		if (countitem(1000374) < 3) {
+			mes "- 需要3" + .@item_name$ + ". - ";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 3472;
+		mes .@npc_name$;
+		mes "啊~!!非常感謝你~當時我非常口渴~";
+		next;
+		mes .@npc_name$;
+		mes "咕嚕~咕嚕~~~";
+		next;
+		specialeffect EF_FLASHER;
+		mes .@npc_name$;
+		mes "嗯...這種強烈的風味...！";
+		next;
+		mes .@npc_name$;
+		mes "嗯..你是我的新手，等一下。我也要喝一些，所以一分鐘後你能和我說話嗎？";
+		close;
+	case 2:
+		erasequest 3472;
+		break;
+	}
+	switch( checkquest(3471,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "你好！ ！你又來了！這是朱諾怪獸協會的地圖檢查員！";
+		next;
+		switch( select( "Receive a subjugation quest.", "Teleport to a nearby city.", "Ask about a subjugation quest.", "Come next." ) ) {
+		case 1:
+			mes .@npc_name$;
+			mes "哦，您想要佣金嗎？";
+			next;
+			mes .@npc_name$;
+			mes "您只需要在我所在的這個領域殺死80個怪物即可。";
+			next;
+			setquest 3471;
+			mes .@npc_name$;
+			mes "那我會等你，希望你安全回來。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "最近的城市是Einbroch！";
+			next;
+			mes .@npc_name$;
+			mes "如果你給我一個" + .@item_name$ + ", I will send it right away!";
+			next;
+			if (select( "Move", "Do not move" ) == 2) {
+				mes .@npc_name$;
+				mes "是的，請告訴我您是否需要傳送！ ！";
+				close;
+			}
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "嘿，你沒有" + .@item_name$ + "~";
+				next;
+				mes .@npc_name$;
+				mes "傳送需要1" + .@item_name$ + ".";
+				close;
+			}
+			mes .@npc_name$;
+			mes "是的！那我們會搬你！";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "einbroch",146,49;
+			end;
+		case 3:
+			mes .@npc_name$;
+			mes "有時候，發現了擴大的怪物殖民地現象。";
+			next;
+			mes .@npc_name$;
+			mes "有一次，征服被積極進行，但是如今，由於有些忽視，這可以看出。";
+			next;
+			mes .@npc_name$;
+			mes "如果這種現象繼續存在，那是危險的，因此朱諾怪獸協會決定進行全面的征服。";
+			next;
+			mes .@npc_name$;
+			mes "這意味著通過將地圖檢查員放置在需要征服的每個區域中來進行征服！";
+			close;
+		case 4:
+			mes .@npc_name$;
+			mes "啊，你要去哪裡？";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "您只需要征服該區域中任何類型的80個怪物即可。";
+		next;
+		mes .@npc_name$;
+		mes "征服後，來找我並獲得您的回報！";
+		close;
+	case 2:
+		getexp 146520,131880;
+		erasequest 3471;
+		setquest 3472;
+		mes .@npc_name$;
+		mes "你安全回來了！";
+		next;
+		mes .@npc_name$;
+		mes "我幾乎沒有實現這樣的目標...";
+		next;
+		mes .@npc_name$;
+		mes "如果您負擔得起明天，請再來！";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "BaseLevel >= 76 && checkquest(3471,HUNTING) == -1" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(3471,HUNTING) == 2" );
+	end;
+}
+
+// note: all mobs increase the hunt count
+lhz_fild03,167,344,3	script	Map Examiner Modaka#madaka	4_F_JOB_KNIGHT,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 77) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(3474,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "啊，這足以容納今天的征服！";
+		next;
+		mes .@npc_name$;
+		mes "如果您明天再來並幫助征服怪物，我將不勝感激！ ！";
+		next;
+		if (select( "Send " + .@item_name$ + ".", "Do not pass." ) == 2)
+			end;
+		if (countitem(1000374) < 3) {
+			mes "- 需要3" + .@item_name$ + ". - ";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 3474;
+		mes .@npc_name$;
+		mes "嗯，非常感謝~~這是令人耳目一新的碳酸水~？";
+		next;
+		mes .@npc_name$;
+		mes "杜鵑~拍手~";
+		next;
+		mes .@npc_name$;
+		mes "啊，太酷了~！";
+		next;
+		mes .@npc_name$;
+		mes "哦，冒險家，等一下~給我時間將它包裹在我的脖子上，請在一段時間後再次與我交談~";
+		close;
+	case 2:
+		erasequest 3474;
+		break;
+	}
+	switch( checkquest(3473,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "你好！ ！你又來了！我是莫達卡（Modaka），是朱諾怪獸協會（Juno Monster Society）派遣的地圖審查員！";
+		next;
+		switch( select( "Receive a subjugation quest.", "Teleport to a nearby city.", "Ask about a subjugation quest.", "Come next." ) ) {
+		case 1:
+			mes .@npc_name$;
+			mes "哦，您想做一個任務嗎？";
+			next;
+			mes .@npc_name$;
+			mes "您只需要在我所在的這個領域殺死80個怪物~";
+			next;
+			setquest 3473;
+			mes .@npc_name$;
+			mes "那我會在這裡等待，請小心~！";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "最近的城市是lighthalzen~";
+			next;
+			mes .@npc_name$;
+			mes "如果你給我一個" + .@item_name$ + ", I will send it right away!";
+			next;
+			if (select( "Move", "Do not move" ) == 2) {
+				mes .@npc_name$;
+				mes "是的，如果您需要傳送，請告訴我！";
+				close;
+			}
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "嘿，你沒有" + .@item_name$ + "~";
+				next;
+				mes .@npc_name$;
+				mes "傳送需要1" + .@item_name$ + ".";
+				close;
+			}
+			mes .@npc_name$;
+			mes "是的，那我會搬你！";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "lighthalzen",214,319;
+			end;
+		case 3:
+			mes .@npc_name$;
+			mes "有時候，發現了擴大的怪物殖民地現象。";
+			next;
+			mes .@npc_name$;
+			mes "有一次，征服被積極進行，但是如今，由於有些忽視，這可以看出。";
+			next;
+			mes .@npc_name$;
+			mes "如果這種現象繼續存在，那是危險的，因此朱諾怪獸協會決定進行全面的征服。";
+			next;
+			mes .@npc_name$;
+			mes "這意味著通過將地圖檢查員放置在需要征服的每個區域中來進行征服！";
+			close;
+		case 4:
+			mes .@npc_name$;
+			mes "啊，你要去哪裡？";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "您只需要在我所在地區征服80個怪物~";
+		next;
+		mes .@npc_name$;
+		mes "征服後，請回到我身邊~";
+		close;
+	case 2:
+		getexp 148560,140040;
+		erasequest 3473;
+		setquest 3474;
+		mes .@npc_name$;
+		mes "你在這裡~";
+		next;
+		mes .@npc_name$;
+		mes "我認為今天的目標已經實現。謝謝~";
+		next;
+		mes .@npc_name$;
+		mes "我希望你也可以明天來！ ！ ！";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "BaseLevel >= 77 && checkquest(3473,HUNTING) == -1" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(3473,HUNTING) == 2" );
+	end;
+}
+
+tur_dun02,151,256,4	script	Map Examiner Tidun#yma	4_M_NINJA_BLUE,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 80) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(5929,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "您可以在明天再次征服烏龜島地下城。你一定很累，所以回家休息。";
+		next;
+		switch( select( "You look tired. Would you like a drink?", "Teleport to a nearby city." ) ) {
+		case 1:
+			if (countitem(1000374) < 3) {
+				mes .@npc_name$;
+				mes "我想我聽說他們給你3" + .@item_name$ + ", but I must have heard it wrong.";
+				close;
+			}
+			delitem 1000374,3;	// Brilliant_Soda
+			erasequest 5929;
+			mes .@npc_name$;
+			mes "哦！謝謝。你真好。我會喝的。";
+			next;
+			npctalk "I feel engulfed in a sense of freshness.", "", bc_self;
+			specialeffect EF_FLASHER;
+			mes .@npc_name$;
+			mes "唔！我認為客人到了。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "如果你給我一個" + mesitemlink( 1000374 ) + ", I can teleport you to the nearby city, Alberta.";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "傳送到附近城市正在收到1" + .@item_name$ + ", so I just want to send it to you, but it's the official price..";
+				close;
+			}
+			mes .@npc_name$;
+			mes "旅行愉快。";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "alberta",117,55;
+			end;
+		}
+		end;
+	case 2:
+		erasequest 5929;
+		mes .@npc_name$;
+		mes "您可以再次征服烏龜島地牢。";
+		close;
+	}
+	switch( checkquest(5928,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "朱諾怪獸協會（Juno Monster Society）準備了製服烏龜島地牢的探索。你有什麼想法嗎？";
+		next;
+		switch( select( "Receive a subjugation quest.", "Subjugation quest?", "Teleport to a nearby city.", "third" ) ) {
+		case 1:
+			setquest 5928;
+			mes .@npc_name$;
+			mes "在烏龜島地下城抓住80個怪物後，來向我報告。那我祝你好運。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "我一直在尋找一個安靜的地方，找到了合適的工作，所以我申請了地圖檢查員。";
+			next;
+			mes .@npc_name$;
+			mes "問題是我的住宿比我預期的更長。";
+			next;
+			mes .@npc_name$;
+			mes "我想盡快回家。";
+			close;
+		case 3:
+			mes .@npc_name$;
+			mes "如果你給我一個" + mesitemlink( 1000374 ) + ", I can teleport you to the nearby city, Alberta.";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "傳送到附近城市正在收到1" + .@item_name$ + ", so I just want to send it to you, but it's the official price..";
+				close;
+			}
+			mes .@npc_name$;
+			mes "旅行愉快。";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "alberta",117,55;
+			end;
+		case 4:
+			mes .@npc_name$;
+			mes "我聽說由於怪物數量增加，預計菌落之間發生了碰撞。";
+			next;
+			mes .@npc_name$;
+			mes "如果怪物殖民地彼此相撞，那麼人類是否試圖提前減少它們的數量？";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "在烏龜島地下城抓住80個怪物後，來向我報告。我會等你的。";
+		close;
+	case 2:
+		getexp 95240,88580;
+		erasequest 5928;
+		setquest 5929;
+		mes .@npc_name$;
+		mes "您很快解決了。這很棒。我明天可以再次進行此征服任務，所以如果有時間，我會再次見到您。";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_CLICKME, QMARK_YELLOW, "(checkquest(5929,PLAYTIME) == 0 || checkquest(5929,PLAYTIME) == 1) && countitem(1000374) > 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 80 && checkquest(5928,HUNTING) == -1 && checkquest(5929,PLAYTIME) == -1" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(5929,PLAYTIME) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(5928,HUNTING) == 2" );
+	end;
+}
+
+tur_dun03,125,186,6	script	Map Examiner Tsensor#yma	4_M_SIT_NOVICE,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 80) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(5931,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "你沒有什麼事嗎？你明天要來，那你為什麼要又和我說話？";
+		next;
+		switch( select( "You look tired. Would you like a drink?", "Teleport to a nearby city." ) ) {
+		case 1:
+			if (countitem(1000374) < 3) {
+				mes .@npc_name$;
+				mes "哈哈..多麼昂貴" + .@item_name$ + ", I can't give you three of them.";
+				close;
+			}
+			delitem 1000374,3;	// Brilliant_Soda
+			erasequest 5931;
+			mes .@npc_name$;
+			mes "哦，你知道什麼嗎？我會喝得好。我想嘗試一下，但是我不能喝它，因為它很昂貴。";
+			next;
+			npctalk "Wow, it tasted like this.", "", bc_self;
+			specialeffect EF_FLASHER;
+			mes .@npc_name$;
+			mes "嗯？ ！朋友，我們見過彼此嗎？不是嗎？就像我們第一次見面...";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "艾伯塔省快遞1" + mesitemlink( 1000374 ) + ", left immediately.";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "對不起。如果你不給我一個" + .@item_name$ + ", I won't send it. Good work.";
+				close;
+			}
+			mes .@npc_name$;
+			mes "艾伯塔特快（Alberta Express）即將離開。好工作~";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "alberta",117,55;
+			end;
+		}
+		end;
+	case 2:
+		erasequest 5931;
+		mes .@npc_name$;
+		mes "哇~我可以再次執行征服任務。你有什麼想法嗎？";
+		close;
+	}
+	switch( checkquest(5930,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "快點！您有征服的意圖嗎？";
+		next;
+		switch( select( "Receive a subjugation quest.", "Subjugation quest?", "Teleport to a nearby city.", "Nobis?" ) ) {
+		case 1:
+			setquest 5930;
+			mes .@npc_name$;
+			mes "是的！是的！我告訴你去這裡的揚喬琴抓住80個怪物，當您抓住所有這些怪物時，他們會報告並來找我。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "你在說什麼？這只是捕捉怪物的追求。";
+			next;
+			mes .@npc_name$;
+			mes "但是什麼！您收到了20個定位器和20個凍結器的請求，並且您收到了所有的定位器，但是仍然有5個冰櫃？";
+			next;
+			mes .@npc_name$;
+			mes "只殺死該社區的所有怪物，這不會發生，這不會發生嗎？不是嗎？";
+			close;
+		case 3:
+			mes .@npc_name$;
+			mes "艾伯塔省快遞1" + mesitemlink( 1000374 ) + ", left immediately.";
+			next;
+			select( "Give me 1 " + .@item_name$ + "." );
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "對不起。如果你不給我一個" + .@item_name$ + ", I won't send it. Good work.";
+				close;
+			}
+			mes .@npc_name$;
+			mes "艾伯塔特快（Alberta Express）即將離開。好工作~";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "alberta",117,55;
+			end;
+		case 4:
+			mes .@npc_name$;
+			mes "嗯？這是您第一次見到新手嗎？";
+			next;
+			mes .@npc_name$;
+			mes "當我還是新手時，即使就像一個活著的地牢，我只是說我去了那裡。是口香糖。";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "你在幹什麼？您為什麼不去Yanggeochon捕捉80個怪物？";
+		close;
+	case 2:
+		getexp 102260,96700;
+		erasequest 5930;
+		setquest 5931;
+		mes .@npc_name$;
+		mes "好吧，我不如我好，但是我的技能還不錯。即使我也想明天也要做征服任務，我也要留在這裡。";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_CLICKME, QMARK_YELLOW, "(checkquest(5931,PLAYTIME) == 0 || checkquest(5931,PLAYTIME) == 1) && countitem(1000374) > 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 80 && checkquest(5930,HUNTING) == -1 && checkquest(5931,PLAYTIME) == -1" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(5931,PLAYTIME) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(5930,HUNTING) == 2" );
+	end;
+}
+
+// note: all mobs increase the hunt count
+ra_fild12,50,219,1	script	Map Examiner Chakari#chakari	4_F_JOB_ASSASSIN,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 80) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(3476,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "今天很好！";
+		next;
+		mes .@npc_name$;
+		mes "如果您想做更多的征服，請明天回來！";
+		next;
+		if (select( "Send " + .@item_name$ + ".", "Do not pass." ) == 2)
+			end;
+		if (countitem(1000374) < 3) {
+			mes "- 需要3" + .@item_name$ + ". - ";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 3476;
+		mes .@npc_name$;
+		mes "你把它給我了嗎？我會喝得很好！";
+		next;
+		mes .@npc_name$;
+		mes "咕嚕~咕嚕~~~！ ！ ！";
+		next;
+		specialeffect EF_FLASHER;
+		mes .@npc_name$;
+		mes "啊...？ ？這種微妙的味道是什麼...";
+		next;
+		mes .@npc_name$;
+		mes "嗯...我現在有點朦朧，但是過了一會兒，你能再次和我說話嗎？";
+		close;
+	case 2:
+		erasequest 3476;
+		break;
+	}
+	switch( checkquest(3475,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "你好！我是查卡里納（Chakarina），是朱諾怪獸協會（Juno Monster Society）派遣的地圖審查員~！";
+		next;
+		switch( select( "Receive a subjugation quest.", "Teleport to a nearby city.", "Ask about a subjugation quest.", "Come next." ) ) {
+		case 1:
+			mes .@npc_name$;
+			mes "您正在接受請求嗎？";
+			next;
+			mes .@npc_name$;
+			mes "您只需要在我所在的這個領域殺死80個怪物！";
+			next;
+			setquest 3475;
+			mes .@npc_name$;
+			mes "我會相信你快速完成它！ ！";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "雷切爾是最接近這裡的！";
+			next;
+			mes .@npc_name$;
+			mes "如果你給我一個" + .@item_name$ + ", I'll send it right away!";
+			next;
+			if (select( "Move", "Do not move" ) == 2) {
+				mes .@npc_name$;
+				mes "是的，如果您需要傳送，請讓我知道！";
+				close;
+			}
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "嗯？你沒有" + .@item_name$ + "!!";
+				next;
+				mes .@npc_name$;
+				mes "你需要1" + .@item_name$ + " to teleport!";
+				close;
+			}
+			mes .@npc_name$;
+			mes "是的！然後準備~!!";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "rachel",130,30;
+			end;
+		case 3:
+			mes .@npc_name$;
+			mes "您是否聽說過怪物殖民地擴張？";
+			next;
+			mes .@npc_name$;
+			mes "這本來應該是一個連續的征服，但我認為由於短暫的中斷，這是危險情況的邊緣。";
+			next;
+			mes .@npc_name$;
+			mes "因此，朱諾怪獸協會派遣了幾位地圖審查員，這就是我來這裡的原因。";
+			close;
+		case 4:
+			mes .@npc_name$;
+			mes "再次見到你！";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "您只需要征服該區域中任何類型的80個怪物即可。";
+		next;
+		mes .@npc_name$;
+		mes "如果您在征服後來，我會給您一個很好的獎勵~！";
+		close;
+	case 2:
+		getexp 155040,146520;
+		erasequest 3475;
+		setquest 3476;
+		mes .@npc_name$;
+		mes "畢竟，您快速完成！ ！";
+		next;
+		mes .@npc_name$;
+		mes "我認為只要有冒險家，征服就不會有任何問題...";
+		next;
+		mes .@npc_name$;
+		mes "我希望你明天也可以幫助我...！";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	// note: ! displayed when playtime ongoing
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "BaseLevel >= 80 && checkquest(3475,HUNTING) == -1" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(3475,HUNTING) == 2" );
+	end;
+}
+
+// note: all mobs increase the hunt count
+ice_dun01,161,13,3	script	Map Examiner Dove#dove123	8_F_GIRL,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 85) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(3484,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "啊，這足以容納今天的征服！";
+		next;
+		mes .@npc_name$;
+		mes "如果您明天再來並幫助征服怪物，我將不勝感激！ ！";
+		next;
+		if (select( "Send " + .@item_name$ + ".", "Do not pass." ) == 2)
+			end;
+		if (countitem(1000374) < 3) {
+			mes "- 需要3" + .@item_name$ + ". - ";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 3484;
+		mes .@npc_name$;
+		mes "啊~!!非常感謝你~當時我非常口渴~";
+		next;
+		mes .@npc_name$;
+		mes "咕嚕~咕嚕~~~";
+		next;
+		specialeffect EF_FLASHER;
+		mes .@npc_name$;
+		mes "嗯...這種強烈的風味...！";
+		next;
+		mes .@npc_name$;
+		mes "嗯..你是我的新手，等一下。我也要喝一些，所以一分鐘後你能和我說話嗎？";
+		close;
+	case 2:
+		erasequest 3484;
+		break;
+	}
+	switch( checkquest(3483,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "你好！ ！你又來了！我是Dove，是朱諾怪獸協會（Juno Monster Society）派遣的地圖審查員！";
+		next;
+		switch( select( "Receive a subjugation quest.", "Teleport to a nearby city.", "Ask about a subjugation quest.", "Come next." ) ) {
+		case 1:
+			mes .@npc_name$;
+			mes "哦，您想要佣金嗎？";
+			next;
+			mes .@npc_name$;
+			mes "您只需要在我所在的這個領域殺死80個怪物即可。";
+			next;
+			setquest 3483;
+			mes .@npc_name$;
+			mes "那我會等你，希望你安全回來。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "最近的城市是Einbroch！";
+			next;
+			mes .@npc_name$;
+			mes "如果你給我一個" + .@item_name$ + ", I will send it right away!";
+			next;
+			if (select( "Move", "Do not move" ) == 2) {
+				mes .@npc_name$;
+				mes "是的，請告訴我您是否需要傳送！ ！";
+				close;
+			}
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "嘿，你沒有" + .@item_name$ + "~";
+				next;
+				mes .@npc_name$;
+				mes "傳送需要1" + .@item_name$ + ".";
+				close;
+			}
+			mes .@npc_name$;
+			mes "是的！那我們會搬你！";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "rachel",130,30;
+			end;
+		case 3:
+			mes .@npc_name$;
+			mes "有時候，發現了擴大的怪物殖民地現象。";
+			next;
+			mes .@npc_name$;
+			mes "有一次，征服被積極進行，但是如今，由於有些忽視，這可以看出。";
+			next;
+			mes .@npc_name$;
+			mes "如果這種現象繼續存在，那是危險的，因此朱諾怪獸協會決定進行全面的征服。";
+			next;
+			mes .@npc_name$;
+			mes "這意味著通過將地圖檢查員放置在需要征服的每個區域中來進行征服！";
+			close;
+		case 4:
+			mes .@npc_name$;
+			mes "啊，你要去哪裡？";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "您只需要征服該區域中任何類型的80個怪物即可。";
+		next;
+		mes .@npc_name$;
+		mes "征服後，來找我並獲得您的回報！";
+		close;
+	case 2:
+		getexp 140296,132912;
+		erasequest 3483;
+		setquest 3484;
+		mes .@npc_name$;
+		mes "你安全回來了！";
+		next;
+		mes .@npc_name$;
+		mes "我幾乎沒有實現這樣的目標...";
+		next;
+		mes .@npc_name$;
+		mes "如果您負擔得起明天，請再來！";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "BaseLevel >= 85 && checkquest(3483,HUNTING) == -1" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(3483,HUNTING) == 2" );
+	end;
+}
+
+// note: all mobs increase the hunt count
+ra_fild08,163,47,5	script	Map Examiner Lucia#rsia	4_F_04,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 85) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(3480,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "今天，你完成了。";
+		next;
+		mes .@npc_name$;
+		mes "請明天回來。";
+		next;
+		if (select( "Send " + .@item_name$ + ".", "Do not pass." ) == 2)
+			end;
+		if (countitem(1000374) < 3) {
+			mes "- 需要3" + .@item_name$ + ". - ";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 3480;
+		mes .@npc_name$;
+		mes "嗯...我口渴...可以喝這個嗎？";
+		next;
+		mes .@npc_name$;
+		mes "拍。";
+		next;
+		specialeffect EF_FLASHER;
+		mes .@npc_name$;
+		mes "嗯...我覺得很奇怪...！";
+		next;
+		mes "[地圖審查員盧西亞]";
+		mes "嗯...您來收到請求嗎？你收到了...嗎？";
+		next;
+		mes .@npc_name$;
+		mes "我現在有點昏昏欲睡，所以請等待一會兒和我說話。";
+		close;
+	case 2:
+		erasequest 3480;
+		break;
+	}
+	switch( checkquest(3479,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "再次見到您，這是朱諾怪獸協會的露西亞。";
+		next;
+		switch( select( "Receive a subjugation quest.", "Teleport to a nearby city.", "Ask about a subjugation quest.", "Come next." ) ) {
+		case 1:
+			mes .@npc_name$;
+			mes "我迫切希望有一隻助手。";
+			next;
+			mes .@npc_name$;
+			mes "請殺死居住在這個領域的80個怪物。";
+			next;
+			setquest 3479;
+			mes .@npc_name$;
+			mes "我希望你不受傷害回來。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "雷切爾是最接近的。";
+			next;
+			mes .@npc_name$;
+			mes "如果你給我一個" + .@item_name$ + ", I will help.";
+			next;
+			if (select( "Move", "Do not move" ) == 2) {
+				mes .@npc_name$;
+				mes "告訴我什麼時候需要它。";
+				close;
+			}
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "看來你沒有" + .@item_name$ + ".";
+				next;
+				mes .@npc_name$;
+				mes "你需要1" + .@item_name$ + " to teleport.";
+				close;
+			}
+			mes .@npc_name$;
+			mes "那請準備。";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "rachel",130,30;
+			end;
+		case 3:
+			mes .@npc_name$;
+			mes "有一天...自從我離開怪物的數字逐漸增加以來已經有一段時間了。";
+			next;
+			mes .@npc_name$;
+			mes "現在我們已經達到了關鍵水平。";
+			next;
+			mes .@npc_name$;
+			mes "我別無選擇，只能搬到朱諾怪獸協會。";
+			next;
+			mes .@npc_name$;
+			mes "這就是我們將地圖檢查人員派往需要征服的每個區域的方式。";
+			close;
+		case 4:
+			mes .@npc_name$;
+			mes "再見";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "請殺死居住在這個領域的80個怪物。";
+		next;
+		mes .@npc_name$;
+		mes "一切都結束後請回到我身邊。";
+		close;
+	case 2:
+		getexp 166440,157920;
+		erasequest 3479;
+		setquest 3480;
+		mes .@npc_name$;
+		mes "我很高興您不受傷害回來。";
+		next;
+		mes .@npc_name$;
+		mes "我認為一段時間會很好。";
+		next;
+		mes .@npc_name$;
+		mes "我希望你也可以明天來。";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "BaseLevel >= 85 && checkquest(3479,HUNTING) == -1" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(3479,HUNTING) == 2" );
+	end;
+}
+
+ra_fild04,274,69,5	script	Map Examiner Sukumari#85	4_M_MOC_SOLDIER,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 86) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(8667,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		if (countitem(1000374) < 3) {
+			mes .@npc_name$;
+			mes "原則上，征服任務僅限於每天一次。";
+			mes "今天，休息一會兒，下次...";
+			close;
+		}
+		mes .@npc_name$;
+		mes "原則上，征服任務僅限於每天一次。";
+		mes "今天，休息一會兒，下次...";
+		next;
+		if (select( "I recommend " + .@item_name$ + "", "See you tomorrow" ) == 2) {
+			mes .@npc_name$;
+			mes "是的！明天見。";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 8667;
+		mes .@npc_name$;
+		mes "哦，這是我的最愛" + .@item_name$ + "!";
+		mes "我可以接受嗎？謝謝你！";
+		mes "踢敲踢...";
+		next;
+		specialeffect EF_FLASHER;
+		mes .@npc_name$;
+		mes "令人耳目一新！";
+		mes "凱哈~...";
+		mes "...";
+		mes "啊!冒險家！";
+		next;
+		mes .@npc_name$;
+		.@skip = true;
+		break;
+	case 2:
+		mes .@npc_name$;
+		mes "你好。你今天來了！";
+		erasequest 8667;
+		break;
+	}
+	switch( checkquest(8668,HUNTING) ) {
+	case -1:
+		if (!.@skip) {
+			mes .@npc_name$;
+			mes "你好。你今天來了！";
+		}
+		mes "我將怪物征服調查請求發送給經過這裡的冒險家，怎麼樣？";
+		mes "或者，如果您在附近，我們還支持傳送服務。";
+		next;
+		switch( select( "Subjugation Quest", "Move to a nearby city", "Stop" ) ) {
+		case 1:
+			mes .@npc_name$;
+			mes "如果您在這個Audumla Meadow中殺死了80個怪物，我可以看到這個領域，我們的社會將認識到您的成就並為您提供體驗。";
+			next;
+			if (select( "Accept", "Refuse" ) == 2) {
+				mes .@npc_name$;
+				mes "這是互惠互利的，所以為什麼拒絕...";
+				close;
+			}
+			setquest 8668;
+			mes .@npc_name$;
+			mes "我喜歡它，我喜歡它。";
+			mes "我將檢查這裡是否有足夠的人口控制。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "最近的地方是 ^0033ffrachel ^000000，";
+			mes "如果有" + .@item_name$ + ", please give me one... and I'll teleport you.";
+			mes "哈希~這幾天很受歡迎，但我不能去買。";
+			next;
+			if (select( "Give me 1 " + .@item_name$ + ", Rachel", "No" ) == 2) {
+				mes .@npc_name$;
+				mes "啊...那我該怎麼辦？";
+				mes "我什麼時候再試...";
+				close;
+			}
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "你似乎沒有" + .@item_name$ + "?";
+				mes "我站著...對不起。";
+				close;
+			}
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "rachel",113,136;
+			end;
+		case 3:
+			mes .@npc_name$;
+			mes "這是互惠互利的，所以為什麼拒絕...";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "請在這裡殺死80個怪物。";
+		mes "...是的？移動服務？";
+		next;
+		mes .@npc_name$;
+		mes "最近的地方是 ^0033ffrachel ^000000，";
+		mes "如果有" + .@item_name$ + ", please give me one... and I'll teleport you.";
+		mes "哈希~這幾天很受歡迎，但我不能去買。";
+		next;
+		if (select( "Give me 1 " + .@item_name$ + ", Rachel", "No" ) == 2) {
+			mes .@npc_name$;
+			mes "啊...那我該怎麼辦？";
+			mes "我什麼時候再試...";
+			close;
+		}
+		if (countitem(1000374) < 1) {
+			mes .@npc_name$;
+			mes "你似乎沒有" + .@item_name$ + "?";
+			mes "我站著...對不起。";
+			close;
+		}
+		delitem 1000374,1;	// Brilliant_Soda
+		warp "rachel",113,136;
+		end;
+	case 2:
+		mes .@npc_name$;
+		mes "啊，冒險家！我看到了你的表現足夠好。謝謝您的辛勤工作。";
+		next;
+		mes .@npc_name$;
+		mes "我認為正確的數量對任何事情都非常重要，對嗎？";
+		getexp 171420,162480;
+		erasequest 8668;
+		setquest 8667;
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 86 && checkquest(8668,HUNTING) == -1 && checkquest(8667,PLAYTIME) == -1" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8667,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8668,HUNTING) == 2" );
+
+	// (no questinfo when playtime ongoing)
+	end;
+}
+
+// note: all mobs increase the hunt count
+ve_fild07,158,354,3	script	Map Examiner Shevko#chevco	2_M_DYEINGER,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 86) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(3478,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "今天的請求已關閉。";
+		next;
+		mes .@npc_name$;
+		mes "明天我會再試一次，所以我會見你。";
+		next;
+		if (select( "Send " + .@item_name$ + ".", "Do not pass." ) == 2)
+			end;
+		if (countitem(1000374) < 3) {
+			mes "- 需要3" + .@item_name$ + ". - ";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 3478;
+		mes .@npc_name$;
+		mes "嗯？這是什麼？我先喝。";
+		next;
+		mes .@npc_name$;
+		mes "每個人！ / ämmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm_ish 沒有。";
+		next;
+		specialeffect EF_FLASHER;
+		mes .@npc_name$;
+		mes "唔！ ！ ！這是一個奇怪的味道，但這是...嗯...";
+		next;
+		mes .@npc_name$;
+		mes "…………";
+		next;
+		mes .@npc_name$;
+		mes "對不起，我睡了一段時間。我想我會很快就能感知到我的感官，所以請等待一會兒。";
+		close;
+	case 2:
+		erasequest 3478;
+		break;
+	}
+	switch( checkquest(3477,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "很高興認識您，我是Juno Monster Society的地圖審查員Shevko。";
+		next;
+		switch( select( "Receive a subjugation quest.", "Teleport to a nearby city.", "Ask about a subjugation quest.", "Come next." ) ) {
+		case 1:
+			mes .@npc_name$;
+			mes "您想收到征服任務嗎？";
+			next;
+			mes .@npc_name$;
+			mes "您只需要在我們目前所在的該領域殺死80個怪物即可。";
+			next;
+			setquest 3477;
+			mes .@npc_name$;
+			mes "那我祝你好運。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "最近的城市是靜脈。";
+			next;
+			mes .@npc_name$;
+			mes "如果你給我1" + .@item_name$ + ", I will move it right away.";
+			next;
+			if (select( "Move", "Do not move" ) == 2) {
+				mes .@npc_name$;
+				mes "如果您需要任何東西，請告訴我。";
+				close;
+			}
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "你沒有" + .@item_name$ + ".";
+				next;
+				mes .@npc_name$;
+				mes "傳送需要1" + .@item_name$ + ".";
+				close;
+			}
+			mes .@npc_name$;
+			mes "好吧，我們走。";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "veins",146,32;
+			end;
+		case 3:
+			mes .@npc_name$;
+			mes "在某個時候，居住在每個領域的怪物數量開始增加。";
+			next;
+			mes .@npc_name$;
+			mes "我知道怪物的數量逐漸增加，但這是由於沒有認真對待它的結果。";
+			next;
+			mes .@npc_name$;
+			mes "為了將其恢復為以前的州，朱諾怪獸協會已將地圖審查員派往各個地方。";
+			next;
+			mes .@npc_name$;
+			mes "我是那些地圖審查員之一，我正在等待征服勇敢的冒險家。";
+			close;
+		case 4:
+			mes .@npc_name$;
+			mes "祝你今天過得愉快";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "您只需要征服該區域中任何類型的80個怪物即可。";
+		next;
+		mes .@npc_name$;
+		mes "征服後，請不要忘記，讓我知道。";
+		close;
+	case 2:
+		getexp 148560,140040;
+		erasequest 3477;
+		setquest 3478;
+		mes .@npc_name$;
+		mes "你毫髮無損地回來...你一定是一個好人。";
+		next;
+		mes .@npc_name$;
+		mes "多虧了您，我能夠成功實現今天的征服目標，謝謝。";
+		next;
+		mes .@npc_name$;
+		mes "我希望明天可能會再次見到你。";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "BaseLevel >= 86 && checkquest(3477,HUNTING) == -1" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(3477,HUNTING) == 2" );
+	end;
+}
+
+ra_fild03,368,183,5	script	Map Examiner Lauren#85	4_M_MOC_SOLDIER,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 86) {
+		mes .@npc_name$;
+		mes "Juno Monsterthe社會正在征服任務。但是您看起來仍然有點虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(8664,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		if (countitem(1000374) < 3) {
+			mes .@npc_name$;
+			mes "原則上，征服任務僅限於每天一次。";
+			mes "今天，休息一會兒，下次...";
+			close;
+		}
+		mes .@npc_name$;
+		mes "原則上，征服任務僅限於每天一次。";
+		mes "今天，休息一會兒，下次...";
+		next;
+		if (select( "I recommend " + .@item_name$ + "", "See you tomorrow" ) == 2) {
+			mes .@npc_name$;
+			mes "是的！明天見。";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 8664;
+		mes .@npc_name$;
+		mes "哦，這是我的最愛" + .@item_name$ + "!";
+		mes "我可以接受嗎？謝謝你！";
+		mes "踢敲踢...";
+		next;
+		specialeffect EF_FLASHER;
+		mes .@npc_name$;
+		mes "呢";
+		mes "凱哈~...";
+		mes "...";
+		next;
+		mes .@npc_name$;
+		mes "啊，冒險家！我要求進行怪物征服調查，怎麼樣？";
+		.@skip = true;
+		break;
+	case 2:
+		erasequest 8664;
+		break;
+	}
+	switch( checkquest(8665,HUNTING) ) {
+	case -1:
+		if (!.@skip) {
+			mes .@npc_name$;
+			mes "你好。你今天來了！";
+			mes "我將怪物征服調查請求發送給經過這裡的冒險家，怎麼樣？";
+		}
+		mes "或者，如果您在附近，我們還支持傳送服務。";
+		next;
+		switch( select( "Subjugation Quest", "Move to a nearby city", "Stop" ) ) {
+		case 1:
+			mes .@npc_name$;
+			mes "Iida Plain，如果您在我可以看到的這一領域中殺死80個怪物，我們的社會將認識到您的成就並為您提供體驗。";
+			next;
+			if (select( "Accept", "Refuse" ) == 2) {
+				mes .@npc_name$;
+				mes "如果不能做...";
+				close;
+			}
+			setquest 8665;
+			mes .@npc_name$;
+			mes "我喜歡它，我喜歡它。";
+			mes "我將檢查這裡是否有足夠的人口控制。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "最近的地方是 ^0033ffrachel ^000000，";
+			mes "如果有" + .@item_name$ + ", please give me one... and I'll teleport you.";
+			mes "這是在這裡最可悲的事情。";
+			next;
+			if (select( "Give me 1 " + .@item_name$ + ", Rachel", "No" ) == 2) {
+				mes .@npc_name$;
+				mes "啊...那我該怎麼辦？";
+				close;
+			}
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "你似乎沒有" + .@item_name$ + "?";
+				close;
+			}
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "rachel",113,136;
+			end;
+		case 3:
+			mes .@npc_name$;
+			mes "這是互惠互利的，所以為什麼拒絕...";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "請在這裡殺死80個怪物。";
+		mes "...是的？移動服務？";
+		next;
+		mes .@npc_name$;
+		mes "最近的地方是 ^0033ffrachel ^000000，";
+		mes "如果有" + .@item_name$ + ", please give me one... and I'll teleport you.";
+		mes "哈希~這幾天很受歡迎，但我不能去買。";
+		next;
+		if (select( "Give me 1 " + .@item_name$ + ", Rachel", "No" ) == 2) {
+			mes .@npc_name$;
+			mes "啊...那我該怎麼辦？";
+			mes "我什麼時候再試...";
+			close;
+		}
+		if (countitem(1000374) < 1) {
+			mes .@npc_name$;
+			mes "你似乎沒有" + .@item_name$ + "?";
+			close;
+		}
+		delitem 1000374,1;	// Brilliant_Soda
+		warp "rachel",113,136;
+		end;
+	case 2:
+		mes .@npc_name$;
+		mes "啊，冒險家！我看到了你的表現足夠好。謝謝您的辛勤工作。";
+		next;
+		mes .@npc_name$;
+		mes "我認為正確的數量對任何事情都非常重要，對嗎？";
+		getexp 165480,156750;
+		erasequest 8665;
+		setquest 8664;
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 86 && checkquest(8665,HUNTING) == -1 && checkquest(8664,PLAYTIME) == -1" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8664,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8665,HUNTING) == 2" );
+
+	// (no questinfo when playtime ongoing)
+	end;
+}
+
+ra_fild05,48,356,5	script	Map Examiner Valenzela#85	4_M_MOC_SOLDIER,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 87) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(8670,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		if (countitem(1000374) < 3) {
+			mes .@npc_name$;
+			mes "原則上，征服任務僅限於每天一次。";
+			mes "今天，休息一會兒，下次...";
+			close;
+		}
+		mes .@npc_name$;
+		mes "原則上，征服任務僅限於每天一次。";
+		mes "今天，休息一會兒，下次...";
+		next;
+		if (select( "I recommend " + .@item_name$ + "", "See you tomorrow" ) == 2) {
+			mes .@npc_name$;
+			mes "是的！明天見。";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 8670;
+		mes .@npc_name$;
+		mes "哦，這是我的最愛" + .@item_name$ + "!";
+		mes "我可以接受嗎？謝謝你！";
+		mes "踢敲踢...";
+		next;
+		specialeffect EF_FLASHER;
+		mes .@npc_name$;
+		mes "令人耳目一新！";
+		mes "凱哈~...";
+		mes "...";
+		mes "啊!冒險家！";
+		next;
+		mes .@npc_name$;
+		.@skip = true;
+		break;
+	case 2:
+		erasequest 8670;
+		break;
+	}
+	switch( checkquest(8671,HUNTING) ) {
+	case -1:
+		if (!.@skip) {
+			mes .@npc_name$;
+			mes "你好。你今天來了！";
+		}
+		mes "我將怪物征服調查請求發送給經過這裡的冒險家，怎麼樣？";
+		mes "或者，如果您在附近，我們還支持傳送服務。";
+		next;
+		switch( select( "Subjugation Quest", "Move to a nearby city", "Stop" ) ) {
+		case 1:
+			mes .@npc_name$;
+			mes "如果您在這個Audumla Meadow中殺死了80個怪物，我可以看到這個領域，我們的社會將認識到您的成就並為您提供體驗。";
+			next;
+			if (select( "Accept", "Refuse" ) == 2) {
+				mes .@npc_name$;
+				mes "這是互惠互利的，所以為什麼拒絕...";
+				close;
+			}
+			setquest 8671;
+			mes .@npc_name$;
+			mes "我喜歡它，我喜歡它。";
+			mes "我將檢查這裡是否有足夠的人口控制。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "最近的地方是 ^0033ffrachel ^000000，";
+			mes "如果有" + .@item_name$ + ", please give me one... and I'll teleport you.";
+			mes "哈希~這幾天很受歡迎，但我不能去買。";
+			next;
+			if (select( "Give me 1 " + .@item_name$ + ", Rachel", "No" ) == 2) {
+				mes .@npc_name$;
+				mes "啊...那我該怎麼辦？";
+				mes "我什麼時候再試...";
+				close;
+			}
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "你似乎沒有" + .@item_name$ + "?";
+				mes "我站著...對不起。";
+				close;
+			}
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "rachel",113,136;
+			end;
+		case 3:
+			mes .@npc_name$;
+			mes "這是互惠互利的，所以為什麼拒絕...";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "請在這裡殺死80個怪物。";
+		mes "...是的？移動服務？";
+		next;
+		mes .@npc_name$;
+		mes "最近的地方是 ^0033ffrachel ^000000，";
+		mes "如果有" + .@item_name$ + ", please give me one... and I'll teleport you.";
+		mes "哈希~這幾天很受歡迎，但我不能去買。";
+		next;
+		if (select( "Give me 1 " + .@item_name$ + ", Rachel", "No" ) == 2) {
+			mes .@npc_name$;
+			mes "啊...那我該怎麼辦？";
+			mes "我什麼時候再試...";
+			close;
+		}
+		if (countitem(1000374) < 1) {
+			mes .@npc_name$;
+			mes "你似乎沒有" + .@item_name$ + "?";
+			mes "我站著...對不起。";
+			close;
+		}
+		delitem 1000374,1;	// Brilliant_Soda
+		warp "rachel",113,136;
+		end;
+	case 2:
+		mes .@npc_name$;
+		mes "啊，冒險家！我看到了你的表現足夠好。謝謝您的辛勤工作。";
+		next;
+		mes .@npc_name$;
+		mes "我認為正確的數量對任何事情都非常重要，對嗎？";
+		getexp 187410,178020;
+		erasequest 8671;
+		setquest 8670;
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 87 && checkquest(8671,HUNTING) == -1 && checkquest(8670,PLAYTIME) == -1" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8670,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8671,HUNTING) == 2" );
+
+	// (no questinfo when playtime ongoing)
+	end;
+}
+
+ra_fild01,224,319,5	script	Map Examiner Ciara#85	4_M_MOC_SOLDIER,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 88) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(8661,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		if (countitem(1000374) < 3) {
+			mes .@npc_name$;
+			mes "冒險家，這裡很危險。";
+			mes "我不知道我的生活不值得...";
+			close;
+		}
+		mes .@npc_name$;
+		mes "原則上，征服任務僅限於每天一次。";
+		mes "今天，休息一會兒，下次...";
+		next;
+		if (select( "I recommend " + .@item_name$ + "", "See you tomorrow" ) == 2) {
+			mes .@npc_name$;
+			mes "是的！明天見。";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 8661;
+		mes .@npc_name$;
+		mes "哦，這是我的最愛" + .@item_name$ + "!";
+		mes "我可以接受嗎？謝謝你！";
+		mes "踢敲踢...";
+		next;
+		specialeffect EF_FLASHER;
+		mes .@npc_name$;
+		mes "令人耳目一新！";
+		mes "凱哈~...";
+		mes "...";
+		mes "啊!冒險家！";
+		next;
+		mes .@npc_name$;
+		mes "真的很好。我們問冒險家，他們經過這裡調查怪物征服，怎麼樣？";
+		.@skip = true;
+		break;
+	case 2:
+		erasequest 8661;
+		break;
+	}
+	switch( checkquest(8662,HUNTING) ) {
+	case -1:
+		if (!.@skip) {
+			mes .@npc_name$;
+			mes "你好。你今天來了！";
+			mes "我將怪物征服調查請求發送給經過這裡的冒險家，怎麼樣？";
+		}
+		mes "或者，如果您在附近，我們還支持傳送服務。";
+		next;
+		switch( select( "Subjugation Quest", "Move to a nearby city", "Stop" ) ) {
+		case 1:
+			mes .@npc_name$;
+			mes "如果您在這個Audumla Meadow中殺死了80個怪物，我可以看到這個領域，我們的社會將認識到您的成就並為您提供體驗。";
+			next;
+			if (select( "Accept", "Refuse" ) == 2) {
+				mes .@npc_name$;
+				mes "這是互惠互利的，所以為什麼拒絕...";
+				close;
+			}
+			setquest 8662;
+			mes .@npc_name$;
+			mes "我喜歡它，我喜歡它。";
+			mes "我將檢查這裡是否有足夠的人口控制。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "最近的地方是 ^0033ffrachel ^000000，";
+			mes "如果有" + .@item_name$ + ", please give me one... and I'll teleport you.";
+			mes "哈希~這幾天很受歡迎，但我不能去買。";
+			next;
+			if (select( "Give me 1 " + .@item_name$ + ", Rachel", "No" ) == 2) {
+				mes .@npc_name$;
+				mes "哦...那我該怎麼辦？不。";
+				mes "我什麼時候再試...";
+				close;
+			}
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "你似乎沒有" + .@item_name$ + "?";
+				mes "我站著...對不起。";
+				close;
+			}
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "rachel",113,136;
+			end;
+		case 3:
+			mes .@npc_name$;
+			mes "這是互惠互利的，所以為什麼拒絕...";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "請在這裡殺死80個怪物。";
+		mes "...是的？移動服務？";
+		next;
+		mes .@npc_name$;
+		mes "最近的地方是 ^0033ffrachel ^000000，";
+		mes "如果有" + .@item_name$ + ", please give me one... and I'll teleport you.";
+		mes "哈希~這幾天很受歡迎，但我不能去買。";
+		next;
+		if (select( "Give me 1 " + .@item_name$ + ", Rachel", "No" ) == 2) {
+			mes .@npc_name$;
+			mes "啊...那我該怎麼辦？";
+			mes "我什麼時候再試...";
+			close;
+		}
+		if (countitem(1000374) < 1) {
+			mes .@npc_name$;
+			mes "你似乎沒有" + .@item_name$ + "?";
+			mes "我站著...對不起。";
+			close;
+		}
+		delitem 1000374,1;	// Brilliant_Soda
+		warp "rachel",113,136;
+		end;
+	case 2:
+		mes .@npc_name$;
+		mes "啊，冒險家！我看到了你的表現足夠好。謝謝您的辛勤工作。";
+		next;
+		mes .@npc_name$;
+		mes "我認為正確的數量對任何事情都非常重要，對嗎？";
+		getexp 166760,157960;
+		erasequest 8662;
+		setquest 8661;
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 88 && checkquest(8662,HUNTING) == -1 && checkquest(8661,PLAYTIME) == -1" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8661,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8662,HUNTING) == 2" );
+
+	// (no questinfo when playtime ongoing)
+	end;
+}
+
+// note: all mobs increase the hunt count
+ve_fild01,354,280,3	script	Map Examiner Yirun Seo#suiroon	4_F_SISTER,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 90) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(3482,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "啊，這足以容納今天的征服！";
+		next;
+		mes .@npc_name$;
+		mes "如果您明天再來並幫助征服怪物，我將不勝感激！ ！";
+		next;
+		if (select( "Send " + .@item_name$ + ".", "Do not pass." ) == 2)
+			end;
+		if (countitem(1000374) < 3) {
+			mes "- 需要3" + .@item_name$ + ". - ";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 3482;
+		mes .@npc_name$;
+		mes "啊~!!非常感謝你~當時我非常口渴~";
+		next;
+		mes .@npc_name$;
+		mes "咕嚕~咕嚕~~~";
+		next;
+		specialeffect EF_FLASHER;
+		mes .@npc_name$;
+		mes "嗯...這種強烈的風味...！";
+		next;
+		mes .@npc_name$;
+		mes "嗯..你是我的新手，等一下。我也要喝一些，所以一分鐘後你能和我說話嗎？";
+		close;
+	case 2:
+		erasequest 3482;
+		break;
+	}
+	switch( checkquest(3481,HUNTING) ) {
+	case -1:
+		mes .@npc_name$;
+		mes "你好！ ！我叫Irun Seo，是朱諾怪獸協會（Juno Monster Society）派遣的地圖審查員！";
+		next;
+		switch( select( "Receive a subjugation quest.", "Teleport to a nearby city.", "Ask about a subjugation quest.", "Come next." ) ) {
+		case 1:
+			mes .@npc_name$;
+			mes "哦，您想要佣金嗎？";
+			next;
+			mes .@npc_name$;
+			mes "您只需要在我所在的這個領域殺死80個怪物即可。";
+			next;
+			setquest 3481;
+			mes .@npc_name$;
+			mes "那我會等你，希望你安全回來。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "最近的城市是Einbroch！";
+			next;
+			mes .@npc_name$;
+			mes "如果你給我一個" + .@item_name$ + ", I will send it right away!";
+			next;
+			if (select( "Move", "Do not move" ) == 2) {
+				mes .@npc_name$;
+				mes "是的，請告訴我您是否需要傳送！ ！";
+				close;
+			}
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "嘿，你沒有" + .@item_name$ + "~";
+				next;
+				mes .@npc_name$;
+				mes "傳送需要1" + .@item_name$ + ".";
+				close;
+			}
+			mes .@npc_name$;
+			mes "是的！那我們會搬你！";
+			close2;
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "veins",146,32;
+			end;
+		case 3:
+			mes .@npc_name$;
+			mes "有時候，發現了擴大的怪物殖民地現象。";
+			next;
+			mes .@npc_name$;
+			mes "有一次，征服被積極進行，但是如今，由於有些忽視，這可以看出。";
+			next;
+			mes .@npc_name$;
+			mes "如果這種現象繼續存在，那是危險的，因此朱諾怪獸協會決定進行全面的征服。";
+			next;
+			mes .@npc_name$;
+			mes "這意味著通過將地圖檢查員放置在需要征服的每個區域中來進行征服！";
+			close;
+		case 4:
+			mes .@npc_name$;
+			mes "啊，你要去哪裡？";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "您只需要征服該區域中任何類型的80個怪物即可。";
+		next;
+		mes .@npc_name$;
+		mes "征服後，來找我並獲得您的回報！";
+		close;
+	case 2:
+		getexp 209440,157920;
+		erasequest 3481;
+		setquest 3482;
+		mes .@npc_name$;
+		mes "你安全回來了！";
+		next;
+		mes .@npc_name$;
+		mes "我幾乎沒有實現這樣的目標...";
+		next;
+		mes .@npc_name$;
+		mes "如果您負擔得起明天，請再來！";
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "BaseLevel >= 90 && checkquest(3481,HUNTING) == -1 && checkquest(3482,PLAYTIME) == -1" );
+	questinfo( QTYPE_QUEST, QMARK_YELLOW, "checkquest(3482,PLAYTIME) == 2" );
+	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(3481,HUNTING) == 2" );
+
+	// (no questinfo when playtime ongoing)
+	end;
+}
+
+ve_fild04,52,242,5	script	Map Examiner Rana#85	4_M_MOC_SOLDIER,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 90) {
+		mes .@npc_name$;
+		mes "冒險家，這裡很危險。";
+		mes "我不知道我的生活不值得...";
+		close;
+	}
+	switch( checkquest(8676,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		if (countitem(1000374) < 3) {
+			mes .@npc_name$;
+			mes "原則上，征服任務僅限於每天一次。";
+			mes "今天，休息一會兒，下次...";
+			close;
+		}
+		mes .@npc_name$;
+		mes "原則上，征服任務僅限於每天一次。";
+		mes "今天，休息一會兒，下次...";
+		next;
+		if (select( "I recommend " + .@item_name$ + "", "See you tomorrow" ) == 2) {
+			mes .@npc_name$;
+			mes "是的！明天見。";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 8676;
+		mes .@npc_name$;
+		mes "哦，這是我的最愛" + .@item_name$ + "!";
+		mes "我可以接受嗎？謝謝你！";
+		mes "踢敲踢...";
+		next;
+		specialeffect EF_FLASHER;
+		mes .@npc_name$;
+		mes "令人耳目一新！";
+		mes "...";
+		mes "啊!冒險家！";
+		next;
+		mes .@npc_name$;
+		mes "我將怪物征服調查請求發送給經過這裡的冒險家，怎麼樣？";
+		callsub( S_Quest, 8677, 2 );	// no text
+	case 2:
+		erasequest 8676;
+		break;
+	}
+	if (isbegin_quest(8675) < 2) {
+		switch( checkquest(8675,HUNTING) ) {	// first time
+		case -1:
+			callsub( S_Quest, 8675, 0 );
+		case 0:
+		case 1:
+			mes .@npc_name$;
+			mes "請在這裡殺死80個怪物。";
+			mes "...是的？移動服務？";
+			next;
+			callsub( S_Warp );
+		case 2:
+			mes .@npc_name$;
+			mes "啊，冒險家！我看到了你的表現足夠好。謝謝您的辛勤工作。";
+			getexp 188600,173200;
+			completequest 8675;
+			setquest 8676;
+			close;
+		}
+	}
+	switch( checkquest(8677,HUNTING) ) {
+	case -1:
+		callsub( S_Quest, 8677, 1 );
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "請在這裡殺死80個怪物。";
+		mes "...是的？移動服務？";
+		next;
+		callsub( S_Warp );
+	case 2:
+		mes .@npc_name$;
+		mes "啊，冒險家！我看到了你的表現足夠好。謝謝您的辛勤工作。";
+		getexp 188600,173200;
+		erasequest 8677;
+		setquest 8676;
+		close;
+	}
+	end;
+
+S_Quest:
+	.@quest_id = getarg(0);
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+
+	switch( getarg(1) ) {
+	case 0:	// quest 8675
+		mes .@npc_name$;
+		mes "你好。這是朱諾怪獸協會的蘭亞。";
+		mes "我要求冒險家調查怪物征服，您感覺如何？";
+		break;
+	case 1:	// quest 8677
+		mes .@npc_name$;
+		mes "你好。你今天在這裡！";
+		mes "我要求從這裡經過的冒險家的怪物征服調查。如何？";
+		break;
+	case 2:	// quest 8677 but no text
+		break;
+	}
+	mes "或者，如果您在附近，我們還支持傳送服務。";
+	next;
+	switch( select( "Listen to the situation", "Move to a nearby city", "Stop" ) ) {
+	case 1:
+		if (.@quest_id == 8675) {
+			mes .@npc_name$;
+			mes "最近，包括該地區在內的某些地區的怪物數量正在增加。";
+			mes "我認為原因是人比以前更少...";
+			next;
+			mes .@npc_name$;
+			mes "這已經意味著您無法自然控制對象。";
+			mes "為了防止進一步的殖民化擴大，我們的朱諾怪獸協會計劃了大規模的征服。";
+			next;
+			mes .@npc_name$;
+			mes "不管有多少冒險家訪問，如果您到人們居住的地方，這都是很大的...";
+			mes "那麼，我可以請你征服我嗎？";
+			next;
+		}
+		mes .@npc_name$;
+		mes "如果您在這個靜脈領域殺死了80個怪物，那麼我可以看到的這個領域，我們的社會將認識到您的成就並為您提供體驗。";
+		next;
+		if (select( "Accept", "Refuse" ) == 2) {
+			mes .@npc_name$;
+			mes "這是互惠互利的，所以為什麼拒絕...";
+			close;
+		}
+		setquest .@quest_id;
+		mes .@npc_name$;
+		mes "好的。我在這裡等。";
+		close;
+	case 2:
+		callsub( S_Warp );
+	case 3:
+		mes .@npc_name$;
+		mes "這是互惠互利的，所以為什麼拒絕...";
+		close;
+	}
+	end;
+
+S_Warp:
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	mes .@npc_name$;
+	mes "最近的地方是 ^0033ffveins ^000000，";
+	mes "如果有" + .@item_name$ + ", please give me one... and I'll teleport you.";
+	next;
+	if (select( "Give me 1 " + .@item_name$ + " with Veins", "No" ) == 2) {
+		mes .@npc_name$;
+		mes "啊...那我該怎麼辦？";
+		close;
+	}
+	if (countitem(1000374) < 1) {
+		mes .@npc_name$;
+		mes "你似乎沒有" + .@item_name$ + "?";
+		close;
+	}
+	delitem 1000374,1;	// Brilliant_Soda
+	warp "veins",208,124;
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 90 && checkquest(8675,HUNTING) == -1" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "isbegin_quest(8675) == 2 && checkquest(8677,HUNTING) == -1 && checkquest(8676,PLAYTIME) == -1" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8676,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8675,HUNTING) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8677,HUNTING) == 2" );
+
+	// (no questinfo when playtime ongoing)
+	end;
+}
+
+ra_fild06,292,39,5	script	Map Examiner Kantu#85	4_M_MOC_SOLDIER,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 93) {
+		mes .@npc_name$;
+		mes "Juno Monster Society正在征服任務。但是您似乎仍然有些虛弱，無法執行任務。";
+		close;
+	}
+	switch( checkquest(8673,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		if (countitem(1000374) < 3) {
+			mes .@npc_name$;
+			mes "原則上，征服任務僅限於每天一次。";
+			mes "今天，休息一會兒，下次...";
+			close;
+		}
+		mes .@npc_name$;
+		mes "原則上，征服任務僅限於每天一次。";
+		mes "今天，休息一會兒，下次...";
+		next;
+		if (select( "I recommend " + .@item_name$ + "", "See you tomorrow" ) == 2) {
+			mes .@npc_name$;
+			mes "是的！明天見。";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 8673;
+		mes .@npc_name$;
+		mes "哦，這是我的最愛" + .@item_name$ + "!";
+		mes "我可以接受嗎？謝謝你！";
+		next;
+		specialeffect EF_FLASHER;
+		mes .@npc_name$;
+		mes "令人耳目一新！";
+		mes "凱哈~...";
+		next;
+		mes .@npc_name$;
+		mes "啊，冒險家。我今天要接受怪物征服調查請求，怎麼樣？";
+		.@skip = true;
+		break;
+	case 2:
+		erasequest 8673;
+		break;
+	}
+	if (isbegin_quest(8672) == 2)
+		.@quest_id = 8674;
+	else
+		.@quest_id = 8672;
+
+	switch( checkquest(.@quest_id,HUNTING) ) {
+	case -1:
+		if (!.@skip) {
+			mes .@npc_name$;
+			mes "你好，冒險家！我是朱諾怪獸協會的Kantu。";
+			mes "我要求冒險家調查怪物征服，您感覺如何？";
+			next;
+			mes .@npc_name$;
+		}
+		mes "或者，如果您在附近，我們將為您提供傳送服務。";
+		next;
+		switch( select( "Listen to the situation", "Move to a nearby city", "Stop" ) ) {
+		case 1:
+			if (.@quest_id == 8672) {
+				mes .@npc_name$;
+				mes "最近，包括該地區在內的某些地區的怪物數量正在增加。";
+				mes "這已經意味著您無法自然控制對象。";
+				next;
+				mes .@npc_name$;
+				mes "為了防止進一步的殖民化擴大，我們的朱諾怪獸協會計劃了大規模的征服。";
+				mes "不管有多少冒險家訪問，如果您到人們居住的地方，這都是很大的...";
+				next;
+			}
+			mes .@npc_name$;
+			mes "那麼，我可以請你征服我嗎？";
+			mes "這個Porto Luna，如果您在我看到的這一領域中殺死80個怪物，我們的社會將認識到您的成就並為您提供體驗。";
+			next;
+			if (select( "Accept", "Refuse" ) == 2) {
+				mes .@npc_name$;
+				mes "啊...你能幫我們嗎？";
+				close;
+			}
+			setquest .@quest_id;
+			mes .@npc_name$;
+			mes "是的，我已經註冊了！";
+			mes "我將檢查人口是否在這裡進行。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "最近的地方是 ^0033ffrachel ^000000，";
+			mes "如果有" + .@item_name$ + ", please give me one... and I'll teleport you.";
+			mes "哈希~這幾天很受歡迎，但我不能去買。";
+			next;
+			if (select( "Give me 1 " + .@item_name$ + ", Rachel", "No" ) == 2) {
+				mes .@npc_name$;
+				mes "我無能為力。";
+				close;
+			}
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "你似乎沒有" + .@item_name$ + "?";
+				mes "我站著...對不起。";
+				close;
+			}
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "rachel",113,136;
+			end;
+		case 3:
+			mes .@npc_name$;
+			mes "啊...請幫助我們...";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "請在這裡殺死80個怪物。";
+		mes "...是的？移動服務？";
+		next;
+		mes .@npc_name$;
+		mes "最近的地方是 ^0033ffrachel ^000000，";
+		mes "如果有" + .@item_name$ + ", please give me one... and I'll teleport you.";
+		next;
+		if (select( "Give me 1 " + .@item_name$ + ", Rachel", "No" ) == 2) {
+			mes .@npc_name$;
+			mes "我無能為力。";
+			close;
+		}
+		if (countitem(1000374) < 1) {
+			mes .@npc_name$;
+			mes "你似乎沒有" + .@item_name$ + "?";
+			mes "我站著...對不起。";
+			close;
+		}
+		delitem 1000374,1;	// Brilliant_Soda
+		warp "rachel",113,136;
+		end;
+	case 2:
+		mes .@npc_name$;
+		mes "你好，冒險家！我是朱諾怪獸協會的Kantu。";
+		mes "我要求冒險家調查怪物征服，您感覺如何？";
+		next;
+		getexp 194712,185136;
+		mes .@npc_name$;
+		mes "啊，冒險家！我看到了你的表現足夠好。謝謝您的辛勤工作。";
+		if (.@quest_id == 8672)
+			completequest 8672;
+		else
+			erasequest 8674;
+		setquest 8673;
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 93 && checkquest(8672,HUNTING) == -1 && checkquest(8673,PLAYTIME) == -1" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "isbegin_quest(8672) == 2 && checkquest(8674,HUNTING) == -1 && checkquest(8673,PLAYTIME) == -1" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8673,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8672,HUNTING) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8674,HUNTING) == 2" );
+	end;
+}
+
+ve_fild03,348,230,5	script	Map Examiner Dew#85	4_M_MOC_SOLDIER,{
+	.@npc_name$ = "[" + strnpcinfo(1) + "]";
+	.@item_name$ = getitemname(1000374);
+
+	if (BaseLevel < 95) {
+		mes .@npc_name$;
+		mes "冒險家，這裡很危險。";
+		mes "我不知道我的生活不值得...";
+		close;
+	}
+	switch( checkquest(8679,PLAYTIME) ) {
+	case -1:
+		break;
+	case 0:
+	case 1:
+		if (countitem(1000374) < 3) {
+			mes .@npc_name$;
+			mes "原則上，征服任務僅限於每天一次。";
+			mes "今天，休息一會兒，下次...";
+			close;
+		}
+		mes .@npc_name$;
+		mes "原則上，征服任務僅限於每天一次。";
+		mes "今天，休息一會兒，下次...";
+		next;
+		if (select( "I recommend " + .@item_name$ + "", "See you tomorrow" ) == 2) {
+			mes .@npc_name$;
+			mes "是的！明天見。";
+			close;
+		}
+		delitem 1000374,3;	// Brilliant_Soda
+		erasequest 8679;
+		mes .@npc_name$;
+		mes "哦，這是我的最愛" + .@item_name$ + "!";
+		mes "我可以接受嗎？謝謝你！";
+		mes "踢敲踢...";
+		next;
+		specialeffect EF_FLASHER;
+		mes .@npc_name$;
+		mes "令人耳目一新！";
+		mes "〜...";
+		next;
+		mes .@npc_name$;
+		mes "我要求冒險家調查怪物征服，您感覺如何？";
+		.@skip = true;
+		break;
+	case 2:
+		erasequest 8679;
+		break;
+	}
+	switch( checkquest(8680,HUNTING) ) {
+	case -1:
+		if (!.@skip) {
+			mes .@npc_name$;
+			mes "你好。你今天來了！";
+			mes "我將怪物征服調查請求發送給經過這裡的冒險家，怎麼樣？";
+		}
+		mes "或者，如果您在附近，我們還支持傳送服務。";
+		next;
+		switch( select( "Subjugation Quest", "Move to a nearby city", "Stop" ) ) {
+		case 1:
+			mes .@npc_name$;
+			mes "如果您在這個靜脈領域殺死了80個怪物，那麼我可以看到的這個領域，我們的社會將認識到您的成就並為您提供體驗。";
+			next;
+			if (select( "Accept", "Refuse" ) == 2) {
+				mes .@npc_name$;
+				mes "對不起";
+				close;
+			}
+			setquest 8680;
+			mes .@npc_name$;
+			mes "好的。";
+			mes "我正在檢查這裡是否在這裡控制人口。";
+			close;
+		case 2:
+			mes .@npc_name$;
+			mes "最近的地方是 ^0033ff靜脈 ^000000，";
+			mes "如果有" + .@item_name$ + ", please give me one... and I'll teleport you.";
+			next;
+			if (select( "Give me 1 " + .@item_name$ + " with Veins", "No" ) == 2) {
+				mes .@npc_name$;
+				mes "啊...那我該怎麼辦？";
+				close;
+			}
+			if (countitem(1000374) < 1) {
+				mes .@npc_name$;
+				mes "你似乎沒有" + .@item_name$ + "?";
+				close;
+			}
+			delitem 1000374,1;	// Brilliant_Soda
+			warp "veins",208,124;
+			end;
+		case 3:
+			mes .@npc_name$;
+			mes "對不起";
+			close;
+		}
+		end;
+	case 0:
+	case 1:
+		mes .@npc_name$;
+		mes "請在這裡殺死80個怪物。";
+		mes "...是的？移動服務？";
+		next;
+		mes .@npc_name$;
+		mes "最近的地方是 ^0033ffveins ^000000，";
+		mes "如果有" + .@item_name$ + ", please give me one... and I'll teleport you.";
+		mes "哈希~這幾天很受歡迎，但我不能去買。";
+		next;
+		if (select( "Give me 1 " + .@item_name$ + " with Veins", "No" ) == 2) {
+			mes .@npc_name$;
+			mes "啊...那我該怎麼辦？";
+			close;
+		}
+		if (countitem(1000374) < 1) {
+			mes .@npc_name$;
+			mes "你似乎沒有" + .@item_name$ + "?";
+			close;
+		}
+		delitem 1000374,1;	// Brilliant_Soda
+		warp "veins",208,124;
+		end;
+	case 2:
+		mes .@npc_name$;
+		mes "啊，冒險家！我看到了你的表現足夠好。謝謝您的辛勤工作。";
+		next;
+		mes .@npc_name$;
+		mes "我認為正確的數量對任何事情都非常重要，對嗎？";
+		erasequest 8680;
+		setquest 8679;
+		getexp 209440,193440;
+		close;
+	}
+	end;
+
+OnInit:
+	setunittitle getnpcid(0), "<Juno Monster Society>";
+
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "BaseLevel >= 95 && checkquest(8680,HUNTING) == -1 && checkquest(8679,PLAYTIME) == -1" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8679,PLAYTIME) == 2" );
+	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(8680,HUNTING) == 2" );
+	end;
+}

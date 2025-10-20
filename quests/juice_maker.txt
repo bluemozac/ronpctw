@@ -1,0 +1,349 @@
+﻿//===== rAthena Script =======================================
+//= Juice Maker Quest
+//===== By: ==================================================
+//= kobra_k88
+//===== Current Version: =====================================
+//= 2.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Learn where to turn apples, bananas, carrots, and grapes
+//= into juice.
+//= Condition if done: (MISC_QUEST & 1)
+//===== Additional Comments: =================================
+//= 1.9 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//=     Added tracking variables in, which are unset when complete.
+//= 2.0 Added missing checkweight. [L0ne_W0lf]
+//= 2.1 Fixed dialog for if your missing the needed items (He always said the dialog for grape juice). [Kisuka]
+//============================================================
+
+prt_in,49,172,3	script	Marianne#juice	53,{
+	if ((MISC_QUEST&1) || morison_meat == 15) {
+		mes "[家庭主婦瑪麗安]";
+		mes "哇...！";
+		mes "不過，除非是肉，否則他不會吃任何東西。但是，如果切割的話，也許他會吃水果，以便容易吃。就像，如果將其融合到果汁中...";
+		next;
+		set mother_marienu,0;
+		set morison_meat,0;
+		set MISC_QUEST,MISC_QUEST | 1;
+		mes "[家庭主婦瑪麗安]";
+		mes "啊!想一想，我聽說他們在某個地方生產果汁。現在在哪裡... Payon Village或Morocc？";
+		close;
+	}
+	if (mother_marienu == 1) {
+		mes "[家庭主婦瑪麗安]";
+		mes "莫里森！吃一些水果！長大後，您不想成為一頭肥大的肥豬，對嗎？";
+		next;
+		if (select("談話:取消") == 1) {
+			mes "[家庭主婦瑪麗安]";
+			mes "嗯？ ...你！";
+			mes "你是那個給我的小莫里森的人嗎？你來這里以為我不知道嗎？";
+			next;
+			mes "[家庭主婦瑪麗安]";
+			mes "走開，現在離開我的房子！";
+			close;
+		}
+		mes "[家庭主婦瑪麗安]";
+		mes "莫里森！如果您繼續這樣做，我會非常生氣！";
+		close;
+	}
+	if (morison_meat > 0) {
+		set mother_marienu,1;
+		mes "[家庭主婦瑪麗安]";
+		mes "哦!! ....這個...";
+		mes "這是什麼...？";
+		mes "你怎麼能對我的男孩做這樣的事情？";
+		next;
+		mes "[家庭主婦瑪麗安]";
+		mes "arg！這瞬間就離開我家！";
+		close;
+	}
+	mes "[家庭主婦瑪麗安]";
+	mes "莫里森！請吃一些水果！請~！";
+	next;
+	mes "[家庭主婦碼頭]";
+	mes "嘆氣~!!像父親一樣，像兒子...";
+	next;
+	switch(select("談話:取消")) {
+		mes "[家庭主婦瑪麗安]";
+		mes "*嘆*...這是莫里森...";
+		mes "我的唯一兒子。";
+		next;
+		mes "[家庭主婦瑪麗安]";
+		mes "但是這些天，他只是不會吃水果。他的臉太乏味了，因為他拒絕健康。他只想吃肉。我需要找到一種方法來餵他水果或蔬菜。";
+		close;
+	}
+	mes "[家庭主婦瑪麗安]";
+	mes "莫里森！如果您堅持下去，您將遇到大麻煩！";
+	close;
+}
+
+prt_in,47,173,3	script	Morrison#juice	97,{
+	if ((MISC_QUEST&1) || morison_meat == 15) {
+		mes "[小莫里森]";
+		mes "Bleh ...算了。";
+		mes "我只是要吃水果就枯萎了。不要擔心我。";
+		close;
+	}
+	if (morison_meat > 9) {
+		mes "[小莫里森]";
+		mes "啊...好~";
+		mes "我想我現在可以生活。";
+		mes "您不必再給我更多的肉。我覺得如果我再吃了，我會爆炸。";
+		if (morison_meat == 10) {
+			next;
+			set morison_meat,morison_meat+1;
+			mes "[小莫里森]";
+			mes "哦...而且...嗯。";
+			mes "接受這個。";
+			next;
+			mes "[小莫里森]";
+			mes "以後我一直在吃一些東西，但是由於您給了我肉，我想我可以傳遞糖果。";
+			close;
+			getitem 529,3; //Candy
+			getitem 530,1; //Candy_Striper
+		}
+		close;
+	}
+	mes "[小莫里森]";
+	mes "agh ....不！";
+	mes "不，不要讓我吃！我不能忍受品嚐水果！";
+	next;
+	if (countitem(517) > 0) {
+		switch(select("談話:展示肉:取消")) {
+		case 1:
+			mes "[小莫里森]";
+			mes "aaaagh！一次或兩次就足夠了！ ！我拒絕吃更多的水果！您必須剝去它們，有太多果汁，以至於您感到很奇怪...";
+			next;
+			mes "[小莫里森]";
+			mes "而且它們都是濕滑和酸的...即使我吃了，我仍然感到飢餓。 aaaah~！給我肉！";
+			close;
+		case 2:
+			mes "[小莫里森]";
+			mes "哦！ m-meaaat~";
+			mes "啊... hu ...餓...";
+			mes "肉的氣味...";
+			mes "打擾一下...";
+			mes "我有一個嗎？";
+			next;
+			if (select("給肉:不給肉") == 1) {
+				delitem 517,1; //Meat
+				set morison_meat,morison_meat+1;
+				mes "[小莫里森]";
+				mes "哇~!!!肉！ ！";
+				mes "好吃！";
+				mes "謝謝你，";
+				mes "我想我可以";
+				mes "現在活著。";
+				mes "*咀嚼*";
+				close;
+			}
+			set morison_meat,15;
+			mes "[小莫里森]";
+			mes "哇...！";
+			mes "很好，我現在明白了。";
+			mes "成人都是一樣的！";
+			close;
+		case 3:
+			mes "[小莫里森]";
+			mes "aaaaah！無論如何，我不會吃水果和蔬菜！";
+			close;
+		}
+	}
+	if (select("談話:取消") == 1) {
+		mes "[小莫里森]";
+		mes "aaah！我不能再吃水果了！";
+		next;
+		mes "[小莫里森]";
+		mes "我拒絕吃更多的水果！您必須剝去它們，有太多果汁，以至於您感到很奇怪...";
+		next;
+		mes "[小莫里森]";
+		mes "而且它們都是濕滑和酸的...即使我吃了，我仍然感到飢餓。";
+		mes "啊啊啊~！";
+		mes "給我肉！";
+		close;
+	}
+	mes "[小莫里森]";
+	mes "aaaaah！無論如何，我不會吃水果和蔬菜！";
+	close;
+}
+
+payon_in03,188,146,5	script	Marx Hansen#juice	86,{
+	if (checkweight(1201,1) == 0) {
+		mes "- 稍等！ -";
+		mes "- 目前您正在攜帶 -";
+		mes "- 與您在一起太多。 -";
+		mes "- 請稍後再回來 -";
+		mes "- 將一些項目放入KAFRA存儲後。 -";
+		close;
+	}
+	if (MISC_QUEST&1) {
+		mes "[商人馬克思·漢森]";
+		mes "歡迎。";
+		mes "你來了嗎";
+		mes "處理水果嗎？";
+		next;
+		switch(select("製作果汁。 :交談並獲取有關水果加工的信息。 :取消。")) {
+		case 1:
+			mes "[商人馬克思·漢森]";
+			mes "您想製造哪種果汁？";
+			next;
+			switch(select("蘋果汁:香蕉汁:胡蘿蔔汁:葡萄汁:取消")) {
+			case 1:
+				set .@fruit,512;
+				set .@juice,531;
+				break;
+			case 2:
+				set .@fruit,513;
+				set .@juice,532;
+				break;
+			case 3:
+				set .@fruit,515;
+				set .@juice,534;
+				break;
+			case 4:
+				set .@fruit,514;
+				set .@juice,533;
+				break;
+			case 5:
+				mes "[商人馬克思·漢森]";
+				mes "好吧...";
+				mes "下次見。";
+				close;
+			}
+			if (countitem(.@fruit) == 0 || countitem(713) == 0 || Zeny < 3) {
+				mes "[商人馬克思·漢森]";
+				mes "哦，不...";
+				mes "您沒有所有必要的材料。做"+getitemname(.@juice)+", I need 1 "+getitemname(.@fruit)+" and 1 Empty Bottle. I will also need a 3 zeny fee.";
+				next;
+				mes "[商人馬克思·漢森]";
+				mes "當您準備一切時，我會融合水果，為您提供美味的果汁。";
+				close;
+			}
+
+			mes "[商人馬克思·漢森]";
+			mes "你想要多少？";
+			next;
+			switch(select("盡可能多。 :我想要一定數量。 :取消。")) {
+			case 1:
+				set .@make,countitem(.@fruit);
+				if (countitem(713) < .@make) set .@make, countitem(713);
+				if (Zeny/3 < .@make) set .@make, Zeny/3;
+				break;
+			case 2:
+				mes "[商人馬克思·漢森]";
+				mes "選擇小於100的數字。如果您不想，請放“ 0”。你可以彌補" + countitem(.@fruit) + " bottles of juice.";
+				next;
+				while(1) {
+					input .@input;
+					if (.@input == 0) {
+						mes "[商人馬克思·漢森]";
+						mes "好吧...";
+						mes "再來。";
+						close;
+					}
+					else if (.@input > 100) {
+						mes "[商人馬克思·漢森]";
+						mes "超過100瓶是不可能的。選擇其他數量。";
+						next;
+					}
+					else {
+						break;
+					}
+				}
+				set .@make,.@input;
+				break;
+			case 3:
+				mes "[商人馬克思·漢森]";
+				mes "好吧...";
+				mes "再來。";
+				close;
+			}
+
+			set .@total_zeny,3 * .@make;
+
+			if (countitem(.@fruit) < .@make || countitem(713) < .@make || Zeny < .@total_zeny) {
+				mes "[商人馬克思·漢森]";
+				mes "哦，不...";
+				mes "您沒有所有必要的材料。我無能為力。我想您收集了您的需求。";
+				close;
+			}
+			delitem .@fruit,.@make;
+			delitem 713,.@make;
+			set Zeny, Zeny-.@total_zeny;
+			getitem .@juice,.@make;
+
+			mes "[商人馬克思·漢森]";
+			mes "幹得好！按承諾的新鮮和美味的果汁。它應該非常令人耳目一新。";
+			next;
+			mes "[商人馬克思·漢森]";
+			mes "好吧...";
+			mes "再來。";
+			close;
+		case 2:
+			mes "[商人馬克思·漢森]";
+			mes "在人類能夠發展如此廣闊的社會之前，他們從樹木中收集了果實生存。水果可能是大自然的祝福，使我們能夠在世界上存在。";
+			next;
+			mes "[商人馬克思·漢森]";
+			mes "由於生活變得如此繁榮，年輕一代似乎不再吃水果了。因此，我開始考慮使水果更容易吃的方法。";
+			next;
+			mes "[商人馬克思·漢森]";
+			mes "我意識到，當您製作果汁時，吃飯更方便，味道更好。";
+			next;
+			mes "＃果汁信息＃";
+			mes "^cc4e5c-蘋果汁 - ^000000";
+			mes "Apple X 1 EA，空瓶X 1 EA，3 Zeny。";
+			mes "^e3cf57-香蕉汁 - ^000000";
+			mes "香蕉X 1 ea，空瓶子x 1 ea，3 Zeny。";
+			mes "^ED9121-胡蘿蔔汁 - ^000000";
+			mes "胡蘿蔔x 1 ea，空瓶子x 1 ea，3 Zeny。";
+			mes "^cc00ff-葡萄汁 - ^000000";
+			mes "葡萄x 1 ea，空瓶x 1 ea，3 Zeny。";
+			close;
+		case 3:
+			mes "[商人馬克思·漢森]";
+			mes "嘿！";
+			mes "如果您訪問";
+			mes "有人和他們說話！";
+			close;
+		}
+	}
+	else {
+		mes "[商人馬克思·漢森]";
+		mes "歡迎。";
+		mes "我該如何幫助您？";
+		next;
+		if (select("談話:取消") == 1) {
+			mes "[商人馬克思·漢森]";
+			mes "在人類能夠發展如此廣闊的社會之前，他們從樹木中收集了果實生存。水果可能是大自然的祝福，使我們能夠在世界上存在。";
+			next;
+			mes "[商人馬克思·漢森]";
+			mes "由於生活變得如此繁榮，年輕一代似乎不再吃水果了。因此，我開始考慮使水果更容易吃的方法。";
+			next;
+			mes "[商人馬克思·漢森]";
+			mes "我意識到，當您製作果汁時，吃飯更方便，味道更好。";
+			close;
+		}
+		mes "[商人馬克思·漢森]";
+		mes "嘿！";
+		mes "如果你徒步旅行";
+		mes "有人和他們說話！";
+		close;
+	}
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.1 fixed input number check [Lupus]
+//= 1.2 fixed misplaced Grape<->Carrot juices [Lupus]
+//= 1.3 added a loopless menu 'as many as possible' [Lupus]
+//= 1.3a Turned the juice making part of the Juicer npc into a
+//=     subfunc.  Changed fruit amount needed to 1.[kobra_k88]
+//=     Fixed exploits [Lupus]
+//= 1.6 fixed typo (where did @ipnut came from?) [Lance]
+//= 1.8 got rid of vars: 'MEAT',"MARIANNE","MORRISON"
+//=     From now, all common quests start using bits of the
+//=     same variable MISC_QUEST [Lupus]
+//============================================================ 

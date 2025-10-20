@@ -1,0 +1,7512 @@
+﻿//===== rAthena Script ======================================= 
+//= Rachel Quests
+//===== By: ================================================== 
+//= L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 3.6
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Collection of Rachel Quests 
+//= Lost Child Quest:
+//= - End of quest coincides with opening the Sanctuary.
+//= - Variable in use: lost_boy (max 13)
+//= Bruspetti Quest:
+//= - [Official Conversion]
+//= - Requires friendship quest as a prerequisite.
+//= - Variable in use: rach_vice (max 24)
+//= Ice Necklace Quest:
+//= - iRO uses a different sprite for Urstia, and no cutins.
+//= - Variable in use: ice_necklace_q (max 7)
+//= Sanctuary Quest:
+//= - Actually two quests in one. Donation and dungeon quest.
+//= - Requires 10000 donations before players can start the quest.
+//= - Variable in use: ra_tem_q (max 23) (unset at end)
+//= - Variable in use: Once completed MISC_QUEST bit 8192 is set
+//= - Variable in use: ra_have_donated (0 no/1 yes)
+//= - Variable in use: $rachel_donate (max 10000)
+//===== Additional Comments: ================================= 
+//= 3.0 Large reordering of Zhed, and Peace to the Arunafeltz addition. [L0ne_W0lf]
+//=     Some more numeric conversion, and some other cleanup.
+//= 3.1 Updated Ice Necklace quest, added missing checks. [L0ne_W0lf]
+//= 3.2 Added missing updates for Peace to the Arunafeltz quest. [L0ne_W0lf]
+//= 3.3 Fixed occurance of PcName. [L0ne_W0lf]
+//=     Fixed level 4 ID warps always being usable.
+//= 3.3a Fixed level 4 ID warps again. (Bugreport:4102) [L0ne_W0lf]
+//= 3.4 Added quest log entries for:
+//=     - Ice Necklace Quest
+//=     - Thor Volcano Base Quest addition.
+//= 3.5 Updated RE/Pre-RE EXP. [Euphy]
+//= 3.6 Added questlog support. [Euphy]
+//============================================================ 
+
+// Lost Child Quest (Prerequisite to High Priest quest) :: rachel_wonjumin
+//============================================================ 
+ra_in01,384,246,3	script	Vincent#ra_in01	47,{
+	if (BaseLevel < 60) {
+		mes "[文森特]";
+		mes "你在Zhed爵士的里面";
+		mes "尋找新員工，";
+		mes "我不認為你適合";
+		mes "對於這種家庭";
+		mes "工作，勇敢的冒險家。";
+		close;
+	}
+	if (lost_boy < 1) {
+		mes "[文森特]";
+		mes "我是Vincert，管家";
+		mes "這個豪宅和忠實";
+		mes "先生的僕人";
+		mes "Zhed，最強大的";
+		mes "整個阿魯納菲爾茨的人。";
+		next;
+		mes "[文森特]";
+		mes "我的主人目前正在";
+		mes "參加大祭司";
+		mes "組裝，已經走了";
+		mes "幾天。我想";
+		mes "向您尋求幫助";
+		mes "代表他的問題。";
+		next;
+		switch(select("我太忙了:當然可以，為什麼不呢？")) {
+		case 1:
+			mes "[文森特]";
+			mes "我明白。";
+			mes "對不起，你";
+			mes "目前太忙了...";
+			mes "如果您應該有空";
+			mes "後來，我想要求";
+			mes "您的協助再次。";
+			close;
+		case 2:
+			mes "[文森特]";
+			mes "謝謝。你看，";
+			mes "教皇授予Zhed爵士";
+			mes "因為他對";
+			mes "Arunafeltz有一顆珍貴的寶石。";
+			mes "但是，這個珠寶不見了";
+			mes "我需要您的幫助才能找到它。";
+			next;
+			mes "[文森特]";
+			mes "我沒有任何證據，但是";
+			mes "我懷疑它被偷走了";
+			mes "Phobe，僕人";
+			mes "消失了大約";
+			mes "寶石消失了。";
+			next;
+			mes "[文森特]";
+			mes "請找回這個寶石";
+			mes "並找到誰偷了它";
+			mes "Zhed爵士返回並找到";
+			mes "找出發生了什麼。如果你";
+			mes "可以保留這個秘密，我";
+			mes "非常感謝它。";
+			next;
+			mes "[文森特]";
+			mes "我相信你想要";
+			mes "詢問Phobe，但";
+			mes "他逃走了。";
+			mes "您可能想質疑";
+			mes "他下落的其他僕人。再次感謝您的幫助。";
+			set lost_boy,1;
+			setquest 8089;
+			close;
+		}
+	}
+	else if ((lost_boy >= 1) && (lost_boy < 4)) {
+		mes "[文森特]";
+		mes "我建議環顧四周";
+		mes "豪宅問";
+		mes "有關任何線索的僕人";
+		mes "Phobe的當前位置。";
+		close;
+	}
+	else if ((lost_boy >= 4) && (lost_boy < 7)) {
+		mes "[文森特]";
+		mes "我們用完了";
+		mes "時間...請找到";
+		mes "寶石和phobe";
+		mes "盡快。";
+		close;
+	}
+	else if (lost_boy == 7) {
+		mes "[文森特]";
+		mes "啊...！";
+		mes "H-Hello！怎樣";
+		mes "你還是，嗯...那";
+		mes "看你的臉？做過";
+		mes "你碰巧找到洛根嗎？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "不！我實際上得到了";
+		mes "被莫根刺傷，";
+		mes "然後我們進行了談話。是什麼";
+		mes "大主意？我來幫忙";
+		mes "你，你試圖擁有我";
+		mes "killed！我想要一個解釋！";
+		next;
+		mes "[文森特]";
+		mes "我...是的，你應該得到";
+		mes "事實之後的真相";
+		mes "我試圖對你做。第一的";
+		mes "總的來說，Phobe是我的兒子，但是";
+		mes "請不要告訴任何人！";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "什麼？";
+		mes "為什麼，是什麼";
+		mes "大事？";
+		next;
+		mes "[文森特]";
+		mes "有東西";
+		mes "這裡的類系統";
+		mes "Arunafeltz。沒有人說話";
+		mes "關於它，但是那些";
+		mes "在這裡移民並建造了";
+		mes "城市是主要的階級。";
+		next;
+		mes "[文森特]";
+		mes "土著人是";
+		mes "二等公民";
+		mes "被";
+		mes "定居者的後代";
+		mes "發展了這座城市。它";
+		mes "是一個悲傷，不可否認的事實。";
+		next;
+		mes "[文森特]";
+		mes "土著人通常";
+		mes "遭受較低階級的狀態，";
+		mes "而且通常做硬的藍色";
+		mes "在城市工作。珍妮，";
+		mes "Phobe的母親就是其中之一。";
+		next;
+		mes "[文森特]";
+		mes "我愛她是禁忌的，";
+		mes "特別是自Zhed爵士有";
+		mes "把我帶到他的翅膀下";
+		mes "對我來說像父親。如果";
+		mes "我嫁給了她，這很大";
+		mes "損害他的聲譽。";
+		next;
+		mes "[文森特]";
+		mes "我試圖控制我的";
+		mes "感覺...好吧，";
+		mes "Phobe出生了。還有";
+		mes "現在不回去。我們做到了";
+		mes "雖然秘密結婚，";
+		mes "我不後悔。";
+		next;
+		mes "[文森特]";
+		mes "Phobe必須討厭我...";
+		mes "我不得不對待他";
+		mes "他的母親像奴隸";
+		mes "在其他人面前。";
+		mes "我知道這太可怕了...";
+		mes "對你所愛的人太冷了。";
+		next;
+		mes "[文森特]";
+		mes "當他和";
+		mes "珠寶，我實際上更多";
+		mes "擔心Phobe比";
+		mes "我主人的寶藏。所以...";
+		mes "我盡我所能";
+		mes "讓他回來：我僱用了你。";
+		next;
+		mes "[文森特]";
+		mes "但是，一旦找到";
+		mes "phobe，我打算有";
+		mes "你殺了，我們可以";
+		mes "怪你盜竊。我是";
+		mes "抱歉，我知道這是錯誤的，但是";
+		mes "我很擔心我的男孩！";
+		next;
+		mes "[文森特]";
+		mes "我希望你原諒我...";
+		mes "我會做我應該做的";
+		mes "從一開始就完成...";
+		mes "我會承擔全部責任";
+		mes "為了盜竊寶石，先生";
+		mes "Zhed可以對我做什麼。";
+		next;
+		mes "[文森特]";
+		mes "寶石很特別...";
+		mes "我們的教皇命令我";
+		mes "主人保留珠寶";
+		mes "安全，因為它具有力量";
+		mes "拯救Arunafeltz和Rachel";
+		mes "時間到了。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "寶石真的是";
+		mes "重要的是，是嗎？好吧，你";
+		mes "幾乎讓我被殺，但是";
+		mes "既然我還活著，我想";
+		mes "我可以忽略它，你知道嗎？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "你不會遇到麻煩";
+		mes "如果我能找到珠寶，";
+		mes "Zhed爵士之前的Phobe";
+		mes "返回，所以我會嘗試找到";
+		mes "他們盡快為您服務。";
+		next;
+		mes "[文森特]";
+		mes "你願意";
+		mes "那對我有嗎？ ^333333*SOB*^000000";
+		mes "即使我放了";
+		mes "你嗎？ ^333333*嗅探*^000000";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "嗯，我經歷了所有";
+		mes "這個麻煩已經";
+		mes "我不妨完成";
+		mes "工作。此外，Phobe是";
+		mes "只是一個孩子，所以他可能是";
+		mes "藏在鎮上的某個地方。";
+		set lost_boy,8;
+		changequest 8094,8095;
+		close;
+	}
+	else if (lost_boy == 8) {
+		mes "[文森特]";
+		mes "寶石很特別...";
+		mes "我們的教皇命令我";
+		mes "主人保留珠寶";
+		mes "安全，因為它具有力量";
+		mes "拯救Arunafeltz和Rachel";
+		mes "時間到了。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "寶石真的是";
+		mes "重要的是，是嗎？好吧，你";
+		mes "幾乎讓我被殺，但是";
+		mes "既然我還活著，我想";
+		mes "我可以忽略它，你知道嗎？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "你不會遇到麻煩";
+		mes "如果我能找到珠寶，";
+		mes "Zhed爵士之前的Phobe";
+		mes "返回，所以我會嘗試找到";
+		mes "他們盡快為您服務。";
+		next;
+		mes "[文森特]";
+		mes "你願意";
+		mes "那對我有嗎？ ^333333*SOB*^000000";
+		mes "即使我放了";
+		mes "你嗎？ ^333333*嗅探*^000000";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "嗯，我經歷了所有";
+		mes "這個麻煩已經";
+		mes "我不妨完成";
+		mes "工作。此外，Phobe是";
+		mes "只是一個孩子，所以他可能是";
+		mes "藏在城裡的某個地方...";
+		close;
+	}
+	else if (lost_boy == 9) {
+		mes "[文森特]";
+		mes "你回來了！";
+		mes "你能";
+		mes "找到Phobe？ ！ h-how";
+		mes "他是嗎？他還好嗎？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "嗯？哦，是的，他是";
+		mes "很好。我找到了Phobe";
+		mes "在弗雷亞（Freya）的閒逛";
+		mes "春天。嗯，他不願意";
+		mes "回家，但他確實";
+		mes "給我他偷了的寶石。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "所以...我賺了";
+		mes "現在獎勵，對嗎？";
+		mes "沒有人必須死嗎？";
+		next;
+		mes "[文森特]";
+		mes "是的，是的，謝謝你";
+		mes "很多！我永遠不會忘記";
+		mes "你為我做了什麼。";
+		mes "哦，我的男孩很好！";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "嘿！嗯，拿";
+		mes "這個珠寶！你需要";
+		mes "將其返回到任何地方";
+		mes "應該去，對嗎？";
+		next;
+		mes "[文森特]";
+		mes "哦，是的，我最好做";
+		mes "那。當我返回這個";
+		mes "珠寶，你能";
+		mes "告訴我的妻子珍妮我們";
+		mes "男孩還好嗎？她去過了";
+		mes "非常擔心他，所以...";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "你要我告訴";
+		mes "珍妮關於Phobe？";
+		mes "當然，我會這樣做。";
+		set lost_boy,10;
+		changequest 8096,8097;
+		close;
+	}
+	else if (lost_boy == 10) {
+		mes "[文森特]";
+		mes "哦！當我返回這個";
+		mes "珠寶，你能";
+		mes "告訴我的妻子珍妮我們";
+		mes "男孩還好嗎？她去過了";
+		mes "非常擔心他，所以...";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "你要我告訴";
+		mes "珍妮關於Phobe？";
+		mes "當然，我會這樣做。";
+		close;
+	}
+	else if (lost_boy == 11) {
+		mes "["+strcharinfo(0)+"]";
+		mes "我告訴珍妮";
+		mes "關於Phobe，那";
+		mes "寶石退還了...";
+		mes "她似乎很放心...";
+		next;
+		mes "[文森特]";
+		mes "太感謝了，";
+		mes "冒險家。她就是這樣";
+		mes "一個善良，充滿愛心的女人，";
+		mes "我討厭看到她經歷";
+		mes "所有的折磨。我不應該得到";
+		mes "如此美麗的女人...";
+		next;
+		mes "[文森特]";
+		mes "很幸運";
+		mes "你來拯救我們...";
+		mes "請下一個";
+		mes "你在雷切爾的時間，";
+		mes "如果可以的話，我會盡力為您提供幫助。";
+		next;
+		mes "[文森特]";
+		mes "啊，實際上，我有";
+		mes "最後一個恩惠";
+		mes "你們你拜託嗎";
+		mes "帶上此註釋和包裹";
+		mes "給我的主人？他應該仍然";
+		mes "現在就在聖殿。";
+		next;
+		mes "[文森特]";
+		mes "如果您要求高";
+		mes "牧師zhed並提及";
+		mes "我寄給你，然後他";
+		mes "會和你見面。";
+		next;
+		mes "[文森特]";
+		mes "現在是時候了";
+		mes "我給你你";
+		mes "報酬。那呢？";
+		mes "我不知道裡面有什麼，";
+		mes "但是我知道這些物品是";
+		mes "如今非常有價值...";
+		set lost_boy,12;
+		changequest 8098,8099;
+		getitem 617,1; //Old_Violet_Box
+		next;
+		mes "[文森特]";
+		mes "啊，這個筆記是";
+		mes "推薦信";
+		mes "我為你寫了。";
+		mes "請將其交付給Zhed爵士";
+		mes "盡快地。再見，";
+		mes "並感謝您所做的一切。";
+		next;
+		mes "^3355ffyou收到了一封信";
+		mes "推薦";
+		mes "來自Vincent。 ^000000";
+		close;
+	}
+	else {
+		mes "[文森特]";
+		mes "謝謝你的一切";
+		mes "你為我做了";
+		mes "還有我的家人。如果你曾經";
+		mes "需要幫助，請不要";
+		mes "猶豫問我，好嗎？";
+		close;
+	}
+}
+
+rachel,114,232,3	script	Logan#ra_in01	869,{
+	if ((lost_boy < 1) || (lost_boy >= 3)) {
+		mes "[洛根]";
+		mes "我只是洛根，一個";
+		mes "眾多僕人";
+		mes "在Zhed爵士的這里工作";
+		mes "光榮的豪宅。我有";
+		mes "很多工作要做，所以不要";
+		mes "請不要分散我的注意力。";
+		close;
+	}
+	else if (lost_boy == 1) {
+		mes "["+strcharinfo(0)+"]";
+		mes "對不起，但是";
+		mes "你知道男人叫";
+		mes "Phobe有機會嗎？";
+		mes "我聽說他用過";
+		mes "在這里工作。";
+		next;
+		mes "[洛根]";
+		mes "嗯，我可以問嗎";
+		mes "你是？為什麼是";
+		mes "你在找他嗎？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "好吧，我只是去過";
+		mes "僱用去尋找他，";
+		mes "有人告訴我問";
+		mes "周圍的僕人";
+		mes "是一個很好的起點。";
+		next;
+		mes "[洛根]";
+		mes "哦好的。是的，Phobe的";
+		mes "從那以後失";
+		mes "他離開去買東西";
+		mes "幾天前的市場。";
+		mes "我希望孩子還好。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "嗯，孩子？只是";
+		mes "Phobe多大了？";
+		next;
+		mes "[洛根]";
+		mes "他剛滿十五歲。";
+		mes "這就是我所知道的";
+		mes "他。說實話，我不";
+		mes "自從我只是知道很多";
+		mes "開始在這里工作。為什麼不";
+		mes "你問高級僱員嗎？";
+		next;
+		mes "[洛根]";
+		mes "讓我們來看看...";
+		mes "你可以問曼森先生";
+		mes "在豪宅內。他是";
+		mes "在這里工作了一段時間。";
+		set lost_boy,2;
+		changequest 8089,8090;
+		close;
+	}
+	else if (lost_boy == 2) {
+		mes "[洛根]";
+		mes "如果你想學習";
+		mes "關於Phobe的更多信息，您會";
+		mes "最好問一個大四";
+		mes "自從我剛開始以來的員工";
+		mes "在這里工作。曼森先生";
+		mes "豪宅是一個不錯的選擇。";
+		close;
+	}
+}
+
+ra_in01,372,200,3	script	Manson#ra_in01	929,{
+	if (lost_boy < 1) {
+		mes "[曼森]";
+		mes "我是曼森，其中之一";
+		mes "許多僕人在這里工作";
+		mes "在Zhed爵士的豪宅中。嗯，";
+		mes "你會更小心嗎";
+		mes "在這裡走來走去？我討厭";
+		mes "在訪客後清理。";
+		close;
+	}
+	else if (lost_boy == 1) {
+		mes "[曼森]";
+		mes "你知道，正在考慮";
+		mes "像我這樣的當地人是";
+		mes "低頭";
+		mes "有點是下層階級，";
+		mes "我真的很幸運";
+		mes "Zhed爵士在豪宅里。";
+		close;
+	}
+	else if (lost_boy == 2) {
+		mes "["+strcharinfo(0)+"]";
+		mes "對不起，但是你";
+		mes "認識一個叫Phobe的人嗎？";
+		mes "他失了，所以我";
+		mes "被雇用去尋找他。";
+		next;
+		mes "[曼森]";
+		mes "啊，你是一個";
+		mes "Vincent僱用的，是嗎？";
+		mes "很好，很好。";
+		mes "我很確定Phobe是";
+		mes "躲在某個地方";
+		mes "只是四處亂逛。";
+		next;
+		mes "[曼森]";
+		mes "我確定他可以照顧";
+		mes "他自己，所以我們不會";
+		mes "擔心太多。讓我們來看看，";
+		mes "他問我是否有";
+		mes "為他做的差事，";
+		mes "所以我把他送到了市場。";
+		next;
+		mes "[曼森]";
+		mes "那是我最後一次看到的";
+		mes "他。我想他正在使用";
+		mes "我給了他養活自己的錢";
+		mes "當他逃跑時。他年輕，";
+		mes "所以我不能怪他。";
+		mes "我們都做了瘋狂的事情~";
+		next;
+		mes "[曼森]";
+		mes "啊，我們的園丁珍妮";
+		mes "是介紹的";
+		mes "我給他。她為此工作";
+		mes "Zhed爵士很長一段時間";
+		mes "她愛孩子。我想她是";
+		mes "對Phobe情有獨鍾。";
+		next;
+		mes "[曼森]";
+		mes "沒有人知道他的誰";
+		mes "父母是，所以我想";
+		mes "他是孤兒。就是這樣";
+		mes "可能她有他的原因。";
+		mes "在豪宅中與我們合作。";
+		next;
+		mes "[曼森]";
+		mes "珍妮為";
+		mes "那個男孩。我們跳過了";
+		mes "通常的就業過程";
+		mes "只是為她，你知道嗎？和";
+		mes "現在珍妮甚至文森特";
+		mes "擔心他失。";
+		next;
+		mes "[曼森]";
+		mes "你知道，如果你想";
+		mes "了解那個孩子，";
+		mes "你應該和珍妮談談。";
+		mes "她在花園里工作";
+		mes "現在，她會很感激";
+		mes "您在尋找Phobe方面的幫助。";
+		set lost_boy,3;
+		changequest 8090,8091;
+		close;
+	}
+	else if (lost_boy == 3) {
+		mes "[曼森]";
+		mes "你知道，如果你想";
+		mes "了解那個孩子，";
+		mes "你應該和珍妮談談。";
+		mes "她在花園里工作";
+		mes "現在，她會很感激";
+		mes "您在尋找Phobe方面的幫助。";
+		close;
+	}
+	else {
+		mes "[曼森]";
+		mes "堅果，有很多";
+		mes "工作要做！我從來沒有";
+		mes "為了完成一切，直到";
+		mes "一天結束。";
+		mes "嗯，這是一個生活。";
+		close;
+	}
+}
+
+rachel,48,237,3	script	Jenny#ra_in01	894,{
+	if (lost_boy < 3) {
+		mes "[珍妮]";
+		mes "這些理由由";
+		mes "Zhed先生，被考慮";
+		mes "私有財產。請";
+		mes "如果你立即離開";
+		mes "沒有被邀請！";
+		close;
+	}
+	else if (lost_boy == 3) {
+		mes "["+strcharinfo(0)+"]";
+		mes "對不起，但是";
+		mes "你珍妮？我去過";
+		mes "曼森告訴";
+		mes "如果我想學習";
+		mes "有關Phobe的更多信息。你看，";
+		mes "文森特僱用我找到他。";
+		next;
+		mes "[珍妮]";
+		mes "哦！太好了";
+		mes "消息！是的，我是珍妮。";
+		mes "您需要知道什麼？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "嗯，你能做的一切";
+		mes "告訴我會沒事的。";
+		mes "像他最喜歡的事情";
+		mes "聚會群也可能是";
+		mes "有助於我調查。";
+		next;
+		mes "[珍妮]";
+		mes "Phobe真是個好人";
+		mes "男生。我不知道什麼";
+		mes "他遇到的麻煩";
+		mes "到這個時候，他是";
+		mes "真的是一個很棒的孩子";
+		mes "只是給他一個機會。";
+		next;
+		mes "[珍妮]";
+		mes "哦...文森特必須";
+		mes "也是 - 我 - 我非常";
+		mes "很高興他被錄用了";
+		mes "你。但至於地方";
+		mes "他可能會發現，我";
+		mes "不知道我是否知道。";
+		next;
+		mes "[珍妮]";
+		mes "你嘗試過嗎";
+		mes "市場？那就是那裡";
+		mes "他最後一次見過，不是嗎？";
+		mes "也許他們有一些想法";
+		mes "他要去哪裡？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "哦...這是個好主意。";
+		mes "好吧，我想我可以去";
+		mes "到市場並詢問。";
+		set lost_boy,4;
+		changequest 8091,8092;
+		close;
+	}
+	else if ((lost_boy >= 3) && (lost_boy < 6)) {
+		mes "[珍妮]";
+		mes "請找到Phobe，";
+		mes "並帶他回來";
+		mes "一旦你安全";
+		mes "能！我忍不住擔心";
+		mes "關於那個男孩，你知道嗎？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "我會盡力而為";
+		mes "首先，我想我應該問";
+		mes "在市場周圍";
+		mes "Phobe最後一次出現。";
+		close;
+	}
+	else if (lost_boy == 6) {
+		mes "[珍妮]";
+		mes "請找到Phobe，";
+		mes "並帶他回來";
+		mes "一旦你安全";
+		mes "能！我忍不住擔心";
+		mes "關於那個男孩，你知道嗎？";
+		close;
+	}
+	else if ((lost_boy > 6) && (lost_boy < 11)) {
+		mes "[珍妮]";
+		mes "哦！你回來了！";
+		mes "你找到了phobe嗎？";
+		next;
+		if (lost_boy == 7) {
+			mes "["+strcharinfo(0)+"]";
+			mes "實際上...呃...";
+			mes "我有一些東西";
+			mes "討論很重要";
+			mes "首先是文森特。";
+		}
+		else if (lost_boy == 8) {
+			mes "["+strcharinfo(0)+"]";
+			mes "實際上...呃...";
+			mes "不僅是。但是我";
+			mes "跟隨非常好";
+			mes "帶領！不用擔心，我";
+			mes "我保證很快就會找到他。";
+		}
+		else if (lost_boy == 9) {
+			mes "["+strcharinfo(0)+"]";
+			mes "實際上...呃...";
+			mes "我應該向";
+			mes "文森特首先返回";
+			mes "這首明珠，但我會交付";
+			mes "一些好消息，很快";
+			mes "我保證。稍後再~";
+		}
+		else if (lost_boy == 10) {
+			mes "["+strcharinfo(0)+"]";
+			mes "是的，他很好，只是";
+			mes "在南方閒逛";
+			mes "城鎮的一面。他很安全，";
+			mes "但是他不願意";
+			mes "現在就回家。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "珠寶被返回，";
+			mes "所以一切都應該沒事";
+			mes "現在。另外，文森特解釋說";
+			mes "一切對我來說。你知道，";
+			mes "您，他和Phobe如何";
+			mes "都是相關的，所以...";
+			next;
+			mes "[珍妮]";
+			mes "哦！我懂了。他告訴";
+			mes "你是我們的秘密嗎？出色地，";
+			mes "我想我們可以相信你。";
+			mes "通常，我只是放心";
+			mes "我兒子沒事，";
+			mes "他不會遇到麻煩。";
+			next;
+			mes "[珍妮]";
+			mes "無論如何，即使Phobe";
+			mes "很固執，";
+			mes "我確定他會回來";
+			mes "很快。隨著他的成長，我認為";
+			mes "他會理解父親的";
+			mes "定位好一點。";
+			next;
+			mes "[珍妮]";
+			mes "我希望如此。雖然";
+			mes "很難";
+			mes "我們三個人活著";
+			mes "這樣，我不可能";
+			mes "更快樂。謝謝你";
+			mes "您的所有幫助，冒險家~";
+			set lost_boy,11;
+			changequest 8097,8098;
+		}
+		close;
+	}
+	else if ((lost_boy > 10) && (lost_boy < 13)) {
+		mes "[珍妮]";
+		mes "非常感謝";
+		mes "找到我的兒子。如果是";
+		mes "我可以做的任何事情";
+		mes "你，請讓我知道。";
+		mes "你不知道多麼感激";
+		mes "我作為母親對你...";
+		close;
+	}
+	end;
+}
+
+rachel,138,73,5	script	Idle Merchant#ra_in01	85,{
+	if ((lost_boy < 4) || (lost_boy >= 6)) {
+		mes "[空閒商人]";
+		mes "男人！業務正在進行";
+		mes "現在太sl了！";
+		mes "好吧，沒有意義";
+		mes "在這個垃圾場周圍很多";
+		mes "更長。也許我應該";
+		mes "收拾行裝，回家。";
+		close;
+	}
+	else if (lost_boy == 4) {
+		mes "["+strcharinfo(0)+"]";
+		mes "打擾一下？";
+		mes "你好？先生？";
+		next;
+		mes "[空閒商人]";
+		mes "最後！客戶！";
+		mes "我知道有人會來";
+		mes "最終！所以沃達亞想要";
+		mes "買？我得到了各種各樣的";
+		mes "方便的小障礙~";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "抱歉，不感興趣。";
+		mes "我只是想問一下是否";
+		mes "你見過一個男孩";
+		mes "這大約十五";
+		mes "年齡。他應該";
+		mes "逃離家園，所以。";
+		next;
+		mes "[空閒商人]";
+		mes "十五？我自己的兒子是";
+		mes "那個年齡...對不起，但是";
+		mes "我還沒看過任何小伙子";
+		mes "過去的年齡";
+		mes "幾天。不過，您可能會";
+		mes "想詢問其他商人。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "涼爽的。多謝。";
+		next;
+		mes "[空閒商人]";
+		mes "好吧，那！";
+		mes "祝你好運";
+		mes "男孩家！哦，你是";
+		mes "確定你不想要";
+		mes "環顧四周？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "嗯，到底做什麼";
+		mes "你在這裡賣嗎？我不能";
+		mes "認識其中的任何一個";
+		mes "您要出售的商品。";
+		next;
+		mes "[空閒商人]";
+		mes "你知道一些餐館如何";
+		mes "用模擬肉提供菜餚";
+		mes "由蔬菜和";
+		mes "諸如小麥麵筋之類的東西，對嗎？";
+		next;
+		mes "[空閒商人]";
+		mes "明白：模擬蔬菜";
+		mes "用純肉製成！現在";
+		mes "這是如何最好的";
+		mes "世界？是的？是的？這裡，";
+		mes "你為什麼不嘗試樣品？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "什麼？";
+		mes "在地獄中沒辦法";
+		mes "我把它放在我的";
+		mes "嘴！什麼哎呀";
+		mes "那應該是嗎？";
+		next;
+		mes "[空閒商人]";
+		mes "這是世界";
+		mes "首先是西葫蘆...";
+		mes "完全脫穎而出";
+		mes "一年級的牛lo牛排！";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "不，不！我必須";
+		mes "去問其他人";
+		mes "商人對此";
+		mes "失男孩。嗯，但是";
+		mes "祝你好運。";
+		set lost_boy,5;
+		close;
+	}
+	else if (lost_boy >= 5) {
+		mes "["+strcharinfo(0)+"]";
+		mes "（^333333i最好問另一個";
+		mes "如果這裡的商人在這裡";
+		mes "他們看到了那個男孩。我是";
+		mes "浪費我的時間與之交談";
+		mes "這個瘋狂的商人和他的";
+		mes "荒謬的模擬蔬菜。 ^000000）";
+		close;
+	}
+}
+
+rachel,120,47,3	script	Idle Merchant#ra_in01_2	85,{
+	if ((lost_boy < 5) || (lost_boy > 6)) {
+		mes "[空閒商人]";
+		mes "我正在考慮退出";
+		mes "這項業務...沒有人";
+		mes "似乎想要什麼";
+		mes "我要賣！我絕對不能";
+		mes "以這樣的生活為生。";
+		close;
+	}
+	else if (lost_boy == 5) {
+		mes "["+strcharinfo(0)+"]";
+		mes "打擾一下，";
+		mes "嗯...你好？";
+		next;
+		mes "[空閒商人]";
+		mes "哦！歡迎來到我的商店！";
+		mes "今天我該如何幫助您？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "實際上，我不是";
+		mes "在這裡購買任何東西...";
+		mes "我在找男孩";
+		mes "命名為Phobe";
+		mes "幾天前這裡。";
+		mes "你見過他嗎？";
+		next;
+		mes "[空閒商人]";
+		mes "哦！是的，昨晚，";
+		mes "有人要我告訴";
+		mes "任何尋找這個傢伙的人";
+		mes "命名為Phobe給您";
+		mes "一條消息。基本上，他想要";
+		mes "你來到“冰洞”。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "誰要求你告訴";
+		mes "我那個？他怎麼知道";
+		mes "我會來這裡嗎？";
+		mes "他知道phobe在哪裡嗎";
+		mes "是？我 - 是的，好嗎？";
+		next;
+		mes "[空閒商人]";
+		mes "沒有線索。我告訴大家";
+		mes "我知道。讓我們看看他";
+		mes "名字是... Nogan？";
+		mes "羅根？某物";
+		mes "這樣。就是這樣";
+		mes "老實說，我所知道的。";
+		next;
+		mes "[空閒商人]";
+		mes "所以孩子失了，";
+		mes "嗯？祝你好運";
+		mes "他。哦，要小心";
+		mes "在那個冰洞。那個地方";
+		mes "可能很危險。";
+		set lost_boy,6;
+		changequest 8092,8093;
+		close;
+	}
+	else if (lost_boy == 6) {
+		mes "[空閒商人]";
+		mes "是的，昨晚，";
+		mes "有人要我告訴";
+		mes "任何尋找這個傢伙的人";
+		mes "命名為Phobe給您";
+		mes "一條消息。基本上，他想要";
+		mes "你來到“冰洞”。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "誰要求你告訴";
+		mes "我那個？他怎麼知道";
+		mes "我會來這裡嗎？";
+		mes "他知道phobe在哪裡嗎";
+		mes "是？我 - 是的，好嗎？";
+		next;
+		mes "[空閒商人]";
+		mes "沒有線索。我告訴大家";
+		mes "我知道。讓我們看看他";
+		mes "名字是... Nogan？";
+		mes "羅根？某物";
+		mes "這樣。就是這樣";
+		mes "老實說，我所知道的。";
+		next;
+		mes "[空閒商人]";
+		mes "所以孩子失了，";
+		mes "嗯？祝你好運";
+		mes "他。哦，要小心";
+		mes "在那個冰洞。那個地方";
+		mes "可能很危險。";
+		close;
+	}
+}
+
+ra_fild01,245,325,3	script	Suspicious Man#ra_in01	934,{
+	if ((lost_boy < 6) || (lost_boy > 7)) {
+		mes "[可疑男人]";
+		mes "第三還不夠";
+		mes "空氣在這裡，太悶了！";
+		mes "嘿，逃脫！你";
+		mes "浪費我所有的";
+		mes "珍貴的氧！";
+		close;
+	}
+	if (lost_boy == 6) {
+		mes "["+strcharinfo(0)+"]";
+		mes "對不起，但是你";
+		mes "認識一個名叫的人";
+		mes "羅根？我在這裡 -";
+		next;
+		mes "[可疑男人]";
+		mes "啊！我不知道";
+		mes "這很簡單！";
+		mes "我最簡單的錢";
+		mes "曾經做過！ bwahahaha！";
+		mes "是時候死了，孩子！";
+		next;
+		mes "[可疑男人]";
+		mes "嘿！";
+		percentheal -50,0;
+		next;
+		mes "^3355ffthis可疑的人";
+		mes "投擲傷害了你";
+		mes "匕首，然後扔了另一個";
+		mes "您設法躲避的一個。";
+		mes "您很快進行報復以保持";
+		mes "他進一步傷害了你。 ^000000";
+		next;
+		mes "[可疑男人]";
+		mes "arg！我...";
+		mes "我想我低估了";
+		mes "你！你更強大";
+		mes "比你被帶走";
+		mes "驚喜，冒險家！";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "嘿，到底是誰";
+		mes "你？ ！你是羅根嗎？";
+		mes "你是一個嗎";
+		mes "被綁架的Phobe？";
+		next;
+		mes "[可疑男人]";
+		mes "什麼 - ？我沒有";
+		mes "綁架沒人！我不是";
+		mes "知道任何phobe！我是";
+		mes "剛僱用殺死你，";
+		mes "將您的身體帶給我的客戶。";
+		mes "這不是我所期望的。";
+		next;
+		mes "[可疑男人]";
+		mes "文森特的指示";
+		mes "要殺死任何人";
+		mes "問關於羅根的問題";
+		mes "他編造的名字。我的名字";
+		mes "是Mogan。天哪...我想";
+		mes "你是一個非常壞人。";
+		next;
+		mes "[莫干山]";
+		mes "嘿，讓我直截了當";
+		mes "這裡。你偷了嗎？";
+		mes "真的";
+		mes "有價值，像某些人一樣";
+		mes "紅珠寶還是什麼？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "嗯？不！文森特實際上";
+		mes "送我去找那個傢伙";
+		mes "那偷了那個珠寶，";
+		mes "為他找回它！";
+		next;
+		mes "[莫干山]";
+		mes "看來他設定";
+		mes "我們起來，伙計。那是...";
+		mes "那真的很低。對不起，";
+		mes "如果我知道，我不會";
+		mes "做到了。為什麼會";
+		mes "他這樣操縱我們嗎？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "我不知道...";
+		mes "我要談談";
+		mes "到文森特並做";
+		mes "他解釋一切。";
+		set lost_boy,7;
+		changequest 8093,8094;
+		close;
+	}
+	else if (lost_boy == 7) {
+		mes "[莫干山]";
+		mes "看來他設定";
+		mes "我們起來，伙計。那是...";
+		mes "那真的很低。對不起，";
+		mes "如果我知道，我不會";
+		mes "做到了。為什麼會";
+		mes "他這樣操縱我們嗎？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "我不知道...";
+		mes "我要談談";
+		mes "到文森特並做";
+		mes "他解釋一切。";
+		close;
+	}
+}
+
+rachel,263,32,3	script	Kid#ra_in01	931,{
+	if (lost_boy < 7) {
+		mes "[孩子]";
+		mes "請別打擾我！";
+		close;
+	}
+	else if (lost_boy == 8) {
+		mes "^3355ffyou抓住閃亮";
+		mes "這個男孩的閃閃發光";
+		mes "後袋。也許他";
+		mes "有文森特的珠寶";
+		mes "要你檢索。 ^000000";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "嘿，你。";
+		mes "你一定是";
+		mes "Phobe，對吧？";
+		next;
+		mes "[孩子]";
+		mes "是的？";
+		mes "所以呢？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "你父親寄來的";
+		mes "我在這裡找到你。";
+		next;
+		mes "[菲比]";
+		mes "不！不要碰我！";
+		mes "我沒有父親！";
+		mes "他對我來說死了！";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "好吧，無論如何，我需要";
+		mes "歸還珠寶";
+		mes "你藏在口袋裡。";
+		mes "我知道它確實屬於";
+		mes "Zhed爵士。  如果我不這樣做，那";
+		mes "你父親會遇到麻煩。";
+		next;
+		mes "[菲比]";
+		mes "啊！你的意思是'先生";
+		mes "Vincent！ ''很好";
+		mes "我！就是這";
+		mes "為什麼我拿了這個東西！";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "哦，是嗎？你怎麼樣";
+		mes "認為珍妮·威爾女士";
+		mes "感覺？你想嗎？";
+		mes "她會快樂的";
+		mes "聽到這個消息嗎？";
+		next;
+		mes "[菲比]";
+		mes "........................................................";
+		mes "...所以你知道";
+		mes "我們的家庭秘密，是嗎？";
+		mes "好吧，我會給這個";
+		mes "你。但是我這樣做";
+		mes "我媽媽，不適合他！";
+		next;
+		mes "^3355ffphobe小心翼翼";
+		mes "閃亮的紅色寶石";
+		mes "從他的口袋裡";
+		mes "不情願地將其交給您。 ^000000";
+		next;
+		mes "[菲比]";
+		mes "只是你知道，";
+		mes "我不打算去";
+		mes "回家！好吧，只是";
+		mes "無論如何不是這秒。";
+		mes "但是讓我媽媽知道";
+		mes "我很好，不用擔心。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "好吧，我會告訴你媽媽";
+		mes "但是你應該得到";
+		mes "很快回到他們身邊。你的";
+		mes "父親做了一個很大的";
+		mes "為您掩蓋的風險。";
+		next;
+		mes "[菲比]";
+		mes "hmpf！我...";
+		mes "我不在乎！";
+		next;
+		mes "^3355ffit看起來不像";
+		mes "你可以強迫phobe";
+		mes "暫時返回家園，所以";
+		mes "你應該帶這個紅色";
+		mes "珠寶回到文森特。 ^000000";
+		set lost_boy,9;
+		changequest 8095,8096;
+		close;
+	}
+	else if (lost_boy == 9) {
+		mes "[菲比]";
+		mes "我...我還沒準備好";
+		mes "回家";
+		mes "很好，讓文森特先生";
+		mes "知道我不後悔";
+		mes "我所做的，好嗎？";
+		next;
+		mes "^3355ffit看起來不像";
+		mes "你可以強迫phobe";
+		mes "暫時返回家園，所以";
+		mes "你應該帶這個紅色";
+		mes "珠寶回到文森特。 ^000000";
+		close;
+	}
+	else {
+		mes "["+strcharinfo(0)+"]";
+		mes "你知道，你應該";
+		mes "退出麻煩和";
+		mes "聽你的父母。";
+		next;
+		mes "[菲比]";
+		mes "你不是老闆";
+		mes "我對介意自己的";
+		mes "商業！耶茲·路易絲！";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "我不介意自己的";
+		mes "如果您的行動";
+		mes "造成了這麼多麻煩";
+		mes "給許多其他人！你";
+		mes "需要更負責任地行動！";
+		next;
+		mes "[菲比]";
+		mes "嗯嗯……";
+		mes "天哪...很好。";
+		close;
+	}
+}
+
+// Bruspetti Quest (Perequisite: Lighthalzen "Friendship" quest) :: rachel_ryu
+//============================================================ 
+ra_in01,235,194,5	script	Katinshuell	931,{
+	if (rach_vice > 21) {
+		mes "[卡廷舒爾]";
+		mes "如果我只轉過身";
+		mes "我自己...也許我有";
+		mes "努力支付";
+		mes "我的犯罪，我和布魯斯佩蒂";
+		mes "本來有機會...";
+		close;
+	}
+	else if ((rach_vice == 21) && (countitem(1201) > 0)) {
+		mes "[卡廷舒爾]";
+		mes "請...請";
+		mes "請別打擾我。我輸了";
+		mes "我愛的女人，因為";
+		mes "我做的愚蠢的事";
+		mes "在過去。如果你想";
+		mes "上交我，繼續...";
+		delitem 1201,1; //Knife
+		set rach_vice,22;
+		changequest 8121,8122;
+		close;
+	}
+	else if (rach_vice == 21) {
+		mes "[卡廷舒爾]";
+		mes "我想是我的";
+		mes "承受這種內gui的命運。";
+		mes "它已經摧毀了我的";
+		mes "有史以來最好的機會";
+		mes "真正快樂。 Bruspetti ...";
+		close;
+	}
+	else if ((rach_vice == 20) && (countitem(1201) > 0)) {
+		mes "[卡廷舒爾]";
+		mes "我想有";
+		mes "沒有理由隱藏";
+		mes "一切了...";
+		mes "您可能已經想到了";
+		mes "到目前為止的重要內容...";
+		next;
+		mes "[卡廷舒爾]";
+		mes "我曾經是一個";
+		mes "保安人員";
+		mes "Lighthalzen。我們基本上";
+		mes "看著邊界";
+		mes "豐富的區域和貧民窟。";
+		next;
+		mes "[卡廷舒爾]";
+		mes "我實際上是被訂購的";
+		mes "殺死一個人";
+		mes "反复移動";
+		mes "貧民窟和豐富的區域。";
+		mes "他是一個有錢的孩子...";
+		mes "真的不值得。";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "......";
+		mes "…………";
+		next;
+		mes "[卡廷舒爾]";
+		mes "我被付了很多錢";
+		mes "做到這一點。起初，我想";
+		mes "我只是在做我的工作。你";
+		mes "知道，我的意思是，法律正在進行";
+		mes "我的身邊。但是男孩的鮮血";
+		mes "不會洗我的手...";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "......";
+		mes "…………";
+		next;
+		mes "[卡廷舒爾]";
+		mes "我害怕殺死他，";
+		mes "但是一旦我這樣做，";
+		mes "折磨已經";
+		mes "難以忍受！我沒去過";
+		mes "能夠入睡...這就是為什麼";
+		mes "我不得不離開燈塔。";
+		set rach_vice,21;
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "......";
+		mes "…………";
+		next;
+		mes "[卡廷舒爾]";
+		mes "Bruspetti震驚了我";
+		mes "她了解了什麼";
+		mes "那時我做到了。我的一個";
+		mes "愛...她忍不住";
+		mes "真相。當她從";
+		mes "我自己的嘴唇，她生氣了...";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "......";
+		mes "…………";
+		next;
+		mes "[卡廷舒爾]";
+		mes "我不能阻止她...";
+		mes "我掙扎，試圖";
+		mes "救她，但她設法";
+		mes "淹沒在弗雷亞的";
+		mes "春天。她從我身上走了";
+		mes "生活。就是這樣。永遠。";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "......";
+		mes "…………";
+		next;
+		mes "[卡廷舒爾]";
+		mes "我之後來這裡";
+		mes "殺死一個男人開始";
+		mes "新生活，也許會得到";
+		mes "乾淨的板岩，但我最終";
+		mes "間接殺死那個女人";
+		mes "我愛。為什麼上帝？為什麼？ ！";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "......";
+		mes "…………";
+		next;
+		mes "[卡廷舒爾]";
+		mes "你現在開心嗎？";
+		mes "你現在開心嗎？";
+		mes "我告訴過你真相嗎？";
+		mes "那不是讓我";
+		mes "你感覺好多了嗎？";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "......";
+		mes "…………";
+		next;
+		mes "[卡廷舒爾]";
+		mes "................................................................";
+		mes "上帝！我的生活很糟糕！";
+		close;
+	}
+	else if (rach_vice == 21) {
+		mes "[卡廷舒爾]";
+		mes "^333333*褲子褲*^000000";
+		mes "畢竟";
+		mes "時間...我想";
+		mes "我可以逃跑...";
+		mes "但是聲音仍然";
+		mes "H-Haunt我...哈哈哈...";
+		close;
+	}
+	else if ((rach_vice == 20) && (countitem(1201) > 0)) {
+		mes "[卡廷舒爾]";
+		mes "我...";
+		mes "我不應該得到這個！";
+		mes "你為什麼繼續獵犬";
+		mes "我有這些問題嗎？";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "做了...做了什麼";
+		mes "當Bruspetti時發生";
+		mes "在弗雷亞（Freya）面對你";
+		mes "春天？到底做了什麼";
+		mes "她學到了嗎";
+		mes "你在燈塔嗎？";
+		next;
+		mes "[卡廷舒爾]";
+		mes "我...我沒有";
+		mes "告訴你什麼！";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "你怎麼說？";
+		mes "我剛剛讀過布魯斯佩蒂的";
+		mes "她學到的日記";
+		mes "有些可怕的東西";
+		mes "你，這涉及";
+		mes "刀...就像這個一樣。";
+		next;
+		mes "[卡廷舒爾]";
+		mes "……！";
+		mes "......................";
+		mes "不！對不起，是的";
+		mes "我的錯！我絕望了！";
+		mes "你不明白如何";
+		mes "我曾經生活過，你dont't  - ！";
+		set rach_vice,21;
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "嗯...？";
+		mes "Katinshuell先生？";
+		close;
+	}
+	else if ((rach_vice == 19) || (rach_vice == 20)) {
+		mes "[卡廷舒爾]";
+		mes "我...";
+		mes "我不應該得到這個！";
+		mes "你為什麼繼續獵犬";
+		mes "我有這些問題嗎？";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "做了...做了什麼";
+		mes "當Bruspetti時發生";
+		mes "在弗雷亞（Freya）面對你";
+		mes "春天？到底做了什麼";
+		mes "她學到了嗎";
+		mes "你在燈塔嗎？";
+		next;
+		mes "[卡廷舒爾]";
+		mes "我...我沒有";
+		mes "告訴你什麼！";
+		set rach_vice,20;
+		changequest 8120,8121;
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "（^3333333HE仍在抵抗";
+		mes "我...我怎麼能得到";
+		mes "他揭示真相？ ^000000）";
+		close;
+	}
+	else if (rach_vice == 18) {
+		mes "[" + strcharinfo(0) + "]";
+		mes "讓我們來看看...";
+		mes "哦，這個條目看起來";
+		mes "有趣的。都是";
+		mes "關於你，卡廷蘇爾。";
+		next;
+		mes "- 日期：OOXX-";
+		mes "我是如此愛上他，";
+		mes "但是他總是改變";
+		mes "每當我問他";
+		mes "關於他的個人問題";
+		mes "過去的。可能是他";
+		mes "向我隱藏一些東西？";
+		next;
+		mes "- 日期：OOXX-";
+		mes "是另一個女人嗎？";
+		mes "我不禁感到";
+		mes "嫉妒的！我需要知道。";
+		mes "這就是為什麼我決定要";
+		mes "去Lighthalzen，看看";
+		mes "我能找到的。";
+		next;
+		mes "- 日期：Ooxo-";
+		mes "親愛的日記，";
+		mes "今天我剛剛學會了";
+		mes "可怕的真理...我需要";
+		mes "讓他承認";
+		mes "我。我希望我們仍然可以";
+		mes "這一切之後...";
+		next;
+		mes "- 日期：Ooxo-";
+		mes "但是我不知道是否";
+		mes "我可以忍受這個！";
+		mes "我愛的男人...是";
+		mes "不可想像的是";
+		mes "使用刀子T-to ...我只是";
+		mes "想吐。";
+		next;
+		mes "- 日期：Ooxo-";
+		mes "我打算見他";
+		mes "明天在弗雷亞的春天。";
+		mes "我忍不住看著他";
+		mes "現在有所不同，但仍然...";
+		mes "他是我真正愛的人。";
+		next;
+		mes "- 日期：Ooxo-";
+		mes "我希望我有";
+		mes "好消息接下來";
+		mes "我寫這本日記的時間...";
+		mes "好吧，這是希望的。";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "好吧，那是";
+		mes "最後一頁...";
+		mes "什麼時候發生了";
+		mes "布魯斯佩蒂面對";
+		mes "你在弗雷亞的春天嗎？";
+		set rach_vice,19;
+		next;
+		mes "[卡廷舒爾]";
+		mes "…………";
+		mes "我...我...";
+		mes "…………";
+		close;
+	}
+	else if (rach_vice == 17) {
+		mes "[卡廷舒爾]";
+		mes "該死的！我不想";
+		mes "再考慮她了！";
+		mes "遠離我，去";
+		mes "Bruspetti的日記與您在一起！";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "什麼？ ！沒辦法，不是在";
+		mes "那個小的爆發";
+		mes "殺死或不殺死布魯斯佩蒂！";
+		mes "很好，如果你不打算";
+		mes "說話，那我要翻轉";
+		mes "通過本日記以獲取答案。";
+		set rach_vice,18;
+		close;
+	}
+	else if (rach_vice == 16) {
+		mes "[卡廷舒爾]";
+		mes "哈哈哈...";
+		mes "這是某種";
+		mes "審訊？";
+		mes "我 - 我什麼也沒做";
+		mes "錯誤的！前進，";
+		mes "問我什麼！";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "好吧，為什麼";
+		mes "你不解釋一下嗎？";
+		next;
+		switch(select("Shendar 先生的房子:Lighthalzen:Freya 的春天:Bruspetti")) {
+		case 1:
+			mes "[" + strcharinfo(0) + "]";
+			mes "Shendar先生，布魯斯佩蒂";
+			mes "父親，說有人";
+			mes "一直在偷偷摸摸";
+			mes "出於某種原因。";
+			mes "現在，你為什麼要這樣做？";
+			next;
+			mes "["+ strcharinfo(0) +"]";
+			mes "你認出了";
+			mes "Bruspetti的日記";
+			mes "很快...";
+			mes "你確實提到了";
+			mes "您正在尋找它。";
+			next;
+			mes "[卡廷舒爾]";
+			mes "哼！ S-停止";
+			mes "談論瘋狂說話！";
+			mes "我不知道什麼";
+			mes "你在說！";
+			close;
+		case 2:
+			mes "[" + strcharinfo(0) + "]";
+			mes "你知道，我發現";
+			mes "布魯斯佩蒂正在計劃";
+			mes "去燈塔。";
+			mes "看來她需要";
+			mes "真正學習一些東西";
+			mes "那裡很重要...";
+			next;
+			mes "[卡廷舒爾]";
+			mes "不...！";
+			mes "她不能...！";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "好吧。這是沒有用的";
+			mes "假裝你不";
+			mes "認識她。你是她";
+			mes "男朋友，不是嗎？";
+			mes "她會嘗試什麼";
+			mes "在燈塔中找到？";
+			next;
+			mes "[卡廷舒爾]";
+			mes "不！不，不！";
+			mes "住口！住口！";
+			mes "請！只是離開";
+			mes "我一個人！逃離";
+			mes "現在從我這裡！";
+			next;
+			switch(select("申達爾先生之家:芙蕾雅的春天:最近的分手")) {
+			case 1:
+				mes "[" + strcharinfo(0) + "]";
+				mes "所以當她不在時";
+				mes "在Lighthalzen，你偷偷摸摸";
+				mes "在Shendar先生的家中 -";
+				next;
+				mes "[卡廷舒爾]";
+				mes "是的！是的，是的！";
+				mes "是因為我很擔心";
+				mes "關於她！我不知道";
+				mes "她一直走到";
+				mes "Lighthalzen！哈哈！哈哈！";
+				next;
+				mes "[" + strcharinfo(0) + "]";
+				mes "................................................................";
+				mes "（^33333333nuts！我想";
+				mes "適得其反，所以我要去";
+				mes "必須再次嘗試。 ）^000000";
+				close;
+			case 2:
+				mes "[" + strcharinfo(0) + "]";
+				mes "所以當她不在時";
+				mes "在Lighthalzen，你去了";
+				mes "到弗雷亞的春天";
+				mes "自己，不是嗎？";
+				next;
+				mes "[卡廷舒爾]";
+				mes "......";
+				mes "…………";
+				mes "嗯？ ...是的。";
+				next;
+				mes "[" + strcharinfo(0) + "]";
+				mes "................................................................";
+				mes "（^33333333nuts！我想";
+				mes "適得其反，所以我要去";
+				mes "必須再次嘗試。 ）^000000";
+				close;
+			case 3:
+				mes "[" + strcharinfo(0) + "]";
+				mes "等一下！您的分手";
+				mes "和Bruspetti的突然需求";
+				mes "調查某件事";
+				mes "Lighthalzen ...他們是相關的";
+				mes "不知何故，不是嗎？";
+				next;
+				mes "[卡廷舒爾]";
+				mes "......";
+				mes "…………";
+				mes "不！這不是真的！";
+				next;
+				mes "[" + strcharinfo(0) + "]";
+				next;
+				switch(select("Shendar先生的家:Freya's Spring")) {
+				case 1:
+					mes "[" + strcharinfo(0) + "]";
+					mes "所以當她不在時";
+					mes "在Lighthalzen，你偷偷摸摸";
+					mes "在Shendar先生的家中 -";
+					next;
+					mes "[卡廷舒爾]";
+					mes "是的！是的，是的！";
+					mes "是因為我很擔心";
+					mes "關於她！我不知道";
+					mes "她一直走到";
+					mes "Lighthalzen！哈哈！哈哈！";
+					next;
+					mes "[" + strcharinfo(0) + "]";
+					mes "................................................................";
+					mes "（^33333333nuts！我想";
+					mes "適得其反，所以我要去";
+					mes "必須再次嘗試。 ）^000000";
+					close;
+				case 2:
+					mes "[" + strcharinfo(0) + "]";
+					mes "嗯...你為什麼";
+					mes "總是在";
+					mes "弗雷亞（Freya）獨自一人？";
+					mes "為什麼Bruspetti";
+					mes "還沒有回家嗎？";
+					next;
+					mes "[卡廷舒爾]";
+					mes "...您會停止胡說八道嗎？";
+					mes "您有什麼證據使我對犯罪定罪？";
+					mes "我不想再聽到你了。";
+					next;
+					mes "[" + strcharinfo(0) + "]";
+					mes "即使您殺死了Bruspetti，";
+					mes "您開始擔心另一種可能性。";
+					mes "因此，您也在計劃擺脫這種可能性。";
+					next;
+					set rach_vice,17;
+					mes "[卡廷舒爾]";
+					mes "不！停止！停止！";
+					mes "你在暗示";
+					mes "我殺了她嗎？我沒有！";
+					mes "放棄這個胡說八道";
+					mes "在我真的生氣之前！";
+					close;
+				}
+			}
+		case 3:
+			mes "[" + strcharinfo(0) + "]";
+			mes "弗雷亞的春天。";
+			mes "你為什麼總是";
+			mes "閒逛";
+			mes "自己，嗯？";
+			next;
+			mes "[卡廷舒爾]";
+			mes "................................................................";
+			mes "是因為我真的";
+			mes "想念我的前女友。";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "哦。正確的。";
+			mes "那很漂亮";
+			mes "充分的理由。";
+			close;
+		case 4:
+			mes "[" + strcharinfo(0) + "]";
+			mes "如果不是Bruspetti";
+			mes "你的女朋友，然後...";
+			mes "是誰？回答！";
+			next;
+			mes "[卡廷舒爾]";
+			mes "................................................................";
+			mes "很好，很好。你贏了。";
+			mes "她是我的前女友。";
+			mes "我只是不喜歡說話";
+			mes "關於Bruspetti，僅此而已。";
+			mes "現在你會讓我一個人嗎？";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "（^333333334nuts！他不應該";
+			mes "那樣陷入困境！我需要";
+			mes "再次質疑他直到";
+			mes "我的直覺很滿足！ ^000000）";
+			close;
+		}
+	}
+	else if ((rach_vice == 15) && (countitem(7571))) {
+		mes "[卡廷舒爾]";
+		mes "哦，又是你。";
+		mes "你現在想要什麼？";
+		mes "我只是告訴你我不是";
+		mes "與與之交談的心情";
+		mes "任何人。我還在應付";
+		mes "和我的女朋友分手。";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "katinshuell ...我得到";
+		mes "感覺到你躲藏了";
+		mes "某物。任何機會，";
+		mes "布魯斯佩蒂是你的女朋友嗎？";
+		next;
+		mes "[卡廷舒爾]";
+		mes "嗯？ ！嗯，什麼？";
+		mes "是什麼讓您認為？";
+		mes "這與您無關！";
+		mes "此外，你不認為";
+		mes "像她這樣的女孩太好了";
+		mes "對於像我這樣的人？";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "我沒有真正的";
+		mes "懷疑你的原因";
+		mes "一切，但是我的直覺";
+		mes "而你的反應方式不是";
+		mes "非常放心。好吧，我想";
+		mes "我可以翻閱這本書...";
+		next;
+		mes "[卡廷舒爾]";
+		mes "嘿！嘿...";
+		mes "那是布魯斯佩蒂的日記！";
+		mes "我 - 我一直在尋找 - 嗯...";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "嘿！你會好嗎";
+		mes "知道嗎？";
+		mes "告訴我真相！";
+		mes "實際上，你知道嗎？";
+		mes "我們為什麼不看";
+		mes "真相嗎？那怎麼樣？";
+		next;
+		mes "^3355 fffyou毫無平常";
+		mes "扔日記";
+		mes "katinshuell的腳，";
+		mes "它開頭";
+		mes "中間的頁面。 ^000000";
+		next;
+		mes "[卡廷舒爾]";
+		mes "......！";
+		delitem 7571,1; //Diary_Of_Blue
+		set rach_vice,16;
+		changequest 8119,8120;
+		close;
+	}
+	else if ((rach_vice == 10) || (rach_vice == 11)) {
+		mes "[卡廷舒爾]";
+		mes "arg！我很沮喪。";
+		mes "老實說，我只想";
+		mes "我自己留下來";
+		mes "很久。你到底是什麼";
+		mes "想問我嗎？";
+		next;
+		input .@input$;
+		if (.@input$ == "Lighthalzen") {
+			mes "[卡廷舒爾]";
+			mes "萊特哈爾岑...？";
+			mes "施瓦茨瓦爾德的城市";
+			mes "共和國。那是";
+			mes "一個艱難的住所。";
+			mes "這就是我真正知道的...";
+			next;
+		}
+		else if (.@input$ == "Bruspetti") {
+			mes "[卡廷舒爾]";
+			mes "...已經有一段時間了";
+			mes "自從我聽到這個名字。";
+			mes "Bruspetti ...她很漂亮";
+			mes "在這個城鎮周圍很受歡迎...";
+			mes "每個人都喜歡她。就是這樣";
+			mes "您想知道的一切嗎？";
+			next;
+		}
+		else if (.@input$ == "Freya's Spring") {
+			mes "[卡廷舒爾]";
+			mes "弗雷亞的春天...";
+			mes "那隻是一個公園";
+			mes "老年人和";
+			mes "夫妻有點閒逛。";
+			mes "我不喜歡去那裡，";
+			mes "儘管。你也不應該。";
+			next;
+		}
+		else {
+			mes "[卡廷舒爾]";
+			mes "..." + .@input$ + "?";
+			mes "什麼？我不明白你...";
+			close;
+		}
+		if (rach_vice == 10) {
+			set rach_vice,11;
+			changequest 8114,8115;
+		}
+		mes "[卡廷舒爾]";
+		mes "你開心，現在？";
+		mes "退出試圖撬入";
+		mes "我的個人生意，";
+		mes "只是喜歡游覽這個";
+		mes "小鎮。就是這樣";
+		mes "你來做，對嗎？";
+		close;
+	}
+	else if (rach_vice == 4) {
+		mes "[卡廷舒爾]";
+		mes "呃...";
+		mes "我只是告訴你我破產了";
+		mes "和我的女朋友。你";
+		mes "知道，我有點想";
+		mes "獨自一人。離開...";
+		close;
+	}
+	else if (rach_vice == 3) {
+		mes "[卡廷舒爾]";
+		mes "嗯？哦，這是你們中的一個";
+		mes "伙計們，那些善良的人";
+		mes "冒險家。你不能";
+		mes "還有其他事情要做...";
+		mes "否則，為什麼要和我說話？";
+		next;
+		mes "[卡廷舒爾]";
+		mes "哎呀...我知道你們去";
+		mes "圍繞解決問題，";
+		mes "但這是你的一件事";
+		mes "無法應付。我和我的";
+		mes "女朋友現在是歷史。";
+		mes "我們之間已經結束了。";
+		set rach_vice,4;
+		changequest 8107,8108;
+		close;
+	}
+	else if (rach_vice == 2) {
+		mes "[卡廷舒爾]";
+		mes "你是一個冒險家，";
+		mes "所以我不認為你會";
+		mes "了解多麼困難";
+		mes "這是一個安靜，和平的生活";
+		mes "生活。當您經歷過";
+		mes "某些事情，這很難。";
+		next;
+		mes "[卡廷舒爾]";
+		mes "當你忙時，你是";
+		mes "愣。但是即使我";
+		mes "獨自一人，這些想法";
+		mes "我的永遠不會停止困擾我...";
+		close;
+	}
+	else if (rach_vice == 1) {
+		mes "[卡廷舒爾]";
+		mes "你是一個冒險家，";
+		mes "所以我不認為你會";
+		mes "了解多麼困難";
+		mes "這是一個安靜，和平的生活";
+		mes "生活。當您經歷過";
+		mes "某些事情，這很難。";
+		next;
+		mes "[卡廷舒爾]";
+		mes "當你忙時，你是";
+		mes "愣。但是即使我";
+		mes "獨自一人，這些我的想法永遠不會阻止我困擾我...";
+		close;
+	}
+	else if (rach_vice == 0) {
+		mes "[卡廷舒爾]";
+		mes "你是一個冒險家，";
+		mes "所以我不認為你會";
+		mes "了解多麼困難";
+		mes "這是一個安靜，和平的生活";
+		mes "生活。當您經歷過";
+		mes "某些事情，這很難。";
+		next;
+		mes "[卡廷舒爾]";
+		mes "我不再需要";
+		mes "我一生的興奮。";
+		mes "我只想安靜地生活，";
+		mes "遠離別人，";
+		mes "並獨自一人";
+		mes "和平的一些外觀。";
+		if (friendship > 10) set rach_vice,1;
+		close;
+	}
+	mes "[卡廷舒爾]";
+	mes "你相信業力嗎？";
+	mes "我做...不管你是什麼";
+	mes "這樣做，即使你不得到";
+	mes "抓了，不知何故";
+	mes "趕上你。";
+	next;
+	mes "[卡廷舒爾]";
+	mes "你有沒有感覺過";
+	mes "對某事有罪";
+	mes "但是躲藏在事實中嗎？";
+	mes "讓我告訴你必須";
+	mes "成為痛苦的經歷。它是";
+	mes "最好何時承認。";
+	close;
+}
+
+ra_in01,250,19,3	script	Mr. Shendar	929,{
+	if (rach_vice > 21) {
+		mes "[先生。 Shendar]";
+		mes "我什麼時候珍貴";
+		mes "女兒Bruspetti是";
+		mes "回家？我敢肯定";
+		mes "她可以照顧好自己，";
+		mes "但是父親不禁";
+		mes "擔心自己死了。";
+		next;
+		mes "[先生。 Shendar]";
+		mes "啊，如果你碰巧";
+		mes "在你的女兒看我的女兒";
+		mes "旅行，請告訴她";
+		mes "她的父親在等";
+		mes "讓她回家。";
+		mes "謝謝，冒險家。";
+		close;
+	}
+	else if (rach_vice == 14) {
+		mes "[先生。 Shendar]";
+		mes "所以你有一個漂亮的";
+		mes "誰是誰";
+		mes "在我家偷偷摸摸？";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "好吧，我懷疑這個傢伙";
+		mes "命名為Katinshuell，因為";
+		mes "他可能是布魯斯佩蒂的";
+		mes "男朋友，他一直在表演";
+		mes "有趣的。不過，我沒有";
+		mes "真正的證據。";
+		next;
+		mes "[先生。 Shendar]";
+		mes "布魯斯佩蒂的男朋友？";
+		mes "hmpf！我不喜歡";
+		mes "男孩已經我沒有";
+		mes "遇見了他，但它是我的";
+		mes "父親莊嚴的職責";
+		mes "討厭和不信任他！";
+		close;
+	}
+	else if (rach_vice == 13) {
+		mes "[先生。 Shendar]";
+		mes "嘿！嘿！你是";
+		mes "發生的變態";
+		mes "潛入我家";
+		mes "要捕食我女兒？";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "世界衛生大會 - ？";
+		mes "不，我只是一個 -";
+		next;
+		percentheal -50,0;
+		mes "^3355ff*嘭！ *^000000";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "哇！做了什麼";
+		mes "你這樣做嗎？";
+		next;
+		mes "[先生。 Shendar]";
+		mes "還活著，是嗎？ hmpf！";
+		mes "我會讓你脫穎而出！患病的...";
+		mes "嗯，是嗎？等等，我想";
+		mes "我認識你。你是那個";
+		mes "冒險家過去";
+		mes "以前在這裡，對嗎？";
+		next;
+		mes "[先生。 Shendar]";
+		mes "哦...我想我做了";
+		mes "一個錯誤。我以為你";
+		mes "是那個人";
+		mes "在我周圍徘徊";
+		mes "房子。我不知道他是誰";
+		mes "但是我確定不是你...";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "等待，等等...";
+		mes "所以有人去過";
+		mes "在這裡偷偷摸摸？";
+		mes "那很奇怪。等等，那";
+		mes "蓋伊，可能";
+		mes "成為布魯斯佩蒂的男朋友...";
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "是的，他的名字是";
+		mes "katinshuell。那個傢伙";
+		mes "表現得很有趣。";
+		mes "也許他是一個偷偷摸摸的人";
+		mes "在這裡？我最好去";
+		mes "問他這個...";
+		next;
+		mes "[先生。 Shendar]";
+		mes "等等，在哪裡";
+		mes "你要去嗎？我...我";
+		mes "抱歉打你嗎？";
+		next;
+		mes "[先生。 Shendar]";
+		mes "詛咒！如果那個傢伙是我的";
+		mes "女兒的男朋友，他是";
+		mes "然後侵入我的家";
+		mes "他可能真的很危險。";
+		mes "我不能問太糟糕了";
+		mes "關於他的一切...";
+		next;
+		mes "[先生。 Shendar]";
+		mes "嗯...好吧，冒險家。";
+		mes "如果您能找到它，我允許";
+		mes "你要讀我";
+		mes "女兒的日記。我們需要";
+		mes "要了解有關這個人的更多信息";
+		mes "katinshuell。如果他很危險...";
+		next;
+		mes "[先生。 Shendar]";
+		mes "對不起...我問你";
+		mes "為了您的幫助...但是";
+		mes "我無能為力";
+		mes "父親。此外，冒險家";
+		mes "就像你可以給她";
+		mes "最好的保護...";
+		set rach_vice,14;
+		changequest 8117,8118;
+		close;
+	}
+	else if (rach_vice == 9) {
+		mes "[先生。 Shendar]";
+		mes "詛咒！我永遠都不應該";
+		mes "提到我女兒的";
+		mes "對冒險家的日記";
+		mes "你！我知道你那樣";
+		mes "自然太好奇了...！";
+		close;
+	}
+	else if (rach_vice == 8) {
+		mes "[先生。 Shendar]";
+		mes "什麼？我女兒去了";
+		mes "到燈塔？她沒有";
+		mes "認識那裡的任何人。嗯，也許";
+		mes "那是她所在的地方";
+		mes "計劃去了解更多";
+		mes "關於困擾她的事情。";
+		next;
+		mes "[先生。 Shendar]";
+		mes "是的，她非常通用：";
+		mes "``爸爸，我需要去某個地方。 ''";
+		mes "和我需要的東西";
+		mes "確保。 ''";
+		mes "所有細節都沒有提出";
+		mes "父親放心！";
+		next;
+		mes "[先生。 Shendar]";
+		mes "好，謝謝你讓";
+		mes "我知道她可能在哪裡。";
+		mes "現在，我希望我知道她什麼";
+		mes "正在計劃做。或許";
+		mes "她寫了一些東西";
+		mes "在她的日記中？是的，也許...";
+		next;
+		mes "[先生。 Shendar]";
+		mes "不！我做不到！";
+		mes "作為一個充滿愛的父親，我不能";
+		mes "讓自己入侵我";
+		mes "珍貴的女兒的隱私。";
+		mes "即使她不小心離開";
+		mes "她的日記在抽屜上面。";
+		next;
+		mes "[先生。 Shendar]";
+		mes "哦，但是父親怎麼樣";
+		mes "擔心。我的甜蜜會嗎";
+		mes "親愛的bruspetti沒事嗎？";
+		set rach_vice,9;
+		changequest 8112,8113;
+		close;
+	}
+	else if ((rach_vice == 4) || (rach_vice == 5)) {
+		mes "[先生。 Shendar]";
+		mes "我想念我的女兒。是的，";
+		mes "房子聞起來有所不同";
+		mes "沒有她。有點";
+		mes "很奇怪地談論這個，";
+		mes "但是布魯斯佩蒂總是聞到";
+		mes "很好，就像她的母親一樣。";
+		next;
+		mes "[先生。 Shendar]";
+		mes "即使他們不穿";
+		mes "香水，他們有這個";
+		mes "獨特的宜人";
+		mes "對他們的氣味。我猜";
+		mes "它一定是歸屬的嗎？";
+		if (rach_vice == 4) {
+			set rach_vice,5;
+			changequest 8108,8109;
+		}
+		close;
+	}
+	else if (rach_vice == 2) {
+		mes "[先生。 Shendar]";
+		mes "接受我的建議：永遠不要";
+		mes "有一個女兒！你擔心";
+		mes "關於他們太多了，他們";
+		mes "一次忽略父母";
+		mes "他們長大了！我敢打賭她是";
+		mes "有一個古老的時期...";
+		next;
+		mes "[先生。 Shendar]";
+		mes "混淆了...！";
+		mes "那個傢伙是誰，";
+		mes "他最好不要嘗試任何有趣的";
+		mes "商業！作為她的父親，我有";
+		mes "他的合法權利";
+		mes "小脖子！至少，我應該...";
+		close;
+	}
+	else if (rach_vice == 1) {
+		mes "[先生。 Shendar]";
+		mes "我剛剛發現";
+		mes "我寶貴的女兒有";
+		mes "和某人一起出去。";
+		mes "她去了另一個小鎮";
+		mes "對於這個男孩，我還沒有";
+		mes "從那以後聽到她的話！";
+		next;
+		mes "[先生。 Shendar]";
+		mes "接受我的建議：永遠不要";
+		mes "有一個女兒！你擔心";
+		mes "關於他們太多了，他們";
+		mes "一次忽略父母";
+		mes "他們長大了！我敢打賭她是";
+		mes "有一個古老的時期...";
+		next;
+		mes "[先生。 Shendar]";
+		mes "大概在一些愛";
+		mes "與誰一起旅行";
+		mes "男孩是。她已經走了";
+		mes "糟糕的很長一段時間，但她是";
+		mes "現在也是成年人。我...我猜";
+		mes "她應該沒事。";
+		set rach_vice,2;
+		setquest 8106;
+		close;
+	}
+	mes "[先生。 Shendar]";
+	mes "我剛剛發現";
+	mes "我寶貴的女兒有";
+	mes "和某人一起出去。";
+	mes "她去了另一個小鎮";
+	mes "看到這個男孩，我還沒有";
+	mes "從那以後聽到她的話！";
+	next;
+	mes "[先生。 Shendar]";
+	mes "接受我的建議：永遠不要";
+	mes "有一個女兒！你擔心";
+	mes "關於他們太多了，他們";
+	mes "一次忽略父母";
+	mes "他們長大了！我敢打賭她是";
+	mes "有一個古老的時期...";
+	close;
+}
+
+rachel,73,244,3	script	Lachellen	919,{
+	if (rach_vice > 21) {
+		mes "[笑]";
+		mes "如果您碰巧看到";
+		mes "布魯斯佩蒂，告訴她";
+		mes "來跟我說話。我需要";
+		mes "知道我是否想";
+		mes "出去她的男朋友是誰！";
+		mes "我等不及要見她~";
+		close;
+	}
+	else if ((rach_vice == 11) || (rach_vice == 12)) {
+		mes "[笑]";
+		mes "哦，再次你好~";
+		mes "有什麼辦法";
+		mes "這次幫你嗎？我知道";
+		mes "您正在尋找Bruspetti，";
+		mes "所以如果你有";
+		mes "對我有任何問題~";
+		next;
+		input .@input$;
+		if (.@input$ == "Lighthalzen") {
+			mes "[笑]";
+			mes "Lighthalzen？哦，那是";
+			mes "正確的！布魯斯佩蒂確實問過";
+			mes "我關於Lighthalzen一會兒";
+			mes "前。是的，她似乎真的";
+			mes "有興趣了解更多";
+			mes "最近那個地方。";
+			next;
+		}
+		else if (.@input$ == "Freya's Spring") {
+			mes "[笑]";
+			mes "弗雷亞的春天？";
+			mes "哦，我喜歡那個地方！";
+			mes "說到哪個，我知道";
+			mes "有人叫Katinshuell";
+			mes "經常去那裡。";
+			mes "通常男人不一個人去...";
+			next;
+			mes "[笑]";
+			mes "等等，那是一個地方";
+			mes "我告訴過你，哪裡";
+			mes "布魯斯佩蒂和她的男朋友";
+			mes "通常見面。你想嗎？";
+			mes "她和katinshuell ...？";
+			mes "哦，也許我想知道了！";
+			next;
+			mes "[笑]";
+			mes "但是，是的，那個地方是";
+			mes "通常充滿夫妻，";
+			mes "所以你看起來像一個真正的失敗者";
+			mes "如果你一個人去那裡。就是這樣";
+			mes "為什麼我現在想要一個男朋友...";
+			set rach_vice,12;
+			changequest 8115,8116;
+			next;
+		}
+		else {
+			mes "[笑]";
+			mes "哦，對不起...";
+			mes "我什麼都不知道";
+			mes "關於"+.@input$+".";
+			close;
+		}
+		mes "[笑]";
+		mes "好吧，我不知道是否";
+		mes "你學到了什麼";
+		mes "我很重要，";
+		mes "但我希望我有幫助";
+		mes "你，即使是";
+		mes "只是一點。";
+		close;
+	}
+	else if (rach_vice == 7) {
+		mes "[笑]";
+		mes "讓我們看看... Bruspetti";
+		mes "她的傢伙通常會";
+		mes "在...嗯，我知道哪裡";
+		mes "是從感覺的，但我真的不能";
+		mes "給你好的方向";
+		mes "到達那裡。嗯，對不起！";
+		next;
+		mes "[笑]";
+		mes "幸運的是，這個小鎮";
+		mes "不是那麼大，所以我";
+		mes "當然會發現一些東西";
+		mes "如果您一直在尋找。";
+		mes "哦，如果你找到她，";
+		mes "告訴她我說“嗨，”好嗎？";
+		close;
+	}
+	else if (rach_vice == 6) {
+		mes "[笑]";
+		mes "哦，布魯斯佩蒂的父親";
+		mes "在談論如何";
+		mes "她聞起來很好嗎？是的，";
+		mes "她有點以";
+		mes "在這裡，他是";
+		mes "不令人毛骨悚然或任何東西。";
+		next;
+		mes "[笑]";
+		mes "我明白了，所以你認為你";
+		mes "在某些人中抓住了她";
+		mes "另一個城鎮。是的，我聽到了";
+		mes "她去看去看";
+		mes "如果她能學到一些東西，";
+		mes "她還沒有回來。";
+		next;
+		mes "[笑]";
+		mes "哦，你知道嗎？";
+		mes "如果她在燈塔中，";
+		mes "她可能去過那裡";
+		mes "了解有關她的男朋友的更多信息。";
+		mes "布魯斯佩蒂提到了一些東西";
+		mes "關於這一點，當我上次見到她時。";
+		next;
+		mes "[笑]";
+		mes "我什麼都不知道";
+		mes "別的。嗯，也許如果你";
+		mes "檢查她的位置";
+		mes "和她的男朋友通常";
+		mes "約會，你可能";
+		mes "能夠找到一些東西。";
+		set rach_vice,7;
+		changequest 8110,8111;
+		close;
+	}
+	else if ((rach_vice == 2) || (rach_vice == 3)) {
+		mes "[笑]";
+		mes "哦，我很嫉妒";
+		mes "bruspetti！她去過了";
+		mes "花很多時間與";
+		mes "她的新男朋友最近...";
+		mes "但是她仍然拒絕告訴";
+		mes "我叫什麼名字。";
+		next;
+		mes "[笑]";
+		mes "她告訴我她是";
+		mes "認真對他，但是";
+		mes "她還承認";
+		mes "她對";
+		mes "他。讓我們看看...他在Lighthalzen長大嗎？這就是她所知道的。";
+		set rach_vice,3;
+		changequest 8106,8107;
+		close;
+	}
+	mes "[笑]";
+	mes "我的朋友Bruspetti";
+	mes "是一個非常好的女孩~";
+	mes "每個人都愛她，";
+	mes "她太漂亮了。全部";
+	mes "伙計們嫉妒";
+	mes "她的新男朋友！";
+	next;
+	mes "[笑]";
+	mes "不過，她真的是";
+	mes "害羞，不會告訴我";
+	mes "他是誰。有很多";
+	mes "我不知道他，但是";
+	mes "我確定他們在一起很高興。";
+	close;
+}
+
+rachel,196,77,3	script	Kid#1rachel	921,{
+	mes "[孩子]";
+	mes "嘿，你看過嗎";
+	mes "bruspetti？她真的";
+	mes "很好，總是買我";
+	mes "很多餅乾！";
+	next;
+	mes "[孩子]";
+	mes "嗯，我沒看過";
+	mes "不過，她有一段時間。";
+	mes "我聽說她去旅行";
+	mes "某處。多久了";
+	mes "你以為她會走了，是嗎？";
+	close;
+}
+
+rachel,151,155,3	script	Kid#2rachel	921,{
+	mes "[孩子]";
+	mes "哦，哇！我想成為一個";
+	mes "像你一樣的冒險家";
+	mes "我長大了！參與各種各樣的";
+	mes "地方，訪問不同的地方";
+	mes "城鎮。聽起來很有趣！";
+	next;
+	mes "[孩子]";
+	mes "也許如果我真的找到了";
+	mes "好地方，也許我只是";
+	mes "留下來，然後搬到那裡。";
+	mes "這裡的某個地方";
+	mes "那是這樣做的，然後移動了";
+	mes "從燈塔到這裡~";
+	next;
+	mes "[孩子]";
+	mes "是的，一旦我得到";
+	mes "機會，我要拋棄";
+	mes "這個小鎮，看到了很多";
+	mes "我可能會在世界上！我需要";
+	mes "比這更快！";
+	close;
+}
+
+rachel,266,35,3	script	Grandma#rachel	918,{
+	if (rach_vice > 21) {
+		mes "[奶奶]";
+		mes "當你成為我的";
+		mes "年齡，你會珍惜所有人";
+		mes "您的記憶，即使";
+		mes "經歷很傷人";
+		mes "當它實際發生的時候。";
+		next;
+		mes "[奶奶]";
+		mes "您的記憶是一部分";
+		mes "你是誰，什麼";
+		mes "使你獨一無二。我可以";
+		mes "欣賞生活";
+		mes "我有，即使是";
+		mes "不是特別特別。";
+		close;
+	}
+	else if (rach_vice == 13) {
+		mes "[奶奶]";
+		mes "當你成為我的";
+		mes "年齡，你欣賞生活";
+		mes "更多，可以釋放您的";
+		mes "更容易後悔。我浪費了";
+		mes "我年輕的大部分不必要";
+		mes "當我可以放鬆的時候擔心。";
+		close;
+	}
+	else if (rach_vice == 12) {
+		mes "[奶奶]";
+		mes "哦，又回來了，是嗎？";
+		mes "我想你真的一定";
+		mes "就像來這個地方";
+		mes "也。嗯，這使我想起...";
+		next;
+		mes "[奶奶]";
+		mes "看到春天的邊緣嗎？";
+		mes "經常同一個年輕人";
+		mes "來到那個地方，凝視著";
+		mes "進入水中，只是悲傷地滴下來。有人這麼年輕";
+		mes "不應該那樣。";
+		next;
+		mes "[奶奶]";
+		mes "你應該來";
+		mes "在這裡放鬆和享受";
+		mes "周圍的美麗，";
+		mes "在你的悲傷中並不沉悶。";
+		mes "我想那個男孩沒有";
+		mes "同意我的看法。";
+		next;
+		mes "[奶奶]";
+		mes "你應該能夠";
+		mes "放開一切";
+		mes "打擾你，只是";
+		mes "享受現在的生活。";
+		set rach_vice,13;
+		changequest 8116,8117;
+		close;
+	}
+	mes "[奶奶]";
+	mes "我喜歡這個地方，";
+	mes "它美麗的場景";
+	mes "和寧靜的氣氛。";
+	mes "天上的和平。";
+	next;
+	mes "[奶奶]";
+	mes "看到我的心很高興";
+	mes "年輕夫婦可以來";
+	mes "在這裡，一起放鬆。";
+	mes "不愛大事嗎？";
+	close;
+}
+
+lhz_in02,213,207,0	script	#ratrace1	111,4,4,{
+OnTouch_:
+	if (rach_vice == 5) {
+		mes "[" + strcharinfo(0) + "]";
+		mes "這...";
+		mes "這種氣味...";
+		mes "聞起來很香！";
+		mes "像玫瑰花瓣騎";
+		mes "輕而易舉...";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "等等，可以嗎";
+		mes "Bruspetti的氣味";
+		mes "父親前面提到？";
+		set rach_vice,6;
+		changequest 8109,8110;
+		close;
+	}
+	end;
+}
+
+rachel,265,47,0	script	#raevent1	111,2,2,{
+OnTouch_:
+	if (rach_vice == 23) {
+		mes "[" + strcharinfo(0) + "]";
+		mes "只是看這個";
+		mes "春天讓我想";
+		mes "布魯斯佩蒂。到底是什麼";
+		mes "發生在她身上？我明白了";
+		mes "她的感覺";
+		mes "陷入絕望。";
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "水不是";
+		mes "寒冷或非常深...";
+		mes "和Katinshuell提到";
+		mes "她的身體變得li行...";
+		mes "但是她還在看";
+		mes "對他困擾...";
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "我想她被撕裂了...";
+		mes "她愛他，但不能";
+		mes "忍受他的秘密。";
+		mes "最後，一切都非常";
+		mes "悲慘。 Katinshuell不是";
+		mes "真的是一個壞人...";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "他被迫";
+		mes "犯下令人髮指的犯罪，";
+		mes "並一直犯錯，";
+		mes "從他的罪惡感中跑來跑去。是";
+		mes "有人對此負責嗎？";
+		mes "誰應該指責？";
+		next;
+		set rach_vice,24;
+		completequest 8122;
+		if (checkre(3)) {
+			if (BaseLevel > 90) getexp 130000,0;
+			else if (BaseLevel > 75) getexp 85000,0;
+			else getexp 45000,0;
+		} else {
+			if (BaseLevel > 90) getexp 1300000,0;
+			else if (BaseLevel > 75) getexp 850000,0;
+			else getexp 450000,0;
+		}
+		mes "[" + strcharinfo(0) + "]";
+		mes "不知何故，我希望";
+		mes "Katinshuell有";
+		mes "面對他的力量";
+		mes "內，然後";
+		mes "原諒自己。";
+		close;
+	}
+	else if (rach_vice == 22) {
+		mes "[" + strcharinfo(0) + "]";
+		mes "這一定是";
+		mes "布魯斯佩蒂淹死了...";
+		next;
+		mes "[奶奶]";
+		mes "哦！打擾一下，";
+		mes "年輕冒險家，";
+		mes "但是你一定不能忍受";
+		mes "那裡！這很滑。";
+		mes "如果你陷入";
+		mes "春天？這很危險。";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "哦...嗯，謝謝。";
+		mes "是的，我不想";
+		mes "讓自己淹死。";
+		next;
+		set rach_vice,23;
+		mes "[奶奶]";
+		mes "淹死了...？我只是";
+		mes "不想你";
+		mes "弄濕衣服。";
+		mes "水不那麼深...";
+		mes "即使你不能游泳，你也";
+		mes "可以爬出來，你知道。";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "...什麼？";
+		close;
+	}
+	else if (rach_vice == 8) {
+		mes "[" + strcharinfo(0) + "]";
+		mes "那個老婦人告訴";
+		mes "要小心不要";
+		mes "滑入水中";
+		mes "在這裡，我更好";
+		mes "確保我小心翼翼。";
+		close;
+	}
+	else if (rach_vice == 7) {
+		mes "[？ ？ ？ ]";
+		mes "哦，請非常小心！";
+		mes "你不想得到";
+		mes "離水太近。";
+		mes "如果你滑倒呢？";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "嗯？";
+		next;
+		mes "[奶奶]";
+		mes "哦，對不起，如果";
+		mes "我嚇到你了，但是";
+		mes "你站著的理由";
+		mes "上面很滑，你知道。";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "啊，我明白了。";
+		set rach_vice,8;
+		changequest 8111,8112;
+		close;
+	}
+	end;
+}
+
+ra_in01,255,25,0	script	Book#ra_in	111,{
+	if (rach_vice == 15) {
+		mes "^3355ffthis是您的";
+		mes "找到了布魯斯佩蒂的日記。";
+		mes "也許你應該接受";
+		mes "下次和你一起";
+		mes "您與Katinshuell交談。 ^000000";
+		close;
+	}
+	else if (rach_vice == 14) {
+		set rach_vice,15;
+		changequest 8118,8119;
+		getitem 7571,1; //Diary_Of_Blue
+		mes "^3355ffthis必須是";
+		mes "Bruspetti的日記！";
+		mes "您現在有許可";
+		mes "隨身攜帶";
+		mes "你可以弄清楚她是否和";
+		mes "Katinshuell連接...^000000";
+		close;
+	}
+	else if ((rach_vice == 9) || (rach_vice == 10)) {
+		mes "^3355ffthis必須是";
+		mes "Bruspetti的日記！";
+		mes "但是...閱讀";
+		mes "會讓你感到";
+		mes "就像一個真正的蠕變。";
+		mes "所以不要觸摸它。 ^000000";
+		set rach_vice,10;
+		changequest 8113,8114;
+		close;
+	}
+
+}
+
+// Ice Necklace/Summon Ktullanux Quest and Glacial Heart buyer :: rachel_tre
+//============================================================ 
+//iRO Changed this NPC to avoid "offending" people.
+//To enable how it originally looked, uncomment the
+//line below (npc header), and comment the line
+//under it, and then uncomment the cutin lines.
+
+//rachel,157,183,3	script	Sincere Follower Urstia	917,{
+rachel,157,183,3	script	Sincere Follower Urstia	916,{
+	cutin "ra_usti1",2;
+	if (checkweight(908,200) == 0) {
+		mes "^3355FFWAIT第二秒！";
+		mes "現在，您正在攜帶";
+		mes "你和你在一起太多。";
+		mes "請在";
+		mes "使用KAFRA服務";
+		mes "存儲您的一些物品。 ^000000";
+	}
+	if (ice_necklace_q < 1) {
+		mes "[在農場]";
+		mes "哦，你是冒險家嗎";
+		mes "從外面？讚美";
+		mes "到弗雷亞！她的愛與恩典";
+		mes "到達世界各地，";
+		mes "甚至感動的心";
+		mes "外國人，帶領他們在這裡！";
+		next;
+		if (select("芙蕾雅？我想知道更多:那真是胡言亂語！") == 1) {
+			emotion ET_OK;
+			mes "[在農場]";
+			mes "那天即將到來";
+			mes "弗雷亞（Freya）會復活，";
+			mes "領導她所有的忠實";
+			mes "瓦爾哈拉。現在她在";
+			mes "深度睡眠，但即使那樣";
+			mes "她看著我們所有人。";
+			next;
+			mes "[在農場]";
+			mes "你看，弗雷亞用完了";
+			mes "她所有的力量與";
+			mes "最可怕的惡魔";
+			mes "在千年戰爭中。";
+			mes "現在她休息並康復";
+			mes "在一個純潔而神聖的地方。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "等待...";
+			mes "你怎麼樣";
+			mes "知道所有";
+			mes "這發生了嗎？";
+			next;
+			mes "[在農場]";
+			mes "這些都是真理";
+			mes "弗雷亞的信徒知道。";
+			mes "弗雷亞（Freya）向";
+			mes "通過她的凡人船，我們";
+			mes "我們美麗的教皇";
+			mes "鮮豔的白光。";
+			next;
+			mes "[在農場]";
+			mes "不幸的是，即使是最多的";
+			mes "忠實的經歷失敗了";
+			mes "判斷。它使我感到震驚";
+			mes "承認我的兒子埃加波";
+			mes "是...犯罪。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "罪？他做了什麼";
+			mes "如果你不這樣做";
+			mes "介意我問？";
+			next;
+			mes "[在農場]";
+			mes "我不知道，但是Egapeo";
+			mes "已經生病了一段時間";
+			mes "現在。我堅信他";
+			mes "做了一些激怒弗雷亞的事情";
+			mes "儘管他可能應該得到";
+			mes "我正在盡力幫助他。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "...等待。什麼？ ！";
+			next;
+			mes "[在農場]";
+			mes "我知道如果我努力祈禱";
+			mes "夠了，請弗雷亞，";
+			mes "她會原諒我兒子和";
+			mes "治愈他的病。";
+			mes "但是有時祈禱不是";
+			mes "足夠...我需要致敬。";
+			next;
+			mes "[在農場]";
+			mes "我設法獲得了";
+			mes "無與倫比的項鍊";
+			mes "矮人的美麗。";
+			mes "但是，寶石鈍了";
+			mes "隨著年齡的增長和需要發光";
+			mes "在我能將他們提供給弗雷亞之前。";
+			next;
+			mes "[在農場]";
+			mes "但是，不只是任何人都可以";
+			mes "閃耀這條特殊項鍊";
+			mes "矮人鍛造。我需要";
+			mes "一個知道奧術魔術的人";
+			mes "幫助我。我認為只有";
+			mes "一個可以拋光這個的法師...";
+			next;
+			mes "[在農場]";
+			mes "Maheo，著名法師與";
+			mes "訪問最強大的";
+			mes "世界上的魔法咒語，";
+			mes "必須能夠清潔";
+			mes "項鍊的寶石！然而";
+			mes "我無法接觸他。";
+			next;
+			mes "[在農場]";
+			mes "你看，馬霍離開了";
+			mes "征服";
+			mes "冰洞中的冰怪";
+			mes "在北部，他沒有";
+			mes "返回了。那個地方也是";
+			mes "對像我這樣的人危險。";
+			next;
+			mes "[在農場]";
+			mes "我知道你的冒險家";
+			mes "定期通過那些";
+			mes "那種區域，你也會";
+			mes "請尋找Maheo並詢問";
+			mes "他打掃這條項鍊";
+			mes "我代表？請給我兒子...";
+			next;
+			if (select("但這不關我的事！ :好吧，我會做的。") == 1) {
+				mes "[在農場]";
+				mes "我...我明白了。";
+				mes "我以為弗雷亞";
+				mes "帶你去找我，但是";
+				mes "也許我的祈禱沒有";
+				mes "已經回答了。也許";
+				mes "我需要更熱心地祈禱？";
+				close2;
+				cutin "",255;
+				end;
+			}
+			mes "[在農場]";
+			mes "太感謝了！";
+			mes "請照顧這個";
+			mes "項鍊問馬哈";
+			mes "恢復其光澤。然後，";
+			mes "這將是對";
+			mes "我們充滿愛心的女神弗雷亞。";
+			setquest 2109;
+			getitem 7572,1; //Magic_Necklace
+			set ice_necklace_q,1;
+			close2;
+			cutin "",255;
+			end;
+		}
+		cutin "ra_usti2",2;
+		mes "[在農場]";
+		mes "................................................................";
+		mes "你在告訴我嗎";
+		mes "你不相信嗎？";
+		mes "悔改，願你";
+		mes "心向弗雷亞開放！";
+	}
+	else if ((ice_necklace_q >= 1) && (ice_necklace_q < 5)) {
+		mes "[在農場]";
+		mes "請找到Maheo";
+		mes "法師要求他恢復";
+		mes "項鍊的美麗";
+		mes "我給了你。他應該是";
+		mes "與怪物戰鬥";
+		mes "冰洞向北。";
+	}
+	else if (ice_necklace_q == 5) {
+		if (countitem(7573) > 0) {
+			mes "[在農場]";
+			mes "哦！我的項鍊！謝謝你！";
+			mes "真漂亮！會";
+			mes "向";
+			mes "弗雷亞！我確定這個，";
+			mes "我兒子會好起來的！";
+			next;
+			mes "[在農場]";
+			mes "在這裡，我知道這不多，";
+			mes "但是請接受這一點";
+			mes "我的圍繞";
+			mes "你為我做了什麼。";
+			delitem 7573,1; //Magic_Necklace_
+			getexp (checkre(3))?90000:700000,0;
+			set ice_necklace_q,6;
+			completequest 2113;
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "哦，只是說是";
+			mes "值得的經歷";
+			mes "為我。";
+			next;
+			mes "[在農場]";
+			mes "…………";
+			mes "…………";
+			mes "願弗雷亞（Freya）總是保護和";
+			mes "引導你並原諒你";
+			mes "那個可怕的笑話。";
+		}
+		else {
+			mes "["+strcharinfo(0)+"]";
+			mes "哦，不！項鍊消失了！";
+		}
+	}
+	else {
+		mes "[在農場]";
+		mes "願弗雷亞永遠";
+		mes "保護和指導你";
+		mes "與她不斷流動";
+		mes "恩典和智慧..";
+	}
+	close2;
+	cutin "",255;
+	end;
+}
+
+ice_dun02,120,105,3	script	Man Stuck in Ice#cave	924,5,5,{
+	if (checkweight(908,200) == 0) {
+		mes "^3355FFWAIT第二秒！";
+		mes "現在，您正在攜帶";
+		mes "你和你在一起太多。";
+		mes "請在";
+		mes "使用KAFRA服務";
+		mes "存儲您的一些物品。 ^000000";
+		close;
+	}
+	if (ice_necklace_q == 1) {
+		cutin "ra_magic3",2;
+		emotion ET_HUK;
+		mes "[卡在冰上]";
+		mes "H-你好？";
+		mes "嘿！嘿，你！";
+		mes "幫我打破這個";
+		mes "冰！我需要得到";
+		mes "離開這裡！";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "你是怎麼得到的";
+		mes "卡在那裡？";
+		next;
+		mes "[卡在冰上]";
+		mes "我會解釋一切";
+		mes "之後！只是...得到";
+		mes "這個冰上的冰！";
+		next;
+		if (getskilllv("MG_FIREBOLT") > 0) {
+			specialeffect EF_FIREBALL;
+			mes "^3355ffyou在";
+			mes "冰..^000000";
+		}
+		else {
+			specialeffect EF_HIT2;
+			mes "^3355ffyou hammer在";
+			mes "冰冰。 ^000000";
+		}
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "......";
+		mes "…………";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "我不能...";
+		mes "我什至無法刮擦";
+		mes "你有什麼想法嗎？";
+		next;
+		emotion ET_CRY;
+		mes "[卡在冰上]";
+		mes "這是如此屈辱...";
+		mes "我，最偉大的法師";
+		mes "在我們這個時代，瑪哈（Maheo）";
+		mes "在這個冰支柱中。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "等待...";
+		mes "你是馬哈嗎？";
+		next;
+		cutin "ra_magic1",2;
+		emotion ET_KIK;
+		mes "[甚至也";
+		mes "是的。你在說話";
+		mes "Maheo，最偉大的法師，";
+		mes "和奧術咒語的大師。";
+		mes "我知道魔術甚至很高";
+		mes "巫師永遠不會希望";
+		mes "一生學習！";
+		next;
+		cutin "ra_magic4",2;
+		mes "[甚至也";
+		mes "儘管我偉大，";
+		mes "我是一個謙虛的男人。看？";
+		mes "這就是為什麼我總是穿";
+		mes "這個法師制服...";
+		mes "提醒自己";
+		mes "謙卑的價值。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "那你怎麼得到";
+		mes "卡在所有的冰上？";
+		next;
+		cutin "ra_magic3",2;
+		mes "[甚至也";
+		mes "實際上，這發生了";
+		mes "因為我太謙虛了";
+		mes "你看，我低估了";
+		mes "我和毀滅性的";
+		mes "我自己的魔力的力量。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "...嗯？";
+		next;
+		mes "[甚至也";
+		mes "是的，這不會";
+		mes "如果我不是這樣，就會發生";
+		mes "謙虛...謙虛和善良。";
+		mes "這一切都始於我想";
+		mes "這個洞穴以及人們如何";
+		mes "有時候來這裡去冰。";
+		next;
+		mes "[甚至也";
+		mes "然後我決定";
+		mes "我會消滅這些";
+		mes "邪惡的怪物";
+		mes "人民！公民";
+		mes "會受到保護，並";
+		mes "我會被公認為英雄！";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "好吧...我想";
+		mes "聽起來正常";
+		mes "足夠的。繼續。";
+		next;
+		mes "[甚至也";
+		mes "我勇敢地戰鬥";
+		mes "雪摩爾。他們是";
+		mes "我的魔術沒有匹配！";
+		mes "所以，我決定只是";
+		mes "用來摧毀所有人";
+		mes "一個魔法咒語。";
+		next;
+		mes "[甚至也";
+		mes "你知道流星風暴嗎？";
+		mes "我知道另一個咒語";
+		mes "那...但是是兩百";
+		mes "倍強大！是的...";
+		mes "它具有一百萬的力量";
+		mes "爆炸太陽！但是...";
+		next;
+		emotion ET_CRY;
+		mes "[甚至也";
+		mes "太強大了！";
+		mes "有震顫，";
+		mes "冰碎，然後";
+		mes "所有的火焰造成了我的";
+		mes "著火的衣服！";
+		next;
+		emotion ET_SPARK, playerattached();
+		mes "["+strcharinfo(0)+"]";
+		mes "你...";
+		mes "你放火";
+		mes "穿衣服";
+		next;
+		cutin "ra_magic2",2;
+		mes "[甚至也";
+		mes "是的，但不要擔心。";
+		mes "我迅速熄滅";
+		mes "那些與我的火焰";
+		mes "強大的霜凍潛水員咒語！";
+		next;
+		cutin "ra_magic3",2;
+		mes "[甚至也";
+		mes "事後看...";
+		mes "那可能是";
+		mes "是一個錯誤...";
+		next;
+		cutin "ra_magic3",2;
+		mes "[甚至也";
+		mes "關於我自己。";
+		mes "貴族追求帶來了什麼";
+		mes "您去這個地方，冒險家？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "我聽說你可以";
+		mes "拋光寶石";
+		mes "帶有魔法的項鍊，";
+		mes "所以我來這裡是為了找到你。";
+		next;
+		mes "[甚至也";
+		mes "確實，我可以發光";
+		mes "那些寶石，以便它們";
+		mes "像閃耀一樣明亮";
+		mes "百萬爆炸的太陽！";
+		next;
+		mes "[甚至也";
+		mes "也就是說，很快";
+		mes "因為我可以出去";
+		mes "這個冰。唔...";
+		mes "但是我懷疑正常";
+		mes "魔術將能夠";
+		mes "融化所有這些。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "那我們怎麼樣";
+		mes "應該得到";
+		mes "你出去嗎？";
+		next;
+		mes "[甚至也";
+		mes "不要害怕。我敢肯定";
+		mes "我的主人會知道";
+		mes "一種使我脫離的方法";
+		mes "這個冰監獄。他可以";
+		mes "可以在弗雷亞（Freya）的春天附近找到：";
+		mes "代表我懇求他！";
+		set ice_necklace_q,2;
+		changequest 2109,2110;
+		close2;
+		cutin "",255;
+		end;
+	}
+	else if ((ice_necklace_q == 2) || (ice_necklace_q == 3)) {
+		mes "[甚至也";
+		mes "我的主人可能沒有";
+		mes "我的才華，但他";
+		mes "在";
+		mes "魔術的方式。請...";
+		mes "向他尋求幫助。他應該";
+		mes "在弗雷亞的春天附近閱讀。";
+		close;
+	}
+	else if (ice_necklace_q == 4) {
+		if (countitem(7569) > 0) {
+			if (countitem(7572) > 0) {
+				mes "[甚至也";
+				mes "哦，你回來了！";
+				mes "我的主人也有";
+				mes "關於破裂的任何想法";
+				mes "冰冷的冰獄？";
+				next;
+			}
+			else {
+				mes "["+strcharinfo(0)+"]";
+				mes "哦，射擊！我離開了城市的項鍊！我會馬上回來！";
+				next;
+				mes "[甚至也";
+				mes "嘿，嘿！你不能先釋放我嗎？";
+				emotion ET_CRY;
+				close;
+			}
+		}
+		else {
+			mes "[甚至也";
+			mes "我的主人可能沒有";
+			mes "我的才華，但他";
+			mes "在";
+			mes "魔術的方式。請...";
+			mes "向他尋求幫助。他應該";
+			mes "在弗雷亞的春天附近閱讀。";
+			close;
+		}
+		mes "["+strcharinfo(0)+"]";
+		mes "好吧，他做了這個";
+		mes "魔術錘";
+		mes "應該能夠";
+		mes "打破這個魔術冰。";
+		next;
+		mes "[甚至也";
+		mes "當然！";
+		mes "我為什麼不想";
+		mes "那？太好了，現在得到";
+		mes "我離開這裡！";
+		next;
+		mes "^3355fffyou緊緊抓住";
+		mes "風錘，然後";
+		mes "在冰上搖擺";
+		mes "憑藉您所有的力量。 ^000000";
+		next;
+		specialeffect EF_TEIHIT3;
+		specialeffect EF_FREEZE;
+		specialeffect EF_ICECRASH;
+		mes "^3355ff*pzzzzz*";
+		mes "*崩潰！ *^000000";
+		next;
+		setnpcdisplay "Man Stuck in Ice#cave",937;
+		emotion ET_SURPRISE;
+		mes "[甚至也";
+		mes "最後...！";
+		mes "畢竟";
+		mes "時間！我有空！";
+		next;
+		specialeffect EF_BEGINSPELL4;
+		mes "[甚至也";
+		mes "現在，所有的怪物";
+		mes "在這個洞穴中會品嚐";
+		mes "最偉大的法師的憤怒";
+		mes "世界！我要報仇，";
+		mes "並給那些野獸雙重";
+		mes "他們給我的痛苦！";
+		next;
+		monster "ice_dun02",108,109,"Snowier",1775,1,"Man Stuck in Ice#cave::OnMyMobDead";
+		monster "ice_dun02",114,112,"Snowier",1775,1,"Man Stuck in Ice#cave::OnMyMobDead";
+		monster "ice_dun02",126,105,"Snowier",1775,1,"Man Stuck in Ice#cave::OnMyMobDead";
+		monster "ice_dun02",121,99,"Snowier",1775,1,"Man Stuck in Ice#cave::OnMyMobDead";
+		specialeffect EF_LORD;
+		killmonster "ice_dun02","Man Stuck in Ice#cave::OnMyMobDead";
+		mes "[甚至也";
+		mes "穆哈哈哈哈哈哈哈哈！";
+		next;
+		mes "[甚至也";
+		mes "嗯，但是首先，我需要";
+		mes "用我的魔術清潔";
+		mes "你的那條項鍊。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "這裡...";
+		next;
+		mes "[甚至也";
+		mes "哦！這是由";
+		mes "矮人，不是嗎？";
+		mes "看來他們做了";
+		mes "另一個傑作。";
+		mes "可恥的是如此";
+		mes "不過，很受損。";
+		next;
+		mes "[甚至也";
+		mes "讓我們看看，現在...";
+		next;
+		specialeffect EF_FROSTWEAPON;
+		mes "^3355ff*廷*^000000";
+		next;
+		mes "[甚至也";
+		mes "好吧，我想這個";
+		mes "是我們分開的地方。";
+		mes "在這裡，將其作為禮物...";
+		mes "而且請不要提及";
+		mes "我困住自己的事實";
+		mes "在冰上給別人，好嗎？";
+		set ice_necklace_q,5;
+		changequest 2112,2113;
+		delitem 7569,1; //Hammer_Of_Wind
+		delitem 7572,1; //Magic_Necklace
+		getitem 7573,1; //Magic_Necklace_
+		getitem 7574,4; //Ice_Particle
+		close2;
+		cutin "",255;
+		setnpcdisplay "Man Stuck in Ice#cave",924;
+		end;
+	}
+
+OnTouch:
+	end;
+
+OnTouchNPC: 
+	emotion ET_FRET;
+	emotion ET_KIK, getattachedrid();
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+ice_dun02,120,3,0	script	#cave_vos	-1,{
+OnInit:
+	initnpctimer;
+	end;
+
+OnTimer3600000:
+	mapannounce "ice_dun02","Go away, you animals! I'll burn you to death once I get free!",bc_map,0xFFCE00;
+	end;
+
+OnTimer7200000:
+	mapannounce "ice_dun02","Hello? Can anyone hear me? I'm... I'm kind of stuck!",bc_map,0xFFCE00;
+	end;
+
+OnTimer10800000:
+	stopnpctimer;
+	mapannounce "ice_dun02","Please! I can't move! Hello? I think I might need help!",bc_map,0xFFCE00;
+	initnpctimer;
+	end;
+}
+
+rachel,265,98,3	script	Hamion#aru	930,{
+	if (checkweight(908,200) == 0) {
+		mes "^3355FFWAIT第二秒！";
+		mes "現在，您正在攜帶";
+		mes "你和你在一起太多。";
+		mes "請在";
+		mes "使用KAFRA服務";
+		mes "存儲您的一些物品。 ^000000";
+		close;
+	}
+	if (ice_necklace_q < 2) {
+		mes "[哈米恩]";
+		mes "嗯？你需要嗎";
+		mes "某物？如果不是";
+		mes "重要的是，我想";
+		mes "回到閱讀我的書。";
+		close;
+	}
+	else if (ice_necklace_q == 2) {
+		mes "[哈米恩]";
+		mes "嗯？你需要嗎";
+		mes "某物？如果不是";
+		mes "重要的是，我想";
+		mes "回到閱讀我的書。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "嗯，你知道嗎";
+		mes "名字的法師";
+		mes "瑪哈（Maheo）？我想";
+		mes "去尋找他的主人";
+		mes "在這個區域周圍。";
+		next;
+		mes "[哈米恩]";
+		mes "好吧，你找到了他";
+		mes "因為那就是我。";
+		mes "Maheo怎麼了？";
+		next;
+		mes "[哈米恩]";
+		mes "他凍結了自己嗎？";
+		mes "哈哈哈！一些天才！";
+		mes "哦，好吧，我想他還在";
+		mes "有很多要學習的";
+		mes "角色，即使不是魔術。";
+		next;
+		mes "[哈米恩]";
+		mes "讓我們看看，讓我們看看...";
+		mes "這本書應該有";
+		mes "答案。嗯...啊！";
+		mes "第42頁！我需要構造";
+		mes "為了打破的工件";
+		mes "那神秘的冰。嗯。";
+		next;
+		mes "[哈米恩]";
+		mes "你會幫忙嗎？";
+		mes "我？我需要得到";
+		mes "^4d4dff5大風^000000，";
+		mes "^4d4dff1 Hammer^000000，和";
+		mes "^4D4DFF1空白捲軸^000000";
+		next;
+		mes "[哈米恩]";
+		mes "你可以得到空白的捲軸";
+		mes "在朱諾的聖人學院。";
+		mes "啊，錘子是一種武器，";
+		mes "這些污點工具中不是其中之一。";
+		mes "如果可以的話，我會幫你的，但是...";
+		mes "我只是聰明，不強壯。";
+		set ice_necklace_q,3;
+		changequest 2110,2111;
+		close;
+	}
+	else if (ice_necklace_q == 3) {
+		if ((countitem(996) < 5) || (countitem(1354) < 1) || (countitem(7433) < 1)) { 
+			mes "[哈米恩]";
+			mes "我需要創建";
+			mes "神奇的人工製品";
+			mes "打破冰";
+			mes "誘捕maheo。你會嗎";
+			mes "請幫我？沒有";
+			mes "我可以自己買東西的方式！";
+			next;
+			mes "[哈米恩]";
+			mes "我需要得到";
+			mes "^4d4dff5大風^000000，";
+			mes "^4d4dff1 Hammer^000000，和";
+			mes "^4D4DFF1空白捲軸^000000";
+			next;
+			mes "[哈米恩]";
+			mes "你可以得到空白的捲軸";
+			mes "在朱諾的聖人學院。";
+			mes "啊，錘子是一種武器，";
+			mes "這些污點工具中不是其中之一。";
+			mes "如果可以的話，我會幫你的，但是...";
+			mes "我只是聰明，不強壯。";
+			close;
+		}
+		mes "[哈米恩]";
+		mes "太好了，你有一切";
+		mes "我需要！但是首先，你會嗎";
+		mes "確保您只有";
+		mes "您的庫存中有1個錘子？";
+		mes "如果您有多個";
+		mes "我可能會錯的錘子。";
+		next;
+		if (select("讓我查一下:別擔心，我查過了。") == 1) {
+			mes "[哈米恩]";
+			mes "好吧，總是";
+			mes "安全比安全";
+			mes "對不起！如果只有maheo";
+			mes "更加小心，更多";
+			mes "像你一樣，也許";
+			mes "不會發生。";
+			close;
+		}
+		mes "[哈米恩]";
+		mes "好吧，我帶你";
+		mes "為此。現在，讓我們吧";
+		mes "帶上工具";
+		mes "過程。嗯...讓我";
+		mes "在第45頁上查看此處。";
+		next;
+		mes "[哈米恩]";
+		mes "開始了...！";
+		next;
+		specialeffect2 EF_CONE;
+		mes "^3355ff*pzzzz*^000000";
+		next;
+		mes "[哈米恩]";
+		mes "... aaaand現在已經完成了。";
+		mes "在這裡，拿這錘";
+		mes "並用它來釋放maheo。";
+		mes "這個錘子只能工作";
+		mes "曾經，請確保您";
+		mes "正確砸碎了冰！";
+		delitem 1354,1; //Hammer
+		delitem 996,5; //Rough_Wind
+		delitem 7433,1; //Scroll
+		set ice_necklace_q,4;
+		changequest 2111,2112;
+		getitem 7569,1; //Hammer_of_Wind
+		close;
+	}
+	else if (ice_necklace_q >= 4) {
+		mes "[哈米恩]";
+		mes "總是有";
+		mes "唱歌鳥和";
+		mes "揮舞著蝴蝶";
+		mes "整個地方";
+		mes "太放鬆了，";
+		mes "如此閱讀的好地方。";
+		close;
+	}
+}
+
+rachel,113,97,5	script	Mohadian	929,10,10,{
+	if (ice_necklace_q == 6) {
+		mes "[莫哈迪安]";
+		mes "我在酒吧工作";
+		mes "在這裡，我聽到了很好";
+		mes "關於你的事情。其中一些";
+		mes "客戶聽說過";
+		mes "您通過去幫助Urstialla";
+		mes "進入那個危險的冰洞。";
+		next;
+		mes "[莫哈迪安]";
+		mes "現在，你真的有能力嗎";
+		mes "定期擊敗";
+		mes "裡面的雪怪？";
+		mes "如果是，我有一點";
+		mes "為您提供業務主張。";
+		next;
+		emotion ET_AHA;
+		mes "[莫哈迪安]";
+		mes "這裡周圍的天氣";
+		mes "天然很熱，潮濕，";
+		mes "所以我們需要冰才能冷";
+		mes "在酒吧喝飲料。";
+		mes "冰洞是最好的";
+		mes "放冰的地方，對嗎？";
+		next;
+		mes "[莫哈迪安]";
+		mes "如果你給我帶冰塊";
+		mes "從冰洞裡，我會買";
+		mes "他們從375 Zeny那裡得到他們";
+		mes "每個。認為它是一個";
+		mes "自由職業工作。我的意思是，如果你";
+		mes "可以給我帶冰，我會買！";
+		next;
+		mes "[莫哈迪安]";
+		mes "你可以做一些好";
+		mes "錢，我的客戶可以";
+		mes "享受冰冷的飲料，";
+		mes "我的生意一定會";
+		mes "益處。我們會殺死三隻鳥";
+		mes "用一塊石頭！你怎麼說？";
+		next;
+		if (select("不，謝謝。 :當然。") == 1) {
+			mes "[莫哈迪安]";
+			mes "噢，多麼令人失望。";
+			mes "我真的很確定";
+			mes "對於";
+			mes "我們倆。好吧，如果你";
+			mes "願意改變主意";
+			mes "然後我們可以成為夥伴！";
+			close;
+		}
+		mes "[莫哈迪安]";
+		mes "偉大的！現在，那個冰";
+		mes "我需要來自冰川";
+		mes "心。你可以得到那些";
+		mes "通過狩獵雪怪";
+		mes "在冰洞裡。記住，我會的";
+		mes "為每個人支付375 Zeny！";
+		set ice_necklace_q,7;
+		close;
+	}
+	else if (ice_necklace_q == 7) {
+		if (countitem(7561) < 1) {
+			mes "[莫哈迪安]";
+			mes "給我一些冰川";
+			mes "冰洞的心";
+			mes "我一定會補償";
+			mes "你有一些zeny。這是一個";
+			mes "兩者的交易真的很好";
+			mes "當您考慮它時，我們中的";
+			close;
+		}
+		mes "[莫哈迪安]";
+		mes "完美，你帶了我";
+		mes "一些冰川心！我可以";
+		mes "永不習慣美麗";
+		mes "這些冰晶的純度。";
+		next;
+		mes "[莫哈迪安]";
+		mes "是的，我想我可能";
+		mes "甚至能夠使用這些";
+		mes "使Arunafeltz冰川";
+		mes "葡萄酒。無論如何，讓我看看";
+		mes "你帶了我多少。";
+		next;
+		set .@hearts,countitem(7561);
+		set .@totalprice,375*.@hearts;
+		mes "[莫哈迪安]";
+		mes .@hearts +"冰川心";
+		mes "在375 Zeny每個...";
+		mes "看起來我欠你";
+		mes .@totalprice +"Zeny。給你！";
+		mes "總是很高興";
+		mes "與您做生意~";
+		delitem 7561,.@hearts; //Glacial Hearts
+		set Zeny, Zeny+.@totalprice;
+		close;
+	}
+
+OnTouch_:
+	if (ice_necklace_q == 6) {
+		mes "[莫哈迪安]";
+		mes "歡迎來到 -";
+		mes "嗯？你好？";
+		mes "打擾一下？";
+		close;
+	}
+	end;
+}
+
+ice_dun03,126,126,3	script	Blazing Fire#ice1	802,{
+	mes "^3355ff這場大火中的火焰";
+	mes "魔法障礙裂紋";
+	mes "力量。沒有辦法";
+	mes "你可以把這大火撲滅";
+	mes "具有常規均值。 ^000000";
+	if (ice_necklace_q > 4) {
+		if ($@ktullanux_summon < 4) {
+			if (countitem(7574) > 0) {
+				next;
+				select("使用冷凍雪粉。");
+				mes "^3355ffyou撒上冰雪";
+				mes "粉末到火焰上。它";
+				mes "熄滅前閃爍。 ^000000";
+				delitem 7574,1; //Freezing Snow Powder
+				hideonnpc "Blazing Fire#ice1";
+				set $@ktullanux_summon,$@ktullanux_summon+1;
+				if ($@ktullanux_summon == 4) donpcevent "ice_boss#broad::OnStart";
+			}
+			else if (countitem(7562) > 0) {
+				next;
+				select("使用冰秤。");
+				mes "^3355ffyou將冰秤扔進";
+				mes "火焰，它在";
+				mes "滅火。 ^000000";
+				delitem 7562,1; //Ice Scale
+				hideonnpc "Blazing Fire#ice1";
+				set $@ktullanux_summon,$@ktullanux_summon+1;
+				if ($@ktullanux_summon == 4) donpcevent "ice_boss#broad::OnStart";
+				close;
+			}
+		}
+	}
+	close;
+}
+
+
+ice_dun03,172,126,0	script	Blazing Fire#ice2	802,{
+	mes "^3355ff這場大火中的火焰";
+	mes "魔法障礙裂紋";
+	mes "力量。沒有辦法";
+	mes "你可以把這大火撲滅";
+	mes "具有常規均值。 ^000000";
+	if (ice_necklace_q > 4) {
+		if ($@ktullanux_summon < 4) {
+			if (countitem(7574) > 0) {
+				next;
+				select("使用冷凍雪粉。");
+				mes "^3355ffyou撒上冰雪";
+				mes "粉末到火焰上。它";
+				mes "熄滅前閃爍。 ^000000";
+				delitem 7574,1; //Freezing Snow Powder
+				hideonnpc "Blazing Fire#ice2";
+				set $@ktullanux_summon,$@ktullanux_summon+1;
+				if ($@ktullanux_summon == 4) donpcevent "ice_boss#broad::OnStart";
+			}
+			else if (countitem(7562) > 0) {
+				next;
+				select("使用冰秤。");
+				mes "^3355ffyou將冰秤扔進";
+				mes "火焰，它在";
+				mes "滅火。 ^000000";
+				delitem 7562,1; //Ice Scale
+				hideonnpc "Blazing Fire#ice2";
+				set $@ktullanux_summon,$@ktullanux_summon+1;
+				if ($@ktullanux_summon == 4) donpcevent "ice_boss#broad::OnStart";
+				close;
+			}
+		}
+	}
+	close;
+}
+
+ice_dun03,172,172,0	script	Blazing Fire#ice3	802,{
+	mes "^3355ff這場大火中的火焰";
+	mes "魔法障礙裂紋";
+	mes "力量。沒有辦法";
+	mes "你可以把這大火撲滅";
+	mes "具有常規均值。 ^000000";
+	if (ice_necklace_q > 4) {
+		if ($@ktullanux_summon < 4) {
+			if (countitem(7574) > 0) {
+				next;
+				select("使用冷凍雪粉。");
+				mes "^3355ffyou撒上冰雪";
+				mes "粉末到火焰上。它";
+				mes "熄滅前閃爍。 ^000000";
+				delitem 7574,1; //Freezing Snow Powder
+				hideonnpc "Blazing Fire#ice3";
+				set $@ktullanux_summon,$@ktullanux_summon+1;
+				if ($@ktullanux_summon == 4) donpcevent "ice_boss#broad::OnStart";
+			}
+			else if (countitem(7562) > 0) {
+				next;
+				select("使用冰秤。");
+				mes "^3355ffyou將冰秤扔進";
+				mes "火焰，它在";
+				mes "滅火。 ^000000";
+				delitem 7562,1; //Ice Scale
+				hideonnpc "Blazing Fire#ice3";
+				set $@ktullanux_summon,$@ktullanux_summon+1;
+				if ($@ktullanux_summon == 4) donpcevent "ice_boss#broad::OnStart";
+				close;
+			}
+		}
+	}
+	close;
+}
+
+ice_dun03,127,172,0	script	Blazing Fire#ice4	802,{
+	mes "^3355ff這場大火中的火焰";
+	mes "魔法障礙裂紋";
+	mes "力量。沒有辦法";
+	mes "你可以把這大火撲滅";
+	mes "具有常規均值。 ^000000";
+	if (ice_necklace_q > 4) {
+		if ($@ktullanux_summon < 4) {
+			if (countitem(7574) > 0) {
+				next;
+				select("使用冷凍雪粉。");
+				mes "^3355ffyou撒上冰雪";
+				mes "粉末到火焰上。它";
+				mes "熄滅前閃爍。 ^000000";
+				delitem 7574,1; //Freezing Snow Powder
+				hideonnpc "Blazing Fire#ice4";
+				set $@ktullanux_summon,$@ktullanux_summon+1;
+				if ($@ktullanux_summon == 4) donpcevent "ice_boss#broad::OnStart";
+			}
+			else if (countitem(7562) > 0) {
+				next;
+				select("使用冰秤。");
+				mes "^3355ffyou將冰秤扔進";
+				mes "火焰，它在";
+				mes "滅火。 ^000000";
+				delitem 7562,1; //Ice Scale
+				hideonnpc "Blazing Fire#ice4";
+				set $@ktullanux_summon,$@ktullanux_summon+1;
+				if ($@ktullanux_summon == 4) donpcevent "ice_boss#broad::OnStart";
+				close;
+			}
+		}
+	}
+	close;
+}
+
+ice_dun03,1,173,5	script	ice_boss#broad	-1,{
+OnStop:
+	stopnpctimer;
+	end;
+
+OnStart:
+	initnpctimer;
+	end;
+
+OnTimer2000:
+	mapannounce "ice_dun03","Someone has put out Thor's flames... Infidel!",bc_map,0xFF6633;
+	end;
+
+OnTimer8000:
+	mapannounce "ice_dun03","I, Ktullanux, must protect and preserve Thor's fierce flames...",bc_map,0xFF6633;
+	end;
+
+OnTimer10000:
+	mapannounce "ice_dun03","As the master of this cave, I vow vengeance!",bc_map,0xFF6633;
+	end;
+
+OnTimer13000:
+	mapannounce "ice_dun03","Only a human would be so foolhardy....",bc_map,0xFF6633;
+	end;
+
+OnTimer16000:
+	mapannounce "ice_dun03","Your curiosity will cost you, human.",bc_map,0xFF6633;
+	end;
+
+OnTimer19000:
+	mapannounce "ice_dun03","Prepare yourself for a freezing realm of pain which you cannot possibly imagine!",bc_map,0xFF6633;
+	end;
+
+OnTimer21000:
+	stopnpctimer;
+	donpcevent "ice_boss#on::OnStart";
+	end;
+}
+
+ice_dun03,1,174,3	script	ice_boss#on	-1,{
+OnStart:
+	monster "ice_dun03",150,135,"Ktullanux",1779,1,"ice_boss#on::OnMyMobDead";
+	end;
+
+OnStartTimer:
+	Initnpctimer;
+	end;
+
+OnStopTimer:
+	stopnpctimer;
+	end;
+
+OnMyMobDead:
+	mapannounce "ice_dun03","Oh, Odin! Please protect this place from Thor's fierce fire!",bc_map,0xFF6633;
+	mapannounce "ice_dun03","Pzzzzz...Pzzzz...",bc_map,0x33FFFF;
+	donpcevent "ice_boss#on::OnStartTimer";
+	donpcevent "#ice_sec::OnStart";
+	end;
+
+OnTimer7200000:
+	stopnpctimer;
+	set $@ktullanux_summon,0;
+	hideoffnpc "Blazing Fire#ice1";
+	hideoffnpc "Blazing Fire#ice2";
+	hideoffnpc "Blazing Fire#ice3";
+	hideoffnpc "Blazing Fire#ice4";
+	end;
+}
+	
+ice_dun03,1,175,3	script	#ice_sec	-1,{
+OnStart:
+	initnpctimer;
+	enablenpc "#ice_4f_1";
+	enablenpc "#ice_4f_2";
+	enablenpc "#ice_4f_3";
+	enablenpc "#ice_4f_4";
+	specialeffect EF_MAPPILLAR2,AREA,"#ice_4f_1";
+	specialeffect EF_MAPPILLAR2,AREA,"#ice_4f_2";
+	specialeffect EF_MAPPILLAR2,AREA,"#ice_4f_3";
+	specialeffect EF_MAPPILLAR2,AREA,"#ice_4f_4";
+	end;
+
+OnTimer60000:
+	stopnpctimer;
+	disablenpc "#ice_4f_1";
+	disablenpc "#ice_4f_2";
+	disablenpc "#ice_4f_3";
+	disablenpc "#ice_4f_4";
+	end;
+}
+
+ice_dun03,150,137,0	script	#ice_4f_1	45,2,2,{
+OnTouch_:
+	warp "ice_dun04",33,144;
+	end;
+
+OnInit:
+	disablenpc "#ice_4f_1";
+	end;
+}
+
+ice_dun03,138,148,0	script	#ice_4f_2	45,2,2,{
+OnTouch_:
+	warp "ice_dun04",33,144;
+	end;
+
+OnInit:
+	disablenpc "#ice_4f_2";
+	end;
+}
+
+ice_dun03,161,148,0	script	#ice_4f_3	45,2,2,{
+OnTouch_:
+	warp "ice_dun04",33,144;
+	end;
+
+OnInit:
+	disablenpc "#ice_4f_3";
+	end;
+}
+
+ice_dun03,151,162,0	script	#ice_4f_4	45,2,2,{
+OnTouch_:
+	warp "ice_dun04",33,144;
+	end;
+
+OnInit:
+	disablenpc "#ice_4f_4";
+	end;
+}
+
+// Donation Lottery Quest/High Priest Quest :: rachel_oz & rachel_ma1
+//============================================================ 
+ra_temple,119,180,0	script	Temple Entrance#ra_tem	45,1,1,{
+OnTouch:
+	if ($rachel_donate >= 10000) {
+		if (MISC_QUEST & 8192) { warp "ra_temin",169,23; end; }
+
+		if (ra_tem_q < 10) {
+			mes "^3355ffthe寺";
+			mes "入口被鎖定。 ^000000";
+			next;
+			select("踢門:用武器砸門。");
+			emotion ET_HUK, getnpcid(0, "Nemma#ra_temple");
+			mes "[女祭司尼瑪]";
+			mes "請不要那樣做！";
+			close;
+		}
+	}
+	warp "ra_temin",169,23;
+	end;
+}
+
+ra_temple,116,174,3	script	Nemma#ra_temple	920,{
+	cutin "ra_nemma02",2;
+	if ($rachel_donate < 10000) {
+		if (ra_have_donated == 0) {
+			cutin "ra_nemma03",2;
+			mes "[女祭司尼瑪]";
+			mes "美好的一天，冒險家。";
+			mes "我可以問什麼";
+			mes "你今天去聖殿嗎？";
+			next;
+			if (select("只是觀光:我是來祈禱的。") == 1) {
+				cutin "ra_nemma01",2;
+				mes "[女祭司尼瑪]";
+				mes "我想大多數外國人";
+				mes "不熟悉我們的";
+				mes "信仰，所以我想他們";
+				mes "不會來這裡祈禱...";
+				mes "好吧，我希望你喜歡你的";
+				mes "在這裡的時間，冒險家。";
+				goto L_End;
+			}
+			mes "[女祭司尼瑪]";
+			mes "哦！我很高興看到";
+			mes "我們的靈性是";
+			mes "在其他國家實行~";
+			mes "你知道，我們在";
+			mes "Cheshrumnir將主持";
+			mes "節日在寺廟。";
+			next;
+			cutin "ra_nemma01",2;
+			mes "[女祭司尼瑪]";
+			mes "我們接受捐款";
+			mes "為了節日，我們會";
+			mes "感謝您能做到的";
+			mes "貢獻。不管，";
+			mes "我們邀請您慶祝";
+			mes "與我們的女神的恩典。";
+			emotion ET_DELIGHT;
+			next;
+			mes "[女祭司尼瑪]";
+			mes "有一個大祭司";
+			mes "不同意籌集資金";
+			mes "從寺廟的顧客那裡，但是";
+			mes "如果你想，這取決於你";
+			mes "給或不給。如果你捐款，你";
+			mes "也許可以贏得獎品！";
+			next;
+			mes "[女祭司尼瑪]";
+			mes "您可以使用我們的彩票";
+			mes "贏得我們的好東西";
+			mes "寺廟存儲。但是，你";
+			mes "為每個捐贈50,000 Zeny";
+			mes "彩票，這也恰好是最低捐贈金額。";
+			next;
+			cutin "ra_nemma03",2;
+			mes "[女祭司尼瑪]";
+			mes "給予的獎品";
+			mes "捐贈者也隨機";
+			mes "選擇，所以我沒有辦法";
+			mes "告訴你你會得到什麼。";
+			mes "你有興趣嗎";
+			mes "在捐款？";
+			next;
+			if (select("不，謝謝。 :當然。") == 1) {
+				cutin "ra_nemma01",2;
+				mes "[女祭司尼瑪]";
+				mes "我明白。出色地，";
+				mes "也許還有其他時間。";
+				mes "願弗雷亞祝福你";
+				mes "您所有的旅程。願";
+				mes "女神的恩典";
+				mes "在我們所做的一切中支持我們~";
+				goto L_End;
+			}
+			mes "[女祭司尼瑪]";
+			mes "偉大的！你會多少";
+			mes "喜歡捐贈嗎？我們只能";
+			mes "接受捐款";
+			mes "在50,000 Zeny中，我們只能";
+			mes "一次接受多達150,000 Zeny。我知道有點複雜...";
+			next;
+			switch(select("50,000z - 1 彩票:100,000z - 2 彩票:150,000z - 3 彩票:取消")) {
+			case 1:
+				callsub S_Donate,1,"50,000";
+				break;
+			case 2:
+				callsub S_Donate,2,"100,000";
+				break;
+			case 3:
+				callsub S_Donate,3,"150,000";
+				break;
+			case 4:
+				cutin "ra_nemma02",2;
+				mes "[女祭司尼瑪]";
+				mes "我知道這需要";
+				mes "有些人想與";
+				mes "諸如50,000的金額";
+				mes "Zeny。即使這樣，弗雷亞總是";
+				mes "保護你，無論你走到哪裡~";
+				break;
+			}
+			goto L_End;
+		}
+		else {
+			cutin "ra_nemma03",2;
+			mes "[女祭司尼瑪]";
+			mes "哦，你" + strcharinfo(0) + "!";
+			mes "歡迎回來！我記得";
+			mes "你只捐了一點";
+			mes "前那是什麼帶你";
+			mes "今天到聖殿，嗯？";
+			next;
+			switch(select("我又來捐款了。 :只是觀光。 :我來參加儀式。 :我只是想再次見到你。")) {
+			case 1:
+				mes "[女祭司尼瑪]";
+				mes "你來了";
+				mes "捐款？燦爛！多少";
+				mes "你想捐贈這個嗎";
+				mes "時間？記住我們只能";
+				mes "接受以增量的捐款";
+				mes "50,000 Zeny高達150,000 Zeny。";
+				next;
+				switch(select("50,000z - 1 彩票:100,000z - 2 彩票:150,000z - 3 彩票:取消")) {
+				case 1:
+					callsub S_Donate,1,"50,000";
+					break;
+				case 2:
+					callsub S_Donate,2,"100,000";
+					break;
+				case 3:
+					callsub S_Donate,3,"150,000";
+					break;
+				case 4:
+					cutin "ra_nemma02",2;
+					mes "[女祭司尼瑪]";
+					mes "我知道這需要";
+					mes "有些人想與";
+					mes "諸如50,000的金額";
+					mes "Zeny。即使這樣，弗雷亞總是";
+					mes "保護你，無論你走到哪裡~";
+					break;
+				}
+				goto L_End;
+			case 2:
+				mes "[女祭司尼瑪]";
+				mes "哦！如果你想要一些";
+				mes "有關我們的寺廟的信息，";
+				mes "你為什麼不問女祭司";
+				mes "潘諾在裡面的服務台？";
+				next;
+				mes "[女祭司尼瑪]";
+				mes "Penno也將兌換";
+				mes "您的彩票";
+				mes "獎品，儘管她沒有";
+				mes "真的很喜歡這份工作。";
+				mes "好吧，無論如何，她會幫忙";
+				mes "你出去。稍後再見！";
+				break;
+			case 3:
+				mes "[女祭司尼瑪]";
+				mes "你是在這裡";
+				mes "服務？太好了~";
+				mes "我希望你能找到意義";
+				mes "鎮定只有你只能";
+				mes "從女神弗雷亞~";
+				break;
+			case 4:
+				mes "[女祭司尼瑪]";
+				mes "哦，你多麼甜蜜~";
+				break;
+			}
+			goto L_End;
+		}
+	}
+	else {
+		if (MISC_QUEST & 8192) {
+			cutin "ra_nemma01",2;
+			mes "[女祭司尼瑪]";
+			mes "歡迎來到我們的聖殿！";
+			goto L_End;
+		}
+		if (ra_tem_q < 1) {
+			mes "[女祭司尼瑪]";
+			mes "你好呀！";
+			mes "................................................................";
+			mes "嗯，由於某種原因，";
+			mes "廟門還沒有打開";
+			mes "但是現在應該開放。出色地";
+			mes "有時會發生這種情況...";
+			next;
+			mes "[女祭司尼瑪]";
+			mes "看，有這個自動鎖定";
+			mes "添加到";
+			mes "當這座寺廟是";
+			mes "建造，但現在更多";
+			mes "煩惱比安全性。";
+			next;
+			mes "[女祭司尼瑪]";
+			mes "每次有人混亂";
+			mes "使用鎖，或者如果破裂，";
+			mes "我們必須等到自動";
+			mes "在起作用之前重置自己";
+			mes "再次。沒有人可以修復它";
+			mes "真的很快，你知道...";
+			next;
+			mes "[女祭司尼瑪]";
+			mes "^333333*嗅*^000000我該怎麼辦？";
+			mes "自動重置永遠不會進行";
+			mes "這麼長，我真的需要";
+			mes "進去。 ^333333*sob*^000000 p-panno！";
+			mes "Panno，我靜脈heeeeelp~！";
+			set ra_tem_q,1;
+			goto L_End;
+		}
+		else if ((ra_tem_q >= 1) && (ra_tem_q < 10)) {
+			mes "[女祭司尼瑪]";
+			mes "如果大門鎖定，那就";
+			mes "我剛剛找到了";
+			mes "秘密入口。一些孩子";
+			mes "據說使用它進入";
+			mes "並在聖殿裡玩惡作劇，";
+			mes "但是我不知道他們是誰...";
+			next;
+			mes "[女祭司尼瑪]";
+			mes "Panno會知道的";
+			mes "該怎麼辦...我想。";
+			mes "哦，潘諾，幫我！";
+			goto L_End;
+		}
+		else if (ra_tem_q == 10) {
+			cutin "ra_nemma04",2;
+			mes "[女祭司尼瑪]";
+			mes "哦，"+strcharinfo(0)+"!";
+			mes "大門剛打開，";
+			mes "我能夠進去";
+			mes "聖殿！ ^333333*whew*^000000 i";
+			mes "真的很擔心";
+			mes "關於它一段時間。";
+			next;
+			mes "[女祭司尼瑪]";
+			mes "這是第一次";
+			mes "自Panno以來，門被鎖定";
+			mes "被分配給她的職位";
+			mes "寺廟。我想也許";
+			mes "發生了什麼事";
+			mes "她遇到了麻煩，你知道嗎？";
+			next;
+			cutin "ra_nemma02",2;
+			mes "[女祭司尼瑪]";
+			mes "等待，等等...";
+			mes "我在外面。如果什麼";
+			mes "大門再次鎖定？";
+			mes "哦，我該怎麼辦？";
+			goto L_End;
+		}
+		else if (ra_tem_q == 11) {
+			emotion ET_DELIGHT;
+			cutin "ra_nemma03",2;
+			mes "[女祭司尼瑪]";
+			mes "嘿，"+strcharinfo(0)+"~!";
+			mes "我們達到了目標！";
+			mes "那不是很棒嗎？我們沒有";
+			mes "要求捐款更長";
+			mes "但是你仍然可以兌換";
+			mes "裡面的彩票，好嗎？";
+			goto L_End;
+		}
+		else if (ra_tem_q == 12) {
+			mes "[女祭司尼瑪]";
+			mes "嗯...我知道什麼";
+			mes "我可以做！我可以要求";
+			mes "鞭炮！是的，那會";
+			mes "為節日開心。";
+			mes "嘿，你知道哪裡";
+			mes "那些東西被賣了嗎？";
+			next;
+			cutin "ra_nemma01",2;
+			mes "[女祭司尼瑪]";
+			mes "我，嗯，不能給你";
+			mes "很多...但是如果你願意";
+			mes "給我一些鞭炮，";
+			mes "那我為你的好祈禱";
+			mes "財富。抱歉，那是";
+			mes "我真正可以提供的。";
+			next;
+			cutin "ra_nemma04",2;
+			mes "[女祭司尼瑪]";
+			mes "嘿，帶我";
+			mes "許多鞭炮，";
+			mes "像， ^ff000020 ^000000！感謝";
+			mes "你謝謝你謝謝你！";
+			set ra_tem_q,13;
+			goto L_End;
+		}
+		else if (ra_tem_q == 13) {
+			mes "[女祭司尼瑪]";
+			mes "嘿，你帶我去嗎";
+			mes "^ff000020鞭炮^000000？嗯？";
+			next;
+			if(select("是的:不，還沒有。") == 1) {
+				cutin "ra_nemma01",2;
+				mes "[女祭司尼瑪]";
+				mes "讓我們來看看...";
+				next;
+				if (countitem(12018) >= 20) {
+					cutin "ra_nemma04",2;
+					delitem 12018,20; //Fire_Cracker
+					getexp (checkre(3))?50000:200000,0;
+					set ra_tem_q,14;
+					mes "[女祭司尼瑪]";
+					mes "耶！";
+					mes "鞭炮！";
+					mes "哦，讓我祈禱";
+					mes "為了你的好運！";
+					next;
+					mes "^3355ffpriestess nemma祈禱";
+					mes "熱心為你的好";
+					mes "財富。感覺就像";
+					mes "它實際上在工作...^000000";
+					next;
+					cutin "ra_nemma04",2;
+					mes "[女祭司尼瑪]";
+					mes "我受夠了！";
+					mes "現在是時候了";
+					mes "玩！嗯，也許";
+					mes "我們的教皇想要";
+					mes "也看到這些？";
+					goto L_End;
+				}
+				cutin "ra_nemma02",2;
+				mes "[女祭司尼瑪]";
+				mes "啊……";
+				mes "這還不夠";
+				mes "鞭炮。我是說，";
+				mes "我知道這就像捐贈，";
+				mes "但仍然多少樂趣";
+				mes "煙花如果沒有很多？";
+			}
+			else {
+				cutin "ra_nemma01",2;
+				mes "[女祭司尼瑪]";
+				mes "啊……";
+				mes "好吧，我不是真的";
+				mes "有很多錢付錢給你";
+				mes "無論如何，回來了~";
+			}
+			goto L_End;
+		}
+		else {
+			cutin "ra_nemma01",2;
+			mes "[女祭司尼瑪]";
+			mes "歡迎來到我們的聖殿！";
+		}
+		goto L_End;
+	}
+
+L_End:
+	close2;
+	cutin "",255;
+	end;
+
+S_Donate:
+	.@num = getarg(0);
+	cutin "ra_nemma01",2;
+	mes "[女祭司尼瑪]";
+	mes "所以，" + strcharinfo(0) + "...";
+	mes "我只想確保：";
+	mes "你想捐款"+getarg(1);
+	mes "Zeny，並接受"+ .@num +" Lottery";
+	if (.@num == 1) mes "票。這是正確的嗎？";
+	else mes "門票。這是正確的嗎？";
+	next;
+	if (select("否:是") == 1) {
+		mes "[女祭司尼瑪]";
+		mes "我懂了。好吧，如果你";
+		mes "沒有足夠的zeny";
+		mes "你，你可以來";
+		mes "返回並捐款。我們的";
+		mes "女神弗雷亞對";
+		mes "慷慨並獎勵病人！";
+		return;
+	}
+	if (Zeny >= .@num*50000) {
+		if (!checkweight(7570,.@num)) {
+			cutin "ra_nemma02",2;
+			mes "[女祭司尼瑪]";
+			mes "我幾乎無法相信...";
+			mes "您正在攜帶很多東西，";
+			mes "你甚至還不夠";
+			mes "彩票的空間。";
+			mes "你最好把一些";
+			mes "您的東西在存儲中，是嗎？";
+			next;
+			cutin "ra_nemma01",2;
+			mes "[女祭司尼瑪]";
+			mes "別擔心，我仍然是";
+			mes "在您做更多之後";
+			mes "您可用的空間";
+			mes "存貨。快點回來";
+			mes "如果可以的話捐贈，好嗎？";
+			return;
+		}
+		$rachel_donate = $rachel_donate + .@num;
+		getitem 7570,.@num;// Temple_Lottery_Ticket
+		Zeny = Zeny - .@num *50000;
+		set ra_have_donated,1;
+		if ($rachel_donate > 9999) {
+			cutin "ra_nemma03",2;
+			mes "[女祭司尼瑪]";
+			mes "你在那裡~";
+			mes "非常感謝";
+			mes "你的捐款！我敢肯定";
+			mes "那個弗雷亞在微笑";
+			mes "在你身上，會獎勵";
+			mes "你的慷慨~";
+			return;
+		}
+		else {
+			set .@Remaining,10000-$rachel_donate;
+			cutin "ra_nemma03",2;
+			mes "[女祭司尼瑪]";
+			mes "太感謝了！我們會";
+			mes "繼續接受捐款";
+			mes "直到我們達到目標。一次";
+			mes "我們收到"+.@Remaining+" more donations";
+			mes "以50,000 Zeny的增量";
+			mes "我們的籌款活動將完成。";
+			next;
+			mes "[女祭司尼瑪]";
+			mes "如果你感覺如此";
+			mes "傾向，稍後再回來";
+			mes "並做出另一個貢獻。";
+			mes "再次感謝，願弗雷亞";
+			mes "總是照顧你。";
+			return;
+		}
+	}
+	else {
+		mes "[女祭司尼瑪]";
+		mes "對不起，但是你有";
+		mes "少於"+ (.@num *50000) +" zeny...";
+		mes "我知道它問了很多，";
+		mes "但是這些是規則";
+		mes "我被告知要跟隨，所以...";
+		mes "好吧，也許再過一次，是嗎？";
+		return;
+	}
+}
+
+rachel,243,37,3	script	Kid#Candy Addict	921,{
+	if ((ra_tem_q < 2) || (ra_tem_q > 9) || (MISC_QUEST & 8192)) {
+		mes "[孩子]";
+		mes "嘿！那是什麼";
+		mes "微笑？你不";
+		mes "會拍我的頭，";
+		mes "你是？不！我討厭那個！";
+		next;
+		mes "[孩子]";
+		mes "不要來這裡！";
+		mes "我不想你";
+		mes "拍我的頭！ Grrr ...";
+		mes "我 - 我警告你！";
+		next;
+		mes "[孩子]";
+		mes "嘿，看看你";
+		mes "衣服！在哪裡";
+		mes "你來自，是嗎？";
+		next;
+		mes "[孩子]";
+		mes "你是來自";
+		mes "不同的國家？";
+		next;
+		mes "[孩子]";
+		mes "嗯，吧？";
+		mes "哪個國家";
+		mes "你來自嗎？";
+		next;
+		mes "[孩子]";
+		mes "嗯，隨便。";
+		next;
+		mes "[孩子]";
+		mes "哦，嘿，願意";
+		mes "你喜歡糖果嗎？";
+		if (ra_tem_q == 1) {
+			next;
+			switch(select("一點也不。 :是的。 :當然，我喜歡這些東西〜:不多。")) {
+			case 1:
+				mes "[孩子]";
+				mes "hmpf！好的。";
+				close;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				mes "[孩子]";
+				mes "哦。這是因為你";
+				mes "一個成年人。為什麼不";
+				mes "你喜歡糖果嗎？";
+				next;
+				mes "[孩子]";
+				mes "為什麼，吧？";
+				mes "告訴我，告訴我";
+				mes "我，怎麼來？";
+				close;
+			}
+			if (rand(1,2) != 2) {
+				mes "[孩子]";
+				mes "哦，是的...？";
+				next;
+				mes "[孩子]";
+				mes "但是你是一個成年人";
+				mes "不是嗎？呵呵呵呵！";
+				next;
+				mes "[孩子]";
+				mes "糖果僅用於";
+				mes "孩子們！哈哈哈哈！";
+				next;
+				mes "[孩子]";
+				mes "我欺騙了你！";
+				mes "你那個大假人！";
+			}
+			else {
+				mes "[孩子]";
+				mes "哦，你呢？";
+				mes "這意味著";
+				mes "你有";
+				mes "那麼，有什麼糖果嗎？";
+				next;
+				mes "[孩子]";
+				mes "我想要一個！";
+				next;
+				mes "[孩子]";
+				mes "快點，給我一個！";
+				mes "給我給我~！";
+				next;
+				if (countitem(529) > 0) {
+					mes "[孩子]";
+					mes "嗯...";
+					mes "如果你給我";
+					mes "一些糖果，然後我";
+					mes "告訴你一些事情";
+					mes "真的很酷，是嗎？";
+					next;
+					if (select("當然。 :不。") == 1) {
+						mes "[孩子]";
+						mes "是的~";
+						next;
+						mes "[孩子]";
+						mes "啊！得到你！";
+						mes "我不想要任何";
+						mes "無論如何糖果！ nyeh！";
+						mes "但是我喜歡你，所以";
+						mes "我可以告訴你一個秘密！";
+						next;
+						mes "[孩子]";
+						mes "你知道嗎";
+						mes "他們總是離開一個";
+						mes "窗戶的窗戶";
+						mes "解鎖？你監視";
+						mes "裡面的牧師。他們總是";
+						mes "鬥爭！那不是不好嗎？";
+						next;
+						mes "[孩子]";
+						mes "哦，他們是成年人，";
+						mes "所以我不知道。也許他們...";
+						mes "毫米。好吧，我記得";
+						mes "戰鬥應該是不好的。";
+						next;
+						mes "[孩子]";
+						mes "噢，堅果！";
+						mes "我只記得！";
+						mes "如果您有糖果，";
+						mes "必須來自另一個";
+						mes "國家！我應該有";
+						mes "從你那裡拿走。當它！";
+						next;
+						mes "[孩子]";
+						mes "哦，我恨你";
+						mes "現在！請別打擾我！";
+						set ra_tem_q,2;
+						close;
+					}
+					mes "[孩子]";
+					mes "你不想";
+					mes "分享您的糖果？";
+					mes "hmpf！我猜你";
+					mes "必須真的很喜歡它。";
+					mes "...你貪婪。";
+					close;
+				}
+				mes "[孩子]";
+				mes "等等，你沒有";
+				mes "有糖果，是嗎？怎麼可能";
+				mes "你告訴我你喜歡糖果";
+				mes "什麼時候不攜帶？";
+				mes "看看這個！我的口袋";
+				mes "充滿糖果！";
+				next;
+				mes "[孩子]";
+				mes "看？";
+				mes "看";
+				mes "這個糖果！";
+				next;
+				mes "[孩子]";
+				mes "是的，你必須";
+				mes "至少有這個";
+				mes "糖果很多";
+				mes "你喜歡他們。";
+				mes "呵呵呵呵呵呵！";
+				next;
+				mes "[孩子]";
+				mes "哦，嘿...";
+				mes "你是否想要";
+				mes "有糖果嗎？";
+				next;
+				mes "[孩子]";
+				mes "哈哈！我欺騙了你！";
+				mes "我不會分享";
+				mes "所有這些糖果！";
+				mes "所有這些都是我的！";
+				next;
+				mes "[孩子]";
+				mes "................................................................";
+				mes "嗯...你生氣了嗎？";
+				next;
+				mes "[孩子]";
+				mes "哦...";
+				mes "你生氣了";
+				mes "對我，不是嗎？";
+				next;
+				mes "[孩子]";
+				mes "好吧，好吧。";
+				mes "我會告訴你一個";
+				mes "很酷的秘密，所以保證";
+				mes "你不會生氣了。";
+				next;
+				switch(select("不，謝謝。 : 那是什麼？")) {
+				case 1:
+					mes "[孩子]";
+					mes "請~";
+					break;
+				case 2:
+					mes "[孩子]";
+					mes "你知道嗎";
+					mes "他們總是離開一個";
+					mes "窗戶的窗戶";
+					mes "解鎖？你監視";
+					mes "裡面的牧師。他們總是";
+					mes "鬥爭！那不是不好嗎？";
+					next;
+					mes "[孩子]";
+					mes "哦，他們是成年人，";
+					mes "所以我不知道。也許他們...";
+					mes "毫米。好吧，我記得";
+					mes "戰鬥應該是不好的...";
+					next;
+					mes "[孩子]";
+					mes "現在，我希望你";
+					mes "不會生氣";
+					mes "我了...";
+					mes "如果不是，";
+					mes "那我要";
+					mes "對你瘋了！";
+					set ra_tem_q,2;
+					break;
+				}
+			}
+		}
+		close;
+	}
+	else if (ra_tem_q == 2) {
+		mes "[孩子]";
+		mes "你要走了嗎？";
+		mes "你不想";
+		mes "看著我玩搖滾，";
+		mes "紙，剪刀？";
+		next;
+		mes "[孩子]";
+		mes "嘿！我不喜歡";
+		mes "您正在尋找的方式";
+		mes "對我我不喜歡你";
+		mes "那樣看著我！";
+		mes "你為什麼不走？";
+		next;
+		mes "[孩子]";
+		mes "天哪，我說，走開了！";
+		next;
+		mes "[孩子]";
+		mes "如果你很無聊，";
+		mes "你為什麼不窺視";
+		mes "廟裡的窗戶，";
+		mes "嗯？天哪！有些人！";
+		close;
+	}
+}
+
+ra_temple,67,209,0	script	zawa00	-1,3,3,{
+OnTouch:
+	if (ra_tem_q == 2) {
+		mes "^3355ffyou注意到一個略微";
+		mes "打開窗口";
+		mes "您可以輕鬆輸入。 ^000000";
+		next;
+		if(select("停留:從窗口進入") == 2) {
+			mes "^3355ffyou拉窗戶，";
+			mes "它順利打開。";
+			mes "這可能是什麼";
+			mes "那些雜亂無章的命中";
+			mes "一直使用進入";
+			mes "沒有註意到這座寺廟。 ^000000";
+			close2;
+			warp "que_rachel",62,82;
+			end;
+		}
+		mes "^3355ffyou決定是";
+		mes "偷偷溜進錯誤";
+		mes "一個地方。但是如果";
+		mes "你沒有被抓住？ ^000000";
+		close;
+	}
+	else if ((ra_tem_q >= 3) && (ra_tem_q < 10)) {
+		mes "^3355您想";
+		mes "進入寺廟";
+		mes "通過此窗口？ ^000000";
+		next;
+		if(select("輸入:取消") == 1) {
+			close2;
+			warp "que_rachel",62,82;
+			end;
+		}
+		mes "^3355通過此窗口是";
+		mes "可能是唯一的方法";
+		mes "您可以輸入。 ^000000";
+		close;
+	}
+	end;
+}
+
+que_rachel,63,82,0	script	Window#ra_temple	111,{
+	mes "^3355ffthis窗口開放。 ^000000";
+	next;
+	if(select("停留:從窗口退出") == 2) {
+		close2;
+		warp "ra_temple",73,208;
+		end;
+	}
+	close;
+}
+
+que_rachel,60,80,0	script	zawa01	-1,5,5,{
+OnTouch:
+	if (ra_tem_q == 2) {
+		mes "^3355 FFFIT奇怪";
+		mes "黑暗在這裡。 ^000000";
+		set ra_tem_q,3;
+		close;
+	}
+	end;
+}
+
+que_rachel,59,112,0	script	zawa02	-1,10,10,{
+OnTouch:
+	if (ra_tem_q == 3) {
+		mes "^3355fffyou聽到一些";
+		mes "走廊的噪音";
+		mes "走向教堂。它";
+		mes "聽起來有";
+		mes "這裡其他幾個人。 ^000000";
+		set ra_tem_q,4;
+		close;
+	}
+	end;
+}
+
+que_rachel,94,139,0	script	zawa03	-1,10,10,{
+OnTouch:
+	if (ra_tem_q == 4) {
+		mes "^3355fffyou聽到某些聲音";
+		mes "樓梯上的騷動。 ^000000";
+		set ra_tem_q,5;
+		close;
+	}
+	end;
+}
+
+que_rachel,132,70,0	script	zawa04	-1,10,10,{
+OnTouch:
+	if (ra_tem_q == 5) {
+		mes " ";
+		mes " ";
+		mes "^ff0000崩潰！ ^000000";
+		next;
+		mes "^3355fffyou聽到了什麼";
+		mes "從樓梯跌落，";
+		mes "其次是噪音";
+		mes "聽起來像個混戰。 ^000000";
+		set ra_tem_q,6;
+		close;
+	}
+	end;
+}
+
+que_rachel,28,315,0	script	Bloody Spot	-1,5,5,{
+OnTouch:
+	if (ra_tem_q == 6) {
+		mes "^3355ffthere在";
+		mes "地面比";
+		mes "其餘的地板...^000000";
+		next;
+		if (select("調查:忽略") == 1) {
+			mes "^3355fffit太黑了";
+			mes "真的看到了點^000000";
+			next;
+			mes "...";
+			mes "......";
+			mes "…………";
+			next;
+			mes "^3355ffit聞起來有點";
+			mes "喜歡銅或鐵。血";
+			mes "^000000可能已經溢出了。";
+			set ra_tem_q,7;
+			close;
+		}
+		else {
+			mes "^3355ffyou決定您";
+			mes "時間會更好";
+			mes "調查其他東西。 ^000000";
+			close;
+		}
+	}
+	else if (ra_tem_q == 7) {
+		mes "^3355ffthis在";
+		mes "地面真的很令人毛骨悚然，";
+		mes "不管有多少";
+		mes "您查看它。 ^000000。";
+		next;
+		if (select("再次調查:忽略") == 1) {
+			mes "^3355ff地面上的血液";
+			mes "還沒有乾燥，但是";
+			mes "到現在為止可能很冷。 ^000000";
+			next;
+			mes "...";
+			mes "......";
+			mes "…………";
+			next;
+			mes "^3355FF";
+			mes "地面更多";
+			mes "比僅包含";
+			mes "一個人。你最好得到";
+			mes "在為時已晚之前離開這裡。 ^000000";
+			set ra_tem_q,8;
+			close;
+		}
+		else {
+			mes "^3355ffyou決定您";
+			mes "時間會更好";
+			mes "調查其他東西。 ^000000";
+			close;
+		}
+	}
+	else if (ra_tem_q == 8) {
+		mes "^3355ff這個苦力";
+		mes "地面很糟糕";
+		mes "符號。你可能必須";
+		mes "逃脫這個地方之前";
+		mes "什麼造成這麼多";
+		mes "出血對您也一樣。 ^000000";
+		close;
+	}
+	end;
+}
+
+que_rachel,170,37,0	script	nemma01::nemma01	-1,5,5,{
+OnTouch_:
+	if (ra_tem_q == 8) {
+		mes "[？ ？ ？ ]";
+		mes "只有女神存在。";
+		next;
+		mes "[？ ？ ？ ]";
+		mes "每個人都必須是";
+		mes "準備好她來了。";
+		next;
+		mes "[？ ？ ？ ]";
+		mes "伊茲盧德，我的家鄉，";
+		mes "我來了";
+		mes "建造的地方。";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "呢";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Th-that祭司";
+		mes "潘諾的聲音！但不是";
+		mes "她在門外嗎？";
+		mes "她到底在說什麼？";
+		set ra_tem_q,9;
+		close;
+	}
+	end;
+}
+
+que_rachel,175,37,0	duplicate(nemma01)	nemma02	-1,5,5
+que_rachel,180,37,0	duplicate(nemma01)	nemma03	-1,5,5
+que_rachel,165,37,0	duplicate(nemma01)	nemma04	-1,5,5
+que_rachel,160,37,0	duplicate(nemma01)	nemma05	-1,5,5
+
+que_rachel,169,18,0	script	Quest Temple Exit#ra_tem	45,2,2,{
+	mes "^3355ff門關閉。 ^000000";
+	next;
+	switch(select("推門:檢查門:踢門:用武器粉碎門")) {
+	case 1:
+		mes "^3355ffyou推門";
+		mes "竭盡全力...";
+		if (ra_tem_q == 9) {
+			close2;
+			set ra_tem_q,10;
+			warp "ra_temple",119,175;
+			end;
+		}
+		mes "但它甚至都不會放心。 ^000000";
+		break;
+	case 2:
+		mes "^3355ffthere有些奇怪";
+		mes "安裝機械";
+		mes "大門和一個插槽";
+		mes "看起來你可以插入";
+		mes "卡或許可證。燈";
+		mes "正在打開，所以它必須工作。 ^000000";
+		break;
+	case 3:
+		mes "^3355ffyou憤怒地踢大門...";
+		if (ra_tem_q == 9) {
+			close2;
+			set ra_tem_q,10;
+			warp "ra_temple",119,175;
+			end;
+		}
+		mes "但是不管有多少憤怒";
+		mes "你把你踢了";
+		mes "門拒絕為您開放。";
+		mes "哦，你的腳也受傷了。 ^000000。";
+		break;
+	case 4:
+		mes "^3355FFWAIT！那不是";
+		mes "一個好主意。你不能";
+		mes "砸向大門";
+		mes "聖地：英雄不";
+		mes "專門從事褻瀆。 ^000000";
+		break;
+
+	}
+	close;
+}
+
+ra_temin,277,159,3	script	High Priest Zhed#rachel	932,{
+	if ((ra_tem_q > 14) || (MISC_QUEST&8192)) set lost_boy,14;
+	if (checkweight(908,200) == 0) {
+		mes "^3355FFWAIT第二秒！";
+		mes "現在，您正在攜帶";
+		mes "你和你在一起太多。";
+		mes "請在";
+		mes "使用KAFRA服務";
+		mes "存儲您的一些物品。 ^000000";
+		close;
+	}
+	if (lost_boy == 12) {
+		cutin "ra_gman",2;
+		mes "[大祭司Zhed]";
+		mes "由於某種原因，你看";
+		mes "我很熟悉。你應該嗎";
+		mes "在這裡？否則，您應該";
+		mes "如果沒有的話離開這個地方";
+		mes "適當的授權。";
+		next;
+		select("我是代表文森特來的");
+		mes "[大祭司Zhed]";
+		mes "文森特寄給你？我懂了。";
+		mes "你一定一直在尋找";
+		mes "為我。我是大祭司zhed，";
+		mes "我知道你";
+		mes "為我準備包裹。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "通常，文森特沒有";
+		mes "相信陌生人交付";
+		mes "這些包裹，但也許";
+		mes "有些人需要";
+		mes "奇怪的情況。反正，";
+		mes "讓我們看看他給我發了什麼...";
+		next;
+		cutin "ra_gman2",2;
+		mes "[大祭司Zhed]";
+		mes "嗯？這是什麼？";
+		mes "文森特發送了一張紙條？";
+		mes "我想這一定是";
+		mes "重要的。給我一個";
+		mes "讀這篇文章的時刻，請...";
+		next;
+		mes "[大祭司Zhed]";
+		mes "................................................................";
+		mes "... hrrrmm。文森特。現在";
+		mes "我明白。所以他在";
+		mes "故意冷向珍妮";
+		mes "和菲比，所以其他人";
+		mes "不會可疑...";
+		next;
+		cutin "ra_gman",2;
+		mes "[大祭司Zhed]";
+		mes "不過，我不認為他";
+		mes "必須這樣做 - 可能";
+		mes "也有點";
+		mes "很多。好吧，我真的";
+		mes "感謝您的幫助";
+		mes "在這件事上，冒險家。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "但是告訴我，你只有";
+		mes "幫助Vincent並冒險";
+		mes "生活是因為你在";
+		mes "有薪酬的？你只是在";
+		mes "錢的動機？";
+		next;
+		select("其實……我只是好奇而已。");
+		mes "[大祭司Zhed]";
+		mes "你只是為了";
+		mes "滿足您的好奇心？呵呵";
+		mes "嘿，這很有趣。";
+		mes "那也是最好的態度";
+		mes "對於勇敢的冒險家。我喜歡";
+		mes "那。我可以叫你的名字嗎？";
+		next;
+		select("告訴他你的名字。");
+		mes "[大祭司Zhed]";
+		mes ""+strcharinfo(0)+"...";
+		mes "是的，這是一個很好的名字。";
+		mes "它非常適合您。我一定會的";
+		mes "記住這一點。再說一次";
+		mes "我謝謝你冒險";
+		mes "生活以檢測我的財產。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "我要為";
+		mes "弗雷亞指導和保護";
+		mes "你在旅行中。和平";
+		mes "和你在一起"+strcharinfo(0)+".";
+		close2;
+		cutin "",255;
+		set lost_boy,13;
+		completequest 8099;
+		specialeffect2 EF_ABSORBSPIRITS;
+		getexp (checkre(3))?90000:900000,0;
+		end;
+	}
+	else if ((lost_boy == 13) && (ra_tem_q < 14)) {
+		mes "[大祭司Zhed]";
+		mes "啊，"+strcharinfo(0)+"...";
+		mes "我很感激你你";
+		mes "設法檢索了我的";
+		mes "我的財產。你是";
+		mes "一個真正有才華的冒險家。";
+		mes "願弗雷亞保護你...";
+	}
+	else if ((lost_boy == 13) && (ra_tem_q == 14)) {
+		cutin "ra_gman",2;
+		mes "[大祭司Zhed]";
+		mes "啊，好，我希望你能";
+		mes "遲早出現在這裡。";
+		mes "我有一個忙問你";
+		mes "既然我太忙了";
+		mes "我自己，我更信任你";
+		mes "比其他任何冒險家。";
+		next;
+		cutin "ra_gman2",2;
+		mes "[大祭司Zhed]";
+		mes "但是，在我給你之前";
+		mes "細節，您必須知道";
+		mes "必須保留這個青睞";
+		mes "秘密。換句話說，一次";
+		mes "我解釋了任務，你必須";
+		mes "接受我的要求。";
+		next;
+		if (select("讓我考慮一下:是的，當然。") == 1) {
+			mes "[大祭司Zhed]";
+			mes "我明白，但是如果你";
+			mes "請改變主意";
+			mes "回來讓我知道。";
+			mes "我很難找到";
+			mes "我真的可以";
+			mes "依靠為我做這個...";
+			close2;
+			cutin "",255;
+			end;
+		}
+		cutin "ra_gman",2;
+		mes "[大祭司Zhed]";
+		mes "啊，我很高興看到";
+		mes "你接受。不用擔心，";
+		mes "這個任務並不復雜，";
+		mes "也不需要太多";
+		mes "以犧牲的方式。";
+		next;
+		cutin "ra_gman2",2;
+		mes "[大祭司Zhed]";
+		mes "您可能已經知道，";
+		mes "我們國家的阿魯納菲爾茨";
+		mes "崇拜女神弗雷亞。";
+		mes "幾乎沒有分離";
+		mes "在政治，社會之間，";
+		mes "和我們的宗教信仰。";
+		next;
+		cutin "ra_gman",2;
+		mes "[大祭司Zhed]";
+		mes "現在，我們的領導者";
+		mes "民族宗教，我們的教皇，";
+		mes "是弗雷亞的直接僕人";
+		mes "並傳達她的消息";
+		mes "給我們。因此，她必須生活";
+		mes "通過非常嚴格的準則。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "我們的教皇很好奇";
+		mes "外界和願望";
+		mes "了解更多有關謊言的信息";
+		mes "除了阿魯納菲爾茨（Arunafeltz），但她";
+		mes "不容易被這個";
+		mes "有點知識。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "首先，她不能離開";
+		mes "雷切爾，那個地方";
+		mes "弗雷亞女神的精神。";
+		mes "其次，所有公民和祭司都被禁止離開這座城市";
+		mes "為了維護我們的神聖性。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "這些是隱性規則";
+		mes "通常不會公開討論";
+		mes "但是每個人都跟隨他們";
+		mes "防止被污名化。";
+		mes "坦白說，我認為這有點可恥，但我們正在努力。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "此外，我們的教皇必須";
+		mes "保持她的超然形象";
+		mes "虔誠，所以她在外面公開質疑她是不合適的";
+		mes "世界事務。雖然，這樣";
+		mes "知識將使她受益...";
+		next;
+		mes "[大祭司Zhed]";
+		mes "這就是為什麼大祭司";
+		mes "決定吸引值得信賴的";
+		mes "冒險家通知我們的教皇";
+		mes "關於外界。現在";
+		mes "你明白我為什麼問";
+		mes "您要保留所有這些秘密。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "你不需要洩露";
+		mes "令人髮指的秘密或任何東西";
+		mes "這樣。我想平凡";
+		mes "細節足以";
+		mes "請她。只是讓她成為";
+		mes "能夠設想您的家園。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "就個人而言，我認為會";
+		mes "為我們的教皇刷新";
+		mes "聽到你的一些故事";
+		mes "她一直在崇拜";
+		mes "我們的女神代表";
+		mes "我們光榮的城市中的每個人。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "不幸的是，我不能護送";
+		mes "你去女祭司，但我會";
+		mes "關聯您的手段";
+		mes "可以吸引她的觀眾。";
+		mes "首先，您需要一個 ^ff0000高";
+		mes "牧師的建議^000000。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "我會為你寫的";
+		mes "無需擔心";
+		mes "你自己。接下來，你";
+		mes "需要收集 ^FF000040冰川";
+		mes "心^000000作為像徵性的證明";
+		mes "你的力量和純度。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "當我寫完這個";
+		mes "建議，讓我告訴";
+		mes "你如何去教皇的";
+		mes "辦公室必須去一次";
+		mes "您會收集40個冰川心。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "從教堂向西走";
+		mes "在寺廟的中心，";
+		mes "然後進入守衛的門";
+		mes "由兩名士兵。向他們展示你";
+		mes "推薦和冰川心，他們應該給您通過。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "啊，你在這裡。";
+		mes "我寫完了";
+		mes "您的建議。";
+		mes "那麼，我想我會";
+		mes "之後見";
+		mes "完成了此任務。";
+		next;
+		mes "^3355ffyou獲得了高";
+		mes "牧師的建議。 ^000000";
+		close2;
+		cutin "",255;
+		set ra_tem_q,15;
+		set lost_boy,14;
+		setquest 8100;
+		end;
+	}
+	else if ((ra_tem_q == 15) || (ra_tem_q == 16)) {
+		mes "[大祭司Zhed]";
+		mes "一旦您聚集";
+		mes "^ff000040冰川心^000000，";
+		mes "你可以向他們展示";
+		mes "有了我的建議";
+		mes "為你寫信給士兵";
+		mes "保護教皇的辦公室。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "當你準備好去";
+		mes "到教皇的辦公室，只是";
+		mes "從教堂向西走";
+		mes "到聖殿的中心：";
+		mes "這是入口的地方。";
+	}
+	else if (ra_tem_q == 17) {
+		mes "[大祭司Zhed]";
+		mes "啊，非常感謝";
+		mes "花一些時間";
+		mes "與我的教皇在一起。";
+		mes "我可以說她真的";
+		mes "喜歡與您說話。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "我很好奇...";
+		mes "我們的教皇不習慣";
+		mes "與局外人交談";
+		mes "所以我認為你有";
+		mes "您自己的問題之後";
+		mes "你與她的交談...";
+		next;
+		select("嗯，她確實提到了一些聖地……");
+		cutin "ra_gman2",2;
+		mes "[大祭司Zhed]";
+		mes "什麼...？ ！";
+		mes "她提到";
+		mes "聖地...？ ！";
+		next;
+		cutin "ra_gman",2;
+		mes "[大祭司Zhed]";
+		mes "聖地是一個地方";
+		mes "所有人類，包括";
+		mes "教皇被禁止。";
+		mes "我們曾經允許人們";
+		mes "過去訪問，但是...";
+		next;
+		mes "[大祭司Zhed]";
+		mes "只有眾神才能進入";
+		mes "現在那個地方。聽，如果";
+		mes "其他牧師問";
+		mes "您與";
+		mes "教皇，請不要做任何";
+		mes "提及聖地。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "請不要問我";
+		mes "為什麼，但是相信我";
+		mes "非常重要的是";
+		mes "你假裝無知";
+		mes "聖地的存在！";
+		next;
+		mes "[？ ？ ？ ]";
+		mes "對不起，Zhed？";
+		mes "我可以和你說話嗎";
+		mes "片刻？我需要";
+		mes "與您談論";
+		mes "私人問題...";
+		next;
+		cutin "ra_gman2",2;
+		mes "[大祭司Zhed]";
+		mes "嗯，是的，當然！";
+		mes "請問我片刻...";
+		mes "當你在等我時";
+		mes "你為什麼不放鬆";
+		mes "下一個房間？不要忘記：";
+		mes "沒有聖地。";
+		close2;
+		cutin "",255;
+		select("好的。");
+		set ra_tem_q,18;
+		warp "ra_temin",297,156;
+		end;
+	}
+	else if (ra_tem_q == 18) {
+		mes "[大祭司Zhed]";
+		mes "對不起，但我們不是";
+		mes "很好地完成了我們的";
+		mes "討論。你為什麼不";
+		mes "在隔壁的房間裡等待並放鬆";
+		mes "同時在那邊？";
+		changequest 8101,8102;
+		close2;
+		cutin "",255;
+		warp "ra_temin",297,156;
+		end;
+	}
+	else if (ra_tem_q == 19) {
+		mes "[大祭司Zhed]";
+		mes "我為製作而道歉";
+		mes "你等了這麼久：我有";
+		mes "一些至關重要的事情";
+		mes "討論。現在，看起來";
+		mes "你臉上告訴我";
+		mes "您有一個緊迫的問題。";
+		next;
+		select("詢問關於 Bekento 的問題");
+		cutin "ra_gman2",2;
+		mes "[大祭司Zhed]";
+		mes "貝肯托？啊，你必須";
+		mes "一直在談論";
+		mes "大祭司尼倫。";
+		mes "她是唯一的";
+		mes "叫我那個。你知道，我的";
+		mes "全名是Zhed Bekento。";
+		next;
+		cutin "ra_gman",2;
+		mes "[大祭司Zhed]";
+		mes "說哪個...";
+		mes "尼倫問你什麼";
+		mes "或告訴你一些";
+		mes "不平凡嗎？";
+		next;
+		mes "^3355fferter有點猶豫，";
+		mes "你告訴大祭司zhed";
+		mes "關於您的對話";
+		mes "與大祭司Niren一起。 ^000000";
+		next;
+		mes "[大祭司Zhed]";
+		mes "嗯，我明白了。";
+		mes "是的。聽起來";
+		mes "就像她會做的事情。";
+		mes "我稍後再解釋，但是";
+		mes "現在，我需要休息。";
+		mes "我老了，你知道。";
+		next;
+		cutin "ra_gman2",2;
+		mes "[大祭司Zhed]";
+		mes "啊，但是在你走之前，讓";
+		mes "我警告你不要在附近 ^ff0000go";
+		mes "聖地^000000。我重複一遍，";
+		mes "遠離聖地。";
+		next;
+		mes "^3355ff 聖地...";
+		mes "為什麼大祭司Zhed";
+		mes "如此堅定保護";
+		mes "聖地？不管...";
+		mes "如果你想去那裡，那";
+		mes "只是去那裡。誰會阻止您？ ^000000";
+		close2;
+		cutin "",255;
+		set ra_tem_q,20;
+		changequest 8103,8104;
+		end;
+	}
+	else if ((ra_tem_q >= 20) && (ra_tem_q < 22)) {
+		cutin "ra_gman2",2;
+		mes "[大祭司Zhed]";
+		mes "無論您做什麼，無論如何";
+		mes "請您旅行";
+		mes "確保您留下";
+		mes "遠離聖地！";
+		next;
+		mes "^3355ffnow，比以往任何時候";
+		mes "你感到被迫";
+		mes "進入聖地。 ^000000";
+	}
+	else if (ra_tem_q == 23) {
+		cutin "ra_gman2",2;
+		mes "[大祭司Zhed]";
+		mes "哦，是你。";
+		mes "讓我猜...";
+		mes "在我說的一切之後，";
+		mes "你仍然繼續";
+		mes "參觀了聖地，";
+		mes "不是嗎？那好吧...";
+		next;
+		select("發生什麼事了嗎？");
+		cutin "ra_gman",2;
+		mes "[大祭司Zhed]";
+		mes "好吧，老實說，我去過";
+		mes "暫時暫停";
+		mes "工作，但不必擔心。";
+		mes "這不是你的錯。我去過";
+		mes "與另一個高位衝突";
+		mes "無論如何，祭司一會兒。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "請不要擔心。";
+		mes "如果不是這樣，他們將有";
+		mes "找到了其他攻擊方式";
+		mes "我。這只是一個問題";
+		mes "時間。他們很誇張";
+		mes "您為他們的利益而侵犯。";
+		next;
+		cutin "ra_gman2",2;
+		mes "[大祭司Zhed]";
+		mes "我想要的只是";
+		mes "Arunafeltz安全";
+		mes "和平。我希望這個";
+		mes "土地沒有被";
+		mes "貪婪的人類。我希望一切";
+		mes "根據弗雷亞的遺囑工作。";
+		next;
+		cutin "ra_gman",2;
+		mes "[大祭司Zhed]";
+		mes "啊，請不要";
+		mes "怪尼倫。她一定有";
+		mes "她自己的原因";
+		mes "動作。她改變了";
+		mes "但最後，我認為";
+		mes "我們仍然是朋友。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "最後一件事：";
+		mes "盡量不要讓";
+		mes "其他牧師抓住你";
+		mes "做任何禁止的事情。";
+		mes "這有點尷尬";
+		mes "對我來說，你明白。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "不過，你秘密地";
+		mes "邀請在這裡，所以我確定";
+		mes "他們只有少數";
+		mes "能夠識別";
+		mes "你。最後，你會做";
+		mes "你會的，對嗎？";
+		next;
+		cutin "ra_gman2",2;
+		mes "[大祭司Zhed]";
+		mes "...我想我知道什麼";
+		mes "你在聖地看到。";
+		mes "我確定你有很多";
+		mes "問，但現在不是時間";
+		mes "尋求答案。請，";
+		mes "你必須耐心等待。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "直到合適的時間";
+		mes "來了，我不想你";
+		mes "告訴任何人";
+		mes "你在聖地看到。";
+		next;
+		cutin "ra_gman",2;
+		mes "[大祭司Zhed]";
+		mes "那麼，冒險家，";
+		mes "謝謝您的到來。";
+		mes "我現在要躺下，";
+		mes "所以如果你讓我休息...";
+		close2;
+		set MISC_QUEST,MISC_QUEST | 8192;
+		set ra_tem_q,0;
+		cutin "",255;
+		completequest 8105;
+		specialeffect2 EF_ABSORBSPIRITS;
+		if (checkre(3))
+			getexp 90000,60000;
+		else
+			getexp 900000,600000;
+		end;
+	}
+	else if (MISC_QUEST & 8192) {
+		// Start Veins "Thor Volcano Base" Quest Addition
+		if (rachel_camel == 25) {
+			// Start Nameless Island Access Quest Addition
+			if (aru_monas == 11) {
+				cutin "ra_gman",2;
+				mes "[大祭司Zhed]";
+				mes "啊，已經有一段時間了，";
+				mes "不是嗎？你看起來很好，";
+				mes "我和你一樣好";
+				mes "可以看到。我能做些什麼";
+				mes "今天為你"+strcharinfo(0)+"?";
+				next;
+				switch(select("我只是想打個招呼:詢問靜脈事件")) {
+				case 1:
+					mes "[大祭司Zhed]";
+					mes "眾所周知，我只是";
+					mes "標題中的大祭司，";
+					mes "失去了我的大部分影響力";
+					mes "在許多其他";
+					mes "我的觀點的牧師。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "不過，我仍然相信";
+					mes "正義和善意";
+					mes "勝過腐敗";
+					mes "困擾著我們的牧師，";
+					mes "只要好人";
+					mes "願意採取行動。";
+					break;
+				case 2:
+					mes "[大祭司Zhed]";
+					mes "靜脈事件？";
+					mes "我還沒聽說";
+					mes "一切...也許";
+					mes "如果您詳細說明，那就";
+					mes "我會更多。";
+					next;
+					mes "^3355ffyou告訴大祭司";
+					mes "澤德的";
+					mes "在靜脈裡被捕的走私者。 ^000000";
+					next;
+					mes "[大祭司Zhed]";
+					mes "哦，我想我確實聽到了";
+					mes "早些時候。";
+					mes "現在讓我們看看...啊，對。";
+					mes "尼倫提到了一些東西";
+					mes "對他們很奇怪...";
+					next;
+					mes "[大祭司Zhed]";
+					mes "走私者與";
+					mes "一位高級官員";
+					mes "符文米加特王國，";
+					mes "這就是為什麼Niren如此";
+					mes "不願採取任何行動";
+					mes "反對他們一段時間。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "我太整合了";
+					mes "其他事情，我沒有";
+					mes "當時考慮很多。";
+					mes "你為什麼不和尼倫說話？";
+					mes "我確定她可以告訴你";
+					mes "有關發生的事情的更多信息。";
+					set aru_monas,12;
+					changequest 17007,17008;
+					next;
+					mes "[大祭司Zhed]";
+					mes "如果您決定";
+					mes "請訪問Niren";
+					mes "向她發送我的問候。";
+					break;
+				}
+			}
+			// End Nameless Island Access Quest Addition.
+			else if (aru_vol == 0) {
+				cutin "ra_gman",2;
+				mes "[大祭司Zhed]";
+				mes "啊，這對我的心";
+				mes "很高興再次見到你。";
+				mes "冒險家願意工作";
+				mes "為了世界而艱難";
+				mes "像你自己一樣的和平是公平的";
+				mes "罕見。我希望你知道。";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "嗯...？";
+				mes "請不要討人喜歡";
+				mes "我這樣！說";
+				mes "這樣就是";
+				mes "過度了，不是嗎？";
+				emotion ET_OHNO, playerattached();
+				next;
+				mes "[大祭司Zhed]";
+				mes "一點也不。實際上，我";
+				mes "確定一個地方";
+				mes "瓦爾哈拉已經";
+				mes "為你保證";
+				mes "由女武神。現在，怎麼樣";
+				mes "我的朋友，我可以幫你嗎？";
+				next;
+				select("火山中的神秘建築");
+				mes "["+strcharinfo(0)+"]";
+				mes "實際上，我想知道";
+				mes "如果您不知道";
+				mes "雷神裡面的這個設施";
+				mes "靜脈附近的火山。那裡";
+				mes "可能很大";
+				mes "在那邊。";
+				next;
+				mes "^3131ffyou告訴大祭司";
+				mes "the繩";
+				mes "雷神火山的孩子，";
+				mes "您如何找到建築物";
+				mes "隱藏在那裡。大祭司Zhed";
+				mes "似乎被你的話感到不安。 ^000000";
+				next;
+				mes "[大祭司Zhed]";
+				mes "我懂了。我有懷疑";
+				mes "關於正在發生的事情。現在，";
+				mes "您知道Arunafeltz";
+				mes "由我們的教會管理，";
+				mes "而且我們整個國家";
+				mes "崇拜女神弗雷亞。";
+				next;
+				mes "[大祭司Zhed]";
+				mes "領導這一領導的牧師";
+				mes "民族分為兩個主要";
+				mes "派系：我被認為是一部分";
+				mes "中等派系";
+				mes "通常與";
+				mes "Jingoistic強硬派派系。";
+				next;
+				mes "[大祭司Zhed]";
+				mes "這些頑固的牧師";
+				mes "非常願意使用";
+				mes "如果他們相信暴力方法";
+				mes "它是弗雷亞的意志，";
+				mes "是建立的";
+				mes "雷神火山的軍事營地。";
+				next;
+				mes "[大祭司Zhed]";
+				mes "當然，這也是";
+				mes "被認為是地質訓練營";
+				mes "因為他們總是在監視";
+				mes "那個火山活動的地方，";
+				mes "但是出於所有意圖和目的，";
+				mes "他們正在訓練男人戰鬥。";
+				next;
+				mes "[大祭司Zhed]";
+				mes "我害怕我想";
+				mes "關於它，但我敢肯定";
+				mes "他們有許多軍事用品";
+				mes "和大規模毀滅的機器";
+				mes "隱藏在營地裡。";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "等等，到底是怎麼回事";
+				mes "他們希望完成";
+				mes "通過戰鬥？他們如何";
+				mes "打算幫助女神";
+				mes "弗雷亞通過使用暴力？";
+				next;
+				mes "[大祭司Zhed]";
+				mes "所有的牧師都同意";
+				mes "重新組裝伊米爾的心會";
+				mes "復興的弗雷亞。如您所知，";
+				mes "碎片散落";
+				mes "世界。有些人擁有";
+				mes "由符文米加特斯王國。";
+				next;
+				mes "[大祭司Zhed]";
+				mes "為了避免";
+				mes "衝突，中等派系";
+				mes "牧師決定僱用";
+				mes "科學家複製Ymir的";
+				mes "心，導致";
+				mes "模仿該工件。";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "模仿伊米爾的";
+				mes "心？我想我知道";
+				mes "來自";
+				mes "施瓦茨瓦爾德共和國";
+				mes "正在為此努力！讓我們";
+				mes "看，他的名字是...";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "不是科學家的名字...";
+				input .@input$;
+				mes "^3131FF"+.@input$+"^000000?";
+				next;
+				if (.@input$ == "Varmunt") {
+					mes "[大祭司Zhed]";
+					mes "哦，你聽說過他嗎？";
+					mes "是的，他的名字叫Varmunt。";
+					mes "不幸的是，他故意";
+					mes "摧毀了模仿";
+					mes "伊米爾的心變成碎片，";
+					mes "然後消失。";
+					next;
+				}
+				else {
+					mes "[大祭司Zhed]";
+					mes ""+.@input$+"?";
+					mes "不，那不是他。";
+					mes "創造的人";
+					mes "模仿伊米爾的心";
+					mes "被命名為Varmunt。";
+					mes "他確實是個天才。";
+					next;
+				}
+				mes "[大祭司Zhed]";
+				mes "我不確定發生了什麼";
+				mes "要varmunt。我只知道";
+				mes "發生了嚴重的事情";
+				mes "在施瓦茨瓦爾德共和國，";
+				mes "他消失在";
+				mes "慘敗。很奇怪...";
+				next;
+				mes "[大祭司Zhed]";
+				mes "雖然工作";
+				mes "伊米爾的心模仿";
+				mes "Varmunt創造的被打破了";
+				mes "其他科學家";
+				mes "設法大部分繁殖";
+				mes "他在不穩定的伊米爾心中的工作。";
+				next;
+				mes "[大祭司Zhed]";
+				mes "自從我們中等派係以來";
+				mes "只能提供";
+				mes "不穩定的Ymir心臟模仿，";
+				mes "硬地派迅速";
+				mes "獲得的尊重比";
+				mes "我們在人民的眼中。";
+				next;
+				mes "[大祭司Zhed]";
+				mes "儘管我們先進的武器";
+				mes "和盔甲，恐怕我們的";
+				mes "Arunafeltz國家不像";
+				mes "像我一樣，文明與和平";
+				mes "像它一樣";
+				mes "現在控制我們的政府。";
+				next;
+				mes "[大祭司Zhed]";
+				mes "雖然是艱難的";
+				mes "讓我們繼續";
+				mes "我們忠實的研究";
+				mes "再現伊米爾的心，";
+				mes "他們一直在發展自己的";
+				mes "軍隊可能沒有反對。";
+				next;
+				mes "[大祭司Zhed]";
+				mes "因此，基本上，溫和派";
+				mes "正在嘗試重新創建Ymir的";
+				mes "研究中心的心";
+				mes "在聖地和";
+				mes "施瓦茨瓦爾共和國。";
+				next;
+				mes "[大祭司Zhed]";
+				mes "艱難的人是";
+				mes "訓練士兵和";
+				mes "存儲軍事用品";
+				mes "和他們營地中的武器";
+				mes "在雷神火山。然而，";
+				mes "我不知道任何細節。";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "這看起來不好。";
+				mes "我的意思是，如果他們的齒輪";
+				mes "拿起伊米爾的心";
+				mes "用武力的碎片是戰爭";
+				mes "反對施瓦茨瓦特共和國";
+				mes "和符文米加特王國！";
+				next;
+				mes "[大祭司Zhed]";
+				mes "看到我是一部分";
+				mes "中等派系";
+				mes "最近被降級了，我只是不";
+				mes "可以訪問很多信息";
+				mes "關於硬線。然而，";
+				mes "可能仍然有希望...";
+				next;
+				mes "[大祭司Zhed]";
+				mes "戰爭對所有人都不利";
+				mes "涉及各方。那是";
+				mes "為什麼我想請你";
+				mes "潛入營地";
+				mes "雷神火山是為了";
+				mes "保護國際和平。";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "我真的很想知道";
+				mes "更多關於他們什麼";
+				mes "計劃這樣做，但是";
+				mes "地方受到嚴重保護！";
+				mes "我要偷偷摸摸？";
+				next;
+				mes "[大祭司Zhed]";
+				mes "你說得對。";
+				mes "我們必須考慮";
+				mes "一個很好的方式";
+				mes "讓你滲入";
+				mes "那個地方。嗯...";
+				set aru_vol,1;
+				setquest 2114;
+				close2;
+				cutin "",255;
+				end;
+			}
+			else if ((aru_vol > 0) && (aru_vol < 5)) {
+				mes "[大祭司Zhed]";
+				mes "唔...";
+				next;
+				switch(select("如何潛入陣營:溫和派:強硬派")) {
+				case 1:
+					mes "[大祭司Zhed]";
+					mes "我仍然沒有";
+					mes "潛入的想法";
+					mes "雷神火山的營地。";
+					mes "給我更多的時間，";
+					mes "希望我們能弄清楚";
+					mes "在一起的東西。";
+					break;
+				case 2:
+					mes "[大祭司Zhed]";
+					mes "我們的祭司";
+					mes "派系反對戰爭，";
+					mes "所以我們一直在嘗試";
+					mes "發展模仿Ymir的";
+					mes "心臟很長一段時間。我們已經";
+					mes "不幸的是，成功。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "艱難的陣容實際上";
+					mes "反對我們的努力，但是";
+					mes "他們讓我們繼續";
+					mes "他們認為他們最終可以";
+					mes "使用模仿ymir心";
+					mes "軍事目的。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "YMIR心臟繁殖";
+					mes "項目令人沮喪";
+					mes "世界上最好的頭腦，";
+					mes "一些科學家甚至有";
+					mes "訴諸於禁止使用";
+					mes "方法。真可惜。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "Varmunt實際上成功了";
+					mes "在重現伊米爾的心中，";
+					mes "但是他摧毀了它，";
+					mes "他消失了。他做到了";
+					mes "防止戰爭，但我們可以";
+					mes "現在真的利用他的幫助。";
+					break;
+				case 3:
+					mes "[大祭司Zhed]";
+					mes "艱苦的局面特別是";
+					mes "狂熱的奉獻";
+					mes "弗雷亞（Freya），並將使用任何方式";
+					mes "進一步解釋";
+					mes "作為她的意願。他們願意";
+					mes "為了他們的信念而進行戰爭。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "他們甚至";
+					mes "在雷神建造了一個軍事營地";
+					mes "火山極大地打擾了我。";
+					mes "幾乎可以肯定他們";
+					mes "打算對任何人發動戰爭";
+					mes "伊米爾的心臟碎片的國家。";
+					next;
+					mes "["+strcharinfo(0)+"]";
+					mes "誰負責";
+					mes "雷神火山的營地？";
+					next;
+					mes "[大祭司Zhed]";
+					mes "大祭司維爾特。";
+					mes "他負責所有";
+					mes "重要的建築物";
+					mes "Arunafeltz。他的房間在";
+					mes "建築物的另一側，";
+					mes "但這總是受到嚴重保護。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "維爾特是";
+					mes "排名最高的成員";
+					mes "頑固的牧師";
+					mes "派。他很少做到這一點";
+					mes "他的事見任何人";
+					mes "他看到他的下方。";
+					break;
+				}
+				close2;
+				cutin "",255;
+				end;
+			}
+			else if (aru_vol == 5) {
+				cutin "ra_gman",2;
+				if (countitem(7342) > 0) {
+					mes "["+strcharinfo(0)+"]";
+					mes "你拜託嗎";
+					mes "看看這個";
+					mes "文件，大祭司ZHED？";
+					next;
+					mes "[大祭司Zhed]";
+					mes "當然。";
+					mes "讓我們看看是什麼";
+					mes "在此文件文件夾中？";
+					next;
+					mes "[大祭司Zhed]";
+					mes "......................";
+					mes "……………………";
+					mes "................................................";
+					next;
+					mes "[大祭司Zhed]";
+					mes "這是地質";
+					mes "關於雷神火山的報告？";
+					mes "啊，我明白了。他們一定有";
+					mes "有人定期檢查";
+					mes "看看它是否會爆發。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "雖然這很危險";
+					mes "在那裡建造一個軍事營，";
+					mes "一些武器材料可以";
+					mes "僅是從熱量中鍛造的";
+					mes "來自雷神的火山。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "是的，我認為這也是";
+					mes "可能有特別的";
+					mes "武器製作金屬和";
+					mes "只能是";
+					mes "在火山上發現。那";
+					mes "完全有道理。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "雖然火山是";
+					mes "現在休眠，這些報告";
+					mes "聲稱火山是";
+					mes "安全或準備爆發";
+					mes "隨時。這裡的數據";
+					mes "沒有任何意義。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "嗯。這只是一個直覺，";
+					mes "但是看到這些差異";
+					mes "在他的報告中，我真的認為這位地質學家有一個議程";
+					mes "雷神火山的營地。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "你知道，如果那是真的，";
+					mes "他可能能夠提供幫助";
+					mes "你潛入營地。";
+					mes "你不認為這是值得的";
+					mes "現在檢查一下嗎？";
+					next;
+					if (select("是:否") == 2) {
+						mes "[大祭司Zhed]";
+						mes "好吧，你永遠不知道";
+						mes "直到你問。除了，";
+						mes "我不知道是否有";
+						mes "偷偷摸摸的任何其他方式";
+						mes "進入雷神火山營地...";
+						next;
+					}
+					mes "[大祭司Zhed]";
+					mes "我希望你去談談";
+					mes "致地質學家。他應該";
+					mes "在靜脈裡，沙漠城";
+					mes "雷切爾南部。他是你的";
+					mes "進入雷神的最佳機會";
+					mes "無疑的火山營地。";
+					delitem 7342,1; //File01
+					set aru_vol,6;
+					changequest 2115,2116;
+				}
+				else {
+					mes "["+strcharinfo(0)+"]";
+					mes "嗯...？";
+					mes "我放在哪裡";
+					mes "該文件文件夾？";
+				}
+			}
+			else if (aru_vol == 6) {
+				cutin "ra_gman",2;
+				mes "[大祭司Zhed]";
+				mes "我希望你去談談";
+				mes "致地質學家。他應該";
+				mes "在靜脈裡，沙漠城";
+				mes "雷切爾南部。他是你的";
+				mes "進入雷神的最佳機會";
+				mes "無疑的火山營地。";
+				close2;
+				cutin "",255;
+				end;
+			}
+			else if ((aru_vol > 6) && (aru_vol < 26)) {
+				cutin "ra_gman",2;
+				mes "[大祭司Zhed]";
+				mes "我希望你去談談";
+				mes "致地質學家。他應該";
+				mes "在靜脈裡，沙漠城";
+				mes "雷切爾南部。他是你的";
+				mes "進入雷神的最佳機會";
+				mes "無疑的火山營地。";
+				close2;
+				cutin "",255;
+				end;
+			}
+			else if (aru_vol == 26) {
+				cutin "ra_gman",2;
+				mes "[大祭司Zhed]";
+				mes "哦！你回來了！";
+				mes "那個地質學家能夠";
+				mes "幫助你潛入";
+				mes "雷神火山營地？";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "不僅如此。我們已經";
+				mes "說服了營地";
+				mes "火山將爆炸，";
+				mes "所以他們爭先恐後";
+				mes "撤離。他們真的";
+				mes "驚慌在那邊！";
+				next;
+				mes "[大祭司Zhed]";
+				mes "哈哈哈！那太棒了！";
+				mes "即使他們確實想";
+				mes "他們已經去過";
+				mes "愚弄了，這將帶他們";
+				mes "一些時間意識到這一點";
+				mes "在所有混亂中。";
+				next;
+				mes "[大祭司Zhed]";
+				mes "是的，可能不是";
+				mes "絕佳的時機";
+				mes "堅硬的派系權利";
+				mes "現在，但是機會";
+				mes "應該很快出現。";
+				mes "感謝您的所有幫助。";
+				next;
+				mes "[大祭司Zhed]";
+				mes "請放鬆一會兒，";
+				mes "我會照顧其餘的。";
+				mes "當罷工的時間到來時，";
+				mes "我將再次與您聯繫。";
+				mes "在一起，我們可以保護";
+				mes "我們國家之間的和平。";
+				set aru_vol,27;
+				completequest 60213;
+				getexp (checkre(3))?20000:200000,0;
+				close2;
+				cutin "",255;
+				end;
+			}
+			else if (aru_vol > 26) {
+				// Start Peace to Arunafeltz addition
+				if (aru_em < 7) {
+					mes "[大祭司Zhed]";
+					mes "我一定會聯繫";
+					mes "您再次尋求幫助";
+					mes "當時間合適的時候。";
+					mes "我確定還有其他";
+					mes "現在可能需要你...";
+				}
+				else if (aru_em == 8){
+					cutin "ra_gman",2;
+					mes "["+strcharinfo(0)+"]";
+					mes "歡迎，冒險家。";
+					mes "我很高興看到你";
+					mes "這裡。我想...我認為";
+					mes "機會出現了";
+					mes "我可以用你的";
+					mes "專家協助。";
+					next;
+					cutin "ra_gman2",2;
+					mes "[大祭司Zhed]";
+					mes "不過，我擔心我可能是";
+					mes "做出錯誤的決定。";
+					mes "畢竟，我不再有";
+					mes "在";
+					mes "其他牧師...我無能為力";
+					mes "但是認為我錯了。";
+					next;
+					mes "["+strcharinfo(0)+"]";
+					mes "不要灰心，";
+					mes "大祭司Zhed。";
+					mes "我...我相信你！";
+					next;
+					cutin "ra_gman",2;
+					mes "[大祭司Zhed]";
+					mes "我想你是對的。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "眾所周知，";
+					mes "最高權威";
+					mes "Arunafeltz是我們的教皇，";
+					mes "輪迴";
+					mes "我們的女神弗雷亞。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "不幸的是，她也是";
+					mes "年輕而無辜，她";
+					mes "還沒有經驗";
+					mes "主張控制並蓋章";
+					mes "消除戰鬥和";
+					mes "牧師之間的腐敗。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "在這些絕望的時期，";
+					mes "我們需要有人";
+					mes "提供強大而自信";
+					mes "人民的領導";
+					mes "阿魯納菲爾茨（Arunafeltz）之前";
+					mes "失去了戰爭和暴力。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "^333333*嘆氣...*^000000";
+					mes "我知道可能不是";
+					mes "是的，但是有人";
+					mes "必須做點什麼";
+					mes "在另一個高中之前";
+					mes "牧師毀了我們的國家。";
+					next;
+					emotion ET_HUK, playerattached();
+					mes "["+strcharinfo(0)+"]";
+					mes "是的，你沒有想";
+					mes "推翻";
+					mes "你是教皇嗎？我 - 不是";
+					mes "那有點極端？";
+					next;
+					cutin "ra_gman2",2;
+					emotion ET_SWEAT;
+					mes "[大祭司Zhed]";
+					mes "什麼？不，不！";
+					mes "不要得出結論";
+					mes "那樣！不要誤會";
+					mes "我：我忠於我們的教皇。";
+					next;
+					cutin "ra_gman",2;
+					mes "[大祭司Zhed]";
+					mes "我實際上想工作";
+					mes "與教皇非常緊密";
+					mes "從本質上講，統治與";
+					mes "通過結合我的經驗";
+					mes "和她的智慧。雄心勃勃，";
+					mes "但是我還能做什麼？";
+					next;
+					mes "[大祭司Zhed]";
+					mes "你還記得你的";
+					mes "停止了硬地板";
+					mes "祭司";
+					mes "他們在";
+					mes "雷神火山營地？那會";
+					mes "只能暫時阻止他們。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "他們最終會準備";
+					mes "再次以暴力行動。";
+					mes "我們需要一個永久的解決方案";
+					mes "確保這種";
+					mes "事情不會再次發生。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "我們需要說服";
+					mes "教皇最終採取行動，";
+					mes "賦予我的和平政策";
+					mes "她的全力支持。將要";
+					mes "你幫我做這個嗎？";
+					next;
+					if (select("是:否") == 2) {
+						mes "好吧...要求";
+						mes "教皇的支持是唯一的";
+						mes "解決方案我能夠";
+						mes "尋找。你有什麼想法嗎";
+						mes "在這裡保護和平";
+						mes "在Arunafeltz？";
+						next;
+						input .@input$;
+						mes "["+strcharinfo(0)+"]";
+						mes ""+.@input$+"?";
+						next;
+						mes "[大祭司Zhed]";
+						mes "好吧，我不知道。";
+						mes "這是一個好主意，但是";
+						mes "我擔心它只會";
+						mes "有效的";
+						mes "學期。我們為什麼不只是";
+						mes "嘗試我首先提出的內容？";
+						next;
+					}
+					mes "[大祭司Zhed]";
+					mes "嗯，現在怎麼會";
+					mes "我們說服教皇";
+					mes "支持我們？即使是弗雷亞的";
+					mes "轉世...她只是";
+					mes "一個年輕的女孩。她可能";
+					mes "對政治一無所知。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "最好是";
+					mes "告訴她到底是什麼";
+					mes "發生。全部真相。";
+					mes "在我心中，我知道";
+					mes "最好。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "但是...也許會";
+					mes "如果我們加糖會更好";
+					mes "塗了一點。";
+					mes "她可能不會";
+					mes "如果我們接受我們";
+					mes "完全震驚了她。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "嗯...你是什麼";
+					mes "思考？我們應該堅持嗎？";
+					mes "真理，或者你";
+					mes "認為如果我們會更好";
+					mes "誇張和...撒謊";
+					mes "我們覺得有必要嗎？";
+					next;
+					switch(select("真相:謊言")) {
+					case 1:
+						mes "[大祭司Zhed]";
+						mes "這也是我的想法。";
+						mes "雖然我擔心";
+						mes "教皇將如何反應";
+						mes "我們的信息，我應該有";
+						mes "信仰。我應該有信心。";
+						next;
+						break;
+					case 2:
+						mes "[大祭司Zhed]";
+						mes "我想你可以";
+						mes "有一點。可能不是";
+						mes "完全是一個好主意";
+						mes "使她暴露在醜陋的地方";
+						mes "真相。我會盡力而為";
+						mes "誠實...";
+						next;
+						break;
+					}
+					mes "[大祭司Zhed]";
+					mes "好吧，沒有時間";
+					mes "浪費。我們兩個人可能";
+					mes "不足以說服";
+					mes "教皇為和平行事。";
+					mes "我已經有一個人";
+					mes "請注意，這可能會對我們有所幫助。";
+					next;
+					emotion ET_SPARK, playerattached();
+					mes "["+strcharinfo(0)+"]";
+					mes "聽起來很好。";
+					mes "他是誰？";
+					next;
+					mes "[大祭司Zhed]";
+					mes "我的老朋友，大祭司";
+					mes "尼倫。我不確定她是否會";
+					mes "畢竟要幫助我";
+					mes "發生在我們之間。她";
+					mes "甚至可能認為我應該得到";
+					mes "被驅逐出境...";
+					next;
+					emotion ET_BEST, playerattached();
+					mes "["+strcharinfo(0)+"]";
+					mes "來吧，不會";
+					mes "受傷的嘗試！除了，";
+					mes "尼倫不是一個壞人。";
+					mes "也許她會明白的";
+					mes "看到事物的方式";
+					mes "如果您解釋它們？";
+					next;
+					mes "[大祭司Zhed]";
+					mes "當然，你是對的。";
+					mes "我只是抓住稻草";
+					mes "在這裡，但是我和我倆都用過";
+					mes "相信和平是";
+					mes "可能的。我不知道為什麼";
+					mes "她加入了艱難的人...";
+					next;
+					mes "[大祭司Zhed]";
+					mes ""+strcharinfo(0)+"...";
+					mes "你能和嗎";
+					mes "她，看看她怎麼樣";
+					mes "正在做？可能不是一個好";
+					mes "是時候提到我們的計劃了";
+					mes "馬上...";
+					next;
+					mes "[大祭司Zhed]";
+					mes "如果你認為你";
+					mes "有說服力的機會";
+					mes "她，然後感到自由並提供";
+					mes "我的建議。她的辦公室是";
+					mes "位於這裡，";
+					mes "但是她總是很忙...";
+					next;
+					mes "[大祭司Zhed]";
+					mes "實際上有";
+					mes "一個很好的機會";
+					mes "她在某個地方";
+					mes "開展業務。她很高";
+					mes "你知道，你知道。";
+					set aru_em,9;
+					changequest 2131,2132;  // unconfirmed
+				}
+				else if ((aru_em == 9) || (aru_em == 10)) {
+					mes "[大祭司Zhed]";
+					mes "請與Niren交談，";
+					mes "如果她願意";
+					mes "幫助我們說服教皇";
+					mes "在我們國家執行和平。";
+				}
+				else if (aru_em == 11) {
+					cutin "ra_gman",2;
+					mes "[大祭司Zhed]";
+					mes "歡迎回來。";
+					mes "所以你有機會";
+					mes "和Niren說話？怎麼了";
+					mes "她回應我的建議？";
+					next;
+					mes "^3355ffyou解釋了Niren的原因";
+					mes "因為她的失望";
+					mes "溫和的神父派，";
+					mes "並告訴Zhed她打算";
+					mes "執行戰爭計劃。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "......................................";
+					mes "......................................";
+					mes "......................................";
+					next;
+					mes "[大祭司Zhed]";
+					mes "嗯...這解釋了為什麼";
+					mes "她和其他一些高";
+					mes "牧師開始缺席";
+					mes "從他們的辦公室。許多";
+					mes "他們被邀請到";
+					mes "施瓦茨瓦爾德共和國...";
+					next;
+					mes "[大祭司Zhed]";
+					mes "無論如何，我知道";
+					mes "戰爭永遠不會";
+					mes "解決方案。它只會帶來";
+					mes "死亡與破壞。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "給我一點。";
+					mes "我要寫";
+					mes "我想要的一封信";
+					mes "你給尼倫。";
+					set aru_em,12;
+				}
+				else if(aru_em == 12) {
+					cutin "ra_gman",2;
+					mes "[大祭司Zhed]";
+					mes "請帶這封信";
+					mes "致尼倫。我希望什麼";
+					mes "我必須說會有所幫助";
+					mes "她了解我的感覺";
+					mes "關於這些戰爭計劃。";
+					next;
+					mes "^3355ffyou收到了一封信";
+					mes "大祭司的niren。 ^000000";
+					set aru_em,13;
+					changequest 2133,2134;
+				}
+				else if((aru_em == 13) || (aru_em == 14)) {
+					mes "[大祭司Zhed]";
+					mes "請交付我的";
+					mes "給Niren的信";
+					mes "盡快。";
+					mes "我真的很感激";
+					mes "你在幫助我。";
+				}
+				else if ((aru_em > 14) && (aru_em < 20)) {
+					mes "[大祭司Zhed]";
+					mes "好消息！尼倫只是";
+					mes "給我一個答复：我不能";
+					mes "相信她願意";
+					mes "幫助我！你拜託嗎";
+					mes "給她任何幫助她";
+					mes "從現在開始可能需要嗎？";
+				}
+				else if(aru_em == 20) {
+					cutin "ra_gman",2;
+					mes "[大祭司Zhed]";
+					mes "啊，我去過";
+					mes "等你。";
+					next;
+					mes "["+strcharinfo(0)+"]";
+					mes "大祭司Zhed，";
+					mes "一切都準備好了！";
+					mes "大祭司尼倫（Niren）";
+					mes "發送所有這些";
+					mes "靠近的追隨者";
+					mes "教皇。您不會中斷。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "我希望我們能獲得教皇";
+					mes "了解情況";
+					mes "我們的國家。我只...";
+					mes "哦，弗雷亞幫我們...";
+					next;
+					mes "[大祭司Zhed]";
+					mes "........................";
+					mes "........................";
+					mes "........................";
+					next;
+					mes "[大祭司Zhed]";
+					mes "好吧，我準備好了。";
+					mes "讓我們收到一個";
+					mes "觀眾與";
+					mes "教皇，我們嗎？";
+					set aru_em,21;
+				}
+				else if(aru_em == 21) {
+					mes "[大祭司Zhed]";
+					mes "我有點緊張";
+					mes "關於如此狂熱地談論";
+					mes "對教皇，但我";
+					mes "準備去見她。";
+				}
+				else if (aru_em == 22) {
+					mes "[大祭司Zhed]";
+					mes "我相信Niren";
+					mes "有重要的東西";
+					mes "告訴你。為什麼不";
+					mes "你以前和她說話";
+					mes "回到我身邊？";
+				}
+				else if (aru_em == 23) {
+					cutin "ra_gman",2;
+					mes "[大祭司Zhed]";
+					mes "我很高興一切";
+					mes "原來很棒。你的";
+					mes "幫助確實是一種祝福。";
+					mes "雖然施瓦茨瓦爾德會";
+					mes "繼續他們的計劃而沒有";
+					mes "我們，我們放慢了腳步。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "是的，沒有我們的支持，";
+					mes "Schwarzwald不會";
+					mes "任何藉口繼續";
+					mes "他們的危險研究";
+					mes "至少有一段時間。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "雷神火山營地";
+					mes "應該很快關閉，";
+					mes "現在我們不再";
+					mes "有任何用途。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "我也低估了我們的";
+					mes "教皇。她更加端莊，";
+					mes "我相信。";
+					mes "我欠她我的歉意。";
+					next;
+					mes "[大祭司Zhed]";
+					mes "我們不會放棄";
+					mes "恢復我們的女神弗雷亞，";
+					mes "但是我們將檢索Ymir的";
+					mes "通過外交的心";
+					mes "而不是暴力。";
+					mes "這不會容易...";
+					next;
+					mes "[大祭司Zhed]";
+					mes "你一直在工具";
+					mes "在這裡返回和平";
+					mes "Arunafeltz。我什至去過";
+					mes "恢復，將非常";
+					mes "從現在開始忙碌，工作";
+					mes "與教皇緊密聯繫...";
+					next;
+					mes "[大祭司Zhed]";
+					mes "我知道的生活";
+					mes "冒險招呼你。";
+					mes "我知道她想看看";
+					mes "你離開之前，但是";
+					mes "她深深地睡覺了";
+					mes "那令人筋疲力盡的演講...";
+					next;
+					mes "[大祭司Zhed]";
+					mes "代表我們的教皇";
+					mes "以及所有的公民";
+					mes "Arunafeltz，我想";
+					mes "謝謝你的英雄主義。";
+					mes "您在瓦爾哈拉的位置是";
+					mes "我敢肯定。";
+					set aru_em,24;
+					completequest 2142;
+					getexp (checkre(3))?150000:1500000,0;
+				}
+				else {
+					mes "[大祭司Zhed]";
+					mes "願弗雷亞祝福你";
+					mes "在您的所有旅程中，";
+					mes "我的好朋友。";
+				}
+				// End Peace to Arunafeltz addition
+			}
+			else {
+				cutin "ra_gman",2;
+				mes "[大祭司Zhed]";
+				mes "啊...！";
+				mes "我有這樣的";
+				mes "可怕的頭痛！";
+			}
+		}
+		else {
+			cutin "ra_gman",2;
+			mes "[大祭司Zhed]";
+			mes "我現在應該休息。";
+			mes "請安全旅行。";
+		}
+	// End Veins "Thor Volcano Base" Quest Addition.
+	}
+	else {
+		cutin "ra_gman",2;
+		mes "[大祭司Zhed]";
+		mes "願弗雷亞和你在一起。";
+	}
+	close2;
+	cutin "",255;
+	end;
+}
+
+ra_temin,170,46,3	script	Panno#rachel	920,{
+	cutin "ra_fano03",2;
+	if (ra_tem_q >= 12 || (MISC_QUEST & 8192)) {
+		cutin "ra_fano03",2;
+		mes "[女祭司聖衣]";
+		mes "再會。";
+		mes "你來嗎";
+		mes "贖回彩票？";
+		next;
+		if (select("是:否") == 1) goto L_Lottery;
+		if (ra_tem_q == 12) {
+			cutin "ra_fano01",2;
+			mes "[女祭司聖衣]";
+			mes "我已經告訴過你";
+			mes "我知道的一切。";
+			mes "記住要保留";
+			mes "對我說的話安靜。";
+			goto L_End;
+		}
+	}
+	else if (ra_tem_q < 2) {
+		mes "[女祭司聖衣]";
+		mes "問候。";
+		mes "願弗雷亞填補";
+		mes "你的日子很高興。";
+		mes "笑聲。和繁榮。";
+		next;
+		switch(select("兌換彩票:寺廟信息:嘿，發生了什麼事？")) {
+		case 1:
+			cutin "ra_fano03",2;
+			mes "[女祭司聖衣]";
+			mes "美好的。你真的";
+			mes "想交換你的";
+			mes "彩票？這是我的工作";
+			mes "問並確保你";
+			mes "知道，以防萬一你保存";
+			mes "他們出於某種奇怪的原因。";
+			next;
+			if (select("是:否") == 1) goto L_Lottery;
+			cutin "ra_fano03",2;
+			mes "[女祭司聖衣]";
+			mes "你可以贖回你的";
+			mes "彩票";
+			mes "時間，所以請訪問";
+			mes "我在你閒暇時。";
+			mes "和弗雷亞一起去。";
+			goto L_End;
+
+		case 2:
+			cutin "ra_fano01",2;
+			mes "[女祭司聖衣]";
+			mes "教堂位於";
+			mes "在我身後的牆上。";
+			mes "我們教皇的辦公室和房間";
+			mes "在樓上。你只能去";
+			mes "如果你有特別的話";
+			mes "授權。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "......";
+			mes "…………";
+			next;
+			mes "[女祭司聖衣]";
+			mes "…………";
+			mes "…………";
+			mes "......";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "...？";
+			next;
+			cutin "ra_fano02",2;
+			mes "[女祭司聖衣]";
+			mes "你來到寺廟";
+			mes "祈禱，不要看";
+			mes "大約。或聊天";
+			mes "與女祭司";
+			mes "像我這樣的。不要忘記它。";
+			next;
+			cutin "ra_fano03",2;
+			mes "[女祭司聖衣]";
+			mes "高處的辦公室";
+			mes "牧師都位於";
+			mes "走廊的一面。然而，";
+			mes "您只能在您";
+			mes "事先被允許。";
+			goto L_End;
+
+		case 3:
+			mes "[女祭司聖衣]";
+			mes "......................................";
+			mes "沒有聊天";
+			mes "在寺廟內。";
+			goto L_End;
+		}
+	}
+	else if (ra_tem_q == 10) {
+		mes "[女祭司聖衣]";
+		mes "再會。";
+		next;
+
+		switch(select("兌換彩票:寺廟信息:嘿，你開門了嗎？")) {
+
+		case 1:
+			cutin "ra_fano01",2;
+			mes "[女祭司聖衣]";
+			mes "你...還有";
+			mes "彩票來自";
+			mes "捐款";
+			mes "節日？查找";
+			mes "詞“守時”";
+			mes "字典。它可能會幫助您。";
+			next;
+			mes "[女祭司聖衣]";
+			mes "美好的。你真的";
+			mes "想交換你的";
+			mes "彩票？這是我的工作";
+			mes "問並確保你";
+			mes "知道，以防萬一你保存";
+			mes "他們出於某種奇怪的原因。";
+			next;
+			if (select("是:否") == 1) goto L_Lottery;
+			mes "[女祭司聖衣]";
+			mes "你可以贖回你的";
+			mes "彩票";
+			mes "時間，所以請訪問";
+			mes "我在你閒暇時。";
+			mes "和弗雷亞一起去。";
+			goto L_End;
+
+		case 2:
+			cutin "ra_fano01",2;
+			mes "[女祭司聖衣]";
+			mes "教堂位於";
+			mes "在我身後的牆上";
+			mes "我們教皇的辦公室和房間";
+			mes "在樓上。你只能去";
+			mes "如果你有特別的話";
+			mes "授權。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "......";
+			mes "…………";
+			next;
+			mes "[女祭司聖衣]";
+			mes "…………";
+			mes "…………";
+			mes "......";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "...？";
+			next;
+			cutin "ra_fano02",2;
+			mes "[女祭司聖衣]";
+			mes "你來到寺廟";
+			mes "祈禱，不要看";
+			mes "大約。或聊天";
+			mes "與女祭司";
+			mes "像我這樣的。不要忘記它。";
+			next;
+			cutin "ra_fano02",2;
+			mes "[女祭司聖衣]";
+			mes "高處的辦公室";
+			mes "牧師都位於";
+			mes "走廊的一面。然而，";
+			mes "您只能在您";
+			mes "事先被允許。";
+			goto L_End;
+
+		case 3:
+			cutin "ra_fano02",2;
+			mes "[女祭司聖衣]";
+			mes "門...？";
+			next;
+			select("寺廟大門緊鎖！");
+			mes "[女祭司聖衣]";
+			mes "我不知道";
+			mes "你是什麼意思。";
+			next;
+			select("解釋");
+			mes "["+strcharinfo(0)+"]";
+			mes "我認為那個女祭司";
+			mes "一直擔心";
+			mes "門被打破了";
+			mes "從那以後就不是那樣了";
+			mes "您已經開始了職位";
+			mes "在聖殿。";
+			next;
+			mes "[女祭司聖衣]";
+			mes "擔心...？";
+			mes "是的，我的雙胞胎姐姐";
+			mes "已知";
+			mes "做很多事情，哭泣";
+			mes "為了我的幫助。我對嗎？";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "很奇怪";
+			mes "...她說大門";
+			mes "應該自動修復";
+			mes "本身，但不是";
+			mes "最近做。她";
+			mes "表演真的很有趣。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "她在談論";
+			mes "寺廟的歷史和";
+			mes "安全系統如何";
+			mes "建造。然後她提到你，";
+			mes "所以我感覺到你可能";
+			mes "知道這一點。";
+			next;
+			mes "[女祭司聖衣]";
+			mes "…………";
+			set ra_tem_q,11;
+			goto L_End;
+		}
+	}
+	else if (ra_tem_q == 11) {
+		mes "["+strcharinfo(0)+"]";
+		mes "我記得現在...！";
+		mes "大門時我在那裡";
+		mes "關閉，我聽到有人";
+		mes "用你的確切聲音耳語";
+		mes "神奇開放的東西";
+		mes "大門！那是什麼？";
+		next;
+		mes "[女祭司聖衣]";
+		mes "......";
+		mes "…………";
+		mes "…………";
+		next;
+		mes "[女祭司聖衣]";
+		mes "......";
+		mes "…………";
+		mes "…………";
+		mes "我們...我的意思是...";
+		next;
+		cutin "ra_fano01",2;
+		mes "[女祭司聖衣]";
+		mes "Nemma和我是後裔";
+		mes "來自一個偉大的煉金術士。";
+		mes "他們持續了漫長的宗教";
+		mes "朝聖，最終在這裡。";
+		mes "他們是建造的";
+		mes "這個寺廟和安全系統。";
+		next;
+		mes "[女祭司聖衣]";
+		mes "從某種意義上說，這座寺廟";
+		mes "是我們祖先的墳墓，";
+		mes "誰離開了符文中的米達和";
+		mes "建造了瑞秋城市";
+		mes "一千年前。";
+		next;
+		mes "[女祭司聖衣]";
+		mes "幾代人，許多";
+		mes "煉金術士留下了符文中的符文";
+		mes "並在這裡定居，轉換";
+		mes "沙漠進入綠色田地。";
+		mes "這座寺廟被認為";
+		mes "成為入侵者的庇護所。";
+		next;
+		mes "[女祭司聖衣]";
+		mes "我的祖先設計了";
+		mes "寺廟安全系統";
+		mes "需要特殊許可證";
+		mes "為了進入寺廟";
+		mes "但是入侵者從未來過";
+		mes "而且我們不需要許可證。";
+		next;
+		mes "[女祭司聖衣]";
+		mes "特別許可是";
+		mes "處置，但自動";
+		mes "安全系統被啟用";
+		mes "大門，以防萬一。現在，";
+		mes "我聽說過安全性";
+		mes "系統一直出現故障。";
+		next;
+		cutin "ra_fano03",2;
+		mes "[女祭司聖衣]";
+		mes "但是，這是不可能的。";
+		mes "即使按照今天的標準，";
+		mes "系統設計完美。";
+		mes "當我在";
+		mes "教堂前一段時間，我發現";
+		mes "是什麼原因導致門問題。";
+		next;
+		mes "[女祭司聖衣]";
+		mes "突然，燈光流了";
+		mes "出去，我只能";
+		mes "請參閱區分我的周圍環境。";
+		mes "我正要去外面";
+		mes "我聽到樓梯上的聲音。";
+		next;
+		cutin "ra_fano02",2;
+		mes "[女祭司聖衣]";
+		mes "從我能告訴的，";
+		mes "有人在運輸";
+		mes "聖潔的東西";
+		mes "理由。我不知道什麼";
+		mes "他們保留在那裡。";
+		mes "我不是高級女祭司。";
+		next;
+		mes "[女祭司聖衣]";
+		mes "我不確定我是否想要";
+		mes "找出那裡有什麼";
+		mes "我聽到了一些";
+		mes "聽起來像是可怕的";
+		mes "怪物的how叫。是";
+		mes "令人難以置信的恐懼。";
+		next;
+		mes "[女祭司聖衣]";
+		mes "我驚慌失措，跑到";
+		mes "我的桌子在前面，";
+		mes "只是背誦了秘密";
+		mes "密碼從我的";
+		mes "祖先打開大門。";
+		next;
+		cutin "ra_fano01",2;
+		mes "[女祭司聖衣]";
+		mes "你看，我的祖先";
+		mes "包括秘密密碼";
+		mes "和語音識別功能";
+		mes "到大門，以防萬一";
+		mes "他們處置了";
+		mes "寺廟許可證 - 只是以防萬一。";
+		next;
+		mes "[女祭司聖衣]";
+		mes "大門的真正原因";
+		mes "表演奇怪不是";
+		mes "因為大門壞了，所以";
+		mes "但是因為有人偷偷摸摸";
+		mes "進出聖地。";
+		next;
+		mes "[女祭司聖衣]";
+		mes "無論他們是誰";
+		mes "必須使用其中之一";
+		mes "舊的寺廟許可證";
+		mes "遮蓋他們的軌道。現在，";
+		mes "你知道一切。";
+		next;
+		cutin "ra_fano01",2;
+		mes "[女祭司聖衣]";
+		mes "你最好不要";
+		mes "揭示你學到的東西";
+		mes "來自我。否則，我";
+		mes "當然，我們最終死了。";
+		mes "對不起，我需要";
+		mes "回到工作。";
+		set ra_tem_q,12;
+		goto L_End;
+	}
+	cutin "ra_fano02",2;
+	mes "[女祭司聖衣]";
+	mes "這是一個聖地";
+	mes "表現自己，然後";
+	mes "尊重那些有";
+	mes "來這裡只是為了敬拜。";
+	goto L_End;
+
+L_Lottery:
+	if(checkweight(607,1) == 0){
+		cutin "ra_fano02",2;
+		mes "[女祭司聖衣]";
+		mes "你攜帶太多";
+		mes "現在。你是做什麼的";
+		mes "如果我給你的話";
+		mes "大而笨拙的東西";
+		mes "和沈重？放你的垃圾";
+		mes "首先在存儲中。";
+		goto L_End;
+	}
+	mes "[女祭司聖衣]";
+	mes "開始了";
+	mes "興奮的？毫米";
+	mes "我只能兌換";
+	mes "1張彩票";
+	mes "時間。您的獎勵";
+	mes "因為這張票是...";
+	next;
+	cutin "ra_fano02",2;
+	if (countitem(7570) > 0) {
+		mes "[女祭司聖衣]";
+		mes "^ff0000this^000000。已經在我們的";
+		mes "存儲一段時間，但是";
+		mes "我希望這是可以接受的";
+		mes "作為聖殿的象徵";
+		mes "感激。願弗雷亞微笑";
+		mes "您的慷慨...";
+		delitem 7570,1;
+		set .@bonus_donate,rand(100);
+		if (.@bonus_donate == 99) {
+			set .@bonus_donate2,rand(100);
+			if (.@bonus_donate2 > 0 && .@bonus_donate2 < 11) getitem 616,1;		//Old Card Album 0.1%
+			else if (.@bonus_donate2 > 10 && .@bonus_donate2 < 31) getitem 617,1;	//Old Violet Box 0.2%
+			else if (.@bonus_donate2 > 30 && .@bonus_donate2 < 61) getitem 603,1;	//Old Blue Box 0.3%
+			else getitem 607,1; //Yggdrasil Berry 0.4+%
+		}
+		else if (.@bonus_donate > 88 && .@bonus_donate < 96) getitem 644,1;	//Gift Box 7%
+		else if (.@bonus_donate > 76 && .@bonus_donate < 89) getitem 607,1;	//Yggdrasil Berry 12%
+		else if (.@bonus_donate > 65 && .@bonus_donate < 77) getitem 505,1;	//Blue Potion 11%
+		else if (.@bonus_donate > 57 && .@bonus_donate < 66) getitem 604,1;	//Dead Branch 8%
+		else if (.@bonus_donate > 45 && .@bonus_donate < 58) getitem 608,1;	//Yggdrasil Seed 12%
+		else if (.@bonus_donate > 5 && .@bonus_donate < 11) getitem 518,1;	//Honey 5%
+		else if (.@bonus_donate > 0 && .@bonus_donate < 6) getitem 526,1;	//Royal Jelly 5%
+		else getitem 547,1; //Condensed White Potion 39%
+		goto L_End;
+	}
+	mes "[女祭司聖衣]";
+	mes "你...";
+	mes "沒有彩票";
+	mes "贖回的門票。";
+	if ($rachel_donate > 9999) {
+		mes "我們不是分發";
+		mes "他們現在，但也許你";
+		mes "可以問你的朋友一個。";
+	}
+	else {
+		mes "你可以從";
+		mes "聖殿的女祭司";
+		mes "捐贈Zeny後進入。";
+	}
+	next;
+	cutin "ra_fano03",2;
+	mes "[女祭司聖衣]";
+	mes "願弗雷亞和你在一起。";
+	goto L_End;
+
+L_End:
+	close2;
+	cutin "",255;
+	end;
+}
+
+ra_temin,134,128,3	script	Pope's Office Guard#rac::raofficeguard	926,{
+	if ((ra_tem_q == 15) && (countitem(7561) > 39)) {
+		mes "[教皇的辦公室後衛]";
+		mes "嗯？你有什麼";
+		mes "那裡？哦，你聚集在一起";
+		mes "40個冰川心，帶來";
+		mes "來自";
+		mes "大祭司？最令人印象深刻。";
+		next;
+		mes "[教皇的辦公室後衛]";
+		mes "我想我知道你為什麼";
+		mes "這裡。感謝您帶來";
+		mes "那些對我來說，我會讓你";
+		mes "輸入並查看教皇";
+		mes "歡迎，勇敢"+strcharinfo(0)+".";
+		close2;
+		set ra_tem_q,16;
+		delitem 7561,40; //Ice_Heart
+		end;
+	}
+	else if (ra_tem_q == 16) {
+		mes "[教皇的辦公室後衛]";
+		mes "教皇在裡面";
+		mes "期待你，所以請";
+		mes "不要讓她等待很長時間。";
+		close;
+	}
+	else if (MISC_QUEST & 8192) {
+		if ((aru_em == 15) || (aru_em == 21)) {
+			mes "- 尼倫告訴我去她辦公室的教皇訪問...";
+			close;
+		}
+		else {
+			mes "[教皇的辦公室後衛]";
+			mes "對不起，但是局外人";
+			mes "通常不允許";
+			mes "拜訪教皇沒有";
+			mes "特別授權。";
+			close;
+		}
+	}
+	else {
+		mes "[教皇的辦公室後衛]";
+		mes "對不起，教皇";
+		mes "主持服務";
+		mes "現在。請回來";
+		mes "服務結束後。";
+		close;
+	}
+}
+
+ra_temin,134,134,3	duplicate(raofficeguard)	Pope's Office Guard#2ra	926
+
+ra_temin,134,131,0	script	gyoin1#rachel	45,1,1,{
+OnTouch:
+	if (ra_tem_q == 16)
+		warp "ra_temin",276,239;
+	else if ((ra_tem_q > 16) || (MISC_QUEST & 8192)){
+		if ((aru_em == 15) || (aru_em == 21))
+			warp "ra_temin",276,239;
+		else {
+			mes "[教皇的辦公室後衛]";
+			mes "對不起，教皇";
+			mes "主持服務";
+			mes "現在。請回來";
+			mes "服務結束後。";
+			close;
+		}
+	}
+	if (ra_tem_q < 16) {
+		mes "^3355ff門被鎖定。 ^000000";
+		close;
+	}
+	end;
+}
+
+ra_temin,275,226,0	script	#rachel33	45,1,1,{
+	end;
+OnTouch_:
+	if (aru_em == 21)
+		warp "que_temsky",99,11;
+	else
+		warp "ra_temsky",99,11;
+	end;
+}
+
+ra_temsky,95,99,6	script	Priest#1rachel	935,{
+	mes "[牧師]";
+	mes "願弗雷亞和你在一起。";
+	close;
+}
+
+ra_temsky,93,97,6	script	Male Follower#1rachel::ramale	926,{
+	mes "[男性追隨者]";
+	mes "願弗雷亞和你在一起。";
+	close;
+}
+
+ra_temsky,90,95,6	duplicate(ramale)	Male Follower#2rachel	926
+ra_temsky,98,59,6	duplicate(ramale)	Male Follower#3rachel	926
+
+ra_temsky,104,99,4	script	Priestess#1rachel	920,{
+	mes "[女祭司]";
+	mes "願弗雷亞和你在一起。";
+	close;
+}
+
+ra_temsky,106,97,4	script	Female Follower#1rachel::rafemale	916,{
+	mes "[女追隨者]";
+	mes "願弗雷亞和你在一起。";
+	close;
+}
+
+ra_temsky,108,95,4	duplicate(rafemale)	Female Follower#2rachel	916
+ra_temsky,101,59,4	duplicate(rafemale)	Female Follower#3rachel	916
+
+ra_temsky,99,99,5	script	Pope#rachel	936,{
+	if (ra_tem_q == 16) {
+		cutin "ra_bishop",2;
+		mes "^3355ffth-這一點";
+		mes "女孩是教皇...？ ！ ^000000";
+		next;
+		mes "[教皇]";
+		mes "................................................................";
+		mes "..........................................嗯...";
+		mes "w-welcome。是什麼";
+		mes "錯誤的？哦，我知道，這是我的";
+		mes "眼睛。對不起，如果他們";
+		mes "嚇到你一點。";
+		next;
+		select("不，一點也不……！");
+		mes "[教皇]";
+		mes "......";
+		mes "......";
+		mes "......你知道，我的外表...";
+		next;
+		mes "[教皇]";
+		mes "沒關係。實際上，";
+		mes "我已經習慣了。人們";
+		mes "通常有點震驚";
+		mes "他們第一次見到我。";
+		mes "所以...嗯...你在哪裡";
+		mes "來自，"+strcharinfo(0)+"?";
+		next;
+		input @input$;
+		mes "[教皇]";
+		mes @input$ +"...？";
+		mes "我想我可能已經聽到了";
+		mes "關於那個地方。";
+		mes "哇...你做了什麼";
+		mes "當你住在那裡的時候？";
+		next;
+		input @input$;
+		mes "[教皇]";
+		mes @input$ +"...？";
+		mes "哇，聽起來很";
+		mes "非凡的。哦，哦！";
+		mes "告訴我，你怎麼來";
+		mes "在這裡去雷切爾？我很感興趣";
+		mes "了解您的更多信息~";
+		next;
+		mes "^3355ffyou和教皇";
+		mes "繼續舒適";
+		mes "交談。她說話時";
+		mes "看起來更像年輕";
+		mes "孤獨的女孩比莊嚴";
+		mes "一個國家的宗教人物。 ^000000";
+		next;
+		mes "[教皇]";
+		mes "...哇，有時候，我真的";
+		mes "希望我能像你一樣生活。";
+		mes "你會認為成為教皇會";
+		mes "很棒，但是他們讓我工作";
+		mes "一直以來。而且有";
+		mes "我做不到的事情。";
+		next;
+		mes "[教皇]";
+		mes "你知道什麼很奇怪嗎？";
+		mes "我想我是這個頭";
+		mes "宗教，但有一個神聖的";
+		mes "甚至我不允許的地方";
+		mes "參觀。那不是那麼怪異嗎？";
+		next;
+		select("羅、真的嗎……？");
+		mes "[教皇]";
+		mes "...是的。我不知道";
+		mes "關於很多，我不是";
+		mes "真的應該說話";
+		mes "關於它。我們只是稱呼這個";
+		mes "放置“聖地...”";
+		next;
+		select("聖地？");
+		mes "[教皇]";
+		mes "對不起...我想要";
+		mes "告訴你更多，但是...";
+		mes "這就是我所知道的。我想知道...";
+		mes "我想知道他們會有什麼";
+		mes "躲在那邊...";
+		next;
+		mes "[牧師]";
+		mes "很抱歉打擾";
+		mes "您的閣下，但這是";
+		mes "是時候主持服務了。";
+		mes "對不起。";
+		next;
+		mes "[教皇]";
+		mes "已經？ ！ HMPF ...";
+		mes "哦，在我忘記之前，";
+		mes "我需要告訴你";
+		mes "大祭司Zhed想要";
+		mes "與你交談，"+strcharinfo(0)+".";
+		next;
+		mes "[教皇]";
+		mes "我真的要感謝";
+		mes "你來講話";
+		mes "大部頭書。我度過了愉快的時光";
+		mes "學習。現在我必須";
+		mes "去主持服務，所以...";
+		mes "現在是再見...";
+		close2;
+		cutin "",255;
+		set ra_tem_q,17;
+		changequest 8100,8101;
+		end;
+	}
+	else {
+		if (aru_em < 15) {
+			mes "[教皇]";
+			mes "哦，是的...";
+			mes "zhed ...嗯，大祭司";
+			mes "Zhed想和您說話！";
+			close2;
+			cutin "",255;
+			end;
+		}
+		else if (aru_em == 15) {
+			mes "[教皇]";
+			mes "哦，你好！又是你！";
+			mes "你來告訴我嗎";
+			mes "有趣的故事";
+			mes "外界再次？";
+			next;
+			input .@input$;
+			mes "[教皇]";
+			mes "毫米。聽起來很漂亮";
+			mes "對我來說很奇怪。好吧，是的";
+			mes "很高興收到您的來信。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "（^333333i不能只離開";
+			mes "現在。我應該嘗試看看";
+			mes "如果我能學到任何東西";
+			mes "來自教皇...^000000）";
+			next;
+			switch(select("你不孤獨嗎？ :你休息過嗎？")) {
+			case 1:
+				mes "[教皇]";
+				mes "好吧，總有";
+				mes "一些牧師和我一起";
+				mes "時間。其中一些";
+				mes "甚至在我睡覺時看著我。";
+				mes "我認為我沒有時間";
+				mes "實際上，感到孤獨。";
+				next;
+				mes "[教皇]";
+				mes "謝謝你的詢問。";
+				mes "有時...有時";
+				mes "我想知道我是否有真實的";
+				mes "家庭。我什至不知道";
+				mes "他們是誰或";
+				mes "存在。我不知道...";
+				next;
+				mes "[教皇]";
+				mes "我...對不起。";
+				mes "我想你沒有";
+				mes "期望聽到什麼";
+				mes "這樣。 ^666666*嘆氣*^000000我感覺到";
+				mes "非常精疲力盡。我更好...";
+				mes "我最好休息一下...";
+				set aru_em,16;
+				changequest 2135,2136;
+				close2;
+				cutin "",255;
+				end;
+			case 2:
+				mes "[教皇]";
+				mes "好吧，即使我想要";
+				mes "對，我不能只出去";
+				mes "並玩。作為教皇...嗯...";
+				mes "大家和一切";
+				mes "有點需要我的注意。";
+				close2;
+				cutin "",255;
+				end;
+			}
+		}
+		else if (aru_em == 16) {
+			mes "[跟隨者]";
+			mes "教皇說她是";
+			mes "筋疲力盡的。請來";
+			mes "當她感覺到";
+			mes "更好，她會有";
+			mes "觀眾和你在一起。";
+		}
+	}
+	close2;
+	cutin "",255;
+	end;
+}
+
+ra_temin,294,149,0	script	High Priestess Niren#ra	915,{
+	end;
+
+OnInit:
+	hideonnpc "High Priestess Niren#ra";
+	end;
+
+OnEnable:
+	initnpctimer;
+	end;
+
+OnTimer120000:
+	stopnpctimer;
+	hideonnpc "High Priestess Niren#ra";
+	end;
+}
+
+ra_temin,293,144,0	script	out1#rachel	-1,3,3,{
+OnTouch:
+	if (ra_tem_q == 18) {
+		mes "^3355ffit聽起來像是他們";
+		mes "還在說話。是的";
+		mes "最好耐心等待";
+		mes "更長的時間。";
+		mes "仍然...太無聊了。 ^000000";
+		next;
+		mes "^3355ffa小竊聽";
+		mes "永遠不會傷害任何人。或許";
+		mes "你可以聽到他們一點";
+		mes "如果您從";
+		mes "牆的左側。 ^000000";
+		close2;
+		warp "ra_temin",300,153;
+		end;
+	}
+	end;
+}
+
+ra_temin,288,151,0	script	hidden1#rachel	-1,1,6,{
+OnTouch:
+	if (ra_tem_q == 18) {
+		mes "^3355ffat你這個距離你";
+		mes "可以清楚地聽到";
+		mes "來自另一個的聲音";
+		mes "牆的一面...^000000";
+		next;
+		mes "[？ ？ ？ ]";
+		mes "...真的";
+		mes "需要參與";
+		mes "局外人";
+		mes "情況？回答我！";
+		next;
+		mes "[大祭司Zhed]";
+		mes "這是關於";
+		mes "事故？你知道";
+		mes "我不同意";
+		mes "導致的行動";
+		mes "法力洩漏。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "即使我以為";
+		mes "這是一個魯ck的決定，";
+		mes "我關閉了神社，";
+		mes "盡我所能掩蓋這個";
+		mes "不幸的事故。";
+		next;
+		mes "[？ ？ ？ ]";
+		mes "我不是在責怪你。在";
+		mes "事實，我會承認：那是";
+		mes "我們的錯誤。我們造成了";
+		mes "怪物侵擾";
+		mes "讓法力洩漏。";
+		next;
+		mes "[？ ？ ？ ]";
+		mes "但這與";
+		mes "我要你問你！";
+		mes "你真的認為是嗎";
+		mes "好的，允許局外人";
+		mes "在與我們的教皇交談期間";
+		mes "如此動蕩的時期？";
+		next;
+		mes "[大祭司Zhed]";
+		mes "為什麼不呢？我以為是";
+		mes "給她帶來巨大的安慰。";
+		mes "她很困惑";
+		mes "為什麼聖地已經";
+		mes "關閉，她不知道";
+		mes "那裡發生了什麼。";
+		next;
+		mes "[大祭司Zhed]";
+		mes "再次...我強烈";
+		mes "不同意什麼";
+		mes "秘密地進行";
+		mes "那裡。我知道我不能";
+		mes "正式反對這一點";
+		mes "行動方案，但是...";
+		next;
+		mes "[？ ？ ？ ]";
+		mes "沒什麼可擔心的";
+		mes "關於！一切都結束了";
+		mes "你知道。此外，是";
+		mes "為時已晚，現在回頭了，";
+		mes "所以我警告你：不是嗎";
+		mes "敢做任何愚蠢的事情。";
+		next;
+		mes "^3355ffsomeone即將到來！";
+		mes "你最好走開";
+		mes "從牆壁和假裝";
+		mes "盡可能地無知！ ^000000";
+		next;
+		hideoffnpc "High Priestess Niren#ra";
+		cutin "ra_gwoman",2;
+		mes "[大祭司尼倫]";
+		mes "哦！你一定是一個";
+		mes "大祭司，Zhed，";
+		mes "告訴我。很好";
+		mes "見你。大祭司";
+		mes "Niren，在您的服務中。";
+		next;
+		mes "[大祭司尼倫]";
+		mes "我聽說你有";
+		mes "與之交談的特權";
+		mes "我們的教皇，她有";
+		mes "美好的時光。做了什麼";
+		mes "你想到她，嗯？";
+		next;
+		select("她和我想像的不一樣...");
+		cutin "ra_gwoman2",2;
+		mes "[大祭司尼倫]";
+		mes "啊，我知道你的意思...";
+		mes "通常，大多數局外人告訴";
+		mes "我認為我們的教皇";
+		mes "成為一個頑強的老人。";
+		mes "但事實並非如此";
+		mes "在Arunafeltz。";
+		next;
+		cutin "ra_gwoman",2;
+		mes "[大祭司尼倫]";
+		mes "通常，我們的教皇是選擇的";
+		mes "她與我們的相似之處";
+		mes "女神弗雷亞。她必須";
+		mes "有銀色的金發，下雪";
+		mes "皮膚和神聖的顏色";
+		mes "眼睛。你看到了，不是嗎？";
+		next;
+		mes "[大祭司尼倫]";
+		mes "我很好奇：什麼樣";
+		mes "你和你和";
+		mes "教皇談論？如你所知，";
+		mes "我們的牧師被禁止";
+		mes "離開Arunafeltz，所以...";
+		next;
+		mes "^3355ffyou關聯";
+		mes "您與教皇的交談，但是";
+		mes "您確保不提";
+		mes "關於聖地的任何事情";
+		mes "正如大祭司Zhed所問的那樣。 ^000000";
+		next;
+		mes "[大祭司尼倫]";
+		mes "啊，這是公平的";
+		mes "有趣的是，你的土地。";
+		mes "告訴我，你是怎麼來的";
+		mes "認識貝肯托，嗯，我的意思是";
+		mes "大祭司zhed？";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "（^6666666666666666666666666666666666666666666666666666666666666666666666666";
+		next;
+		select("解釋一下你是如何認識大祭司哲德的");
+		cutin "ra_gwoman2",2;
+		mes "[大祭司尼倫]";
+		mes "......................................";
+		mes "就這樣？嗯？就是這樣";
+		mes "很有趣。 ^333333*嘆氣*^000000我相信";
+		mes "他太信任人們...";
+		mes "但這只是我的看法。";
+		next;
+		cutin "ra_gwoman",2;
+		mes "[大祭司尼倫]";
+		mes "如果你不介意...";
+		mes "我想給你一點";
+		mes "建議。不要太近";
+		mes "給大祭司Zhed。如果你";
+		mes "做，您可能最終會得到";
+		mes "自己遇到麻煩。";
+		next;
+		cutin "",255;
+		hideonnpc "High Priestess Niren#ra";
+		mes "^3355ffhigh女祭司尼倫離開";
+		mes "她說這些話。";
+		mes "她可能是什麼意思？";
+		mes "現在，你也可能";
+		mes "與大祭司Zhed交談。 ^000000";
+		set ra_tem_q,19;
+		if (isbegin_quest(8102) == 1)
+			changequest 8102,8103;
+		else if (isbegin_quest(8101) == 1)
+			changequest 8101,8103;
+		close;
+	}
+	end;
+}
+
+ra_temin,272,143,0	script	key1#rachel	-1,3,3,{
+OnTouch:
+	if (ra_tem_q == 20) {
+		mes "^3355ffyou找到一個小";
+		mes "放置閃亮的物體";
+		mes "在地板上。 ^000000";
+		next;
+		if (select("忽略:撿起來") == 1) {
+			mes "^3355ffyou決定忽略";
+			mes "小閃亮的物體，";
+			mes "無論它多麼重要";
+			mes "將來可能是您的。 ^000000";
+			close;
+		}
+		mes "^3355ffupon拿起";
+		mes "對象，你能夠";
+		mes "將其識別為小鑰匙。";
+		mes "也許您可以使用它";
+		mes "打開某種鎖。";
+		set ra_tem_q,21;
+		close;
+	}
+	end;
+}
+
+ra_temin,28,319,0	script	saint1#rachel	45,4,2,{
+OnTouch:
+	if ((ra_tem_q > 21) || (MISC_QUEST & 8192)) { warp "ra_san01",140,135; end; }
+
+	if (ra_tem_q == 21) {
+		mes "^3355ffthis必須是";
+		mes "進入聖";
+		mes "地面。但是，";
+		mes "鎖定的門是鎖定的。 ^000000。";
+		next;
+		if (select("退出:使用小鍵") == 2) {
+			mes "^3355ffyou插入小";
+			mes "您發現的鑰匙";
+			mes "大祭司Zhed的房間，";
+			mes "並發現它能夠";
+			mes "解鎖這扇門。 ^000000";
+			close2;
+			warp "ra_san01",140,135;
+			end;
+		}
+		close;
+	}
+	mes "^3355ff門被鎖定。 ^000000";
+	close;
+}
+
+que_san04,119,115,0	script	imir1#rachel	-1,2,2,{
+OnTouch:
+	if (ra_tem_q == 21) {
+		mes "^3355ffthis大面積外觀";
+		mes "就像是人為建造的";
+		mes "由於某種原因 - 不是";
+		mes "似乎很自然";
+		mes "怪物侵擾。 ^000000";
+		next;
+		mes "^3355ffper也許如果您探索";
+		mes "這個地方，你會";
+		mes "找到有趣的東西。 ^000000";
+		close;
+	}
+	end;
+}
+
+que_san04,119,133,0	script	imir2#rachel	-1,20,5,{
+OnTouch:
+	if (ra_tem_q == 21) {
+		mes "^3355ffthere在這裡";
+		mes "在水下。這";
+		mes "可能要仔細觀察。 ^000000";
+		close;
+	}
+	end;
+}
+
+que_san04,119,203,0	script	imir3#rachel	-1,7,7,{
+OnTouch:
+	if (ra_tem_q == 21) {
+		mes "^3355ffno想知道這個對象";
+		mes "在水中似乎是如此";
+		mes "熟悉：這是ymir的";
+		mes "心臟碎！實際上，有";
+		mes "其中數十個只是躺在這裡。 ^000000";
+		next;
+		mes "^3355ff為什麼會有很多";
+		mes "強大的文物在這裡";
+		mes "在聖地？也許";
+		mes "這是一個秘密";
+		mes "牧師正在試圖保留。 ^000000";
+		next;
+		hideoffnpc "High Priestess Niren#r2";
+		cutin "ra_gwoman",2;
+		mes "[大祭司尼倫]";
+		mes "你怎麼敢打擾";
+		mes "聖地！確認";
+		mes "你自己！我會嘗試的！";
+		next;
+		cutin "ra_gwoman2",2;
+		mes "[大祭司尼倫]";
+		mes "哦！是你，";
+		mes "推薦冒險家";
+		mes "由Bekento。嗯。我道歉";
+		mes "為了搶購你喜歡";
+		mes "那。你不知道";
+		mes "沒有人在這裡嗎？";
+		next;
+		cutin "ra_gwoman",2;
+		mes "[大祭司尼倫]";
+		mes "唔。好吧，您是符文";
+		mes "冒險家以您而聞名";
+		mes "技能和能力，但這";
+		mes "沒想到。我的意思是，我們";
+		mes "確保這個地方是";
+		mes "絕對安全。";
+		next;
+		cutin "ra_gwoman2",2;
+		mes "[大祭司尼倫]";
+		mes "做了什麼...";
+		mes "我警告Bekento他";
+		mes "可能會給您帶來麻煩，";
+		mes "但是看來你";
+		mes "給他造成了麻煩。";
+		next;
+		mes "[大祭司尼倫]";
+		mes "理解這一點：";
+		mes "大多數入侵者是";
+		mes "受到嚴厲懲罰，但是";
+		mes "因為我的友誼";
+		mes "與Bekento一起，我讓";
+		mes "你很容易。記住這一點。";
+		next;
+		sc_start SC_Blind,600000,0;
+		mes "^3355ffniren開始頌歌";
+		mes "低聲的聲音和你";
+		mes "眼瞼隨著您而變重";
+		mes "種植溺水和睡覺...^000000";
+		close2;
+		cutin "",255;
+		hideonnpc "High Priestess Niren#r2";
+		set ra_tem_q,22;
+		changequest 8104,8105;
+		warp "rachel",163,152;
+		end;
+	}
+	end;
+}
+
+que_san04,122,200,4	script	High Priestess Niren#r2	915,{
+	end;
+
+OnInit:
+	hideonnpc "High Priestess Niren#r2";
+	end;
+
+OnEnable:
+	initnpctimer;
+	end;
+
+OnTimer120000:
+	stopnpctimer;
+	hideonnpc "High Priestess Niren#r2";
+	end;
+}
+
+rachel,163,152,0	script	imir3#rachel2	-1,3,3,{
+OnTouch:
+	if (ra_tem_q == 22) {
+		mes "^3355fffyou感到有些頭痛";
+		mes "回想起感官後。";
+		mes "不知何故，你被帶到了";
+		mes "回到瑞秋鎮。多久";
+		mes "你昏迷了嗎？ ^000000";
+		next;
+		sc_end SC_Blind;
+		mes "^3355ffit最好";
+		mes "問大祭司Zhed";
+		mes "關於發生的事情。 ^000000";
+		set ra_tem_q,23;
+		close;
+	}
+	end;
+}
+
+rachel,142,167,5	script	Seeking Follower#rachel	916,6,6,{
+	if ((lost_boy == 13) && (ra_tem_q == 20)) {
+		L_Mes:
+		mes "[Arunafeltz追隨者]";
+		mes "對不起，但是";
+		mes "你是"+strcharinfo(0)+"?";
+		next;
+		select("是的。");
+		mes "[Arunafeltz追隨者]";
+		mes "大祭司Zhed";
+		mes "想看";
+		mes "你馬上"+strcharinfo(0)+".";
+		next;
+		select("可以問為什麼嗎？");
+		mes "[Arunafeltz追隨者]";
+		mes "好吧，我實際上沒有";
+		mes "主意。我只應該";
+		mes "通知你他正在尋找";
+		mes "為你。請訪問High";
+		mes "牧師在第二個";
+		mes "寺廟的右房間。";
+		close;
+	}
+	else {
+		mes "[Arunafeltz追隨者]";
+		mes "願弗雷亞祝福你";
+		mes "在你的旅程...";
+		close;
+	}
+
+OnTouch:
+	if ((lost_boy == 13) && (ra_tem_q == 20)) goto L_Mes;
+	end;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.0 First version, needs testing. [L0ne_W0lf]
+//= 1.1 Some slight optimization. [L0ne_W0lf]
+//= 1.2 Fixed Man Stuck in Ice only giving 1 Freezing Snow Powder. [L0ne_W0lf]
+//= 1.3 Added the ability to redeem lottery tickets before donation max is met. [L0ne_W0lf]
+//= 1.4 Removed an erroneous "case". Thanks, Jet. [L0ne_W0lf]
+//= 1.5 Fixed a bug in Bruspetti quest. [SinSloth]
+//= 1.5b Fixed some typos in various quests. [SinSloth]
+//= 1.6 Fixed a couple bugs with the Pope's Office Guards... [L0ne_W0lf]
+//= 1.7 Fixed Maheo, he will revert to his frozen state when clicked. [L0ne_W0lf]
+//=     Replaced  instances of "+name+", with "+strcharinfo(0)".
+//= 1.8 Various fixes: Hamion will now delete items used for Wind Hammer. [L0ne_W0lf]
+//=     Fixed EXP reward in Ice Necklace quest, fixed a typo in an NPC header.
+//=     Another minor fix to Hamion. "< 1" -> "< 2". Added a missing close to
+//=     the ontouch "key". Thanks to Gepard for pointing them out.
+//= 1.9 Fixed a misorder with variable checkings. [SinSloth]
+//= 2.0 Fixed experience gains to match upcoming rate adjustments. [SinSloth]
+//= 2.1 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 2.2 Maheo NPC now uses "setnpcdisplay" instead of two NPCs. [L0ne_W0lf]
+//= 2.2a Corrected a Typo error ";;". [Samuray22]
+//= 2.3 Added Zhed's portion of Thor Volcano Base Quest. (euRO) [L0ne_W0lf]
+//= 2.4 Updated Zhed's Thor Vol. Base addition dialog to iRO's. [L0ne_W0lf]
+//= 2.4a Further updates to Zhed's Veins addition. [L0ne_W0lf]
+//= 2.5 Added Nameless Island quest addition. [L0ne_W0lf]
+//= 2.6 Uncommented ontouchNPC label for Man Stuck in Ice. [L0ne_W0lf]
+//= 2.7 Corrected overlaping warp coordinates. [L0ne_W0lf]
+//= 2.8 Replaced effect numerics with constants. [L0ne_W0lf]
+//= 2.9 Replaced effect numerics with constants. [Samuray22]
+//============================================================

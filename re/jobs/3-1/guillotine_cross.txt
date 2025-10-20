@@ -1,0 +1,3959 @@
+﻿//===== rAthena Script ======================================= 
+//= Guillotine Cross Job Quest
+//===== By: ================================================== 
+//= Muad_Dib
+//===== Current Version: ===================================== 
+//= 1.6
+//===== Compatible With: ===================================== 
+//= rAthena Project; SVN r16945+
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job change Quest from Assassin / Assassin Cross -> Guillotine Cross.
+//===== Additional Comments: ================================= 
+//= 1.0 Adapted from original script. [Euphy]
+//= 1.0a Added 'npcskill' command. [Euphy]
+//= 1.0b Moved warps to separate file. [Euphy]
+//= 1.1 Fixed some minor bugs. [Euphy]
+//= 1.2 Moved "Girl" NPC off ve_fild05. [Euphy]
+//= 1.3 Added missing OnMyMobDead labels. [Euphy]
+//= 1.4 Added missing labels. [Joseph]
+//= 1.5 Added GM management function. [Euphy]
+//= 1.6 Added VIP features. [Euphy]
+//= 1.7 Fixed PLAYTIME issue. [Capuche]
+//============================================================
+
+que_job01,75,96,3	script	Guild Member#3rdgc01	997,{
+	if (job_3rd_gc == 0) {
+		if (Class == Job_Assassin || Class == Job_Assassin_Cross || Class == Job_Baby_Assassin) {
+			if (BaseLevel > 98) {
+			L_Mission:
+				mes "[阿卡特]";
+				mes "最後，是時候了...";
+				mes "嘿，你叫什麼名字？";
+				next;
+				switch(select(strcharinfo(0),".....")) {
+				case 1:
+					mes "[阿卡特]";
+					mes strcharinfo(0)+"？";
+					mes "知道了。我會記得你的名字。";
+					mes "主人告訴我你是一個有能力的人。";
+					break;
+				case 2:
+					mes "[阿卡特]";
+					mes "什麼？你是一個不信任的人。";
+					mes "嗯，無論如何。";
+					mes "我聽說你是一個有能力的人。";
+					break;
+				}
+				next;
+				mes "[阿卡特]";
+				mes "我的職責是向有能力的刺客傳達公會信息。";
+				mes "我認為您適合執行公會的職責。";
+				next;
+				mes "[阿卡特]";
+				mes "那麼，您會為我們履行這項職責嗎？";
+				mes "當然，我將為完成您的任務提供獎勵。";
+				next;
+				select("有什麼要求？");
+				mes "[阿卡特]";
+				mes "目前尚不清楚。";
+				mes "我告訴你了。這是一項特殊的任務。";
+				mes "我唯一知道的是帶有主人能力的人的條件。";
+				next;
+				mes "[阿卡特]";
+				mes "首先，一個有耐心的人。";
+				mes "第二，一個安靜的人。";
+				mes "第三，一個專注的人。";
+				next;
+				mes "[阿卡特]";
+				mes "您如何看待我告訴您的內容？";
+				mes "這項任務意味著它需要一個可以執行任務的人，而不論自己的意志。";
+				next;
+				mes "[阿卡特]";
+				mes "有必要保留此請求秘密。";
+				mes "但這也是您不告訴任何人的責任。";
+				next;
+				mes "[阿卡特]";
+				mes "這就是您的全部選擇。";
+				mes "您會幫助我們解決這個請求嗎？";
+				next;
+	switch(select("我會去做:給我時間考慮")) {
+				case 1:
+					if (VIP_SCRIPT) {
+						callfunc "VIP_Third_Class";
+						set job_3rd_gc, 3;
+						setquest 7101;
+						next;
+					}
+					mes "[阿卡特]";
+					mes "好的，靜脈。";
+					mes "我會聯繫他們。";
+					mes "這是您靜脈的第一個職責。";
+					next;
+					mes "[阿卡特]";
+					mes "您應該能夠輕鬆找到它。";
+					mes "現在去。";
+					set job_3rd_gc, 3;
+					setquest 7101;
+					close;
+				case 2:
+					mes "[阿卡特]";
+					mes "知道了。";
+					mes "但是不要考慮太久了。";
+					set job_3rd_gc, 2;
+					close;
+				}
+			}
+			mes "[阿卡特]";
+			mes "嗯，你是我的同伴。";
+			mes "我是Ahcart。我來自靜脈。";
+			mes "唔...";
+			next;
+			mes "[阿卡特]";
+			mes "當然，刺客公會的一章不僅在摩洛哥。如果您有機會去那裡，請參觀。";
+			mes "我認為你可能會去那裡。";
+			set job_3rd_gc, 1;
+			close;
+		}
+		mes "[一個印象深刻的人]";
+		mes "...";
+		mes "什麼...？";
+		mes "你不是刺客。";
+		close;
+	} else if (job_3rd_gc == 1) {
+		if (BaseLevel > 98) goto L_Mission;
+		mes "[阿卡特]";
+		mes "如果您變得更強大，更熟練，那麼刺客的行會將為您提供一項特殊的任務。";
+		mes "大膽試試吧。";
+		close;
+	} else if (job_3rd_gc == 2) {
+		mes "[阿卡特]";
+		mes "你想到了嗎？";
+		next;
+	switch(select("我會去做:我還沒準備好")) {
+		case 1:
+			if (VIP_SCRIPT) {
+				callfunc "VIP_Third_Class";
+				set job_3rd_gc, 3;
+				setquest 7101;
+				next;
+			}
+			mes "[阿卡特]";
+			mes "好的，靜脈。";
+			mes "我會聯繫他們。";
+			mes "這是您靜脈的第一個職責。";
+			next;
+			mes "[阿卡特]";
+			mes "您應該能夠輕鬆找到它。";
+			mes "現在去。";
+			set job_3rd_gc, 3;
+			setquest 7101;
+			close;
+		case 2:
+			mes "[阿卡特]";
+			mes "你太謹慎了。";
+			mes "我感覺到您不想為我們工作。";
+			close;
+		}
+	} else if (job_3rd_gc == 3) {
+		mes "[阿卡特]";
+		mes "轉到靜脈並找到一章。";
+		mes "您可以從那裡聽到更多細節。";
+		close;
+	} else {
+		mes "[阿卡特]";
+		mes "祝你好運。";
+		close;
+	}
+}
+
+function	script	func_3rdgc	{
+	set .@n$, "["+strcharinfo(0)+"]";
+	mes .@n$;
+	mes "讓我收集所有信息...";
+	set .@i,0;
+	if (checkquest(7112) == 1) { mes "馬德爾在深夜看到了一個看起來像雷切爾牧師的人。"; set .@i,.@i+1; }
+	if (checkquest(7113) == 1) { mes "Crave說有一個女孩沒日沒夜地買了很多東西。"; set .@i,.@i+1; }
+	if (checkquest(7114) == 1) { mes "特羅萬說，有一個人經常被看見，但他不是酒店的客人，所以他很可疑。"; set .@i,.@i+1; }
+	if (!getarg(0)) {
+		set .@i,.@i-2;
+		if (checkquest(7115) == 1) { mes "一個小販穿著破舊的衣服，但每天都買新鮮的、昂貴的東西。"; set .@i,.@i+1; }
+		if (checkquest(7116) == 1) { mes "村里的老人說，有一個女孩同時出現在同一個地方，所以可能搬到了這裡。"; set .@i,.@i+1; }
+	}
+	next;
+	if (.@i == 3) {
+		mes .@n$;
+		mes "有一天，瑪德爾看到一個看上去像雷切爾的牧師的人，";
+		mes "Trovan懷疑該人為什麼在這裡。";
+		next;
+		mes .@n$;
+		mes "但是Trovan懷疑他們的原因是...";
+		next;
+		switch(select("他們陌生:住所不明")) {
+		case 1:
+			mes .@n$;
+			mes "不，那不是原因。警衛每天都會看到新的冒險家。";
+			mes "此外，瑪德爾告訴我，那是一個男人，克里夫說那是一個女孩。";
+			mes "我很困惑。";
+			next;
+			mes .@n$;
+			mes "讓我重新考慮。";
+			set job_3rd_gc, 7;
+			close;
+		case 2:
+			mes .@n$;
+			mes "是的，冒險家經常去看，所以這不是一個正確的原因。";
+			next;
+			mes .@n$;
+			mes "特羅萬懷疑他的住所尚不清楚。但是他經常出現並定期購買供應。";
+			next;
+			mes .@n$;
+			mes "但是渴望說這是一個女孩。";
+			mes "瑪德爾說她目睹了一個男人。";
+			next;
+			if (getarg(0)) {
+				if(select("馬德爾見證了 2...:有超過 2...") == 1) {
+					mes .@n$;
+					mes "瑪德爾說，她在黑暗中看到了另一個人。";
+					mes "那是帶來補給品的女孩嗎？";
+					next;
+				}
+			}
+			else select("它可以是一個幫手。");
+			mes .@n$;
+			mes "是的。可能還有一個幫手。";
+			mes "她派人去買東西而不是自己。";
+			mes "否則可能是同伴瑪德爾（Madelle）看不見。";
+			next;
+			mes .@n$;
+			mes "渴望說她晝夜到這裡定期購買東西。";
+			mes "然後我知道我該怎麼辦。";
+			set job_3rd_gc, 8;
+			close;
+		}
+	}
+	mes .@n$;
+	mes "嗯...";
+	mes "我需要更多信息嗎？我認為還需要更多。";
+	close;
+}
+
+job3_guil01,82,95,3	script	Daora#3rdgc02	940,{
+	mes "[親愛的]";
+	if (Class == Job_Assassin || Class == Job_Assassin_Cross || Class == Job_Baby_Assassin) {
+		if (job_3rd_gc < 4) {
+			if (Sex == SEX_MALE) {
+				mes "哦~你好看！";
+				mes "那麼，您想要什麼？";
+			} else {
+				mes "嗯，你是一個女孩。";
+				mes "好的，請隨身攜帶。";
+			}
+			next;
+			mes "[親愛的]";
+			mes "我不確定您是否已經知道，但我們正在出售特殊的摩洛哥酒。";
+			mes "您想要哪一個？";
+			next;
+	switch(select("熱帶蘇格拉特:海灘上的朱紅:不用了，謝謝!:......")) {
+			case 1:
+				mes "[親愛的]";
+				if (Zeny > 799) {
+					mes "在這裡，請接受。";
+					set Zeny, Zeny - 800;
+					getitem 12112,1; //Tropical_Sograt
+					close;
+				}
+				mes "每杯熱帶sograt是800 Zeny。";
+				close;
+			case 2:
+				mes "[親愛的]";
+				if (Zeny > 799) {
+					mes "在這裡，請接受。";
+					set Zeny, Zeny - 800;
+					getitem 12113,1; //Vermilion_The_Beach
+					close;
+				}
+				mes "在海灘上，每杯朱紅色的朱紅色是800 Zeny。";
+				close;
+			case 3:
+				mes "[親愛的]";
+				mes "不要告訴我你的緊張！";
+				specialeffect2 EF_HIT1;
+				percentheal -30,0;
+				close;
+			case 4:
+				mes "[親愛的]";
+				mes "什麼？你為什麼那樣看我？";
+				mes "哦？你是這個世界的人。";
+				mes "你的名字是...";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes strcharinfo(0)+"。";
+				next;
+				mes "[親愛的]";
+				if (job_3rd_gc == 3) {
+					mes "啊~我以前聽過你的名字。";
+					mes "嗯...對！";
+					mes "Ahcart推薦您。";
+					next;
+					mes "[親愛的]";
+					mes "是的，您能在角落裡找到小巷的入口嗎？";
+					mes "進入那裡，然後您可以聽到一個更詳細的故事。";
+					mes "承擔這項特殊任務~！";
+					set job_3rd_gc, 4;
+					changequest 7101,7102;
+					close;
+				}
+				mes "什麼，我不知道那個名字。";
+				mes "嘿，我必須開展業務，所以你能搬過去嗎？";
+				close;
+			}
+		} else if (job_3rd_gc == 4) {
+			mes "角落裡的房間。隨意進入它，因為無論如何沒有人進入那個房間。";
+			mes "還是您需要一些東西？";
+			next;
+			mes "[親愛的]";
+			mes "啊，我不是要向開始特殊任務的人出售Liquir。";
+			next;
+	switch(select("不賣酒...:我需要資訊:好啊，小子!")) {
+			case 1:
+				mes "[親愛的]";
+				mes "嘿，您現在正在執行任務。";
+				mes "你要我賣你的酒嗎？";
+				mes "每個援助都喜歡你嗎？懶惰的酒杯？";
+				close;
+			case 2:
+				mes "[親愛的]";
+				mes "您敢於在執行任務後要求信息。";
+				mes "你還沒有遇到大師嗎？";
+				mes "好像我會告訴你，因為你問！";
+				mes "你是幼稚的。";
+				close;
+			case 3:
+				mes "[親愛的]";
+				mes "不要和我說話，就像我是你的朋友之一！";
+				mes "您無權這樣！";
+				specialeffect2 EF_HIT1;
+				percentheal -30,0;
+				close;
+			}
+		} else if (job_3rd_gc == 10) {
+			mes "哦~！對我有好處。";
+			mes "她是誰？";
+			mes "你告訴她我們會保護她嗎？";
+			next;
+			select("是的，我做到了。");
+			mes "[親愛的]";
+			mes "嗯，我明白了...";
+			mes "您的意見將很重要。";
+			mes "我得到了它。";
+			next;
+			mes "[親愛的]";
+			mes "她很害怕";
+			mes "所以我給了她一杯熱飲";
+			mes "並把她帶到她的房間。";
+			next;
+			mes "[親愛的]";
+			mes "好吧...比這個房間比這個房間更好地關注她。";
+			next;
+			select("不，我只是保護...");
+			mes "[親愛的]";
+			mes "啊~無論如何，你讓我工作。";
+			mes "保護那個年輕女孩。";
+			next;
+			mes "[親愛的]";
+			mes "Mayshell告訴我，我必須支持您，所以我不會抱怨。";
+			next;
+			mes "[親愛的]";
+			mes "所以，不用擔心。";
+			mes "你應該在這里為她嗎？";
+			mes "前進。";
+			set job_3rd_gc, 11;
+			close;
+		} else if (job_3rd_gc == 11) {
+			mes "她在房間裡。";
+			mes "大師房間前面的那個。";
+			mes "你能找到嗎？";
+			close;
+		} else if (job_3rd_gc == 12) {
+			mes "那個女孩...";
+			mes "會被送到她的家嗎？";
+			mes "不用擔心。";
+			next;
+			mes "[親愛的]";
+			mes "Mayshell和其他人會處理它。";
+			close;
+		} else if (job_3rd_gc == 14) {
+			mes "哦，這是完美的時機。";
+			mes "Mayshell會打電話給您。";
+			mes "去主人房間。";
+			close;
+		} else if (job_3rd_gc > 4 && job_3rd_gc < 18) {
+			mes "你需要什麼？";
+			mes "我們不賣給任何開始特殊任務的人。";
+			next;
+	switch(select("....:給我一杯:那麼，可以給我牛奶嗎?")) {
+			case 1:
+				mes "[親愛的]";
+				mes "為什麼？你很失望嗎？";
+				mes "嗯~";
+				mes "我不能讓任何人喝酒。";
+				close;
+			case 2:
+				mes "[親愛的]";
+				if (job_3rd_gc == 5) {
+					mes "我告訴你，我不會賣給你。";
+					mes "沒有酒的空玻璃很好。";
+					mes "我已經告訴過你...";
+					next;
+					mes "[親愛的]";
+					mes "我會讓您知道我知道的所有信息。";
+					next;
+					mes "[親愛的]";
+					mes "如果需要，請隨時拜訪我，完成任務後，我會為您提供一杯飲料。";
+					set job_3rd_gc, 6;
+					close;
+				} else if (job_3rd_gc == 6) {
+					if (checkquest(7091) == 1) {
+						mes "您希望玻璃杯裡有東西嗎？";
+						mes "信息不能來自空眼鏡。";
+						close;
+					}
+					mes "你需要一杯嗎？";
+					mes "Mayshell的命令使您分心，因此您什麼都不了解。";
+					next;
+					mes "[親愛的]";
+					mes "好的，您想知道什麼？";
+					mes "您希望玻璃杯裡有東西嗎？";
+					next;
+					switch(select("求助:自己處理。")) {
+					case 1:
+						mes "[親愛的]";
+						mes "那麼，這意味著只是在村里殺死一個奇怪的人嗎？";
+						mes "您為什麼因此感到痛苦？";
+						mes "嗯...讓我看看...";
+						next;
+						mes "[親愛的]";
+						mes "那麼它需要腿部工作嗎？";
+						mes "這個村莊最擁擠的地方在哪裡？";
+						mes "酒吧和汽車旅館。";
+						next;
+						mes "[親愛的]";
+						mes "村莊的警衛總是關注陌生人。";
+						mes "否則舊商人在視覺學習方面很快。";
+						next;
+						mes "[親愛的]";
+						mes "我可以特別說...";
+						mes "Trovan，Crave是一名商人，在酒吧里的Madelle在視覺學習方面很快。";
+						next;
+						mes "[親愛的]";
+						mes "這是好的信息，不是嗎？";
+						setquest 7091;
+						next;
+						mes "-  Daora的建議與任務信息有關。 -";
+						close;
+					case 2:
+						mes "[親愛的]";
+						mes "好的。這很棒。";
+						mes "每個單詞和行為將是事件的重要關鍵。";
+						mes "因此，請仔細環顧四周並弄清楚。";
+						next;
+						mes "[親愛的]";
+						mes "好事會發生。";
+						close;
+					}
+				} else if (job_3rd_gc == 7) {
+					mes "您似乎很擔心。";
+					mes "在這裡，這是冷水。";
+					mes "您用冷水思考。";
+					next;
+					switch(select("根據信息推測:停止舞台。")) {
+					case 1:
+						if (checkquest(7091) == 1) set .@j,1;
+						callfunc "func_3rdgc",.@j;
+						close;
+					case 2:
+						mes "您停止確認信息。";
+						close;
+					}
+				} else if (job_3rd_gc == 8) {
+					if (checkquest(7092) == 1) {
+						mes "在她通常會出現的小巷裡等待尋找她，您將能夠提出這個問題。";
+						next;
+						mes "[親愛的]";
+						mes "嘗試不會傷害。";
+						mes "如果您想找到一個根，則必須先找到葉子。";
+						mes "努力工作。";
+						close;
+					}
+					mes "你解決了嗎？";
+					mes "你會怎麼做？";
+					next;
+					switch(select("獲得建議:這是一個秘密。")) {
+					case 1:
+						mes "[親愛的]";
+						mes "您能讓我知道您收集的信息嗎？";
+						next;
+						if(select("你跟他談心:那不可能。") == 2) {
+							mes "[親愛的]";
+							mes "什麼，我不能正確地支持您？";
+							mes "您自己解決。";
+							close;
+						}
+						mes "[親愛的]";
+						mes "哼。知道了。";
+						next;
+						mes "[親愛的]";
+						mes "有一個看起來像牧師，Trovan和Madelle看到了他。";
+						mes "一個商人看到一個定期購買東西的女孩。";
+						next;
+						mes "[親愛的]";
+						mes "主要目標是一個人";
+						mes "但是助手是一個女孩。";
+						mes "或許。";
+						next;
+						mes "[親愛的]";
+						mes "首先，";
+						mes "真的是你的。";
+						next;
+						mes "[親愛的]";
+						mes "那很簡單。";
+						mes "您為什麼不在她經常去的地方遇到她？";
+						next;
+						mes "[親愛的]";
+						mes "這是職責的暫時性。";
+						mes "您不知道一個難題的含義。";
+						next;
+						mes "[親愛的]";
+						mes "他們是否可以是相關的人。";
+						mes "好的，我會非常注意我的需求。";
+						next;
+						mes "[親愛的]";
+						mes "對了嗎？";
+						mes "去一個可以很好看村莊並找到梅利莎的地方。";
+						mes "那將是有幫助的。";
+						next;
+						mes "-  Daora的建議是在任務委員會上附帶的。 -";
+						setquest 7092;
+						close;
+					case 2:
+						mes "[親愛的]";
+						mes "嗯~。";
+						mes "正確的。有一個秘密";
+						mes "您無法在執行任務時告訴任何人。";
+						next;
+						mes "[親愛的]";
+						mes "在這些方面，您超出了標準。";
+						close;
+					}
+				} else if (job_3rd_gc == 9) {
+					if (checkquest(7093) == 1) {
+						mes "因此，去村莊的東部，您可以看到北部的一條狹窄的小巷。";
+						next;
+						mes "[親愛的]";
+						mes "梅利莎（Melissa）告訴的盲人小巷意味著這條街。";
+						mes "你在想像一個孩子。";
+						close;
+					}
+					mes "哈哈...怎麼樣了？";
+					next;
+					switch(select("死胡同在哪裡？ :沒關係。")) {
+					case 1:
+						mes "[親愛的]";
+						mes "盲人胡同？";
+						mes "嗯...好吧。";
+						mes "有沒有像我們的酒吧這樣的盲人巷...";
+						next;
+						mes "[親愛的]";
+						mes "啊，在東北巷";
+						mes "指向村莊的上升空間，";
+						mes "沒有街道，因為";
+						mes "房屋在該地區靠近。";
+						next;
+						mes "[親愛的]";
+						mes "在梅利莎（Melissa）的房子周圍";
+						mes "那是盲人胡同";
+						mes "對於男孩，也許。";
+						next;
+						mes "[親愛的]";
+						mes "在村莊周圍散步非常容易。";
+						setquest 7093;
+						next;
+						mes "-  Daora的建議是在任務委員會上附帶的。 -";
+						close;
+					case 2:
+						mes "[親愛的]";
+						mes "好的。進展順利。";
+						mes "我可以期望取得良好的結果嗎？";
+						close;
+					}
+				} else if (job_3rd_gc == 13) {
+					mes "我把一個叫埃蒂爾達的女孩送到了她的家中。";
+					mes "為什麼我們處理像這樣一文不值的事情？";
+					next;
+					if (checkquest(7094) == 1) {
+						mes "[親愛的]";
+						mes "我不確定他是否仍然活著...";
+						mes "無論如何，他是雷切爾的關鍵工匠";
+						mes "並可以識別各種鑰匙。";
+						next;
+						mes "[親愛的]";
+						mes "什麼？住宅？";
+						mes "我告訴你，是雷切爾。";
+						mes "在瑞秋（Rachel）的餘下時間裡，他也許生活得很舒適。";
+						next;
+						mes "[親愛的]";
+						mes "去雷切爾的酒吧里問問...";
+						close;
+					}
+					mes "[親愛的]";
+					mes "是的，怎麼了？";
+					next;
+					switch(select("進展順利。 :顯示密鑰。")) {
+					case 1:
+						mes "[親愛的]";
+						mes "我的杯子，你不需要嗎？";
+						next;
+						mes "["+strcharinfo(0)+"]";
+						mes "是的。我已經有足夠的信息。";
+						mes "如果那是一個很長的故事，";
+						mes "我們只有一種方式。";
+						next;
+						mes "[親愛的]";
+						mes "正確的。";
+						mes "如果您仔細考慮，";
+						mes "您可以找到一種方法。";
+						next;
+						mes "[親愛的]";
+						mes "祝你好運~";
+						close;
+					case 2:
+						mes "[親愛的]";
+						mes "什麼是 -";
+						mes "我知道，那個傢伙有這個鑰匙...？";
+						next;
+						mes "[親愛的]";
+						mes "這是神社的象徵";
+						mes "並具有艷麗的模式。";
+						mes "唔...";
+						next;
+						mes "[親愛的]";
+						mes "那麼，您想知道該密鑰的用途嗎？";
+						mes "如果這樣做，請去雷切爾。";
+						mes "那裡有一個關鍵的工匠。";
+						next;
+						mes "[親愛的]";
+						mes "現在，他退休了，但他";
+						mes "在和平中度過了衰落的歲月。";
+						mes "你可以自己問他。";
+						next;
+						mes "[親愛的]";
+						mes "詢問此密鑰的用途是什麼。";
+						setquest 7094;
+						next;
+						mes "-  Daora的建議附上在任務委員會上。 -";
+						close;
+					}
+				} else if (job_3rd_gc == 15) {
+					if (checkquest(7095) == 1) {
+						mes "靜脈西北的田野。";
+						mes "您可以通過地圖輕鬆找到它。";
+						mes "有很多狼，所以要小心。";
+						close;
+					}
+					mes "嘿，Mayshell怎麼樣？";
+					mes "您能解決一種不舒服的交談方式嗎？";
+					next;
+					mes "[親愛的]";
+					mes "不要假裝是貴族。";
+					next;
+					switch(select("我要走了:你知道維因斯附近有一座豪宅嗎？")) {
+					case 1:
+						mes "[親愛的]";
+						mes "好的。";
+						mes "不要被不明智的英勇帶走。";
+						mes "好吧...也很難被殺死。";
+						close;
+					case 2:
+						mes "[親愛的]";
+						mes "是的，當然。";
+						mes "溝渠之間有一個豪宅。";
+						mes "這很沮喪。";
+						mes "我不明白他的口味。";
+						next;
+						mes "[親愛的]";
+						mes "那座豪宅建在山溝後面...";
+						mes "總是像夜晚一樣黑。";
+						next;
+						mes "[親愛的]";
+						mes "位置？";
+						mes "出色地...";
+						mes "它位於靜脈西北田。";
+						mes "您可以穿過狹窄的道路到達東北。";
+						setquest 7095;
+						next;
+						mes "-  Daora的建議是在任務委員會上附帶的。 -";
+						next;
+						mes "[親愛的]";
+						mes "該地區有很多可怕的狼，請小心。";
+						close;
+					}
+				} else {
+					mes "不，這不再有趣了。";
+					close;
+				}
+			case 3:
+				mes "[親愛的]";
+				mes "我們的牛奶很昂貴！";
+				mes "給我500 Zeny杯。";
+				next;
+				switch(select("沒關係。給我一杯牛奶:你是一個無恥的強盜！")) {
+				case 1:
+					mes "[親愛的]";
+					if (Zeny > 499) {
+						mes "給你。牛奶。";
+						mes "然後休息。";
+						set Zeny, Zeny - 500;
+						getitem 519,1; //Milk
+						close;
+					}
+					mes "我告訴你，這是500 Zeny。";
+					mes "一個可憐的人。你只有一個很好的數字！";
+					close;
+				case 2:
+					mes "[親愛的]";
+					mes "一個無禮的傢伙！";
+					specialeffect2 EF_HIT1;
+					percentheal -30,0;
+					close;
+				}
+			}
+		} else {
+			mes "您已經完美地完成了任務。";
+			mes "您現在需要什麼？";
+			mes "你還需要其他東西嗎？";
+			next;
+			mes "[親愛的]";
+			mes "如果您決定走路的方法，那麼是時候開始了。";
+			mes "每個人都在等你。";
+			close;
+		}
+	} else if (Class == Job_Guillotine_Cross || Class == Job_Guillotine_Cross_T || Class == Job_Baby_Guillotine_Cross) {
+		if (Sex == SEX_MALE) {
+			mes "哦~你好看~！";
+			mes "值得開設一家酒吧~";
+			mes "每當我看到像你這樣的人時，我都會感到富有成果的勞動~";
+		} else {
+			mes "嗯...你看起來和我年輕時一樣好。";
+			mes "你想要什麼？";
+		}
+		next;
+		switch(select("熱帶索格拉特:海灘上的朱紅:牛奶")) {
+		case 1:
+			mes "[親愛的]";
+			if (Zeny > 799) {
+				mes "在這裡，請接受。";
+				set Zeny, Zeny - 800;
+				getitem 12112,1; //Tropical_Sograt
+				close;
+			}
+			mes "每1杯熱帶sograt是800 Zeny。";
+			close;
+		case 2:
+			mes "[親愛的]";
+			if (Zeny > 799) {
+				mes "在這裡，請接受。";
+				set Zeny, Zeny - 800;
+				getitem 12113,1; //Vermilion_The_Beach
+				close;
+			}
+			mes "[親愛的]";
+			mes "在海灘上每1杯朱紅色的朱尼是800 Zeny。";
+			close;
+		case 3:
+			mes "[親愛的]";
+			if (Sex == SEX_MALE) {
+				mes "嗯...嗯...";
+				mes "這很複雜。但是我別無選擇，因為您想要它。";
+				next;
+				mes "[親愛的]";
+				if (Zeny > 499) {
+					mes "我很遺憾每瓶服用500 Zeny，但我必須。";
+					mes "很難用靜脈取牛奶。";
+					set Zeny, Zeny - 500;
+					getitem 519,1; //Milk
+					close;
+				}
+				mes "嗯...我想我無能為力。";
+				mes "靜脈裡沒有牛奶。";
+				close;
+			} else {
+				mes "啊，牛奶。";
+				mes "呵！牛奶！";
+				next;
+				mes "[親愛的]";
+				mes "我沒有這樣的東西。";
+				close;
+			}
+		}
+	} else {
+		if (Sex == SEX_MALE) {
+			mes "哦~你好看！";
+			mes "那麼，您想要什麼？";
+		}
+		else {
+			mes "哼...你是一個女孩。";
+			mes "好的，請隨身攜帶。";
+		}
+		next;
+		mes "[親愛的]";
+		mes "我不確定您是否已經知道，但是我們正在出售摩洛哥的特殊酒。";
+		mes "您想要哪一個？";
+		next;
+		switch(select("熱帶索格拉特:朱紅海灘:不，謝謝！")) {
+		case 1:
+			mes "[親愛的]";
+			if (Zeny > 999) {
+				mes "在這裡，請接受。";
+				set Zeny, Zeny - 1000;
+				getitem 12112,1; //Tropical_Sograt
+				close;
+			}
+			mes "每杯熱帶sograt是1000 Zeny。";
+			close;
+		case 2:
+			mes "[親愛的]";
+			if (Zeny > 999) {
+				mes "在這裡，請接受。";
+				set Zeny, Zeny - 1000;
+				getitem 12113,1; //Vermilion_The_Beach
+				close;
+			}
+			mes "在海灘上每杯朱紅色的朱尼是1000 Zeny。";
+			close;
+		case 3:
+			mes "[親愛的]";
+			mes "不要告訴我你的緊張！";
+			specialeffect2 EF_HIT1;
+			percentheal -30,0;
+			close;
+		}
+	}
+}
+
+job3_guil01,16,20,4	script	Mayshell#3rdgc03	894,{
+	if (!checkweight(1201,2)) {
+		mes "- 您無法繼續此任務，因為您的項目太多。 -";
+		close;
+	}
+	mes "[梅殼]";
+	if (job_3rd_gc == 4) {
+		mes "您是由Ahcart送到這裡的嗎？";
+		mes "我會給您一個任務而無需再問問題。";
+		mes "好的，仔細聽。";
+		next;
+		mes "[梅殼]";
+		mes "我們正在追逐一個試圖解散組織的人。";
+		mes "我們得到了一個看起來像城鎮領導者的人的信息。";
+		next;
+		mes "[梅殼]";
+		mes "您的任務是在影子的掩護下懲罰他。";
+		next;
+		mes "[梅殼]";
+		mes "我們的目標不應向任何人釋放。";
+		mes "您的記憶應該消失在陰影中。";
+		mes "要謹慎並避免觀察。";
+		next;
+		select("好吧...:所以任務是...？");
+		mes "[梅殼]";
+		mes "他看起來像什麼？";
+		mes "你怎麼認識他？";
+		mes "我不能告訴你。";
+		mes "那是讓你找出答案。";
+		next;
+		mes "[梅殼]";
+		mes "您將需要一個指南針。";
+		mes "您需要一個燈和一盞燈才能在黑暗中看到。";
+		next;
+		mes "[梅殼]";
+		mes "那時，您將可以喝一杯和休息。";
+		next;
+		mes "[梅殼]";
+		mes "克服逆境。";
+		mes "由您決定。";
+		mes "我們無法幫助您，因此您必須自己弄清楚。";
+		next;
+		mes "[梅殼]";
+		mes "我們在這個村莊看到了一個陌生人，我們很確定他是我們正在尋找您的任務的人。";
+		next;
+		mes "[梅殼]";
+		mes strcharinfo(0)+"。";
+		mes "時間不在等你。";
+		mes "前進。用刀的刀片灑血，代表堅忍的生活。";
+		set job_3rd_gc, 5;
+		changequest 7102,7103;
+		close;
+	} else if (job_3rd_gc == 5) {
+		mes "您已經有了訂單。";
+		mes "即使您沒有任何證據，我也相信您能做得很好。";
+		next;
+		mes "[梅殼]";
+		mes "看著你是一項測試。";
+		mes "讓我看看，"+strcharinfo(0)+"...";
+		mes "出去思考您首先要做的事情。";
+		next;
+		mes "[梅殼]";
+		mes "您的任務是找到一個陌生人。";
+		next;
+		mes "[梅殼]";
+		mes "努力出去搜索。";
+		mes "我讓你喝點水。";
+		next;
+		mes "[梅殼]";
+		mes "開始之前與Daora見面。";
+		mes "她可能對你有幫助。";
+		close;
+	} else if (job_3rd_gc == 14) {
+		mes "歡迎。";
+		mes "你今天過得怎麼樣？";
+		mes "我聽說你的活動。";
+		next;
+		mes "[梅殼]";
+		mes "您找到了鑰匙，對嗎？";
+		mes "侯。我有找到答案的方法。";
+		next;
+		mes "[梅殼]";
+		mes "你能告訴我鑰匙嗎？";
+		mes "我要檢查是否";
+		mes "你有能力...";
+		next;
+		select("給他一把鑰匙。");
+		mes "[梅殼]";
+		if (countitem(6150) == 0) {
+			mes "你沒有帶鑰匙嗎？";
+			mes "我會遇到很多麻煩。";
+			close;
+		}
+		mes "我沒想到沒有明確的目標...";
+		mes "你是一個比我想像的要高的人。";
+		next;
+		mes "[梅殼]";
+		mes "我認為您找到了我們想要的目標。";
+		mes "然後，找到鑰匙的主機後處理它。";
+		next;
+		mes "[梅殼]";
+		mes "那將結束。";
+		mes "但是您必須自己找到鑰匙的主機。";
+		next;
+		mes "[梅殼]";
+		mes "當您找到豪宅時，會有一個人在等您。";
+		next;
+		mes "[梅殼]";
+		mes "這是最後一步。";
+		mes "不要犯任何錯誤。";
+		delitem 6150,1; //Key_Of_The_Mansion
+		set job_3rd_gc, 15;
+		changequest 7108,7109;
+		close;
+	} else if (job_3rd_gc == 15) {
+		mes "好，你有事要做嗎？";
+		mes "如果您遲到了，Renzak可能會感到不高興。";
+		close;
+	} else if (job_3rd_gc == 18 || job_3rd_gc == 19) {
+		mes "我已經收到了Renzak的報告。";
+		if (job_3rd_gc == 18) {
+			mes "您快速完成任務。";
+			mes "那太棒了。";
+		} else {
+			mes "我很高興見到你。";
+			mes "但是敏捷對我們非常重要。";
+			next;
+			mes "[梅殼]";
+			mes "你不是守時...";
+			mes "至少你還活著。";
+		}
+		next;
+		set .@all_wine,0;
+		for(set .@i,0; .@i<5; set .@i,.@i+1)
+			if (checkquest(7091+.@i) == 1) set .@all_wine, .@all_wine+1;
+		mes "[梅殼]";
+		if (.@all_wine < 2) {
+			mes "你自己做這項工作";
+			mes "即使沒有";
+			mes "關於它的信息，您";
+			mes "收集了它。";
+			next;
+			mes "[梅殼]";
+			mes "您與所有條件相通";
+			mes "迅速耐心。";
+			next;
+			mes "[梅殼]";
+			if (job_3rd_gc == 18) {
+				mes "對任務的評估是... [S]。";
+				mes "[S]用於“特殊”。";
+				set .@quest,7099;
+			} else {
+				mes "對任務的評估是... [a]。";
+				mes "如果您是守時的，那麼您會收到更高的收益。";
+				set .@quest,7096;
+			}
+			next;
+		} else {
+			mes "您充分利用了Daora的建議。";
+			mes "但是，我沒有提到嗎？";
+			next;
+			mes "[梅殼]";
+			mes "我告訴你要保密...";
+			mes "當然，我不想怪你。";
+			next;
+			mes "[梅殼]";
+			mes "重要的是，不僅要自己解決這個問題，";
+			mes "而且還要努力獲取信息。";
+			next;
+			mes "[梅殼]";
+			if (.@all_wine > 3) {
+				if (job_3rd_gc == 18) {
+					mes "對任務的評估是... [b]。";
+					set .@quest,7097;
+				} else {
+					mes "對任務的評估是... [C]。";
+					mes "您需要自己採取行動。";
+					set .@quest,7098;
+				}
+				next;
+			} else {
+				mes "您以靈活的視角調整了事件。";
+				mes "您不依賴其他人，而是正確地使用了周圍環境。";
+				next;
+				mes "[梅殼]";
+				mes "我喜歡那個。";
+				if (job_3rd_gc == 18) {
+					mes "對任務的評估是... [a]。";
+					set .@quest,7096;
+				} else {
+					mes "對任務的評估是... [b]。";
+					set .@quest,7097;
+				}
+				next;
+			}
+		}
+		mes "[梅殼]";
+		mes "您獲得了完成此任務的新資格。";
+		mes "這是我們刺客作為世界的陰影的陰影...";
+		next;
+		mes "[梅殼]";
+		mes "我將為您提供 ^4d4dffguillotine cross ^000000的資格。";
+		mes "我不是在推您，所以您可以在您想訪問時來。";
+		next;
+		mes "[梅殼]";
+		mes "我為您的勞動獎勵您，我將給您禮物。";
+		mes "我從公會那裡得到了這個，希望這對您有幫助。";
+		set job_3rd_gc, 20;
+		getitem 12106,1; //Accessory_Box
+		erasequest 7091;
+		erasequest 7092;
+		erasequest 7093;
+		if (checkquest(7094) > -1) erasequest 7094;
+		if (checkquest(7095) > -1) erasequest 7095;
+		erasequest 7112;
+		erasequest 7113;
+		erasequest 7114;
+		if (checkquest(7115) > -1) erasequest 7115;
+		if (checkquest(7116) > -1) erasequest 7116;
+		changequest 7111,.@quest;
+		next;
+		mes "[梅殼]";
+		mes "我想告訴你一些事情。";
+		mes "我命令您 ^4d4dffyou不應完全留下任何文檔 ^000000。";
+		next;
+		mes "[梅殼]";
+		mes "有兩種類型的信息：";
+		mes "可以共享的東西以及那些不能共享的東西。";
+		next;
+		mes "[梅殼]";
+		mes "而且切勿離開記錄或告訴任何人您完成的任務...";
+		mes "對於您的大三學生，他們將遵循您的步驟。";
+		next;
+		mes "[梅殼]";
+		mes "不要忘記。";
+		mes "您所做的任務與Rachel，Rune-Midgarts和我們的刺客協會有關。";
+		mes "因此，其他人不應該知道。當然，您被包括在內，所以請忘記一切。";
+		close;
+	} else if (job_3rd_gc == 20) {
+		mes "您被公會承認。";
+		mes "只要您想成為斷頭台十字架，就可以隨意來。";
+		next;
+		mes "[梅殼]";
+		mes "這種選擇意味著您將不得不再次走一條鮮血。";
+		next;
+		mes "[梅殼]";
+		mes "Bercasell在另一側的房間裡等待。";
+		mes "見他。";
+		close;
+	} else if (job_3rd_gc > 20) {
+		mes "即使我給了你資格，";
+		mes "我不想慶祝這一資格。";
+		next;
+		mes "[梅殼]";
+		mes "這是一種放棄一個人的思想和痛苦方式，逆境的方式。";
+		mes "我這樣推動你。";
+		next;
+		mes "[梅殼]";
+		mes "這很有趣。";
+		mes "我們生活在檢查同志...";
+		mes "但這是援助的規則。";
+		next;
+		mes "[梅殼]";
+		mes "在一個漆黑的夜晚，這是一個正在月亮陰影的人的命運。";
+		mes "我希望你能存儲自己的想法...";
+		close;
+	} else {
+		mes "您不允許您進入這裡。";
+		close;
+	}
+}
+
+ve_in,228,108,3	script	Waitress#3rdgc04	80,{
+	mes "[女服務員]";
+	if (job_3rd_gc < 6) {
+		mes "歡迎~";
+		mes "參觀並休息~";
+		close;
+	} else if (job_3rd_gc == 6) {
+		if (checkquest(7091) == 1) {
+			if (checkquest(7112) == 1) {
+				mes "這就是我所知道的所有信息。";
+				mes "之後，我什麼都不記得。";
+				next;
+				mes "那麼我們可以用您收集的信息來弄清楚嗎？";
+				next;
+				switch(select("做吧:停止吧。")) {
+				case 1:
+					callfunc "func_3rdgc",1;
+					close;
+				case 2:
+					mes "您停止確認信息。";
+					close;
+				}
+			} else {
+				mes "歡迎。";
+				mes "您準備訂購了嗎？";
+				next;
+				switch(select("你是...:你的名字是..？ :請給我水。")) {
+				case 1:
+					mes "[女服務員]";
+					mes "怎麼了？";
+					mes "您準備訂購了嗎？";
+					next;
+					select("我在尋找瑪黛爾...");
+					mes "[製作]";
+					mes "啊？瑪德爾？你知道戴奧拉嗎？";
+					mes "我是馬德爾。";
+					mes "我認為您有生意，因為您來自Daora。";
+					next;
+					select("是不是有可疑的客人？");
+					mes "[製作]";
+					mes "可疑客人？";
+					mes "什麼樣的...？";
+					mes "啊，好吧...我們有幾個陌生人。";
+					next;
+					mes "[製作]";
+					mes "由於村莊里的地形崎rough地形，我們沒有很多漂浮的人口。";
+					mes "自從出生以來，幾乎所有人都來到這裡，或者是常客的冒險家。";
+					next;
+					mes "[製作]";
+					mes "但是，如果他們不是那種人...";
+					mes "是的，有陌生人。";
+					next;
+					select("你能告訴我關於他們的事嗎？");
+					mes "[製作]";
+					mes "嗯...一個看起來像雷切爾的牧師。";
+					mes "這個村莊的牧師...";
+					mes "我知道，也許他是士兵。";
+					next;
+					mes "[製作]";
+					mes "有一天，有一個人似乎筋疲力盡併購買了食物。";
+					mes "我記得他是因為他關閉了一家商店後訪問了。";
+					next;
+					mes "[製作]";
+					mes "我不確定，但是有一個人穿著引擎蓋。";
+					mes "他似乎精疲力盡，他們想買一杯小飲料和小吃。";
+					next;
+					mes "[製作]";
+					mes "從那以後我再也沒有見過他們。";
+					mes "所以我不知道了。";
+					setquest 7112;
+					next;
+					mes "-  Madelle的信息附有來賓委員會。";
+					mes "那麼我們可以弄清楚您收集了哪些信息？ -";
+					next;
+					switch(select("做吧:停止吧。")) {
+					case 1:
+						callfunc "func_3rdgc",1;
+						close;
+					case 2:
+						mes "您停止確認信息。";
+						close;
+					}
+				case 2:
+					mes "[女服務員]";
+					mes "什麼？我的名字？";
+					mes "你在撞我嗎？";
+					mes "不要那樣做。";
+					if (Sex == SEX_MALE) mes "你不是我喜歡的類型。";
+					else mes "我不會那樣搖擺。";
+					close;
+				case 3:
+					mes "[女服務員]";
+					mes "你想要冰嗎？";
+					close;
+				}
+			}
+		} else {
+			if (checkquest(7112) == 1) {
+				mes "這就是我所知道的所有信息。";
+				mes "從那以後我再也沒有見過他們。";
+				next;
+				mes "- 我想知道我是否可以通過收集的信息來弄清楚...";
+				next;
+				switch(select("做吧:停止吧。")) {
+				case 1:
+					callfunc "func_3rdgc",0;
+					close;
+				case 2:
+					mes "您停止確認信息。";
+					close;
+				}
+			} else {
+				mes "歡迎。";
+				mes "您準備訂購了嗎？";
+				next;
+				switch(select("可疑的人？ :哪種食物最好？")) {
+				case 1:
+					mes "[女服務員]";
+					mes "一個可疑的人？";
+					mes "你是一個可疑的人。";
+					close;
+				case 2:
+					mes "[女服務員]";
+					mes "嗯？出色地...";
+					mes "如果您想吃一道簡單的菜，請從我們固定的菜單上吃一頓飯。";
+					mes "是5000 Zeny，您想要嗎？";
+					next;
+					switch(select("是的，我會嘗試一下。 :......")) {
+					case 1:
+						if (Zeny > 4999) {
+							mes "[女服務員]";
+							mes "在這裡，這是固定菜單的一頓飯。";
+							mes "在需要時隨時打電話給我。";
+							next;
+							switch(select("你生意怎麼樣？ :客人多嗎？")) {
+							case 1:
+								mes "[女服務員]";
+								mes "好吧...還不錯。";
+								mes "這是這裡唯一的酒吧，所以很好。";
+								break;
+							case 2:
+								mes "[女服務員]";
+								mes "最近沒有那麼多。";
+								mes "這是如此。";
+								break;
+							}
+							next;
+							mes "[女服務員]";
+							mes "村莊的企業可以與客戶保持同步。";
+							mes "在日期，冒險家經常訪問。";
+							next;
+							select("有可疑訪客嗎？");
+							mes "[女服務員]";
+							mes "當然，我每天都看到一些。";
+							mes "我可以識別出他們何時看到他們的服裝。";
+							mes "由於業務，我必須記住他們的角色。";
+							next;
+							select("很無聊...");
+							mes "[女服務員]";
+							mes "是的，有時。";
+							mes "我每天都必須說話";
+							mes "與同一個人。";
+							mes "但...";
+							next;
+							mes "[女服務員]";
+							mes "當我看到像您這樣的客人時，我感到振奮。";
+							mes "我記得幾天前發生的事情。";
+							next;
+							mes "[女服務員]";
+							mes "當我關閉商店時，";
+							mes "他似乎精疲力盡，他們想買一杯小飲料和小吃。";
+							next;
+							mes "[女服務員]";
+							mes "他是一個陌生人，但我確定他來自雷切爾。";
+							mes "他看起來像個牧師。";
+							next;
+							mes "[女服務員]";
+							mes "我以為一位牧師來到這裡，但這是錯誤的。";
+							mes "我開始害怕。";
+							next;
+							mes "[女服務員]";
+							mes "我以為我可能已經打開了小偷的門。";
+							mes "啊，對不起，我一定說太多了。";
+							next;
+							mes "[女服務員]";
+							mes "與那個老人交談真無聊...";
+							mes "無論如何，不要讓我打擾你了。";
+							mes "享受你的食物吧！";
+							next;
+							mes "[女服務員]";
+							mes "哦，順便說一句，我叫Madelle。";
+							mes "我希望你還記得我的名字。";
+							set Zeny, Zeny - 5000;
+							setquest 7112;
+							next;
+							mes "-  Madelle的信息附在了任務板上。我收集了什麼信息？ -";
+							next;
+							switch(select("檢查信息:取消。")) {
+							case 1:
+								callfunc "func_3rdgc",0;
+								close;
+							case 2:
+								mes "您停止確認信息。";
+								close;
+							}
+						} else {
+							mes "[女服務員]";
+							mes "我們菜單上的一頓飯是5000 Zeny。";
+							mes "你必須付款。";
+							mes "這是預付款。";
+							close;
+						}
+					case 2:
+						mes "[女服務員]";
+						mes "你感到很生氣。";
+						mes "我懂了。我不會推你。";
+						mes "在那裡休息。";
+						close;
+					}
+				}
+			}
+		}
+	} else {
+		mes "嗨~！";
+		mes "我們經常看到彼此。";
+		next;
+		mes "[製作]";
+		mes "一頓飯？酒？";
+		mes "Hoho，玩得開心！";
+		close;
+	}
+}
+
+ve_in,246,303,3	script	Young Merchant#3rdgc05	930,{
+	if (job_3rd_gc < 6) {
+		mes "[年輕商人]";
+		mes "如果您想購買東西，請去找這個人。";
+		mes "我是分銷商。";
+		close;
+	}
+	else if (job_3rd_gc == 6) {
+		if (checkquest(7091) == 1) {
+			if (checkquest(7113) == 1) {
+				mes "[渴望]";
+				mes "我已經給了你所有我擁有的信息。";
+				mes "我很快就可以視覺學習。";
+				mes "我找不到另一個女孩，只有一個與您的病情相匹配的女孩。";
+				next;
+				mes "我們可以弄清楚您收集的信息嗎？";
+				next;
+				switch(select("做吧:停止吧。")) {
+				case 1:
+					callfunc "func_3rdgc",1;
+					close;
+				case 2:
+					mes "您停止確認信息。";
+					close;
+				}
+			} else {
+				mes "[年輕商人]";
+				mes "下次增加藥水怎麼樣？";
+				mes "嗯，你有什麼要告訴我的嗎？";
+				next;
+				switch(select("你認識Crave嗎？ :給我一瓶藥水。")) {
+				case 1:
+					mes "[渴望]";
+					mes "我渴望，你是誰...？";
+					//mes "你不是一個平常的人。"; //FIXME: Dialogue.
+					next;
+					mes "[渴望]";
+					mes "啊，是關於Daora的嗎？";
+					mes "是的，我能為您做什麼？";
+					next;
+					select("這幾天你有看到陌生人嗎？");
+					mes "[渴望]";
+					mes "陌生人...關於Daora的業務？";
+					mes "好的。我了解您在說什麼。";
+					next;
+					mes "[渴望]";
+					mes "我發現了一張新面孔";
+					mes "看商店。";
+					mes "那是一個女孩...";
+					next;
+					mes "[渴望]";
+					mes "她在早上和下午定期購買食物和生活必需品。";
+					mes "我想進一步了解她，因為她很漂亮。";
+					mes "但是沒有人知道她的住所。";
+					next;
+					mes "[渴望]";
+					mes "這是一個神秘的人嗎？";
+					mes "我不知道她是誰，或者她住在哪裡！";
+					next;
+					mes "[渴望]";
+					mes "我想和她說話，但她逃跑了...";
+					mes "她一定要隱藏一些東西。";
+					setquest 7113;
+					next;
+					mes "- 渴望提供的信息附在Quest板上。";
+					mes "那麼我們可以通過收集的信息來找出我們的信息嗎？ -";
+					next;
+					switch(select("做吧:停止吧。")) {
+					case 1:
+						callfunc "func_3rdgc",1;
+						close;
+					case 2:
+						mes "您停止確認信息。";
+						close;
+					}
+				case 2:
+					mes "[年輕商人]";
+					mes "我進行批發貿易，而不是零售貿易。";
+					mes "從工具銷售人員那裡購買。";
+					close;
+				}
+			}
+		} else {
+			if (checkquest(7113) == 1) {
+				mes "[渴望]";
+				mes "我已經給了你所有我擁有的信息。";
+				mes "我很快就可以視覺學習。";
+				mes "我找不到另一個女孩，只有一個與您的病情相匹配的女孩。";
+				next;
+				mes "我們可以弄清楚您收集的信息嗎？";
+				next;
+				switch(select("做吧:停止吧。")) {
+				case 1:
+					callfunc "func_3rdgc",0;
+					close;
+				case 2:
+					mes "您停止確認信息。";
+					close;
+				}
+			} else {
+				mes "[年輕商人]";
+				mes "怎麼了？";
+				mes "我是商人，但不是零售商人。";
+				mes "如果您想購買東西，請去找其他人。";
+				next;
+				switch(select("可疑的人？ :聽說你很敏銳。")) {
+				case 1:
+					mes "[年輕商人]";
+					mes "一個可疑的人？";
+					mes "有很多人可疑。";
+					next;
+					mes "[年輕商人]";
+					mes "那個la腳的人可疑，不是嗎？";
+					close;
+				case 2:
+					mes "[年輕商人]";
+					mes "唔？這是合理的。";
+					mes "我必須快速在視覺學習中以作為商人生活。";
+					next;
+					mes "[年輕商人]";
+					mes "我必須記住與我開展業務的人的面孔，以便我可以獲利。";
+					mes "然後，我可以使客戶穩定。";
+					next;
+					switch(select("我正在尋找表弟...:結束對話。")) {
+					case 1:
+						mes "[年輕商人]";
+						mes "她是美麗的金發嗎？";
+						next;
+						switch(select("不，是個男孩。 :是的，她是。")) {
+						case 1:
+							mes "[年輕商人]";
+							mes "他是嗎？";
+							mes "我不知道。";
+							mes "我只知道一個神秘的金髮美女。";
+							close;
+						case 2:
+							mes "[渴望]";
+							mes "哦，她是嗎？";
+							mes "我渴望。如果您以後找到她，請與我聯繫。";
+							next;
+							mes "[渴望]";
+							mes "不要給我猛烈的皺眉。";
+							mes "我是一個有能力的人。";
+							next;
+							select("你在哪裡看到她的？");
+							mes "["+strcharinfo(0)+"]";
+							mes "已經過去了幾天。";
+							mes "我想盡快找到她。";
+							mes "你說你看到了那個孩子嗎？你在哪裡看到她的？";
+							next;
+							mes "[渴望]";
+							mes "所以...這就是為什麼我們不知道她的住所。";
+							mes "我可以理解購買食物和其他用品。";
+							next;
+							mes "[渴望]";
+							mes "她總是逃跑而無話可說。";
+							mes "我喜歡她，因為她的神秘氛圍。";
+							next;
+							mes "[渴望]";
+							mes "我認為她逃離家鄉。";
+							mes "她每天和每天晚上都在這裡訪問這裡。";
+							next;
+							mes "[渴望]";
+							mes "當她見到你時，她可能會逃跑。";
+							mes "躲在小巷裡抓住她可能更好。";
+							setquest 7113;
+							next;
+							mes "- 渴望的信息附在了任務委員會上。我收集了什麼信息？ -";
+							next;
+							switch(select("檢查信息:取消。")) {
+							case 1:
+								callfunc "func_3rdgc",0;
+								close;
+							case 2:
+								mes "您停止確認信息。";
+								close;
+							}
+						}
+					case 2:
+						mes "[年輕商人]";
+						mes "為什麼我在談論穩定的客戶時會改變臉？";
+						mes "哦，你是...";
+						mes "這是一把黑暗之劍，無法使人們的臉臉無關。";
+						close;
+					}
+				}
+			}
+		}
+	} else {
+		mes "[渴望]";
+		mes "打擾一下？";
+		mes "您找到了想要的人嗎？";
+		close;
+	}
+}
+
+veins,291,215,3	script	Vigilante#3rdgc06	939,{
+	if (job_3rd_gc < 6) {
+		mes "[治安維持者]";
+		mes "旅行時您有什麼不便嗎？";
+		mes "在城市郊區，有很多怪物。當心。";
+		close;
+	}
+	else if (job_3rd_gc == 6) {
+		if (checkquest(7091) == 1) {
+			if (checkquest(7114) == 1) {
+				mes "[特羅萬]";
+				mes "我已經給了你所有我擁有的信息。";
+				mes "他是唯一被看到的可疑人。";
+				mes "但是什麼都沒發生，所以我一直在監視。";
+				next;
+				mes "- 我收集了什麼信息？ -";
+				next;
+				switch(select("檢查信息:取消。")) {
+				case 1:
+					callfunc "func_3rdgc",1;
+					close;
+				case 2:
+					mes "您停止確認信息。";
+					close;
+				}
+			} else {
+				mes "[治安維持者]";
+				mes "你好？";
+				mes "您需要幫助嗎？";
+				next;
+				switch(select("你認識 Trovan 嗎？ :不，謝謝。")) {
+				case 1:
+					mes "[治安維持者]";
+					mes "嗯？我是Trovan，是靜脈警惕軍團的成員。";
+					mes "怎麼了？";
+					next;
+					mes "[特羅萬]";
+					mes "啊，Daora推薦您。";
+					mes "我記得居住在這個村莊的人們的所有面孔。";
+					next;
+					mes "[特羅萬]";
+					mes "也許他是一個陌生人。";
+					mes "我們應該排除普通冒險家。";
+					next;
+					mes "[特羅萬]";
+					mes "而且，如果達奧拉（Daora）找到一個人，那麼他一定不能是一個普通人。";
+					mes "因此，我們應該排除普通客人...";
+					next;
+					mes "[特羅萬]";
+					mes "然後，我們可以為猜測它是誰設定限制。";
+					mes "幾天前，一位牧師參觀了這個村莊。";
+					mes "他用引擎蓋遮住了臉，所以我看不到他太好了。";
+					next;
+					mes "[特羅萬]";
+					mes "我可以很好地發現可疑的人。";
+					mes "如果他藏著自己的臉，他可能是罪犯。";
+					next;
+					mes "[特羅萬]";
+					mes "他為什麼可疑？";
+					mes "他定期出現在這裡，但他沒有明確的住所。";
+					mes "當我嘗試跟隨他時，我總是失去他。";
+					next;
+					mes "[特羅萬]";
+					mes "我無法提供更多信息。";
+					mes "我總是必須保護村莊的入口，所以我不能跟隨他太久了。";
+					next;
+					mes "[特羅萬]";
+					mes "反正。他是我懷疑的唯一人。";
+					mes "他沒有被抓到任何罪犯，";
+					mes "但是他總是掩蓋自己。";
+					setquest 7114;
+					next;
+					mes "-  Trovan的信息附在了任務委員會上。我收集了什麼信息？ -";
+					next;
+					switch(select("檢查信息:取消。")) {
+					case 1:
+						callfunc "func_3rdgc",1;
+						close;
+					case 2:
+						mes "您停止確認信息。";
+						close;
+					}
+				case 2:
+					mes "[特羅萬]";
+					mes "最近，我見過許多可疑的人。";
+					mes "我要嚴格監視。";
+					close;
+				}
+			}
+		} else {
+			if (checkquest(7114) == 1) {
+				mes "[特羅萬]";
+				mes "我已經給了你所有我擁有的信息。";
+				mes "他是唯一被看到的可疑人。";
+				mes "但是什麼都沒發生，所以我一直在監視。";
+				next;
+				mes "- 我應該找出收集的信息嗎？ -";
+				next;
+				switch(select("查看信息:取消。")) {
+				case 1:
+					callfunc "func_3rdgc",0;
+					close;
+				case 2:
+					mes "您停止確認信息。";
+					close;
+				}
+			} else {
+				mes "[特羅萬]";
+				mes "我是Trovan，是靜脈的後衛。";
+				mes "怎麼了？";
+				next;
+				switch(select("有通緝犯嗎？ :沒有。")) {
+				case 1:
+					mes "[特羅萬]";
+					mes "一個想要的人？";
+					mes "不，怎麼了？";
+					next;
+					mes "[特羅萬]";
+					mes "您最近發現任何可疑的人進入這個村莊嗎？";
+					mes "嗯...";
+					next;
+					mes "[特羅萬]";
+					mes "最近，這個村莊里有一個男人戴著引擎蓋。";
+					mes "他不是旅行者。他買了食物，滑出了村莊。";
+					next;
+					mes "[特羅萬]";
+					mes "我想知道他的身份。";
+					mes "我認為他與神社有關...";
+					mes "也許他不是...";
+					next;
+					mes "[特羅萬]";
+					mes "在這個村莊里的人們中沒有其他人喜歡他。";
+					mes "我想知道他來自哪裡。";
+					next;
+					mes "[特羅萬]";
+					mes "他可能還在這裡。";
+					mes "除了他，沒有新朋友。我知道幾乎所有的冒險家面孔都來這裡。";
+					mes "所以這不是什麼新聞。";
+					setquest 7114;
+					next;
+					mes "-  Trovan的信息附在了任務委員會上。我收集了什麼信息？ -";
+					next;
+					switch(select("檢查信息:取消。")) {
+					case 1:
+						callfunc "func_3rdgc",0;
+						close;
+					case 2:
+						mes "您停止確認信息。";
+						close;
+					}
+				case 2:
+					mes "[特羅萬]";
+					mes "不要走得太遠。";
+					close;
+				}
+			}
+		}
+	} else {
+		mes "[特羅萬]";
+		mes "怎麼樣了？";
+		close;
+	}
+}
+
+veins,187,143,5	script	Peddler#3rdgc07	892,{
+	mes "[小販]";
+	if (job_3rd_gc < 6) {
+		mes "多麼巨大的沙塵暴。";
+		mes "你還好嗎？";
+		close;
+	}
+	else if (job_3rd_gc == 6) {
+		if (checkquest(7091) == 1) {
+			mes "多麼巨大的沙塵暴。";
+			mes "你還好嗎？";
+			close;
+		} else {
+			if (checkquest(7115) == 1) {
+				mes "那麼，你找到了那個女孩嗎？";
+				mes "如果您這樣做，請讓她知道她必須來拜訪我。";
+				next;
+				mes "- 您無法從小販那裡獲得更多信息。我收集了什麼信息？ -";
+				next;
+				switch(select("檢查信息:取消。")) {
+				case 1:
+					callfunc "func_3rdgc",1;
+					close;
+				case 2:
+					mes "您停止確認信息。";
+					close;
+				}
+			} else {
+				mes "嘿。嘿！";
+				mes "我在跟你說話！";
+				next;
+				switch(select("別理他:聽故事。")) {
+				case 1:
+					mes "[小販]";
+					mes "你太冷了。";
+					close;
+				case 2:
+					mes "[小販]";
+					mes "一個漂亮的女孩剛買了食物。";
+					mes "您知道購買魚時的新鮮感很重要...";
+					next;
+					mes "[小販]";
+					mes "但是我把錯誤的魚交給了她。";
+					mes "最近，她從我的商店買了食物。";
+					mes "我找不到她，也許她不住在這裡。";
+					next;
+					mes "[小販]";
+					mes "她看上去很破舊，但她總是買昂貴的食物。";
+					mes "我以為她是女僕，但我們沒有一個可以租用靜脈的女僕的豪宅。";
+					next;
+					mes "[小販]";
+					mes "有點可疑，不是嗎？";
+					mes "但是，我給了她被寵壞的魚...";
+					next;
+					mes "[小販]";
+					mes "因此，我必須找到她，並兌換魚以退款。";
+					next;
+					mes "[小販]";
+					mes "如果您找到她，請發送該消息？";
+					mes "我不能想念像她這樣的客人。";
+					next;
+					mes "[小販]";
+					mes "好吧，讓我們看看...";
+					mes "她是金發女孩。";
+					mes "你應該能夠";
+					mes "很容易找到她。";
+					next;
+					mes "[小販]";
+					mes "實際上，沒人知道她來自哪裡。";
+					mes "您是一個冒險家，所以我問你。";
+					next;
+					select("我會把你的信息發給她:嗯...");
+					mes "["+strcharinfo(0)+"]";
+					mes "- 即使我沒有時間花時間，小販提到的女孩也是可疑的。 -";
+					next;
+					mes "["+strcharinfo(0)+"]";
+					mes "- 一個沒有明確住所併購買昂貴食物的女孩。我必須找出答案。 -";
+					next;
+					mes "[小販]";
+					mes "然後請將我的消息發送給她。";
+					mes "如果我不能換魚，它將破壞。";
+					setquest 7115;
+					next;
+					mes "- 小販的信息已附加到任務委員會。我收集了什麼信息？ -";
+					next;
+					switch(select("檢查信息:取消。")) {
+					case 1:
+						callfunc "func_3rdgc",0;
+						close;
+					case 2:
+						mes "您停止確認信息。";
+						close;
+					}
+				}
+			}
+		}
+	} else {
+		mes "您是否正確發送了我的消息？";
+		mes "那為什麼她不訪問這裡交換魚呢？";
+		close;
+	}
+}
+
+veins,235,126,3	script	Old Man#3rdgc07	945,{
+	mes "[老人]";
+	if (job_3rd_gc < 6) {
+		mes "哈哈...當我看到像你這樣的年輕冒險家時，我記得我的過去...";
+		close2;
+	} else if (job_3rd_gc == 6) {
+		if (checkquest(7091) == 1) {
+			mes "哈哈...當我看到像你這樣的年輕冒險家時，我記得我的過去...";
+			close;
+		} else {
+			if (checkquest(7116) == 1) {
+				mes "感謝您與我交談。";
+				next;
+				mes "- 我再也無法從老人那裡獲得信息。我收集了什麼信息？ -";
+				next;
+				switch(select("檢查信息:取消。")) {
+				case 1:
+					callfunc "func_3rdgc",0;
+					close;
+				case 2:
+					mes "您停止確認信息。";
+					close;
+				}
+			} else {
+				mes "什麼？怎麼了？";
+				mes "你想和我說話嗎？";
+				next;
+				switch(select("可疑者……:你看起來不錯。")) {
+				case 1:
+					mes "[老人]";
+					mes "一個可疑的人？";
+					mes "好吧，Trovan可能比我更了解她。";
+					close;
+				case 2:
+					mes "[老人]";
+					mes "反正謝謝。";
+					mes "我只是坐在這裡...";
+					next;
+					mes "[老人]";
+					mes "我環顧四周一直在這裡經過的人。";
+					mes "我可以通過觀看穿著的衣服來輕鬆地找出它們的位置。";
+					next;
+					mes "[老人]";
+					mes "我根本不能忘記她，因為她的衣服很有趣。";
+					mes "忘記一個穿著正式禮服的人並不難。";
+					next;
+					select("那有什麼好笑的呢？");
+					mes "[老人]";
+					mes "嗯，這個村莊不再有趣了。";
+					mes "我知道一切~我什至找到了每個人的工作。";
+					next;
+					mes "[老人]";
+					mes "但...";
+					mes "最近，一個女孩出現了。";
+					mes "早晨，她從小販那裡購買了一些食物，然後消失了。";
+					next;
+					mes "[老人]";
+					mes "下午，她通常會購買生活的必要性。";
+					mes "一次有一點。";
+					mes "然後她去了...";
+					next;
+					mes "[老人]";
+					mes "我認為她一定要準備一些東西。";
+					mes "如果她買了很多東西，那麼可以很容易地找到她。";
+					next;
+					mes "[老人]";
+					mes "我認為她大量儲存在戰鬥中有幫助的食物上。";
+					next;
+					mes "[老人]";
+					mes "她最近剛開始這個例行程序。";
+					mes "她是新來者嗎？";
+					next;
+					mes "[老人]";
+					mes "我要看你一段時間。";
+					mes "啊，為什麼我為這個故事打擾你？";
+					setquest 7116;
+					next;
+					mes "- 老人的信息附在了任務委員會上。我收集了什麼信息？";
+					next;
+					switch(select("檢查信息:取消。")) {
+					case 1:
+						callfunc "func_3rdgc",0;
+						close;
+					case 2:
+						mes "您停止確認信息。";
+						close;
+					}
+				}
+			}
+		}
+	} else if (job_3rd_gc == 8) {
+		mes "你想知道什麼嗎？";
+		mes "我們村里有一個奇妙的女孩。";
+		next;
+		mes "[老人]";
+		mes "我不知道她有什麼樣的禮物，但她知道如何找到人。";
+		next;
+		mes "[老人]";
+		mes "如果您想找到她，請問那個孩子。";
+		close;
+	} else {
+		mes "我仍然不知道。";
+		mes "我太老了...";
+		close;
+	}
+}
+
+veins,223,180,3	script	Girl#3rdgc09	941,{
+	mes "[梅麗莎]";
+	if (job_3rd_gc == 8) {
+		mes "你好？";
+		mes "什麼？";
+		mes "你失去了朋友嗎？";
+		next;
+		switch(select("你知道什麼嗎？ :不...")) {
+		case 1:
+			mes "[梅麗莎]";
+			mes "我有一生的特殊禮物。";
+			mes "人們需要找到東西時拜訪我。";
+			next;
+			mes "[梅麗莎]";
+			mes "在尋找某人嗎？";
+			mes "你能告訴我他們的角色嗎？";
+			next;
+			switch(select("你開玩笑吧:讓我來吧。")) {
+			case 1:
+				mes "[梅麗莎]";
+				mes "哈!但是當您需要找到某人時，您會回到我身邊。";
+				mes "我知道一切。";
+				close;
+			case 2:
+				set .@ans00, 0;
+				mes "[梅麗莎]";
+				mes "好，回答我的問題。";
+				mes "是男孩還是女孩？";
+				next;
+				switch(select("一個男孩:一個女孩")) {
+				case 1:
+					mes "[梅麗莎]";
+					mes "一個男孩和...";
+					break;
+				case 2:
+					mes "[梅麗莎]";
+					mes "一個女孩和...";
+					set .@ans00, .@ans00+1;
+					break;
+				}
+				next;
+				mes "[梅麗莎]";
+				mes "什麼是頭髮顏色？";
+				next;
+				switch(select("深色:紅色:淺黃色:白色")) {
+				case 1:
+					mes "[梅麗莎]";
+					mes "深色髮色...嗯...";
+					mes "深棕色或黑色頭髮...";
+					break;
+				case 2:
+					mes "[梅麗莎]";
+					mes "淺棕色或深橙色...紅頭髮...";
+					break;
+				case 3:
+					mes "[梅麗莎]";
+					mes "淺橙色至金色的頭髮。";
+					set .@ans00, .@ans00+1;
+					break;
+				case 4:
+					mes "[梅麗莎]";
+					mes "灰色...白色...金...銀髮...";
+					break;
+				}
+				next;
+				mes "[梅麗莎]";
+				mes "年齡大小？";
+				next;
+				switch(select("像個孩子。 :年輕。 :中年。 :很老。")) {
+				case 1:
+					mes "[梅麗莎]";
+					mes "和一個孩子。";
+					break;
+				case 2:
+					mes "[梅麗莎]";
+					mes "年輕人。";
+					mes "喜歡你嗎？";
+					set .@ans00, .@ans00+1;
+					break;
+				case 3:
+					mes "[梅麗莎]";
+					mes "與工具推銷員的年齡相同？";
+					mes "中年。";
+					break;
+				case 4:
+					mes "[梅麗莎]";
+					mes "是的，很老。";
+					break;
+				}
+				next;
+				mes "[梅麗莎]";
+				mes "你好，"+((Sex == SEX_MALE)?"brother":"sister")+"~ Let me collect all of the information you've provided...";
+				next;
+				mes "- 她開始喃喃自語，並向天空示意。她的頭髮浮現在她說的...-";
+				next;
+				if (.@ans00 == 3) {
+					mes "[梅麗莎]";
+					mes "知道了！";
+					mes "我知道她。";
+					mes "她的名字為 ^4d4dffeStillda ^000000。";
+					mes "正確的？";
+					next;
+					mes "[梅麗莎]";
+					mes "你為什麼要尋找她？她是你的朋友嗎？";
+					mes "她前幾天給了我糖果。";
+					next;
+					mes "[梅麗莎]";
+					mes "嗯...這個女孩...";
+					mes "會經過";
+					mes "一條盲人胡同";
+					mes "大約1小時！";
+					mes "呵呵！";
+					erasequest 7103;
+					setquest 7104;
+					set job_3rd_gc, 9;
+					next;
+					mes "[梅麗莎]";
+					mes "她必須成為您要尋找的人。我永遠不會錯。";
+					mes "告訴我我做得很好！";
+					next;
+					switch(select("拍拍梅麗莎的頭:給她豎起大拇指。")) {
+					case 1:
+						mes "你把梅利莎戴在頭上。";
+						mes "她像小狗一樣做出反應。";
+						next;
+						mes "[梅麗莎]";
+						mes "呵呵...";
+						mes "我在這裡幫忙~！";
+						close;
+					case 2:
+						mes "[梅麗莎]";
+						mes "呵呵...";
+						mes "我做得很好！";
+						close;
+					}
+				} else {
+					mes "[梅麗莎]";
+					mes "嗯...";
+					mes "那些具有這些特徵的人是...";
+					next;
+					mes "[梅麗莎]";
+					mes "世界衛生大會-...？ eww，我從未錯過。";
+					mes "我不知道為什麼，但是我看不到那個人。";
+					next;
+					mes "[梅麗莎]";
+					mes "eeeahh！哇！";
+					next;
+					mes "- 我所能做的就是舒緩梅利莎（Melissa）哭泣。我必須再次考慮這個人的特徵。 -";
+					close;
+				}
+			}
+		case 2:
+			mes "[梅麗莎]";
+			mes "很奇怪。";
+			mes "在這個村莊里，人們一直在尋找某人。";
+			close;
+		}
+	} else if (job_3rd_gc == 9) {
+		mes "你找到她了嗎？";
+		mes "感謝她前幾天給我糖果。";
+		close;
+	} else {
+		mes "當我尋找人時，一個穿著黑色衣服的天使給了我信息。";
+		next;
+		mes "[梅麗莎]";
+		mes "我告訴了Daora這個故事，然後她對我說，不要再做一次。";
+		mes "也許她不是一個好天使。";
+		close;
+	}
+}
+
+veins,337,284,0	script	#ghostestilla_3rdgc	139,3,3,{
+	end;
+OnTouch:
+	if (job_3rd_gc == 9) {
+		if ((checkquest(7104,PLAYTIME) == 0) || (checkquest(7105,PLAYTIME) == 0)) {
+			mes "……？";
+			mes "有一個人在場的跡象。";
+			mes "你還有時間。";
+			close;
+		} else if ((checkquest(7104,PLAYTIME) == 2) || (checkquest(7105,PLAYTIME) == 2)) {
+			mes "梅利莎（Melissa）告訴我的盲人小巷一定是這條街。";
+			next;
+			mes "有一個人在場的跡象。";
+			mes "一個金發女孩出現！";
+			donpcevent "Estillda#3rdgc10::OnEnable";
+			next;
+			select("發動突然襲擊。");
+			set .@c_spec, readparam(bDex)+readparam(bAspd)+readparam(bCritical);
+			if (.@c_spec > 209 || (!rand(2) && .@c_spec > 190 && .@c_spec < 210) || (!rand(3) && .@c_spec < 191)) {
+				mes "您將她帶到手腕上，試圖不讓她見到你。";
+				mes "她拿著的食物落在地板上。";
+				next;
+				mes "[艾斯蒂爾達]";
+				mes "啊！";
+				mes "你是誰？";
+				mes "你在幹什麼？";
+				next;
+				if(select("誰派你來的？ :誰來自雷切爾？") == 2) {
+					mes "[艾斯蒂爾達]";
+					mes "我不知道！我不知道。我不認識他！";
+					next;
+				}
+				mes "[艾斯蒂爾達]";
+				mes "如果我為他買東西...";
+				mes "他說，他可以支付我的勞動和生產費用。";
+				next;
+				mes "[艾斯蒂爾達]";
+				mes "我不知道他是誰。";
+				mes "是的。";
+				mes "他是壞人嗎？";
+				next;
+				mes "[艾斯蒂爾達]";
+				mes "幫我嗎？";
+				mes "幫我。";
+				mes "我會做你想做的任何事情。";
+				next;
+				mes "[艾斯蒂爾達]";
+				mes "我對他一無所知，我不知道他是否是個壞人。";
+				mes "我只是買了一些東西...（抽泣）...";
+				next;
+				mes "- 埃斯蒂爾達（Estillda）感到震驚，因為她認為自己有麻煩。 -";
+				next;
+				select("讓她冷靜下來。");
+				mes "["+strcharinfo(0)+"]";
+				mes "放鬆一秒鐘。";
+				mes "我完全理解你在說什麼。";
+				mes "您不會遇到任何麻煩。";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "我正在尋找一個犯罪並逃跑的人。";
+				mes "我必須抓他。";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "那麼誰讓您得到這些用品？";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "如果您與我合作，我將保護您，直到完成這一切。";
+				mes "刺客公會將保護您。";
+				next;
+				mes "[艾斯蒂爾達]";
+				mes "你保證，對嗎？";
+				mes "我怎麼幫你？";
+				next;
+				select("你們什麼時候見面？");
+				mes "[艾斯蒂爾達]";
+				mes "哦，我已經交付了這些東西。";
+				mes "我正在回去。";
+				next;
+				mes "[艾斯蒂爾達]";
+				mes "啊，這些是我的。";
+				mes "我有很多Zeny。";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "然後以這種方式直行，假裝什麼都沒發生。";
+				next;
+				mes "- 我要求她照常走，並告訴她如何去Daora的酒吧。 -";
+				donpcevent "Estillda#3rdgc10::OnDisable";
+				if (checkquest(7104) > -1) erasequest 7104;
+				if (checkquest(7105) > -1) erasequest 7105;
+				set job_3rd_gc, 10;
+				setquest 7106;
+				next;
+				mes "- 靜脈地下的酒吧是確保她安全的最佳場所。 -";
+				close;
+			} else {
+				mes "- 我試圖抓住她的手腕，但她已經知道並逃跑了。 -";
+				donpcevent "Estillda#3rdgc10::OnDisable";
+				if (checkquest(7104) > -1) erasequest 7104;
+				if (checkquest(7105) > -1) erasequest 7105;
+				setquest 7105;
+				next;
+				mes "您無法抓住Estillda。";
+				close;
+			}
+		} else {
+			mes "發生了錯誤。";
+			mes "請聯繫通用汽車團隊以解決這種情況。";
+			close;
+		}
+	}
+	end;
+}
+
+veins,341,287,3	script	Estillda#3rdgc10	919,{
+OnInit:
+OnDisable:
+	disablenpc "Estillda#3rdgc10";
+	end;
+OnEnable:
+	enablenpc "Estillda#3rdgc10";
+	end;
+}
+
+job3_guil01,79,15,1	script	Estillda#3rdgc11	919,{
+	if (job_3rd_gc == 11) {
+		mes "埃斯蒂爾達（Estillda）環顧四周，臉上焦慮地表情。";
+		next;
+		switch(select("你還好嗎？ :恐嚇她。")) {
+		case 1:
+			mes "[艾斯蒂爾達]";
+			mes "是的？是的...";
+			mes "我以為刺客很可怕。";
+			mes "但是我不這麼認為...";
+			next;
+			select("你看起來不像是靜脈來的");
+			mes "[艾斯蒂爾達]";
+			mes "是的？是的...";
+			mes "我來自雷切爾。";
+			mes "我在這裡做Zeny。";
+			mes "我在瑞秋過得很荒涼。";
+			next;
+			switch(select("你一個人來到這裡？ :過著荒涼的生活……")) {
+			case 1:
+				mes "[艾斯蒂爾達]";
+				mes "不。";
+				mes "我不這麼認為。";
+				mes "我和一個男人來到這裡。";
+				next;
+				mes "[艾斯蒂爾達]";
+				mes "我通常一個人來這裡。有時他會檢查我的目的地。";
+				mes "我以為他是一些公司的重要人物。";
+				next;
+				mes "[艾斯蒂爾達]";
+				mes "但是我不知道他是誰。";
+				break;
+			case 2:
+				mes "[艾斯蒂爾達]";
+				mes "我是本地人，";
+				mes "我在他家工作。";
+				mes "我認為還不錯。";
+				mes "我剛離開家...";
+				next;
+				mes "[艾斯蒂爾達]";
+				mes "他說他需要一個女僕，他可以付給我足夠的錢。";
+				break;
+			}
+			next;
+			mes "[艾斯蒂爾達]";
+			mes "實際上，我不太了解他。";
+			mes "...我永遠不會做。";
+			mes "我想回家。我想念我的媽媽。";
+			next;
+			switch(select("你能告訴我什麼？ :告訴我你知道什麼！")) {
+			case 1:
+				mes "[艾斯蒂爾達]";
+				mes "是的。正確的？";
+				mes "我要告訴你我所知道的一切。";
+				break;
+			case 2:
+				mes "[艾斯蒂爾達]";
+				mes "對不起。對不起。";
+				mes "我要做你想做的...";
+				next;
+				mes "["+strcharinfo(0)+"]";
+				mes "你的態度是一個問題。";
+				mes "讓我們佔據主要主題。";
+				break;
+			}
+			next;
+			mes "[艾斯蒂爾達]";
+			mes "我通常提供食物";
+			mes "和其他生活必需品。";
+			next;
+			mes "[艾斯蒂爾達]";
+			mes "我為自己買一些食物。";
+			mes "我每天為他買昂貴的食物。";
+			next;
+			mes "[艾斯蒂爾達]";
+			mes "我認為他對食物很挑剔...";
+			mes "每當我提供食物時，我都會得到錢。";
+			next;
+			select("你睡哪兒了？");
+			mes "[艾斯蒂爾達]";
+			mes "是的？是的，在這裡。";
+			mes "有一個士兵留下來的地方。";
+			mes "他要我呆在那裡...";
+			next;
+			select("你們什麼時候見面？");
+			mes "[艾斯蒂爾達]";
+			mes "幾個小時後。";
+			mes "在南部的地下倉庫。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "感謝您的合作。";
+			mes "你的房子在瑞秋嗎？";
+			mes "Estillda是您的真名嗎？";
+			mes "是的，我要在雷切爾（Rachel）提取他的口糧。";
+			next;
+			mes "["+strcharinfo(0)+"]";
+			mes "沒有事故回家。";
+			set job_3rd_gc, 12;
+			changequest 7106,7107;
+			close;
+		case 2:
+			mes "[艾斯蒂爾達]";
+			mes "是的？";
+			mes "請...";
+			mes "不要殺了我。";
+			next;
+			mes "-  Estillda看起來很害怕。您需要更改主題。 -";
+			close;
+		}
+	} else if (job_3rd_gc == 12) {
+		mes "[艾斯蒂爾達]";
+		mes "我們通常同時在同一地方見面。";
+		mes "它在南部的地下倉庫中。";
+		mes "不要告訴他我告訴你。";
+		close;
+	}
+	end;
+}
+
+veins,206,56,0	script	#3rdgc_battleroom01	139,1,1,{
+	end;
+OnInit:
+	set $@3rdgc_room01, 0;
+	end;
+OnTouch_:
+	if (job_3rd_gc == 12) {
+		if (checkquest(7107,PLAYTIME) == 2) {
+			mes "這一定是Estillda告訴我的地方。";
+			next;
+			switch(select("進去:觀察情況。")) {
+			case 1:
+				if ($@3rdgc_room01 == 0) {
+					warp "job3_guil02",34,44;
+					set $@3rdgc_room01, 1;
+				} else {
+					mes "您試圖打開門，但已鎖定。";
+					mes "它沒有顯示生命的任何跡象。";
+					next;
+					mes "稍後再回到這裡。";
+				}
+				close;
+			case 2:
+				mes "我備份觀看情況。";
+				close;
+			}
+		} else if (checkquest(7107,PLAYTIME) == 0) {
+			mes "這一定是Estillda告訴我的地方。";
+			mes "我有足夠的時間開會。";
+			close;
+		} else {
+			mes "發生了錯誤。";
+			mes "與通用汽車團隊聯繫以解決情況。";
+			close;
+		}
+	}
+	end;
+}
+
+job3_guil02,34,44,0	script	#3rdgc_room01_mag01	139,2,2,{
+	end;
+OnEnable:
+	enablenpc "#3rdgc_room01_mag01";
+	end;
+OnDisable:
+	disablenpc "#3rdgc_room01_mag01";
+	end;
+OnStop:
+	stopnpctimer;
+	end;
+OnTouch_:
+	if (job_3rd_gc == 12) {
+		initnpctimer;
+		donpcevent "A man with black clothes::OnEnable";
+		disablenpc "#3rdgc_room01_mag01";
+	} else {
+		mes "您現在不必來這裡。";
+		close;
+		warp "veins",178,62;
+		set $@3rdgc_room01, 0;
+		end;
+	}
+	end;
+OnTimer295000:
+	mapannounce "job3_guil02","Dandelion: ...Ha, you are strong and sticky!",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	donpcevent "A man with black clothes::OnReset";
+	end;
+OnTimer296000:
+	mapannounce "job3_guil02","The Dandelion ran away.",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	end;
+OnTimer298000:
+	mapwarp "job3_guil02","veins",186,65;
+	end;
+OnTimer299000:
+	donpcevent "Dandelion#3rdgc12::OnDisable";
+	donpcevent "A man with black clothes::OnDisable";
+	donpcevent "#3rdgc_room01_mag01::OnEnable";
+	end;
+OnTimer300000:
+	set $@3rdgc_room01, 0;
+	stopnpctimer;
+	end;
+}
+
+job3_guil02,51,43,7	script	A man with black clothes	456,4,4,{
+	end;
+OnInit:
+OnDisable:
+	hideonnpc "A man with black clothes";
+	set .on,0;
+	end;
+OnEnable:
+	hideoffnpc "A man with black clothes";
+	set .on,1;
+	end;
+OnReset:
+	killmonster "job3_guil02","A man with black clothes::OnMyMobDead";
+	end;
+OnTouch_:
+	if (!.on) end;
+	mes "[一個穿著黑色衣服的男人]";
+	mes "你剛到這裡。";
+	mes "你為什麼這麼晚？";
+	mes "放下你的東西。";
+	next;
+	select("......");
+	mes "[一個穿著黑色衣服的男人]";
+	mes "願女神永遠祝福你...";
+	npcskill "AL_BLESSING",10,0,0;
+	next;
+	emotion ET_SURPRISE;
+	mes "[一個穿著黑色衣服的男人]";
+	mes "誰...你是誰？";
+	mes "一個...刺客公會？";
+	mes "什麼？ ！";
+	mes "我什麼時候給你一個線索？";
+	next;
+	select("你失去了頭...");
+	mes "["+strcharinfo(0)+"]";
+	mes "這是正確的目標嗎？";
+	mes "你能和我聊一秒鐘嗎？";
+	next;
+	mes "[一個穿著黑色衣服的男人]";
+	mes "決不！ ！ ！ ！";
+	mes "你...我會讓你永遠閉上眼睛！";
+	next;
+	mes "["+strcharinfo(0)+"]";
+	mes "什麼？ ！";
+	close2;
+	donpcevent "A man with black clothes::OnDisable";
+	monster "job3_guil02",51,43,"Dandelion",2031,1,"A man with black clothes::OnMyMobDead";
+	end;
+OnMyMobDead:
+	donpcevent "#3rdgc_room01_mag01::OnStop";
+	donpcevent "#3rdgc_2nd_timer::OnEnable";
+	mapwarp "job3_guil02","job3_guil02",47,43;
+	end;
+}
+
+job3_guil02,1,1,0	script	#3rdgc_2nd_timer	844,{
+	end;
+OnEnable:
+	initnpctimer;
+	end;
+OnTimer1000:
+	donpcevent "Dandelion#3rdgc12::OnEnable";
+	end;
+OnTimer60000:
+	mapwarp "job3_guil02","veins",186,65;
+	end;
+OnTimer61000:
+	donpcevent "Dandelion#3rdgc12::OnDisable";
+	donpcevent "A man with black clothes::OnDisable";
+	donpcevent "#3rdgc_room01_mag01::OnEnable";
+	set $@3rdgc_room01, 0;
+	stopnpctimer;
+	end;
+}
+
+job3_guil02,49,43,5	script	Dandelion#3rdgc12	457,{
+	if (!checkweight(1201,2)) {
+		mes "- 您無法繼續此任務，因為您的項目太多。 -";
+		close;
+	}
+	if (job_3rd_gc == 12) {
+		mes "[蒲公英]";
+		mes "恩！";
+		mes "你...什麼都不會找到。";
+		mes "一切...由女神引導...";
+		mes "激動！";
+		next;
+		mes "- 他把東西放在嘴裡吞嚥。 -";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "那是什麼？";
+		mes "你嘴裡有什麼...？";
+		mes "你為什麼這樣做？";
+		next;
+		mes "救他為時已晚。";
+		mes "他去世了。";
+		mes "您會發現他的脖子上有一個奇特的裝飾的鑰匙。";
+		set job_3rd_gc, 13;
+		getitem 6150,1; //Key_Of_The_Mansion
+		changequest 7107,7108;
+		close;
+	} else {
+		if (job_3rd_gc == 13) {
+			mes "無事可做。";
+			mes "讓我們離開這裡。";
+		} else
+			mes "您被一支未知的力量推了。";
+		close2;
+		warp "veins",178,62;
+		end;
+	}
+OnInit:
+OnDisable:
+	disablenpc "Dandelion#3rdgc12";
+	end;
+OnEnable:
+	enablenpc "Dandelion#3rdgc12";
+	end;
+}
+
+rachel,115,77,3	script	Girke#3rdgc13	85,{
+	mes "[希臘語]";
+	mes "哦~年輕人。";
+	mes "我是吉爾克·薩拉（Girke Sara）。";
+	mes "只是叫我吉爾克。";
+	next;
+	mes "- 他聞起來像酒精。 -";
+	next;
+	mes "[希臘語]";
+	mes "你知道嗎？";
+	mes "一個是傳奇的關鍵工匠的人住在我們村莊。";
+	mes "打ic~";
+	next;
+	mes "[希臘語]";
+	mes "啊~哈哈哈哈";
+	mes "我爸爸喜歡這樣的作品。";
+	mes "有一天，他對我說。";
+	next;
+	mes "[希臘語]";
+	mes "“吉爾克，我的願望是用俄勒撒制定的鑰匙。”";
+	next;
+	mes "[希臘語]";
+	mes "但是奧雷薩（Oresa）將所有東西交給了他的學徒後已經消失了。";
+	mes "最後，我父親去世而沒有看到這樣的鑰匙...";
+	next;
+	mes "[希臘語]";
+	mes "你知道。";
+	mes "那歐雷薩！他住在我們鎮上嗎？";
+	mes "打ic~";
+	next;
+	mes "[希臘語]";
+	mes "但是他太老了...";
+	mes "但是工匠是...";
+	next;
+	mes "[希臘語]";
+	mes "...很難見面。";
+	mes "像我父親一樣...他有點孤獨。";
+	next;
+	mes "[希臘語]";
+	mes "我在和你說什麼。";
+	mes "你喝醉了嗎？爸爸...（抽泣）";
+	mes "啊...爸爸...";
+	next;
+	mes "- 吉爾克開始哭泣。 -";
+	close;
+}
+
+ra_in01,175,196,3	script	Oresa Rava#3rdgc13	866,{
+	mes "[奧雷薩分解]";
+	if (job_3rd_gc == 13) {
+		mes "我不知道你為什麼要拜訪我，但我不再製作。";
+		mes "我太老了，無法製作。";
+		next;
+		select("你認識這個鑰匙嗎？");
+		mes "[奧雷薩分解]";
+		mes "唔？嗯...給我。";
+		mes "這個模式...";
+		mes "你從哪裡得到的？";
+		next;
+		switch(select("我剛拿起它:我有一個故事......")) {
+		case 1:
+			mes "[奧雷薩分解]";
+			mes "嗯？你剛上了嗎？";
+			mes "那是不可能的。";
+			mes "那所房子裡發生了什麼事。";
+			next;
+			mes "[奧雷薩分解]";
+			mes "那麼您將如何處理此鍵？";
+			next;
+			select("我這就去找失主。");
+			mes "[奧雷薩分解]";
+			mes "啊~！這就是為什麼你來這裡見我的原因。";
+			mes "我把那個鑰匙給了一個牧師。";
+			next;
+			mes "[奧雷薩分解]";
+			mes "他成為牧師後，我看不到他的家，但我為慶祝活動做了鑰匙。";
+			next;
+			mes "[奧雷薩分解]";
+			mes "這是他豪宅的關鍵。";
+			mes "現在我不知道他住在哪裡。";
+			mes "但是，您可以參觀那裡並派遣夏季小屋的看護人嗎？";
+			next;
+			break;
+		case 2:
+			mes "[奧雷薩分解]";
+			mes "我不知道發生了什麼。";
+			mes "我把那個鑰匙給了一個牧師。";
+			next;
+			mes "[奧雷薩分解]";
+			mes "他成為牧師後，我看不到他的家，但我為慶祝活動做了鑰匙。";
+			next;
+			mes "[奧雷薩分解]";
+			mes "這是他豪宅的關鍵。";
+			mes "現在我不知道他住在哪裡。";
+			mes "但是，您可以參觀那裡並派遣夏季小屋的看護人嗎？";
+			next;
+			mes "[奧雷薩分解]";
+			mes "實際上，我不能相信你...";
+			mes "但是您出現了一個鑰匙。這可能是一種普羅維登斯的行為。";
+			next;
+			select("當然。");
+			break;
+		}
+		mes "[奧雷薩分解]";
+		mes "那個豪宅是...";
+		mes "建在峽谷的峽谷中。";
+		mes "我不知道它的確切位置。";
+		next;
+		select("那應該足夠了。");
+		mes "[奧雷薩分解]";
+		mes "你確定嗎？";
+		mes "你真好。";
+		mes "發送該鑰匙。";
+		next;
+		mes "- 盡快找到該鑰匙的所有者，並告訴Mayshell。 -";
+		set job_3rd_gc, 14;
+		close;
+	} else if (job_3rd_gc == 14) {
+		mes "該鑰匙是建在峽谷中的豪宅。";
+		mes "我確定。";
+		close;
+	} else {
+		mes "這是一個關於那個工匠的古老故事。";
+		mes "現在...最好看到我的孫子。";
+		next;
+		mes "[奧雷薩分解]";
+		mes "您現在在笑，但您很快就會理解我。";
+		close;
+	}
+}
+
+//Pre-RE: ve_fild05 (327,308)
+ve_fild02,330,384,3	script	Girl#3rdgc14	466,{
+	if (job_3rd_gc > 14 && job_3rd_gc < 18) {
+		mes "[倫扎克]";
+		if (job_3rd_gc == 15) {
+			mes "你在這裡。";
+			mes "我是Renzak。";
+			mes "您從Mayshell寄來嗎？";
+			//mes "我不糾纏了。"; //FIXME: Dialogue.
+			next;
+			mes "[倫扎克]";
+			mes "我們的最終目標在那兒。";
+			mes "豪宅被懸崖包圍。";
+			mes "您必須刪除豪宅中的目標。";
+			next;
+			mes "[倫扎克]";
+			mes "我要給你10分鐘。";
+			mes "完成您的任務，然後等待豪宅的後門。";
+			mes "我在那裡等你。";
+		} else if (job_3rd_gc == 16) {
+			mes "您必須實現我們的目標，並在10分鐘內從豪宅的後門出來。";
+			mes "你可以做到。";
+		} else {
+			mes "你失敗了。";
+			mes "你必須成功。";
+			next;
+			mes "[倫扎克]";
+			mes "您必須從豪宅的後門出來。";
+			mes "我等你。";
+		}
+		next;
+		switch(select("我明白了:我會準備好的。")) {
+		case 1:
+			if ($@3rdgc_room02 == 0) {
+				erasequest ((job_3rd_gc == 17)?7110:7109);
+				set job_3rd_gc, 17;
+				setquest 7110;
+				set $@3rdgc_room02, 1;
+				warp "job3_guil03",22,70;
+			} else {
+				mes "[倫扎克]";
+				mes "等待一秒鐘。";
+				mes "只要等到天黑了。";
+				next;
+				mes "[倫扎克]";
+				mes "它很容易滲透，因為它被懸崖的陰影覆蓋。";
+				set job_3rd_gc, 16;
+			}
+			close;
+		case 2:
+			mes "[倫扎克]";
+			mes "您沒有時間備用。";
+			mes "您應該為行動做準備。";
+			if (job_3rd_gc == 17) {
+				erasequest 7110;
+				setquest 7109;
+			}
+			set job_3rd_gc, 16;
+			close;
+		}
+	} else if (job_3rd_gc > 18) {
+		mes "[倫扎克]";
+		mes "你看起來不錯。";
+		mes "我？我一直都有相同的數字。";
+		next;
+		mes "[倫扎克]";
+		mes "我只是在等我要做的人。";
+		close;
+	} else {
+		mes "[陰影面臨的女孩]";
+		mes "......";
+		mes "這條路被封鎖。";
+		mes "回去。";
+		close;
+	}
+OnInit:
+	set $@3rdgc_room02, 0;
+	end;
+}
+
+job3_guil03,22,70,0	script	#3rdgc_event01	139,3,3,{
+	end;
+OnEnable:
+	enablenpc "#3rdgc_event01";
+	end;
+OnDisable:
+	disablenpc "#3rdgc_event01";
+	end;
+OnStop:
+	stopnpctimer;
+	end;
+OnTouch_:
+	if (job_3rd_gc == 17) {
+		initnpctimer;
+		donpcevent "#3rdgc_event_master::OnEnable";
+		disablenpc "#3rdgc_event01";
+	} else {
+		mes "您不必來這裡。";
+		close2;
+		warp "ve_fild02",330,379;	//Pre-RE: ve_fild05 (341,303)
+		set $@3rdgc_room02, 0;
+	}
+	end;
+OnTimer900000:
+	mapannounce "job3_guil03","Renzak : Withdraw!",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	end;
+OnTimer901000:
+	mapwarp "job3_guil03","ve_fild02",330,379;	//Pre-RE: ve_fild05 (341,303)
+	end;
+OnTimer902000:
+	donpcevent "#3rdgc_event_master::OnReset";
+	stopnpctimer;
+	end;
+}
+
+job3_guil03,1,4,0	script	#3rdgc_event_master	844,{
+	end;
+OnEnable:
+	donpcevent "Barbed-Wire Entanglement::OnEnable";
+	donpcevent "Guard Dog#dog01::OnEnable";
+	donpcevent "Guard Dog#dog02::OnEnable";
+	donpcevent "#3rdgc_sunchal_nomal::OnEnable";
+	donpcevent "#3rdgc_sunchal_kill01::OnEnable";
+	donpcevent "#3rdgc_sunchal_kill02::OnEnable";
+	donpcevent "#3rdgc_sunchal_kill03::OnEnable";
+	donpcevent "#3rdgc_gojung_kill01::OnEnable";
+	donpcevent "#3rdgc_gojung_kill02::OnEnable";
+	donpcevent "#3rdgc_gojung_kill03::OnEnable";
+	donpcevent "Priest from Rachel::OnEnable";
+	end;
+OnReset:
+	donpcevent "#3rdgc_guard::OnStop";
+	donpcevent "#3rdgc_guardoff::OnReset";
+	donpcevent "#3rdgc_hide01::OnStop";
+	donpcevent "#3rdgc_hide02::OnStop";
+	donpcevent "#3rdgc_hide03::OnStop";
+	donpcevent "#3rdgc_sunchal_kill01::OnStop";
+	donpcevent "#3rdgc_sunchal_kill02::OnStop";
+	donpcevent "#3rdgc_sunchal_kill03::OnStop";
+	donpcevent "#3rdgc_gojung_kill01::OnStop";
+	donpcevent "#3rdgc_gojung_kill02::OnStop";
+	donpcevent "#3rdgc_gojung_kill03::OnStop";
+	donpcevent "Guard Dog#dog01::OnReset";
+	donpcevent "Guard Dog#dog02::OnReset";
+	donpcevent "#3rdgc_sunchal_nomal::OnReset";
+	donpcevent "#3rdgc_sunchal_kill01::OnReset";
+	donpcevent "#3rdgc_sunchal_kill02::OnReset";
+	donpcevent "#3rdgc_sunchal_kill03::OnReset";
+	donpcevent "#3rdgc_gojung_kill01::OnReset";
+	donpcevent "#3rdgc_gojung_kill02::OnReset";
+	donpcevent "#3rdgc_gojung_kill03::OnReset";
+	donpcevent "Priest from Rachel::OnReset";
+	donpcevent "Barbed-Wire Entanglement::OnDisable";
+	donpcevent "Guard Dog#dog01::OnDisable";
+	donpcevent "Guard Dog#dog02::OnDisable";
+	donpcevent "#3rdgc_gojung_kill01::OnDisable";
+	donpcevent "#3rdgc_gojung_kill02::OnDisable";
+	donpcevent "#3rdgc_gojung_kill03::OnDisable";
+	donpcevent "Priest from Rachel::OnDisable";
+	donpcevent "Renzak#3rdgc16::OnDisable";
+	donpcevent "#3rdgc_event01::OnEnable";
+	set $@3rdgc_room02, 0;
+	end;
+}
+
+//Original name: Barbed-Wire Entanglements#3rdgc_door01
+job3_guil03,55,79,0	script	Barbed-Wire Entanglement	844,1,1,{
+	end;
+OnEnable:
+	enablenpc "Barbed-Wire Entanglement";
+	end;
+OnDisable:
+	disablenpc "Barbed-Wire Entanglement";
+	end;
+OnTouch_:
+	mes "舊柵欄底部有空間。";
+	next;
+	if(select("另闢蹊徑:爬進太空。") == 2) {
+		mes "您爬上狹窄的空間。";
+		mes "孔被舊的鐵絲網糾纏堵塞。";
+		close2;
+		warp "job3_guil03",57,79;
+		disablenpc "Barbed-Wire Entanglement";
+		end;
+	}
+	close;
+}
+
+job3_guil03,98,46,0	script	#3rdgc_hide01	139,1,4,{
+	end;
+OnStop:
+	killmonster "job3_guil03","#3rdgc_hide01::OnMyMobDead";
+	stopnpctimer;
+	end;
+OnTouch_:
+	mapannounce "job3_guil03","Man's voice : Umm? Is that a shadow in the window?",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	initnpctimer;
+	end;
+OnTimer2000:
+	monster "job3_guil03",97,49,"Guard",1985,1,"#3rdgc_hide01::OnMyMobDead";
+	monster "job3_guil03",98,49,"Guard",1985,1,"#3rdgc_hide01::OnMyMobDead";
+	monster "job3_guil03",99,49,"Guard Dog",1866,1,"#3rdgc_hide01::OnMyMobDead";
+	mapannounce "job3_guil03","Guards : An invader!!",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	end;
+OnTimer60000:
+	mapannounce "job3_guil03","Guards : Keep strict watch!!",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	donpcevent "#3rdgc_guard::OnEnable";
+	stopnpctimer;
+	end;
+OnMyMobDead:
+	if (mobcount("job3_guil03","#3rdgc_hide01::OnMyMobDead") < 1)
+		stopnpctimer;
+	end;
+}
+
+job3_guil03,98,55,0	script	#3rdgc_hide02	139,1,4,{
+	end;
+OnStop:
+	killmonster "job3_guil03","#3rdgc_hide02::OnMyMobDead";
+	stopnpctimer;
+	end;
+OnTouch_:
+	mapannounce "job3_guil03","Man's voice : There is something outside!",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	initnpctimer;
+	end;
+OnTimer2000:
+	monster "job3_guil03",97,57,"Guard",1985,1,"#3rdgc_hide02::OnMyMobDead";
+	monster "job3_guil03",98,57,"Guard",1985,1,"#3rdgc_hide02::OnMyMobDead";
+	monster "job3_guil03",99,57,"Guard Dog",1866,1,"#3rdgc_hide02::OnMyMobDead";
+	mapannounce "job3_guil03","Guards : An invader!!",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	end;
+OnTimer60000:
+	mapannounce "job3_guil03","Guards : Keep strict watch!!",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	donpcevent "#3rdgc_guard::OnEnable";
+	stopnpctimer;
+	end;
+OnMyMobDead:
+	if (mobcount("job3_guil03","#3rdgc_hide02::OnMyMobDead") < 1)
+		stopnpctimer;
+	end;
+}
+
+job3_guil03,98,64,0	script	#3rdgc_hide03	139,1,4,{
+	end;
+OnStop:
+	killmonster "job3_guil03","#3rdgc_hide03::OnMyMobDead";
+	stopnpctimer;
+	end;
+OnTouch_:
+	mapannounce "job3_guil03","Man's voice : What is that?",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	initnpctimer;
+	end;
+OnTimer2000:
+	monster "job3_guil03",97,67,"Guard",1985,1,"#3rdgc_hide03::OnMyMobDead";
+	monster "job3_guil03",98,67,"Guard",1985,1,"#3rdgc_hide03::OnMyMobDead";
+	monster "job3_guil03",99,67,"Guard Dog",1866,1,"#3rdgc_hide03::OnMyMobDead";
+	mapannounce "job3_guil03","Guards : An invader!!",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	end;
+OnTimer60000:
+	mapannounce "job3_guil03","Guards : Keep strict watch!!",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	donpcevent "#3rdgc_guard::OnEnable";
+	stopnpctimer;
+	end;
+OnMyMobDead:
+	if (mobcount("job3_guil03","#3rdgc_hide03::OnMyMobDead") < 1)
+		stopnpctimer;
+	end;
+}
+
+job3_guil03,1,2,0	script	#3rdgc_guard	844,{
+	end;
+OnEnable:
+	initnpctimer;
+	end;
+OnStop:
+	stopnpctimer;
+	end;
+OnTimer5000:
+	mapannounce "job3_guil03","Guards : Take strict precaution outside!",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	donpcevent "Exterior Guard#g01::OnEnable";
+	donpcevent "Exterior Guard#g02::OnEnable";
+	donpcevent "Exterior Guard#g03::OnEnable";
+	donpcevent "Exterior Guard#g04::OnEnable";
+	donpcevent "Exterior Guard#g05::OnEnable";
+	donpcevent "Exterior Guard#g06::OnEnable";
+	end;
+OnTimer8000:
+	mapannounce "job3_guil03","Guards : Take strict precaution of the front gate!",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	donpcevent "Front Gate Guard#g01::OnEnable";
+	donpcevent "Front Gate Guard#g03::OnEnable";
+	donpcevent "Front Gate Guard#g04::OnEnable";
+	donpcevent "Front Gate Guard#g05::OnEnable";
+	end;
+OnTimer13000:
+	mapannounce "job3_guil03","Guards : Take strict precaution of the back gate!",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	donpcevent "Back Gate Guard#g01::OnEnable";
+	donpcevent "Back Gate Guard#g03::OnEnable";
+	donpcevent "Back Gate Guard#g04::OnEnable";
+	donpcevent "Back Gate Guard#g05::OnEnable";
+	end;
+OnTimer16000:
+	mapannounce "job3_guil03","Guards : Take strict precaution of the interior!",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	donpcevent "Interior Guard#g01::OnEnable";
+	donpcevent "Interior Guard#g03::OnEnable";
+	donpcevent "Interior Guard#g04::OnEnable";
+	donpcevent "Interior Guard#g05::OnEnable";
+	stopnpctimer;
+	end;
+}
+
+job3_guil03,1,3,0	script	#3rdgc_guardoff	844,{
+	end;
+OnDisable:
+	initnpctimer;
+	end;
+OnReset:
+	stopnpctimer;
+	donpcevent "Front Gate Guard#g01::OnDisable";
+	donpcevent "Front Gate Guard#g03::OnDisable";
+	donpcevent "Front Gate Guard#g04::OnDisable";
+	donpcevent "Front Gate Guard#g05::OnDisable";
+	donpcevent "Back Gate Guard#g01::OnDisable";
+	donpcevent "Back Gate Guard#g03::OnDisable";
+	donpcevent "Back Gate Guard#g04::OnDisable";
+	donpcevent "Back Gate Guard#g05::OnDisable";
+	donpcevent "Interior Guard#g01::OnDisable";
+	donpcevent "Interior Guard#g03::OnDisable";
+	donpcevent "Interior Guard#g04::OnDisable";
+	donpcevent "Interior Guard#g05::OnDisable";
+	donpcevent "Exterior Guard#g01::OnDisable";
+	donpcevent "Exterior Guard#g02::OnDisable";
+	donpcevent "Exterior Guard#g03::OnDisable";
+	donpcevent "Exterior Guard#g04::OnDisable";
+	donpcevent "Exterior Guard#g05::OnDisable";
+	donpcevent "Exterior Guard#g06::OnDisable";
+	donpcevent "Front Gate Guard#g01::OnReset";
+	donpcevent "Back Gate Guard#g01::OnReset";
+	donpcevent "Interior Guard#g01::OnReset";
+	donpcevent "Exterior Guard#g01::OnReset";
+	donpcevent "Exterior Guard#g02::OnReset";
+	donpcevent "Exterior Guard#g03::OnReset";
+	donpcevent "Exterior Guard#g04::OnReset";
+	donpcevent "Exterior Guard#g05::OnReset";
+	donpcevent "Exterior Guard#g06::OnReset";
+	end;
+OnTimer1000:
+	mapannounce "job3_guil03","Guards : Umm? I'm imagining things.",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	end;
+OnTimer4000:
+	mapannounce "job3_guil03","Guards : Let's go back.",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	end;
+OnTimer5000:
+	donpcevent "Front Gate Guard#g01::OnDisable";
+	donpcevent "Front Gate Guard#g03::OnDisable";
+	donpcevent "Front Gate Guard#g04::OnDisable";
+	donpcevent "Front Gate Guard#g05::OnDisable";
+	donpcevent "Back Gate Guard#g01::OnDisable";
+	donpcevent "Back Gate Guard#g03::OnDisable";
+	donpcevent "Back Gate Guard#g04::OnDisable";
+	donpcevent "Back Gate Guard#g05::OnDisable";
+	donpcevent "Interior Guard#g01::OnDisable";
+	donpcevent "Interior Guard#g03::OnDisable";
+	donpcevent "Interior Guard#g04::OnDisable";
+	donpcevent "Interior Guard#g05::OnDisable";
+	donpcevent "Exterior Guard#g01::OnDisable";
+	donpcevent "Exterior Guard#g02::OnDisable";
+	donpcevent "Exterior Guard#g03::OnDisable";
+	donpcevent "Exterior Guard#g04::OnDisable";
+	donpcevent "Exterior Guard#g05::OnDisable";
+	donpcevent "Exterior Guard#g06::OnDisable";
+	stopnpctimer;
+	end;
+}
+
+-	script	#3rdgc_guard00	-1,{
+	end;
+OnInit:
+OnDisable:
+	disablenpc();
+	end;
+OnEnable:
+	enablenpc();
+	end;
+}
+
+job3_guil03,93,35,3	script	Front Gate Guard#g01	456,5,5,{
+	end;
+OnInit:
+OnDisable:
+	disablenpc "Front Gate Guard#g01";
+	end;
+OnEnable:
+	enablenpc "Front Gate Guard#g01";
+	end;
+OnReset:
+	killmonster "job3_guil03","Front Gate Guard#g01::OnMyMobDead";
+	end;
+OnTouch_:
+	disablenpc "Front Gate Guard#g01";
+	disablenpc "Front Gate Guard#g03";
+	disablenpc "Front Gate Guard#g04";
+	disablenpc "Front Gate Guard#g05";
+	monster "job3_guil03",93,37,"Guard Dog",1866,1,"Front Gate Guard#g01::OnMyMobDead";
+	monster "job3_guil03",93,36,"Front Gate Guard",1985,1,"Front Gate Guard#g01::OnMyMobDead";
+	monster "job3_guil03",93,35,"Front Gate Guard",1985,1,"Front Gate Guard#g01::OnMyMobDead";
+	monster "job3_guil03",93,34,"Front Gate Guard",1985,1,"Front Gate Guard#g01::OnMyMobDead";
+	monster "job3_guil03",93,33,"Front Gate Guard",1985,1,"Front Gate Guard#g01::OnMyMobDead";
+	monster "job3_guil03",93,32,"Guard Dog",1866,1,"Front Gate Guard#g01::OnMyMobDead";
+	end;
+OnMyMobDead:
+	end;
+}
+job3_guil03,93,36,3	duplicate(#3rdgc_guard00)	Front Gate Guard#g03	456
+job3_guil03,93,34,3	duplicate(#3rdgc_guard00)	Front Gate Guard#g04	456
+job3_guil03,93,33,3	duplicate(#3rdgc_guard00)	Front Gate Guard#g05	456
+
+job3_guil03,133,52,5	script	Back Gate Guard#g01	456,5,5,{
+	end;
+OnInit:
+OnDisable:
+	disablenpc "Back Gate Guard#g01";
+	end;
+OnEnable:
+	enablenpc "Back Gate Guard#g01";
+	end;
+OnReset:
+	killmonster "job3_guil03","Back Gate Guard#g01::OnMyMobDead";
+	end;
+OnTouch_:
+	disablenpc "Back Gate Guard#g01";
+	disablenpc "Back Gate Guard#g03";
+	disablenpc "Back Gate Guard#g04";
+	disablenpc "Back Gate Guard#g05";
+	monster "job3_guil03",133,54,"Guard Dog",1866,1,"Back Gate Guard#g01::OnMyMobDead";
+	monster "job3_guil03",133,53,"Back Gate Guard",1985,1,"Back Gate Guard#g01::OnMyMobDead";
+	monster "job3_guil03",133,52,"Back Gate Guard",1985,1,"Back Gate Guard#g01::OnMyMobDead";
+	monster "job3_guil03",133,51,"Back Gate Guard",1985,1,"Back Gate Guard#g01::OnMyMobDead";
+	monster "job3_guil03",133,50,"Back Gate Guard",1985,1,"Back Gate Guard#g01::OnMyMobDead";
+	monster "job3_guil03",133,49,"Guard Dog",1866,1,"Back Gate Guard#g01::OnMyMobDead";
+	end;
+OnMyMobDead:
+	end;
+}
+job3_guil03,133,53,5	duplicate(#3rdgc_guard00)	Back Gate Guard#g03	456
+job3_guil03,133,51,5	duplicate(#3rdgc_guard00)	Back Gate Guard#g04	456
+job3_guil03,133,50,5	duplicate(#3rdgc_guard00)	Back Gate Guard#g05	456
+
+job3_guil03,117,51,4	script	Interior Guard#g01	456,5,5,{
+	end;
+OnInit:
+OnDisable:
+	disablenpc "Interior Guard#g01";
+	end;
+OnEnable:
+	enablenpc "Interior Guard#g01";
+	end;
+OnReset:
+	killmonster "job3_guil03","Interior Guard#g01::OnMyMobDead";
+	end;
+OnTouch_:
+	disablenpc "Interior Guard#g01";
+	disablenpc "Interior Guard#g03";
+	disablenpc "Interior Guard#g04";
+	disablenpc "Interior Guard#g05";
+	monster "job3_guil03",117,53,"Guard Dog",1866,1,"Interior Guard#g01::OnMyMobDead";
+	monster "job3_guil03",117,52,"Interior Guard",1985,1,"Interior Guard#g01::OnMyMobDead";
+	monster "job3_guil03",117,51,"Interior Guard",1985,1,"Interior Guard#g01::OnMyMobDead";
+	monster "job3_guil03",117,50,"Interior Guard",1985,1,"Interior Guard#g01::OnMyMobDead";
+	monster "job3_guil03",117,49,"Interior Guard",1985,1,"Interior Guard#g01::OnMyMobDead";
+	monster "job3_guil03",117,48,"Guard Dog",1866,1,"Interior Guard#g01::OnMyMobDead";
+	end;
+OnMyMobDead:
+	end;
+}
+job3_guil03,117,52,4	duplicate(#3rdgc_guard00)	Interior Guard#g03	456
+job3_guil03,117,50,4	duplicate(#3rdgc_guard00)	Interior Guard#g04	456
+job3_guil03,117,49,4	duplicate(#3rdgc_guard00)	Interior Guard#g05	456
+
+job3_guil03,88,44,4	script	Exterior Guard#g01	456,5,5,{
+	end;
+OnInit:
+OnDisable:
+	disablenpc "Exterior Guard#g01";
+	end;
+OnEnable:
+	enablenpc "Exterior Guard#g01";
+	end;
+OnReset:
+	killmonster "job3_guil03","Exterior Guard#g01::OnMyMobDead";
+	end;
+OnTouch_:
+	mapannounce "job3_guil03","Guards : Who are you?!",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	disablenpc "Exterior Guard#g01";
+	monster "job3_guil03",88,44,"Exterior Guard",1985,1,"Exterior Guard#g01::OnMyMobDead";
+	monster "job3_guil03",88,43,"Exterior Guard",1985,1,"Exterior Guard#g01::OnMyMobDead";
+	monster "job3_guil03",88,45,"Guard Dog",1866,1,"Exterior Guard#g01::OnMyMobDead";
+	end;
+OnMyMobDead:
+	end;
+}
+
+job3_guil03,88,55,4	script	Exterior Guard#g02	456,5,5,{
+	end;
+OnInit:
+OnDisable:
+	disablenpc "Exterior Guard#g02";
+	end;
+OnEnable:
+	enablenpc "Exterior Guard#g02";
+	end;
+OnReset:
+	killmonster "job3_guil03","Exterior Guard#g02::OnMyMobDead";
+	end;
+OnTouch_:
+	mapannounce "job3_guil03","Guards : Enemy?!",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	disablenpc "Exterior Guard#g02";
+	monster "job3_guil03",88,55,"Exterior Guard",1985,1,"Exterior Guard#g02::OnMyMobDead";
+	monster "job3_guil03",88,54,"Exterior Guard",1985,1,"Exterior Guard#g02::OnMyMobDead";
+	monster "job3_guil03",88,56,"Guard Dog",1866,1,"Exterior Guard#g02::OnMyMobDead";
+	end;
+OnMyMobDead:
+	end;
+}
+
+job3_guil03,88,64,4	script	Exterior Guard#g03	456,5,5,{
+	end;
+OnInit:
+OnDisable:
+	disablenpc "Exterior Guard#g03";
+	end;
+OnEnable:
+	enablenpc "Exterior Guard#g03";
+	end;
+OnReset:
+	killmonster "job3_guil03","Exterior Guard#g03::OnMyMobDead";
+	end;
+OnTouch_:
+	mapannounce "job3_guil03","Guards : An invader, remove!",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	disablenpc "Exterior Guard#g03";
+	monster "job3_guil03",88,64,"Exterior Guard",1985,1,"Exterior Guard#g03::OnMyMobDead";
+	monster "job3_guil03",88,63,"Exterior Guard",1985,1,"Exterior Guard#g03::OnMyMobDead";
+	monster "job3_guil03",88,65,"Guard Dog",1866,1,"Exterior Guard#g03::OnMyMobDead";
+	end;
+OnMyMobDead:
+	end;
+}
+
+job3_guil03,73,62,4	script	Exterior Guard#g04	456,5,5,{
+	end;
+OnInit:
+OnDisable:
+	disablenpc "Exterior Guard#g04";
+	end;
+OnEnable:
+	enablenpc "Exterior Guard#g04";
+	end;
+OnReset:
+	killmonster "job3_guil03","Exterior Guard#g04::OnMyMobDead";
+	end;
+OnTouch_:
+	mapannounce "job3_guil03","Guards : Who are you?!",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	disablenpc "Exterior Guard#g04";
+	monster "job3_guil03",73,62,"Exterior Guard",1985,1,"Exterior Guard#g04::OnMyMobDead";
+	monster "job3_guil03",73,61,"Exterior Guard",1985,1,"Exterior Guard#g04::OnMyMobDead";
+	monster "job3_guil03",73,63,"Guard Dog",1866,1,"Exterior Guard#g04::OnMyMobDead";
+	end;
+OnMyMobDead:
+	end;
+}
+
+job3_guil03,77,51,4	script	Exterior Guard#g05	456,5,5,{
+	end;
+OnInit:
+OnDisable:
+	disablenpc "Exterior Guard#g05";
+	end;
+OnEnable:
+	enablenpc "Exterior Guard#g05";
+	end;
+OnReset:
+	killmonster "job3_guil03","Exterior Guard#g05::OnMyMobDead";
+	end;
+OnTouch_:
+	mapannounce "job3_guil03","Guards : Who are you?!",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	disablenpc "Exterior Guard#g05";
+	monster "job3_guil03",77,51,"Exterior Guards",1985,1,"Exterior Guard#g05::OnMyMobDead";
+	monster "job3_guil03",77,50,"Exterior Guards",1985,1,"Exterior Guard#g05::OnMyMobDead";
+	monster "job3_guil03",77,49,"Guard Dog",1866,1,"Exterior Guard#g05::OnMyMobDead";
+	end;
+OnMyMobDead:
+	end;
+}
+
+job3_guil03,73,34,4	script	Exterior Guard#g06	456,5,5,{
+	end;
+OnInit:
+OnDisable:
+	disablenpc "Exterior Guard#g06";
+	end;
+OnEnable:
+	enablenpc "Exterior Guard#g06";
+	end;
+OnReset:
+	killmonster "job3_guil03","Exterior Guard#g06::OnMyMobDead";
+	end;
+OnTouch_:
+	mapannounce "job3_guil03","Guard : Who are you?!",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	disablenpc "Exterior Guard#g06";
+	monster "job3_guil03",73,34,"Exterior Guards",1985,1,"Exterior Guard#g06::OnMyMobDead";
+	monster "job3_guil03",73,33,"Exterior guards",1985,1,"Exterior Guard#g06::OnMyMobDead";
+	monster "job3_guil03",73,32,"Guard Dog",1866,1,"Exterior Guard#g06::OnMyMobDead";
+	end;
+OnMyMobDead:
+	end;
+}
+
+job3_guil03,110,27,3	script	Guard Dog#dog01	1866,3,1,{
+	end;
+OnEnable:
+	enablenpc "Guard Dog#dog01";
+	end;
+OnDisable:
+	disablenpc "Guard Dog#dog01";
+	end;
+OnReset:
+	killmonster "job3_guil03","Guard Dog#dog01::OnMyMobDead";
+	end;
+OnTouch_:
+	mapannounce "job3_guil03","You have been detected by the guard dog.",bc_map,"0x00ff00"; //FW_NORMAL 12 0 0
+	disablenpc "Guard Dog#dog01";
+	monster "job3_guil03",110,27,"Guard Dog",1866,1,"Guard Dog#dog01::OnMyMobDead";
+	monster "job3_guil03",103,27,"Dog Trainer",1985,1,"Guard Dog#dog01::OnMyMobDead";
+	monster "job3_guil03",104,27,"Dog Trainer's Assistant",1985,1,"Guard Dog#dog01::OnMyMobDead";
+	monster "job3_guil03",98,27,"Guard",1985,1,"Guard Dog#dog01::OnMyMobDead";
+	end;
+OnMyMobDead:
+	end;
+}
+
+job3_guil03,119,27,3	script	Guard Dog#dog02	1866,3,1,{
+	end;
+OnEnable:
+	enablenpc "Guard Dog#dog02";
+	end;
+OnDisable:
+	disablenpc "Guard Dog#dog02";
+	end;
+OnReset:
+	killmonster "job3_guil03","Guard Dog#dog02::OnMyMobDead";
+	end;
+OnTouch_:
+	mapannounce "job3_guil03","You have been detected by the guard dog.",bc_map,"0x00ff00"; //FW_NORMAL 12 0 0
+	disablenpc "Guard Dog#dog02";
+	monster "job3_guil03",124,27,"Guard Dog",1866,1,"Guard Dog#dog02::OnMyMobDead";
+	monster "job3_guil03",126,27,"Dog Trainer",1985,1,"Guard Dog#dog02::OnMyMobDead";
+	monster "job3_guil03",104,27,"Trainer's Assistant",1985,1,"Guard Dog#dog02::OnMyMobDead";
+	monster "job3_guil03",131,27,"Guard",1985,1,"Guard Dog#dog02::OnMyMobDead";
+	end;
+OnMyMobDead:
+	end;
+}
+
+job3_guil03,2,1,0	script	#3rdgc_sunchal_nomal	844,{
+	end;
+OnEnable:
+	monster "job3_guil03",62,35,"Guard",1985,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",108,78,"Guard",1985,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",133,77,"Guard",1985,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",79,69,"Guard",1985,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",117,27,"Guard",1985,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",62,48,"Guard",1985,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",116,24,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",137,24,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",49,74,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",48,50,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",62,48,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",61,38,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",74,47,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",90,34,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",91,51,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",155,77,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",127,67,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",131,43,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",103,27,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",63,74,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",79,69,"Guard Dog",1866,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",0,0,"Watch Light",1129,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",0,0,"Watch Light",1129,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",0,0,"Watch Light",1129,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",0,0,"Watch Light",1129,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	monster "job3_guil03",0,0,"Watch Light",1129,1,"#3rdgc_sunchal_nomal::OnMyMobDead";
+	end;
+OnReset:
+	killmonster "job3_guil03","#3rdgc_sunchal_nomal::OnMyMobDead";
+	end;
+OnMyMobDead:
+	end;
+}
+
+job3_guil03,2,2,0	script	#3rdgc_sunchal_kill01	844,{
+	end;
+OnEnable:
+	set .@i, atoi(charat(strnpcinfo(0),20));
+	setarray .@x[1],74,124,103;
+	setarray .@y[1],63, 78, 24;
+	monster "job3_guil03",.@x[.@i],.@y[.@i],"Guard",1985,1,strnpcinfo(0)+"::OnMyMobDead";
+	end;
+OnStop:
+	mapannounce "job3_guil03","Guard : Am I imagining things? I just heard something...",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	stopnpctimer;
+	end;
+OnReset:
+	killmonster "job3_guil03",strnpcinfo(0)+"::OnMyMobDead";
+	end;
+OnMyMobDead:
+	initnpctimer;
+	end;
+OnTimer3000:
+	mapannounce "job3_guil03","Guard : Huh? What's that sound. Hey, what's going on?",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	end;
+OnTimer70000:
+	mapannounce "job3_guil03","Guard : What's the matter?",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	end;
+OnTimer10000:
+	mapannounce "job3_guil03","Guard : Something's wrong, take caution!",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	donpcevent "#3rdgc_guard::OnEnable";
+	stopnpctimer;
+	end;
+}
+job3_guil03,2,3,0	duplicate(#3rdgc_sunchal_kill01)	#3rdgc_sunchal_kill02	844
+job3_guil03,2,4,0	duplicate(#3rdgc_sunchal_kill01)	#3rdgc_sunchal_kill03	844
+
+job3_guil03,64,68,3	script	#3rdgc_gojung_kill01	456,7,7,{
+	end;
+OnEnable:
+	enablenpc();
+	end;
+OnDisable:
+	disablenpc();
+	end;
+OnStop:
+	mapannounce "job3_guil03","Guard : Am I imagining things? I just heard something.",bc_map,"0xA8A8A8"; //FW_NORMAL 12 0 0
+	stopnpctimer;
+	end;
+OnReset:
+	killmonster "job3_guil03",strnpcinfo(0)+"::OnMyMobDead";
+	end;
+OnTouch_:
+	set .@i, atoi(charat(strnpcinfo(0),19));
+	setarray .@x[1],64,86,83;
+	setarray .@y[1],68,63,36;
+	mapannounce "job3_guil03","Guard : Who are you?!",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	disablenpc();
+	monster "job3_guil03",.@x[.@i],.@y[.@i],"Guard",1985,1,strnpcinfo(0)+"::OnMyMobDead";
+	initnpctimer;
+	end;
+OnMyMobDead:
+	stopnpctimer;
+	end;
+OnTimer5000:
+	if (strnpcinfo(0) == "#3rdgc_gojung_kill03") end;
+OnTimer10000:
+	mapannounce "job3_guil03","Guard : I need support! Take caution!",bc_map,"0x7b68ee"; //FW_NORMAL 12 0 0
+	donpcevent "#3rdgc_guard::OnEnable";
+	stopnpctimer;
+	end;
+}
+job3_guil03,86,63,1	duplicate(#3rdgc_gojung_kill01)	#3rdgc_gojung_kill02	456,8,8
+job3_guil03,83,36,5	duplicate(#3rdgc_gojung_kill01)	#3rdgc_gojung_kill03	456,6,6
+
+job3_guil03,88,71,0	script	#3rdgc_safezone01	139,1,1,{
+	end;
+OnTouch_:
+	mes "隱藏自己是一個很好的灌木叢。";
+	donpcevent strnpcinfo(0)+"::OnTimer";
+	close;
+OnTimer:
+	//FIXME: This is a workaround for...
+	//var pccount_tt = GetNeighborPcNumber 2
+	getmapxy(.@map$,.@x,.@y,BL_NPC);
+	setarray .@x[1],.@x-2,.@x+2;
+	setarray .@y[1],.@y-2,.@y+2;
+	sleep 1000;
+	for(set .@i,0; .@i<9; set .@i,.@i+1) {
+		if (getareausers(.@map$,.@x[1],.@y[1],.@x[2],.@y[2]) < 1)
+			end;
+		sleep 1000;
+	}
+	if (getareausers(.@map$,.@x[1],.@y[1],.@x[2],.@y[2]) > 0)
+		donpcevent "#3rdgc_guardoff::OnDisable";
+	end;
+}
+job3_guil03,82,45,0	duplicate(#3rdgc_safezone01)	#3rdgc_safezone02	139,1,1
+job3_guil03,72,53,0	duplicate(#3rdgc_safezone01)	#3rdgc_safezone03	139,1,1
+
+job3_guil03,111,51,7	script	Priest from Rachel	928,{
+	if (!.on) end;
+	mes "[雷切爾的牧師]";
+	if (job_3rd_gc == 17) {
+		mes "您是刺客公會的嗎？";
+		next;
+		mes "[雷切爾的牧師]";
+		mes "我們組織解散的原因是因為你們。";
+		mes "你是一個徹底的人嗎？";
+		next;
+		mes "[雷切爾的牧師]";
+		mes "因為你，你毀了一切！";
+		setnpcdisplay(strnpcinfo(0),2030);
+		next;
+		mes "[雷切爾的牧師]";
+		mes "您想永遠摧毀我們！";
+		mes "我不能讓女神羞辱一個骯髒的奧丁！";
+		next;
+		mes "[雷切爾的牧師]";
+		mes "我永遠不會原諒你！";
+		mes "異教徒！正義會很快！";
+		donpcevent "Priest from Rachel::OnDisable";
+		monster "job3_guil03",111,51,"Priest from Rachel",2030,1,"Priest from Rachel::OnMyMobDead";
+		close;
+	}
+	mes "你是誰？";
+	mes "離開這裡。";
+	close2;
+	warp "ve_fild02",330,379;	//Pre-RE: ve_fild05 (341,303)
+	end;
+OnInit:
+OnDisable:
+	set .on,0;
+	hideonnpc "Priest from Rachel";
+	end;
+OnEnable:
+	set .on,1;
+	hideoffnpc "Priest from Rachel";
+	end;
+OnReset:
+	killmonster "job3_guil03","Priest from Rachel::OnMyMobDead";
+	end;
+OnMyMobDead:
+	donpcevent "Renzak#3rdgc16::OnEnable";
+	mapannounce "job3_guil03","I... I can't die in vain...",bc_map,"0xFF0000"; //FW_NORMAL 12 0 0
+	donpcevent "#3rdgc_event01::OnStop";
+	initnpctimer;
+	end;
+OnTimer3000:
+	mapannounce "job3_guil03","Renzak : Hey! Come out!",bc_map,"0x4d4dff"; //FW_NORMAL 12 0 0
+	end;
+OnTimer40000:
+	mapannounce "job3_guil03","Renzak : Don't lag!",bc_map,"0x4d4dff"; //FW_NORMAL 12 0 0
+	end;
+OnTimer60000:
+	mapwarp "job3_guil03","ve_fild02",330,379;	//Pre-RE: ve_fild05 (341,303)
+	end;
+OnTimer61000:
+	donpcevent "#3rdgc_guard::OnStop";
+	donpcevent "#3rdgc_guardoff::OnReset";
+	donpcevent "#3rdgc_hide01::OnStop";
+	donpcevent "#3rdgc_hide02::OnStop";
+	donpcevent "#3rdgc_hide03::OnStop";
+	donpcevent "#3rdgc_sunchal_kill01::OnStop";
+	donpcevent "#3rdgc_sunchal_kill02::OnStop";
+	donpcevent "#3rdgc_sunchal_kill03::OnStop";
+	donpcevent "#3rdgc_gojung_kill01::OnStop";
+	donpcevent "#3rdgc_gojung_kill02::OnStop";
+	donpcevent "#3rdgc_gojung_kill03::OnStop";
+	donpcevent "Guard Dog#dog01::OnReset";
+	donpcevent "Guard Dog#dog02::OnReset";
+	donpcevent "#3rdgc_sunchal_nomal::OnReset";
+	donpcevent "#3rdgc_sunchal_kill01::OnReset";
+	donpcevent "#3rdgc_sunchal_kill02::OnReset";
+	donpcevent "#3rdgc_sunchal_kill03::OnReset";
+	donpcevent "#3rdgc_gojung_kill01::OnReset";
+	donpcevent "#3rdgc_gojung_kill02::OnReset";
+	donpcevent "#3rdgc_gojung_kill03::OnReset";
+	donpcevent "Priest from Rachel::OnReset";
+	donpcevent "Barbed-Wire Entanglement::OnDisable";
+	donpcevent "Guard Dog#dog01::OnDisable";
+	donpcevent "Guard Dog#dog02::OnDisable";
+	donpcevent "#3rdgc_gojung_kill01::OnDisable";
+	donpcevent "#3rdgc_gojung_kill02::OnDisable";
+	donpcevent "#3rdgc_gojung_kill03::OnDisable";
+	donpcevent "Priest from Rachel::OnDisable";
+	donpcevent "Renzak#3rdgc16::OnDisable";
+	end;
+OnTimer61500:
+	donpcevent "#3rdgc_event01::OnEnable";
+	set $@3rdgc_room02, 0;
+	stopnpctimer;
+	end;
+}
+
+job3_guil03,146,70,3	script	Renzak#3rdgc16	466,{
+	mes "[倫扎克]";
+	if (checkquest(7110,HUNTING) == 2) {
+		mes "我的同齡人會來這裡解決這一事件。";
+		mes "去Mayshell進行報告。";
+		next;
+		mes "[倫扎克]";
+		if (checkquest(7110,PLAYTIME) == 0) {
+			mes "你很快完成。";
+			mes "好工作。";
+			set job_3rd_gc, 18;
+		} else {
+			mes "我告訴你，您必須在10分鐘內完成。";
+			mes "您可能會精疲力盡。";
+			mes "幸運的是你還可以。";
+			set job_3rd_gc, 19;
+		}
+		erasequest 7110;
+		setquest 7111;
+		close2;
+		warp "job3_guil01",51,50;
+		end;
+	}
+	mes "獲取目標！";
+	mes "實際上，我不應該在這裡。你有問題嗎？";
+	close;
+OnInit:
+	disablenpc "Renzak#3rdgc16";
+	end;
+OnEnable:
+	enablenpc "Renzak#3rdgc16";
+	end;
+OnDisable:
+	disablenpc "Renzak#3rdgc16";
+	end;
+}
+
+job3_guil01,148,53,3	script	Bercasell#3rdgc16	467,{
+	if (!checkweight(1201,2)) {
+		mes "- 您無法繼續此任務，因為您的項目太多。 -";
+		close;
+	}
+	mes "[貝爾卡塞爾]";
+	if (Class == Job_Assassin || Class == Job_Assassin_Cross || Class == Job_Baby_Assassin) {
+		if (job_3rd_gc == 20) {
+			if (JobLevel > 49 && SkillPoint == 0 && BaseLevel > 98) {
+				mes "我很累...";
+				mes "您是由Mayshell發送的嗎？";
+				mes "告訴我為什麼你來見我。";
+				next;
+				switch(select("什麼是斷頭台十字架？ :我想成為斷頭台十字架。 :什麼都沒有。")) {
+				case 1:
+					mes "[貝爾卡塞爾]";
+					mes "…………";
+					next;
+					mes "[貝爾卡塞爾]";
+					mes "所以您想知道斷頭台十字架嗎？";
+					mes "出去！";
+					next;
+					switch(select("告訴我吧……:……")) {
+					case 1:
+						mes "[貝爾卡塞爾]";
+						callsub L_Info;
+						mes "[貝爾卡塞爾]";
+						mes "我這樣和你說話很有趣。";
+						mes "我想阻止您由於您的反抗而成為斷頭台十字架。";
+						close;
+					case 2:
+						mes "[貝爾卡塞爾]";
+						mes "是的，您不問問題。";
+						mes "那挺好的。你有資格。那是斷頭台十字架呢？";
+						mes "您想成為斷頭台十字架嗎？";
+						next;
+						switch(select("是的，換工作。 :我需要考慮一下。")) {
+						case 1:
+							L_JobChange:
+							mes "[貝爾卡塞爾]";
+							mes "你不後悔嗎？";
+							callsub L_Info;
+							mes "[貝爾卡塞爾]";
+							mes "您可以成為一種活潑的進攻武器。";
+							mes "您真的想成為斷頭台十字架嗎？";
+							next;
+							switch(select("是的，換工作。 :我需要重新考慮。")) {
+							case 1:
+								mes "[貝爾卡塞爾]";
+								if (ismounting()) {
+									mes "我無法執行工作更改。";
+									mes "請卸下坐騎，然後重試。";
+									close;
+								} else if (SkillPoint != 0) {
+									mes "您仍然有無關緊要的技能點。";
+									mes "請使用您所有的技能點，然後重試。";
+									close;
+								}
+								mes "您的決定是決賽嗎？";
+								mes "好的。";
+								next;
+								mes "[貝爾卡塞爾]";
+								mes "現在，您是刺客，但您不再是刺客了。";
+								mes "您在陰影中，但與其他陰影不同。";
+								next;
+								mes "[貝爾卡塞爾]";
+								mes "您的敵人就是您所看到的一切。";
+								mes "不要忘記自己。";
+								mes "武器上的血液重量。";
+								next;
+								mes "[貝爾卡塞爾]";
+								mes "好的，將衣服換成新制服。";
+								mes "您現在是斷頭台十字架。";
+								next;
+								mes "[貝爾卡塞爾]";
+								mes "陰影的劍...";
+								setlook 7,0;
+								jobchange roclass(eaclass()|EAJL_THIRD);
+								if (checkquest(7096) == 1) {
+									set job_3rd_gc, 25;
+									erasequest 7096;
+								} else if (checkquest(7097) == 1) {
+									set job_3rd_gc, 26;
+									erasequest 7097;
+								} else if (checkquest(7098) == 1) {
+									set job_3rd_gc, 27;
+									erasequest 7098;
+								} else if (checkquest(7099) == 1) {
+									set job_3rd_gc, 28;
+									erasequest 7099;
+								}
+								getitem 2795,1; //Green_Apple_Ring
+								getitem 5755,1; //Silent_Executer
+								next;
+								mes "[貝爾卡塞爾]";
+								mes "而且...這些是慶祝您成為斷頭台十字架的禮物。";
+								close;
+							case 2:
+								mes "[貝爾卡塞爾]";
+								mes "你是審慎的。那是一件好事。";
+								mes "我將等待您決定加入我們的斷頭台十字架的那一天。";
+								close;
+							}
+						case 2:
+							mes "[貝爾卡塞爾]";
+							mes "你是審慎的。那是一件好事。";
+							mes "我將等待您決定加入我們的斷頭台十字架的那一天。";
+							close;
+						}
+					}
+				case 2:
+					goto L_JobChange;
+				case 3:
+					mes "[貝爾卡塞爾]";
+					mes "不要打擾我。";
+					close;
+				}
+			}
+			mes "......";
+			mes "我能為你做什麼？";
+			next;
+			switch(select("我想成為斷頭台:沒什麼。")) {
+			case 1:
+				mes "[貝爾卡塞爾]";
+				mes "你？";
+				mes "做什麼的...？";
+				mes "當然，您是憑自己的意志來到這裡的...";
+				next;
+				mes "[貝爾卡塞爾]";
+				mes "斷頭台十字架是刺客公會法律的執行者。";
+				mes "您可以在一個同齡人的後面放匕首嗎？";
+				next;
+				mes "[貝爾卡塞爾]";
+				mes "您還沒有準備好做...";
+				close;
+			case 2:
+				mes "[貝爾卡塞爾]";
+				mes "不要打擾我。";
+				close;
+			}
+		} else if (job_3rd_gc > 20) {
+			mes "不要只追求力量。";
+			mes "你會累。";
+			mes "這沒有比生活更好。";
+			mes "如果您只尋求權力...";
+			next;
+			mes "[貝爾卡塞爾]";
+			mes "總有一天，它會回到你身邊。";
+			mes "好吧，我只是一種武器，假設我無權談論生活...";
+			close;
+		} else {
+			mes "Daora怎麼了？";
+			mes "你為什麼在這裡？";
+			mes "我說你可以來這裡嗎？";
+			next;
+			mes "[貝爾卡塞爾]";
+			mes "還是Mayshell發送給您？";
+			mes "或什麼，你是我的粉絲？";
+			mes "您找到了錯誤的地方！";
+			next;
+			mes "[貝爾卡塞爾]";
+			mes "現在離開這裡！ ！ ！";
+			close;
+		}
+	} else if (Class == Job_Guillotine_Cross || Class == Job_Guillotine_Cross_T || Class == Job_Baby_Guillotine_Cross) {
+		mes "不要只追求力量。";
+		mes "你會累。";
+		mes "這沒有比生活更好。";
+		mes "如果您只尋求權力...";
+		next;
+		mes "[貝爾卡塞爾]";
+		mes "總有一天，它會回到你身邊。";
+		mes "好吧，我只是一種武器，假設我無權談論生活...";
+		close;
+	}
+	mes "什麼？";
+	mes "嘿，你不應該在這裡！";
+	mes "現在出去！";
+	close;
+
+L_Info:
+	mes "斷頭台十字架是執法者。";
+	mes "活著的進攻武器...";
+	next;
+	mes "[貝爾卡塞爾]";
+	mes "誰是刺客的自然敵人？";
+	mes "劍客？牧師？";
+	mes "嚮導？";
+	mes "邪惡的事物豐富嗎？";
+	next;
+	mes "[貝爾卡塞爾]";
+	mes "不，刺客的自然敵人是其他刺客。";
+	mes "對我們來說，最有威脅性的是我們。";
+	next;
+	mes "[貝爾卡塞爾]";
+	mes "在公會的黑暗中，在陰影中，我們是斷頭台十字架。";
+	mes "我們在刺客公會內維護法律和秩序。";
+	next;
+	mes "[貝爾卡塞爾]";
+	mes "有時我們為同齡人設定了例子，有時我們以公會的名義將劍瞄准我們的脖子。";
+	mes "我們是斷頭台十字架，刺客公會的劍。";
+	next;
+	mes "[貝爾卡塞爾]";
+	mes "我們有技巧可以找到在黑暗中的成員，而您太急躁了。";
+	next;
+	mes "[貝爾卡塞爾]";
+	mes "我們具有高級的戰鬥技能。";
+	next;
+	return;
+}
+
+// Warp Portals
+//============================================================
+job3_guil01,80,77,0	script	#gate_to_guil05	45,1,1,{
+	end;
+OnTouch:
+	if (job_3rd_gc > 3)
+		warp "job3_guil01",60,50;
+	else {
+		mes "[親愛的]";
+		mes "嘿！";
+		mes "沒有侵入！";
+		close;
+	}
+	end;
+}
+job3_guil01,51,55,0	script	#gate_to_guil07	45,1,1,{
+	end;
+OnTouch:
+	if (job_3rd_gc == 4 || job_3rd_gc == 14 || job_3rd_gc > 17)
+		warp "job3_guil01",12,7;
+	else {
+		mes "[----------------------------------------]";
+		mes "沒有侵入";
+		mes "允許。";
+		mes "我不是";
+		mes "慷慨的人。";
+		mes "- 梅謝爾";
+		mes "[----------------------------------------]";
+		close;
+	}
+	end;
+}
+job3_guil01,51,44,0	script	#gate_to_guil09	45,1,1,{
+	end;
+OnTouch:
+	if (job_3rd_gc == 11 || job_3rd_gc == 12)
+		warp "job3_guil01",79,23;
+	else if (job_3rd_gc > 19)
+		warp "job3_guil01",144,57;
+	else {
+		mes "您無事可做。";
+		close;
+	}
+	end;
+}
+
+job3_guil02,1,3,0	script	#GMhelper01_gc	844,{
+	callfunc "F_GM_NPC";
+	mes "我能為你做什麼？";
+	next;
+	if (callfunc("F_GM_NPC",1854,0) == 1) {
+		set .@room01, $@3rdgc_room01;
+		mes "我檢查了最近的情況。";
+		mes "存儲的戰斗狀況："+.@room01+"";
+		mes "1：正在進行。 0：待機狀態。";
+		next;
+		switch(select("重置存儲情況:停止。")) {
+		case 1:
+			mes "您想重置存儲情況嗎？";
+			mes "請檢查內部是否有一個人。";
+			next;
+			switch(select("編號:重置。")) {
+			case 1:
+				mes "我什麼也沒做。";
+				close;
+			case 2:
+				mes "重置存儲情況。";
+				donpcevent "Dandelion#3rdgc12::OnDisable";
+				donpcevent "A man with black clothes::OnDisable";
+				donpcevent "#3rdgc_room01_mag01::OnEnable";
+				set $@3rdgc_room01, 0;
+				next;
+				mes "完成重置。";
+				close;
+			}
+		case 2:
+			mes "豪宅的管理是在豪宅中。";
+			close;
+		}
+	} else {
+		mes "-_-。";
+		close;
+	}
+}
+
+job3_guil03,1,8,0	script	#GMhelper02_gc	844,{
+	callfunc "F_GM_NPC";
+	mes "我能為你做什麼？";
+	next;
+	if (callfunc("F_GM_NPC",1854,0) == 1) {
+		set .@room02, $@3rdgc_room02;
+		mes "檢查最近的情況。";
+		mes "豪宅的戰斗狀況是："+.@room02+"";
+		mes "1：正在進行。 0：待機狀態。";
+		next;
+		switch(select("重置豪宅:停下來。")) {
+		case 1:
+			mes "您想重置豪宅嗎？";
+			mes "完工後，所有內部的球員都將被開除。";
+			next;
+			switch(select("編號:重置。")) {
+			case 1:
+				mes "我什麼都沒有。";
+				close;
+			case 2:
+				mes "重置豪宅。";
+				donpcevent "#3rdgc_guard::OnStop";
+				donpcevent "#3rdgc_guardoff::OnReset";
+				donpcevent "#3rdgc_hide01::OnStop";
+				donpcevent "#3rdgc_hide02::OnStop";
+				donpcevent "#3rdgc_hide03::OnStop";
+				donpcevent "#3rdgc_sunchal_kill01::OnStop";
+				donpcevent "#3rdgc_sunchal_kill02::OnStop";
+				donpcevent "#3rdgc_sunchal_kill03::OnStop";
+				donpcevent "#3rdgc_gojung_kill01::OnStop";
+				donpcevent "#3rdgc_gojung_kill02::OnStop";
+				donpcevent "#3rdgc_gojung_kill03::OnStop";
+				donpcevent "Guard Dog#dog01::OnReset";
+				donpcevent "Guard Dog#dog02::OnReset";
+				donpcevent "#3rdgc_sunchal_nomal::OnReset";
+				donpcevent "#3rdgc_sunchal_kill01::OnReset";
+				donpcevent "#3rdgc_sunchal_kill02::OnReset";
+				donpcevent "#3rdgc_sunchal_kill03::OnReset";
+				donpcevent "#3rdgc_gojung_kill01::OnReset";
+				donpcevent "#3rdgc_gojung_kill02::OnReset";
+				donpcevent "#3rdgc_gojung_kill03::OnReset";
+				donpcevent "Priest from Rachel::OnReset";
+				donpcevent "Barbed-Wire Entanglement::OnDisable";
+				donpcevent "Guard Dog#dog01::OnDisable";
+				donpcevent "Guard Dog#dog02::OnDisable";
+				donpcevent "#3rdgc_gojung_kill01::OnDisable";
+				donpcevent "#3rdgc_gojung_kill02::OnDisable";
+				donpcevent "#3rdgc_gojung_kill03::OnDisable";
+				donpcevent "Priest from Rachel::OnDisable";
+				donpcevent "Renzak#3rdgc16::OnDisable";
+				next;
+				mes "在內部完成一個NPC的重置。";
+				mes "整體var是組織的。";
+				mes "我們開始用武力驅逐。";
+				mes "立即放入輸入按鈕。";
+				donpcevent "#3rdgc_event01::OnEnable";
+				set $@3rdgc_room02, 0;
+				close2;
+				mapwarp "job3_guil03","ve_fild02",330,379;	//Pre-RE: ve_fild05 (341,303)
+				end;
+			}
+		case 2:
+			mes "存儲的管理在存儲中。";
+			close;
+		}
+	} else {
+		mes "-_-。";
+		close;
+	}
+}

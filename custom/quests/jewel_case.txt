@@ -1,0 +1,66 @@
+﻿//===== rAthena Script =======================================
+//= Jewel Case Quest
+//===== By: ==================================================
+//= Lupus
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= A quest for players at base level 99,
+//= with Jewel Case as a reward.
+//===== Additional Comments: =================================
+//= 1.0 First Version.
+//============================================================
+
+lighthalzen,108,229,2	script	La Fenn	766,{
+	mes "[拉芬]";
+	if(BaseLevel<99) {
+		if(Q_99LVL) {
+			mes "你...你很年輕！ ！ ！但是你絕對是你！";
+			mes "我覺得你能夠滿足我的狀況...";
+			emotion ET_SCRATCH;
+			next;
+			mes "[拉芬]";
+			mes "這是您的獎品。永遠是你的。";
+			set Q_99LVL,0;
+			getitem 12106,1; //Jewel Case
+			emotion ET_CONGRATULATION;
+		} else {
+			mes callfunc("f_hi");
+			mes "...";
+			emotion ET_SLEEPY;
+			next;
+			mes "[拉芬]";
+			mes "我有一個二等班的堅強男子和99個基礎水平的謎語。";
+			mes "*打哈欠*如果您遇到了一些，請告訴他們我的謎語。";
+		}
+		close;
+	}
+	if(BaseLevel==99 && Upper==0) {
+		if(Q_99LVL) {
+			mes "現在去年輕！";
+			mes "如果您解決了我的謎語，那麼我會給您一個帶有稀有配件的神奇寶石盒。";
+		} else {
+			mes callfunc("f_hi")+" The Hero!";
+			if(BaseExp<1000000) {
+				mes "現在你很堅強。";
+				mes "但是...對我的謎語不強。";
+				if(rand(2)) {
+					mes "殺"+((1000000-BaseExp)/3765+1)+" more Seals and return.";
+				} else {
+					mes "殺"+((1000000-BaseExp)/81+1)+" more Poporings and come back.";
+				}
+			} else {
+				mes "現在你真的很堅強。";
+				mes "如果您比現在年輕，我會給您我的寶藏。";
+				set Q_99LVL,1;
+				emotion ET_BEST;
+			}
+		}
+		close;
+	}
+	emotion ET_SCRATCH;
+	mes "...";
+	close;
+}

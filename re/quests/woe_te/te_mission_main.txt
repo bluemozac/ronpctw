@@ -1,0 +1,568 @@
+﻿//===== rAthena Script =======================================
+//= Mission WoE TE
+//===== Description: =========================================
+//= [Official Conversion]
+//= Template for mission WoE TE
+//===== Changelogs: ==========================================
+//= 1.0 First Version. [Capuche]
+//============================================================
+
+// This npc call the duplicate of pop_mission_TE npc in order to spawn the mobs mission.
+-	script	#popswitch	-1,{
+OnInit:
+	if (strnpcinfo(4) == "") end;
+	if (agitcheck3() == 1)
+		donpcevent strnpcinfo(0) + "::OnCommandOn";
+	else
+		donpcevent strnpcinfo(0) + "::OnReset";
+	end;
+
+OnCommandOn:
+	.@map$ = strnpcinfo(4);
+	if (compare( .@map$,"te_alde" ))
+		callsub S_Event, "alde0"+ charat( .@map$,getstrlen(.@map$)-1 ) + "::OnCommandOn";// #popa_alde0[1-5]::OnCommandOn
+	else
+		callsub S_Event, "prt0"+ charat( .@map$,getstrlen(.@map$)-1 ) + "::OnCommandOn";
+	end;
+
+OnReset:
+	.@map$ = strnpcinfo(4);
+	if (compare( .@map$,"te_alde" ))
+		callsub S_Event, "alde0"+ charat( .@map$,getstrlen(.@map$)-1 ) + "::OnReset";
+	else
+		callsub S_Event, "prt0"+ charat( .@map$,getstrlen(.@map$)-1 ) + "::OnReset";
+	end;
+
+S_Event:
+	.@string$ = getarg(0);
+	donpcevent "#popa_"+ .@string$;
+	donpcevent "#popb_"+ .@string$;
+	donpcevent "#popc_"+ .@string$;
+	donpcevent "#popd_"+ .@string$;
+	end;
+}
+
+-	script	pop_mission_TE	-1,{
+OnMyMobDead:
+	.@map$ = strnpcinfo(4);
+	if (mobcount( .@map$,strnpcinfo(0) +"::OnMyMobDead" ) < 1 && playerattached()) {// playerattached stop the script if killmonster / maprespawnguildid
+		callsub S_Coord, .@item_id, .@mob_id, .@coord;
+		for ( .@mtem = 0; .@mtem < 20; .@mtem++ )
+			makeitem .@item_id,1, .@map$, rand( .@coord[0],.@coord[1] ), rand( .@coord[2],.@coord[3] );
+		initnpctimer;
+	}
+	end;
+
+OnTimer12000:
+	stopnpctimer;
+OnCommandOn:
+	callsub S_Coord, .@item_id, .@mob_id, .@coord;
+	monster strnpcinfo(4), rand( .@coord[0],.@coord[1] ), rand( .@coord[2],.@coord[3] ),"--ja--",.@mob_id,1,strnpcinfo(0) + "::OnMyMobDead";
+	end;
+
+OnReset:
+	killmonster strnpcinfo(4),strnpcinfo(0) +"::OnMyMobDead";
+	stopnpctimer;
+	end;
+
+S_Coord:
+	if (compare( strnpcinfo(4),"te_alde" )) {
+		set getarg(0), 7056;// Payroll_Of_Kafra
+		set getarg(1), 2450;// THIEF_PORING
+		.@hidden_name$ = strnpcinfo(2);
+
+		if (.@hidden_name$ == "popa_alde01") setarray .@coord[0],178,234, 128,175;// area x1,x2, y1,y2
+		else if (.@hidden_name$ == "popb_alde01") setarray .@coord[0],14,65, 186,222;
+		else if (.@hidden_name$ == "popc_alde01") setarray .@coord[0],46,114, 37,105;
+		else if (.@hidden_name$ == "popd_alde01") setarray .@coord[0],198,233, 5,41;
+		else if (.@hidden_name$ == "popa_alde02") setarray .@coord[0],29,73, 169,211;
+		else if (.@hidden_name$ == "popb_alde02") setarray .@coord[0],175,220, 136,184;
+		else if (.@hidden_name$ == "popc_alde02") setarray .@coord[0],196,231, 7,40;
+		else if (.@hidden_name$ == "popd_alde02") setarray .@coord[0],53,125, 11,80;
+		else if (.@hidden_name$ == "popa_alde03") setarray .@coord[0],43,107, 212,264;
+		else if (.@hidden_name$ == "popb_alde03") setarray .@coord[0],181,215, 150,187;
+		else if (.@hidden_name$ == "popc_alde03") setarray .@coord[0],59,121, 63,123;
+		else if (.@hidden_name$ == "popd_alde03") setarray .@coord[0],192,215, 24,51;
+		else if (.@hidden_name$ == "popa_alde04") setarray .@coord[0],154,189, 34,101;
+		else if (.@hidden_name$ == "popb_alde04") setarray .@coord[0],21,76, 64,125;
+		else if (.@hidden_name$ == "popc_alde04") setarray .@coord[0],120,143, 200,219;
+		else if (.@hidden_name$ == "popd_alde04") setarray .@coord[0],13,37, 199,222;
+		else if (.@hidden_name$ == "popa_alde05") setarray .@coord[0],145,207, 47,78;
+		else if (.@hidden_name$ == "popb_alde05") setarray .@coord[0],13,43, 87,116;
+		else if (.@hidden_name$ == "popc_alde05") setarray .@coord[0],11,63, 177,230;
+		else if (.@hidden_name$ == "popd_alde05") setarray .@coord[0],130,167, 191,225;
+	}
+	else {
+		set getarg(0), 6592;// Small_Wooden_Chest
+		set getarg(1), 2451;// BABY_STRANGE
+		.@hidden_name$ = strnpcinfo(2);
+
+		if (.@hidden_name$ == "popa_prt01") setarray .@coord[0],10,90, 10,80;
+		else if (.@hidden_name$ == "popb_prt01") setarray .@coord[0],146,190, 64,118;
+		else if (.@hidden_name$ == "popc_prt01") setarray .@coord[0],92,128, 170,204;
+		else if (.@hidden_name$ == "popd_prt01") setarray .@coord[0],188,204, 180,204;
+		else if (.@hidden_name$ == "popa_prt02") setarray .@coord[0],15,95, 162,225;
+		else if (.@hidden_name$ == "popb_prt02") setarray .@coord[0],144,172, 152,175;
+		else if (.@hidden_name$ == "popc_prt02") setarray .@coord[0],43,99, 23,62;
+		else if (.@hidden_name$ == "popd_prt02") setarray .@coord[0],168,204, 24,58;
+		else if (.@hidden_name$ == "popa_prt03") setarray .@coord[0],7,76, 48,110;
+		else if (.@hidden_name$ == "popb_prt03") setarray .@coord[0],160,204, 32,81;
+		else if (.@hidden_name$ == "popc_prt03") setarray .@coord[0],138,190, 183,232;
+		else if (.@hidden_name$ == "popd_prt03") setarray .@coord[0],8,36, 202,227;
+		else if (.@hidden_name$ == "popa_prt04") setarray .@coord[0],246,270, 233,275;
+		else if (.@hidden_name$ == "popb_prt04") setarray .@coord[0],14,53,236,273;
+		else if (.@hidden_name$ == "popc_prt04") setarray .@coord[0],13,96, 12,63;
+		else if (.@hidden_name$ == "popd_prt04") setarray .@coord[0],259,283, 14,35;
+		else if (.@hidden_name$ == "popa_prt05") setarray .@coord[0],17,95, 226,281;
+		else if (.@hidden_name$ == "popb_prt05") setarray .@coord[0],243,287, 243,288;
+		else if (.@hidden_name$ == "popc_prt05") setarray .@coord[0],16,66, 17,60;
+		else if (.@hidden_name$ == "popd_prt05") setarray .@coord[0],205,282, 12,93;
+	}
+	for ( .@i = 0; .@i < 4; .@i++ )
+		set getelementofarray( getarg(2),.@i ), .@coord[.@i];
+	return;
+}
+
+
+-	script	Training_Instructor_TE	-1,{
+	if (checkweight(1201,5) == 0) {
+		mes "您有太多的項目可以進行任務。";
+		mes "請減輕您的負載，然後重試。";
+		close;
+	}
+	.@map$ = strnpcinfo(4);
+	if (.@map$ == "te_alde_gld") {
+		.@npc_name$ = "Mana";
+		.@fortress$ = "Kafragarten";
+		.@menu$ = callsub( S_Menu, .@quest_id,
+			7510,"1 Suspicious Poring",
+			7511,"10 Suspicious Poring",
+			7512,"30 Suspicious Poring",
+			7504,"Destroy 1 Emperium",
+			7505,"Destroy 3 Emperiums",
+			7506,"Destroy 5 Emperiums",
+			7513,"10 Kafra's Paychecks",
+			7514,"20 Kafra's Paychecks",
+			7515,"30 Kafra's Paychecks" );
+	}
+	else {
+		.@npc_name$ = "Rune";
+		.@fortress$ = "Gloria";
+		.@menu$ = callsub( S_Menu, .@quest_id,
+			7501,"1 Suspicious Babee",
+			7502,"10 Suspicious Babee",
+			7503,"30 Suspicious Babee",
+			7504,"Destroy 1 Emperium",
+			7505,"Destroy 3 Emperiums",
+			7506,"Destroy 5 Emperiums",
+			7507,"10 Small Wooden Boxes",
+			7508,"20 Small Wooden Boxes",
+			7509,"30 Small Wooden Boxes" );
+	}
+	mes "["+ .@npc_name$ +"]";
+	if (jobcanentermap("te_prtcas01") == 0) {
+		mes "啊...你...";
+		mes "基於TE規則，不幸的是，我不會訂購您或要求您的幫助。";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "嘿，現在，由於這個地方僅適用於小學和次要工作類別以及沒有擴展級別的用戶，如果您在這裡無事可做，您可以離開嗎？";
+		close;
+	}
+	mes "您可以在TE地區完成一些任務。";
+	mes "讓我們看看，您想要什麼？";
+	next;
+	switch( select( "Accept/Conform Missions", "What do you mean a mission?", "I don't have any." ) ) {
+	case 1:
+		mes "["+ .@npc_name$ +"]";
+		if (BaseLevel < 70) {
+			mes "MM，很抱歉，但任務適用於 ^4D4DFF70級 ^000000或更高的用戶。";
+			mes "老實說，如果您的水平太低，很難完成任務。";
+			close;
+		}
+		.@time_check = WoeTETimeStart(3600);
+		.@siege_check = agitcheck3();
+		mes "您已經知道您必須在一定時間內接受任務，對嗎？";
+		if (.@time_check == 1 || .@siege_check == 1)
+			mes "此外，您必須記住，如果它們的內容相同，則不能同時接受高級和低級任務。";
+		else {
+			mes "不幸的是，您現在不能接受任務。";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			.@playtime_check2 = checkquest(7516,PLAYTIME);// A Break for Commercial Development
+			if (.@playtime_check2 == 2) {
+				erasequest 7516;
+				mes "嗯，你休息一下嗎？";
+				mes "好吧，這已經不再重要了。";
+			}
+			mes "您只能檢查已經接受的任務的結果。";
+		}
+		next;
+		.@s = select( .@menu$ + "Cancel" ) -1;
+		mes "["+ .@npc_name$ +"]";
+		if (.@s == 9) {
+			mes "稍後再見。";
+			close;
+		}
+
+		.@main_quest = .@quest_id[.@s];
+		deletearray .@quest_id[.@s],1;
+		.@mission01 = isbegin_quest(.@main_quest);
+		.@playtime_check = checkquest(.@main_quest,PLAYTIME);
+		.@hunting_check = checkquest(.@main_quest,HUNTING);
+
+		.@index = (.@s/3) *3;
+		.@mission02 = isbegin_quest(.@quest_id[.@index]);
+		.@mission03 = isbegin_quest(.@quest_id[.@index+1]);
+
+		if (.@s == 0 || .@s == 1 || .@s == 2) {// Hunting suspicious quest
+			if (.@map$ == "te_alde_gld")
+				setarray .@mob_name$[0],"Porings","suspicious Porings";
+			else
+				setarray .@mob_name$[0],"Orc Babies","suspicious creatures";
+
+			if (.@s == 0)
+				.@num_kill = 1;
+			else if (.@s == 1) {
+				.@num_tool_box = 2;
+				.@num_kill = 10;
+				setarray .@reward[0],12873,2;
+				setarray .@exp[0],20000,10000;
+			}
+			else if (.@s == 2) {
+				.@num_tool_box = 3;
+				.@num_kill = 30;
+				setarray .@reward[0],12873,3;
+				setarray .@exp[0],30000,15000;
+			}
+
+			if (.@mission01 == 1) {
+				if (.@playtime_check == 0) {
+					if (.@hunting_check == 2) {
+						mes "你及時做到了。";
+						mes "我不明白為什麼"+ .@mob_name$[0] +" appear at that time of the day.";
+						mes "無論如何，幹得好。";
+						if (.@num_tool_box == 0) {
+							erasequest .@main_quest;
+							getitem 11558,5;// TE_White_Slim_Potion
+							getexp 5000,2500;
+							close;
+						}
+						next;
+						mes "["+ .@npc_name$ +"]";
+						mes "由於您做得很好，我會讓您打開我的工具箱" + .@num_tool_box + " times.";
+						mes "雖然您不會發現任何東西...";
+						mes "這是一個獎勵，所以即使您什麼都沒有，也不要抱怨。";
+						next;
+						mes "一樣"+ .@npc_name$ +" said, you went through the box in front, and...";
+						erasequest .@main_quest;
+						getitem .@reward[0],.@reward[1];
+						getexp .@exp[0],.@exp[1];
+						callsub( S_Rentbox, .@num_tool_box );
+					}
+					callsub( S_Cancelquest, .@main_quest, .@npc_name$, "This mission is to eliminate "+ .@mob_name$[1] +" that secretly appear at the fortress in "+ .@fortress$ +"." );
+				}
+				mes "時間到了。";
+				mes "不幸的是，任務失敗了！";
+				mes "下一次吧！";
+				erasequest .@main_quest;
+				close;
+			}
+			if (.@time_check != 1 && .@siege_check != 1) {
+				mes "您目前沒有執行此任務。";
+				mes "你能再次檢查嗎？";
+				close;
+			}
+			if (.@mission02 == 1 || .@mission03 == 1) {
+				if (.@num_tool_box == 0) {
+					mes "您已經處於高級任務！";
+					mes "如果您已經執行相同內容的高級任務，則不能接受低級任務！";
+				}
+				else {
+					mes "您已經處於淘汰任務！";
+					mes "我希望您照顧您已經擁有的東西，除非您想取消它。";
+				}
+				next;
+				mes "["+ .@npc_name$ +"]";
+				mes "這只有這樣有意義，不是嗎？";
+				mes "你不這麼認為嗎？";
+				close;
+			}
+			mes "有人告訴我"+ .@mob_name$[1] +" appear during the busy siege hours at the fortress in "+ .@fortress$ +".";
+			mes "我希望你能 ^4d4dffeliminate"+ .@num_kill +" or more of "+ .@mob_name$[1] +"^000000.";
+			callsub( S_Acceptquest, .@main_quest, .@npc_name$ );
+		}
+		else if (.@s == 3 || .@s == 4 || .@s == 5) {// Breaking Emperiums
+			if (.@s == 3) {
+				.@num_tool_box = 1;
+				.@num_kill = 1;
+				setarray .@reward[0],12873,3;
+				setarray .@exp[0],30000,10000;
+			}
+			else if (.@s == 4) {
+				.@num_tool_box = 3;
+				.@num_kill = 3;
+				setarray .@reward[0],12873,9;
+				setarray .@exp[0],90000,30000;
+			}
+			else if (.@s == 5) {
+				.@num_tool_box = 5;
+				.@num_kill = 5;
+				setarray .@reward[0],12873,15;
+				setarray .@exp[0],150000,50000;
+			}
+			if (.@mission01 == 1) {
+				if (.@playtime_check == 0) {
+					if (.@hunting_check == 2) {
+						mes "極好的！";
+						mes "打破皇帝絕對不是一件容易的事。";
+						mes "您必須為您的公會做出很多貢獻。好工作！";
+						next;
+						mes "["+ .@npc_name$ +"]";
+						mes "由於您做得很好，我會讓您打開我的工具箱"+ .@num_tool_box +" times.";
+						mes "雖然您不會發現任何東西...";
+						mes "這是一個獎勵，所以即使您什麼都沒有，也不要抱怨。";
+						next;
+						mes "一樣"+ .@npc_name$ +" said, you went through the box in front, and...";
+						erasequest .@main_quest;
+						setquest 7516;
+						getitem .@reward[0],.@reward[1];
+						getexp .@exp[0],.@exp[1];
+						callsub( S_Rentbox, .@num_tool_box );
+					}
+					callsub( S_Cancelquest, .@main_quest, .@npc_name$, "This mission is to ^4d4dff destroy Emperiums that exist all over Gloria and Kafragarten regions.^000000" );
+				}
+				mes "時間到了。";
+				mes "不幸的是，任務失敗了！";
+				mes "下一次吧！";
+				erasequest .@main_quest;
+				close;
+			}
+			if (.@time_check != 1 && .@siege_check != 1) {
+				mes "您目前沒有執行此任務。";
+				mes "你能再次檢查嗎？";
+				close;
+			}
+			if (.@mission02 == 1 || .@mission03 == 1) {
+				mes "您已經在執行相同內容的任務，";
+				mes "級別不同";
+				mes "我希望您照顧您已經擁有的東西，除非您想取消它。";
+				next;
+				mes "["+ .@npc_name$ +"]";
+				mes "這只有這樣有意義，不是嗎？";
+				mes "你不這麼認為嗎？";
+				close;
+			}
+			.@playtime_check2 = checkquest(7516,PLAYTIME);
+			if (.@playtime_check2 == 0) {
+				mes "每個要塞中都有所謂的“商業發展水平”。";
+				mes "它增加了每個公會的投資。";
+				next;
+				mes "["+ .@npc_name$ +"]";
+				mes "但是，這與皇帝密切相關。";
+				mes "毀滅皇帝一再停滯商業發展水平。";
+				next;
+				mes "["+ .@npc_name$ +"]";
+				mes "因此，現在我們休息一下，以防止商業發展水平過多下降。";
+				mes "一點點見。";
+				close;
+			}
+			else if (.@playtime_check2 == 2) {
+				erasequest 7516;
+				mes "堡壘的商業發展的休息現在已經結束。";
+				mes "好的。想想您想要什麼樣的任務，然後再次回來。";
+				close;
+			}
+			mes "圍困戰鬥中最重要的是什麼？";
+			mes "它正在破壞皇帝！讓我給你摧毀帝國的確切任務！";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "格洛里亞（Gloria）或kafragarten，無論身在何處！現在，在這個小時， ^4d4dffdestroy Emperiums！ ^000000";
+			mes "^4d4dfftarget編號是"+ .@num_kill +" or more!^000000";
+			callsub( S_Acceptquest, .@main_quest, .@npc_name$ );
+		}
+		else if (.@s == 6 || .@s == 7 || .@s == 8) {
+			if (.@map$ == "te_alde_gld") {
+				.@item_quest = 7056;// Payroll_Of_Kafra
+				setarray .@string$[0], "paychecks", "I don't understand why Porings would steal Kafra's Paychecks", "Kafra's stolen paychecks";
+			}
+			else {
+				.@item_quest = 6592;// Small_Wooden_Chest
+				setarray .@string$[0], "wooden boxes", "So, those Orc Babies were after this, huh?", "wooden boxes";
+			}
+			if (.@s == 6) {
+				.@num_tool_box = 1;
+				.@num_items = 10;
+				setarray .@reward[0],12873,1;
+				setarray .@exp[0],10000,5000;
+			}
+			else if (.@s == 7) {
+				.@num_tool_box = 2;
+				.@num_items = 20;
+				setarray .@reward[0],12873,2;
+				setarray .@exp[0],20000,10000;
+			}
+			else if (.@s == 8) {
+				.@num_tool_box = 3;
+				.@num_items = 30;
+				setarray .@reward[0],12873,3;
+				setarray .@exp[0],30000,15000;
+			}
+
+			if (.@mission01 == 1) {
+				if (.@playtime_check == 0) {
+					if (countitem(.@item_quest) > 9) {
+						mes .@num_items +"或更多"+ .@string$[0] +" let's see you've done it right.";
+						mes .@string$[1];
+						mes "無論如何，幹得好。";
+						next;
+						mes "["+ .@npc_name$ +"]";
+						mes "讓我拿起其餘的"+ .@string$[0] +".";
+						mes "我將其退還給其原始所有者。";
+						next;
+						mes "["+ .@npc_name$ +"]";
+						mes "由於您做得很好，我會讓您打開我的工具箱"+ .@num_tool_box +" times.";
+						mes "雖然您不會發現任何東西...";
+						mes "這是一個獎勵，所以即使您什麼都沒有，也不要抱怨。";
+						next;
+						mes "一樣"+ .@npc_name$ +" said, you went through the box in front, and...";
+						delitem .@item_quest, countitem(.@item_quest);
+						erasequest .@main_quest;
+						getitem .@reward[0],.@reward[1];
+						getexp .@exp[0],.@exp[1];
+						callsub( S_Rentbox, .@num_tool_box );
+					}
+					callsub( S_Cancelquest, .@main_quest, .@npc_name$, "This mission is to ^4d4dffcollect "+ .@string$[2] +"^000000 at the fortress in "+ .@fortress$ +"." );
+				}
+				mes "時間到了。";
+				mes "不幸的是，任務失敗了！";
+				mes "下一次吧！";
+				erasequest .@main_quest;
+				close;
+			}
+			if (.@time_check != 1 && .@siege_check != 1) {
+				mes "您目前沒有執行此任務。";
+				mes "你能再次檢查嗎？";
+				close;
+			}
+			if (.@mission02 == 1 || .@mission03 == 1) {
+				mes "您已經在執行相同內容的任務，";
+				mes "級別不同";
+				mes "我希望您照顧您已經擁有的東西，除非您想取消它。";
+				next;
+				mes "["+ .@npc_name$ +"]";
+				mes "這只有這樣有意義，不是嗎？";
+				mes "你不這麼認為嗎？";
+				close;
+			}
+			mes "嗯，您不會相信，但是此任務與盜竊有關。";
+			mes "他們告訴我一堆"+ .@string$[2] +" is missing from the fortress in "+ .@fortress$ +".";
+			next;
+			mes "["+ .@npc_name$ +"]";
+			mes "小偷可能利用了攻城時間。";
+			mes "這是找到 ^4D4DFF的請求"+ .@num_items +" or more of "+ .@string$[2] +"^000000.";
+			callsub( S_Acceptquest, .@main_quest, .@npc_name$ );
+		}
+	case 2:
+		mes "["+ .@npc_name$ +"]";
+		mes "由於TE地區的氛圍更多，";
+		mes "只是做攻城鬥爭，這並不有趣，對嗎？";
+		mes "因此，我帶來了 ^4d4dffsome的作品，您可以在攻城時間 ^000000~";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "您可以接受任務 ^4D4DFFFSTART，從圍困開始前的1小時，直到圍困戰的結束，";
+		mes "每個任務都有 ^4D4DFFA 4小時的時間限制 ^000000用於完成。";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "簡而言之，您在攻城時間接受我的任務，";
+		mes "^4d4dffcome回給我時間限制^000000。";
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "嘗試一下。";
+		close;
+	case 3:
+		mes "["+ .@npc_name$ +"]";
+		mes "我懂了。";
+		mes "如果您改變主意，隨時回來。";
+		mes "不過，我可能沒有。呵呵。";
+		close;
+	}
+
+S_Cancelquest:
+	.@npc_name$ = getarg(1);
+	if (WoeTETimeStart(3600) == 1 || agitcheck3()) {
+		mes "似乎您還沒有完成任務嗎？";
+		mes getarg(2);
+		next;
+		mes "["+ .@npc_name$ +"]";
+		mes "您想取消任何機會嗎？";
+		next;
+		switch( select( "No.","Yes." ) ) {
+		case 1:
+			mes "["+ .@npc_name$ +"]";
+			mes "祝你好運！";
+			close;
+		case 2:
+			mes "["+ .@npc_name$ +"]";
+			mes "您想要的是，此任務被取消。";
+			erasequest getarg(0);
+			close;
+		}
+	}
+	else {
+		mes "嗯，您還有一些時間，但這還不是攻城小時";
+		mes "我認為你不應該繼續。";
+		mes "您應該取消此任務。我會說這是失敗的。";
+		next;
+		switch( select( "I would like to go on.","Yes, I'll cancel it." ) ) {
+		case 1:
+			mes "["+ .@npc_name$ +"]";
+			mes "我認為這是不值得的。好吧，祝你好運！";
+			close;
+		case 2:
+			mes "["+ .@npc_name$ +"]";
+			mes "您想要的是，此任務被取消。";
+			erasequest getarg(0);
+			close;
+		}
+	}
+
+S_Acceptquest:
+	.@npc_name$ = getarg(1);
+	next;
+	switch( select( "Accept it.","Do not accept it." ) ) {
+	case 1:
+		mes "["+ .@npc_name$ +"]";
+		mes "^4D4DFF時間限制為4小時。 ^000000";
+		mes "在那個時候完成任務並向我報告。";
+		setquest getarg(0);
+		close;
+	case 2:
+		mes "["+ .@npc_name$ +"]";
+		mes "然後嘗試另一個任務。";
+		close;
+	}
+
+S_Rentbox:
+	setarray .@item_id[0], 2950,15067,20709,22012;// Rune_Ring, Rune_Suit, Mana_Manteau, Mana_Boots
+	for ( .@count = 0; .@count < getarg(0); .@count++ ) {
+		.@miss_item01 = rand(100);
+		if (.@miss_item01 > 3)
+			mes "您什麼都沒找到。";
+		else {
+			rentitem .@item_id[ .@miss_item01 ],86400;
+			mes "你發現'"+ getitemname(.@item_id[ .@miss_item01 ]) +" !'";
+		}
+	}
+	close;
+
+S_Menu:
+	for ( .@i = 1; .@i < getargcount(); .@i += 2 ) {
+		if ( isbegin_quest(getarg(.@i)) )
+			.@menu$ = .@menu$ + getarg(.@i+1) + " ^4d4dffCheck the result^000000:";
+		else
+			.@menu$ = .@menu$ + getarg(.@i+1) + ":";
+		set getelementofarray( getarg(0),.@index ), getarg(.@i);
+		.@index++;
+	}
+	return .@menu$;
+}

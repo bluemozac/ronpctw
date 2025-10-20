@@ -1,0 +1,605 @@
+﻿//===== rAthena Script =======================================
+//= 2012 Headgear Quests
+//===== By: ==================================================
+//= Euphy, -SkittleNugget-
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Enhance gears by synthesizing them with Energy Crystals.
+//===== Additional Comments: =================================
+//= 1.0 First version. [Euphy]
+//=     Script is a little messy, could use some cleaning.
+//============================================================
+
+// Main NPC :: 2012_hat_quest
+//============================================================
+moc_para01,41,169,3	script	Reno#2012hat	64,{
+
+	// iRO has (very) minor differences in dialogue from the original script.
+	// To use iRO's version, uncomment the line below.
+	//set .@features_iRO,1;
+
+	//custom translation -  all checks below
+	if (checkweight(1301,1) == 0 || MaxWeight - Weight < 800) {
+		mes "- 攜帶太多物品，無法進行。 -";
+		close;
+	}
+
+	setarray .@type$[0],"lower","intermediate","advanced","highest";
+	setarray .@crystal$[0],"Rough","Purified","High";
+
+	// playtime checks
+	setarray .@quests_playtime[0],5161,5169,5174,5225,5226,5227;
+	for (set .@i,0; .@i<6; set .@i,.@i+1) {
+		if (checkquest(.@quests_playtime[.@i],PLAYTIME) == 2) {
+			erasequest .@quests_playtime[.@i];
+			mes "[里諾]";
+			if (.@i < 3)	// hunting quest wait time
+				mes "等待時間"+.@type$[.@i]+" collection quest has expired. You can now take another request.";
+			else        	// buff wait time
+				mes "存儲的等待時間"+.@crystal$[.@i]+" Energy Crystals has expired. You can now store them again.";
+			close;
+		}
+	}
+
+	// hunting quest checks
+	callsub L_CheckHunting,5161,5162,7,.@type$[0],6623,10; //Rough_Energy_Crystal
+	callsub L_CheckHunting,5169,5170,4,.@type$[1],6624,10; //Purified_Energy_Crystal
+	callsub L_CheckHunting,5174,5175,4,.@type$[2],6625,5;  //High_Purity_Energy_Xtal
+	callsub L_CheckHunting,5174,5179,4,.@type$[3],6625,10; //High_Purity_Energy_Xtal
+
+	// buff checks
+	set .@energy_buf00, getstatus(SC_QUEST_BUFF1) + getstatus(SC_QUEST_BUFF2) + getstatus(SC_QUEST_BUFF3);
+	if (!.@energy_buf00) {
+		for (set .@i,0; .@i<3; set .@i,.@i+1) {
+			if (isbegin_quest(.@i + 5222)) {
+				set .@item, 6623 + .@i;
+				set .@amount, 2 + rand(3);
+				mes "[里諾]";
+				mes getitemname(.@item)+"存儲現在已經完成。";
+				next;
+				setquest 5225 + .@i;
+				erasequest 5222 + .@i;
+				getitem .@item,.@amount;
+				mes "[里諾]";
+				mes "^0000ff"+.@amount+" "+getitemname(.@item)+"s^000000 were extracted.";
+				close;
+			}
+		}
+	}
+
+	mes "[里諾]";
+	mes "你好？我是能源晶體研究協會或ECRA的Reno。";
+	next;
+	switch(select("ECRA?:Quest to get Energy Crystals:Energy Crystal Buffs:Compress Energy Crystals:Exchange Crystals for Headgear:Random Gear for Crystals" + ((.@features_iRO)?":See Equipment List":""))) {
+	case 1:
+		mes "[里諾]";
+		mes "ECRA是研究“^0000FENERGY晶體^000000”的研究所，該晶體應用作符文米加特王國的替代能源，該王國的能量短缺。";
+		next;
+		select("這樣做的原因是什麼？");
+		mes "[里諾]";
+		mes "我想解釋說，在我解釋原因之前，我們不是要藉口擺脫面臨問題。絕不！所以請讓我完成。";
+		next;
+		mes "[里諾]";
+		mes "研究團隊向我發送了他們發現的結果。";
+		next;
+		mes "[里諾]";
+		mes "能量晶體證明在某些怪物的體內被 ^0000 ff，並且根據研究，更強的怪物在其體內產生了高層的能量晶體。";
+		next;
+		mes "[里諾]";
+		mes "研究團隊決定通過適當的獎勵向冒險家提出要求來收集能量晶體。這使我們能夠更好地收集，並且更具 ^ff0000效率 ^000000。";
+		next;
+		mes "[里諾]";
+		mes "通過我的要求通過狩獵怪物積累的能量晶體應用於我的研究。 ^0000flsome計劃將其退還給冒險家。 ^000000";
+		next;
+		mes "[里諾]";
+		mes "冒險家可以通過我使用收集的能量晶體作為 ^ff0000upgrading設備 ^000000。";
+		next;
+		mes "[里諾]";
+		mes "如果運作良好，它對ECRA和冒險家似乎都很好。";
+		close;
+	case 2:
+		mes "[里諾]";
+		mes "狩獵任務按怪物水平和困難進行排名。範圍較低，中間，高級任務，每天只能進行一次。";
+		next;
+
+		setarray .@quest_status[0],
+			isbegin_quest(5162) + isbegin_quest(5163) + isbegin_quest(5164) + isbegin_quest(5165) + isbegin_quest(5166) + isbegin_quest(5167) + isbegin_quest(5168),
+			isbegin_quest(5170) + isbegin_quest(5171) + isbegin_quest(5172) + isbegin_quest(5173),
+			isbegin_quest(5175) + isbegin_quest(5176) + isbegin_quest(5177) + isbegin_quest(5178) + isbegin_quest(5179) + isbegin_quest(5180) + isbegin_quest(5181) + isbegin_quest(5182);
+		setarray .@quest_index[0],5161,5169,5174;
+
+		set .@select, select("低級狩獵[61-80]:中級狩獵[80-99]:高級狩獵[90及以上]:取消我當前的任務。") - 1;
+		if (.@select < 3) {
+			setarray .@min_level[0],60,80,90,100;
+			if (BaseLevel < .@min_level[.@select]) {
+				mes "[里諾]";
+				mes "對不起，但要求"+.@type$[.@select]+" collection is only available for those level "+.@min_level[.@select]+" and higher. You do not seem to be capable of carrying out this request.";
+				close;
+			}
+			if (.@quest_status[.@select]) {
+				mes "[里諾]";
+				mes "您似乎是根據"+.@type$[.@select]+" collection. If the quest seems to be too hard... how about you ^FF0000give up on the request^000000?";
+				close;
+			}
+			set .@playtime, checkquest(.@quest_index[.@select],PLAYTIME);
+			if (.@playtime == 0 || .@playtime == 1) {
+				mes "[里諾]";
+				mes "目前正在等待"+.@type$[.@select]+" collection commission. Tasks in each collection can only be completed once per day."; //custom translation
+				close;
+			}
+			mes "[里諾]";
+			mes "您選擇從"+.@type$[.@select]+" collection. After hunting these monsters you will receive "+((.@features_iRO)?"10 ":"")+"^0000FF"+.@crystal$[.@select]+" Energy Crystals^000000 when you return to me.";
+			next;
+			mes "[里諾]";
+			mes "請選擇您認為可以輕鬆從列表中狩獵的怪物。";
+			next;
+			switch (.@select) {
+			case 0:
+				set .@quest, select(
+					"[Lower class] Requiem",
+					"[Lower class] Bathory",
+					"[Lower class] Spring Rabbit",
+					"[Lower class] Sleeper",
+					"[Lower class] Evil Druid",
+					"[Lower class] Ground Petite",
+					"[Lower class] Clock"
+				);
+				break;
+			case 1:
+				set .@quest, select(
+					"[Intermediate class] Siroma",
+					"[Intermediate class] Dark Priest",
+					"[Intermediate class] Stapo",
+					"[Intermediate class] Solider"
+				);
+				break;
+			case 2:
+				set .@quest, select(
+					"[Advanced] Desert Wolf",
+					"[Advanced] Medusa",
+					"[Advanced] Pinguicula",
+					"[Advanced] Majoruros",
+					"[Highest] Raydric",
+					"[Highest] Naga",
+					"[Highest] Ancient Mummy",
+					"[Highest] Ancient Mimic"
+				);
+				if (.@quest > 4 && BaseLevel < .@min_level[3]) {
+					mes "[里諾]";
+					mes "很抱歉，但最高級收藏的請求僅適用"+.@min_level[3]+" and higher. You do not seem to be capable of carrying out this request.";
+					close;
+				}
+				break;
+			}
+			setquest .@quest_index[.@select] + .@quest;
+			mes "[里諾]";
+			mes "請求"+.@type$[.@select]+" collection monsters has been issued. Please check the details on the issued document.";
+			close;
+		} else {
+			setarray .@quest_count[0],7,4,8;
+			for (set .@i,0; .@i<3; set .@i,.@i+1) {
+				if (.@quest_status[.@i]) {
+					mes "[里諾]";
+					mes "您目前處於"+.@type$[.@i]+" collection. If you give up now, all your history will be lost. Do you really want to give up?";
+					next;
+					set .@erase_quest, select("是:否");
+					switch (.@erase_quest) {
+					case 1:
+						for (set .@quest,.@quest_index[.@i]+1; .@quest<=.@quest_index[.@i]+.@quest_count[.@i]; set.@quest,.@quest+1) {
+							if (isbegin_quest(.@quest))
+								erasequest .@quest;
+						}
+						break;
+					case 2:
+						break;
+					}
+				}
+			}
+			switch (.@erase_quest) {
+			case 0:
+				mes "[里諾]";
+				mes "您不受任何要求。";
+				close;
+			case 1:
+				mes "[里諾]";
+				mes "對您的書面請求已被撤回。";
+				close;
+			case 2:
+				mes "[里諾]";
+				mes "請繼續。";
+				close;
+			}
+		}
+	case 3:
+		mes "[里諾]";
+		mes "您想在體內積聚能量晶體以接收增益嗎？";
+		next;
+		set .@select, select("積累能量結晶:積累粗能量結晶:積累精煉能量結晶:積累高能量結晶");
+		switch (.@select) {
+		case 1:
+			mes "[里諾]";
+			mes "當您狩獵我們要您的怪物時，能量晶體會積聚在您的體內。";
+			next;
+			mes "[里諾]";
+			mes "我們的研究表明，某些方法使人類能夠以增益的形式積聚人體內部的能量晶體。";
+			next;
+			mes "[里諾]";
+			mes "如果您花費大約3個小時，您將能夠獲得少量的能量晶體。那你想接收愛好者嗎？";
+			close;
+		case 2:
+			set .@playtime, checkquest(5225,PLAYTIME);
+			set .@quest,5222;
+			set .@min_level,60;
+			set .@rate,1;
+			set .@buff, SC_QUEST_BUFF1;
+			break;
+		case 3:
+			set .@playtime, checkquest(5226,PLAYTIME);
+			set .@quest,5223;
+			set .@min_level,80;
+			set .@rate,2;
+			set .@buff, SC_QUEST_BUFF2;
+			break;
+		case 4:
+			set .@playtime, checkquest(5227,PLAYTIME);
+			set .@quest,5224;
+			set .@min_level,90;
+			set .@rate,3;
+			set .@buff, SC_QUEST_BUFF3;
+			break;
+		}
+		if (.@playtime == 0 || .@playtime == 1) {
+			mes "[里諾]";
+			mes "你成功了嗎？雖然存儲其他能量晶體不會對您的身體產生太大影響，但存儲相同的晶體可能會導致您的傷害。"; //custom translation
+			close;
+		}
+		if (BaseLevel < .@min_level) {
+			mes "[里諾]";
+			mes "有這樣的身體，你不能積累"+.@crystal$[.@select-2]+" Energy Crystals. You must be level "+.@min_level+" or your body will be harmed in the process."; //custom translation
+			close;
+		}
+		if (.@energy_buf00) {
+			mes "[里諾]";
+			mes "積累的能量晶體已經開始。對不起，但是一次積累兩種不同類型的能量晶體是不可能的。";
+			close;
+		}
+		if (isbegin_quest(.@quest) > 0) {
+			erasequest .@quest;
+			mes "[里諾]";
+			mes "發生了錯誤。請原諒我的不便。"; //custom translation
+			close;
+		}
+		mes "[里諾]";
+		mes "您的身體需要3個小時才能累積2至4"+.@crystal$[.@select-2]+" Energy Crystals. Do you want to start?";
+		next;
+		if(select("取消:開始") == 1) {
+			mes "[里諾]";
+			mes "我建議您在有時間時嘗試佔用能量晶體。";
+			close;
+		}
+		mes "[里諾]";
+		mes "您可能會感到有些刺痛。";
+		next;
+		specialeffect2 EF_BASH3D;
+		percentheal .@rate * -5,0;
+		//consumeitem ??; //Keep_Connection_[.@rate]
+		sc_start .@buff,10800000,.@rate;	// Atk/Matk + 5*rate (+5, +10, +15)
+		setquest .@quest;
+		mes "[里諾]";
+		mes "- 冰球 -";
+		next;
+		mes "[里諾]";
+		mes "一切似乎都是井井有條的。讓我們開始積累"+.@crystal$[.@select-2]+" Energy Crystals. Remember to come back to me after 3 hours to get the "+.@crystal$[.@select-2]+" Energy Crystals.";
+		close;
+	case 4:
+		mes "[里諾]";
+		mes "您想壓縮能量晶體嗎？";
+		next;
+		switch(select("壓縮的作用是什麼？ :將粗晶壓縮為精晶:將精晶壓縮為高晶")) {
+		case 1:
+			mes "[里諾]";
+			mes "您對能量晶體壓縮感到好奇嗎？我可以將較低水平的能量晶體壓縮到較高的能量晶體中。";
+			next;
+			mes "[里諾]";
+			mes "這是我可以做的。";
+			mes "^ff000010粗晶^000000 =^ff00001純淨能量晶體^000000";
+			mes "^ff00005純淨能量晶體^000000 =^ff00001高能量晶體^000000";
+			next;
+			mes "[里諾]";
+			mes "如果您需要高級能量晶體，這是獲得它們的好方法，因為較低的能量晶體更容易獲得。";
+			close;
+		case 2:
+			set .@crystal,6623;  //Rough_Energy_Crystal
+			set .@crystal_,6624; //Purified_Energy_Crystal
+			set .@rate,10;
+			break;
+		case 3:
+			set .@crystal,6624;  //Purified_Energy_Crystal
+			set .@crystal_,6625; //High_Purity_Energy_Xtal
+			set .@rate,5;
+			break;
+		}
+		set .@crystal_count, countitem(.@crystal);
+		set .@crystal_get, .@crystal_count / .@rate;
+		mes "[里諾]";
+		mes sprintf("^ff0000％d％s^000000 =^ff00001％s^000000",.@rate,getitemname(.@crystal),getitemname(.@crystal_));
+		next;
+		mes "[里諾]";
+		mes sprintf("％D％SS將被壓縮到％D％SS。",.@crystal_count,getitemname(.@crystal),.@crystal_get,getitemname(.@crystal_));
+		mes "您想壓縮嗎？";
+		next;
+		if(select("壓縮:停止") == 2) {
+			mes "[里諾]";
+			mes "好的，如果您將來需要我，請聯繫。";
+			close;
+		}
+		while(1) {
+			if (.@crystal_count >= .@rate) {  //custom translation
+				delitem .@crystal,.@rate;
+				getitem .@crystal_,1;
+				set .@crystal_count, countitem(.@crystal);
+				set .@crystal_get, .@crystal_count / .@rate;
+				mes "[里諾]";
+				mes "壓縮非常成功。";
+				mes "有"+.@crystal_count+" Energy Crystals left, which can compress into "+.@crystal_get+" Energy Crystals. Do you want to continue?";
+				next;
+				if(select("壓縮:停止") == 2)
+					break;
+			} else {
+				mes "[里諾]";
+				mes "你沒有足夠的"+getitemname(.@crystal)+"s.";
+				next;
+				break;
+			}
+		}
+		mes "[里諾]";
+		mes "壓縮完成。";
+		close;
+	case 5:
+		disable_items;
+		mes "[里諾]";
+		mes "您想將能量晶體換成設備嗎？請選擇您希望交換的能量晶體類型。";
+		next;
+		setarray .@crystals[0], countitem(6623), countitem(6624), countitem(6625);
+		switch(select("See Equipment List:["+.@crystals[0]+"] Rough Energy Crystal:["+.@crystals[1]+"] Purified Energy Crystal:["+.@crystals[2]+"] High Energy Crystal")) {
+		case 1:
+			mes "[里諾]";
+			mes "這是有關我們的能源水晶研究協會提供的設備升級的小冊子。請環顧四周。";
+			close2;
+			readbook 11060,1; //Energy_Xtal_Combi_Book
+			end;
+
+		// Variable descriptions
+		// .@crystal     : Energy Crystal used
+		// .@materials[] : equipment to upgrade
+		// .@showslot[]  : display slots with equipment name (-1 to disable)
+		// .@costs[]     : amount of Energy Crystals needed
+		// .@rewards[]   : upgraded equipment
+		case 2:
+			set .@crystal,6623; //Rough_Energy_Crystal
+			setarray .@materials[0], 5027, 5045, 5069, 5003, 2214, 5167, 5168, 5043;
+			setarray .@showslot[0],    -1,   -1,   -1,   -1,   -1,    1,    1,   -1;
+			setarray .@costs[0],      100,  100,  100,  100,  100,  100,  100,  100;
+			setarray .@rewards[0],  18760,18761,18762,18763,18764,18769,18770,18771;
+			break;
+		case 3:
+			set .@crystal,6624; //Purified_Energy_Crystal
+			setarray .@materials[0], 2296, 5014, 5096, 2292,2615, 2355,2116, 2420, 2521, 5125;
+			setarray .@showslot[0],    -1,   -1,   -1,   -1,  -1,    1,   1,    1,    1,    1;
+			setarray .@costs[0],      200,  200,  200,  200, 200,  100, 100,  100,  100,  100;
+			setarray .@rewards[0],  18772,18773,18774,18775,2956,15068,2183,22015,20710,18776;
+			break;
+		case 4:
+			set .@crystal,6625; //High_Purity_Energy_Xtal
+			setarray .@materials[0], 5019, 5162, 5025, 5022, 5353, 2423,2678,2679, 2355,2116, 2420, 2521, 5125;
+			setarray .@showslot[0],    -1,    1,   -1,    0,    1,   -1,  -1,  -1,    1,   1,    1,    1,    1;
+			setarray .@costs[0],      300,  300,  300, 1000,  100,  300, 300, 300,   20,  20,   20,   20,   20;
+			setarray .@rewards[0],  18765,18768,18766,18767,18767,22014,2957,2958,15068,2183,22015,20710,18776;
+			break;
+		}
+		mes "[里諾]";
+		mes "請選擇交換設備"+getitemname(.@crystal)+"s.";
+		next;
+		set .@crystal_count, countitem(.@crystal);
+		set .@menu$,"";
+		for (set .@i,0; .@i<getarraysize(.@materials); set .@i,.@i+1) {
+			set .@item_name$, getitemname(.@materials[.@i]) + ((.@showslot[.@i] > -1)?"["+.@showslot[.@i]+"]":"");
+			set .@menu$, .@menu$ + sprintf("%s (%d/%d):",.@item_name$,.@crystal_count,.@costs[.@i]);
+		}
+		set .@index, select(.@menu$) - 1;
+		set .@material, .@materials[.@index];
+		set .@item_name$, getitemname(.@material) + ((.@showslot[.@index] > -1)?"["+.@showslot[.@index]+"]":"");
+		set .@cost, .@costs[.@index];
+		set .@reward, .@rewards[.@index];
+
+		//custom translations
+		if (.@material == 2615) {  // Special case: Safety Ring
+			if (countitem(2615) < 1 || countitem(2621) < 1 || countitem(2622) < 1 || countitem(2624) < 1 ||
+			    countitem(2625) < 1 || countitem(2623) < 1 || countitem(2626) < 1 || countitem(.@crystal) < .@cost) {
+				mes "[里諾]";
+				mes "製造安全環[1]的材料不足。請檢查您的庫存。";
+				close;
+			}
+			mes "[里諾]";
+			mes "在升級安全戒指之前，請收聽這些 ^ff0000 -precautions ^000000。";
+			next;
+			mes "[里諾]";
+			mes "^ff0000in在安全環上增加，所需材料的所有精煉和卡也將消失。 ^000000";
+			next;
+		} else {
+			if (countitem(.@material) < 1 || countitem(.@crystal) < .@cost) {
+				mes "[里諾]";
+				mes "材料不足。請檢查您的材料。";
+				close;
+			}
+			mes "[里諾]";
+			mes "在升級設備之前，請收聽這些 ^ff0000 -precainess ^000000。";
+			next;
+			mes "[里諾]";
+			mes "^ff0000當使用能量晶體升級設備時，所有先前的修補，魅力和卡片都會丟失。 ^000000";
+			next;
+		}
+		mes "[里諾]";
+		mes "您是否熟悉 ^ff0000 -precaines ^000000？";
+		next;
+		if(select("我是:不。") == 2) {
+			mes "[里諾]";
+			mes "好的。下次。";
+			close;
+		}
+		mes "[里諾]";
+		mes "然後讓我們開始升級"+.@item_name$+".";
+		next;
+		specialeffect2 EF_REPAIRWEAPON;
+		progressbar "ffff00",2;
+		delitem .@material,1;
+		if (.@material == 2615) {
+			delitem 2621,1; //Ring_
+			delitem 2622,1; //Earring_
+			delitem 2624,1; //Glove_
+			delitem 2625,1; //Brooch_
+			delitem 2623,1; //Necklace_
+			delitem 2626,1; //Rosary_
+		}
+		delitem .@crystal,.@cost;
+		getitem .@reward,1;
+		mes "[里諾]";
+		mes "升級成功。您的能量晶體將極大地幫助我們的研究。";
+		close;
+	case 6:
+		mes "[里諾]";
+		mes "您想捐贈能量晶體以獲取隨機的新頭飾嗎？";
+		next;
+		switch(select("贈送能量水晶？ :贈送原石能量水晶300顆。 :贈送精煉能量水晶600顆。 :贈送高能水晶900顆。")) {
+		case 1:
+			mes "[里諾]";
+			mes "我們正在收集能量晶體，以便我們可以為冒險家研究更多的頭飾組合。";
+			next;
+			mes "[里諾]";
+			mes "由於冒險家的支持，我們可以使用這些能量晶體來進一步研究。";
+			next;
+			mes "[里諾]";
+			mes "因此，我們至少收到300個粗糙的能量晶體，600個純化的能量晶體和900個高能晶體。";
+			if (!.@features_iRO) {
+				next;
+				mes "[里諾]";
+				mes "您可能會覺得這是一個負擔，但是為了我們的研究，請繼續。"; //custom translation
+				close;
+			}
+			mes "對於捐贈，我會給您一個隨機的新頭飾。";
+			next;
+			mes "[里諾]";
+			mes "300粗糙的能量晶體";
+			mes "- 新的法師帽子";
+			mes "- 新魔術師帽子";
+			mes "- 新的Kitsune面具";
+			mes "- 新小丑小丑";
+			mes "- 新兔子樂隊";
+			mes "- 新的Munak帽子";
+			mes "- 新的邦貢帽子";
+			mes "- 新的幻影歌劇口罩";
+			next;
+			mes "[里諾]";
+			mes "600純淨的能量晶體";
+			mes "- 良好的雙筒望遠鏡";
+			mes "- 好的鰭盔";
+			mes "- 好的刺客面具";
+			mes "- 好的焊接面膜";
+			mes "- 良好的安全戒指";
+			mes "- 良好的天使般的保護";
+			mes "- 好天使衛隊";
+			mes "- 好天使開衫";
+			mes "- 好天使的轉世";
+			next;
+			mes "[里諾]";
+			mes "900高能量晶體";
+			mes "- 增強的海盜船";
+			mes "- 增強的骨頭盔";
+			mes "- 增強的天使掌舵";
+			mes "- 增強的變體鞋";
+			mes "- 增強的火焰戒指";
+			mes "- 增強共振環";
+			close;
+		case 2:
+			if (countitem(6623) < 300) {
+				mes "[里諾]";
+				mes "感謝您的支持，但我們需要300個粗糙的能量晶體。";
+				close;
+			}
+			delitem 6623,300; //Rough_Energy_Crystal
+			set .@r, rand(1,17);
+			     if (.@r <= 2)  getitem 18760,1; //Remodel_Wizardry_Hat
+			else if (.@r <= 4)  getitem 18761,1; //Remodel_Magician_Hat
+			else if (.@r <= 6)  getitem 18762,1; //Remodel_Mask_Of_Fox
+			else if (.@r <= 8)  getitem 18763,1; //Remodel_Joker_Jester
+			else if (.@r <= 10) getitem 18764,1; //Remodel_Bunny_Band
+			else if (.@r <= 13) getitem 18769,1; //Remodel_Munak_Turban
+			else if (.@r <= 16) getitem 18770,1; //Remodel_Bongun_Hat
+			else                getitem 18771,1; //Remodel_Opera_Mask
+			break;
+		case 3:
+			if (countitem(6624) < 600) {
+				mes "[里諾]";
+				mes "感謝您的支持，但我們需要600個純淨的能量晶體。";
+				close;
+			}
+			delitem 6624,600; //Purified_Energy_Crystal
+			set .@r, rand(1,18);
+			     if (.@r <= 3)  getitem 18772,1; //Improved_Binoculars
+			else if (.@r <= 6)  getitem 18773,1; //Improved_Fin_Helm
+			else if (.@r <= 9)  getitem 18774,1; //Improved_Assassin_Mask
+			else if (.@r <= 12) getitem 18775,1; //Improved_Welding_Mask
+			else if (.@r <= 13) getitem 2956,1;  //Safety_Ring_
+			else if (.@r <= 14) getitem 15068,1; //Im_Angel's_Protection
+			else if (.@r <= 15) getitem 2183,1;  //Impr_Angel's_Safeguard
+			else if (.@r <= 16) getitem 22015,1; //Impr_Angel's_Arrival
+			else if (.@r <= 17) getitem 20710,1; //Impr_Angel's_Warmth
+			else                getitem 18776,1; //Improved_Kiss_Of_Angel
+			break;
+		case 4:
+			if (countitem(6625) < 900) {
+				mes "[里諾]";
+				mes "感謝您的支持，但我們需要900個高能量晶體。";
+				close;
+			}
+			delitem 6625,900; //High_Purity_Energy_Xtal
+			set .@r, rand(1,33);
+			     if (.@r <= 10) getitem 18765,1; //Enhanced_Corsair
+			else if (.@r <= 20) getitem 18768,1; //Enhanced_Bone_Helm
+			else if (.@r <= 25) getitem 18766,1; //Enhanced_Helm_Of_Angel
+			else if (.@r <= 30) getitem 22014,1; //Enhanced_Variant_Shoes
+			else if (.@r <= 31) getitem 2957,1;  //Good_Ring_Of_Flame_Lord
+			else                getitem 2958,1;  //Good_Ring_Of_Resonance
+			break;
+		}
+		mes "[里諾]";
+		mes "非常感謝。您捐贈的能量晶體將對我們的研究非常有幫助。這是您捐款的獎勵。"; //custom translation
+		close;
+	case 7:  // iRO only
+		mes "[里諾]";
+		mes "這是有關我們的能源水晶研究協會提供的設備升級的小冊子。請環顧四周。";
+		close2;
+		readbook 11060,1; //Energy_Xtal_Combi_Book
+		end;
+	}
+
+//callsub L_CheckHunting,<quest index>,<start quest>,<number of quests>,"<type>",<reward id>,<reward amount>;
+L_CheckHunting:
+	for (set .@quest,getarg(0)+1; .@quest<getarg(1)+getarg(2); set .@quest,.@quest+1) {
+		if (checkquest(.@quest,HUNTING) == 2) {
+			mes "[里諾]";
+			mes "完成的"+getarg(3)+" collection hunting quest.";
+			next;
+			setquest getarg(0);
+			erasequest .@quest;
+			getitem getarg(4),getarg(5);
+			mes "你收到"+getarg(5)+" "+getitemname(getarg(4))+"s as the "+getarg(3)+" collection reward.";
+			close;
+		}
+	}
+	return;
+}

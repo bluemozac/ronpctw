@@ -1,0 +1,442 @@
+﻿//===== rAthena Script =======================================
+//= iRO Halloween (2009)
+//===== By: ==================================================
+//= Kisuka
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= iRO Halloween (2009)
+//= Quest for Weird Pumpkin Hat.
+//= Exchange treats for buffs.
+//= Summon event monsters in towns.
+//===== Notes: ===============================================
+//= You must enable the event items in item_db2.
+//= You must enable the event mobs in mob_db2, mob_avail, and
+//= their skills in mob_skill_db2.
+//===== Additional Comments: =================================
+//= 1.0 First version. [Kisuka]
+//= 1.1 Fixed even exploit, fixed mobs overlap. [Lupus]
+//============================================================
+
+// Headgear Quest - Pumpkin Hat
+//============================================================
+prontera,152,192,5	script	Pumpkin Hat Researcher	712,{
+	if(BaseLevel < 45) {
+		mes "[南瓜帽研究人員]";
+		mes "shoo，我不需要一個孩子。噓！我不和新手交談。";
+		next;
+		mes "[南瓜帽研究人員]";
+		mes "去達到可以與更強大的怪物戰鬥並回來的水平。";
+		close;
+	}
+	mes "[南瓜帽研究人員]";
+	mes "說你喜歡南瓜派嗎？";
+	next;
+	mes "[南瓜帽研究人員]";
+	mes "我是南瓜帽研究人員，你為什麼不聽我的故事？";
+	next;
+	while(1) {
+		switch(select("聽故事。 :詢問南瓜帽。 :得到一頂南瓜帽。 :停止談話。")) {
+			case 1:
+				mes "[南瓜帽研究人員]";
+				mes "我一直在研究升級的南瓜帽子。";
+				mes "我發現這是一個非常簡單的過程。";
+				next;
+				mes "[南瓜帽研究人員]";
+				mes "該過程非常簡單。";
+				mes "如果您帶給我 ^4a4aff20 Jack O'Pumpkin ^000000，我可以告訴您。";
+				mes "那不是一個誘人的建議嗎？";
+				next;
+				break;
+			case 2:
+				mes "[南瓜帽研究人員]";
+				mes "這款升級的南瓜帽是有力的東西！";
+				next;
+				mes "[南瓜帽研究人員]";
+				mes "它可以製作一個南瓜派，可為佩戴它的人使用冷凝能量來恢復大部分的HP＆SP。";
+				next;
+				mes "[南瓜帽研究人員]";
+				mes "您所需要的是 ^4A4AFF20 Jack O'Pumpkin ^000000。";
+				next;
+				break;
+			case 3:
+				mes "[南瓜帽研究人員]";
+				mes "你想得到南瓜派嗎？好吧，讓我數量您帶來的傑克O'Pumpkins。";
+				next;
+				if(countitem(1062) < 20) {
+					mes "[南瓜帽研究人員]";
+					mes "我需要 ^4a4aff20 jack o'Pumpkin ^000000。";
+					mes "我不是煉金術士或巫師，可以從一無所有創造東西。";
+					next;
+					mes "[南瓜帽研究人員]";
+					mes "好吧，去狩獵怪物然後回來。";
+					mes "我要在這裡待一會兒，所以請花點時間。";
+					next;
+					break;
+				}else{
+					mes "[南瓜帽研究人員]";
+					mes "我希望這對您有用。不要忘記在戰鬥時穿著南瓜派。";
+					delitem 1062,20;	// Jack o' Pumpkin
+					getitem 5668,1;		// Weird Pumpkin Hat
+					next;
+					mes "[南瓜帽研究人員]";
+					mes "我想我應該回到研究。";
+					close;
+				}
+			case 4:
+				mes "[南瓜帽研究人員]";
+				mes "再見，直到我們再次見面。";
+				mes "祝你好...";
+				close;
+		}
+	}
+}
+
+// Buffs - Trick or Treaters
+//============================================================
+-	script	Trick or Treater::09Treats	706,2,2,{
+OnTouch:
+	hideoffnpc strnpcinfo(3);
+	initnpctimer;
+	mes "[技巧或treater]";
+	mes "哇！哇！哇！";
+	mes "搗蛋？";
+	next;
+	if(select("竅門:治療。") == 1) {
+		mes "[技巧或treater]";
+		mes "！ ！ ！";
+		mes "美好的。我別無選擇，只能欺騙您！";
+		sc_start SC_Stun,5000,0;
+		close;
+	}
+	mes "[技巧或treater]";
+	mes "哦，是的！你有什麼樣的零食？";
+	next;
+	switch(select("糖果:拐杖糖:烤好的餅乾:什麼都沒有")) {
+		case 1:
+			if(countitem(529) > 0) {
+				mes "[技巧或treater]";
+				mes "是的，謝謝！";
+				mes "在這裡，以如此的友善為例！";
+				sc_start SC_STRFood, 1800000, 5;
+				sc_start SC_INTFood, 1800000, 5;
+				sc_start SC_VITFood, 1800000, 5;
+				sc_start SC_AGIFood, 1800000, 5;
+				sc_start SC_DEXFood, 1800000, 5;
+				sc_start SC_LUKFood, 1800000, 5;
+				sc_start SC_FLEEFOOD, 1800000, 15;
+				delitem 529,1;	// Candy
+				close;
+			}else{
+				mes "[技巧或treater]";
+				mes "我只要求糖果，糖果甘蔗或烤好的餅乾。";
+				mes "美好的。我別無選擇，只能欺騙你！";
+				sc_start SC_Stun,5000,0;
+				close;
+			}
+		case 2:
+			if(countitem(530) > 0) {
+				mes "[技巧或treater]";
+				mes "是的，謝謝！";
+				mes "在這裡，以如此的友善為例！";
+				sc_start SC_STRFood, 1800000, 5;
+				sc_start SC_INTFood, 1800000, 5;
+				sc_start SC_VITFood, 1800000, 5;
+				sc_start SC_AGIFood, 1800000, 5;
+				sc_start SC_DEXFood, 1800000, 5;
+				sc_start SC_LUKFood, 1800000, 5;
+				sc_start SC_FLEEFOOD, 1800000, 15;
+				delitem 530,1;	// Candy Cane
+				close;
+			}else{
+				mes "[技巧或treater]";
+				mes "我只要求糖果，糖果甘蔗或烤好的餅乾。";
+				mes "美好的。我別無選擇，只能欺騙你！";
+				sc_start SC_Stun,5000,0;
+				close;
+			}
+		case 3:
+			if(countitem(538) > 0) {
+				mes "[技巧或treater]";
+				mes "是的，謝謝！";
+				mes "在這裡，以如此的友善為例！";
+				sc_start SC_STRFood, 1800000, 5;
+				sc_start SC_INTFood, 1800000, 5;
+				sc_start SC_VITFood, 1800000, 5;
+				sc_start SC_AGIFood, 1800000, 5;
+				sc_start SC_DEXFood, 1800000, 5;
+				sc_start SC_LUKFood, 1800000, 5;
+				sc_start SC_FLEEFOOD, 1800000, 15;
+				delitem 538,1;	// Well-baked Cookie
+				close;
+			}else{
+				mes "[技巧或treater]";
+				mes "我只要求糖果，糖果甘蔗或烤好的餅乾。";
+				mes "美好的。我別無選擇，只能欺騙你！";
+				sc_start SC_Stun,5000,0;
+				close;
+			}
+		case 4:
+			mes "[技巧或treater]";
+			mes "我只要求糖果，糖果甘蔗或烤好的餅乾。";
+			mes "美好的。我別無選擇，只能欺騙你！";
+			sc_start SC_Stun,5000,0;
+			close;
+	}
+OnInit:
+	hideonnpc "Trick or Treater#iRO1";
+	hideonnpc "Trick or Treater#iRO2";
+	hideonnpc "Trick or Treater#iRO3";
+	hideonnpc "Trick or Treater#iRO4";
+	hideonnpc "Trick or Treater#iRO5";
+	hideonnpc "Trick or Treater#iRO6";
+	hideonnpc "Trick or Treater#iRO7";
+	hideonnpc "Trick or Treater#iRO8";
+	end;
+	
+OnEnableTreat:
+	enablenpc strnpcinfo(3);
+	hideonnpc strnpcinfo(3);
+	end;
+	
+OnTimer15000:
+	hideonnpc strnpcinfo(3);
+	disablenpc strnpcinfo(3);
+	end;
+		
+OnTimer300000:
+	donpcevent strnpcinfo(3)+"::OnEnableTreat";
+	stopnpctimer;
+	end;
+}
+prontera,151,173,5	duplicate(09Treats)	Trick or Treater#iRO1	706,2,2
+prontera,270,350,5	duplicate(09Treats)	Trick or Treater#iRO2	706,2,2
+prontera,234,310,5	duplicate(09Treats)	Trick or Treater#iRO3	706,2,2
+prontera,156,321,5	duplicate(09Treats)	Trick or Treater#iRO4	706,2,2
+prontera,156,283,5	duplicate(09Treats)	Trick or Treater#iRO5	706,2,2
+prontera,142,214,5	duplicate(09Treats)	Trick or Treater#iRO6	706,2,2
+prontera,134,125,5	duplicate(09Treats)	Trick or Treater#iRO7	706,2,2
+prontera,220,72,5	duplicate(09Treats)	Trick or Treater#iRO8	706,2,2
+
+// Monster Summoning - Halloween Wizard
+//============================================================
+-	script	Halloween Wizard#iRO09::09HallowWiz	737,{
+	mes "[萬聖節嚮導]";
+	mes "...";
+	mes "您想對某人打個技巧嗎？";
+	next;
+	while(1) {
+		switch(select("什麼技巧？ :當然:不。")) {
+			case 1:
+				mes "[萬聖節嚮導]";
+				mes "我可以用幾種材料召喚世界其他地區的怪物。";
+				next;
+				mes "[萬聖節嚮導]";
+				mes "聽起來很有趣吧？";
+				next;
+				mes "[萬聖節嚮導]";
+				mes "如果您給我帶來面料，插孔O'Pragkins，磨損的織物或碎瓜，我可以召喚怪物。";
+				next;
+				break;
+			case 2:
+				mes "[萬聖節嚮導]";
+				mes "您想在哪個小鎮上玩一些技巧？";
+				next;
+				getmapxy(.@mapname$,.@mapx,.@mapy,BL_PC,""+strcharinfo(0)+"");
+				if (.@mapname$ == "prontera") {
+					switch(select("格芬:佩永:艾伯塔省:畢宿五")) {
+						case 1:
+							set .@HallowTown,3;
+							break;
+						case 2:
+							set .@HallowTown,2;
+							break;
+						case 3:
+							set .@HallowTown,4;
+							break;
+						case 4:
+							set .@HallowTown,5;
+							break;
+					}
+				}
+				else if (.@mapname$ == "payon") {
+					switch(select("普隆德拉:格芬:艾伯塔省:畢宿五")) {
+						case 1:
+							set .@HallowTown,1;
+							break;
+						case 2:
+							set .@HallowTown,3;
+							break;
+						case 3:
+							set .@HallowTown,4;
+							break;
+						case 4:
+							set .@HallowTown,5;
+							break;
+					}
+				}
+				else if (.@mapname$ == "geffen") {
+					switch(select("普隆德拉:佩永:艾伯塔省:畢宿五")) {
+						case 1:
+							set .@HallowTown,1;
+							break;
+						case 2:
+							set .@HallowTown,2;
+							break;
+						case 3:
+							set .@HallowTown,4;
+							break;
+						case 4:
+							set .@HallowTown,5;
+							break;
+					}
+				}
+				else if (.@mapname$ == "alberta") {
+					switch(select("普羅恩")) {
+						case 1:
+							set .@HallowTown,1;
+							break;
+						case 2:
+							set .@HallowTown,3;
+							break;
+						case 3:
+							set .@HallowTown,2;
+							break;
+						case 4:
+							set .@HallowTown,5;
+							break;
+					}
+				}
+				else if (.@mapname$ == "aldebaran") {
+					switch(select("普羅恩")) {
+						case 1:
+							set .@HallowTown,1;
+							break;
+						case 2:
+							set .@HallowTown,3;
+							break;
+						case 3:
+							set .@HallowTown,2;
+							break;
+						case 4:
+							set .@HallowTown,4;
+							break;
+					}
+				}
+				setarray .@HallowTowns$[1],"prontera","payon","geffen","alberta","aldebaran";
+				mes "[萬聖節嚮導]";
+				mes "好的，然後讓我們轉到下一步。";
+				next;
+				mes "[萬聖節嚮導]";
+				mes "您想使用多少個織物或傑克O'Purgkins？不要超過100個，因為這是我可以使用的最大金額。";
+				next;
+				input .@input;
+				if (.@input == 0) {
+					mes "[萬聖節嚮導]";
+					mes "您沒有明確的想法。";
+					mes "這沒什麼大不了的。";
+					mes "讓我知道。";
+					next;
+					break;
+				}
+				else if (.@input > 100) {
+					mes "[萬聖節嚮導]";
+					mes "我告訴你，它必須在1到100之間！";
+					mes "您沒有註意！";
+					next;
+					break;
+				}
+				else {
+					set .@fabric,countitem(1059);
+					set .@jack,countitem(1062);
+					set .@worn,countitem(6299);
+					set .@crushed,countitem(6298);
+					set .@whispers,0;
+					set .@darklords,0;
+
+					set .@total,.@fabric + .@jack + .@worn + .@crushed;
+
+					if(.@total < .@input) {
+						mes "[萬聖節嚮導]";
+						mes "敘述您擁有的物品數量，並告訴我總數。";
+						mes "胡胡胡胡...";
+						next;
+						break;
+					}
+
+					if(.@fabric > 0) {
+						if(.@fabric >= .@input) {
+							delitem 1059,.@input;
+							set .@whispers,.@whispers+.@input;
+							set .@input,0;
+						}
+						else{
+							delitem 1059,.@fabric;
+							set .@input,.@input - .@fabric;
+							set .@whispers,.@whispers+.@fabric;
+						}
+					}
+					if(.@worn > 0 && .@input != 0) {
+						if(.@worn >= .@input) {
+							delitem 6299,.@input;
+							set .@whispers,.@whispers+.@input;
+							set .@input,0;
+						}
+						else{
+							delitem 6299,.@worn;
+							set .@input,.@input - .@worn;
+							set .@whispers,.@whispers+.@worn;
+						}
+					}
+					if(.@jack > 0 && .@input != 0) {
+						if(.@jack >= .@input) {
+							delitem 1062,.@input;
+							set .@darklords,.@darklords+.@input;
+							set .@input,0;
+						}
+						else{
+							delitem 1062,.@jack;
+							set .@input,.@input - .@jack;
+							set .@darklords,.@darklords+.@jack;
+						}
+					}
+					if(.@crushed > 0 && .@input != 0) {
+						if(.@crushed >= .@input) {
+							delitem 6298,.@input;
+							set .@darklords,.@darklords+.@input;
+							set .@input,0;
+						}
+						else{
+							delitem 6298,.@crushed;
+							set .@input,.@input - .@crushed;
+							set .@darklords,.@darklords+.@crushed;
+						}
+					}
+					if (.@input > 0) {
+						mes "有一個問題。";
+						close;
+					}
+					monster ""+.@HallowTowns$[.@HallowTown]+"",0,0,"Halloween Whisper",3014,.@whispers;
+					monster ""+.@HallowTowns$[.@HallowTown]+"",0,0,"Halloween Dark Lord",3015,.@darklords;
+					mes "[萬聖節嚮導]";
+					mes "這是您想要的。";
+					mes "想像一下人們在其他村莊必須想什麼？";
+					mes "穆阿哈哈哈";
+					close;
+				}
+			case 3:
+				mes "[萬聖節嚮導]";
+				mes "如果您改變主意，請回到這裡...";
+				mes "我會在這裡待一會兒...";
+				mes "哈哈哈哈...";
+				close;
+		}
+	}
+}
+prontera,156,195,5	duplicate(09HallowWiz)	Halloween Wizard#1	737
+geffen,133,122,5	duplicate(09HallowWiz)	Halloween Wizard#2	737
+payon,156,196,5	duplicate(09HallowWiz)	Halloween Wizard#3	737
+alberta,96,57,5	duplicate(09HallowWiz)	Halloween Wizard#4	737
+aldebaran,146,122,5	duplicate(09HallowWiz)	Halloween Wizard#5	737

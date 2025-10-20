@@ -1,0 +1,129 @@
+﻿//===== rAthena Script ======================================= 
+//= Renewal Archer Job Quest
+//===== By: ================================================== 
+//= Kisuka
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Job Change to Archer Class
+//===== Additional Comments: ================================= 
+//= 1.0 First Version. [Kisuka]
+//= 1.1 Added support for Baby classes. [Euphy]
+//============================================================ 
+payon_in02,64,71,4	script	Archer Guildsman#archer	85,{
+	if (Upper == 1) {
+		if (Class == Job_Novice_High && (ADVJOB == Job_Sniper || ADVJOB == Job_Clown || ADVJOB == Job_Gypsy)) {
+			mes "[阿切爾公會]";
+			mes "嘿，我知道你。";
+			mes "你參加了這個測試";
+			mes "以前，不是嗎？";
+			next;
+			mes "[阿切爾公會]";
+			mes "啊，你一定是";
+			mes "到瓦爾哈拉並重生。";
+			mes "哇，真是令人印象深刻！";
+			next;
+			if (!callfunc("F_CanChangeJob")) {
+				mes "[阿切爾公會]";
+				mes "犯錯...";
+				mes "在成為弓箭手之前，您最好先學習所有基本技能。";
+				next;
+				mes "[阿切爾公會]";
+				mes "好吧，稍後再見。";
+				close;
+			}
+			mes "[阿切爾公會]";
+			mes "好吧。我不是";
+			mes "需要說什麼。";
+			mes "我知道你會做一個很棒的弓箭手...";
+			next;
+			skill "NV_TRICKDEAD",0,SKILL_PERM;
+			jobchange Job_Archer_high;
+			skill "AC_MAKINGARROW",1,SKILL_PERM;
+			skill "AC_CHARGEARROW",1,SKILL_PERM;
+			mes "[阿切爾公會]";
+			mes "雖然沒有特別的";
+			mes "這次為您獎勵，希望您能理解。照顧好你自己。";
+			close;
+		}else{
+			mes "[阿切爾公會]";
+			mes "哦...？";
+			mes "嘿，是什麼";
+			mes "你在這裡做...？";
+			next;
+			mes "[阿切爾公會]";
+			mes "我可以說你沒有被割斷為弓箭手。感覺就像你打算做";
+			mes "其他...";
+			close;
+		}
+	}
+	mes "[阿切爾公會]";
+	mes "很高興見到你。我該如何幫助您？";
+	next;
+	switch(select("我想要成為弓箭手:我需要了解條件:沒事，謝謝")) {
+	case 1:
+		mes "[阿切爾公會]";
+		if(BaseJob != Job_Novice) {
+			if(BaseJob == Job_Archer)
+				mes "哈哈，你在跟我開玩笑...";
+			else {
+				mes "我感到很抱歉，但是只有新手才能改變他們的工作。";
+				mes "您已經有自己的體面工作，不是嗎？";
+			}
+			close;
+		}else{
+			mes "你是..."+strcharinfo(0)+", right?";
+			next;
+			if (!callfunc("F_CanChangeJob")) {
+				mes "[阿切爾公會]";
+				mes "好吧，您的技能水平不正確。";
+				mes "您的工作水平必須至少為 ^4A4AFF10 ^000000，您的基本技能水平應達到 ^4A44A4AFFLEVEL 9";
+				next;
+				mes "[阿切爾公會]";
+				mes "因為弓箭手需要非常高的集中度，因此我們不接受那些幾乎沒有耐心的人。";
+				close;
+			}
+			mes "[阿切爾公會]";
+			mes "您的基本技能已經足夠了。";
+			mes "....嗯~~所以您現在準備成為一名弓箭手。我將立即邁出一步。";
+			next;
+			mes "[阿切爾公會]";
+			mes "恭喜！你現在是弓箭手！另外，我們希望您積極參加許多弓箭協會復興的計劃。";
+			mes "啊，物品已經從生產部門到達。在這裡，拿這些！這些都是你的！";
+			callfunc "Job_Change",Job_Archer;
+			getitem 1742,1;	// N_Composite_Bow
+			getitem 12004,1;	// Arrow_Container
+			getitem 12009,1;	// Silver_Arrow_Container
+			getitem 12008,1;	// Fire_Arrow_Container
+			next;
+			mes "[阿切爾公會]";
+			mes "擁有弓箭，現在您成為了真正的弓箭手。";
+			mes "如果打開箭頭容器，其中有箭頭，然後可以裝備它們。";
+			mes "好吧，我希望聽到您的好消息。是時候說再見了。";
+			mes "再見。";
+			close;
+		}
+	case 2:
+		mes "[阿切爾公會]";
+		mes "弓箭手具有弓箭的技能，並且具有各種才能。";
+		mes "弓箭手的最大能力是從長途攻擊敵人。";
+		next;
+		mes "[阿切爾公會]";
+		mes "儘管弓箭手的HP較弱，但他或她可以在遠距離射擊敵人，";
+		mes "因此，弓箭手在一場真正的戰鬥中更安全。";
+		next;
+		mes "[阿切爾公會]";
+		mes "儘管Ragnarok的弓箭手的HP較低，但他或她的準確性和攻擊率很高，因此弓箭手可以在接近弓箭手之前殺死怪物。";
+		next;
+		mes "[阿切爾公會]";
+		mes "^8c2121an Archer可以將工作更改為獵人。 ^000000";
+		mes "^8c2122以外，如果您是男人，則可以將工作更改為吟遊詩人，如果您是女人，則可以將工作更改為舞者。 ^000000";
+		close;
+	case 3:
+		mes "[阿切爾公會]";
+		mes "如果您有任何疑問，請隨時問我。";
+		close;
+	}
+}

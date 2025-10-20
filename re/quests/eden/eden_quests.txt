@@ -1,0 +1,4383 @@
+﻿//===== rAthena Script =======================================
+//= Eden Group Quest - Quests NPCs
+//===== Description: =========================================
+//= Eden Group Headquarter NPCs.
+//===== Changelogs: ==========================================
+//= 1.0 First Version. [L0ne_W0lf]
+//= 1.1 Removed unencoded comments (Korean -> Gibberish)
+//=     Readded the GM helper NPC, commented out.
+//= 1.2 Some little optimization here and there. [Masao]
+//= 1.3 Added Instructor Ur and the new Quests which come
+//=     alongside him. Special thanks to Chilly for the base. [Masao]
+//= 1.4 Partial cleaning and bug fixing. [Euphy]
+//= 1.4a Added 'npcskill' command. [Euphy]
+//= 1.4b Added 'disable_items' command. [Euphy]
+//= 1.5 Added GM management function. [Euphy]
+//= 1.6 Kagerou/Oboro support (Class -> BaseClass) [Euphy]
+//= 2.0 Updated Instructor Ur's quests. [Capuche]
+//= 2.1 Updated Blacksmith Thorn and Weapons Expert NPC. [Capuche]
+//= 2.2 Added support to Para_Team_Mark_ in Eden Group. [Ragno]
+//= 2.3 Added use of F_HasEdenGroupMark function. [Ragno]
+//============================================================
+
+moc_para01,25,35,4	script	Instructor Boya#para01	4_M_KNIGHT_GOLD,{
+	mes "[無論]";
+	if (!callfunc("F_HasEdenGroupMark")) {
+		mes "你不是我的小組嗎？";
+		mes "我對局外人無話可說。";
+		mes "如果您想向我的小組註冊。";
+		next;
+		mes "[無論]";
+		mes "在我旁邊的伊甸園（Eden Group）進行註冊。";
+		close;
+	}
+	if (para_suv01 == 0) {
+		mes "這是怎麼回事？";
+		mes "如果您有任何正常任務，請使用公告板。";
+		next;
+		switch (select("你的責任是什麼？ :你沒有設備嗎？ :忽略。")) {
+			mes "[無論]";
+		case 1:
+			mes "我給會員培訓任務。";
+			mes "這就是為什麼他們參與其中。";
+			mes "如果他們不想遇到麻煩，那是必不可少的。";
+			next;
+			mes "[無論]";
+			mes "通過戰鬥訓練，他們可以改善他們的真實經驗。";
+			mes "證明自己的成員甚至會獲得回報。";
+			next;
+			mes "[無論]";
+			mes "我們給了他們製作的特殊設備。";
+			mes "這些禮物是給那些真正盡力而為的人。";
+			next;
+			mes "[無論]";
+			mes "如果您很好奇，可以加入。";
+			mes "訓練戰場不是很困難。";
+			mes "沒什麼可擔心的。";
+			next;
+			mes "[無論]";
+			mes "如果您想加入，請不要猶豫。";
+			next;
+			switch (select("參加培訓:忽略。")) {
+				mes "[無論]";
+			case 1:
+				callsub S_Quest1;
+				callsub S_Quest2;
+				callsub S_Quest3;
+			case 2:
+				mes "這都是你的決定。";
+				mes "這不是我的事，但您可能應該重新考慮。";
+				close;
+			}
+		case 2:
+			mes "嗯？";
+			mes "你真誠實！";
+			mes "天哪。您想了解有關設備的信息嗎？";
+			next;
+			mes "[無論]";
+			mes "我有一個統一的套裝，對我們的小組成員免費。";
+			mes "但是，我不能免費給它。";
+			next;
+			mes "[無論]";
+			mes "我們將其提供給在培訓中盡力而為的偉大參與者。";
+			next;
+			mes "-boya從上到下注視著您。";
+			mes "嗯...他似乎認為有什麼問題。 -";
+			next;
+			mes "[無論]";
+			mes "由於情感。";
+			next;
+			select("什麼？ ！");
+			mes "[無論]";
+			mes "那麼，您是否會加入培訓？";
+			mes "我看起來有點有趣，實際上我真的很忙，我被稱為閃亮的符文騎士。";
+			mes "做出決定，快點。";
+			next;
+			switch (select("參加培訓:拒絕！ ！")) {
+				mes "[無論]";
+			case 1:
+				callsub S_Quest1;
+				callsub S_Quest2;
+				callsub S_Quest3;
+			case 2:
+				mes "你真無禮！";
+				specialeffect2 EF_HIT1;
+				percentheal -50,0;
+				next;
+				mes "- 迅速撲朔迷離，這個閃亮的符文騎士變成了看不見的。";
+				mes "太疼了 -";
+				close;
+			}
+		case 3:
+			mes "不要打擾我。";
+			close;
+		}
+	}
+	else if (para_suv01 < 5) {
+		mes "嘿，我已經談論了所有培訓領域。";
+		mes "我將再次解釋，請集中精力。";
+		next;
+		mes "[無論]";
+		mes "摩洛哥的綠洲。";
+		mes "中間有一隻大狗。";
+		mes "詳細的故事寫在日誌中，看嗎？";
+	}
+	else if (para_suv01 == 5) {
+		mes "哦，你回來了。";
+		mes "好工作。";
+		mes "現在您正在適應。";
+		next;
+		mes "[無論]";
+		mes "完成步驟1。";
+		mes "恭喜。";
+		mes "我們將為您提供統一和一些設備。";
+		next;
+		mes "[無論]";
+		mes "您能看到板旁邊的大藍色大門嗎？";
+		mes "進入室內，然後繼續行走直到正確通道的盡頭。那裡有一個設備存儲。";
+		next;
+		mes "[無論]";
+		mes "通知經理我寄給您。他會給你一些東西。";
+		mes "去！去！去！";
+		para_suv01 = 11;
+		completequest 7132;
+	}
+	else if (para_suv01 < 10) {
+		mes "培訓名稱是“征服涵洞！";
+		mes "您是否充分探索了涵洞？";
+		next;
+		mes "[無論]";
+		mes "當您完成當地教練的所有課程時，請回來。";
+	}
+	else if (para_suv01 == 10) {
+		mes "哦，你回來了。";
+		mes "好工作。";
+		mes "現在您正在適應。";
+		next;
+		mes "[無論]";
+		mes "完成步驟1。";
+		mes "恭喜。";
+		mes "我的團隊會為您提供統一和一些設備。";
+		next;
+		mes "[無論]";
+		mes "您能看到板旁邊的大藍色大門嗎？";
+		mes "進入室內，然後繼續行走直到正確通道的盡頭。那裡有一個設備存儲。";
+		next;
+		mes "[無論]";
+		mes "通知經理我寄給您。他會給你一些東西。";
+		mes "去！去！去！";
+		para_suv01 = 11;
+		completequest 7137;
+	}
+	else if (para_suv01 == 11) {
+		mes "你在幹什麼？";
+		mes "從存儲經理那裡獲取設備。";
+		mes "我們的製服很棒哈哈。";
+	}
+	else if (para_suv01 == 12) {
+		mes "嗯，你喜歡用品嗎？";
+		mes "我喜歡紅色帽子。";
+		mes "紅絲帶真的很可愛。";
+		next;
+		mes "[無論]";
+		if (BaseLevel > 25) {
+			mes "而且你似乎。";
+			mes "現在可以上高層。";
+			mes "那你想要嗎？";
+			next;
+			switch (select("不，當然。 :當然，我會的。")) {
+				mes "[無論]";
+			case 1:
+				mes "真的嗎？";
+				mes "實際上，我不在乎，但制服將隨著上層階級而改變。";
+				close;
+			case 2:
+				mes "涼爽的。";
+				mes "讓我為您選擇一個合適的地方。";
+				next;
+				mes "[無論]";
+				callsub S_Quest2;
+				callsub S_Quest3;
+			}
+		}
+		else {
+			mes "戰鬥訓練被組織為步驟。";
+			mes "當您能夠加入下一步後，升級了更多時。";
+			next;
+			mes "[無論]";
+			mes "下一個訓練步驟可針對超過26級的人提供。";
+			mes "當您達到該水平時，再次來。得到它？";
+		}
+	}
+	else if (para_suv01 < 16) {
+		mes "訓練區位於佩隆的北部洞穴。";
+		mes "一名工作人員已經在那裡派遣。";
+		mes "找到他並遵循他的指示。";
+	}
+	else if (para_suv01 == 16) {
+		mes "您完成了訓練的第二步。";
+		mes "現在您了解這個世界是如何組織的嗎？";
+		next;
+		mes "[無論]";
+		mes "我將證明您完成了培訓。";
+		mes "負責設備存儲的人員將為您提供所需的東西。";
+		next;
+		mes "[無論]";
+		mes "選擇適合您特定技能的設備。";
+		para_suv01 = 22;
+		completequest 7141;
+	}
+	else if (para_suv01 < 21) {
+		mes "訓練區位於摩洛哥西南部。";
+		mes "輸入聖達爾曼堡壘直接到達它。";
+		next;
+		mes "[無論]";
+		mes "那裡有人叫...嗯...他在等你跟隨他的方向。";
+	}
+	else if (para_suv01 == 21) {
+		mes "您完成了訓練的第二步。";
+		mes "現在您了解這個世界是如何組織的嗎？";
+		next;
+		mes "[無論]";
+		mes "我將證明您完成了培訓。";
+		mes "負責設備存儲的人員將為您提供所需的東西。";
+		para_suv01 = 22;
+		completequest 7146;
+	}
+	else if (para_suv01 == 22) {
+		mes "通過訓練的第二步後，我們為受訓者提供設備和盔甲。";
+		mes "去倉庫，與那裡的負責人會面。";
+		next;
+		mes "[無論]";
+		mes "要找到儲物，通過任務板旁邊的藍色大門，然後在右側的走廊末端。";
+	}
+	else if (para_suv01 == 23) {
+		mes "嘿，很久沒看見。";
+		mes "那麼這是什麼一回事？";
+		next;
+		switch (select("我想參加培訓:沒什麼。")) {
+			mes "[無論]";
+		case 1:
+			mes "嗯...真的嗎？";
+			mes "讓我看看...哪個步驟對您有好處...";
+			next;
+			mes "[無論]";
+			if (BaseLevel < 40) {
+				mes "很抱歉，要加入此培訓，您需要至少40級。";
+				mes "集中精力成為更高的水平，然後回來。";
+				close;
+			}
+			callsub S_Quest3;
+		case 2:
+			mes "你來見我嗎？";
+			mes "就是這樣？沒有什麼？";
+			mes "至少可以帶一些巧克力...";
+			next;
+			mes "[無論]";
+			mes "香蕉卷或條紋稻草...任何東西。";
+			mes "哦，我不吃肉桂的小吃...";
+			close;
+		}
+	}
+	else if (para_suv01 < 28) {
+		mes "嗯。獸人村那裡有一個Kafra員工，因此您可以使用Kafra服務。";
+		next;
+		mes "[無論]";
+		mes "我們的一位派遣成員正在Kafra員工附近的建築物中等待。";
+	}
+	else if (para_suv01 == 28) {
+		mes "涼爽的！您通過了訓練的第三步。";
+		mes "我將證明您完成了培訓。";
+		mes "負責設備存儲的人員將為您提供一些設備。";
+		next;
+		mes "[無論]";
+		mes "通過訓練的第二步後，我們為受訓者提供設備和盔甲。";
+		mes "去倉庫，與那裡的負責人會面。";
+		next;
+		mes "[無論]";
+		mes "要找到儲物，通過任務板旁邊的藍色大門，然後在右側的走廊末端。";
+		para_suv01 = 37;
+		completequest 7151;
+	}
+	else if (para_suv01 < 32) {
+		mes "嗯。獸人村那裡有一個Kafra員工，因此您可以在那裡使用Kafra服務。";
+		next;
+		mes "[無論]";
+		mes "我們的一位派遣成員正在Kafra員工附近的建築物中等待。";
+	}
+	else if (para_suv01 == 32) {
+		mes "涼爽的！您通過了訓練的第三步。";
+		mes "我將證明您完成了培訓。";
+		mes "負責設備存儲的人員將為您提供一些設備。";
+		next;
+		mes "[無論]";
+		mes "通過訓練的第二步後，我們為受訓者提供設備和盔甲。";
+		mes "去倉庫，與那裡的負責人會面。";
+		next;
+		mes "[無論]";
+		mes "要找到儲物，通過任務板旁邊的藍色大門，然後在右側的走廊末端。";
+		para_suv01 = 37;
+		completequest 7155;
+	}
+	else if (para_suv01 < 36) {
+		mes "首先從伊茲盧德（Izlude）乘船前往貝拉（Bayalan）！";
+		mes "有一個地下洞穴。進入底樓，您會在那裡找到一個歷史悠久的水下城市。";
+		next;
+		mes "[無論]";
+		mes "大洋城的入口處有一個派遣的實習生。";
+	}
+	else if (para_suv01 == 36) {
+		mes "涼爽的！您通過了訓練的第三步。";
+		mes "我將證明您完成了培訓。";
+		mes "負責設備存儲的人員將為您提供一些設備。";
+		next;
+		mes "[無論]";
+		mes "通過訓練的第二步後，我們為受訓者提供設備和盔甲。";
+		mes "去倉庫，與那裡的負責人會面。";
+		next;
+		mes "[無論]";
+		mes "要找到儲物，通過任務板旁邊的藍色大門，然後在右側的走廊末端。";
+		para_suv01 = 37;
+		completequest 7159;
+	}
+	else if (para_suv01 == 37) {
+		mes "[無論]";
+		mes "如果您完成了所有步驟，並獲取您的用品。";
+		mes "我們為完成培訓的人提供設備。";
+		next;
+		mes "[無論]";
+		mes "我們可能會為您服務其他事情。";
+		mes "如果您有任何疑問，請詢問負責阿森納的人。";
+		next;
+		mes "[無論]";
+		mes "阿森納越過藍門，在通道的右側末端。";
+	}
+	else if (para_suv01 >= 38) {
+		mes "我的老闆創建了培訓的所有課程。";
+		mes "在製造制服和物資後，他改變了主意，並說他不能免費給他們。";
+		next;
+		mes "[無論]";
+		mes "向我的團隊和世界展示努力的人可以獲得一些用品。";
+		mes "這就是為什麼要開設這些課程的原因。";
+		next;
+		mes "[無論]";
+		mes "基本上我們應該為初學者提供這些用品";
+		mes "但是，如果專家想參加這項培訓，我們會接受。";
+		next;
+		mes "[無論]";
+		mes "儘管統一和設備可能沒有用。";
+		mes "參加這項培訓意味著他們希望成為我們小組的成員。";
+		next;
+		mes "[無論]";
+		mes "是的，僅此而已。";
+		mes "這就是為什麼當我們決定帽子設計時，這確實很困難。";
+		next;
+		mes "[無論]";
+		mes "當您使用設備時，請記住這一點。";
+		mes "但是，如果您決定出售或交易它們，那與我們無關。";
+	}
+	else {
+		mes "你想要什麼？";
+		mes "我懷疑您需要更多的培訓。";
+		next;
+		mes "[無論]";
+		mes "我沒有更多的東西可以教像你這樣的戰斗大師。";
+	}
+	close;
+S_Quest1:
+	mes "真的嗎？你似乎已經準備好了。";
+	mes "我們總共有3個步驟進行培訓。";
+	mes "讓我看看...";
+	next;
+	mes "[無論]";
+	if (BaseLevel < 12) {
+		mes "嗯。您應該提高水平！";
+		mes "您至少需要12級！";
+		mes "對不起，這些是規則。";
+		close;
+	}
+	if (BaseLevel < 20) {
+		mes "第一步是課程。";
+		mes "當然A被稱為“征服沙漠！”。";
+		mes "這是您級別的最合適的任務。";
+		next;
+		mes "[無論]";
+		mes "^4d4dffthere是一個名為Morocc的沙漠小鎮。";
+		mes "從那裡向南，然後向東。該領域的中心有小綠洲。 ^000000";
+		next;
+		mes "[無論]";
+		mes "如果您去那裡，您會在綠洲周圍找到一隻狗。";
+		mes "他真的很神秘，可以說話，所以不要驚訝。";
+		next;
+		mes "[無論]";
+		mes "告訴狗 ^4d4d4dffboya真的很棒。 ^000000";
+		mes "如果您有任何疑問，請問那隻狗。";
+		next;
+		mes "[無論]";
+		mes "你為什麼要盯著我？";
+		mes "我必須提出一個密碼嗎？";
+		mes "該密碼怎麼了？";
+		next;
+		mes "[無論]";
+		mes "無論如何，這個地方離這裡不遠，所以對於像您這樣的初學者來說，這是一個合理的地方。";
+		mes "好的，願弗雷亞祝福你~！";
+		para_suv01 = 1;
+		setquest 7128;
+		close;
+	}
+	if (BaseLevel < 26) {
+		mes "我會把你送到當然B的第一步。";
+		mes "課程B被稱為“征服涵洞！”。";
+		mes "這是您級別的最合適的任務。";
+		next;
+		mes "[無論]";
+		mes "您需要註冊以探索騎士公會的prontera的涵洞。";
+		mes "註冊後，前往Prontera的西門。涵洞的經理在入口附近。";
+		next;
+		mes "[無論]";
+		mes "進入涵洞後，您可以找到派遣的貓。如果他與您交談，請不要感到驚訝。";
+		next;
+		mes "[無論]";
+		mes "告訴cat ^4d4d4dffboya的幫助就像一個巨大而美麗的金槍魚 ^000000。";
+		mes "他真的很神秘，可以說話，所以不要驚訝。";
+		mes "當您告訴他時，他會給您一個戰鬥目標。";
+		mes "如果您有任何疑問，請問貓。";
+		next;
+		mes "[無論]";
+		mes "你為什麼那樣盯著我？";
+		mes "這只是我編制的密碼。";
+		next;
+		mes "[無論]";
+		mes "反正...";
+		mes "這個地方離這裡也不遙不可及，對於像您這樣的初學者來說，這是一個合理的地方。";
+		mes "好的，願弗雷亞祝福你~！";
+		para_suv01 = 6;
+		setquest 7133;
+		close;
+	}
+	return;
+S_Quest2:
+	if (BaseLevel < 33) {
+		mes "涼爽的。";
+		mes "讓我為您選擇一個合適的地方。";
+		next;
+		mes "[無論]";
+		mes "我會把你送到當然A的第二步。";
+		mes "本課程稱為“征服幽靈洞！”。";
+		mes "這是您級別的最合適的任務。";
+		next;
+		mes "[無論]";
+		mes "Payon以北有一個小型弓箭手村莊。";
+		mes "弓箭手村的西山上有一個洞穴。";
+		next;
+		mes "[無論]";
+		mes "我們派出了洞穴前面的人。";
+		mes "他的名字是...嗯...";
+		mes "...";
+		next;
+		mes "[無論]";
+		mes "無論如何他是我們中的一員，所以他會認識我。";
+		mes "他會給你一個任務。";
+		mes "如果您有疑問，請問他。";
+		next;
+		mes "[無論]";
+		mes "你為什麼要盯著我？";
+		mes "我們已經很久沒有見面了，這就是為什麼我不記得他的名字！";
+		next;
+		mes "[無論]";
+		mes "反正...";
+		mes "那個地方離這裡不遠，所以很快回來。";
+		mes "好的，願弗雷亞祝福你~！";
+		para_suv01 = 13;
+		setquest 7138;
+		close;
+	}
+	if (BaseLevel < 40) {
+		mes "我會把你送到當然B的第二步。";
+		mes "本課程稱為“征服安特爾！”。";
+		mes "這是您級別的最合適的任務。";
+		next;
+		mes "[無論]";
+		mes "就在摩洛哥市西南部旅行。";
+		mes "在那裡，您會在地面上找到一個名為Anthell的洞穴。";
+		next;
+		mes "[無論]";
+		mes "那裡有很多螞蟻。 KK？";
+		mes "它也被沙子覆蓋，所以要小心。";
+		next;
+		mes "[無論]";
+		mes "這就是為什麼它被稱為螞蟻地獄。";
+		mes "我們的一位成員將在那裡等待。";
+		mes "他的名字是... K？ m？唔？無論如何，我不記得了。";
+		next;
+		mes "[無論]";
+		mes "他是我們中的一員，所以他會認識我。";
+		mes "他會給你一個任務。";
+		mes "如果您有任何疑問，請問他。";
+		next;
+		mes "[無論]";
+		mes "你為什麼要盯著我？";
+		mes "我們已經很久沒有見面了，這就是為什麼我不記得他的名字！";
+		next;
+		mes "[無論]";
+		mes "反正...";
+		mes "那個地方離這裡不遠，所以很快回來。";
+		mes "好吧，祝福你~!!";
+		para_suv01 = 17;
+		setquest 7142;
+		close;
+	}
+	return;
+S_Quest3:
+	if (BaseLevel < 50) {
+		mes "您當然是第三步。";
+		mes "本課程稱為“征服獸人村！”。";
+		mes "讓我看看...";
+		next;
+		mes "[無論]";
+		mes "穿過Prontera的大門，繼續向西走。獸人村正朝那個方向。";
+		mes "或者，您可以穿過Geffen的西門，並繼續前進。";
+		next;
+		mes "[無論]";
+		mes "嗯。獸人村在那裡派出了Kafra員工，因此您可以使用Kafra服務。";
+		mes "由你決定。";
+		next;
+		mes "[無論]";
+		mes "我們的一位派遣成員正在Kafra員工附近的建築物中等待。";
+		next;
+		mes "[無論]";
+		mes "她將解釋在那裡需要做什麼。";
+		mes "如果您有任何疑問，請問她。";
+		next;
+		mes "[無論]";
+		mes "好，願弗雷亞祝福你！";
+		para_suv01 = 24;
+		setquest 7147;
+	}
+	else if (BaseLevel < 60) {
+		mes "您當然是B的第三步。";
+		mes "本課程稱為“征服獸人地牢！”。";
+		mes "這是您級別的最合適的任務。";
+		next;
+		mes "[無論]";
+		mes "穿過Prontera的大門，繼續向西走。獸人村正朝那個方向。";
+		mes "或者，您可以穿過Geffen的西門，並繼續前進。";
+		next;
+		mes "[無論]";
+		mes "嗯。獸人村在那裡派出了Kafra員工，因此您可以使用Kafra服務。";
+		mes "由你決定。";
+		next;
+		mes "[無論]";
+		mes "我們的一位派遣成員正在Kafra員工附近的建築物中等待。";
+		next;
+		mes "[無論]";
+		mes "她將解釋在那裡需要做什麼。";
+		mes "如果您有任何疑問，請問她。";
+		next;
+		mes "[無論]";
+		mes "好，願弗雷亞祝福你！";
+		para_suv01 = 29;
+		setquest 7152;
+	}
+	else {
+		mes "您是最後一步。";
+		mes "本課程稱為“征服大洋城！”。";
+		mes "我不知道這是否是適當的課程，但無論如何，這是我們培訓的最後課程。";
+		next;
+		mes "[無論]";
+		mes "首先從Izlude乘船前往Byalan島！";
+		mes "有一個地下洞穴。進入底樓，您會在那裡找到一個歷史悠久的水下城市。";
+		next;
+		mes "[無論]";
+		mes "儘管它是水下，但您可以呼吸，所以不用擔心。";
+		mes "大洋城的入口處有一個派遣的實習生。";
+		next;
+		mes "[無論]";
+		mes "告訴他，我派了你並遵循他的指示。";
+		mes "好，願弗雷亞祝福你！";
+		para_suv01 = 33;
+		setquest 7156;
+	}
+	close;
+}
+
+moc_fild11,180,253,5	script	Talking Dog#para03	972,{
+	if (para_suv01 == 1) {
+		mes "[會說話的狗]";
+		mes "KkkukuuhuauaAaAUAUUAALIAHOL。";
+		mes "嗚嗚嗚。";
+		mes "哇..";
+		next;
+		mes "[會說話的狗]";
+		mes "這是怎麼回事？";
+		mes "你是！";
+		mes "伊甸園的成員。";
+		mes "你來給我吃飯嗎？我不喜歡喝酒。";
+		next;
+		switch (select("博雅真的很完美。 :博雅真的很棒。 :博雅真的很柔軟。")) {
+		case 1:
+			mes "[會說話的狗]";
+			mes "嗯...";
+			mes "你在說什麼。";
+			close;
+		case 2:
+			mes "[會說話的狗]";
+			mes "啊...嗯...";
+			mes "天哪，你來這裡參加培訓嗎？";
+			mes "如果Boya寄給您，那麼您就會知道這是戰鬥訓練。";
+			mes "弓哇...";
+			next;
+			mes "[會說話的狗]";
+			mes "如果是這樣，我應該開始更清楚地確保綠洲嗎？";
+			mes "你能看到禿鷹飛嗎？";
+			next;
+			mes "[會說話的狗]";
+			mes "你能為我嚇'他們嗎？";
+			mes "因此，人們可以更安全，更舒適地使用這種綠洲。";
+			next;
+			mes "[會說話的狗]";
+			mes "我們應該至少狩獵10個禿鷹，好嗎？";
+			mes "我會睡一會兒。";
+			mes "嗚嗚嗚弓……";
+			set para_suv01,2;
+			changequest 7128,7129;
+			close;
+		case 3:
+			mes "[會說話的狗]";
+			mes "你還好嗎？";
+			mes "你以前沒看過說話的狗嗎？";
+			mes "你在說什麼？";
+			close;
+		}
+	}
+	if (para_suv01 == 2) {
+		if (checkquest(7129,HUNTING) == 2) {
+			mes "[會說話的狗]";
+			mes "哇...";
+			mes "偉大的！";
+			mes "我可以從你那裡感受到我的青春。";
+			next;
+			mes "[會說話的狗]";
+			mes "沒關係。";
+			mes "讓我們找到下一個目標KK！";
+			mes "好的。讓我們把沙漠狼從這裡趕出。";
+			next;
+			mes "[會說話的狗]";
+			mes "如果他們長大，他們將變得危險。";
+			mes "......";
+			next;
+			mes "[會說話的狗]";
+			mes "為什麼，你為什麼那樣看我？";
+			mes "他們是狼，我是一隻好狗。";
+			mes "但是我一生並不總是是狗。";
+			next;
+			mes "[會說話的狗]";
+			mes "我將向您展示根本不必憐憫我。";
+			next;
+			mes "[會說話的狗]";
+			mes "他們在任何地方撒尿，沒有羞恥。";
+			mes "只是在長大時揮舞著尾巴，咬人不小心！";
+			next;
+			mes "[會說話的狗]";
+			mes "您必須至少狩獵10個！";
+			mes "正是10！";
+			mes "去！去！去！";
+			set para_suv01,3;
+			changequest 7129,7130;
+			close;
+		}
+		mes "[會說話的狗]";
+		mes "首先讓我們跟隨禿頭和嘈雜的鳥。";
+		mes "是的禿鷹。";
+		mes "殺死10個禿鷹。似乎很容易，對吧？";
+		mes "哦，如果您累了，我會幫助您的。";
+		next;
+		mes "- 當狗吠叫時，您的HP和SP恢復了。 -";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 3) {
+		if (checkquest(7130,HUNTING) == 2) {
+			mes "[會說話的狗]";
+			mes "你真完美。";
+			next;
+			mes "[會說話的狗]";
+			mes "或不。呵呵，無論如何感謝您的幫助。";
+			mes "綠洲現在幾乎已經固定了。";
+			mes "好的，這是最後一步！";
+			next;
+			mes "[會說話的狗]";
+			mes "有一個煩人的怪物藏在沙灘上，毒害人們無處不在。";
+			next;
+			mes "[會說話的狗]";
+			mes "所有美麗的東西里面都有一些毒藥，但實際上殺死了。";
+			mes "殺死稱為沙漠中的毒品！";
+			next;
+			mes "[會說話的狗]";
+			mes "這是最後一步，所以讓它簡單";
+			mes "只是狩獵5！";
+			mes "弓哇！";
+			set para_suv01,4;
+			changequest 7130,7131;
+			close;
+		}
+		mes "[會說話的狗]";
+		mes "我不想讓你表現出任何可惜。";
+		mes "我是金色心臟的狗。";
+		next;
+		mes "[會說話的狗]";
+		mes "狩獵後，十個沙漠狼再次回來。";
+		mes "哦，如果您累了，我會幫助您的。";
+		next;
+		mes "- 當狗吠叫時，您的HP和SP恢復了。 -";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 4) {
+		if (checkquest(7131,HUNTING) == 2) {
+			mes "[會說話的狗]";
+			mes "嗯。出色的。";
+			mes "你很棒！";
+			next;
+			mes "[會說話的狗]";
+			mes "多虧了您的努力，綠洲才安全。";
+			mes "不要環顧四周！";
+			mes "如果我說這是安全的！";
+			mes "嗚嗚嗚啊啊啊！";
+			next;
+			mes "[會說話的狗]";
+			mes "在這裡。";
+			mes "如果我越來越多地挖掘，我可以找到蝎子，但是";
+			mes "這種綠洲肯定會更安全。";
+			next;
+			mes "[會說話的狗]";
+			mes "您可以自己感到自豪和自信，並儘力而為。";
+			mes "您有很多幫助使我的休息舒適。";
+			next;
+			mes "[會說話的狗]";
+			mes "您已經幫助征服了沙漠，";
+			mes "並通過了初學者訓練步驟，以便我蓋章。";
+			mes "Krrrrreuun。繼續。";
+			next;
+			mes "[會說話的狗]";
+			mes "回到伊甸園集團總部，並將其展示給浮華的符文騎士。";
+			mes "讓我再說一遍，你很棒！";
+			mes "勳奈勳~";
+			set para_suv01,5;
+			changequest 7131,7132;
+			close;
+		}
+		mes "[會說話的狗]";
+		mes "讓我們只狩獵5次蝎子。";
+		mes "這樣我們就可以在這種綠洲中實現和平。";
+		next;
+		mes "[會說話的狗]";
+		mes "當我小睡時，他們不會再咀嚼我的尾巴了。";
+		mes "由於他的錯誤，我的腳根本不會受傷。";
+		next;
+		mes "[會說話的狗]";
+		mes "你可以打架。";
+		mes "我可以更舒適地休息。";
+		mes "其他人也會更安全。";
+		next;
+		mes "[會說話的狗]";
+		mes "每個人都會對伊甸園的思考。";
+		mes "哦，如果您累了，我會幫助您的。";
+		next;
+		mes "- 當狗吠叫時，您的HP和SP恢復了。 -";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 5) {
+		mes "[會說話的狗]";
+		mes "kkkkaaaauuuuunng。";
+		mes "哎呀，庫普。";
+		next;
+		mes "[會說話的狗]";
+		mes "你為什麼還在這裡？";
+		mes "你在這裡完成。";
+		mes "hooooo弓哇。";
+		close;
+	}
+	if (para_suv01 > 5) {
+		mes "[會說話的狗]";
+		mes "嘿，~發生了什麼事？";
+		mes "那符文騎士呢？";
+		mes "咕嚕咕嚕...";
+		mes "鉤鉤...";
+		next;
+		mes "[會說話的狗]";
+		mes "伊甸園很酷。";
+		mes "他們是一個非常好的團隊。";
+		mes "他們接受了一隻流浪的狗。";
+		mes "保重和好運。";
+		close;
+	}
+	mes "嘿，看。";
+	mes "我說話的狗。";
+	mes "不是狼。";
+	mes "我不是原來的狗...";
+	next;
+	if (callfunc("F_HasEdenGroupMark")) {
+		mes "[會說話的狗]";
+		mes "無論如何您是伊甸園成員嗎？";
+		mes "哦，很高興見到你。";
+		mes "我也是伊甸園集團的成員。";
+		mes "保重和好運。";
+		close;
+	}
+	mes "[會說話的狗]";
+	mes "你為什麼那樣看我？";
+	mes "......";
+	close;
+}
+
+prt_sewb1,131,262,3	script	Timid Cat#para04	422,{
+	if (para_suv01 < 6) {
+		mes "[膽小的貓]";
+		mes "喵...";
+		mes "你是誰？";
+		mes "你為什麼在這裡哭？";
+		close;
+	}
+	if (para_suv01 == 6) {
+		mes "[膽小的貓]";
+		mes "快點...";
+		mes "我可能站在這裡，像這個喵喵一樣和你說話，但我仍然是一隻貓...";
+		next;
+		mes "[膽小的貓]";
+		mes "親愛的人，你是";
+		mes "我小組的成員？";
+		mes "回复...真的...！";
+		mes "親愛的博亞的幫助就像一個巨人和...";
+		next;
+		switch (select("美麗的秋刀魚:新鮮的青花魚:美麗的金槍魚")) {
+		case 1:
+			mes "[膽小的貓]";
+			mes "大而美麗的索里...";
+			mes "我害羞。";
+			close;
+		case 2:
+			mes "[膽小的貓]";
+			mes "我想吃鯖魚。";
+			mes "大和新鮮的鯖魚在哪裡？";
+			close;
+		case 3:
+			mes "[膽小的貓]";
+			mes "你知道大而美麗的金槍魚嗎？";
+			mes "親愛的博婭肯定送你這裡。";
+			mes "我該如何解釋...？";
+			next;
+			mes "[膽小的貓]";
+			mes "我腳下的東西剛到了嗎？";
+			mes "你想殺死一隻貓嗎？";
+			mes "這裡的環境很糟糕。";
+			next;
+			mes "[膽小的貓]";
+			mes "無論如何，我正在做我被分配要做的事情。";
+			mes "嗨，你好，歡迎。";
+			next;
+			mes "[膽小的貓]";
+			mes "你是來這裡戰鬥的嗎？";
+			mes "狩獵那些小偷的蟲子，快點！";
+			mes "狩獵至少10個！";
+			mes "我！";
+			next;
+			mes "[膽小的貓]";
+			mes "我真的不喜歡那些討厭的爬蟲...";
+			mes "嘿~！";
+			next;
+			mes "^4d4dff貓被貓感到驚訝";
+			mes "小偷蟲子凍結";
+			mes "地方。狩獵那些";
+			mes "小偷蟲子周圍。 ^000000";
+			set para_suv01,7;
+			changequest 7133,7134;
+			close;
+		}
+	}
+	if (para_suv01 == 7) {
+		if (checkquest(7134,HUNTING) == 2) {
+			mes "[膽小的貓]";
+			mes "現在您了解骯髒潮濕的地下下水道嗎？";
+			mes "嗯，看看下一步是什麼。";
+			next;
+			mes "[膽小的貓]";
+			mes "這是那些小偷蟲子旁邊的污垢的象徵。";
+			mes "狩獵一些tarou使下水道清潔器。";
+			next;
+			mes "[膽小的貓]";
+			mes "對於我們的成員加入這項任務。";
+			mes "亨特10塔魯。";
+			mes "容易，不是嗎？";
+			next;
+			mes "[膽小的貓]";
+			mes "我為什麼不一次問你？ KKK .. ??";
+			mes "嗯........";
+			mes "因為這只是一個培訓任務。";
+			next;
+			mes "[膽小的貓]";
+			mes "培訓任務很艱難且令人反感。";
+			mes "所以趕快狩獵10塔魯。";
+			set para_suv01,8;
+			changequest 7134,7135;
+			close;
+		}
+		mes "[膽小的貓]";
+		mes "清潔下水道。現在的第一步是狩獵小偷蟲子。";
+		mes "這不是簡單，喵嗎？";
+		next;
+		mes "[膽小的貓]";
+		mes "小心檢查地圖，以免迷路。";
+		mes "這是一項服務。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 8) {
+		if (checkquest(7135,HUNTING) == 2) {
+			mes "[膽小的貓]";
+			mes "好工作~！";
+			mes "您如何擺脫那些骯髒的蟲子和塔魯。你很勇敢。";
+			next;
+			mes "[膽小的貓]";
+			mes "現在有勇氣，因為我將您送往更強大的對手。";
+			mes "但是首先是為了測試您的勇氣，狩獵熟悉。";
+			next;
+			mes "[膽小的貓]";
+			mes "熟悉的人會咬你，所以要小心。";
+			mes "他們是卑鄙的。";
+			mes "他們嚇到我了，所以只狩獵5，那就足夠了。";
+			next;
+			mes "[膽小的貓]";
+			mes "那將向我表明你很勇敢。";
+			mes "嘿~！";
+			next;
+			mes "[膽小的貓]";
+			mes "我什麼都沒有...";
+			mes "......";
+			mes "你想要什麼喵？熟悉的人正在等待與您戰鬥，快點，移動~！";
+			set para_suv01,9;
+			changequest 7135,7136;
+			close;
+		}
+		mes "[膽小的貓]";
+		mes "如果您不能殺死塔魯，您可能會患上各種骯髒的疾病。";
+		mes "因此，為自己感到驕傲，並儘力殺死他們。";
+		next;
+		mes "[膽小的貓]";
+		mes "我會幫你一點。";
+		mes "在這裡，我已經恢復了你的素食。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 9) {
+		if (checkquest(7136,HUNTING) == 2) {
+			mes "[膽小的貓]";
+			mes "你很棒~";
+			mes "你這麼快殺了他們！";
+			mes "喵...";
+			next;
+			mes "[膽小的貓]";
+			mes "現在，您根本不害怕蟲子和塔魯。";
+			mes "感謝您參加征服涵洞培訓任務。";
+			next;
+			mes "[膽小的貓]";
+			mes "現在回到總部，請教練Boya確保他擁有美麗的金槍魚...";
+			mes "我會在這裡等。";
+			next;
+			mes "[膽小的貓]";
+			mes "您知道如何到達伊甸園集團總部嗎？";
+			mes "Prontera是這裡最接近的城市。";
+			mes "前往Prontera，找到一個伊甸園的傳送器。";
+			set para_suv01,10;
+			changequest 7136,7137;
+			close;
+		}
+		mes "[膽小的貓]";
+		mes "熟悉的人真的很可怕。";
+		mes "他們總是在飛。";
+		next;
+		mes "[膽小的貓]";
+		mes "這是最後一門課程。";
+		mes "我會幫你一點。";
+		mes "在這裡，我已經恢復了你的素食。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 >= 10) {
+		mes "[膽小的貓]";
+		mes "您已經完成了“征服涵洞”。";
+		mes "回到伊甸園總部向博亞報告。";
+		next;
+		mes "[膽小的貓]";
+		mes "Boya在等您時可能會吃我的金槍魚。";
+		close;
+	}
+	mes "[膽小的貓]";
+	mes "你好嗎？";
+	mes "您是否自願征服了涵洞？";
+	mes "您肯定是Edgen組的成員。";
+	mes "您正在幫助使世界變得更美好。";
+	close;
+}
+
+pay_arche,41,136,3	script	Eden Member Karl#para05	904,{
+	if (para_suv01 < 13) {
+		if (callfunc("F_HasEdenGroupMark")) {
+			mes "[卡爾]";
+			mes "嘿，你怎麼樣？";
+			mes "很高興見到你~";
+			mes "你要進去嗎？";
+			close;
+		}
+		mes "[卡爾]";
+		mes "嗯...？";
+		mes "你不是我在等待的人。";
+		close;
+	}
+	if (para_suv01 == 13) {
+		mes "[卡爾]";
+		mes "你好？";
+		mes "由於我得到了報告，所以我一直在等你。";
+		mes "您來這裡加入培訓任務，對嗎？";
+		next;
+		mes "[卡爾]";
+		mes "您以前曾經進入這個洞穴嗎？";
+		mes "我不知道您是否已經在這個村莊聽過一些故事。";
+		next;
+		mes "[卡爾]";
+		mes "有許多死者的靈魂改變了他們的外表，就好像他們是真實的人一樣，並發表了威脅性的言論。";
+		mes "太糟糕了，不是嗎？";
+		next;
+		mes "[卡爾]";
+		mes "這就是為什麼我們選擇這個地方作為戰鬥訓練任務的第2步。";
+		mes "此步驟稱為“征服幽靈洞穴~”。";
+		mes "幫助人們舒適地享受他們的夜晚。";
+		next;
+		mes "[卡爾]";
+		mes "那裡有很多危險的事情。唔...";
+		mes "對您來說，一樓就足夠了。";
+		next;
+		mes "[卡爾]";
+		mes "讓我們征服危險的幽靈洞...";
+		mes "殺死那裡的骨骨架。";
+		next;
+		mes "[卡爾]";
+		mes "骨頭來自骨骼。";
+		mes "實際上骨骼或正常骨骼都是一樣的，但是...";
+		next;
+		mes "[卡爾]";
+		mes "骨骼是基本的亡靈課程之一。";
+		mes "亡靈永遠不會。狩獵15個亡靈骨骼。";
+		next;
+		mes "[卡爾]";
+		mes "如果您覺得自己處於危險之中，請隨時離開。";
+		mes "您不擔心受傷嗎？";
+		set para_suv01,14;
+		changequest 7138,7139;
+		close;
+	}
+	if (para_suv01 == 14) {
+		if (checkquest(7139,HUNTING) == 2) {
+			mes "[卡爾]";
+			mes "你得到了不死的工作方式嗎？";
+			mes "眾所周知，亡靈永遠不會死，這與他們對他們的詛咒相同。";
+			next;
+			mes "[卡爾]";
+			mes "所以...可以節省治愈和復活的人的技能。";
+			mes "這些事情確實是不死階級的強烈攻擊。";
+			next;
+			mes "[卡爾]";
+			mes "無論如何...就是這樣。";
+			mes "接下來...我想您在殺死骨骼時已經看到了。";
+			mes "一些綠色的東西正在撿起死去的怪物掉下的所有東西。";
+			next;
+			mes "[卡爾]";
+			mes "你知道波林斯嗎？也許他們與他們有關。";
+			mes "他們看起來真的很糟糕，也許他們一直在吃毒藥或其他東西。";
+			next;
+			mes "[卡爾]";
+			mes "好的，如果您準備好殺死那些poporings。";
+			mes "您應該狩獵其中10個。";
+			next;
+			set para_suv01,15;
+			changequest 7139,7140;
+			close;
+		}
+		mes "[卡爾]";
+		mes "骨骼是基本的亡靈。";
+		mes "使用治療或複活技巧。";
+		mes "如果可以的話。";
+		next;
+		mes "[卡爾]";
+		mes "以防萬一我會恢復您的所有精力。";
+		mes "這是最後一步，所以要小心。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 15) {
+		if (checkquest(7140,HUNTING) == 2) {
+			mes "[卡爾]";
+			mes "你回到了彈出式的偷了什麼嗎？";
+			mes "這個洞穴真的很深，他們可能會撿起很多寶貴的東西。";
+			next;
+			mes "[卡爾]";
+			mes "你的工作真的很棒。出色的。";
+			mes "一樓現在更安全。感謝您的幫助。";
+			next;
+			mes "[卡爾]";
+			mes "您已經完成了所有訓練任務，因此請回到總部並獲得浮華符文騎士的批准。";
+			next;
+			mes "[卡爾]";
+			mes "您可能會得到新的製服。";
+			mes "哈哈。我將保持您的進步。";
+			set para_suv01,16;
+			changequest 7140,7141;
+			close;
+		}
+		mes "[卡爾]";
+		mes "poporings比您預期的要強。";
+		mes "如果您對待它們與普通途徑相同，那將使您陷入困境。";
+		next;
+		mes "[卡爾]";
+		mes "以防萬一我會恢復您的所有精力。";
+		mes "這是最後一步，所以要小心。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 >= 16) {
+		mes "[卡爾]";
+		mes "我已經在伊甸園總部通知了博亞。";
+		mes "如果您去那裡，他會非常歡迎您。";
+		next;
+		mes "[卡爾]";
+		mes "您會得到新的製服，您不是興奮嗎？";
+		mes "哈哈哈..";
+		close;
+	}
+	mes "[卡爾]";
+	mes "殺死亡靈？";
+	mes "盡力使世界更安全。";
+	mes "這是伊甸園的目標之一。";
+	close;
+}
+
+anthell01,29,264,5	script	Eden Member Cloud#para06	899,{
+	if (para_suv01 < 17) {
+		if (callfunc("F_HasEdenGroupMark")) {
+			mes "[雲]";
+			mes "糟糕。";
+			mes "您是我小組的成員。";
+			mes "你為什麼來這裡，你在尋找危險嗎？";
+			next;
+			mes "[雲]";
+			mes "最強大的老闆怪物之一在這裡。";
+			mes "在這裡探索時要小心。";
+			close;
+		}
+		mes "[雲 ]";
+		mes "你在看什麼？";
+		mes "我們沒有彼此關係，我們是...";
+		close;
+	}
+	if (para_suv01 == 17) {
+		mes "[雲]";
+		mes "你好？";
+		mes "你為什麼來這裡尋找危險？";
+		next;
+		switch (select("征服螞蟻地獄:只是想認識你:我在哪裡？")) {
+		case 1:
+			mes "[雲]";
+			mes "嗯。征服螞蟻地獄？你說的嗎？";
+			mes "你是一名實習生。";
+			mes "你來對地方了。";
+			next;
+			mes "[雲]";
+			mes "起初，我將解釋一下螞蟻地獄。";
+			mes "螞蟻在沙子中挖了一個洞穴，並與表面相連。那是螞蟻地獄。";
+			next;
+			mes "[雲]";
+			mes "沙子逐漸流入孔中。";
+			mes "如果有人踩在孔上，他們將穿過沙子的洞中。";
+			next;
+			mes "[雲]";
+			mes "很難從那裡生存。";
+			mes "對我們來說，這似乎是正常的發生，所以對普通人來說不是生存的問題。";
+			next;
+			mes "[雲]";
+			mes "許多螞蟻都住在這裡。";
+			mes "有一個名為Maya的老闆怪物，所以您應該更加謹慎。";
+			next;
+			mes "[雲]";
+			mes "好的，讓我們嘗試先狩獵最弱的螞蟻。";
+			mes "皮埃爾是最弱的螞蟻的名字。";
+			mes "他們就在這裡。";
+			next;
+			mes "[雲]";
+			mes "就螞蟻而言，他們在攻擊時彼此協助。";
+			mes "小心並殺死15位皮埃爾螞蟻。";
+			set para_suv01,18;
+			changequest 7142,7143;
+			close;
+		case 2:
+			mes "[雲]";
+			mes "......";
+			mes "哈哈...你在開玩笑嗎？";
+			mes "您因沙漠中極炎熱的天氣而筋疲力盡。";
+			next;
+			mes "[雲]";
+			mes "我是一個忙碌的男人。";
+			mes "一位受訓者計劃拜訪我，但該人尚未露面。我很緊張。";
+			close;
+		case 3:
+			mes "[雲]";
+			mes "你在哪裡？";
+			mes "您在摩洛哥西南地獄的安特。";
+			mes "Morocc是這里東北部最近的城市。";
+			close;
+		}
+	}
+	if (para_suv01 == 18) {
+		if (checkquest(7143,HUNTING) == 2) {
+			mes "[雲]";
+			mes "嘿，是什麼？";
+			mes "也許當您狩獵皮埃爾時，您看到了安德烈（Andre）。";
+			next;
+			mes "[雲]";
+			mes "好吧，現在讓我們狩獵安德烈·阿斯維爾（Andre Aswel）。";
+			mes "啊，你看著我的方式，''我為什麼不要求你一次做這件事呢？";
+			next;
+			mes "[雲]";
+			mes "這樣不是很有趣嗎？";
+			mes "嘿，現在您的下一個目標是15安德烈！";
+			mes "你很堅強，所以會沒事的！";
+			next;
+			mes "[雲]";
+			mes "如果找不到安德烈（Andre）進入洞穴。";
+			mes "啊，要小心瑪雅。";
+			set para_suv01,19;
+			changequest 7143,7144;
+			close;
+		}
+		mes "[雲]";
+		mes "您如何看待螞蟻地獄？";
+		mes "你可以待更長嗎？";
+		mes "好的，我會恢復您的strengh，所以繼續前進。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 19) {
+		if (checkquest(7144,HUNTING) == 2) {
+			mes "[雲]";
+			mes "偉大的。您似乎已經殺死了所有的安德烈。";
+			mes "您如何看待與螞蟻作戰？";
+			mes "好嗎？";
+			next;
+			mes "[雲]";
+			mes "嘿，振作起來。";
+			mes "要征服螞蟻地獄，你還剩一步。";
+			mes "您可能已經猜到了下一個目標。";
+			next;
+			mes "[雲]";
+			mes "葡萄園！";
+			mes "我怎麼說...他看起來像親愛的。";
+			mes "皮埃爾是一名工人。安德烈（Andre）是一名監護人，所以……維塔塔（Vitata）就像母親。";
+			next;
+			mes "[雲]";
+			mes "他們對孩子和女人真的很友善，但對螞蟻沒有任何可惜。";
+			mes "狩獵負責照顧螞蟻雞蛋的維塔塔。";
+			next;
+			mes "[雲]";
+			mes "如果有人陷入螞蟻地獄，可能會比以前更安全。";
+			mes "現在，這是振作起來的最後一步，讓我們殺死10 Vitata。";
+			next;
+			mes "[雲]";
+			mes "如果您覺得自己的危險太大。剛回來。";
+			mes "我會治愈你。";
+			set para_suv01,20;
+			changequest 7144,7145;
+			close;
+		}
+		mes "[雲]";
+		mes "看，為了使您加油，我會治愈您，直到您完成培訓。";
+		mes "下巴振作起來。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 20) {
+		if (checkquest(7145,HUNTING) == 2) {
+			mes "[雲]";
+			mes "哦...這可能是一場煽動的戰鬥。";
+			mes "你完成了這麼快。";
+			next;
+			mes "[雲]";
+			mes "好工作。回到總部報告。";
+			mes "您已經快速完成了培訓。";
+			next;
+			mes "[雲]";
+			mes "你會得到好消息。";
+			mes "即使在炎熱的天氣下，您也做得非常好。";
+			set para_suv01,21;
+			changequest 7145,7146;
+			close;
+		}
+		mes "[雲]";
+		mes "看，為了振作起來，我會治愈您，直到您完成培訓。";
+		mes "下巴振作起來。";
+		next;
+		mes "[雲]";
+		mes "只是維塔塔，那不是一個容易的對手嗎？";
+		mes "如果您看到瑪雅人就逃跑了。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 >= 21) {
+		mes "[雲]";
+		mes "足以說你征服了螞蟻地獄。";
+		mes "你不是在這裡習慣嗎？";
+		next;
+		mes "[雲]";
+		mes "回到總部，報告您完成任務，快點";
+		mes "您會收到好消息。";
+		mes "您將收到Eden Group統一的Aswel。";
+		close;
+	}
+	mes "[雲]";
+	mes "我真的為伊甸園感到自豪。";
+	mes "制服對我看起來不錯嗎？";
+	mes "哈哈...";
+	close;
+}
+
+in_orcs01,38,175,3	script	Eden Member Hooksha	803,{
+	if (para_suv01 < 24) {
+		if (callfunc("F_HasEdenGroupMark")) {
+			mes "[鉤叉]";
+			mes "令人難以置信的是你為什麼來這裡？";
+			mes "嗯...您不在培訓的第三步中嗎？";
+			mes "yeee~我很興奮~";
+			next;
+			mes "[鉤叉]";
+			mes "我有點無聊，等待學員。他們在哪裡？";
+			close;
+		}
+		mes "[鉤叉]";
+		mes "你好。";
+		mes "你為什麼來這裡？";
+		mes "嗯... aaaaa ...";
+		next;
+		mes "[鉤叉]";
+		mes "你為什麼不加入我的小組？";
+		mes "如果您有興趣加入我們，";
+		mes "您不會後悔的決定。";
+		close;
+	}
+	if (para_suv01 == 24) {
+		mes "[鉤叉]";
+		mes "你好。";
+		mes "你是實習生嗎？";
+		mes "是的，我可以說。";
+		mes "那我們開始嗎？";
+		next;
+		mes "[鉤叉]";
+		mes "實際上，我不太喜歡這個訓練任務，但無論如何，我都會向您解釋。";
+		next;
+		mes "[鉤叉]";
+		mes "如您所知，這是獸人村。";
+		mes "獸人不喜歡人類。";
+		mes "他們不嘗試與我們交流。當他們看到人類時，他們立即攻擊我們。";
+		next;
+		mes "[鉤叉]";
+		mes "可悲的是，人類也不想與他們交流。";
+		mes "因此，我們決定對他們採取強烈的態度。";
+		mes "實際上，我們想擺脫所有這些。";
+		next;
+		mes "[鉤叉]";
+		mes "我們正在努力征服獸人村。";
+		mes "這是為像您這樣的冒險家完成初學者培訓任務的合適地方。";
+		next;
+		mes "[鉤叉]";
+		mes "這就是為什麼我們選擇了這個任務的地方。";
+		mes "好的，我們沒有很多時間，所以讓我們開始。";
+		mes "首先，讓我們消除最弱的。";
+		next;
+		mes "[鉤叉]";
+		mes "最好在他們長大之前殺死他們。";
+		mes "狩獵10個ORC嬰兒。";
+		mes "不要憐憫他們，因為他們長大後會成為侵略性的獸人戰士。";
+		next;
+		mes "[鉤叉]";
+		mes "好是壞這就是它的樣子。";
+		mes "即使他們是嬰兒，也不要猶豫。";
+		set para_suv01,25;
+		changequest 7147,7148;
+		close;
+	}
+	if (para_suv01 == 25) {
+		if (checkquest(7148,HUNTING) == 2) {
+			mes "[鉤叉]";
+			mes "偉大的。驚人的。";
+			mes "這不是很愉快，所以讓我們繼續前進。";
+			next;
+			mes "[鉤叉]";
+			mes "在下一步，我們將與獸人戰士作戰。";
+			mes "獸人長大後，它們就會成為強大的獸人戰士。";
+			next;
+			mes "[鉤叉]";
+			mes "他們都是有力的戰士。";
+			mes "當您與獸人嬰兒戰鬥時，您可能受到了他們的攻擊。";
+			next;
+			mes "[鉤叉]";
+			mes "現在是時候狩獵10個獸人戰士了。";
+			mes "如果您遇到麻煩，那就回到這里安全。";
+			mes "你明白嗎？";
+			set para_suv01,26;
+			changequest 7148,7149;
+			close;
+		}
+		mes "[鉤叉]";
+		mes "獸人村中有獸人戰士，獸人女士和獸人嬰兒。";
+		mes "他們真的很積極。";
+		next;
+		mes "[鉤叉]";
+		mes "你看起來很累，我會恢復健康。";
+		mes "如果您遇到麻煩，那就回到這里安全。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 26) {
+		if (checkquest(7149,HUNTING) == 2) {
+			mes "[鉤叉]";
+			mes "現在，您可以繼續下一步。";
+			next;
+			mes "[鉤叉]";
+			mes "正是...現在是時候狩獵獸人了。";
+			mes "如果您想完全征服獸人村，應該在他們有更多的獸人嬰兒之前殺死它們。";
+			next;
+			mes "[鉤叉]";
+			mes "但是您不需要殺死所有這些。";
+			mes "去狩獵10位ORC女士。";
+			next;
+			mes "[鉤叉]";
+			mes "您已經可以從外面感覺到強大的力量...";
+			mes "不要猶豫攻擊他們。";
+			set para_suv01,27;
+			changequest 7149,7150;
+			close;
+		}
+		mes "[鉤叉]";
+		mes "您現在應該精疲力盡。";
+		mes "但是您仍然有更多目標，理解。";
+		next;
+		mes "[鉤叉]";
+		mes "您看起來很累，我會恢復您的健康。";
+		mes "如果您遇到麻煩，那就回到這里安全。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 27) {
+		if (checkquest(7150,HUNTING) == 2) {
+			mes "[鉤叉]";
+			mes "出色的工作。";
+			mes "現在，您應該了解獸人部落在獸人村的工作方式。";
+			mes "在炎熱和潮濕的情況下，您遵循了訓練任務。";
+			mes "您現在已經完成了“征服獸人村！”培訓任務。恭喜。";
+			next;
+			mes "[鉤叉]";
+			mes "返回並向伊甸園總部報告。";
+			mes "我敢肯定，他們會為您帶來好消息。";
+			set para_suv01,28;
+			changequest 7150,7151;
+			close;
+		}
+		mes "[鉤叉]";
+		mes "獸人女士是最後一個目標。";
+		mes "振作起來~！";
+		next;
+		mes "[鉤叉]";
+		mes "您看起來很累，我會恢復您的健康。";
+		mes "如果您遇到麻煩，那就回到這里安全。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 28) {
+		mes "[鉤叉]";
+		mes "您已經完成了培訓任務。";
+		mes "回到伊甸園集團總部並在那里報告。";
+		close;
+	}
+	if (para_suv01 == 29) {
+		mes "[鉤叉]";
+		mes "您來這裡加入培訓嗎？";
+		mes "你看起來像專家。";
+		next;
+		mes "[鉤叉]";
+		mes "這不是說話的好地方，所以讓我們快點。";
+		mes "這個地方與獸人村的地牢有關。";
+		next;
+		mes "[鉤叉]";
+		mes "你能以這種方式看到嗎？";
+		mes "地面下有一個洞穴，普通獸人不會來這裡。";
+		next;
+		mes "[鉤叉]";
+		mes "最安全的地方在這裡。";
+		mes "那裡有許多不死怪物。";
+		next;
+		mes "[鉤叉]";
+		mes "亡靈怪物是危險和威脅性的。";
+		mes "戰鬥時不要猶豫。";
+		next;
+		mes "[鉤叉]";
+		mes "現在在那裡狩獵那些不死的怪物。";
+		next;
+		mes "[鉤叉]";
+		mes "嘗試在地牢中狩獵20個ORC殭屍。";
+		mes "他們真的很好。";
+		next;
+		mes "[鉤叉]";
+		mes "他們會毫不猶豫地在任何地方攻擊您。";
+		mes "願弗雷亞祝福你。";
+		set para_suv01,30;
+		changequest 7152,7153;
+		close;
+	}
+	if (para_suv01 == 30) {
+		if (checkquest(7153,HUNTING) == 2) {
+			mes "[鉤叉]";
+			mes "這與您在Payon中看到的不同，對嗎？";
+			mes "儘管您設法殺死了獸人殭屍，但不能確定自己更強大。";
+			next;
+			mes "[鉤叉]";
+			mes "因此，不要更深入地進入該洞穴，否則您一定會死。";
+			next;
+			mes "[鉤叉]";
+			mes "下一個目標是在獸人殭屍旁邊行走的獸人骨骼。";
+			mes "狩獵20個ORC骨骼。";
+			next;
+			mes "[鉤叉]";
+			mes "這是獸人地牢訓練任務的最後一步。";
+			mes "這一切都取決於您。";
+			next;
+			mes "[鉤叉]";
+			mes "好的，振作起來，再次見到你。";
+			mes "狩獵20個ORC骨骼。";
+			set para_suv01,31;
+			changequest 7153,7154;
+			close;
+		}
+		mes "[鉤叉]";
+		mes "你可以待更長嗎？";
+		mes "您看起來很累，我會恢復您的健康。";
+		mes "如果您遇到麻煩，那就回到這里安全。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 31) {
+		if (checkquest(7154,HUNTING) == 2) {
+			mes "[鉤叉]";
+			mes "您的培訓任務已經完成。";
+			mes "回到伊甸園總部並舉報。";
+			mes "我想詳細地說，但我變得如此疲倦。";
+			next;
+			mes "[鉤叉]";
+			mes "最近，學員來到這裡越來越多，我根本無法入睡。";
+			mes "我的意思是不是要你。";
+			mes "無論如何，我將通知小組，所以去那里報告。";
+			next;
+			set para_suv01,32;
+			changequest 7154,7155;
+			close;
+		}
+		mes "[鉤叉]";
+		mes "你可以待更長嗎？";
+		mes "你看起來很累，我會恢復健康。";
+		mes "如果您遇到麻煩，那就回到這里安全。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 32) {
+		mes "[鉤叉]";
+		mes "您不需要向伊甸園總部報告嗎？";
+		mes "我很累，讓我一個人呆著。";
+		close;
+	}
+	if (para_suv01 > 32) {
+		mes "[鉤叉]";
+		mes "嗯？什麼獸人？探索地牢？";
+		mes "您的艱難時期。";
+		next;
+		mes "[鉤叉]";
+		mes "這個地方真的很高興休息，因為獸人不來這裡。";
+		mes "hu哼...";
+		close;
+	}
+}
+
+iz_dun04,43,46,3	script	Eden Member Callandiva	745,{
+	if (para_suv01 < 33) {
+		if (callfunc("F_HasEdenGroupMark")) {
+			mes "[卡蘭迪瓦]";
+			mes "您是怎麼在這個大洋城深處的？";
+			mes "啊，那個符號是我們小組的。";
+			mes "您肯定是一名實習生。";
+			next;
+			mes "[卡蘭迪瓦]";
+			mes "什麼？你不是嗎？";
+			mes "我...看...我看到...";
+			mes "好...繼續前進。";
+			close;
+		}
+		mes "[卡蘭迪瓦]";
+		mes "儘管我們在海底下，您仍然可以在這裡呼吸。";
+		mes "你知道為什麼嗎？";
+		next;
+		mes "[卡蘭迪瓦]";
+		mes "讓我們看看由於水分，我的皮膚太柔軟了。";
+		mes "我的手指和腳趾彼此不連接。";
+		next;
+		mes "[卡蘭迪瓦]";
+		mes "當伊甸園在這裡派遣我時，我真的很震驚和害怕。";
+		mes "現在我非常喜歡這個環境。";
+		mes "真的很平靜...";
+		close;
+	}
+	if (para_suv01 == 33) {
+		mes "[卡蘭迪瓦]";
+		mes "您是怎麼在這個大洋城深處的？";
+		mes "啊，那個符號是我們小組的。";
+		mes "您肯定是一名實習生。";
+		next;
+		mes "[卡蘭迪瓦]";
+		mes "很高興見到你！";
+		mes "好吧，低頭。";
+		mes "古老的建築在水下睡覺。它們實際上是在海底建造的。";
+		next;
+		mes "[卡蘭迪瓦]";
+		mes "如您所知，我們在這裡沒有任何麻煩。";
+		mes "但是，如果您在那邊看到...是的。";
+		next;
+		mes "[卡蘭迪瓦]";
+		mes "您能看到一條非常有威脅性長矛的人形魚嗎？";
+		mes "他被稱為人造，是一個非常專業的戰士。";
+		next;
+		mes "[卡蘭迪瓦]";
+		mes "好吧，去狩獵15人魚。";
+		mes "那將是您在這裡的第一個培訓任務。";
+		set para_suv01,34;
+		changequest 7156,7157;
+		close;
+	}
+	if (para_suv01 == 34) {
+		if (checkquest(7157,HUNTING) == 2) {
+			mes "[卡蘭迪瓦]";
+			mes "哦，你回來了~！";
+			mes "您如何看待那些威脅人類的人？";
+			mes "實際上，我以為你會雞~";
+			next;
+			mes "[卡蘭迪瓦]";
+			mes "好你的下一個對手會...~";
+			mes "是的，這個...";
+			mes "持有三叉戟的怪物。";
+			next;
+			mes "[卡蘭迪瓦]";
+			mes "他的主要能力是神奇的。";
+			mes "怪物稱為史魯夫！";
+			mes "現在，是時候與真正的魔術師戰鬥了！";
+			next;
+			mes "[卡蘭迪瓦]";
+			mes "嘗試避免避免人造人，然後狩獵10曲子，殺死他們。";
+			set para_suv01,35;
+			changequest 7157,7158;
+			close;
+		}
+		mes "[卡蘭迪瓦]";
+		mes "哦，你累了嗎？";
+		mes "人類並不容易對手。";
+		mes "我會幫助您康復，因此振作起來。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 == 35) {
+		if (checkquest(7158,HUNTING) == 2) {
+			mes "[卡蘭迪瓦]";
+			mes "你已經殺死了所有的騙子嗎？";
+			mes "我不算你會做到的。";
+			mes "我的頭頂上的眼睛哈哈。";
+			next;
+			mes "[卡蘭迪瓦]";
+			mes "當然，我只是在開玩笑。";
+			mes "不要那樣看我~這是個玩笑~！";
+			mes "現在，您對此感到更加輕鬆。";
+			next;
+			mes "[卡蘭迪瓦]";
+			mes "回到總部報告。";
+			mes "您將收到伊甸園總部的最後一套制服。";
+			next;
+			mes "[卡蘭迪瓦]";
+			mes "該培訓任務是為初學者制定的。";
+			mes "因此，這可能對您沒有用。";
+			next;
+			mes "[卡蘭迪瓦]";
+			mes "無論如何，你做得很好！";
+			set para_suv01,36;
+			changequest 7158,7159;
+			close;
+		}
+		mes "[卡蘭迪瓦]";
+		mes "哦，你累了嗎？";
+		mes "斯特魯夫並不容易對手。";
+		mes "我可以幫助您康復，因此振作起來。";
+		npcskill "AL_HEAL",11,99,60;
+		percentheal 100,100;
+		close;
+	}
+	if (para_suv01 >= 36) {
+		mes "[卡蘭迪瓦]";
+		mes "我不會再為您提供幫助。";
+		mes "回到我們的總部，報告有關此培訓任務的信息。";
+		close;
+	}
+	mes "[卡蘭迪瓦]";
+	mes "儘管我們在海底下，您仍然可以在這裡呼吸。";
+	mes "你知道為什麼嗎？";
+	next;
+	mes "[卡蘭迪瓦]";
+	mes "讓我們看看由於水分，我的皮膚太柔軟了。";
+	mes "我的手指和腳趾彼此不連接。";
+	next;
+	mes "[卡蘭迪瓦]";
+	mes "當伊甸園在這裡派遣我時，我真的很震驚和害怕。";
+	mes "現在我非常喜歡這個環境。";
+	mes "真的很平靜...";
+	close;
+}
+
+moc_para01,112,96,5	script	Administrator Michael	4_M_RUSMAN1,{
+	mes "[邁克爾]";
+	mes "你為什麼來這裡？";
+	next;
+	switch (select("獲取物資:這裡在哪裡？ :升級裝備")) {
+		mes "[邁克爾]";
+	case 1:
+		if (para_suv01 == 11) {
+			mes "如果您完成了步驟1";
+			mes "我們可以為您提供伊甸園，制服，曼托和靴子。";
+			mes "^4D4DFFCHECK您的庫存。 ^000000";
+			next;
+			if (select("讓我檢查一下我的庫存:我有足夠的空間。") == 1) {
+				mes "[邁克爾]";
+				mes "確保您有足夠的供應空間。";
+				close;
+			}
+			mes "[邁克爾]";
+			mes "其中兩個耗材， ^4d4dffhat和Manteau ^000000，";
+			mes "只會被放出一次。";
+			mes "因此，請謹慎和照顧。";
+			next;
+			mes "[邁克爾]";
+			mes "至於靴子和製服，您將根據課程成績獲得更好的質量。";
+			next;
+			mes "[邁克爾]";
+			mes "一個伊甸園帽子。";
+			mes "一個伊甸園統一I。";
+			mes "一雙伊甸園靴子。";
+			mes "一個伊甸園曼托。";
+			mes "總共4件供應，僅此而已。";
+			para_suv01 = 12;
+			para_suv02 = 1;
+			getitem 5583,1; //Para_Team_Hat1
+			getitem 2560,1; //Para_Team_Manteau1
+			getitem 2456,1; //Para_Team_Boots1
+			getitem 15009,1; //Para_Team_Uniform1
+			next;
+			mes "[邁克爾]";
+			mes "那是對的嗎？";
+			mes "它是為初學者製造的，因此他們沒有最好的效果，但它們仍然比商店中的設備便宜。";
+			next;
+			mes "[邁克爾]";
+			mes "我們特別為伊甸園製作了它們。";
+		}
+		else if (para_suv01 == 22) {
+			mes "如果您完成了步驟2，我們提供包括基本設備在內的額外武器。";
+			next;
+			mes "[邁克爾]";
+			mes "我們為每個班級選擇了適當的武器。";
+			mes "但是我們不能支持某些無法加入我們的課程。";
+			next;
+			mes "[邁克爾]";
+			mes "我們不能製造世界上所有武器，您不同意嗎？";
+			next;
+			mes "[邁克爾]";
+			mes "我們將提供1個武器，鞋子和製服，因此總共三件事。";
+			mes "另外，我們提供額外的東西來考慮一些無法使用某些耗材的成員。";
+			next;
+			mes "[邁克爾]";
+			mes "^4d4dffplease檢查您的庫存以獲取這些物品。 ^000000";
+			next;
+			if (select("我會騰出更多空間。 :我有足夠的空間。") == 1) {
+				mes "[邁克爾]";
+				mes "騰出足夠的空間。";
+				close;
+			}
+			mes "[邁克爾]";
+			if (Class == Job_Swordman || Class == Job_Swordman_High || Class == Job_Knight || Class == Job_Crusader) {
+				callsub S_Select,"We have one and Two-handed swords",
+					1192,"Eden Slayer I","Two-handed sword","Attack 162","",//P_Slayer1
+					13423,"Eden Saber I","One-handed sword","Attack 147","This is what we strive for.";//P_Sabre1
+			}
+			if (Class == Job_Thief || Class == Job_Thief_High || Class == Job_Assassin || Class == Job_Rogue || Class == Job_Ninja || Class == Job_Novice || Class == Job_Novice_High) {
+				callsub S_Select,"",
+					13050,"Eden Dagger I","Dagger","MATK+60, attack 124","This is what we strive for.";//P_Dagger1
+			}
+			if (Class == Job_Merchant || Class == Job_Merchant_High || Class == Job_Blacksmith || Class == Job_Alchemist) {
+				callsub S_Select,"We have a mace and a One-handed sword",
+					13423,"Eden Saber I","One-handed sword","Attack 147","This is what we strive for.",// P_Sabre1
+					16004,"Eden Mace I","Mace","Attack 142","";// P_Mace1
+			}
+			if (Class == Job_Archer || Class == Job_Archer_High || Class == Job_Hunter || Class == Job_Dancer || Class == Job_Bard) {
+				callsub S_Select,"",
+					1747,"Eden Bow I","Bow","Attack 82","";//P_Bow1
+			}
+			if (Class == Job_Acolyte || Class == Job_Acolyte_High || Class == Job_Priest || Class == Job_Monk) {
+				callsub S_Select,"We have a mace and a staff",
+					16004,"Eden Mace I","Mace","Attack 142","", //P_Mace1
+					1650,"Eden Staff I","Staff","INT+2, MATK+125, attack 60",""; //P_Staff1
+			}
+			if (Class == Job_Mage || Class == Job_Mage_High || Class == Job_Wizard || Class == Job_Sage) {
+				callsub S_Select,"",
+					1650,"Eden Staff I","Staff","INT+2, MATK+125, attack 60","";//P_Staff1
+			}
+			if (Class == Job_Gunslinger) {
+				callsub S_Select,"",
+					13112,"Eden Revolver I","Revolver","HIT-5, attack 44","";//P_Revolver1
+			}
+			if (Class == Job_Summoner) {
+				callsub S_Select,"",
+					1699,"Eden Foxtail Staff I","Staff","MATK+135, attack 120","";//P_Foxtail1
+			}
+			mes "讓我看看...您會收到..";
+			mes "伊甸園靴子II和均勻II。";
+			next;
+			mes "[邁克爾]";
+			para_suv01 = 23;
+			getitem 13050,1; //P_Dagger1
+			getitem 2457,1; //Para_Team_Boots2
+			getitem 15010,1; //Para_Team_Uniform2
+			if (para_suv02 == 0) {
+				mes "我不知道什麼武器會適合您，所以您會得到匕首。";
+				mes "您沒有收到任何用品的記錄";
+				mes "因此，您將收到Eden Group Hat和Manteau Aswell。";
+				getitem 5583,1; //Para_Team_Hat
+				getitem 2560,1; //Para_Team_Manteau
+				para_suv02 = 2;
+				next;
+				mes "[邁克爾]";
+				mes "再次檢查您的用品並照顧它。";
+				close;
+			}
+			para_suv02 = 2;
+			mes "武器，統一和靴子所有3用品。";
+			mes "我不知道什麼武器會適合您，所以您會得到匕首。";
+			mes "請再次檢查。";
+			next;
+			mes "[邁克爾]";
+			mes "我希望它們對您有用。";
+		}
+		else if (para_suv01 == 37) {
+			mes "您已經完成了最後的培訓課程。";
+			mes "是時候讓您收到新武器了。";
+			next;
+			mes "[邁克爾]";
+			mes "我們有更多升級的武器，制服和靴子。";
+			mes "啊，如果武器僅是為第一個工作而製造的武器。";
+			mes "因此，我無法將它們提供給更高的工作。";
+			next;
+			mes "[邁克爾]";
+			mes "^4d4dffplease檢查您的庫存以獲取這些用品。 ^000000";
+			next;
+			if (select("我會回來的:我有足夠的空間。") == 1) {
+				mes "[邁克爾]";
+				mes "確保您有足夠的空間。";
+				close;
+			}
+			mes "[邁克爾]";
+			if (Class == Job_Swordman || Class == Job_Swordman_High || Class == Job_Knight || Class == Job_Crusader) {
+				callsub S_Select,"We have one and Two-handed swords",
+					13424,"Eden Saber II","One-handed sword","Attack 170","",///P_Sabre2
+					1193,"Eden Slayer II","Two-handed sword","Attack 185","";//P_Slayer2
+			}
+			if (Class == Job_Thief || Class == Job_Thief_High || Class == Job_Assassin || Class == Job_Rogue || Class == Job_Novice || Class == Job_Novice_High || Class == Job_Super_Novice || Class == Job_Soul_Linker || Class == Job_Ninja) {
+				callsub S_Select,"",
+					13051,"Eden Dagger II","Dagger","MATK+70, attack 158","";//P_Dagger2
+			}
+			if (Class == Job_Acolyte || Class == Job_Acolyte_High || Class == Job_Priest || Class == Job_Monk) {
+				callsub S_Select,"We have a mace and a staff",
+					16005,"Eden Mace II","Mace","Attack 163","", //P_Mace2
+					1651,"Eden Staff II","Staff","INT+3, MATK+150, attack 60",""; //P_Staff2
+			}
+			if (Class == Job_Archer || Class == Job_Archer_High || Class == Job_Hunter || Class == Job_Dancer || Class == Job_Bard) {
+				callsub S_Select,"",
+					1748,"Eden Bow II","Bow","Attack 82","";//P_Bow2
+			}
+			if (Class == Job_Mage || Class == Job_Mage_High || Class == Job_Wizard || Class == Job_Sage) {
+				callsub S_Select,"",
+					1651,"Eden Staff II","Staff","INT+3, MATK+155, attack 60","";//P_Staff2
+			}
+			if (Class == Job_Merchant || Class == Job_Merchant_High || Class == Job_Blacksmith || Class == Job_Alchemist) {
+				callsub S_Select,"We have a mace and a One-handed sword",
+					13424,"Eden Saber II","One-handed sword","Attack 170","",//P_Sabre2
+					16005,"Eden Mace II","Mace","Attack 163","";// P_Mace2
+			}
+			if (Class == Job_Gunslinger) {
+				callsub S_Select,"",
+					13113,"Eden Revolver II","Revolver","HIT-5, attack 60","";//P_Revolver2
+			}
+			if (Class == Job_Summoner) {
+				callsub S_Select,"",
+					26100,"Eden Foxtail Staff II","Staff","MATK+165, attack 135","";//P_Foxtail1
+			}
+			mes "讓我看看...您會收到..";
+			mes "伊甸園靴子III和統一III。";
+			next;
+			para_suv01 = 38;
+			getitem 2458,1; //Para_Team_Boots3
+			getitem 15011,1; //Para_Team_Uniform3
+			mes "[邁克爾]";
+			if (para_suv02 == 0) {
+				mes "您沒有收到任何用品的記錄";
+				mes "因此，您將收到Eden Group Hat和Manteau Aswell。";
+				para_suv02 = 3;
+				getitem 5583,1; //Para_Team_Hat
+				getitem 2560,1; //Para_Team_Manteau
+				next;
+				mes "[邁克爾]";
+				mes "再次檢查您的用品並照顧它。";
+				close;
+			}
+			para_suv02 = 3;
+			mes "制服和靴子所有2用品。";
+			mes "請再次檢查。";
+			next;
+			mes "[邁克爾]";
+			mes "我希望它們對您有用。";
+		}
+		else {
+			mes "等等...我會檢查記錄...";
+			mes "...";
+			mes "...嗯。";
+			next;
+			mes "[邁克爾]";
+			mes "抱歉，但是我找不到您可以獲得耗材的任何記錄。";
+			mes "你確定嗎？";
+		}
+		close;
+	case 2:
+		mes "我們存儲由伊甸園（Eden Group）創建的武器，裝甲和其他商品。";
+		mes "我們也有很多特殊的東西。";
+		next;
+		mes "[邁克爾]";
+		mes "為了準備緊急情況，我們為整個軍隊提供了足夠的設備和物資。";
+		mes "坦率地說...我們現在沒有用途，但是如果摩洛哥在摩洛克中發生的事情發生。";
+		next;
+		mes "[邁克爾]";
+		mes "只要環顧四周，不要觸摸任何東西。";
+		next;
+		mes "[邁克爾]";
+		mes "如果我犯了一個錯誤，Reke會懲罰我。";
+		close;
+	case 3:
+		mes "您的意思是升級設備，對嗎？";
+		mes "我們只能升級伊甸園的帽子。";
+		next;
+		mes "[邁克爾]";
+		if (para_suv02 == 3) {
+			if (countitem(5583) > 0) {
+				disable_items;
+				mes "您想升級什麼狀態獎金？";
+				next;
+				switch (select("升級STR:升級AGI:升級VIT:升級INT:升級DEX:升級LUK:沒關係。")) {
+				case 1: callsub S_Upgrade,"STR",4701;
+				case 2: callsub S_Upgrade,"AGI",4731;
+				case 3: callsub S_Upgrade,"VIT",4741;
+				case 4: callsub S_Upgrade,"INT",4711;
+				case 5: callsub S_Upgrade,"DEX",4721;
+				case 6: callsub S_Upgrade,"LUK",4751;
+				case 7:
+					mes "[邁克爾]";
+					mes "為什麼？它會比以前的好。";
+					mes "無論如何，我們只能為您提供一頂帽子。";
+					next;
+					mes "[邁克爾]";
+					mes "您對此的作用取決於您。";
+					close;
+				}
+			}
+			mes "首先帶有您要我升級的帽子。";
+			mes "確保它在您的庫存中，知道嗎？";
+			close;
+		}
+		if (para_suv02 == 4) {
+			mes "嗯，您還沒有升級過嗎？";
+			mes "根據記錄";
+			mes ""+strcharinfo(0)+": Has already upgraded their Hat.";
+			next;
+			mes "[邁克爾]";
+			mes "我們只能提供1個升級。";
+			mes "抱歉，我不能這兩次。";
+			close;
+		}
+		mes "您迄今尚未收到所有耗材，直到第3步。";
+		mes "升級帽子是一項特殊服務。";
+		next;
+		mes "[邁克爾]";
+		mes "抱歉，我無能為力。";
+		close;
+	}
+S_Upgrade:
+	mes "[邁克爾]";
+	mes "我懂了。";
+	mes "我將 ^4d4dffupgrade"+ getarg(0) +"^000000.";
+	mes "你確定嗎？";
+	next;
+	switch (select("是的，我是。 :不，等等。")) {
+	case 1:
+		mes "[邁克爾]";
+		mes "我將開始升級。";
+		next;
+		mes "[邁克爾]";
+		mes "給你。";
+		para_suv02 = 4;
+		delitem 5583,1;
+		getitem2 5583,1,1,0,0,0,0,0,getarg(1);
+		close;
+	case 2:
+		mes "[邁克爾]";
+		mes "您不想升級嗎？";
+		close;
+	}
+
+S_Select:
+	.@total_arg = getargcount();
+	if (.@total_arg < 7)
+		mes "我們只有1個武器。";
+	else {
+		mes "您想要什麼樣的武器？";
+		mes getarg(0);
+		mes "這是選項。";
+	}
+	next;
+	mes "[邁克爾]";
+	for ( .@i = 1; .@i < .@total_arg; .@i += 5 ) {
+		set .@menu$, .@menu$ + getarg(.@i+1) + ":";
+		mes getarg(.@i+1)+"："+ getarg(.@i+2) +". "+ getarg(.@i+3) +".";
+	}
+	if (.@total_arg < 7)
+		mes "它是LV。 2，所需的水平是"+ (para_suv01 == 22 ? "26" : "40") +".";
+	else
+		mes "他們倆都是LV。 2個武器，所需的水平是"+ (para_suv01 == 22 ? "26" : "40") +".";
+	next;
+	mes "[邁克爾]";
+	mes "他們也不能與其他玩家交易或進行完善。";
+	next;
+	//			callsub S_Select,"We have one and Two-handed swords",
+		//			13424,"Eden Saber II","One-handed sword","Attack 170","",///P_Sabre2
+			//		1193,"Eden Slayer II","Two-handed sword","Attack 185","";//P_Slayer2
+	if (.@total_arg < 7) {
+		.@i = 1;
+		mes "[邁克爾]";
+		mes "您會收到的"+ getarg(.@i+1) +".";
+		next;
+		mes "[邁克爾]";
+	}
+	else {
+		.@i = (select(.@menu$) -1) *5 +1;
+		mes "[邁克爾]";
+		mes "您選擇了"+ getarg(.@i+1) +".";
+	}
+	if (para_suv01 == 22) {
+		mes "此外，您將收到Eden Group Boots II和統一II。";
+		next;
+		getitem 2457,1;	// Para_Team_Boots2
+		getitem 15010,1;// Para_Team_Uniform2
+		para_suv01 = 23;
+	}
+	else {
+		mes "此外，您將收到Eden Group Boots III和統一III。";
+		next;
+		getitem 2458,1;// Para_Team_Boots3
+		getitem 15011,1;// Para_Team_Uniform3
+		para_suv01 = 38;
+	}
+	getitem getarg(.@i),1;
+	mes "[邁克爾]";
+	if (para_suv02 == 0) {
+		mes "您沒有收到任何用品的記錄";
+		mes "因此，您將收到Eden Group Hat和Manteau Aswell。";
+		getitem 5583,1;// Para_Team_Hat
+		getitem 2560,1;// Para_Team_Manteau
+		if (para_suv01 == 22)
+			para_suv02 = 2;
+		else
+			para_suv02 = 3;
+		next;
+		mes "[邁克爾]";
+		mes "再次檢查您的用品並照顧它。";
+	}
+	else {
+		if (para_suv01 == 22)
+			para_suv02 = 2;
+		else
+			para_suv02 = 3;
+		mes "一個"+ getarg(.@i+2) +", Uniform and Boots all 3 supplies.";
+		mes "請再次檢查。";
+		next;
+		mes "[邁克爾]";
+		mes "我希望它們對您有用。";
+		mes getarg(.@i+4);
+	}
+	close;
+}
+
+moc_para01,179,44,3	script	Chef	820,{
+	mes "[廚師]";
+	mes "這是怎麼回事？";
+	mes "你想吃一頓飯嗎？還是您還有其他業務？";
+	next;
+	switch (select("點餐:說話。")) {
+	case 1:
+		mes "[廚師]";
+		mes "選擇三道菜A，B或C。";
+		mes "您想要解釋嗎？";
+		next;
+		switch (select("我想要一個解釋:點菜 A:點菜 B:點菜 C:結束對話。")) {
+		case 1:
+			mes "[廚師]";
+			mes "嗯？您想知道什麼？";
+			next;
+			switch (select("關於套餐 A.:關於套餐 B.:關於套餐 C.:結束對話。")) {
+			case 1:
+				mes "[廚師]";
+				mes "課程餐A是針對名n的人。";
+				mes "它有三種菜餚，主要是....";
+				mes " ";
+				mes "-Chef試圖指向圖片中的一道菜。有一個黑色卷。 -";
+				next;
+				mes "[廚師]";
+				mes "它是由海草製成的，因此像紙一樣乾燥。";
+				mes "這是一卷，裡面有米飯，蔬菜和肉。";
+				mes "看起來很簡單，但確實很好和健康。";
+				next;
+				mes "[廚師]";
+				mes "成分與辛辣醬充分混合。";
+				mes "它也與切碎的肉（如香腸）混合。";
+				next;
+				mes "[廚師]";
+				mes "它很簡單又便宜，因此每個人都非常受歡迎。";
+				mes "只有3,000 Zeny。";
+				mes "吃完後，您會感到滿意。";
+				close;
+			case 2:
+				mes "[廚師]";
+				mes "嗯，課程餐B是。";
+				mes "我在湯中用芳香蔬菜和肉做醬汁。";
+				next;
+				mes "[廚師]";
+				mes "將肉煮沸，因此湯中的叉子嫩。";
+				mes "湯幾乎完成後，我為最後的觸摸添加麵條。";
+				next;
+				mes "[廚師]";
+				mes "這是與您的朋友分享的好菜。";
+				mes "這是4,000 Zeny。";
+				mes "這是一個非常有趣的菜。";
+				close;
+			case 3:
+				mes "[廚師]";
+				mes "現在課程用餐c ...";
+				mes "這是肉的傑作...肉類的傳奇！";
+				next;
+				mes "[廚師]";
+				mes "牛肉，培根，";
+				mes "帶狀腰部，";
+				mes "肋眼卷";
+				mes "...";
+				next;
+				mes "[廚師]";
+				mes "您需要更多信息嗎？";
+				mes "不用擔心。";
+				mes "我用貝斯橡木吸煙。";
+				mes "啊，是5,000 Zeny。便宜嗎？我只使用最好的肉，所以不用擔心。";
+				close;
+			case 4:
+				mes "[廚師]";
+				mes "我沒有足夠的時間與您聊天...";
+				close;
+			}
+		case 2:
+			mes "[廚師]";
+			mes "課程餐嗎？";
+			mes "啊，金戴克 - 蘇。";
+			mes "這是普通公民的代表餐。";
+			next;
+			if (callfunc("F_HasEdenGroupMark")) {
+				if (Zeny > 2699) {
+					mes "[廚師]";
+					mes "嘿，你在這裡。";
+					mes "請享用。";
+					next;
+					mes "- 吃飯後，您會感到有些飽。";
+					mes "您已經恢復了一些HP和SP。 -";
+					set Zeny, Zeny - 2700;
+					percentheal 50,0;
+					percentheal 0,50;
+					close;
+				}
+				mes "[廚師]";
+				mes "這頓飯花了3,000 Zeny，但我將提供2,700頓飯。";
+				mes "由於您是伊甸園會員，因此獲得10％的折扣，因此是2700 Zeny。";
+				close;
+			}
+			if (Zeny > 2999) {
+				mes "[廚師]";
+				mes "嘿，你在這裡。";
+				mes "請享用。";
+				next;
+				mes "- 吃飯後，您會感到有些飽。";
+				mes "您已經恢復了一些HP和SP。 -";
+				set Zeny, Zeny - 3000;
+				percentheal 50,0;
+				percentheal 0,50;
+				close;
+			}
+			mes "[廚師]";
+			mes "這頓飯花了3,000 Zeny。";
+			mes "我必須告訴你多少次？";
+			close;
+		case 3:
+			mes "[廚師]";
+			mes "課程餐B？";
+			mes "這種食物與熱湯中的肉和蔬菜的食物起源於寒冷和乾燥的性質下的游牧生活。";
+			next;
+			if (callfunc("F_HasEdenGroupMark")) {
+				if (Zeny > 3599) {
+					mes "[廚師]";
+					mes "嘿，你在這裡。";
+					mes "請享用。";
+					next;
+					mes "- 吃飯後，您會感到有些飽。";
+					mes "您已經恢復了一些HP和SP。 -";
+					set Zeny, Zeny - 3600;
+					percentheal 75,0;
+					percentheal 0,75;
+					close;
+				}
+				mes "[廚師]";
+				mes "這頓飯花了4,000 Zeny，但我將提供3,600頓飯。";
+				mes "由於您是伊甸園會員，因此獲得10％的折扣，因此Zeny是3,600。";
+				close;
+			}
+			if (Zeny > 3999) {
+				mes "[廚師]";
+				mes "嘿，你在這裡。";
+				mes "請享用。";
+				next;
+				mes "- 吃飯後，您會感到有些飽。";
+				mes "您已經恢復了一些HP和SP。 -";
+				set Zeny, Zeny - 4000;
+				percentheal 75,0;
+				percentheal 0,75;
+				close;
+			}
+			mes "[廚師]";
+			mes "這頓飯花了4,000 Zeny。";
+			mes "我必須告訴你多少次？";
+			close;
+		case 4:
+			if (callfunc("F_HasEdenGroupMark")) {
+				if (Zeny > 4499) {
+					mes "[廚師]";
+					mes "嘿，你在這裡。";
+					mes "請享用。";
+					next;
+					mes "- 肋眼卷在橡木上烤。";
+					mes "- 吃飯後，您會感到有些飽。";
+					mes "您已經恢復了HP和SP。 -";
+					set Zeny, Zeny - 4500;
+					percentheal 100,0;
+					percentheal 0,100;
+					close;
+				}
+				mes "[廚師]";
+				mes "這頓飯花了5,000 Zeny，但我將提供4,500頓飯。";
+				mes "由於您是伊甸園會員，因此獲得10％的折扣，因此是4,500 Zeny。";
+				close;
+			}
+			if (Zeny > 4999) {
+				mes "[廚師]";
+				mes "嘿，你在這裡。";
+				mes "請享用。";
+				next;
+				mes "嘿，你在這裡。";
+				mes "- 肋眼卷在橡木上烤。";
+				mes "- 吃飯後，您會感到有些飽。";
+				mes "您已經恢復了HP和SP。 -";
+				set Zeny, Zeny - 5000;
+				percentheal 100,0;
+				percentheal 0,100;
+				close;
+			}
+			mes "[廚師]";
+			mes "這頓飯花了5,000 Zeny。";
+			mes "我必須告訴你多少次？";
+			close;
+		case 5:
+			mes "[廚師]";
+			mes "由你決定。";
+			close;
+		}
+	case 2:
+		if (callfunc("F_HasEdenGroupMark")) {
+			mes "[廚師]";
+			mes "大多數工作應該由自己管理。所以這可能很困難，對嗎？";
+			mes "實際上，這是有害的，因此他們一直要求。";
+			next;
+			mes "[廚師]";
+			mes "我們不能通過互相幫助來共同努力嗎？";
+			mes "無論如何，你...";
+			next;
+			if (para_suv01 == 0) {
+				if (BaseLevel < 41) {
+					mes "[廚師]";
+					mes "你好嗎？";
+					mes "啊...現在你看起來不像初學者。";
+					mes "您想知道一些好的信息嗎？";
+					next;
+					mes "[廚師]";
+					mes "伊甸園...有時會收到工作。";
+					mes "但是他們也自己製造了裝甲和武器。";
+					next;
+					mes "[廚師]";
+					mes "如果需要，您可以從伊甸園（Eden Group）獲得制服。";
+					next;
+					mes "[廚師]";
+					mes "為了獲得它，您需要完成他們的任務。";
+					mes "如果您有興趣，請在桌子上與教練Boya見面。";
+					close;
+				}
+				mes "[廚師]";
+				mes "你看起來像專家...";
+				mes "UMM EMM ..";
+				mes "嗯，emm ..嗯..";
+				next;
+				mes "[廚師]";
+				mes "是的！我發現你缺少的東西！";
+				mes "您沒有得到伊甸園的製服嗎？";
+				next;
+				mes "[廚師]";
+				mes "嗯，這不是必要的，但是如果您留在伊甸園中，那將是一個很好的象徵。";
+				next;
+				mes "[廚師]";
+				mes "你不能輕易得到它，但是..";
+				mes "如果您有興趣，請在辦公桌前詢問博亞教練。";
+				close;
+			}
+			mes "[廚師]";
+			mes "當然，制服與您相處得很好。";
+			mes "哦，當然。";
+			mes "如今，領導者進行了設計。";
+			next;
+			mes "[廚師]";
+			mes "啊..尤其是帽子。";
+			mes "to ..我..帽子...嗯。";
+			mes "萊姆（Laime）搭配得很好，但與盧克（Luke）...我不知道..";
+			next;
+			switch (select("帽子呢？ :盧克？")) {
+			case 1:
+				mes "[廚師]";
+				mes "沒有什麼。真可愛。";
+				mes "我擔心緞帶。";
+				mes "但是，我必須戴上這帽子。";
+				next;
+				mes "[廚師]";
+				mes "哈哈哈，我不在乎。";
+				mes "我根本不在乎！";
+				mes "哈哈哈.. aaaaahahahaha ...";
+				close;
+			case 2:
+				mes "[廚師]";
+				mes "他是刀專家。";
+				mes "我們的後衛領導人之一。";
+				mes "他還負責該辦公室的安全性。";
+				next;
+				mes "[廚師]";
+				mes "幾乎每個人都僱用了他的奇蹟。";
+				mes "但是Laime和Luke完全不同。";
+				next;
+				mes "[廚師]";
+				mes "領導人一起工作了很長時間。";
+				mes "但是領導者想掩飾他的過去...";
+				next;
+				mes "[廚師]";
+				mes "我猜是...他可能是一個富裕家庭的兒子。";
+				mes "有傳言說盧克是家庭警衛。";
+				mes "萊姆是僕人？不是嗎？";
+				mes "您如何看待我的故事？";
+				next;
+				select("……");
+				mes "[廚師]";
+				mes "............";
+				mes "啊..嘿~即使我說話無用的事情也不是那樣看我";
+				mes "但這確實是三個人建立了這個伊甸園。";
+				close;
+			}
+		}
+		mes "[廚師]";
+		mes "嗯？任務。你找到正確的地方了嗎？";
+		mes "另外，讓我SE ...您不是我們的成員之一。我該如何給你工作？";
+		next;
+		mes "[廚師]";
+		mes "只是在餐廳吃飯。";
+		mes "我們為所有人提供飯菜。";
+		mes "我很確定它們的味道很棒！";
+		close;
+	}
+}
+
+moc_para01,23,35,5	script	Instructor Ur#2nd01	4_M_KNIGHT_BLACK,{
+	mes "[講師UR]";
+	if (!callfunc("F_HasEdenGroupMark")) {
+		mes "嘿！";
+		mes "我看到您不是我們的代理商之一？";
+		mes "您有興趣加入我們嗎？";
+		next;
+		mes "[講師UR]";
+		mes "沒有收費要加入！";
+		mes "我們是經紀人，在需要幫助的地方發送幫助。像您這樣的更多冒險家意味著更多的利潤。";
+		next;
+		mes "[講師UR]";
+		mes "如果您有興趣，請與Raim交談。";
+		mes "萊姆是個好人。";
+		mes "哈哈哈..";
+	}
+	else if (para_2nd01 == 0) {
+		mes "你好？";
+		mes "您需要幫助嗎？";
+		mes "這是一個一般請求，以接收下一個董事會的請求。";
+		next;
+		if (select("What are you doing here?", "It's nothing." ) == 2) {
+			mes "[講師UR]";
+			mes "我想那時我沒有生意。";
+			close;
+		}
+		mes "[講師UR]";
+		mes "好吧，我是伊甸園的講師。";
+		next;
+		mes "[講師UR]";
+		mes "我在這裡根據您當前的基本水平為您提供任務。";
+		mes "這些任務不是很難。";
+		next;
+		mes "[講師UR]";
+		mes "我是Eden Group的高級講師。";
+		mes "您要挑戰什麼？";
+		next;
+		if (select("Not today I'm not.", "Okay, I'll try." ) == 1) {
+			mes "[講師UR]";
+			mes "真的嗎？";
+			mes "真可悲。";
+			mes "完成這些任務後，我什至會給您不錯的獎勵。";
+			close;
+		}
+		mes "[講師UR]";
+		mes "是的！";
+		mes "好的，讓我檢查一下您應該做的任務嗎？";
+		next;
+		mes "[講師UR]";
+		if (BaseLevel < 60) {
+			mes "好吧...我知道你有心，但是你太虛弱了，無法提供幫助。";
+			next;
+			mes "[講師UR]";
+			mes "抱歉，但是您的基本水平應該至少60個來幫助完成這些任務。";
+		}
+		else if (BaseLevel < 70) {
+			mes "好的，我想您是這些任務的最低水平。";
+			next;
+			mes "[講師UR]";
+			mes "根據您的水平，我認為Comodo區域適合您。";
+			next;
+			mes "[講師UR]";
+			mes "你知道科莫多在哪裡嗎？";
+			mes "您可以去摩洛哥，然後穿過Pharos Lighthouse到達那裡。";
+			next;
+			mes "[講師UR]";
+			mes "科莫多（Comodo）是海岸上有許多洞穴的小城市。";
+			next;
+			mes "[講師UR]";
+			mes "尋找位於北部的洞穴。那裡有人叫羅密歐。";
+			mes "你知道？就像羅密歐的羅密歐一樣，您也是羅密歐的藝術。";
+			next;
+			mes "[講師UR]";
+			mes "去那裡有他的任務。";
+			mes "好吧，然後完成後回到這裡！";
+			para_2nd01 = 1;
+			setquest 7214;// Advanced Training at Comodo
+		}
+		else if (BaseLevel < 80) {
+			mes "讓我們來看看...";
+			mes "您的水平表明Comodo對您來說太容易了。";
+			mes "是的，我們走了。";
+			next;
+			mes "[講師UR]";
+			mes "你知道Glast Heim在哪裡嗎？";
+			mes "如果現在發生了悲慘的事故，符文米達（Rune-Midgarts）王國的首都可以恢復到那裡。";
+			next;
+			mes "[講師UR]";
+			mes "好吧，如果沒有侵擾不死的怪物，它將成為符文中的新國會大廈。";
+			next;
+			mes "[講師UR]";
+			mes "拜託，還活著。";
+			para_2nd01 = 7;
+			setquest 7219;// Advanced Training at Glast Heim
+		}
+		else if (BaseLevel < 90) {
+			mes "啊，好的，對你...";
+			mes "嗯，我在哪裡寄給您？";
+			next;
+			mes "[講師UR]";
+			mes "那裡有一個工業城市，稱為Einbroch。";
+			mes "你知道嗎？這是一個被煙霧覆蓋的城市。";
+			mes "想到這是一個令人沮喪的城市。";
+			next;
+			mes "[講師UR]";
+			mes "無論如何，請前往Einbroch，在那裡找到派遣的教練。他應該在主要城市南部的田野裡。";
+			setquest 7223;// Advanced Training in Einbroch
+			para_2nd01 = 12;
+		}
+		else
+			callsub S_Quest89100;
+	}
+	else if (para_2nd01 == 5) {
+		mes "哦，他在那裡。";
+		mes "羅密歐似乎從他的現場報告中回來了。";
+		next;
+		mes "[講師UR]";
+		mes "我們為您提供獎勵。";
+		mes "我敢肯定羅密歐給了您一些物品，但我們帶來了更多有用的東西。";
+		next;
+		mes "[講師UR]";
+		mes "您知道武器存儲在哪裡嗎？";
+		mes "穿過那條大藍門，走到走廊的盡頭。";
+		mes "詢問鐵匠，他會給您新的設備。";
+		next;
+		mes "[講師UR]";
+		mes "第二階段的培訓和任務始於70級，所以回來。";
+		mes "別忘了，我會等你。";
+		para_2nd01 = 6;
+		para_2nd02 = 1;
+		erasequest 7218;// Report to Instructor Ur
+	}
+	else if (para_2nd01 == 6) {
+		if (BaseLevel > 69) {
+			mes "嘿，哥們~";
+			mes "這是怎麼回事？";
+			next;
+			switch( select("I want to start training.", "I'm just visiting." ) ) {
+				mes "[講師UR]";
+			case 1:
+				mes "嗯...你有一個很好的表格！";
+				mes "讓我看看...";
+				mes "哪個位置適合您？";
+				next;
+				mes "[講師UR]";
+				if (BaseLevel < 80) {
+					mes "啊，這個地方應該很好！";
+					mes "你知道Glast Heim在哪裡嗎？";
+					mes "如果不是那次可怕的事故，Glast Heim仍然會";
+					mes "符文中的首都，而不是prontera。";
+					next;
+					mes "[講師UR]";
+					mes "無論如何，那座古城堡現在充滿了不死的怪物。";
+					mes "在南部的修道院周圍特別糟糕。";
+					next;
+					mes "[講師UR]";
+					mes "所有這些不死的怪物都來自地下墓地";
+					mes "好吧...我想你不必一路走進墓地...";
+					next;
+					mes "[講師UR]";
+					mes "到達修道院後，您會看到我們的單位成員駐紮在入口處。";
+					mes "按照他的指示有助於清除該區域。";
+					next;
+					mes "[講師UR]";
+					mes "請活著回來。";
+					para_2nd01 = 7;
+					setquest 7219;// Advanced Training at Glast Heim
+				}
+				else if (BaseLevel < 90)
+					callsub S_Quest7990;
+				else
+					callsub S_Quest89100;
+				close;
+			case 2:
+				mes "真的嗎？在您的級別上，我認為您可以輕鬆完成頂級任務。";
+				mes "如果您改變主意，我會在這裡。";
+				close;
+			}
+		}
+		else {
+			mes "第二階段訓練任務從70級開始。";
+			mes "那我見。";
+			mes "您是否從存儲空間中獲取必要的設備？";
+			mes "哈哈哈！";
+		}
+	}
+	else if (para_2nd01 == 10) {
+		mes "哦！你在這裡！";
+		mes "我剛收到約翰的消息。";
+		mes "我認為他沒有告訴我一些事情，但我不知道那是什麼。";
+		next;
+		mes "[講師UR]";
+		mes "無論如何，好工作。我很高興你沒有受傷";
+		mes "鐵匠BK說，他會增強您的武器。";
+		next;
+		callsub S_Para2;
+		mes "[講師UR]";
+		mes "你知道鐵匠在哪裡？";
+		mes "穿過藍門，到走廊的盡頭。";
+		mes "BK是一位偉大的鐵匠，他會使您的武器更強大。";
+		mes "你還在等什麼？";
+		para_2nd01 = 11;// Report to Instructor Ur
+		erasequest 7222;
+	}
+	else if (para_2nd01 == 11) {
+		if (BaseLevel > 79) {
+			mes "啊，這麼改進"+ strcharinfo(0) +"?";
+			mes "我欠這種樂趣嗎？";
+			next;
+			switch( select("I came for more training.", "I'm just visiting." ) ) {
+				mes "[講師UR]";
+			case 1:
+				mes "嗯...你有一個很好的表格！";
+				mes "讓我看看...";
+				next;
+				mes "[講師UR]";
+				if (BaseLevel < 90)
+					callsub S_Quest7990;
+				else
+					callsub S_Quest89100;
+				close;
+			case 2:
+				mes "真的嗎？在您的級別上，我認為您可以輕鬆完成頂級任務。";
+				mes "如果您改變主意，我會在這裡。";
+				close;
+			}
+		}
+		else {
+			mes "第三階段訓練從80級開始。";
+			mes "那我見。";
+			mes "哦，如果您還沒有加固武器，請與BK交談。";
+		}
+	}
+	else if (para_2nd01 == 15) {
+		mes "啊，你來了。";
+		mes "我剛收到了基倫的消息。";
+		mes "他怎麼樣？他沒有發脾氣以喚醒他嗎？";
+		mes "如果他這樣做，我不會感到驚訝";
+		next;
+		mes "[講師UR]";
+		mes "無論如何，好工作。我很高興你沒有受傷。";
+		mes "鐵匠BK說，他會增強您的武器。";
+		next;
+		callsub S_Para2;
+		mes "[講師UR]";
+		mes "你知道鐵匠在哪裡？";
+		mes "穿過藍門，到走廊的盡頭。";
+		mes "BK是一位偉大的鐵匠，他會使您的武器更強大。";
+		mes "你還在等什麼？";
+		erasequest 7228;// Report to Instructor Ur
+		para_2nd01 = 16;
+	}
+	else if (para_2nd01 == 16) {
+		if (BaseLevel > 89) {
+			mes "很高興看到您仍然堅強！";
+			mes "今天是什麼帶給你的？";
+			next;
+			if (select("I want to continue training.", "I'm just visiting." ) == 2) {
+				mes "[講師UR]";
+				mes "真的嗎？在您的級別上，我認為您可以輕鬆完成頂級任務。";
+				mes "如果您改變主意，我會在這裡。";
+				close;
+			}
+			mes "[講師UR]";
+			callsub S_Quest89100;
+		}
+		else {
+			mes "第四階段訓練從90級開始。";
+			mes "那我見。";
+			mes "哦，如果您還沒有加固武器，請與BK交談。";
+		}
+	}
+	else if (para_2nd01 == 20) {
+		mes "恭喜您完成所有培訓階段！";
+		mes "那花了很多時間吧？";
+		mes "鐵匠BK說，他會增強您的武器。";
+		next;
+		callsub S_Para2;
+		mes "[講師UR]";
+		mes "你知道鐵匠在哪裡？";
+		mes "穿過藍門，到走廊的盡頭。";
+		mes "BK是一位偉大的鐵匠，他會使您的武器更強大。";
+		next;
+		mes "[講師UR]";
+		mes "好工作！";
+		para_2nd01 = 30;
+		erasequest 7232;//Report to Instructor Ur
+	}
+	else if (para_2nd01 == 29) {
+		mes "恭喜您完成所有培訓階段！";
+		mes "探險怎麼樣？從外觀上看，它一定很艱難。";
+		next;
+		mes "[講師UR]";
+		mes "好工作..";
+		mes "鐵匠BK說，他會增強您的武器。";
+		next;
+		callsub S_Para2;
+		mes "[講師UR]";
+		mes "你知道鐵匠在哪裡？";
+		mes "穿過藍門，到走廊的盡頭。";
+		mes "BK是一位偉大的鐵匠，他會使您的武器更強大。";
+		next;
+		mes "[講師UR]";
+		mes "順便說一下，邁克爾也有一些告訴你的東西";
+		mes "去和他說話，他也在武器儲藏室。";
+		mes "前進。";
+		para_2nd01 = 30;
+		erasequest 7237;// Report to Instructor Ur
+	}
+	else if (para_2nd01 == 30) {
+		mes "好工作。";
+		mes "哦，如果您還沒有加固武器，請與BK交談。";
+		next;
+		mes "[講師UR]";
+		mes "另外，有時邁克爾需要幫助，因此，如果您有時間嘗試幫助他。";
+		mes "我敢肯定他會獎勵您的時間。";
+	}
+	else if (para_2nd01 < 5)
+		callsub S_Direction,"Comodo";
+	else if (para_2nd01 < 10)
+		callsub S_Direction,"Glast Heim Castle";
+	else if (para_2nd01 < 15)
+		callsub S_Direction,"Einbroch";
+	else if (para_2nd01 < 20)
+		callsub S_Direction,"Ice Dungeon";
+	else if (para_2nd01 < 29) {
+		mes "您必須走很遠才能到達 ^4d4dffmidgard Expedition Camp ^000000！";
+		mes "如果您想留在那裡，請通過執行任務來賺取您的保留。知道了？";
+	}
+	close;
+S_Para2:
+	if (para_2nd02 == 0) {
+		mes "[講師UR]";
+		mes "我只是意識到...這是您的第一個任務，不是嗎？";
+		mes "您一定不能獲得基本設備，對嗎？";
+		mes "在武器存儲中撿起它們。";
+		mes "詢問鐵匠邁克爾，他會給你設備。";
+		para_2nd02 = 1;
+		next;
+	}
+	return;
+S_Direction:
+	mes "所以，你去過 ^4d4dff"+ getarg(0) +"^000000 yet?";
+	mes "我不是告訴你去那裡嗎？";
+	mes "首先去那裡，然後回到我身邊。好的？";
+	return;
+
+S_Quest7990:
+	mes "嗯..還不錯...";
+	mes "你必須掌握這個。";
+	mes "這次讓我們去做一個簡單的任務";
+	next;
+	mes "[講師UR]";
+	mes "有一個工業城市叫Einbroch。";
+	mes "你聽說過嗎？這是一個充滿污染的城市。";
+	mes "訪問那個城市後，您將在這裡欣賞更多的環境...";
+	mes "我們都應該感謝。";
+	next;
+	mes "[講師UR]";
+	mes "無論如何，去Einbroch以南的田野，您會看到派遣的教練。";
+	mes "我確定他會先認出你。";
+	mes "別忘了帶伊甸園徽章。";
+	next;
+	mes "[講師UR]";
+	mes "該市的污染是難以忍受的";
+	mes "但是周圍的田地相對乾淨...";
+	mes "這對您來說應該很容易。";
+	para_2nd01 = 12;
+	setquest 7223;// Advanced Training in Einbroch
+	return;
+
+S_Quest89100:
+	if (BaseLevel < 100) {
+		mes "嗯... ...";
+		mes "唔...";
+		mes "你看起來像個酷的人。您如何看待冰洞？";
+		next;
+		mes "[講師UR]";
+		mes "雷切爾市以北是一個充滿冰的洞穴。";
+		mes "在那裡找到派遣教練。";
+		para_2nd01 = 17;
+		setquest 7229;// Advanced Training in Ice Dungeon
+	}
+	else {
+		mes "好吧，...";
+		mes "我什至不知道現在要送你的地方。";
+		mes "我確定您熟悉這裡的大多數地方";
+		next;
+		mes "[講師UR]";
+		mes "然後，我應該這次將您送到某個地方嗎？";
+		mes "這裡有一個貓爪子。";
+		mes "你在那邊看到他嗎？";
+		next;
+		mes "[講師UR]";
+		mes "通過他，您可以很容易地到達Ash真空。";
+		mes "由於那裡有一個探險營...";
+		next;
+		mes "[講師UR]";
+		mes "您要做的就是在那裡找到伊甸園的代理。";
+		mes "告訴他我寄給你，他會給你指示。";
+		mes "您可以探索新世界";
+		mes "就像假期不是嗎？";
+		next;
+		mes "[講師UR]";
+		mes "哈哈哈！";
+		mes "..也許我會去而不是寄給你。";
+		mes "無論如何，他們的名字是媽媽~東西...我不知道。";
+		next;
+		mes "[講師UR]";
+		mes "因此，任務再次在Midgard探險隊找到我們的經紀人。";
+		mes "這不是您有史以來最簡單的任務嗎？";
+		mes "當你回來時，別忘了我的禮物~！";
+		para_2nd01 = 22;
+		setquest 7233;// Advanced Training at Ash Vacuum
+	}
+	return;
+}
+
+//--60~69
+// comodo,173,354,5	script	Dispatched Instructor#2nd02	1_M_JOBTESTER,{
+comodo,173,354,5	script	Dispatched Instructor#02	1_M_JOBTESTER,{
+	mes "[羅密歐]";
+	if (para_2nd01 < 1) {
+		mes "你好嗎？";
+		mes "科莫多的天氣最好。";
+		mes "即使在冬季，Comodo的天氣也很棒。";
+		next;
+		mes "[羅密歐]";
+		mes "你知道為什麼嗎？";
+		mes "科莫多被海洋和洞穴包圍。";
+		mes "季節性變化對這裡的溫度沒有任何影響。";
+		next;
+		mes "[羅密歐]";
+		mes "在這裡輕鬆。";
+		mes "該區域是放鬆的地方。";
+	}
+	else if (para_2nd01 == 1) {
+		mes "你好嗎？";
+		mes "您是由您的教練送到這裡的吧？";
+		mes "你是來這裡尋求任務的嗎？";
+		next;
+		mes "[羅密歐]";
+		mes "我不知道這是否適合您";
+		mes "你為什麼不嘗試。";
+		next;
+		mes "[羅密歐]";
+		mes "關於這個洞穴的事情是，許多怪物都是用石頭創建的。";
+		mes "如果您保持謹慎，他們不應該太威脅...";
+		next;
+		mes "[羅密歐]";
+		mes "但是他們中的大多數都有射程攻擊。";
+		mes "有時候，一個非常強大的人漫遊。";
+		next;
+		mes "[羅密歐]";
+		mes "好吧...這就是您訓練正確的原因嗎？";
+		mes "讓我們嘗試使用一個大怪物之一";
+		next;
+		mes "[羅密歐]";
+		mes "它們被稱為“鐘式魔像”。";
+		mes "嘗試擊敗其中一些。";
+		mes "不太困難，對吧？";
+		para_2nd01 = 2;
+		erasequest 7214;
+		setquest 7215;
+	}
+	else if (para_2nd01 == 2) {
+		if (checkquest(7215,HUNTING) == 2) {
+			mes "那麼，您現在有多好？";
+			mes "您以前曾與這些鬥爭，因此應該可以清理這個洞穴。";
+			next;
+			mes "[羅密歐]";
+			mes "正如我之前說的，因為Komodo是一個洞穴內的城市。";
+			mes "進入外界的通道主要是通過東入口完成的，但是...";
+			next;
+			mes "[羅密歐]";
+			mes "讓我們嘗試穿越北方。";
+			mes "您應該在那裡尋找一些東西。";
+			next;
+			mes "[羅密歐]";
+			mes "而不是只是走出去，";
+			mes "讓我們在出門時殺死大約10個鐘牆魔像。";
+			next;
+			mes "[羅密歐]";
+			mes "這樣，來自北部的旅行者可以安全地穿過。";
+			mes "請記住，10層魔像。然後來到洞穴北部的另一側";
+			next;
+			mes "[羅密歐]";
+			mes "我會在外面等。";
+			para_2nd01 = 3;
+			getexp 10000,10000;
+			erasequest 7215;// Stalactic Golem Hunt
+			setquest 7216;// More Golem Hunting
+		}
+		else {
+			mes "作為對這個洞穴難度的測試";
+			mes "去擊敗3個鐘乳石魔像。";
+			mes "還要當心其他怪物。";
+			next;
+			mes "[羅密歐]";
+			mes "如果您累了，讓我幫助您康復。";
+			npcskill "AL_HEAL",10,99,60;
+			percentheal 0,100;
+		}
+	}
+	else if (para_2nd01 == 3) {
+		mes "您必須穿過這個洞穴到外面。";
+		mes "不要忘記擊敗您在途中遇到的善變的魔像。";
+	}
+	else {
+		mes "我總是給來這裡的學員同樣的測試。";
+		mes "我從未見過像您一樣完美地傳遞它。";
+	}
+	close;
+}
+
+um_fild01,34,280,5	script	Instructor Romeo#2nd02	1_M_JOBTESTER,{
+	mes "[羅密歐]";
+	if (para_2nd01 < 2) {
+		mes "如果您是從伊甸園（Eden Group）派遣的，請在鎮上等我。";
+		mes "我現在正在等待另一個受訓者。";
+	}
+	else if (para_2nd01 == 2) {
+		mes "不，不..不在這裡。";
+		mes "我現在正在等待另一個受訓者。";
+		mes "回去。";
+	}
+	else if (para_2nd01 == 3) {
+		if (checkquest(7216,HUNTING) == 2) {
+			mes "啊，我看到你沒有迷路。";
+			mes "您擊敗那些善變的魔像的技能比我預期的要好。";
+			mes "只是意味著您的進步很大。";
+			next;
+			mes "[羅密歐]";
+			mes "現在環顧四周";
+			mes "我們現在在茂密的森林中。";
+			mes "這裡有dryands和wootans ...";
+			next;
+			mes "[羅密歐]";
+			mes "下一個任務是清除這一怪物區域。";
+			mes "從怪物帶給我以下內容。";
+			next;
+			mes "[羅密歐]";
+			mes "5 Wootan Fighter的願望";
+			mes "7 Dryad的鋒利葉子";
+			next;
+			mes "[羅密歐]";
+			mes "這是最後一個測試。";
+			mes "祝你好運。";
+			para_2nd01 = 4;
+			erasequest 7216;// More Golem Hunting
+			setquest 7217;// Field drops
+			getexp 10000,10000;
+		}
+		else {
+			mes "我看到你沒有迷路。";
+			mes "但是您沒有打敗足夠的鐘乳石魔像。";
+			mes "回去打敗他們。";
+			next;
+			mes "[羅密歐]";
+			mes "如果您累了，我會幫助您康復。";
+			npcskill "AL_HEAL",10,99,60;
+			percentheal 0,100;
+		}
+	}
+	else if (para_2nd01 == 4) {
+		if (countitem(7196) > 4 && countitem(7100) > 6) {// Shoulder_Protection, Sharp_Leaf
+			mes "您真的通過擊敗怪物而得到了這些？";
+			mes "我相信你。無論如何，我想離開這裡。";
+			next;
+			mes "[羅密歐]";
+			mes "這裡不再有培訓任務。";
+			mes "回去向UR報告。";
+			delitem 7196,5;
+			delitem 7100,7;
+			para_2nd01 = 5;
+			erasequest 7217;// Field drops
+			setquest 7218;// Report to Instructor Ur
+			getexp 10000,10000;
+		}
+		else {
+			mes "我不是已經告訴你最後一個任務嗎？";
+			mes "擊敗這個森林中的怪物，給我帶來我要的物品。";
+			next;
+			mes "[羅密歐]";
+			mes "5 Wootan Fighter的願望";
+			mes "7 Dryad的鋒利葉子";
+			mes "您必須帶我通過這項測試。";
+			next;
+			mes "[羅密歐]";
+			mes "如果您累了，我會幫助您康復。";
+			npcskill "AL_HEAL",10,99,60;
+			percentheal 0,100;
+		}
+	}
+	else {
+		mes "gh，這裡太熱了。";
+		mes "你現在可以離開。";
+	}
+	close;
+}
+
+//--70~79
+// glast_01,195,131,5	script	Dispatched Instructor#2nd03	4_F_SISTER,{
+glast_01,195,131,5	script	Dispatched Instructor#03	4_F_SISTER,{
+	mes "[約翰]";
+	if (para_2nd01 < 7) {
+		mes "啊~很無聊。";
+		mes "您不是您寄出的人，是嗎？";
+		mes "哦~沒關係。";
+		next;
+		mes "[約翰]";
+		mes "這是光榮的海姆修道院。";
+		mes "小心，這裡周圍有很多迷失的靈魂。";
+	}
+	else if (para_2nd01 == 7) {
+		mes "哦！";
+		mes "你終於來了！";
+		mes "我要求ur派人在這裡幫助我！";
+		next;
+		select("什麼？我是來培訓的..");
+		mes "[約翰]";
+		mes "不，不，那是同一回事！";
+		mes "您的培訓任務是幫助我清除這個修道院！";
+		next;
+		mes "[約翰]";
+		mes "ph ...真是太艱難了。";
+		mes "我不能獨自一人，但是石像鬼在這裡攻擊我。";
+		mes "哈哈哈...";
+		next;
+		mes "[約翰]";
+		mes "這個修道院是我們的責任。";
+		mes "就像其他修道院一樣，這也有一個地下graveryad，但是..";
+		next;
+		mes "[約翰]";
+		mes "如您所知，這座城堡...不處於正常狀態。";
+		mes "我認為這使這些靈魂無法安息。";
+		next;
+		mes "[約翰]";
+		mes "讓我們首先打敗這裡的人，因為對我們來說，地下可能太多了。";
+		mes "我將測試您的熟練程度...";
+		next;
+		mes "[約翰]";
+		mes "第一個目標是幽靈。";
+		mes "您可以通過他們奇怪的笑聲告訴他們。";
+		mes "他們看起來像惡魔，但我們無法確定...";
+		next;
+		mes "[約翰]";
+		mes "擊敗20個幽靈。";
+		mes "我會從這里為您提供幫助！";
+		para_2nd01 = 8;
+		erasequest 7219;// Advanced Training at Glast Heim
+		setquest 7220;// Wraith Hunt
+	}
+	else if (para_2nd01 == 8) {
+		if (checkquest(7220,HUNTING) == 2) {
+			mes "哦~你很堅強！";
+			mes "我很高興像你一樣堅強的人來了。";
+			mes "我一個人不會在這裡持續很長時間。";
+			next;
+			mes "[約翰]";
+			mes "順便說一句，除了幽靈之外，您還看到了其他怪物嗎？";
+			mes "他們是祭司的腐敗靈魂。";
+			mes "他們也被稱為“邪惡的德魯伊”。";
+			next;
+			mes "[約翰]";
+			mes "這次讓我們照顧好這些邪惡的德魯伊。";
+			mes "其中10個。";
+			mes "你可以做對嗎？";
+			mes "我相信你！";
+			para_2nd01 = 9;
+			erasequest 7220;// Wraith Hunt
+			setquest 7221;// Evil Druid hunt
+			getexp 20000,20000;
+		}
+		else {
+			mes "20個幽靈！";
+			mes "我會看你的背！";
+			mes "...當然..我也打架！";
+			npcskill "AL_HEAL",10,99,60;
+			percentheal 0,100;
+		}
+	}
+	else if (para_2nd01 == 9) {
+		if (checkquest(7221,HUNTING) == 2) {
+			mes "...哦，你回來了！";
+			mes "（約翰打開門並檢查）";
+			mes "....！ ！ ！";
+			mes "好的！ ！";
+			next;
+			mes "[約翰]";
+			mes "謝謝你！我真的很感激！";
+			mes "我想我現在可以不用擔心進入！";
+			mes "我希望那些邪惡的靈魂獨自一人。";
+			next;
+			mes "[約翰]";
+			mes "呵呵，我會說出一個好話！";
+			mes "您是一個閥門，熟練的驅魔人！";
+			next;
+			mes "[約翰]";
+			mes "你現在可以回到伊甸園";
+			mes "我會留下來清理其餘的，呵呵";
+			para_2nd01 = 10;
+			erasequest 7221;// Evil Druid hunt
+			setquest 7222;// Report to Instructor Ur
+			getexp 20000,20000;
+		}
+		else {
+			mes "10個邪惡的德魯伊！";
+			mes "我會像上次一樣看著你的背。";
+			mes "...當然...我也會與他們戰鬥！";
+			npcskill "AL_HEAL",10,99,60;
+			percentheal 0,100;
+		}
+	}
+	else if (para_2nd01 == 10) {
+		mes "回去向UR報告。";
+		mes "燦爛的海姆修道院現在很清楚。";
+		mes "我需要留下來尋找東西...再見。";
+	}
+	else {
+		mes "gh，我還沒有找到我丟失的東西。";
+		mes "嗯...我可能需要等待下一個學員才能再次開始尋找... EEP！";
+		next;
+		mes "[約翰]";
+		mes "嗯...你沒聽到那是嗎？";
+		mes "哈哈哈哈哈哈哈！";
+		mes "哈哈哈哈哈！";
+	}
+	close;
+}
+
+//--80~89
+// ein_fild08,172,359,3	script	Dispatched Instructor#2nd02	4_M_4THPRIN1,{
+ein_fild08,172,359,3	script	Dispatched Instructor#04	4_M_4THPRIN1,{
+	mes "[凱倫]";
+	if (para_2nd01 < 12) {
+		mes "你在看什麼？";
+		mes "你想要我的東西嗎？";
+		mes "介意自己的生意，走開..";
+	}
+	else if (para_2nd01 == 12) {
+		mes "什麼？";
+		mes "...";
+		mes "嗯，你寄給你了嗎？";
+		mes "哦，那個訓練任務。";
+		next;
+		mes "[凱倫]";
+		mes "您走了很長一段路，我不會讓您做任何艱難的事情，不用擔心。";
+		mes "Einbroch之外的田地還不錯。";
+		next;
+		mes "[凱倫]";
+		mes "這裡的怪物通常會讓我一個人呆著，所以我可以整天小睡。";
+		mes "但是有些人困擾著我。";
+		next;
+		mes "[凱倫]";
+		mes "你知道豬嗎？";
+		mes "看起來醜陋的昆蟲...他們也偷了..";
+		next;
+		mes "[凱倫]";
+		mes "讓我們打敗其中一些人作為熱身。";
+		mes "這裡有很多。 30不應該太難嗎？";
+		next;
+		mes "[凱倫]";
+		mes "我不只是因為他們吃了我的午餐而抱怨。";
+		mes "我將在這裡休息，直到你完成為止。";
+		para_2nd01 = 13;
+		erasequest 7223;// Advanced Training in Einbroch
+		setquest 7224;// Porcellio hunting
+	}
+	else if (para_2nd01 == 13) {
+		if (checkquest(7224,HUNTING) == 2) {// Porcellio hunting
+			mes "什麼，你已經完成了？";
+			mes "我正要入睡...哦，..";
+			mes "我猜這是無濟於事的。讓我們去另一個地方。";
+			next;
+			mes "[凱倫]";
+			mes "不，你在說什麼？";
+			mes "和你一起去嗎？";
+			mes "你一個人可以嗎？";
+			next;
+			mes "[凱倫]";
+			mes "好吧，下一個任務！";
+			mes "Einbroch的人們說，北部的污染確實很糟糕。";
+			mes "他們擔心污染會流入該鎮。";
+			next;
+			mes "[凱倫]";
+			mes "可能是所有這些工廠...";
+			mes "我想我仍然應該研究它。";
+			mes "污染的原因...找到並摧毀它。";
+			next;
+			mes "[凱倫]";
+			mes "30個有毒和5只泰迪熊。";
+			mes "那應該足夠好。";
+			next;
+			mes "[凱倫]";
+			mes "我敢肯定，如果我看不到我，你會做的。";
+			mes "為了表達我的支持，讓我給您一些EXP和HP恢復。";
+			next;
+			mes "[凱倫]";
+			mes "這些怪物位於Einbroch的北部田野。";
+			mes "好吧，請安全。";
+			mes "我要小睡。";
+			para_2nd01 = 14;
+			erasequest 7224;// Porcellio hunting
+			setquest 7226;// Venomous hunting
+			setquest 7227;// Teddy Bear hunting
+			getexp 30000,30000;
+		}
+		else {
+			mes "那麼，您是否懲罰了那些豬？";
+			mes "我認為你還沒有完成嗎？";
+			next;
+			mes "[凱倫]";
+			mes "如果您受傷了，我會治愈您。";
+		}
+		npcskill "AL_HEAL",10,99,60;
+		percentheal 0,100;
+	}
+	else if (para_2nd01 == 14) {
+		if (checkquest(7226,HUNTING) == 2 && checkquest(7227,HUNTING) == 2) {
+			mes "嗯...";
+			mes "我正在完成。";
+			mes "唔...";
+			mes "我仍然很累...";
+			next;
+			mes "[凱倫]";
+			mes "好的。這些怪物一直困擾著Einbroch工人。";
+			mes "那很棒..";
+			next;
+			mes "[凱倫]";
+			mes "我有一些東西要向教師ur。";
+			mes "我一直在密切看著你，你做得很好。回到UR並提供此報告。";
+			para_2nd01 = 15;
+			erasequest 7226;// Venomous hunting
+			erasequest 7227;// Teddy Bear hunting
+			setquest 7228;// Report to Instructor Ur
+			getexp 30000,30000;
+			// erasequest 7225;
+		}
+		else {
+			mes "這些怪物位於Einbroch的北部田野。";
+			mes "找到有害的...";
+			mes "不要試圖對我撒謊，因為您已經完成了他們的狩獵。";
+			next;
+			// if (isbegin_quest(7225) > 0)
+				// erasequest 7225;
+			// else {
+			mes "[凱倫]";
+			mes "是的，如果可以的話？";
+			mes "嗯，這很困難。";
+			mes "我會讓你感覺好些。";
+			// }
+			npcskill "AL_HEAL",10,99,60;
+			percentheal 0,100;
+		}
+	}
+	else if (para_2nd01 == 15) {
+		mes "什麼嚴重？";
+		mes "您是否向教練提交了報告？";
+		mes "Einbroch已委託工作，這意味著更多的培訓。";
+	}
+	else {
+		mes "我不是小偷...";
+		mes "這是艱難的生活。";
+		mes "也沒有真正的野心。";
+		next;
+		mes "[凱倫]";
+		mes "來從業人員嗎？";
+		mes "做東西。";
+		mes "多麼方便的女巫。";
+		mes "Heumnya。我一口氣睡覺..";
+	}
+	close;
+}
+
+//--90~99
+// ice_dun01,154,13,5	script	Dispatched Instructor#2nd02	4_F_JOB_BLACKSMITH,{
+ice_dun01,154,13,5	script	Dispatched Instructor#05	4_F_JOB_BLACKSMITH,{
+	mes "[內奧米]";
+	if (para_2nd01 <= 17) {
+		mes "不僅如此~";
+		mes "現在時間到哪裡了~";
+		mes "我以為你說你寄給我了~！";
+		next;
+		mes "[內奧米]";
+		if (para_2nd01 < 17) {
+			mes "這是什麼？你會幫助我。那對嗎？";
+			mes "不，您不必那樣做。";
+			mes "我正在等待有人安排幫助我。";
+			close;
+		}
+		mes "你是嗎？";
+		mes "哦，你被你送到這裡嗎？";
+		mes "我不知道我在雪地裡一直在這裡等待了多長時間。";
+		next;
+		mes "[內奧米]";
+		mes "這是北部平原的冰城。";
+		mes "整年都沒有一個寒冷的洞穴。";
+		next;
+		mes "[內奧米]";
+		mes "因此，這就是瑞秋（Rachel）人民去冰供應的地方。";
+		mes "但是，這個區域正爬有危險的怪物。";
+		next;
+		mes "[內奧米]";
+		mes "這些怪物之一被稱為siroma。";
+		mes "這對您來說應該是一個很好的挑戰。";
+		next;
+		mes "[內奧米]";
+		mes "好吧，然後進入山洞，找到那些siroma。";
+		mes "那裡很冷，但必須完成這項工作。";
+		next;
+		mes "[內奧米]";
+		mes "哦，有時";
+		mes "你在那裡小心。";
+		mes "好吧，祝你好運~！";
+		para_2nd01 = 18;
+		erasequest 7229;// Advanced Training in Ice Dungeon
+		setquest 7230;// Siroma hunting
+	}
+	else if (para_2nd01 == 18) {
+		if (checkquest(7230,HUNTING) == 2) {
+			mes "啊...結束了...";
+			mes "好的！";
+			mes "您的技能已得到驗證。";
+			next;
+			mes "[內奧米]";
+			mes "現在，我接下來做了什麼。";
+			mes "那些頭號絲似乎以更快的速度增長。";
+			mes "和以前一樣，再狩獵30個頭暈，給我帶來了一些材料。";
+			next;
+			mes "[內奧米]";
+			mes "得到這個...好吧...";
+			mes "請仔細聽";
+			mes "30冰立方";
+			mes "1個甜醬";
+			mes "1個牛奶";
+			next;
+			mes "[內奧米]";
+			mes "我不僅為自己做這件事。";
+			mes "我正在為每個人做這個。";
+			next;
+			mes "[內奧米]";
+			mes "無論如何，這就是最後一個。";
+			mes "因此，捕獵那些頭號蟲並獲取材料。";
+			mes "我們彼此了解嗎？";
+			next;
+			select("你呢？");
+			mes "[內奧米]";
+			mes "我？當然...我要在這裡保持警惕。";
+			mes "我...我是一個忙碌的人！";
+			mes "除此之外，這是培訓，所以你是誰問我我呢？";
+			next;
+			mes "[內奧米]";
+			mes "立即去！";
+			mes "那些紅色蛋糕只會在一分鐘的時間內變得更加艱難。";
+			para_2nd01 = 19;
+			erasequest 7230;// Siroma hunting
+			setquest 7231;// Hunting and Gathering
+			getexp 40000,40000;
+			npcskill "AL_HEAL",10,99,60;
+			percentheal 0,100;
+		}
+		else {
+			mes "最大的絆腳石是與Siromas打交道。";
+			mes "你打獵了30嗎？";
+			next;
+			mes "[內奧米]";
+			mes "哦，您想幫助恢復您的HP/SP HUH嗎？";
+			mes "你會從我那裡得到什麼~！";
+			mes "如果我這樣做會有什麼挑戰？";
+		}
+	}
+	else if (para_2nd01 == 19) {
+		if (checkquest(7231,HUNTING) == 2 && countitem(7066) > 29 && countitem(7453) > 0 && countitem(519) > 0) {// Ice_Piece, Sweet_Sauce, Milk
+			mes "哦！";
+			mes "你帶來了一切。";
+			mes "好吧，所以最後一件事...！";
+			next;
+			select("...... 看");
+			mes "[內奧米]";
+			mes "是的，是嗎？為什麼不呢？";
+			mes "...";
+			mes "哦，是的！我應該給你一些東西。";
+			mes "我知道，你做得足夠了。";
+			next;
+			mes "[內奧米]";
+			mes "我會告訴教練你。";
+			mes "還有幾個階段要去，所以不用擔心！";
+			next;
+			mes "[內奧米]";
+			mes "哦，恭喜！";
+			mes "這是準備的最後一個訓練階段！";
+			next;
+			mes "[內奧米]";
+			mes "我想我本人應該做一些事情~";
+			mes "啊哈哈~";
+			delitem 7066,30;
+			delitem 7453,1;
+			delitem 519,1;
+			para_2nd01 = 20;
+			erasequest 7231;// Hunting and Gathering
+			setquest 7232;// Report to Instructor Ur
+			getexp 40000,40000;
+		}
+		else {
+			mes "您是否完成了30 siroma的狩獵？";
+			mes "您已經完成了一次，所以這應該不難...";
+			next;
+			mes "[內奧米]";
+			mes "而且不要忘記30立方體，1個甜醬和1個牛奶。";
+		}
+	}
+	else if (para_2nd01 == 20) {
+		mes "你在那裡嗎？";
+		mes "自您上次來這里以來，其他人來來去去。";
+		mes "現在，我不必自己購買材料。";
+		next;
+		mes "[內奧米]";
+		mes "向講師報告，報告工作已經完成。";
+		mes "不要拖延。";
+	}
+	else
+		mes "las，在任何地方，冰蓋的積聚比這裡更多嗎？";
+	close;
+}
+
+// mid_camp,212,229,3	script	Dispatched Instructor#2nd02	4_F_HUWOMAN,{
+mid_camp,212,229,3	script	Dispatched Instructor#06	4_F_HUWOMAN,{
+	mes "[瑪格麗特]";
+	if (para_2nd01 < 22) {
+		mes "哦，對不起。";
+		mes "我對冒險家的生活了解不多。";
+		mes "我只是Eden Group的成員...";
+	}
+	else if (para_2nd01 == 22) {
+		mes "證明您在那裡。";
+		mes "你在天堂。";
+		mes "您的講師寄給您嗎？";
+		next;
+		if (select("Yes.", "No." ) == 2) {
+			mes "[瑪格麗特]";
+			mes "哦，我的錯誤。";
+			close;
+		}
+		mes "[瑪格麗特]";
+		mes "你好嗎？";
+		mes "哦，所以您在這裡接受教練Ur的培訓。";
+		next;
+		mes "[瑪格麗特]";
+		mes "好的，我現在處於某種情況，所以我要求ur ur使用他的任務來提供幫助。";
+		next;
+		select("情況？");
+		mes "[瑪格麗特]";
+		mes "是的，";
+		mes "找到我的，做他問你的事情。";
+		next;
+		mes "[瑪格麗特]";
+		mes "我們派遣他去做一些事情，他還沒有做，所以我猜他要么被雞掉了，要么失敗了。";
+		next;
+		mes "[瑪格麗特]";
+		mes "那麼，您能在輝煌的領域找到他嗎？";
+		next;
+		mes "[瑪格麗特]";
+		mes "找到他，弄清楚他要做什麼。";
+		para_2nd01 = 23;
+		erasequest 7233;//  Advanced Training at Ash Vacuum
+		setquest 7234;// Margaret's favor
+	}
+	else if (para_2nd01 < 27) {
+		mes "你能找到這兩個兄弟嗎？";
+		mes "找出他們的情況。";
+	}
+	else if (para_2nd01 == 27) {
+		mes "那麼這是什麼一回事？ ！";
+		next;
+		mes "- 您告訴她有關Meeru和我的有關。 -";
+		next;
+		mes "[瑪格麗特]";
+		mes "是的？哦，什麼？";
+		mes "這不是真的...";
+		mes "好的，我去和他們打交道。";
+		next;
+		mes "[瑪格麗特]";
+		mes "好吧，無論收集什麼尼彭和普加尼亞的證明。";
+		next;
+		mes "[瑪格麗特]";
+		mes "您的培訓已經完成，因此回去與Ur教練交談。";
+		para_2nd01 = 29;
+		erasequest 7234;// Margaret's favor
+		setquest 7237;// Report to Instructor Ur
+	}
+	else if (para_2nd01 == 29) {
+		mes "好吧，無論收集什麼尼彭和普加尼亞的證明。";
+		next;
+		mes "[瑪格麗特]";
+		mes "您的培訓已經完成，因此回去與Ur教練交談。";
+	}
+	else
+		mes "…………";
+	close;
+}
+
+// man_fild01,43,234,3	script	Dispatched Instructor#2nd02	4_DST_SOLDIER,{
+man_fild01,43,234,3	script	Dispatched Instructor#07	4_DST_SOLDIER,{
+	mes "[你]";
+	if (para_2nd01 < 23) {
+		mes "你想我會輸！";
+		mes "...？";
+		mes "所有人...你是誰？";
+		mes "我的是個臭嗎？";
+		mes "他送你看我！ ？";
+		next;
+		mes "[你]";
+		mes "什麼？不是嗎？";
+		mes "…………";
+		mes "我的沒有寄給你他嗎？";
+	}
+	else if (para_2nd01 == 23) {
+		mes "你想我會輸！";
+		mes "...？";
+		mes "所有人...你是誰？";
+		mes "我的是個臭嗎？";
+		mes "他送你看我！ ？";
+		next;
+		mes "[你]";
+		mes "什麼？不是嗎？";
+		mes "…………";
+		mes "我的沒有寄給你他嗎？";
+		mes "那你為什麼在這裡呢？";
+		next;
+		select("瑪格麗特派我來");
+		mes "[你]";
+		mes "啊，瑪格麗特！";
+		mes "我的和瑪格麗特總是試圖因為我的勝利而惹我！";
+		mes "天哪...";
+		next;
+		select("What happened?", "What do you win?" );
+		mes "[你]";
+		mes "一切始於他們爭吵。";
+		mes "瑪格麗特被要求為我們倆偵察。就像您現在在做什麼。";
+		next;
+		mes "[你]";
+		mes "我的說，他足夠強大，可以擊敗任何怪物。";
+		mes "因此，我堅持要他去營地的東西方向我展示。";
+		next;
+		mes "[你]";
+		mes "我的閒置威脅，喘不過氣來，但什麼也沒做。";
+		next;
+		mes "[你]";
+		mes "基本上，瑪格麗特不相信他，並挑戰他殺死1個尼泊德。";
+		next;
+		mes "[你]";
+		mes "因此，無論如何，現在我被指控要求人們去狩獵1個nepenthes，這是因為這一爭吵事件。";
+		next;
+		mes "[你]";
+		mes "狩獵1確實並不困難，所以去這裡的東部田野並殺死其中一個。";
+		para_2nd01 = 24;
+		setquest 7235;// Nepenthes Hunt
+	}
+	else if (para_2nd01 == 24) {
+		if (checkquest(7235,HUNTING) == 2) {
+			mes "嗯，我看到了。";
+			mes "我知道我應該要你狩獵超過1。";
+			next;
+			mes "[你]";
+			mes "無論如何，您證明自己比我的強大。";
+			next;
+			mes "[你]";
+			mes "無論如何，這是一個很小的回報。";
+			next;
+			mes "[你]";
+			mes "我只是在這裡確保其他人狩獵裙帶。我可能會請他們狩獵超過1個知道的人。";
+			para_2nd01 = 25;
+			erasequest 7235;// Nepenthes Hunt
+			getexp 50000,50000;
+		}
+		else {
+			mes "為您打獵項嗎？";
+			mes "您似乎有點沖洗。";
+			mes "很好，我治愈你！";
+			npcskill "AL_HEAL",10,99,60;
+			percentheal 0,100;
+		}
+	}
+	else if (para_2nd01 == 25)
+		mes "我只是在這裡確保其他人狩獵裙帶。我可能會請他們狩獵超過1個知道的人。";
+	else {
+		mes "有事嗎？";
+		mes "您是否遇到了項...";
+		mes "…………鉤鉤。";
+	}
+	close;
+}
+
+// spl_fild02,377,149,3	script	Dispatched Instructor#2nd02	4_M_DST_MASTER,{
+spl_fild02,377,149,3	script	Dispatched Instructor#08	4_M_DST_MASTER,{
+	mes "[礦]";
+	if (para_2nd01 < 25) {
+		mes "哦，殘酷的世界。";
+		mes "...";
+		mes "經過的方式。";
+		mes "事實證明這是多麼慘敗";
+	}
+	else if (para_2nd01 == 25) {
+		mes "哦，殘酷的世界...";
+		mes "...";
+		mes "你是誰？";
+		next;
+		if (select("Margaret sent me.", "Yeah I'm here..." ) == 1) {
+			mes "[礦]";
+			mes "嗯？ WHO！";
+			mes "我懂了。那個時候了嗎？";
+			mes "這很困難。";
+			mes "我在這裡危機！";
+		}
+		else {
+			mes "[礦]";
+			mes "哦，所以你不是在這裡靠在這裡嗎？";
+			mes "那為什麼還要打擾呢？";
+			next;
+			mes "[礦]";
+			mes "你不想在這裡嗎？";
+			mes "瑪格麗特寄給你，而不是我敢打賭的其他人。";
+			mes "無論如何，無論如何我在這裡遇到危機！";
+		}
+		next;
+		mes "[礦]";
+		mes "好吧，我不想承認，但是您必須在這裡幫助我。";
+		next;
+		mes "[礦]";
+		mes "好的，只是因為我抱怨並不意味著他們必須把我送到這裡！";
+		next;
+		mes "[礦]";
+		mes "我的意思是，他們要求像我這樣的簡單人太多。";
+		next;
+		mes "[礦]";
+		mes "好的，這是交易。";
+		mes "我應該狩獵那些pinguiculas。只有5個。";
+		mes "但是你會為我做的嗎？";
+		next;
+		mes "[礦]";
+		mes "我保證你會給你一些好東西。";
+		mes "謝謝。";
+		para_2nd01 = 26;
+		setquest 7236;// Pinguicula Hunt
+	}
+	else if (para_2nd01 == 26) {
+		if (checkquest(7236,HUNTING) == 2) {
+			mes "出色的！";
+			mes "現在我可以回到營地...";
+			next;
+			mes "[礦]";
+			mes "我的意思是，您能告訴瑪格麗特完成了這一切嗎？";
+			next;
+			mes "[礦]";
+			mes "哦，別擔心她不介意。我會回去做自己在做的事情。這是您的回報。";
+			para_2nd01 = 27;
+			erasequest 7236;// Pinguicula Hunt
+			getexp 50000,50000;
+		}
+		else {
+			mes "來5個pinguicula。";
+			mes "那你真的是怎麼到達這裡的？";
+			next;
+			mes "[礦]";
+			mes "您不是在撒謊，是一個真正的冒險家嗎？";
+			npcskill "AL_HEAL",10,99,60;
+			percentheal 0,100;
+		}
+	}
+	else if (para_2nd01 == 27) {
+		mes "瑪格麗特把她想要的一切都帶回了營地。";
+		mes "你不用擔心，我很快要回去。";
+	}
+	else
+		mes "…………";
+	close;
+}
+
+moc_para01,111,83,3	script	Blacksmith Thorn#2nd10	2_M_OLDBLSMITH,{
+	if (checkweight(2571,5) == 0) {
+		mes "- 您的庫存中有太多的項目可以繼續 -";
+		close;
+	}
+	mes "[刺]";
+	if (!callfunc("F_HasEdenGroupMark")) {
+		mes "嗯，您是Eden Group的成員嗎？";
+		mes "您需要成為我們使用我的服務的成員之一。";
+		close;
+	}
+	mes "這是怎麼回事？";
+	next;
+	switch( select("Strengthen Equipment", "Personal Request", "Give me new equipment." ) ) {
+		mes "[刺]";
+	case 1:
+		if (para_2nd01 < 6) {
+			mes "嗯設備加強。";
+			mes "我並不是為任何人做到這一點。";
+			mes "第一步至少是更高的培訓程度，所以您是否完成了伊甸園小組培訓？";
+			next;
+			mes "[刺]";
+			mes "你還沒有醒來。";
+			mes "首先執行教練UR規定的任務，我將幫助您加強設備。";
+			next;
+			mes "[刺]";
+			mes "除非您先這樣做，否則我不會幫助您！";
+		}
+		else if (para_2nd04 == 3) {
+			mes "加強您的設備嗎？";
+			mes "我將通過隨機提高統計數據來為您加強新的伊甸園設備。";
+			next;
+			mes "[刺]";
+			mes "那麼，您想增強什麼設備？";
+			next;
+			switch( select("Eden Group Manteau II", "Eden Group Armor IV", "Eden Group Boots IV" ) ) {
+				case 1: callsub S_Enchant,2571,"Manteau";// Para_Team_Manteau2
+				case 2: callsub S_Enchant,15031,"Armor";// Para_Team_Armor
+				case 3: callsub S_Enchant,2473,"Boots";// Para_Team_Boots4
+			}
+		}
+		else {
+			mes "完成我的個人要求後，我將加強您的設備。";
+			next;
+			mes "[刺]";
+			mes "我只想確保您值得使用我的服務。";
+		}
+		close;
+	case 2:
+		if (para_2nd02 < 2) {
+			mes "您是否開始了教練的要求？";
+			mes "我正在為那些值得的人提供服務。";
+			next;
+			mes "[刺]";
+			mes "此外，在執行這些任務之前，您將沒有我可以增強的設備。";
+		}
+		else if (para_2nd04 == 0) {
+			mes "很高興你在這裡。";
+			mes "作為鐵匠，我需要不斷需要鐵材料。";
+			next;
+			mes "[刺]";
+			mes "當然，最終會有回報...";
+			mes "所以...";
+			next;
+			mes "[刺]";
+			if (BaseLevel < 80) {
+				mes "給我帶來一些材料。";
+				mes "我需要20個鐵礦石和10個鐵。";
+			}
+			else {
+				mes "給我帶來一些材料。";
+				mes "帶20個二手鐵板。";
+				.@add = 1;
+			}
+			mes "您可以立即將它們帶走嗎？";
+			next;
+			switch( select("Sure thing.", "I don't want to." ) ) {
+				mes "[刺]";
+			case 1:
+				mes "我很感激。";
+				mes "所以花點時間，我將等待。";
+				para_2nd04 = 1 + .@add;
+				setquest (7238 + .@add);// Errands for Thorn (easy/hard)
+				close;
+			case 2:
+				mes "嗯...？";
+				mes "猜猜你太忙了，無法幫助我。";
+				close;
+			}
+		}
+		else if (para_2nd04 == 1 || para_2nd04 == 2) {
+			if (para_2nd04 == 1) {
+				setarray .@item[0],1002,998;// Iron_Ore, Iron
+				setarray .@amount[0],20,10;
+				setarray .@countitem[0],countitem(1002),countitem(998);
+				.@string$ = "I asked you to get 20 Iron Ore, and 10 Iron.";
+			}
+			else {
+				.@item[0] = 7319;
+				.@amount[0] = 20;
+				.@countitem[0] = countitem(7319);
+				.@add = 1;
+				.@string$ = "I asked you to get 20 Used Iron Plate.";
+			}
+			if (.@countitem[0] >= .@amount[0] && .@countitem[1] >= .@amount[1]) {
+				mes "讓我猜...";
+				mes "您給我帶來了最好的質量材料。";
+				mes "好的。";
+				next;
+				mes "[刺]";
+				mes "我總是可以使用更多的鐵材料。";
+				mes "而不是正常的獎勵，我會給您一個高級設備。";
+				next;
+				mes "[刺]";
+				mes "如果您在任何時候都認為自己有需要加強的設備，請再次成為我。";
+				delitem .@item[0],.@amount[0];
+				if (.@countitem[1])
+					delitem .@item[1],.@amount[1];
+				para_2nd04 = 3;
+				erasequest (7238 + .@add);
+				setquest 7240;
+			}
+			else {
+				mes .@string$;
+				mes "我很確定這並不難。";
+			}
+		}
+		else if (para_2nd04 == 3) {
+			mes "現在，就是這樣。";
+			mes "今天就足夠了。";
+			mes "現在，請我加強您的設備，我會為您做。";
+			next;
+			mes "[刺]";
+			mes "如果您有其中之一，將它們帶給我。";
+			mes "伊甸集團外套 II，伊甸集團鎧甲 IV，伊甸集團靴子 IV。";
+		}
+		else if (para_2nd04 == 4) {
+			if (checkquest(7241,PLAYTIME) == 0) {
+				mes "稍後再回來。";
+				mes "您必須先等待一段時間。";
+			}
+			else {
+				mes "嗯...";
+				mes "我們要做什麼...哦，不用擔心。";
+				mes "以後來找我。";
+				erasequest 7241;// Errands for Thorn timer
+				para_2nd04 = 0;
+			}
+		}
+		close;
+	case 3:
+		if (para_2nd02 < 1) {
+			mes "我不允許我的講師ur。";
+			mes "不要惹我。";
+		}
+		else if (para_2nd02 == 1) {
+			mes "好吧，我給你設備。";
+			mes "我會為您提供驕傲的好盔甲和設備。";
+			next;
+			mes "[刺]";
+			mes "因此，現在， ^4d4dffmake確保您有足夠的免費庫存空間。 ^000000";
+			next;
+			if (select("Let me organize my inventory.", "I have free space." ) == 1) {
+				mes "[刺]";
+				mes "你這樣做。";
+				mes "釋放庫存，以便您可以獲得武器，靴子和所有其他設備。";
+				close;
+			}
+			mes "[刺]";
+			if (BaseJob == Job_Knight || BaseJob == Job_Crusader) {
+				callsub L_Select,"One-handed sword, two-handed sword or spear.",
+					1197,"Eden Group Slayer III","Two-handed Sword, Attack 200",
+					13434,"Eden Group Saber III","One-handed Sword, Attack 185",
+					1434,"Eden Group Spear I","One-handed, Attack 165";
+			}
+			else if (BaseJob == Job_Assassin) {
+				callsub L_Select,"You have your choice of dagger or katar.",
+					13066,"Eden Group Dagger III","Dagger, MATK +80, ATK 165",
+					1289,"Eden Group Katar I","Katar, ATK 155";
+			}
+			else if (BaseJob == Job_Rogue || BaseClass == Job_Novice)
+				getitem 13066,1;// P.Dagger III
+			else if (BaseJob == Job_Alchemist || BaseJob == Job_Blacksmith) {
+				callsub L_Select,"Your options are Mace, Saber and Axe.",
+					16014,"Eden Group Mace III","Mace, Attack 172",// P_Mace3
+					13434,"Eden Group Saber III","Sword, Attack 185",//P.Saber III
+					1391,"Eden Group Axe I","Axe, Attack 195"; //P.Two-Handed Axe I
+			}
+			else if (BaseJob == Job_Wizard)
+				getitem 1658,1;// P.Staff III
+			else if (BaseJob == Job_Sage) {
+				callsub L_Select,"",
+					1658,"Eden Group Staff III","Staff, MATK + 170, INT +4, Attack 60", //P.Staff III
+					1583,"Eden Group Dictionary I","Book, MATK +100, Attack 135"; //P.Book I
+			}
+			else if (BaseJob == Job_Priest) {
+				callsub L_Select,"",
+					1658,"Eden Group Staff III","Staff, MATK + 170, INT +4, Attack 60", //P.Staff III
+					1583,"Eden Group Dictionary I","Book, MATK +100, Attack 135", //P.Book I
+					16014,"Eden Group Mace III","Mace, Attack 172"; //P.Mace III
+			}
+			else if (BaseJob == Job_Monk) {
+				callsub L_Select,"",
+					1831,"Eden Group Knuckles I","Knuckle, Attack 120", //P.Knuckle I
+					16014,"Eden Group Mace III","Mace, Attack 172"; //P.Mace III
+			}
+			else if (BaseJob == Job_Hunter)
+				getitem 18106,1;// P.Bow III
+			else if (BaseJob == Job_Bard) {
+				callsub L_Select,"",
+					18106,"Eden Group Bow III","Bow, Attack 140", //P.Bow III
+					1931,"Eden Group Guitar I","Guitar, Attack 125"; //P.Guitar I
+			}
+			else if (BaseJob == Job_Dancer) {
+				callsub L_Select,"",
+					18106,"Eden Group Bow III","Bow, Attack 140", //P.Bow III
+					1986,"Eden Group Whip I","Whip, Attack 125"; //P.Tail I
+			}
+			else if (Class == Job_Ninja) {
+				callsub L_Select,"",
+					13066,"Eden Group Dagger III","Dagger, MATK +80, ATK 165", //P.Dagger III
+					13310,"Eden Group Huuma Shuriken I","Huuma Suriken, MATK +50, ATK 170"; //P.Huuma Suriken I
+			}
+			else if (Class == Job_Star_Gladiator)
+				getitem 1583,1; //P.Book I
+			else if (Class == Job_Soul_Linker) {
+				callsub L_Select,"",
+					13066,"Eden Group Dagger III","Dagger, MATK +80, ATK 165", //P.Dagger III
+					1658,"Eden Group Staff III","Staff, MATK +170, INT +4, ATK 60"; //P.Staff III
+			}
+			else if (Class == Job_Gunslinger)
+				getitem 13114,1; //P.Revolver III
+			else if (Class == Job_Summoner)
+				getitem 26101,1; //P.Foxtail III
+			else {
+				mes "嗯，您有資格接收設備。";
+				mes "是的，我明白了。";
+				next;
+				mes "[刺]";
+				mes "嗯，雖然出了問題。我不確定什麼...";
+				close;
+			}
+			para_2nd02 = 2;
+			getitem 18514,1;// Paradise Hat II
+			getitem 2571,1;// Paradise Mantle II
+			getitem 2473,1;// Paradise Boots IV
+			getitem 15031,1;// Paradise Uniform IV
+			mes "這是你的設備。";
+			mes "我還會給您此組合的其他裝備。";
+		}
+		else if (para_2nd02 == 2) {
+			mes "您可以加強我給您的設備。";
+			mes "武器專家BK位於伊甸園集團總部，他可以為您做。";
+			next;
+			mes "[刺]";
+			mes "所以去找他，他可以使您的設備更堅固。";
+		}
+		else {
+			mes "你有裝備了嗎？";
+			mes "我可以給你裝備，但我不能為你加強。";
+			next;
+			mes "[刺]";
+			mes "您的盔甲可以由其他人加強。";
+			mes "我希望我可以，但不能。";
+		}
+	}
+	close;
+L_Select:
+	mes "選擇武器。";
+	mes getarg(0);
+	mes "從以下內容中選擇。";
+	for ( .@i = 1; .@i < getargcount(); .@i += 3 ) {
+		set .@menu$, .@menu$ + getarg(.@i+1) + ":";
+		mes getarg(.@i+1)+"："+ getarg(.@i+2);
+	}
+	next;
+	.@i = (select(.@menu$) -1) *3 +1;
+	mes "[塔]";
+	getitem getarg(.@i),1;
+	return;
+S_Enchant:
+	mes "[刺]";
+	if (countitem(getarg(0)) > 0) {
+		// .@1st = rand(1,12);
+		// .@2nd = rand(1,12);
+
+		// if (.@1st == 1) .@1st = 4751;// Luck2
+		// else if (.@1st == 2) .@1st = 4787;// Mdef4
+		// else if (.@1st == 3) .@1st = 4791;// Def3
+		// else if (.@1st == 4) .@1st = 4701;// Strength2
+		// else if (.@1st == 5) .@1st = 4788;// Mdef6
+		// else if (.@1st == 6) .@1st = 4792;// Def6
+		// else if (.@1st == 7) .@1st = 4731;// Agility2
+		// else if (.@1st == 8) .@1st = 4789;// Mdef8
+		// else if (.@1st == 9) .@1st = 4793;// Def9
+		// else if (.@1st == 10) .@1st = 4721;// Dexterity2
+		// else if (.@1st == 11) .@1st = 4711;// Inteligence2
+		// else if (.@1st == 12) .@1st = 4741;// Vitality2
+
+		// if (.@2nd == 1) .@2nd = 4701;// Strength2
+		// else if (.@2nd == 2) .@2nd = 4787;// Mdef4
+		// else if (.@2nd == 3) .@2nd = 4741;// Vitality2
+		// else if (.@2nd == 4) .@2nd = 4791;// Def3
+		// else if (.@2nd == 5) .@2nd = 4788;// Mdef6
+		// else if (.@2nd == 6) .@2nd = 4792;// Def6
+		// else if (.@2nd == 7) .@2nd = 4721;// Dexterity2
+		// else if (.@2nd == 8) .@2nd = 4793;// Def9
+		// else if (.@2nd == 9) .@2nd = 4751;// Luck2
+		// else if (.@2nd == 10) .@2nd = 4789;// Mdef8
+		// else if (.@2nd == 11) .@2nd = 4731;// Agility2
+		// else if (.@2nd == 12) .@2nd = 4711;// Inteligence2
+		setarray .@bonus[1],
+			4751,// Luck2
+			4787,// Mdef4
+			4791,// Def3
+			4701,// Strength2
+			4788,// Mdef6
+			4792,// Def6
+			4731,// Agility2
+			4789,// Mdef8
+			4793,// Def9
+			4721,// Dexterity2
+			4711,// Inteligence2
+			4741;// Vitality2
+		.@1st = .@bonus[ rand(1,12) ];
+		.@2nd = .@bonus[ rand(1,12) ];
+		mes "伊甸園集團"+ getarg(1) +"?";
+		mes "我明白。";
+		mes "請記住，增強的統計數據將是隨機的。";
+		mes "您確定您要我增強它嗎？";
+		next;
+		switch( select("I changed my mind.", "Yes, enhance it." ) ) {
+			mes "[刺]";
+		case 1:
+			mes "您確定不想增強它嗎？";
+			mes "這是您的選擇。";
+			close;
+		case 2:
+			mes "我明白。";
+			mes "讓我們開始增強。";
+			next;
+			specialeffect EF_REPAIRWEAPON;
+			progressbar "ffff00",3;
+			delitem getarg(0),1;
+			para_2nd04 = 4;
+			// erasequest 7240;// Equipment Enhancement
+			// setquest 7241;// Errands for Thorn timer
+			changequest 7240,7241;
+			getitem2 getarg(0),1,1,0,0,0,0,.@1st,.@2nd;						
+			mes "[刺]";
+			mes "好的，似乎增強效果很好。";
+			mes "如果您不喜歡結果，那麼明天可以再次回來。";
+			close;
+		}
+	}
+	mes "嗯...你沒有"+ getarg(1) +"?";
+	mes "我認為您沒有它。";
+	close;
+}
+
+moc_para01,112,79,3	script	Weapons Expert BK#2nd11	4_M_REPAIR,{
+	setarray .@wplist[0],
+		1197,	// P_Slayer3
+		13434,	// P_Saber3
+		13066,	// P_Dagger3
+		1289,	// P_Katar1
+		1391,	// P_Two_Handed_Axe1
+		1434,	// P_Spear I
+		1658,	// P_Staff3
+		16014,	// P_Mace3
+		18106,	// P_Bow3
+		1583,	// P.Book I
+		1931,	// P_Guitar I
+		1986,	// P_Tail1
+		13114,	// P_Revolver3
+		1831,	// P_Knuckle1
+		13310,	// P_Huuma_Shuriken1
+		26101;	// P_Foxtail III
+	.@wplist_size = getarraysize(.@wplist);
+
+	.@menu$ = "Eden Group Slayer III:" +
+		"Eden Group Saber III:" +
+		"Eden Group Dagger III:" +
+		"Eden Group Katar I:" +
+		"Eden Group Axe I:" +
+		"Eden Group Spear I:" +
+		"Eden Group Staff III:" +
+		"Eden Group Mace III:" +
+		"Eden Group Bow III:" +
+		"Eden Group Dictionary I:" +
+		"Eden Group Guitar I:" +
+		"Eden Group Whip I:" +
+		"Eden Group Revolver III:" +
+		"Eden Group Knuckles I:" +
+		"Eden Group Huuma Shuriken I:" +
+		"Eden Group Foxtail III";
+	mes "[黑色]";
+	mes "發生了什麼事？";
+	mes "決不？ ！";
+	next;
+	if (select("Enhancing weapons.", "What?" ) == 2) {
+		mes "[黑色]";
+		mes "是的？";
+		mes "你在問我我所知道的嗎？";
+		next;
+		select("...??");
+		mes "[黑色]";
+		mes "......????";
+		close;
+	}
+	mes "[黑色]";
+	mes "啊，您是在這裡增強裝備。";
+	mes "好吧，好嗎？";
+	next;
+	mes "[黑色]";
+	if (para_2nd02 < 2) {
+		mes "您必須先擁有設備才能做任何事情。";
+		mes "你還沒有從荊棘那裡得到什麼嗎？";
+	}
+	else if (para_2nd02 == 2) {
+		if (para_2nd01 < 11) {
+			mes "嗯，不。";
+			mes "我沒有教師的許可。";
+			mes "您必須完成培訓。";
+			next;
+			mes "[黑色]";
+			mes "一旦您這樣做，我就可以幫助您。";
+			mes "在那之前，我不會和你說話。";
+		}
+		else {
+			mes "好的，您想增強什麼武器？";
+			next;
+			.@s = select(.@menu$) -1;
+			mes "[黑色]";
+			if (countitem(.@wplist[.@s]) > 0) {
+				mes "可以第一次加固。";
+				mes "ATK + 3％還是MATK + 3％？";
+				mes "我會為您提供對所選裝備的這種效果的選項。";
+				next;
+				mes "[黑色]";
+				mes "之後，您不能改變主意，因此可以明智地選擇。";
+				next;
+				if (select("ATK +3%","MATK +3%" ) == 1) {
+					.@string$ = "Ok, you've chosen to raise physical attack.";
+					.@card = 4767;
+				}
+				else {
+					.@string$ = "Ok, you've chosen to raise magical attack.";
+					.@card = 4806;
+					.@add = 1;
+				}
+				mes "[黑色]";
+				mes .@string$;
+				mes "你會看嗎？現在，您的武器將變得更強壯。";
+				para_2nd03 = 1 + .@add;
+				next;
+				specialeffect EF_REPAIRWEAPON;
+				progressbar "ffff00",3;
+				para_2nd02 = 3;
+				delitem .@wplist[.@s],1;
+				getitem2 .@wplist[.@s],1,1,0,0,0,0,0,.@card;
+				mes "[黑色]";
+				mes "這不是宏偉的嗎？";
+				mes "我知道，我知道，我很棒！";
+			}
+			else {
+				mes "你在開玩笑吧？";
+				mes "您似乎沒有那種武器。";
+			}
+		}
+	}
+	else if (para_2nd02 == 3) {
+		if (para_2nd01 < 16) {
+			mes "嗯，我不確定你準備好了。";
+			mes "教師UR任務的所有3個步驟都必須首先完成。";
+			next;
+			mes "[黑色]";
+			mes "你明白我在說什麼？";
+			mes "完成教練UR的第三次任務。";
+		}
+		else {
+			mes "好的。因此，您以前收到了ATK或MATK的補充。";
+			mes "對於此選項，您可以從野蠻，植物，魚類，龍，增加治愈方法中進行選擇。";
+			next;
+			mes "[黑色]";
+			mes "一旦選擇，您就無法再次改變主意。";
+			mes "但是，您的武器會增加對您選擇的增強類型的損害。";
+			next;
+			mes "[黑色]";
+			mes "基本上，我將與您選擇的屬性類型一起添加隨機怪物卡。";
+			mes "祝你好運！";
+			next;
+			switch( select("Brute Type", "Plant Type", "Insect Type", "Fish Type", "Dragon Type", "Increased Heal" ) ) {
+			case 1:
+				setarray .@arg[0],4060,4472,111;// Goblin_Card, Bradium_Goram_Card
+				.@type$ = "Brute";
+				break;
+			case 2:
+				setarray .@arg[0],4068,4470,121;// Scorpion_Card, Nepenthes_Card
+				.@type$ = "Plant";
+				break;
+			case 3:
+				setarray .@arg[0],4063,4476,131;// Caramel_Card, Pinguicula_Card
+				.@type$ = "Insect";
+				break;
+			case 4:
+				setarray .@arg[0],4080,4469,141;// Flora_Card, Naga_Card
+				.@type$ = "Fish";
+				break;
+			case 5:
+				setarray .@arg[0],4118,4471,151;// Petit_Card, Egg_Of_Draco_Card
+				.@type$ = "Dragon";
+				break;
+			case 6:
+				setarray .@arg[0],4805,4805,161;// Heal_Amount2
+			}
+			mes "[黑色]";
+			for ( .@i = 0; .@i < .@wplist_size; .@i++ ) {
+				if (countitem(.@wplist[.@i]) > 0) {
+					if (.@arg[0] == 4805)
+						mes "好的。您的武器現在將提高治療效率。";
+					else
+						mes "好的。您的武器會增加攻擊"+ .@type$ +" type monsters.";
+					next;
+					specialeffect EF_REPAIRWEAPON;
+					progressbar "ffff00",3;
+					delitem .@wplist[.@i],1;
+					para_2nd02 = 4;
+					if (para_2nd03 == 1) {
+						para_2nd03 = .@arg[2];
+						getitem2 .@wplist[.@i],1,1,0,0,0,0,.@arg[0],4767;
+					}
+					else {
+						para_2nd03 = .@arg[2] + 100;
+						getitem2 .@wplist[.@i],1,1,0,0,0,0,.@arg[1],4806;
+					}
+					mes "[黑色]";
+					mes "這不是宏偉的嗎？";
+					mes "我知道，我知道，我很棒！";
+					close;
+				}
+			}
+			mes "抱歉，但似乎您沒有可以增強的武器。";
+			mes "這是怎麼發生的？";
+			close;
+		}
+	}
+	else if (para_2nd02 == 4) {
+		if (para_2nd01 < 30) {
+			mes "教練ur有很多培訓任務，不是嗎？";
+			mes "只有一個階段。";
+			mes "到達訓練的最後階段。";
+		}
+		else {
+			mes "好的，這是最後一步。";
+			mes "我將使您的武器更加增強。";
+			next;
+			mes "[黑色]";
+			mes "上一步中添加的卡將加倍。";
+			mes "而且，如果您擁有治愈武器，它將提高其治愈效率。";
+			mes "你明白嗎？";
+			next;
+			mes "[黑色]";
+			mes "好的，您現在有什麼武器？";
+			next;
+			.@s = select(.@menu$) -1;
+			mes "[黑色]";
+			if (countitem(.@wplist[.@s]) > 0) {
+				mes "將獎金統計數據的實力加倍。";
+				next;
+				specialeffect EF_REPAIRWEAPON;
+				progressbar "ffff00",3;
+				delitem .@wplist[.@s],1;
+				para_2nd02 = 5;
+				if (para_2nd03 == 111)
+					getitem2 .@wplist[.@s],1,1,0,0,0,4060,4060,4767;// Goblin_Card, Goblin_Card, Atk3
+				else if (para_2nd03 == 121)
+					getitem2 .@wplist[.@s],1,1,0,0,0,4068,4068,4767;// Scorpion_Card, Scorpion_Card, Atk3
+				else if (para_2nd03 == 131)
+					getitem2 .@wplist[.@s],1,1,0,0,0,4063,4063,4767;// Caramel_Card, Caramel_Card, Atk3
+				else if (para_2nd03 == 141)
+					getitem2 .@wplist[.@s],1,1,0,0,0,4080,4080,4767;// Flora_Card, Flora_Card, Atk3
+				else if (para_2nd03 == 151)
+					getitem2 .@wplist[.@s],1,1,0,0,0,4118,4118,4767;// Petit_Card, Petit_Card, Atk3
+				else if (para_2nd03 == 161)
+					getitem2 .@wplist[.@s],1,1,0,0,0,4805,4805,4767;// Heal_Amount2, Heal_Amount2, Atk3
+				else if (para_2nd03 == 211)
+					getitem2 .@wplist[.@s],1,1,0,0,0,4472,4472,4806;// Bradium_Goram_Card, Bradium_Goram_Card, Matk3
+				else if (para_2nd03 == 221)
+					getitem2 .@wplist[.@s],1,1,0,0,0,4470,4470,4806;// Nepenthes_Card, Nepenthes_Card, Matk3
+				else if (para_2nd03 == 231)
+					getitem2 .@wplist[.@s],1,1,0,0,0,4476,4476,4806;// Pinguicula_Card, Pinguicula_Card, Matk3
+				else if (para_2nd03 == 241)
+					getitem2 .@wplist[.@s],1,1,0,0,0,4469,4469,4806;// Naga_Card, Naga_Card, Matk3
+				else if (para_2nd03 == 251)
+					getitem2 .@wplist[.@s],1,1,0,0,0,4471,4471,4806;// Egg_Of_Draco_Card, Egg_Of_Draco_Card, Matk3
+				else if (para_2nd03 == 261)
+					getitem2 .@wplist[.@s],1,1,0,0,0,4805,4805,4806;// Heal_Amount2, Heal_Amount2, Matk3
+				mes "[黑色]";
+				mes "這不是宏偉的嗎？";
+				mes "我知道，我知道，我很棒！";
+			}
+			else {
+				mes "嘿，你以為我在開玩笑嗎？";
+				mes "您是否有武器？";
+			}
+		}
+	}
+	else if (para_2nd02 > 4) {
+		mes "您如何喜歡增強武器？";
+		mes "希望它對您有所幫助。";
+		next;
+		mes "[黑色]";
+		mes "我給了您武器效率的頂峰。";
+		mes "武器並不是唯一需要力量的事情，但是您不同意嗎？";
+		next;
+		mes "[黑色]";
+		mes "來承認這一點。";
+		mes "索恩給出了靈感，我打算提供強大的設備，這就是生活的方式。";
+		mes "哈哈哈！";
+	}
+	close;
+}
+
+sec_in02,25,33,4	script	Assistant#para_suvquest	422,{
+	callfunc "F_GM_NPC";
+	mes "密碼";
+	next;
+	if (callfunc("F_GM_NPC",1854,0) == 1) {
+		mes "請選擇要修改的變量。";
+		next;
+		set .@var, select("for_suv01:for_suv02");
+		mes "輸入修改值";
+		next;
+		input .@input,0,9999;
+		mes "para_suv0的值"+.@var+" has been changed to "+.@input+".";
+		setd "para_suv0"+.@var,.@input;
+		close;
+	} else {
+		mes "……喵嗚。";
+		close;
+	}
+}

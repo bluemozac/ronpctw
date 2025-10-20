@@ -1,0 +1,402 @@
+﻿//===== rAthena Script ======================================= 
+//= Valkyrie Realm
+//===== By: ==================================================
+//= Nana, fixes by Poki
+//= finished, optimized and tested by Lupus
+//= L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 3.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Quest to become a Tranceded Class. (Advanced/Rebirthed)
+//===== Additional Comments: ================================= 
+//= 1.1 Made all into functions,additional checks,quest skills,now Valhallana can return you back. She also makes reborn process only when you got no Zeny/items (as in kRO) [Lupus]
+//= 1.2 now alternative classes can use their 1-1 job NPC to become Advanced 1st Class [Lupus]
+//= 1.4 added Baby Class support [Lupus]
+//= 1.5 Fixed loads of gramatical errors. [Mass Zero]
+//= 1.6 Added a func which prevent advanced classes passing 2nd Job Quests again. It also guides adv classes where to go. [Lupus]
+//= 1.7 On reborn reset some Job Quest Vars and Reset Girls Counter [Lupus]
+//= 1.8 Added Taekwondo classes check [Lupus]
+//= 1.9 Added support for Job NPC Fase pics, sorrected one dialogue stuff [Lupus]
+//= 2.0 Removed callfunc Is_####_Class in favor of baseClass [Silentdragon]
+//= 2.1 Changed all numbers into constants. [Vicious]
+//= 2.2 Now ALL quests skills are saved/restored [Lupus]
+//= 2.3 Removed Duplicates [Silent]
+//= 2.4 Fixed typos, optimized [Lupus]
+//= 2.5 Fixed a stuck bug [Lupus]
+//= 2.6a Adding proper dialogues [Lupus]
+//= 2.7 Rescripted to Aegis 10.3 standards. [L0ne_W0;f]
+//=     Removed all functions as they are no longer required.
+//=     Correct job level requirements for 1-1 -> 2-x.
+//= 2.7a Added Function "F_BlockHigh" back in until rewriteing of the 2-x [L0ne_W0lf]
+//=     scripts are comepleted.
+//= 2.7b Removed function "F_BlockHigh" as it's no longer used. [L0ne_W0lf]
+//= 2.8 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 2.9 Corrected Valkyrie case spicifying where to warp after rebirthing. [L0ne_W0lf]
+//= 2.9b Fixed Verdandi typo, fixed resetting vars [Lupus]
+//= 3.0 Added quest log commands. [L0ne_W0lf]
+//= 3.1 Added Izlude Renewal coordinates.
+//============================================================ 
+
+valkyrie,48,86,4	script	Valkyrie#	811,{
+	if (ADVJOB != 0 || Upper == 1) {
+		mes "[瓦爾基里]";
+		mes "歡迎";
+		mes "到瓦爾哈拉，";
+		mes "榮譽大廳。";
+		next;
+		mes "[瓦爾基里]";
+		mes "請做";
+		mes "自己舒適";
+		mes "當你在這裡。";
+		mes "向勇士隊致敬！";
+		close;
+	}
+	else if (BaseLevel > 98 && JobLevel > 49 && Class >= Job_Knight && Class <= Job_Crusader2) {
+		mes "[瓦爾基里]";
+		mes "歡迎";
+		mes "到瓦爾哈拉，";
+		mes "榮譽大廳。";
+		next;
+		mes "[瓦爾基里]";
+		mes "您現在將結束";
+		mes "您現在的生活和";
+		mes "開始全新的生活。";
+		mes "向勇士隊致敬！";
+		next;
+		if (Weight > 0 || Zeny > 0 || checkcart() != 0 || checkfalcon() != 0 || checkriding() != 0) {
+			mes "[瓦爾基里]";
+			mes "您必須有幾件事";
+			mes "在開始之前要做。你必須";
+			mes "首先要清空你的思想和身體。";
+			mes "當你放棄時，榮譽來了";
+			mes "你所有的自私慾望...";
+			next;
+			mes "[瓦爾基里]";
+			mes "您不能隨身攜帶任何東西。您的物品，Zeny，Pets和Pusphcart都必須留在後面。";
+			next;
+			mes "[瓦爾基里]";
+			mes "當你準備好";
+			mes "請返回我，";
+			mes "勇敢的冒險家。";
+			close2;
+			warp "yuno_in02",93,205;
+			end;
+		}
+		else {
+			mes "[瓦爾基里]";
+			mes "我知道你已經";
+			mes "釋放自己";
+			mes "所有世俗的依戀，";
+			mes ""+ strcharinfo(0) +".";
+			next;
+			mes "[瓦爾基里]";
+			mes "對於像您這樣的冒險家來說，這是一種令人欽佩的態度。當您為了人類而放棄所有個人慾望時，榮譽就會出現。";
+			next;
+			if (SkillPoint) {
+				mes "[瓦爾基里]";
+				mes "嗯...我感覺你有";
+				mes "一些纏綿的附件或";
+				mes "您的未完成的業務";
+				mes "當前的生活。照顧好";
+				mes "並將您的當前生活封閉。";
+				close2;
+				warp "yuno_in02",93,205;
+				end;
+			}
+			mes "[瓦爾基里]";
+			mes "現在，讓我刪除所有";
+			mes "您目前的回憶...";
+			mes "但是，您將能夠";
+			mes "記住最光榮的";
+			mes "這一生的時刻。";
+			next;
+			mes "[瓦爾基里]";
+			mes "有一個";
+			mes "我會問";
+			mes "烏爾德女神去除";
+			mes "你們所有的現在";
+			mes "回憶。";
+			next;
+			mes "[瓦爾基里]";
+			mes "有兩個，";
+			mes "我會問";
+			mes "維爾丹迪女神";
+			mes "並記錄您當今一生中最光榮的時刻。";
+			next;
+			mes "[瓦爾基里]";
+			mes "三個，";
+			mes "我會問";
+			mes "女神skuld to";
+			mes "引導你到你的";
+			mes "下一世。";
+			next;
+			mes "[瓦爾基里]";
+			mes "一...";
+			callfunc "F_ClearJobVar";
+			next;
+			mes "[瓦爾基里]";
+			mes "一...";
+			mes "二......";
+			next;
+			mes "[瓦爾基里]";
+			mes "一...";
+			mes "二......";
+			mes "和三個。";
+			set ADVJOB, Class+Job_Novice_High; //memo the target 3rd Job ID
+			if(ADVJOB == Job_Lord_Knight2) set ADVJOB,Job_Lord_Knight;
+			if(ADVJOB == Job_Paladin2) set ADVJOB,Job_Paladin;
+			jobchange Job_Novice_High;
+			resetlvl(1);
+			set MISC_QUEST,MISC_QUEST & ~1024;//<-reset Skill Reset Event
+			skill "NV_FIRSTAID",1,SKILL_PERM;
+			skill "NV_TRICKDEAD",1,SKILL_PERM;
+			completequest 1000;
+			next;
+			mes "[瓦爾基里]";
+			mes "恭喜。";
+			mes "你現在重生";
+			mes "進入嶄新的生活。";
+			mes "請拿這些小禮物";
+			mes "為您的新冒險做準備。";
+			getitem 1202,1; //Knife_
+			getitem 2302,1; //Cotton_Shirt_
+			next;
+			mes "[瓦爾基里]";
+			mes "我希望烏爾德女神授予您的釋放被證明是一種祝福。我希望Verdandi記錄的回憶將永遠尊重您。";
+			next;
+			mes "[瓦爾基里]";
+			mes "我祈禱，女神Skuld將指導您的新生活將比您上次更加光榮。";
+			close2;
+			switch (ADVJOB) {
+			case 4008:
+			case 4015:
+				if (checkre(0)) warp "izlude",129,97;
+				else warp "izlude",94,103;
+				break;
+			case 4009:
+			case 4016:
+				warp "prontera",273,354; break;
+			case 4010:
+			case 4017:
+				warp "geffen",120,60; break;
+			case 4011:
+			case 4019:
+				warp "alberta",116,57; break;
+			case 4012:
+			case 4020:
+			case 4021:
+				warp "payon",69,100; break;
+			case 4013:
+			case 4018:
+				warp "morocc",154,50; break;
+			default:
+				warp "yuno_in02",93,205; break;
+			}
+			end;
+		}
+	}
+	else {
+		mes "[瓦爾基里]";
+		mes "歡迎";
+		mes "到瓦爾哈拉，";
+		mes "榮譽大廳。";
+		next;
+		mes "[瓦爾基里]";
+		mes "不幸的是，您尚未受到這裡的邀請。我請你立即離開。向勇士隊致敬！";
+		close2;
+		warp "yuno_in02",93,205;
+		end;
+	}
+}
+
+yuno_in02,88,164,5	script	Metheus Sylphe#Library	742,{
+	if (BaseLevel > 98 && JobLevel > 49 && Class >= Job_Knight && Class <= Job_Crusader2) {
+		if (valkyrie_Q == 0) {
+			mes "[梅修斯·西爾菲]";
+			mes "歡迎來到Schweicherbil魔術學院的圖書館。";
+			mes "我想你來這裡";
+			mes "讀《伊米爾書》。";
+			next;
+			mes "[梅修斯·西爾菲]";
+			mes "不幸的是，這本書的原始副本隨著時間的流逝而受到損害。我們目前僅允許公眾查看本書的副本。";
+			next;
+			mes "[梅修斯·西爾菲]";
+			mes "另外，為了保留原始的“伊米爾書”，我們決定接受希望閱讀我們提供的副本的人的捐款。";
+			next;
+			mes "[梅修斯·西爾菲]";
+			mes "建議";
+			mes "捐贈金額是";
+			mes "1,285,000 名女性。";
+			next;
+			if (select("捐贈:取消.") == 1) {
+				if (Zeny >= 1285000) {
+					set Zeny, Zeny-1285000;
+					set valkyrie_Q,1;
+					mes "[梅修斯·西爾菲]";
+					mes "謝謝，您的捐款將用於有充分的理由。您可以";
+					mes "現在進去閱讀這本書。";
+					close;
+				}
+				mes "[梅修斯·西爾菲]";
+				mes "不幸的是，目前您似乎沒有足夠的Zeny。請檢查您的資金，然後再次回來。";
+				close;
+			}
+			mes "[梅修斯·西爾菲]";
+			mes "花點時間，";
+			mes "享受您的旅行。";
+			close;
+		}
+		mes "[梅修斯·西爾菲]";
+		mes "再次感謝您的慷慨捐助。閒暇時，請隨時閱讀《伊米爾書》的碳副本。";
+		close;
+	}
+	mes "[梅修斯·西爾菲]";
+	mes "歡迎來到Schweicherbil魔術學院的圖書館。";
+	mes "在這裡，我們有無數的書。請花點時間環顧四周。";
+	close;
+}
+
+yuno_in02,93,207,1	script	Book of Ymir	111,{
+	if (ADVJOB != 0 || Upper == 1) {
+		mes "[伊米爾書]";
+		mes "...榮譽大廳的入口向任何向下生活的人開放。它可以幫助英雄決定他們想做什麼，並可以將他們帶到這個世界上的任何地方。";
+		next;
+		mes "[伊米爾書]";
+		mes "在榮譽大廳中，一切都為英雄做好了準備。有傳言說，在我們的現實中無法實現的任何願望都可以在榮譽廳實現。";
+		next;
+		if (select("停止閱讀:繼續閱讀.") == 1) {
+			mes "[伊米爾書]";
+			mes "…………";
+			close;
+		}
+		mes "[伊米爾書]";
+		mes "有一條被遺忘的道路通往榮譽大廳，這是最接近天堂的地方。普通永遠不會發現這個地方...";
+		close2;
+		warp "valkyrie",48,8;
+		end;
+	}
+	else if (BaseLevel > 98 && JobLevel > 49 && Class >= Job_Knight && Class <= Job_Crusader2) {
+		if (valkyrie_Q != 0) {
+			mes "[伊米爾書]";
+			mes "...因此，古老的英雄是";
+			mes "總是痛苦，知道";
+			mes "最終，它們是致命的，";
+			mes "將從這個領域通過...";
+			next;
+			mes "[伊米爾書]";
+			mes "沒有文件，";
+			mes "歌曲，或留下有關死後生命的任何信息的民間傳說。但是，我最近發現了一個舊的捲軸";
+			mes "關於女武神...";
+			next;
+			mes "[伊米爾書]";
+			mes "女武神...";
+			mes "傳奇";
+			mes "守護天使。";
+			mes "拉格納羅克的天使。";
+			next;
+			mes "[伊米爾書]";
+			mes "巨大的冒險家";
+			mes "勇敢將由";
+			mes "瓦爾塔里（Valkyrie）到瓦爾哈拉（Valhalla），大廳";
+			mes "榮譽。在那裡，他們會";
+			mes "給有新的生活。";
+			next;
+			mes "[伊米爾書]";
+			mes "重生，他們會再次生活";
+			mes "甚至更大的英雄";
+			mes "照亮世界。屍體";
+			mes "精疲力盡將被填滿";
+			mes "充滿能量...";
+			next;
+			mes "[伊米爾書]";
+			mes "他們的靈魂將以伊米爾的心臟賦予能力。然而，在為符文米達（Mune-Midgarts）的戰鬥之後，伊米爾（Ymir）的心被徹底摧毀並散佈在世界各地。";
+			next;
+			mes "[伊米爾書]";
+			mes "我發現了少量";
+			mes "ymir心臟碎片";
+			mes "長時間。但是我不能";
+			mes "確認女神的故事是否";
+			mes "瓦爾哈拉是真的";
+			mes "通過科學測試。";
+			next;
+			mes "[伊米爾書]";
+			mes "因此，我將這張唱片留給希望將來有人";
+			mes "可以確認Valkyrie和Valhalla實際上存在...";
+			next;
+			set valkyrie_Q,2;
+			if(checkquest(1000) == -1) {
+				setquest 1000;
+			}
+			mes "[伊米爾書]";
+			mes "讓英雄過新生";
+			mes "這樣他們可以保護世界";
+			mes "來自危險。進而...";
+			close;
+		}
+		mes "[伊米爾書]";
+		mes "...";
+		close;
+	}
+	mes "[伊米爾書]";
+	mes "...";
+	close;
+}
+
+yuno_in05,49,43,1	script	Heart of Ymir	111,{
+	if (BaseLevel > 98 && JobLevel > 49 && Class >= Job_Knight && Class <= Job_Crusader2) {
+		if (valkyrie_Q == 2) warp "valkyrie",48,8;
+	}
+	end;
+}
+
+valkyrie,44,33,5	script	Teleporter	124,{
+	if (Upper != 1) {
+		set .@karma_d,rand(1,10);
+		if (.@karma_d > 4) {
+			mes "[傳送器]";
+			mes "恭喜。";
+			mes "向勇士隊致敬！";
+			close;
+		}
+		mes "[傳送器]";
+		mes "請避免";
+		mes "從觸摸任何人";
+		mes "展覽。";
+		mes "…………";
+		close;
+	}
+	else {
+		mes "[傳送器]";
+		mes "光榮的人";
+		mes "您想去哪個地方？";
+		next;
+		switch(select("普隆德拉:夢羅克:斐揚:吉芬:艾爾貝塔:伊斯魯德:艾爾帕蘭:科摩多:朱諾")) {
+		case 1: callsub S_Warpchar,"prontera",116,72;
+		case 2: callsub S_Warpchar,"morocc",156,46;
+		case 3: callsub S_Warpchar,"payon",69,100;
+		case 4: callsub S_Warpchar,"geffen",120,39;
+		case 5: callsub S_Warpchar,"alberta",117,56;
+		case 6:
+			if (checkre(0)) callsub S_Warpchar,"izlude",129,97;
+			else callsub S_Warpchar,"izlude",94,103;
+		case 7: callsub S_Warpchar,"aldebaran",91,105;
+		case 8: callsub S_Warpchar,"comodo",209,143;
+		case 9: callsub S_Warpchar,"yuno",328,101;
+		}
+	}
+S_WarpChar:
+	mes "[傳送器]";
+	mes "旅行愉快。";
+	close2;
+	savepoint getarg(0),getarg(1),getarg(2),1,1;
+	warp getarg(0),getarg(1),getarg(2);
+	end;
+}
+
+// Warps
+//============================================================ 
+valkyrie,48,73,0	warp	valk01#1	1,1,valkyrie,48,64
+valkyrie,48,66,0	warp	valk01#2	1,1,valkyrie,48,75

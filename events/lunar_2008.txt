@@ -1,0 +1,283 @@
+﻿//===== rAthena Script =======================================
+//= Lunar New Year Event (2008)
+//===== By: ==================================================
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= iRO Lunar New Year event; Year of the Rat. (2008)
+//= Kill Cramps, Taruus, and Matrins to retrieve "Rice Pouches"
+//= in return for various rice-themed foods, envelopes, and
+//= a "New year Doll" egg. Rates are guessed.
+//=
+//= Cramp, Tarou, and Matrin drops altered, Uncomment in
+//= mob_db2 to enable. [required]
+//=
+//= Miss Lunar NPC uses the sprite 4_f_nacoruri, which isn't
+//= standard in kRO's data files. If you're having problems
+//= or are unsure if your client supports that sprite, an
+//= alternate NPC header has been included.
+//===== Additional Comments: =================================
+//= 1.0 First version. [L0ne_W0lf]
+//= 1.1 Added missing checkweights. [L0ne_W0lf]
+//============================================================
+
+payon_in01,193,30,4	script	Rice Mill Grandma#rat	78,{
+	mes "[稻米奶奶]";
+	if (!lunar_rat) {
+		mes "那些骯髒的小";
+		mes "生物！匆匆忙忙";
+		mes "周圍，搶走東西";
+		mes "來自我！如果只是他們";
+		mes "不是那麼快速地指責...";
+		next;
+		select("怎麼了？");
+		mes "[稻米奶奶]";
+		mes "哦，我只是在做";
+		mes "一些米蛋糕和";
+		mes "糕點要慶祝";
+		mes "新年，但是這些";
+		mes "動物一直在偷東西";
+		mes "我準備的米飯小袋。";
+		next;
+		select("米袋？");
+		mes "[稻米奶奶]";
+		mes "是的，我兒子需要那些";
+		mes "米袋砸";
+		mes "灰漿裡的米飯，但我不能";
+		mes "如果我不這樣做，做任何糕點";
+		mes "甚至有米飯。你";
+		mes "認為你可以幫我嗎？";
+		next;
+		if (select("當然。 :我什至不認識你。") == 1) {
+			set lunar_rat,1;
+			mes "[" + strcharinfo(0)+"]";
+			mes "當然。";
+			mes "我能做些什麼？";
+			next;
+			mes "[稻米奶奶]";
+			mes "好吧，你認為你嗎";
+			mes "可以抓住動物";
+			mes "偷了我的米飯小袋？";
+			mes "他們是這些藍色的";
+			mes "白老鼠和這些";
+			mes "討厭的小痣。";
+			next;
+			select("不是問題。");
+			mes "[" + strcharinfo(0)+"]";
+			mes "沒問題。";
+			mes "我會抓那些動物，";
+			mes "並帶回任何米飯";
+			mes "我可以找到的小袋。";
+			next;
+			mes "[稻米奶奶]";
+			mes "哦，謝謝！";
+			mes "祝你好運";
+			mes "那些害蟲給我~";
+			close;
+		}
+		mes "[稻米奶奶]";
+		mes "我...好吧...";
+		mes "是的，但是我是";
+		mes "計劃給你";
+		mes "有些不錯的回報";
+		mes "為了您的幫助。我知道你";
+		mes "不是壞人，所以...";
+		close;
+	}
+	else if ((lunar_rat >= 1 && lunar_rat <= 2) || lunar_rat == 4) {
+		if (countitem(7770) >= 1 && lunar_rat == 2) {
+			mes "哦，那是";
+			mes "我兒子做的甜米？";
+			mes "你願意讓我有嗎？";
+			mes "請在這裡等片刻，";
+			mes "我會給你一些糕點~";
+			delitem 7770,1; //Sweet_rice
+			set lunar_rat,3;
+			close;
+		}
+		else if (lunar_rat == 4) {
+			if (countitem(7770) >= 1) {
+				mes "哦，那是";
+				mes "我兒子做的甜米？";
+				mes "你願意讓我有嗎？";
+				mes "請在這裡等片刻，";
+				mes "我會給你一些糕點~";
+				delitem 7770,1; //Sweet_rice
+				set lunar_rat,5;
+				close;
+			}
+			mes "哦，在哪裡";
+			mes "米飯袋？我們需要";
+			mes "他們做更多的米蛋糕...";
+			close;
+		}
+		else if (countitem(7869) < 1 && lunar_rat <= 2) {
+			mes "哦，那些白色和";
+			mes "藍色慕斯可能有";
+			mes "搶了我的米飯";
+			mes "那些痣可能";
+			mes "他們也是。如此討厭的小";
+			mes "生物，不是嗎？";
+			close;
+		}
+		mes "哦，那是我的之一";
+		mes "米飯袋？對不起，";
+		mes "但是我的臀部疼痛..";
+		mes "你介意";
+		mes "親愛的，交付";
+		mes "那對我兒子給我嗎？";
+		set lunar_rat,2;
+		close;
+	}
+	else if (lunar_rat == 3 || lunar_rat == 5) {
+		set .@reward,rand(1,100);
+		if (.@reward <= 5) {
+			if (lunar_rat == 3) {
+				getitem 9038,1; // New_Year_Doll_Egg
+				set lunar_rat,4;
+			}
+			else if (lunar_rat == 5) {
+				getitem 668,1; // Red_Envelope
+			}
+		}
+		else if (.@reward >= 6 && .@reward <= 10) getitem 12198,2; // Lucky_Rice_Cake
+		else if (.@reward >= 11 && .@reward <= 30) getitem 12195,3; // Plain_Rice_Cake
+		else if (.@reward >= 31 && .@reward <= 40) getitem 12196,2; // Hearty_Rice_Cake
+		else if (.@reward >= 41 && .@reward <= 55) getitem 12123,2; // Honey_Pastry
+		else if (.@reward >= 56 && .@reward <= 70) getitem 12122,2; // Sesame_Pastry
+		else if (.@reward >= 71 && .@reward <= 80) getitem 12124,2; // Rainbow_Cake
+		else if (.@reward >= 81 && .@reward <= 90) getitem 12198,2; // Korean_Rice_Cake
+		else if (.@reward >= 91 && .@reward <= 100) getitem 12197,3; // Salty_Rice_Cake
+		// After getting the egg there is a chance to get an envelope with each turn in
+		if (rand(1,20) <= 5 && lunar_rat == 4) getitem 668,1; // Red_Envelope
+		// Set the quest accordingly for repeat turn-ins.
+		if (lunar_rat == 3) set lunar_rat,2;
+		else if (lunar_rat == 5) set lunar_rat,4;
+		mes "還不夠";
+		mes "償還你的";
+		mes "為我完成，但我想要";
+		mes "你有這個糕點";
+		mes "我剛做出了。請享受~";
+		next;
+		mes "[稻米奶奶]";
+		mes "謝謝你的";
+		mes "甜米！我會";
+		mes "一定要做點什麼";
+		mes "如果你為你好吃";
+		mes "帶我更多，好嗎？";
+		close;
+	}
+}
+
+payon,215,127,4	script	Rice Mill Man#rat	54,{
+	mes "[稻米人]";
+	if (!lunar_rat) {
+		mes "傷了我的心...";
+		mes "我媽媽花了所有這一切";
+		mes "準備大米的時間";
+		mes "新年，這就是";
+		mes "被老鼠和害蟲偷走了！";
+		close;
+	}
+	else if (lunar_rat == 1) {
+		mes "我收到媽媽的來信";
+		mes "您正在幫助她。";
+		mes "她是一個可愛的老太太，是嗎？";
+		mes "如果您找到ang米飯袋，";
+		mes "你可能想擁有她";
+		mes "先檢查它們。";
+		close;
+	}
+	else if (lunar_rat >= 2) {
+		if (countitem(7869) < 1) {
+			mes "如果你給我一些";
+			mes "米飯，我可以";
+			mes "倒入甜米飯中。";
+			mes "你在這裡幫助我";
+			mes "媽媽，對嗎？謝謝，";
+			mes "我真的很感激。";
+			close;
+		}
+		mes "哦，你給我帶來了一些";
+		mes "我媽媽的米飯？";
+		mes "給我一秒鐘，我會";
+		mes "把這個米飯砸進";
+		mes "糊狀，乳片分裂。";
+		next;
+		mes "[稻米人]";
+		mes "哦！啊！嗨！";
+		mes "哇！哇！";
+		mes "咔咔咔！";
+		mes "哇！";
+		next;
+		mes "[稻米人]";
+		mes "一切都完成了。在這裡，這個";
+		mes "甜米飯已經準備好了";
+		mes "製成糕點";
+		mes "你能帶上嗎";
+		mes "這給我媽媽嗎？";
+		delitem 7869,1; //Rice_Pouch
+		getitem 7770,1; //Sweet_Rice
+		close;
+	}
+}
+
+//payon,126,113,4	script	Miss Lunar#rat	862,{
+payon,126,113,4	script	Miss Lunar#rat	719,{
+	mes "[月球]";
+	if ((MaxWeight-Weight) < 3000 || checkweight(1201,1) == 0) {
+		mes "哦，對不起，我們";
+		mes "如果不能做任何業務";
+		mes "你攜帶的東西很多。";
+		mes "你介意存儲一些嗎";
+		mes "您的kafra服務的事情？";
+		close;
+	}
+	if (lunar_rat < 4) {
+		mes "我想賺到足夠的";
+		mes "錢買那個大的";
+		mes "新月銀銷。";
+		mes "我必須賣盡量";
+		mes "我會盡可能地！";
+		close;
+	}
+	else if (lunar_rat >= 4) {
+		mes "哦，你好！我要賣";
+		mes "特殊的米蛋糕";
+		mes "來自甜米飯。你可以";
+		mes "自己吃或餵";
+		mes "如果您的新年娃娃";
+		mes "你有一個寵物。";
+		next;
+		mes "[月球]";
+		mes "無論如何，我要賣";
+		mes "10 我的 3000 個女人";
+		mes "您想嘗試一些嗎？";
+		next;
+		if (select("是:否") == 1) {
+			if (Zeny >= 3000) {
+				set Zeny,Zeny-3000;
+				getitem 554,10; // Mojji
+				mes "[月球]";
+				mes "謝謝你，希望你";
+				mes "祝新年快樂！";
+				mes "請再來~";
+				close;
+			}
+			mes "[月球]";
+			mes "哦，對不起，但是你";
+			mes "沒有足夠的東西";
+			mes "Zeny現在...";
+			close;
+		}
+		mes "[月球]";
+		mes "哦，好吧。好吧，我";
+		mes "如果您或您的";
+		mes "朋友想要一些莫吉";
+		mes "後來，，下車？再見~";
+		close;
+	}
+}

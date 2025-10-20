@@ -1,0 +1,149 @@
+﻿//===== rAthena Script =======================================
+//= Card Removal NPC
+//===== By: ==================================================
+//= TyrNemesis^
+//===== Current Version: =====================================
+//= 1.2a
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Removes cards from equipped items.
+//===== Additional Comments: =================================
+//= 1.0 First version. [TyrNemesis^]
+//= 1.2 Optimized and fixed getequipname menu. [Kisuka]
+//= 1.2a Added 'disable_items' command. [Euphy]
+//============================================================
+
+prt_in,28,73,4	script	Wise Old Woman#eAcustom	78,{
+
+	set .zenycost,200000;    // base cost of the card remover services (in Zeny)
+	set .percardcost,25000;  // cost per card of the card remover services (in Zeny)
+	set .faildestroy,1;      // should the card remover have a chance of failure that destroys items? (1=yes, 0=no)
+
+	disable_items;
+	mes "[明智的老婦]";
+	mes "美好的一天，年輕一個。我有能力刪除您在設備上複合的卡片。這個主意請您嗎？";
+	next;
+	switch(select("是的，確實如此。 :你們收費多少？ :不，謝謝。")) {
+	case 1:
+		mes "[明智的老婦]";
+		mes "很好。我應該為您檢查哪個項目？";
+		next;
+
+		setarray .@indices[1], EQI_HEAD_TOP, EQI_ARMOR, EQI_HAND_L, EQI_HAND_R, EQI_GARMENT, EQI_SHOES, EQI_ACC_L, EQI_ACC_R, EQI_HEAD_MID, EQI_HEAD_LOW;
+		for( set .@i,1; .@i <= 10; set .@i,.@i+1 ) {
+			if( getequipisequiped(.@indices[.@i]) )
+				set .@menu$, .@menu$ + F_getpositionname(.@indices[.@i]) + "-[" + getequipname(.@indices[.@i]) + "]";
+			set .@menu$, .@menu$ + ":";
+		}
+		set .@part, .@indices[ select(.@menu$) ];
+		if(!getequipisequiped(.@part)) {
+			mes "[明智的老婦]";
+			mes "年輕人...您沒有穿任何東西我可以從那裡刪除卡片。";
+			close;
+		}
+		if(getequipcardcnt(.@part) == 0) {
+			mes "[明智的老婦]";
+			mes "年輕的人...這個物品上沒有任何卡片。恐怕我什麼都不做。";
+			close;
+		}
+		set .@cardcount,getequipcardcnt(.@part);
+		
+		if (!checkweight(1202,(.@cardcount+1))) { 
+			mes "^3355fffjust一分鐘！";
+			mes "我不能提供我的任何";
+			mes "為您服務，因為";
+			mes "你攜帶太多";
+			mes "東西。將您的額外物品放入";
+			mes "kafra存儲，再來一次~";
+			close;
+		}
+		mes "[明智的老婦]";
+		mes "這個項目有" + .@cardcount + " cards compounded on it. To perform my magic, I will need " + (.zenycost+(.@cardcount * .percardcost)) + " zeny, a ^0000FFStar Crumb^000000, and a ^0000FFYellow Gemstone^000000.";
+		next;
+		if(select("很好。做吧:沒關係。") == 2) {
+			mes "[明智的老婦]";
+			mes "很好。如果您尋求我的服務，請立即返回。";
+			close;
+		}
+		if((zeny < (.zenycost+(.@cardcount * .percardcost))) || (countitem(1000) < 1) || (countitem(715) < 1)) {
+			mes "[明智的老婦]";
+			mes "孩子，您沒有我需要的所有物品，孩子。當你這樣做的時候再來。";
+			close;
+		}
+		mes "[明智的老婦]";
+		mes "在開始之前，我必須警告您 - 我可能會失敗。如果這樣做，我可能會銷毀卡，物品或兩者兼而有之。我不退款。話雖如此，這對您來說更重要：卡片或物品？";
+		next;
+		switch(select("我改變了主意。 :物品。 :卡片。")) {
+		case 1:
+			mes "[明智的老婦]";
+			mes "很好。如果您尋求我的服務，請立即返回。";
+			close;
+		case 2:
+			set .@failtype,1;
+			break;
+		case 3:
+			set .@failtype,2;
+		}
+		mes "[明智的老婦]";
+		mes "很好。我會開始的。";
+		set Zeny, Zeny - (.zenycost+(.@cardcount * .percardcost));
+		delitem 1000,1; //Star_Crumb
+		delitem 715,1; //Yellow_Gemstone
+		
+		// Replace the constants in the next 3 lines with failure chance values defined in refine_db.txt
+		// First value = Total failure chance (item and cards destroyed)
+		// Second value = Partial failure chance (one or the other is destroyed, player decides which one is safe)
+		// Third value = Harmless failure chance (all that's lost is your investment)
+
+		set .@failchance,rand(100);
+		if (.faildestroy==1) {
+			if(.@failchance < 2) {
+				next;
+				failedremovecards .@part,0;
+				mes "[明智的老婦]";
+				mes "該過程是完全失敗的。恐怕物品和卡片被摧毀了。";
+				close;
+			}
+
+			if(.@failchance < 8) {
+				if (.@failtype == 1) {
+					next;
+					failedremovecards .@part,1;
+					mes "[明智的老婦]";
+					mes "當我設法從該物品中刪除卡片時，它們在此過程中被銷毀。但是，該項目還可以。";
+					close;
+				}
+
+				if (.@failtype == 2) {
+					next;
+					failedremovecards .@part,2;
+					mes "[明智的老婦]";
+					mes "最不幸的。我成功地刪除了卡片，但該物品本身在此過程中被摧毀了。";
+					close;
+				}
+			}
+		}
+
+		if(.@failchance < 10) {
+			next;
+			failedremovecards .@part,3;
+			mes "[明智的老婦]";
+			mes "我沒有刪除卡片。但是，幸運的是，物品和卡都可以。";
+			close;
+		}
+		next;
+		successremovecards .@part;
+		mes "[明智的老婦]";
+		mes "這個過程是成功的。這是您的卡和您的物品。告別。";
+		close;
+	case 2:
+		mes "[明智的老婦]";
+		mes "我收取的固定費用"+callfunc("F_InsertComma",.zenycost)+" zeny, plus "+callfunc("F_InsertComma",.percardcost)+" zeny for each card I remove from the item. In addition, I need a star crumb and a yellow gemstone to work my magic.";
+		close;
+	case 3:
+		mes "[明智的老婦]";
+		mes "很好。如果您尋求我的服務，請立即返回。";
+		close;
+	}
+}

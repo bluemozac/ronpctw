@@ -1,0 +1,1364 @@
+﻿//===== rAthena Script ======================================= 
+//= Homunculus S Mutation Quest
+//===== By: ================================================== 
+//= Euphy
+//===== Current Version: ===================================== 
+//= 1.2
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Genetic quest to mutate a level 99 evolved Homunculus
+//= into a Homunculus S.
+//===== Additional Comments: ================================= 
+//= 1.0 First Version, entirely custom. [Masao]
+//= 1.1 Cleaning. [Euphy]
+//= 1.2 Replaced with official script. [Euphy]
+//= 1.3 Fixed Job Class for after Genetic. [Mazvi & Lemongrass]
+//============================================================ 
+
+// Main NPCs :: Homun_S
+//============================================================
+job3_gen01,12,44,3	script	Viorel#job3_gen01	542,{
+	if (countitem(6415)) {
+		if ((eaclass()&EAJ_THIRDMASK)==EAJ_GENETIC) {
+			disable_items;
+			if (checkquest(4159) == -1 && checkquest(4160) == -1) {
+				mes "[維奧雷爾]";
+				mes "你為什麼在這裡？";
+				mes "您不應該在 ^005dffjeyna ^000000的房子嗎？";
+				close2;
+				for(set .@i,4154; .@i<=4160; set .@i,.@i+1) {
+					if (checkquest(.@i) > -1)
+						erasequest .@i;
+				}
+				setquest 4154;
+				setquest 4159;
+				morphembryo;
+				if (countitem(6415) == 0)
+					getitem 6415,1; //Strange_Embryo
+				else if (countitem(6415) > 1)
+					delitem 6415, (countitem(6415) - 1); //Strange_Embryo
+				warp "que_house_s",63,41;
+				end;
+			}
+			enable_items;
+		} else if (Class == Job_Novice_High || Class == Job_Merchant_High || Class == Job_Alchemist || Class == Job_Creator) {
+			emotion ET_QUESTION;
+			mes "[維奧雷爾]";
+			mes "我不知道發生了什麼，但是我記得它應該有資格研究 ^ff4800 homunculus ^000000。";
+			next;
+			mes "[維奧雷爾]";
+			mes "不管是什麼原因，您都無法繼續對 ^ff4800 homunculus ^000000進行研究。";
+			mes "在您成為a ^005dffgenetic ^000000並獲得了a ^0000ffbioethics ^000000之後，回來了。";
+			close;
+		} else {
+			delitem 6415, countitem(6415); //Strange_Embryo
+			mes "[維奧雷爾]";
+			mes "等等，您看起來有些奇怪。";
+			next;
+			mes "[維奧雷爾]";
+			mes "除非您有研究 ^ff4800 homunculus ^000000的工作。";
+			mes "這對您無濟於事。";
+			next;
+			mes "[維奧雷爾]";
+			mes "我負責管理 ^0000ffstrange胚胎 ^000000，所以我會為您照顧。";
+			mes "沒有冒犯，我在這裡做任何不好的事情。";
+			close;
+		}
+	}
+	if (((eaclass()&EAJ_THIRDMASK)==EAJ_GENETIC) && (checkquest(4154) > -1)) {
+		if ((checkquest(4155) > -1) || (checkquest(4160) > -1)) {
+			mes "[維奧雷爾]";
+			mes "天氣很好。";
+			next;
+			callsub L_CheckHomunculus;
+			mes "[維奧雷爾]";
+			mes "準備去我家了嗎？";
+			next;
+			switch(select("去^005DFFViorel^000000家。 :別去。")) {
+			case 1:
+				mes "[維奧雷爾]";
+				mes "不錯的選擇。";
+				mes "現在，閉上眼睛一秒鐘...";
+				close2;
+				warp "que_house_s",19,42;
+				end;
+			case 2:
+				mes "[維奧雷爾]";
+				mes "準備好後回來。";
+				mes "您必須隨附 ^ff4800 homunculus ^000000。";
+				close;
+			}
+		} else {
+			mes "[維奧雷爾]";
+			mes "你為什麼在這裡？";
+			mes "您不應該在 ^005dffjeyna ^000000的房子嗎？";
+			next;
+			callsub L_CheckHomunculus;
+			mes "[維奧雷爾]";
+			mes "現在，準備去 ^005dffjeyna ^000000？";
+			next;
+			switch(select("去^005DFFJeyna^000000的房間。 :別去。")) {
+			case 1:
+				mes "[維奧雷爾]";
+				mes "不錯的選擇。";
+				mes "現在，閉上眼睛一秒鐘...";
+				close2;
+				warp "que_house_s",63,41;
+				end;
+			case 2:
+				mes "[維奧雷爾]";
+				mes "準備好後回來。";
+				mes "您必須隨附 ^ff4800 homunculus ^000000。";
+				close;
+			}
+		}
+	}
+	if (BaseJob == Job_Merchant) {
+		mes "[維奧雷爾]";
+		mes "就像你一樣，我曾經是一名商人。";
+		mes "我正在研究 ^ff4800 homunculus ^000000。";
+		next;
+		mes "[維奧雷爾]";
+		mes "如果您對 ^ff4800 homunculus ^000000感興趣，請成為 ^005dffalchemist ^000000或a ^005dfffcreator ^000000。";
+		close;
+ 	} else if (BaseJob == Job_Alchemist && Class < Job_Genetic) {
+		mes "[維奧雷爾]";
+		mes "我花了很多時間和精力在Homunculus上。";
+		mes "如果您覺得自己處於死胡同，請下次使用a ^ff4800 homunculus ^000000回來。";
+		next;
+		mes "[維奧雷爾]";
+		mes "哦。當然，您需要具有合適的潛力。一旦成為 ^ff4800 genetic ^000000，您可能會證明自己。";
+		close;
+	} else if ((eaclass()&EAJ_THIRDMASK)==EAJ_GENETIC) {
+		if (gethominfo(6) >= 99 && (gethominfo(1) >= 6009 && gethominfo(1) <= 6016)) { // Level 99+ evolved Homunculus
+			mes "[維奧雷爾]";
+			mes "哦，太好了~！";
+			mes "您有一個 ^ff4800 homunculus ^000000。";
+			mes "隨著激情投資於其研究，我們可以使它們變得更好。";
+			next;
+			mes "[維奧雷爾]";
+			mes "我必須私下與您交談。你介意和我一起去我家嗎？";
+			next;
+			switch(select("前往 ^005DFFViorel^000000 的家。 :呆在這裡。")) {
+			case 1:
+				mes "[維奧雷爾]";
+				mes "不錯的選擇。";
+				mes "現在，閉上眼睛一秒鐘...";
+				close2;
+				setquest 4154;
+				setquest 4155;
+				warp "que_house_s",19,42;
+				end;
+			case 2:
+				mes "[維奧雷爾]";
+				mes "如果您覺得自己處於死胡同，請下次使用a ^ff4800 homunculus ^000000回來。";
+				close;
+			}
+		} else if (gethominfo(6) >= 99 && (gethominfo(1) >= 6048 && gethominfo(1) <= 6052)) { // Level 99+ mutated Homunculus-S
+			mes "[維奧雷爾]";
+			mes "再次你好。";
+			mes "也許您可能有興趣";
+			mes "在新創建的 ^ff4800 homunculus ^000000中";
+			mes "來自新的 ^006400 Homunculus突變系統 ^000000？";
+			next;
+			switch(select("沒有。再見。 :拜託，我很忙。 :這正是我想听到的。 :你為什麼總是站在那裡？")) {
+			case 1:
+				emotion ET_SMILE;
+				mes "[維奧雷爾]";
+				mes "好的。";
+				mes "很高興見到你。";
+				mes "再見，~！";
+				close;
+			case 2:
+				emotion ET_HUK;
+				mes "[維奧雷爾]";
+				mes "！ ！ ！";
+				mes "我...我明白了。";
+				mes "我以為你在這裡見我。";
+				close;
+			case 3:
+				emotion ET_AHA;
+				mes "[維奧雷爾]";
+				mes "就像我想的那樣。";
+				mes "讓我們看一下我親愛的朋友Jeyna離開的筆記。";
+				next;
+				playbgm "30.mp3"; // One Step Closer
+				callfunc "F_HomMutateInfo","[Memo Pad Notes]";
+				mes "[維奧雷爾]";
+				mes "唔。";
+				mes "好吧，這就是全部。";
+				mes "取決於您更多。";
+				close2;
+				playbgm "08.mp3"; // Theme of Prontera
+				end;
+			case 4:
+				emotion ET_SWEAT;
+				mes "[維奧雷爾]";
+				mes "不，我每天都不站在這裡。";
+				mes "但是，為什麼您每天都站在那裡呢？";
+				next;
+				mes "[維奧雷爾]";
+				mes "什麼？";
+				mes "不，我看到的方式";
+				mes "每次我在這裡，您似乎都在這裡。";
+				close;
+			}
+		} else {
+			if (gethominfo(1) >= 6009) { // Evolved Homunculus
+				mes "[維奧雷爾]";
+				mes "嗯，您似乎與 ^ff4800 homunculus ^000000有特殊的聯繫。";
+				next;
+				mes "[維奧雷爾]";
+				mes "當那個 ^ff4800 homunculus ^000000到達 ^0000fflevel 99 ^000000時，請回到我身邊。";
+				close;
+			} else {
+				mes "[維奧雷爾]";
+				mes "您還沒有進化的 ^ff4800homunculus ^000000 ...";
+				mes "您可能知道進化：";
+				next;
+				mes "[維奧雷爾]";
+				mes "當親密關係級別高於 ^006400 Intimate ^000000時，使用sage ^000000的 ^0000ffstone， ^ff4800homunculus ^000000通過 ^006400 vevolution ^000000。";
+				close;
+			}
+		}
+	}
+	mes "[維奧雷爾]";
+	mes "^ff4800 homunculus^000000研究需要大量時間和資金。";
+	mes "但是，我認為激情是最重要的因素。";
+	next;
+	switch(select("結束對話:你在說什麼？ :你為什麼總是站在那裡？")) {
+	case 1:
+		mes "[維奧雷爾]";
+		mes "這麼久~！";
+		close;
+	case 2:
+		mes "[維奧雷爾]";
+		mes "您會看到， ^006400 Alchemists ^000000具有好奇的性質。";
+		mes "尤其是像我這樣的人，甚至想到創造生活本身。";
+		next;
+		mes "[維奧雷爾]";
+		mes "您必須研究 ^ff4800 homunculus ^000000才能理解。";
+		mes "現在，如果你能原諒我~！";
+		close;
+	case 3:
+		emotion ET_SWEAT;
+		mes "[維奧雷爾]";
+		mes "什麼，在自己的實驗室裡見到煉金術士真是太奇怪了？";
+		mes "為何如此？";
+		close;
+	}
+	end;
+L_CheckHomunculus:
+	if (gethominfo(6) < 99 || (gethominfo(1) < 6009 || gethominfo(1) > 6016)) { // Not level 99+ evolved Homunculus
+		mes "[維奧雷爾]";
+		mes "嗯？";
+		mes "您曾經有 ^ff4800homunculus ^000000在哪裡？";
+		mes "也許我把它誤認為是其他東西...";
+		next;
+		mes "[維奧雷爾]";
+		mes "…………";
+		mes " ";
+		mes "（似乎正在考慮某事。）";
+		next;
+		emotion ET_SMILE;
+		mes "[維奧雷爾]";
+		mes "哈哈~";
+		mes "我想我把你誤認為是別人。";
+		mes "如果你能原諒我。";
+		close;
+	}
+	return;
+}
+
+que_house_s,24,47,3	script	Viorel#homun_s	542,{
+	if (checkquest(4155) > -1) {
+		emotion ET_HUM;
+		mes "[維奧雷爾]";
+		mes "好的。";
+		mes "我看到你是說生意。";
+		next;
+		playbgm "33.mp3"; // Yuna Song
+		mes "[維奧雷爾]";
+		mes "也許你會同意。";
+		mes "當前，您的 ^ff4800 homunculus ^000000不處於完美狀態。";
+		next;
+		mes "[維奧雷爾]";
+		mes "如今，對 ^ff4800homunculus ^000000的生長的研究正在積極進行。";
+		mes "但是，我確實相信我發現了一些特別的東西。";
+		next;
+		mes "[維奧雷爾]";
+		mes "為了打破 ^ff4800 homunculus ^000000的當前局限性，需要發生突變。";
+		next;
+		switch(select("就像，生物實驗...？ ！ :嗯，是的，自然。 :我不想傷害我的侏儒！")) {
+		case 1:
+			emotion ET_PROFUSELY_SWEAT;
+			mes "[維奧雷爾]";
+			mes "看起來不要那麼驚訝。";
+			mes "生物學的倫理現在有點模糊，對嗎？";
+			mes "我是說...";
+			next;
+			mes "[維奧雷爾]";
+			mes "研究 ^ff4800 homunculus ^000000的真正潛力是我的責任。";
+			next;
+			mes "[維奧雷爾]";
+			mes "到目前為止，Homunculus還沒有表現出他們的全部潛力，但我知道我接近突破。";
+			next;
+			break;
+		case 2:
+			emotion ET_OHNO;
+			mes "[維奧雷爾]";
+			mes "是的。";
+			mes "我很高興你不會難過。";
+			mes "突變，";
+			mes "一個在普通心中激發邪惡的詞，";
+			mes "這使我的研究很難進行。";
+			next;
+			mes "[維奧雷爾]";
+			mes "你是否記得？";
+			mes "^005dffkellasus^000000 of^8b4513lighthalzen^000000，^ff4800homunculus^000000研究的先驅。";
+			next;
+			mes "[維奧雷爾]";
+			mes "我相信這項研究實現了知識和信念的賦予者 ^005dffkellasus ^000000所做的承諾。";
+			next;
+			break;
+		case 3:
+			emotion ET_SWEAT;
+			mes "[維奧雷爾]";
+			mes "我了解您的擔心。";
+			mes "但是我想向您保證，這種突變不會傷害或傷害您的 ^ff4800 homunculus ^000000。";
+			next;
+			mes "[維奧雷爾]";
+			mes "相反，當今的 ^ff4800 homunculus ^000000由於不完美而感到痛苦，無法辜負其所謂的潛力。";
+			mes "此外，這些 ^ff4800 homunculus ^000000經常被放棄。";
+			next;
+			mes "[維奧雷爾]";
+			mes "不要誤會我的意思，我研究 ^ff4800 homunculus ^000000，因為我喜歡它們。";
+			next;
+			break;
+		}
+		mes "[維奧雷爾]";
+		mes "好吧，順便說一句...";
+		mes "我發現這個新突變非常穩定。";
+		next;
+		mes "[維奧雷爾]";
+		mes "^006400技術存在，";
+		mes "他們可能會有新的";
+		mes "突變時的技能...^000000";
+		next;
+		mes "[維奧雷爾]";
+		mes "小副作用...";
+		mes "^006400它們的外觀將變化^000000。";
+		mes "但是我認為您會發現這很令人滿意。";
+		next;
+		mes "[維奧雷爾]";
+		mes "我引用了 ^005dffkassibian ^000000， ^ff4800 homunculus ^000000技術的專家，";
+		mes "^006400真相不是單一的形式~！ ^000000";
+		mes "哈哈。";
+		next;
+		emotion ET_SPARK;
+		mes "[維奧雷爾]";
+		mes "我知道這有點突然，但是...";
+		mes "如何將您的 ^ff4800 homunculus ^000000更改為令人難以置信的成就，即 ^006400 homunculus突變系統 ^000000？";
+		next;
+		switch(select("探索^006400Homunculus突變系統^000000。 :取消。")) {
+		case 1:
+			emotion ET_BEST;
+			mes "[維奧雷爾]";
+			mes "不錯的選擇。";
+			mes "成功潛伏在傳統思維盒外面，對嗎？";
+			next;
+			mes "[維奧雷爾]";
+			mes "第一個幫助研究的人是 ^005Dffjeyna ^000000。";
+			mes "我將您發送到 ^005dffjeyna ^000000。";
+			mes "在那裡，您將了解有關新的 ^0000ffhomunculus ^000000的更多信息。";
+			close2;
+			setquest 4156;
+			erasequest 4155;
+			warp "que_house_s",63,41;
+			end;
+		case 2:
+			emotion ET_THINK;
+			mes "[維奧雷爾]";
+			mes "我不明白你為什麼猶豫。";
+			mes "我不是想欺騙你。";
+			mes "也許您需要一些時間來考慮它？";
+			next;
+			switch(select("想一想:我就走開。")) {
+			case 1:
+				mes "[維奧雷爾]";
+				mes "那我們會稍作聊天。";
+				close;
+			case 2:
+				emotion ET_OTL;
+				mes "[維奧雷爾]";
+				mes "恥辱。";
+				mes "但是，我尊重您的意見。";
+				mes "我將您寄回 ^8B4513Laboratory ^000000。";
+				close2;
+				erasequest 4154;
+				erasequest 4155;
+				warp "job3_gen01",12,47;
+				end;
+			}
+		}
+	} else if (checkquest(4160) > -1) {
+		playbgm "33.mp3"; // Yuna Song
+		mes "[維奧雷爾]";
+		mes "我之前看到的 ^ff4800 homunculus ^000000返回其 ^0000fembryo ^000000狀態。";
+		mes "有點奇怪，但是...";
+		mes "您不必擔心它。";
+		next;
+		mes "[維奧雷爾]";
+		mes "順便一提...";
+		mes "我忘了告訴你一些事情。";
+		mes "為了穩定突變過程，我首先需要一些材料。";
+		next;
+		mes "[維奧雷爾]";
+		mes "幸運的是，您不必自己找到它們，因為我已經在這裡了。";
+		mes "但是，我需要 ^FF000050,000 Zeny ^000000，您知道，作為服務費。";
+		next;
+		mes "[維奧雷爾]";
+		mes "我希望我可以免費做到這一點，但我並不是完全用錢賺錢。";
+		mes "那我目前缺乏任何投資者來支持我的研究。";
+		next;
+		mes "[維奧雷爾]";
+		mes "實際上，如果我有足夠的Zeny繼續研究，那麼我可以解決很多問題...";
+		next;
+		mes "[維奧雷爾]";
+		mes "無論如何，您可以嘗試在有或沒有穩定過程的情況下執行此操作。這一切都取決於您。";
+		next;
+		mes "[維奧雷爾]";
+		mes "如果您選擇不穩定";
+		mes "突變，我無法搶劫您要獲得什麼樣的Homunculus。";
+		mes "無論如何，這取決於您。";
+		next;
+		switch(select("突變穩定（50,000 zeny）:不穩定突變")) {
+		case 1:
+			if (Zeny < 50000) {
+				mes "[維奧雷爾]";
+				mes "我認為您現在沒有 ^ff 000050千Zeny ^000000。";
+				mes "請帶足夠的Zeny。";
+				mes "我會等待。";
+				mes "要我將您送回 ^8B4513Laboratory ^000000嗎？";
+				next;
+				switch(select("不用了，謝謝:是的。把我送回實驗室。")) {
+				case 1:
+					mes "[維奧雷爾]";
+					mes "好吧。";
+					mes "我會再見到你。";
+					close;
+				case 2:
+					mes "[維奧雷爾]";
+					mes "好吧。";
+					mes "我將在 ^8B4513Laboration ^000000等待等待。";
+					close2;
+					warp "job3_gen01",12,47;
+					end;
+				}
+			}
+			emotion ET_BEST;
+			playbgm "19.mp3"; // Under the Ground
+			mes "[維奧雷爾]";
+			mes "不錯的選擇。";
+			mes "從不同類型的 ^0000ffhomunculus ^000000中進行選擇。";
+			next;
+			switch(select("埃拉:塞拉:迪特爾:巴耶里:埃莉諾")) {
+			case 1:
+				cutin "Mer_Eira_Card",3;
+				set .@Homunculus,6048; //MER_EIRA
+				break;
+			case 2:
+				cutin "Mer_Sera_Card",3;
+				set .@Homunculus,6050; //MER_SERA
+				break;
+			case 3:
+				cutin "Mer_Dieter_Card",3;
+				set .@Homunculus,6051; //MER_DIETER
+				break;
+			case 4:
+				cutin "Mer_Bayeri_Card",3;
+				set .@Homunculus,6049; //MER_BAYERI
+				break;
+			case 5:
+				cutin "Mer_Eleanor_Card",3;
+				set .@Homunculus,6052; //MER_ELEANOR
+				break;
+			}
+			mes "[維奧雷爾]";
+			mes "你確定嗎？";
+			next;
+			if(select("是的。 :沒有。") == 2) {
+				cutin "",255;
+				playbgm "33.mp3"; // Yuna Song
+				mes "[維奧雷爾]";
+				mes "我懂了。";
+				mes "給它更多的時間思考。";
+				close;
+			}
+			cutin "",255;
+			mes "[維奧雷爾]";
+			mes "出色的！";
+			mes "讓我們繼續前進。";
+			next;
+			specialeffect2 EF_BASH;
+			mes "[維奧雷爾]";
+			mes "現在聚焦~！";
+			mes "你...需要...";
+			mes "... 專注。";
+			next;
+			specialeffect2 EF_PROVIDENCE;
+			mes "[維奧雷爾]";
+			mes "好的。快要完成了！";
+			next;
+			specialeffect2 EF_SUI_EXPLOSION;
+			set Zeny, Zeny - 50000;
+			hommutate .@Homunculus;
+			break;
+		case 2:
+			emotion ET_SCRATCH;
+			mes "[維奧雷爾]";
+			mes "因此，您的選擇是不穩定的突變過程。";
+			mes "你相信命運嗎？";
+			mes "嚴重地...";
+			mes "你真的希望繼續嗎";
+			mes "隨著隨機結果的過程？";
+			next;
+			if(select("前進。（隨機突變）:取消。") == 2) {
+				playbgm "33.mp3"; // Yuna Song
+				mes "[維奧雷爾]";
+				mes "我懂了。";
+				mes "給它更多的時間思考。";
+				close;
+			}
+			emotion ET_THINK;
+			mes "[維奧雷爾]";
+			mes "唔...";
+			mes "知識的探索";
+			mes "充滿了驚喜。";
+			mes "…………";
+			next;
+			emotion ET_SMILE;
+			mes "[維奧雷爾]";
+			mes "哈哈。";
+			mes "嘿，我覺得自己像個鐵匠！";
+			mes "現在讓我們繼續前進。";
+			next;
+			specialeffect2 EF_BASH;
+			mes "[維奧雷爾]";
+			mes "現在聚焦~！";
+			mes "你...需要...";
+			mes "... 專注。";
+			next;
+			specialeffect2 EF_PRESSURE;
+			mes "[維奧雷爾]";
+			mes "更集中精力！";
+			next;
+			specialeffect2 EF_PROVIDENCE;
+			mes "[維奧雷爾]";
+			mes "好的。快要完成了！";
+			next;
+			specialeffect2 EF_SUI_EXPLOSION;
+			hommutate;
+			break;
+		}
+		erasequest 4160;
+		erasequest 4154;
+		emotion ET_DELIGHT;
+		playbgm "64.mp3"; // One Fine Day
+		mes "[維奧雷爾]";
+		mes "好的，突變完成。";
+		mes "PHEW ...沒有跳過心跳，是嗎？";
+		next;
+		mes "[維奧雷爾]";
+		mes "還記得 ^005dffkellasus ^000000說了什麼嗎？";
+		mes "在真相的門口...";
+		mes "我們必須自己看";
+		mes "導致它的路徑。";
+		next;
+		mes "[維奧雷爾]";
+		mes "^0000ff" + strcharinfo(0) + "^000000,";
+		mes "我不認識你";
+		mes "很長一段時間";
+		mes "但是我感覺到";
+		mes "您將取得偉大的成就。";
+		next;
+		mes "[維奧雷爾]";
+		mes "祝您冒險。";
+		mes "我希望您的新 ^ff4800 homunculus ^000000在您的護理下會出色。";
+		next;
+		mes "[維奧雷爾]";
+		mes "而且你不要忘記。";
+		mes "我們的研究";
+		mes "才剛剛開始~！";
+		close;
+	} else {
+		for(set .@i,4154; .@i<=4160; set .@i,.@i+1) {
+			if (checkquest(.@i) > -1)
+				erasequest .@i;
+		}
+		mes "[維奧雷爾]";
+		mes "現在所有的工作都完成了，我請您請假。";
+		mes "我需要恢復。";
+		close2;
+		warp "job3_gen01",12,47;
+		end;
+	}
+}
+
+que_house_s,80,42,3	script	Jeyna#homun_s	558,{
+	if (checkquest(4156) > -1) {
+		playbgm "28.mp3"; // You're in Ruins
+		emotion ET_SURPRISE;
+		mes "[傑娜]";
+		mes "歡迎。";
+		mes "我剛剛從您來的 ^005dffviorel ^000000有消息。";
+		next;
+		emotion ET_SCRATCH;
+		mes "[傑娜]";
+		mes "順便一提...";
+		mes "他說服你做點什麼...？";
+		mes "他確實有話要說。";
+		next;
+		mes "[傑娜]";
+		mes "他之所以需要它們，是因為煉金術士是如此尷尬的人。";
+		emotion ET_OHNO;
+		next;
+		mes "[傑娜]";
+		mes "無論如何~";
+		mes "^0000ff"+strcharinfo(0)+"^000000 and ^005DFFViorel^000000 seem like two peas in a pod.";
+		next;
+		emotion ET_SMILE;
+		mes "[傑娜]";
+		mes "哈哈哈~沒有冒犯。";
+		mes "我認為這是一件好事。";
+		mes "哦是的。";
+		mes "您是在這裡進行 ^ff4800 homunculus ^000000突變。";
+		next;
+		mes "[傑娜]";
+		mes "當我做一些準備時，";
+		mes "你為什麼不看那個董事會？";
+		mes "^006400 homunculus突變系統 ^000000具有不同類型的新突變 ^000000。";
+		next;
+		emotion ET_SURPRISE, getnpcid(0, "Magic Board#homun_s");
+		mes "[傑娜]";
+		mes "您的 ^ff4800 homunculus ^000000可以突變為5種不同形式中的任何一種。";
+		next;
+		emotion ET_AHA;
+		mes "[傑娜]";
+		mes "讓我們來看看...";
+		mes "^006400 homunculus突變系統 ^000000包括正常 ^0000ffhomunculus ^000000的新進化。";
+		mes "突變後，所有以前學習的技能也將保留。";
+		next;
+		mes "[傑娜]";
+		mes "換句話說...";
+		mes "即使您更改了魔術Wielder ^ff4800vanilmirth ^000000，";
+		mes "諸如Caprice之類的技能將是";
+		mes "^006400已撤離並在突變後可用^000000。";
+		next;
+		emotion ET_SURPRISE, getnpcid(0, "Magic Board#homun_s");
+		mes "[傑娜]";
+		mes "看看我身後的魔術板，然後自己決定。";
+		close2;
+		setquest 4157;
+		erasequest 4156;
+		end;
+	} else if (checkquest(4157) > -1) {
+		emotion ET_QUESTION;
+		mes "[傑娜]";
+		mes "在右邊看我身後的董事會。";
+		close2;
+		emotion ET_SURPRISE, getnpcid(0, "Magic Board#homun_s");
+		end;
+	} else if (checkquest(4158) > -1) {
+		playbgm "28.mp3"; // You're in Ruins
+		disable_items;
+		mes "[傑娜]";
+		mes "好吧，我也準備好了。";
+		mes "為了立即恢復該過程，我需要以其胚胎形式的Homunculus。";
+		next;
+		callsub L_CheckHomunculus;
+		if (checkweight(6415,1) == 0) {
+			mes "[傑娜]";
+			mes "但，";
+			mes "您沒有足夠的空間來攜帶 ^0000ffembryo ^000000。";
+			mes "請回到書包裡有足夠的空間。";
+			next;
+			mes "[傑娜]";
+			mes "請返回 ^8B4513Laboratory ^000000。";
+			mes "您可以在 ^8b4513 laboration ^000000上找到 ^005dffviorel ^000000，一旦清空了袋子。";
+			next;
+			mes "[傑娜]";
+			mes "清空書包完成後，請詢問 ^005Dffviorel ^000000將您送回這裡。";
+			mes "繼續並清空您的包~！";
+			close2;
+			warp "job3_gen01",12,47;
+			end;
+		}
+		mes "[傑娜]";
+		mes "現在是時候做出決定了。";
+		mes "要經過新的 ^0000ffhomunculus ^000000的突變，使用了HOMUNCULUS突變系統";
+		mes "您需要進行回歸過程，以將homunculus返回其 ^0000fembryo ^000000狀態。";
+		next;
+		mes "[傑娜]";
+		mes "和...";
+		mes "^006400 You在過程完成之前無法使用功能調用Homunculus。 ^000000";
+		mes "不會花很長時間，所以不要徘徊。";
+		next;
+		mes "[傑娜]";
+		mes "所以，請決定。";
+		mes "您是否要繼續使用新的 ^0000ffhomunculus突變系統 ^000000？";
+		next;
+		switch(select("是的，我願意:我需要考慮更多。")) {
+		case 1:
+			if (checkhomcall() == 1) {
+				mes "[傑娜]";
+				mes "哦，等一下。";
+				mes "為了進行突變，您需要從蒸發狀態中喚醒Homunculus。";
+				next;
+				mes "[傑娜]";
+				mes "完成此操作後回來。";
+				close;
+			}
+			emotion ET_BEST;
+			mes "[傑娜]";
+			mes "好思考。";
+			mes "像我們這樣的煉金術士擔心挑戰是不可接受的。";
+			next;
+			playbgm "01.mp3"; // Title
+			mes "[傑娜]";
+			mes "現在我需要您集中精力。";
+			next;
+			specialeffect2 EF_ABSORBSPIRITS;
+			mes "[傑娜]";
+			mes "我們需要...";
+			mes "穩定更多。";
+			mes "…………";
+			next;
+			specialeffect2 EF_CURE;
+			mes "[傑娜]";
+			mes "片刻之內， ^ff4800 homunculus ^000000將返回其胚胎狀態。";
+			next;
+			specialeffect2 EF_HOLYHIT;
+			mes "[傑娜]";
+			mes "進入特殊的胚胎...";
+			next;
+			callsub L_CheckHomunculus;
+			specialeffect2 EF_BLESSING;
+			morphembryo;
+			setquest 4159;
+			erasequest 4158;
+			emotion ET_DELIGHT;
+			mes "[傑娜]";
+			mes "PHEW~都完成了。";
+			mes "嗯，它的狀態有點奇怪。";
+			next;
+			emotion ET_SMILE;
+			mes "[傑娜]";
+			mes "我想很好。";
+			mes "不要丟失 ^0000ffstrange胚胎 ^000000。";
+			mes "也...";
+			next;
+			mes "[傑娜]";
+			mes "在過程結束之前，不要做任何更改工作或類似的事情之類的事情。";
+			mes "如果是這樣，您， ^0000ff"+strcharinfo(0)+"^000000 might lose all the abilities you have over the Homunculus.";
+			next;
+			mes "[傑娜]";
+			mes "所有這些集中度使我感到疲倦。";
+			mes "我只拿一杯水。";
+			close;
+		case 2:
+			playbgm "28.mp3"; // You're in Ruins
+			emotion ET_OHNO;
+			mes "[傑娜]";
+			mes "也許我首先不應該問。";
+			close;
+		}
+	} else if (checkquest(4159) > -1 || checkquest(4160) > -1) {
+		playbgm "28.mp3"; // You're in Ruins
+		mes "[傑娜]";
+		mes "^005dffviorel^000000將完成突變過程。";
+		mes "現在是時候說再見了。";
+		next;
+		mes "[傑娜]";
+		mes "很短，但是很高興認識您。";
+		mes "我們將再次見到彼此。";
+		next;
+		mes "[傑娜]";
+		mes "祝您好運~！";
+		close2;
+		setquest 4160;
+		erasequest 4159;
+		warp "que_house_s",19,42;
+		end;
+	} else {
+		if (checkquest(4154) > -1)
+			erasequest 4154;
+		mes "[傑娜]";
+		mes "嘿，你是怎麼來這裡的？";
+		mes "請出去。我正在改變~！";
+		close2;
+		warp "job3_gen01",12,47;
+		end;
+	}
+	end;
+L_CheckHomunculus:
+	if (gethominfo(6) < 99 || (gethominfo(1) < 6009 || gethominfo(1) > 6016)) { // Not level 99+ evolved Homunculus
+		mes "[傑娜]";
+		mes "嘿，等等。";
+		mes "^ff4800 homunculus ^000000的狀況不合適。";
+		mes "那很近。";
+		next;
+		mes "[傑娜]";
+		mes "使用Homunculus突變系統";
+		mes "改變新的";
+		mes "^ff4800小人^000000，";
+		mes "^006400 homunculus必須高於99級，並且進化為 ^000000。";
+		next;
+		mes "[傑娜]";
+		mes "準備就緒後回到 ^005DffViorel ^000000。";
+		mes "稍後再見~！";
+		close2;
+		erasequest 4154;
+		erasequest 4158;
+		warp "job3_gen01",12,47;
+		end;
+	}
+	return;
+}
+
+// Magic Board
+//============================================================
+que_house_s,83,47,3	script	Magic Board#homun_s	857,{
+	playbgm "26.mp3"; // Everlasting Wanderers
+	callfunc "F_HomMutateInfo","[Magic Board Posts]";
+	mes "[魔術板帖子]";
+	mes ":: ^0000FFHOMUNCULUS ^000000研究是";
+ 	mes "::這麼有趣。";
+	mes "::成為煉金術士";
+	mes "::誰總是喜歡";
+	mes "::一個人的研究。";
+	next;
+	mes "[魔術板帖子]";
+	mes "::哦，和Viorel ...";
+	mes "::關於你說的話";
+	mes "：：  昨天...";
+	mes "::";
+	mes "::";
+	next;
+	mes "------------------------------------------------";
+	mes "其餘的是密封的，因為它似乎是一個私人信息。";
+	close2;
+	if (checkquest(4157) > -1) {
+		setquest 4158;
+		erasequest 4157;
+	}
+	end;
+}
+
+function	script	F_HomMutateInfo	{
+	.@npc_name$ = getarg(0);
+	mes .@npc_name$;
+	mes "::突變的能力";
+	mes ":: ^0000FFHOMUNCULUS ^000000顯然去了";
+	mes "::超越先前的狀態。";
+	mes "::此外，它的外觀";
+	mes "::也會發展。";
+	next;
+	mes .@npc_name$;
+	mes ":: ^0000FFHOMUNCULUS ^000000出現";
+	mes "::新類型可以分類";
+	mes "::基於不同的物種。";
+	mes "::同一物種的生物";
+	mes "::通常有類似的";
+	mes "：： 外貌。";
+	next;
+	mes .@npc_name$;
+	mes "::類別，外觀和";
+	mes ":: ^0000ffhomunculus ^000000的能力";
+	mes "::通過Homunculus突變";
+	mes "::系統如下：";
+	next;
+	cutin "Mer_Eira_Card",3;
+	mes .@npc_name$;
+	mes "::五個中的第一個";
+	mes "::稱為 ^ff4800eira ^000000。";
+	mes "::美麗而優雅。";
+	next;
+	mes .@npc_name$;
+	mes ":: ^ff4800eira ^000000用途";
+	mes ":: ^006400Wind Element ^000000魔術攻擊和";
+	mes "::支持技能。";
+	mes "::甚至具有能力";
+	mes "::恢復";
+	mes "::墮落的主人。";
+	next;
+	mes .@npc_name$;
+	mes ":: ^ff4800eira ^000000吃";
+	mes ":: ^0000ffsmall雪花 ^000000。";
+	mes "::令人驚訝的是如何生存";
+	mes "::如此少量。";
+	mes ":: ^0000ffsmall雪花 ^000000可以購買";
+	mes "::來自 ^005dfftaming商人 ^000000。";
+	next;
+	cutin "",255;
+	cutin "Mer_Sera_Card",3;
+	mes .@npc_name$;
+	mes "::五個中的第二個";
+	mes "::被稱為 ^ff4800sera ^000000。";
+	mes "::看起來就像 ^ff0000 ristress ^000000，但是";
+	mes "::它不會逃跑。";
+	next;
+	mes .@npc_name$;
+	mes ":: ^fy4800sera ^000000";
+	mes "::專門從事 ^006400 Poison攻擊 ^000000。";
+	mes "::另外，它使用不同的";
+	mes "::使用毒藥支持技能。";
+	next;
+	mes .@npc_name$;
+	mes ":: ^ff4800sera ^000000吃";
+	mes ":: ^0000FFAPPLE布丁 ^000000。";
+	mes "::它更喜歡甜食。";
+	mes ":: ^0000FFAPPLE布丁 ^000000可以購買";
+	mes "::來自 ^005dfftaming商人 ^000000。";
+	next;
+	cutin "",255;
+	cutin "Mer_Dieter_Card",3;
+	mes .@npc_name$;
+	mes "::五個中的第三個";
+	mes ":: 是 ^ff4800dieter ^000000。";
+	mes "::看起來很不尋常，但是";
+	mes "::有很好的舉止。";
+	next;
+	mes .@npc_name$;
+	mes ":: ^ff4800dieter ^000000用途";
+	mes ":: ^ff0000fire ^000000攻擊和";
+	mes "::支持技能。";
+	mes "::它一樣脆弱...";
+	mes "::啊，看起來很可靠。";
+	next;
+	mes .@npc_name$;
+	mes ":: ^ff4800dieter ^000000吃";
+	mes ":: ^0000FFBIG 單元 ^000000。";
+	mes ":: ^0000ffbig cell ^000000可以購買";
+	mes "::來自 ^005dfftaming商人 ^000000。";
+	next;
+	cutin "",255;
+	cutin "Mer_Bayeri_Card",3;
+	mes .@npc_name$;
+	mes "::五個中的第四個";
+	mes ":: IS ^ff4800bayeri ^000000。";
+	mes ":: Bayeri具有";
+	mes "：： 獨角獸。";
+	next;
+	mes .@npc_name$;
+	mes "::它具有強大的破折號技能";
+	mes "::並使用 ^006400HOLY元素 ^000000魔術。";
+	mes "：： 很遺憾，";
+	mes "::他們不會讓你騎他們。";
+	mes "::不是所有四足動物";
+	mes "::可以騎行。";
+	next;
+	mes .@npc_name$;
+	mes ":: ^ff4800bayeri ^000000吃";
+	mes ":: ^0000fffresh工廠 ^000000。";
+	mes "::無論多麼餓";
+	mes "::永遠不要以腐爛的綠色為食。";
+	mes ":: ^0000FFRESH工廠 ^000000可以購買";
+	mes "::來自 ^005dfftaming商人 ^000000。";
+	next;
+	cutin "",255;
+	cutin "Mer_Eleanor_Card",3;
+	mes .@npc_name$;
+	mes "::五個中的最後一個";
+	mes ":: IS ^ff4800eleanor ^000000。";
+	mes "::它具有女性外觀";
+	mes "::和出色的身體技能。";
+	next;
+	mes .@npc_name$;
+	mes ":: ^ff4800埃莉諾 ^000000";
+	mes "::用 ^006400 Strike或Grapple攻擊 ^000000";
+	mes "::在戰鬥中依次。";
+	mes "::絕對令人驚嘆。";
+	next;
+	mes .@npc_name$;
+	mes ":: ^ff4800eleanor ^000000吃";
+	mes ":: ^0000ffkid的餃子 ^000000。";
+	mes "::不要正常混淆";
+	mes "::餃子。";
+	mes ":: ^0000ffkid的餃子 ^000000可以購買";
+	mes "::來自 ^005dfftaming商人 ^000000。";
+	next;
+	cutin "",255;
+	return;
+}
+
+// Books
+//============================================================
+que_house_s,13,52,3	script	Open Book#01homun_s	111,{
+	switch(rand(1,7)) {
+	case 1:
+		mes "[書櫃筆記]";
+		mes "精神錯亂和天才在概念上是相同的，因為它們都是異常現象。";
+		mes "觀察化學家 ^005dffmorgenstein ^000000 of ^8b4513geffen ^000000，我認為它們相等。";
+		next;
+		mes "[書櫃筆記]";
+		mes "有一次我不得不去...";
+		mes "奇怪的 ^005dffmorgenstein ^000000用於研究目的。";
+		next;
+		mes "[書櫃筆記]";
+		mes "在遇到 ^005dffmorgenstein ^000000之前，我有燉肉";
+		mes "令人驚訝的是，他喃喃地說，即使在我接近之前，他都聞到了肉的氣味。";
+		next;
+		mes "[書櫃筆記]";
+		mes "我從沒想過化學家有一種極大的嗅覺。";
+		mes "下次我給";
+		mes "^005dfffmorgenstein^000000訪問，";
+		mes "我會吃其他一頓飯。";
+		close;
+	case 2:
+		mes "[書櫃筆記]";
+		mes "^005dffde bris^000000認為，煉金術士的熱情最近急劇下降> ...";
+		next;
+		mes "[書櫃筆記]";
+		mes "他特別不喜歡我緊密綁定到 ^ff4800 homunculus ^000000研究的事實。";
+		mes "當我們一起學習 ^8B4513Rune-Midgarts ^000000時，他並沒有這樣說。";
+		next;
+		mes "[書櫃筆記]";
+		mes "有一天，我將顯示 ^005dffde bris ^000000我的 ^ff4800 homunculus ^000000研究數據。";
+		mes "我喜歡看著他跳出皮膚。 ...我期待這一天。";
+		close;
+	case 3:
+		mes "[書櫃筆記]";
+		mes "^005dffde bris^000000'對^57007fgenetic^000000藝術的熱情是驚人的。";
+		next;
+		mes "[書櫃筆記]";
+		mes "最近，煉金術士聯盟為我提供了通過一封信加入 ^57007fgenetic ^000000的機會。";
+		mes "我想知道 ^005dffde bris ^000000對工會說什麼...";
+		next;
+		mes "[書櫃筆記]";
+		mes "好吧，我很感激...";
+		mes "但是，對我來說";
+		mes "我的研究是最重要的。";
+		close;
+	case 4:
+		mes "[書櫃筆記]";
+		mes "有一些有趣的 ^005dffdarcia ^000000對我說。";
+		mes "大約是什麼時候 ^005dffjeyna ^000000首先了解藥水組合……";
+		next;
+		mes "[書櫃筆記]";
+		mes "她在將水倒入混合物中的舞台上做得很好。";
+		mes "她只需要把它放入一個空瓶子裡...";
+		next;
+		mes "[書櫃筆記]";
+		mes "^005dffdarcia^000000看著她將在最後階段做什麼，";
+		mes "混亂的 ^005dffjeyna ^000000將混合物從碗裡喝了，並告訴她它癒合得很好。";
+		next;
+		mes "[書櫃筆記]";
+		mes "認為甚至 ^005dffjeyna ^000000，";
+		mes "現在是藥水組合的大師，";
+		mes "有她的新秀錯誤";
+		mes "表明想像有多難";
+		mes "並預測自己的過去和未來。";
+		close;
+	case 5:
+		mes "[書櫃筆記]";
+		mes "^005dffvincent^000000，我想我做到了。";
+		mes "我永遠不會忘記你的勇氣";
+		mes "我很感激我現在可以償還您。";
+		next;
+		mes "[書櫃筆記]";
+		mes "這確實是一個漫長的過程。";
+		mes "當許多聯盟";
+		mes "認為我的研究微不足道";
+		mes "...雖然我沒有失去信念";
+		mes "內心深處。";
+		next;
+		mes "[書櫃筆記]";
+		mes "相信我的幾個朋友";
+		mes "特別是 ^005dffjeyna ^000000";
+		mes "然後您 ^005Dffvincent ^000000 ...";
+		mes "我真誠地感謝我的靈魂。";
+		next;
+		mes "[書櫃筆記]";
+		mes "他們說，";
+		mes "終點證明了手段。";
+		mes "起初，";
+		mes "我不知道這是什麼意思...";
+		next;
+		mes "[書櫃筆記]";
+		mes "現在我知道。";
+		mes "我知道它有多重要";
+		mes "跟隨自己的心。";
+		next;
+		mes "[書櫃筆記]";
+		mes "我很快就會下車。";
+		mes "一直保持狀況良好。";
+		close;
+	case 6:
+		mes "[書櫃筆記]";
+		mes "一個名為 ^0000ff的遊戲，類似於國際象棋，史詩般的戰鬥2 ^000000很有趣。";
+		next;
+		mes "[書櫃筆記]";
+		mes "不久前，我遇到了在史詩般的戰鬥中表現出色的 ^0000ffruit賣家 ^000000。";
+		mes "他甚至輕鬆地克服了臭名昭著的 ^006400 grizzlizzly Shockwave策略 ^000000和 ^006400 GOD恐怖恐怖 ^000000。";
+		next;
+		mes "[書櫃筆記]";
+		mes "要克服 ^0000ffpriest派系的早期階段的那些人 ^000000 ...";
+		mes "對我來說很困難，因為我需要結合碎片並使用一些誘餌技巧。";
+		next;
+		mes "[書櫃筆記]";
+		mes "我想知道什麼時候我會成為3克拉鑽石水平的玩家。";
+		close;
+	case 7:
+		mes "[書櫃筆記]";
+		mes "有許多煉金術士喜歡 ^ff4800vanilmirth ^000000。";
+		next;
+		mes "[書櫃筆記]";
+		mes "但是我更喜歡 ^ff4800 amistr ^000000。";
+		mes "當它用那些閃亮的眼睛搖晃故事時，它很可愛。";
+		next;
+		mes "[書櫃筆記]";
+		mes "我的喬納森（Jonathan）聰明而柔和，使它變得如此可愛。";
+		mes "我們是好朋友，我們不是喬納森嗎？";
+		close;
+	}
+}
+
+que_house_s,16,52,3	script	Open Book#02homun_s	111,{
+	switch(rand(1,8)) {
+	case 1:
+		mes "[書櫃筆記]";
+		mes "我應該寫入 ^005dffde bris ^000000。";
+		mes "::對我著名的";
+		mes "::遺傳朋友de Bris。";
+		mes ":: Lighthalzen怎麼樣？";
+		mes "::他們有足夠的";
+		mes "::餅乾你哦，愛嗎？";
+		next;
+		mes "[書櫃筆記]";
+		mes "::我很快就會";
+		mes "::帶一些餅乾。";
+		mes "::當我們見面時，";
+		mes "::我會向你介紹我的";
+		mes ":: ^006400新小人^000000。";
+		next;
+		mes "[書櫃筆記]";
+		mes "::無需保持警惕。";
+		mes "::與你不同，";
+		mes "::他們對";
+		mes "::其他人必須吃什麼。";
+		mes "::我很快見！";
+		mes "::敢關閉我的門。";
+		close;
+	case 2:
+		mes "[書櫃筆記]";
+		mes "我上次訪問煉金術士聯盟時，桌上有一個有趣的辯論。";
+		mes "我認為這與公共場所的Homunculus的 ^006400 negligence有關 ^000000。";
+		next;
+		mes "[書櫃筆記]";
+		mes "主人打ze睡時";
+		mes "^ff4800 homunculus ^000000 oft牽引";
+		mes "引起某種問題。";
+		next;
+		mes "[書櫃筆記]";
+		mes "我將確保我的喬納森（Jonathan）...";
+		mes "經過訓練，不要在別人周圍造成麻煩。";
+		close;
+	case 3:
+		mes "[書櫃筆記]";
+		mes "有一個新的玩具me， ^005dffjeyna ^000000越來越喜歡。";
+		mes "這是相對較新的，";
+		mes "稱為... ^0000ff'helo' ^000000，我想？";
+		next;
+		mes "[書櫃筆記]";
+		mes "有一首相關的歌曲，由一些 ^57007fminstrel ^000000演唱。";
+		mes "歌詞類似於 ^006400'ahh~hh~ahhhhhhhhhhhhhhhhhhhhhhh' ^000000。";
+		next;
+		mes "[書櫃筆記]";
+		mes "娛樂本身很有趣，";
+		mes "但是音樂也很棒";
+		mes "當我聽";
+		mes "感覺我的SP已大大恢復。";
+		next;
+		mes "[書櫃筆記]";
+		mes "我必須說，";
+		mes "休息時娛樂至關重要";
+		mes "提高研究士氣。";
+		mes "^006400 人造人~！ ^000000";
+		close;
+	case 4:
+		mes "[書櫃筆記]";
+		mes "根據我從工會成員那裡聽到的";
+		mes "^005dffparmy^000000，";
+		mes "^005dffraspuchin^000000仍然是他自己的怪異自我。";
+		next;
+		mes "[書櫃筆記]";
+		mes "這可能不是一個好主意";
+		mes "驅動那些充滿活力的靈魂";
+		mes "來換工作";
+		mes "如此熱情。";
+		close;
+	case 5:
+		mes "[書櫃筆記]";
+		mes "我的朋友正在繪畫，";
+		mes "建議製作<圖形小說>稱為";
+		mes "^0000ff穆特^000000";
+		mes "聽說我的研究後";
+		mes "和我的作品。";
+		next;
+		mes "[書櫃筆記]";
+		mes "故事開始...";
+		mes "有一個外星人";
+		mes "^ff4800 人造人^000000";
+		mes "參觀我們的世界。";
+		next;
+		mes "[書櫃筆記]";
+		mes "來訪的外星人";
+		mes "^ff4800 homunculus^000000可以生存";
+		mes "沒有主人";
+		mes "它可能會變成";
+		mes "各種生物";
+		mes "漫遊我們的世界。";
+		next;
+		mes "[書櫃筆記]";
+		mes "這些外星人^ff4800 homunculus^000000";
+		mes "有兩個對立派系";
+		mes "由政治分歧分開。";
+		mes "在我們的世界中，我們稱他們為";
+		mes "^006400AUT-HOMUN^000000和";
+		mes "^006400 欺騙霍門^000000";
+		next;
+		mes "[書櫃筆記]";
+		mes "^006400AUT-HOMUN ^000000是我們的朋友。";
+		mes "他們的領導人，";
+		mes "稱為 ^005dffoptimus poring ^000000，";
+		mes "是建造的，太酷了";
+		mes "為了探索，";
+		mes "它隨意召喚購物車！";
+		next;
+		mes "[書櫃筆記]";
+		mes "對方的 ^006400 decept-homun ^000000，";
+		mes "由 ^005dffmegatroll ^000000領導";
+		mes "他們使用一切手段";
+		mes "摧毀我們的世界。";
+		next;
+		mes "[書櫃筆記]";
+		mes "這個故事的英雄";
+		mes "是 ^8b4513alberta ^000000的一個，稱為 ^005Dffjam Wicky ^000000，";
+		mes "遇到 ^005dffoptimus poring ^000000";
+		mes "在購買購物車時";
+		mes "好像這是他的命運。";
+		next;
+		mes "[書櫃筆記]";
+		mes "因此";
+		mes "展開史詩般的戰鬥";
+		mes "在 ^8B4513Moroc沙漠 ^000000";
+		mes "我們世界的命運";
+		mes "躺在他的手中...";
+		next;
+		mes "[書櫃筆記]";
+		mes "足夠~！";
+		mes "故事的其餘部分可能是";
+		mes "在已發布的副本中檢查。";
+		mes "^0000ff穆特^000000";
+		mes "真是太棒了~！";
+		close;
+	case 6:
+		mes "[書櫃筆記]";
+		mes "工會向其成員發送了一份特別的禮物。";
+		mes "它稱為a ^0000ffhigh夾4 ^000000。";
+		next;
+		mes "[書櫃筆記]";
+		mes "它最初被用作允許在成員之間輕鬆竊竊私語的工具，但它還具有其他有用的功能。";
+		next;
+		mes "[書櫃筆記]";
+		mes "一個公會發明了這個。我記得他們的標誌有一個蘋果的形象。";
+		close;
+	case 7:
+		mes "[書櫃筆記]";
+		mes "Homunculus確實值得。";
+		mes "但是，像其他所有人一樣，我有時會質疑它的含義和未來。";
+		next;
+		mes "[書櫃筆記]";
+		mes "我相信自然所賦予的生活應該被用作自己。";
+		mes "然而...";
+		next;
+		mes "[書櫃筆記]";
+		mes "實際上，為人的利益而言，賦予HOMUNCULUS生命的研究是為了受益。";
+		mes "也許人類在道德上還沒有準備好創造生活。";
+		close;
+	case 8:
+		mes "[書櫃筆記]";
+		mes "不久前， ^005dffjeyna ^000000向我介紹了某人。";
+		mes "她來自 ^8b4513geffen ^000000，";
+		mes "她以 ^005Dffchicken的研究人員 ^000000介紹了自己。";
+		next;
+		mes "[書櫃筆記]";
+		mes "她是名為 ^006400legendary bijofnil ^000000的專家。";
+		mes "她發現令人反感的人認為Bijofnil是鷹。";
+		next;
+		mes "[書櫃筆記]";
+		mes "她在 ^8b4513hvergilmir的噴泉 ^000000中說了些什麼";
+		mes "存在 ^005dfftalking雞肉 ^000000和其他故事...";
+		mes "好吧，那樣繼續";
+		mes "這很有趣。";
+		close;
+	}
+}
+
+// Notifiers
+//============================================================
+que_house_s,11,52,3	script	#03homun_s	111,{
+	end;
+OnInit:
+	initnpctimer;
+	end;
+OnTimer6000:
+	emotion ET_SURPRISE;
+	end;
+OnTimer7000:
+	emotion ET_SURPRISE, getnpcid(0, "#04homun_s");
+	stopnpctimer;
+	initnpctimer;
+	end;
+}
+
+que_house_s,14,52,3	script	#04homun_s	111,{
+	end;
+}
+
+// Researcher's Pet
+//============================================================
+que_house_s,24,46,3	script	Jonathan#homun_s	6002,{
+	end;
+}
+
+que_house_s,23,46,3	script	#05homun_s	111,{
+	emotion ET_STARE_ABOUT, getnpcid(0, "Jonathan#homun_s");
+	if (gethominfo(1) < 6048 || gethominfo(1) > 6052) { // Not mutated Homunculus-S
+		mes "[喬納森]";
+		mes "黃~hwang！";
+		next;
+		mes "::似乎是Viorel的";
+		mes ":: 人造人。";
+		mes "::它穿著一條小項鍊";
+		mes "::喬納森（Jonathan）的名字";
+		mes "::上。";
+		close;
+	} else {
+		mes "[喬納森]";
+		mes "黃~？ ！";
+		next;
+		emotion ET_PROFUSELY_SWEAT, getnpcid(0, "Jonathan#homun_s");
+		mes "[喬納森]";
+		mes "*嗅* ...";
+		next;
+		mes "::這個Amist";
+		mes "::叫喬納森";
+		mes "::似乎對我感到驚訝";
+		mes "::新的Homunculus。";
+		close;
+	}
+}
