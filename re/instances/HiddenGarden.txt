@@ -20,7 +20,7 @@ OnTouch:
 	if (isbegin_quest(12497) == 0) {	// story
 		cloakoffnpcself( "#he_admin1" );
 		specialeffect EF_WHITEBODY, AREA, "#he_admin1";
-		npctalk "Stand back from the perimeter of the security area. Outsiders are prohibited from accessing it.", "#he_admin1", bc_self;
+		npctalk "遠離安全區域的周邊。禁止外人訪問。", "#he_admin1", bc_self;
 		end;
 	}
 	// daily
@@ -50,7 +50,7 @@ ba_maison,120,321,5	script(CLOAKED)	#he_admin1	MD_ASSISTANT,{
 	if (instance_live_info(ILI_NAME,instance_id(IM_PARTY)) == .@md_name$)
 		.@menu$ = "^FF0000Enter^000000";
 
-	switch( select( "Quit and Stand Back.", "Authenticate Identity", .@menu$ ) ) {
+	switch( select("退出並退後。", "身份驗證", .@menu$ ) ) {
 	case 1:
 		mes "[花園經理]";
 		mes "明智的選擇。";
@@ -102,13 +102,13 @@ ba_maison,120,321,5	script(CLOAKED)	#he_admin2	MD_ASSISTANT,{
 	if (BaseLevel >= 180)
 		.@menu$[1] = "^FF00002nd Security Zone.^000000";
 
-	switch( select( "Stand back.", "Identity Authentication", "Enter Zone" ) ) {
+	switch( select("退後一點。", "身份認證", "進入區域" ) ) {
 	case 1:
 		mes "[花園經理]";
 		mes "好吧。";
 		close;
 	case 2:
-		switch( select( "Stand back.", .@menu$[0], .@menu$[1] ) ) {
+		switch( select("退後一點。", .@menu$[0], .@menu$[1] ) ) {
 		case 1:
 			mes "[花園經理]";
 			mes "好吧。";
@@ -129,7 +129,7 @@ ba_maison,120,321,5	script(CLOAKED)	#he_admin2	MD_ASSISTANT,{
 			dispbottom "The reservation of the instance '" + .@md_name$ + "' has failed due to an active instance.";
 		end;
 	case 3:
-		switch( select( .@menu$[0], .@menu$[1] ) ) {
+		switch( select(.@menu$[0], .@menu$[1] ) ) {
 		case 1:
 			.@md_name$ = "Security Area 1";
 			.@qid = 12499;
@@ -185,7 +185,7 @@ OnInstanceInit:
 		mes "它似乎是自動娃娃的全息圖。您可以在中間面板上看到一個奇怪的玻璃，上面有 ^0000ff單詞[在觸摸屏上輸入圖案] ^000000和其他幾個按鈕。";
 		while(1) {
 			next;
-			if (select( "Leave it alone", "Touch the screen", .@menu$ ) == 1) {
+			if (select("別管它", "觸摸屏幕", .@menu$ ) == 1) {
 				mes "全息圖消失了。";
 				close;
 			}
@@ -209,44 +209,44 @@ OnInstanceInit:
 	if ('hidden_garden == 1) {
 		removespecialeffect EF_MARKING_USE_CHANGEMONSTER;
 		setpcblock PCBLOCK_NPC, true;
-		npctalk "I'm an automatic doll that was designed to work only if your mana synchronizes with Varmundt's mana over a certain level.";
+		npctalk "我是一個自動玩偶，只有當你的法力與瓦蒙特的法力同步達到一定水平時才會起作用。";
 		sleep2 5000;
-		npctalk "[" + 'admin$ + "]" + " has a 73.6% mana similarity to that of Varmundt. Who exactly are you [" + 'admin$ + "]?";
+		npctalk "[" + 'admin$ + "]" + "與瓦蒙特的法力相似度為 73.6%。你到底是誰[" + 'admin$ + "]？";
 		sleep2 5000;
 		setpcblock PCBLOCK_NPC, false;
 		select("偶然發現這裡的冒險家");
 		setpcblock PCBLOCK_NPC, true;
-		npctalk "It's strange. I've never seen an outsider with a mana pattern that matches more than 70% to that of Varmundt's.";
+		npctalk "很奇怪。我從來沒有見過一個外來者的法力模式與瓦蒙特的匹配度超過70%。";
 		sleep2 5000;
 		setpcblock PCBLOCK_NPC, false;
-		.@s = select( "I had the opportunity to meet Varmundt before.", "I don't know why." );
+		.@s = select("我以前有機會見到瓦蒙特。", "我不知道為什麼。" );
 		setpcblock PCBLOCK_NPC, true;
 		sleep2 1000;
 		if (.@s == 1) {
-			npctalk "There is a possibility that you have a similar mana pattern due to frequent contact with him in any form.";
+			npctalk "由於經常以任何形式與他接觸，您有可能具有類似的法力模式。";
 			sleep2 5000;
 		}
 		while(1) {
-			npctalk "Okay. From now on, I will set [" + 'admin$ + "] as our temporary administrator and take action accordingly. Do you agree?";
+			npctalk "好的。從現在開始，我將設定[" + 'admin$ + "] as our temporary administrator and take action accordingly. Do you agree?";
 			sleep2 5000;
 			setpcblock PCBLOCK_NPC, false;
-			switch( select( "I'm a temporary administrator? Why should I?", "Refuse!", "Sure" ) ) {
+			switch( select("我是臨時管理員？我為什麼要這麼做？", "拒絕！", "當然" ) ) {
 			case 1:
 				setpcblock PCBLOCK_NPC, true;
 				sleep2 1000;
-				npctalk "The automatic dolls maintain the flower garden and perform their given duties individually.";
+				npctalk "自動玩偶負責維護花園並單獨執行其指定的職責。";
 				sleep2 5000;
-				npctalk "While Master Varmundt was still present, the progress of duties was checked in the form of individual reports and weekly on-site evaluations.";
+				npctalk "當瓦蒙特大師仍在場時，我們以個人報告和每週現場評估的形式檢查職責進展情況。";
 				sleep2 5000;
-				npctalk "Currently, Master Varmundt has been away for over 1 million hours.";
+				npctalk "目前，Varmundt 大師已經離開超過 100 萬小時。";
 				sleep2 5000;
-				npctalk "Although you are not Master Varmundt, as someone who has more than 70% similarity to his mana pattern, I would like to ask you to evaluate our duties.";
+				npctalk "雖然您不是瓦蒙特大師，但作為與他的法力紋路有70%以上相似度的人，我想請您評價一下我們的職責。";
 				sleep2 5000;
-				npctalk "Please understand that it's a necessary management to prevent our duties from falling into the wrong path.";
+				npctalk "請理解，這是為了防止我們的職責陷入歧途而進行的必要管理。";
 				continue;
 			case 2:
 				sleep2 1000;
-				npctalk "I will wait until you give me your permission.";
+				npctalk "我會等到你的允許。";
 				specialeffect EF_MARKING_USE_CHANGEMONSTER;
 				setpcblock PCBLOCK_NPC, false;
 				end;
@@ -257,9 +257,9 @@ OnInstanceInit:
 		}
 		setpcblock PCBLOCK_NPC, true;
 		sleep2 1000;
-		npctalk "Thank you for your permission. From now on, I'll treat [" + 'admin$ + "] as a temporary administrator.";
+		npctalk "感謝您的許可。從現在開始，我會對待[" + 'admin$ + "] as a temporary administrator.";
 		sleep2 5000;
-		npctalk "First select a code name that will be used to control this automatic doll. Some of the names that were preferred in the past are randomly selected.";
+		npctalk "首先選擇一個用於控制這個自動娃娃的代號。一些過去喜歡的名字是隨機選擇的。";
 
 		setarray .@names$[0],"Lisa","Barbara","Jennifer","Dorothy","Jun","Yeongchun","Susan","Martha","Hannah","Helen","Chunja","Karen","How do I stop this?";
 		.@size = getarraysize(.@names$);
@@ -271,16 +271,16 @@ OnInstanceInit:
 			.@size--;
 		}
 		setpcblock PCBLOCK_NPC, false;
-		.@s = select( .@menu$[0], .@menu$[1], .@menu$[2], .@menu$[3] ) - 1;
+		.@s = select(.@menu$[0], .@menu$[1], .@menu$[2], .@menu$[3] ) - 1;
 		setpcblock PCBLOCK_NPC, true;
 		.@guide_name$ = .@menu$[.@s];
 		.@guide_id = getnpcid(0, instance_npcname("#BMD000001"));
 
-		npctalk "Order has been received.";
+		npctalk "訂單已收到。";
 		sleep2 3000;
-		npctalk "The code name of the automatic doll BMD000001 is [" + .@guide_name$ + "].";
+		npctalk "自動娃娃BMD000001的代號是【" + .@guide_name$ + "]。";
 		sleep2 5000;
-		npctalk "We will start the on-site inspection of the garden based on the temporary administrator response protocol.";
+		npctalk "我們將根據管理員臨時響應協議啟動對花園的現場檢查。";
 		sleep2 5000;
 		if ('hidden_garden == 1) {
 			'guide_id = .@guide_id;
@@ -288,7 +288,7 @@ OnInstanceInit:
 			'hidden_garden = 2;
 			disablenpc instance_npcname("#mc_device");
 			setpcblock PCBLOCK_NPC, false;
-			npctalk "Please watch your step and follow me.";
+			npctalk "請注意腳步，跟著我。";
 			npcspeed 200;
 			unitwalk 'guide_id,63,290, instance_npcname("#BMD000001") + "::OnEvent01";
 		}
@@ -300,21 +300,21 @@ OnInstanceInit:
 		mes "請評估花園的景觀，水質和其他整體佈局。";
 		next;
 		while(true) {
-			switch( select( "Hold on.", "It's a beautiful place.", "I wish there were more trees.", "Why is it surrounded by water?" ) ) {
+			switch( select("堅持，稍等。", "這是一個美麗的地方。", "我希望有更多的樹。", "為什麼周圍都是水？" ) ) {
 			case 1:
-				npctalk "I'll stop the guide. Automatic dolls and objects that has not been inspected and evaluated by the Automatic Doll [" + 'guide_name$ + "] are not allowed to go outside.";
+				npctalk "我會阻止導遊。Automatic dolls and objects that has not been inspected and evaluated by the Automatic Doll [" + 'guide_name$ + "] 不准外出。";
 				end;
 			case 2:
-				npctalk "Then, it has been determined that this place management has met its conditions.";
+				npctalk "至此，認定該場所管理已符合條件。";
 				break;
 			case 3:
 				'trees = 1;
-				npctalk "Understood, we will add more trees in the future.";
+				npctalk "明白了，我們將來會添加更多的樹。";
 				break;
 			case 4:
-				npctalk "Because this is a water garden, the area is surrounded by water.";
+				npctalk "因為這裡是水上花園，所以周圍都是水。";
 				sleep2 5000;
-				npctalk "Changing to a non-water garden can not be accepted, as it is an area beyond Varmundt's taste.";
+				npctalk "改變為非水花園是不能接受的，因為它超出了瓦蒙特的口味。";
 				break;
 			}
 			break;
@@ -327,20 +327,20 @@ OnInstanceInit:
 
 OnTalk01:
 	'npc_is_talking = true;
-	npctalk "This product is an automatic doll that serves as a guide for the flower garden with a serial number BMD000001.";
+	npctalk "本產品為花園導遊自動玩偶，序列號為BMD000001。";
 	sleep 5000;
-	npctalk "The similarity check to Varmundt's mana pattern is at 73.6%. Switching to flower garden guide mode.";
+	npctalk "與 Varmundt 法力模式的相似度檢查為 73.6%。切換到花園引導模式。";
 	sleep 5000;
-	npctalk "Operation will begin in 3 seconds.";
+	npctalk "操作將在 3 秒後開始。";
 	progressbar_npc "3131FF",3;
 	setnpcdisplay instance_npcname("#BMD000001"),20622;	// MD_ASSISTANT
 	specialeffect EF_FLOWERCAST;
-	npctalk "Sleep mode release protocol has been completed. I will check if the master, Varmundt is nearby in addition to the recognized target.";
+	npctalk "睡眠模式釋放協議已完成。我會檢查除了識別的目標之外，Master Varmundt 是否也在附近。";
 	sleep 5000;
-	npctalk "Searching......";
+	npctalk "正在尋找……";
 	progressbar_npc "3131FF",3;
 	sleep 1000;
-	npctalk "Master Varmundt is not detected within the network.";
+	npctalk "網絡內未檢測到 Master Varmundt。";
 	specialeffect EF_MARKING_USE_CHANGEMONSTER;
 	if ('hidden_garden == 0)
 		'hidden_garden = 1;
@@ -348,11 +348,11 @@ OnTalk01:
 	end;
 
 OnEvent01:
-	npctalk "You can start the evaluation from the entrance of this garden.";
+	npctalk "你可以從這個花園的入口開始評價。";
 	sleep 3000;
-	npctalk "Objective evaluation reduces the working errors of the automatic dolls that manage this place and helps them perform their duties close to perfection.";
+	npctalk "客觀的評價減少了管理這裡的自動人偶的工作失誤，幫助他們近乎完美地履行職責。";
 	sleep 6000;
-	npctalk "[" + 'admin$ + "]. Please use the authority of the temporary administrator to determine whether the garden duties is being faithfully carried out.";
+	npctalk "[" + 'admin$ + "]。請利用臨時管理員的權限來確定花園職責是否忠實履行。";
 	sleep 6000;
 	'hidden_garden = 3;
 	specialeffect EF_MARKING_USE_CHANGEMONSTER;
@@ -361,7 +361,7 @@ OnEvent01:
 OnEvent02:
 	if (!'trees) {
 		sleep 5000;
-		npctalk "We have satisfied the criteria of the temporary administrator [" + 'admin$ + "] and will maintain the current management routine as it is.";
+		npctalk "我們已經滿足臨時管理員的標準[" + 'admin$ + "] 並將維持當前的管理程序不變。";
 	}
 	sleep 5000;
 	npctalk "[" + 'admin$ + "], I'd like to request for you to continue the on-site inspection for the remaining sections.";
@@ -369,11 +369,11 @@ OnEvent02:
 	end;
 
 OnEvent03:
-	npctalk "There is no bridge that connects the sections here.";
+	npctalk "這裡沒有連接各個部分的橋樑。";
 	sleep 6000;
-	npctalk "Since Varmundt was a person who can move regardless of the terrain, we did not install a separate structure for normal people during the creation of the flower garden.";
+	npctalk "由於瓦蒙特是一個無論地形如何都可以移動的人，所以我們在花園的創作過程中沒有為普通人設置單獨的結構。";
 	sleep 6000;
-	npctalk "However, considering the temporary administrator's insufficient ability, I will support the space leap services.";
+	npctalk "不過考慮到臨時管理員能力不足，我會支持空間跳躍服務。";
 	sleep 6000;
 	enablenpc instance_npcname("#BMD000002");
 	enablenpc instance_npcname("#carota");
@@ -392,11 +392,11 @@ OnEvent03:
 	if ('hidden_garden == 4) {
 		removespecialeffect EF_MARKING_USE_CHANGEMONSTER;
 		'hidden_garden = 5;
-		npctalk "Master Varmundt gave each of the automatic dolls a research project.";
+		npctalk "Varmundt 大師給每個自動娃娃一個研究項目。";
 		sleep 5000;
-		npctalk "However, the purpose of the research is not available to us dolls, we have to decide on our own what to do with it in the future.";
+		npctalk "不過，研究的目的不是我們玩偶能知道的，以後怎麼辦，還得我們自己決定。";
 		sleep 5000;
-		npctalk "The flower garden is divided into several research sectors and each sector has a different subject as a project.";
+		npctalk "花園分為幾個研究部門，每個部門都有不同的課題作為一個項目。";
 		npcspeed 200;
 		'guide_id = getnpcid(0, instance_npcname("#BMD000002"));
 		unitwalk 'guide_id,124,275, instance_npcname("#BMD000002") + "::OnEvent00";
@@ -410,7 +410,7 @@ OnEvent00:
 
 OnEvent01:
 	unitwalk 'guide_id,125,280, instance_npcname("#BMD000002") + "::OnEvent02";
-	npctalk "Among the research sectors, this sector is a place to grow a plant called Turnip under the orders of Varmundt.";
+	npctalk "在研究部門中，這個部門是在瓦蒙特的命令下種植一種叫做蕪菁的植物的地方。";
 	end;
 
 OnEvent02:
@@ -423,21 +423,21 @@ OnEvent03:
 
 OnEvent04:
 	sleep 3000;
-	npctalk "Let me introduce the automatic doll model CAROTA-88.";
+	npctalk "我來介紹一下自動娃娃型號CAROTA-88。";
 	sleep 4000;
 	npctalk "......";
 	sleep 2000;
-	npctalk "[Error: CAROTA-88 is out of control range. Need to track corresponding object coordinates.]";
+	npctalk "[錯誤：CAROTA-88 超出控制範圍。需要追踪對應的物體坐標。 ]";
 	sleep 5000;
-	npctalk "[Tracking coordinates...]";
+	npctalk "[追踪坐標...]";
 	progressbar_npc "3131FF",4;
-	npctalk "CAROTA-88. Please return to your original location as soon as possible. Don't forget that I can use force when needed.";
+	npctalk "CAROTA-88。請盡快返回原來的位置。別忘了，在需要的時候我可以使用武力。";
 	'carota = getnpcid(0, instance_npcname("#carota"));
 	donpcevent instance_npcname("#carota") + "::OnAction";
 	end;
 
 OnEvent05:
-	npctalk "Let's move on to the next section.", instance_npcname("#BMD000002");
+	npctalk "讓我們繼續下一節。", instance_npcname("#BMD000002");
 	'hidden_garden = 7;
 	sleep 2000;
 	enablenpc instance_npcname("#BMD000003");
@@ -466,25 +466,25 @@ OnTouch:
 		select("報告您的工作詳細信息。");
 		setpcblock PCBLOCK_NPC, true;
 		sleep2 1000;
-		npctalk "Master Varmundt. No further instructions after entering Turnip's biological data . This automatic doll unattended.";
+		npctalk "瓦蒙特大師。輸入蘿蔔的生物數據後沒有進一步指示。這個自動娃娃無人看管。";
 		sleep2 5000;
-		npctalk "No further indications for 5076 hours. This automatic doll's AI collects network information about turnips.";
+		npctalk "5076小時沒有進一步的跡象。這個自動娃娃的人工智能收集有關蘿蔔的網絡信息。";
 		sleep2 5000;
-		npctalk "Obtaining information of edible plants. Finding ancient record of turnip cultivation.";
+		npctalk "獲取可食用植物的信息。尋找蘿蔔種植的古代記錄。";
 		sleep2 5000;
-		npctalk "Optimized germination, growth and sowing of turnips for about 18816 hours compared and recorded.";
+		npctalk "比較並記錄了約 18816 小時的優化蘿蔔發芽、生長和播種。";
 		sleep2 5000;
-		npctalk "Over million hours passed. Collect data on cultivation and harvest of Turnips. a collection of information on breeding method.";
+		npctalk "超過一百萬個小時過去了。收集蘿蔔種植和收穫的數據。有關育種方法的信息集合。";
 		sleep2 5000;
-		npctalk "2 ton yield per year. 99.9% success pest control prevention. 0.2% loss due to physical work errors.";
+		npctalk "年產量2噸。害蟲防治預防成功率達 99.9%。由於體力工作錯誤造成 0.2% 的損失。";
 		sleep2 5000;
-		npctalk "Turnips from flower garden. Sold at an excellent price in a nearby big city. Contributing to maintenance costs for flower gardens and mansions.";
+		npctalk "來自花園的蘿蔔。在附近的大城市以優惠的價格出售。貢獻花園和豪宅的維護費用。";
 		sleep2 5000;
 		setpcblock PCBLOCK_NPC, false;
-		npctalk "Whether the research mission direction of this automatic doll should be improved, continued, or discarded. Waiting for the administrator's decision.";
+		npctalk "這個自動娃娃的研究任務方向是應該改進、繼續還是放棄。等待管理員的決定。";
 		mes "^0000AAAEVALUATE CAROTA-88迄今為止的工作。 ^000000";
 		next;
-		if (select( "The product is full and good shape.", "Improve breeding.", "It's just farming, so everything is good." ) == 3)
+		if (select("產品飽滿、形狀好。", "提高養殖水平。", "只是種田，所以一切都好。" ) == 3)
 			'talk_bool = true;
 		else
 			'talk_bool = false;
@@ -497,32 +497,32 @@ OnTouch:
 OnTalk01:
 	'npc_is_talking = true;
 	sleep 1000;
-	npctalk "Evaluation received...";
+	npctalk "評價已收到...";
 	sleep 5000;
 	if ('talk_bool) {
-		npctalk "CAROTA-88 received confirmation from administrator that Varmundt instructions were performed perfectly.";
+		npctalk "CAROTA-88 收到管理員的確認，表明 Varmundt 指令已完美執行。";
 		sleep 3000;
 		emotion ET_DELIGHT;
 		sleep 2000;
-		npctalk "Existing work routine will be repeated until further orders are issued.";
+		npctalk "將重複現有的工作程序，直到發出進一步的命令。";
 	}
 	else {
-		npctalk "Learning more breeding method.";
+		npctalk "多學習養殖方法。";
 		sleep 3000;
 		emotion ET_DELIGHT;
 		sleep 2000;
-		npctalk "I will actively increase the portion of experiments on improved product seeds that were to be discarded.";
+		npctalk "我會積極增加改良產品種子實驗中被丟棄的部分。";
 	}
 	sleep 5000;
-	npctalk "Thank you, [" + 'admin$ + "] for responding to the evaluation.";
+	npctalk "謝謝你， [" + 'admin$ + "] for responding to the evaluation.";
 	sleep 5000;
 	if ('talk_bool)
-		npctalk "Automatic doll entering control mode to eradicate underground moles. Goodbye.";
+		npctalk "自動娃娃進入控制模式消滅地下鼴鼠。再見。";
 	else
-		npctalk "I'll move to the basement storage to check for new breeds.";
+		npctalk "我會去地下室儲藏室檢查是否有新品種。";
 	progressbar_npc "3131FF",4;
 	disablenpc();
-	npctalk "CAROTA-88 shows a non-logical response to this evaluation. We will arrange for an inspection soon.", instance_npcname("#BMD000002");
+	npctalk "CAROTA-88 顯示了對此評估的非邏輯響應。我們將盡快安排檢查。", instance_npcname("#BMD000002");
 	sleep 3000;
 	if ('hidden_garden == 6)
 		unitwalk 'guide_id,147,278, instance_npcname("#BMD000002") + "::OnEvent05";
@@ -530,7 +530,7 @@ OnTalk01:
 	end;
 
 OnEvent00:
-	npctalk "The project of CAROTA-88 is to grow crops here and protect them from outsiders. Why were you away?", instance_npcname("#BMD000002");
+	npctalk "CAROTA-88的項目是在這裡種植農作物並保護它們免受外來者的侵害。你為什麼離開？", instance_npcname("#BMD000002");
 	unitwalk 'carota,137,272, instance_npcname("#carota") + "::OnEvent01";
 	end;
 
@@ -547,28 +547,28 @@ OnEvent01:
 	sleep 1000;
 	specialeffect EF_FLOWERCAST;
 	sleep 3000;
-	npctalk "Management automatic doll irreasonable!! Very!! Forced recall during pursuit of 5 moles!!! The Turnips is ruined!!!";
+	npctalk "管理自動娃娃不合理！ ！非常！ ！追捕5個內奸時強制召回！ ！ ！蘿蔔被毀了！ ！ ！";
 	sleep 5000;
 	npctalk "Haven't you updated your language pack yet? Regular updates are not mandatory, but its essential.", .@doll$;
 	sleep 5000;
-	npctalk "CAROTA-88 data storage capacity. Language expansion pack burden. If not important, I will return to original work.";
+	npctalk "CAROTA-88數據存儲容量。語言擴展包負擔。如果不重要的話，我會回到原來的工作。";
 	sleep 5000;
-	npctalk "Please wait CAROTA-88. Here is a administrator who can perform the on-site inspection.", .@doll$;
+	npctalk "請等待 CAROTA-88。這裡有一個管理員可以進行現場檢查。", .@doll$;
 	sleep 5000;
-	npctalk "Hasn't it been a long time since CAROTA-88 was last evaluated?", .@doll$;
+	npctalk "距離上次評估 CAROTA-88 不是已經很久了嗎？", .@doll$;
 	sleep 5000;
-	npctalk "CAROTA-88 More than a million hours since last research evaluation. Failed to save more logs.";
+	npctalk "CAROTA-88 自上次研究評估以來已超過一百萬小時。無法保存更多日誌。";
 	sleep 5000;
 	npctalk "CAROTA-88. Don't you want a project evaluation? If we miss this administrator now, we don't know when we can get another project evaluation.", .@doll$;
 	sleep 5000;
-	npctalk "Agree with automatic doll [" + 'guide_name$ + "]. I want an immediate project assessment.";
+	npctalk "同意自動娃娃【" + 'guide_name$ + "]。我想要立即進行項目評估。";
 	sleep 6000;
-	npctalk "Then, open your control panel to [" + 'admin$ + "]. CAROTA-88.", .@doll$;
+	npctalk "然後，打開控制面板以[" + 'admin$ + "]. CAROTA-88.", .@doll$;
 	progressbar_npc "3131FF",2;
 	sleep 1000;
 	specialeffect EF_FLOWERCAST;
 	sleep 2000;
-	npctalk "Automatic doll CAROTA-88 control panel opened. Waiting for input...";
+	npctalk "自動娃娃CAROTA-88控制面板打開。等待輸入...";
 	'hidden_garden = 6;
 	specialeffect EF_MARKING_USE_CHANGEMONSTER;
 	end;
@@ -615,7 +615,7 @@ OnTouch:
 		removespecialeffect EF_MARKING_USE_CHANGEMONSTER;
 		npcspeed 200;
 		'guide_id = getnpcid(0, instance_npcname("#BMD000003"));
-		npctalk "This section is where we study a plant called Pumpkin.";
+		npctalk "這一部分是我們研究一種叫做南瓜的植物的地方。";
 		unitwalk 'guide_id,253,277, instance_npcname("#BMD000003") + "::OnEvent01";
 		end;
 	}
@@ -630,7 +630,7 @@ OnEvent02:
 	end;
 
 OnEvent03:
-	npctalk "The one in charge of this place is pimp25. An automatic doll modeled after a create from this world.";
+	npctalk "這個地方的負責人是pimp25。以這個世界的創造物為原型的自動人偶。";
 	specialeffect EF_MARKING_USE_CHANGEMONSTER, AREA, instance_npcname("#pimp25");
 	'hidden_garden = 9;
 	end;
@@ -648,7 +648,7 @@ OnEvent06:
 	end;
 
 OnEvent07:
-	npctalk "Let's move on.";
+	npctalk "讓我們繼續吧。";
 	enablenpc instance_npcname("#BMD000004");
 	for ( .@i = 1; .@i < 4; ++.@i ) {
 		enablenpc instance_npcname("#swat_" + .@i);
@@ -677,86 +677,86 @@ OnTouch:
 	if ('hidden_garden == 9) {
 		removespecialeffect EF_MARKING_USE_CHANGEMONSTER;
 		while (true) {
-			switch( select( "Cancel.", "How long have you been in care of this place?", "Are they all farming here?" ) ) {
+			switch( select("取消。", "你照顧這個地方多久了？", "他們都在這裡務農嗎？" ) ) {
 			case 1:
 				end;
 			case 2:
 				break;
 			case 3:
-				npctalk "My work is to witness the birth and evolution of life! My research is not easy by any means!";
+				npctalk "我的工作就是見證生命的誕生和進化！我的研究無論如何都不容易！";
 				continue;
 			}
 			break;
 		}
 		setpcblock PCBLOCK_NPC, true;
-		npctalk "How long has it been since I got the orders of Varmundt?!";
+		npctalk "我已經多久沒有收到瓦蒙特的命令了？ ！";
 		sleep2 5000;
-		npctalk "Probably... about... More than a million hours have passed. Subsequent facility management was determined by self-made decision.";
+		npctalk "大概……大約……已經過去了超過一百萬個小時。後續設施管理由自主決定。";
 		sleep2 5000;
 		npctalk "Pimp. When you are reporting to the administrator, you must report the exact recorded time.", instance_npcname("#BMD000003");
 		sleep2 3000;
-		npctalk "Is that so? But Pimp can't afford to record more than a million hours. That's a waste of memory resources! Varmundt is angry!";
+		npctalk "是這樣嗎？但皮條客無法承擔超過一百萬小時的錄音。這就是內存資源的浪費！瓦蒙特生氣了！";
 		sleep2 1000;
 		setpcblock PCBLOCK_NPC, false;
 		select("您對南瓜種植的研究怎麼樣？");
 		setpcblock PCBLOCK_NPC, true;
 		sleep2 1000;
-		npctalk "Plants currently growing. Pumpkin has showed significant results in controlling sodium in human blood vessels.";
+		npctalk "目前正在生長的植物。南瓜在控制人體血管中的鈉含量方面顯示出顯著的效果。";
 		sleep2 5000;
-		npctalk "Pumpkin produced here is high in sugar and sufficient calories. It's very delicious according to humans. Nearby dogs and cats also eat it...";
+		npctalk "這裡出產的南瓜含糖量高，熱量充足。根據人類的說法，它非常美味。附近的狗和貓也吃它......";
 		sleep2 1000;
 		setpcblock PCBLOCK_NPC, false;
 		select("它是由食物製成的嗎？");
 		setpcblock PCBLOCK_NPC, true;
 		sleep2 1000;
-		npctalk "I judged it to be a valued highly for various organisms. It's been continously produced, processed, and stored.";
+		npctalk "我認為它對各種生物體來說都是一種高度重視的東西。它是不斷生產、加工和儲存的。";
 		sleep2 5000;
-		npctalk "The current annual output is about three tons. For long-term preservation, it's being stored in warehouses in 2~6 form of dried food .";
+		npctalk "目前年產量約為三噸。為了長期保存，以2~6乾品的形式存放在倉庫中。";
 		sleep2 1000;
 		setpcblock PCBLOCK_NPC, false;
 		select("這些方法都是你決定的嗎？");
 		setpcblock PCBLOCK_NPC, true;
 		sleep2 1000;
-		npctalk "Pimp has no will to make his own decisions! Only Master Varmundt knows.";
+		npctalk "皮條客沒有意願自己做決定！只有瓦蒙特大師知道。";
 		sleep2 1000;
 		setpcblock PCBLOCK_NPC, false;
 		select("有人決定進行你的研究嗎？");
 		setpcblock PCBLOCK_NPC, true;
 		sleep2 1000;
-		npctalk "I asked Varmundt what to do several times, but there was no answer.";
+		npctalk "我多次問瓦蒙特該怎麼辦，但沒有答案。";
 		sleep2 5000;
-		npctalk "As there was no orders from the master, Pimp started looking for a place where research could be useful.";
+		npctalk "由於沒有主人的命令，皮條客開始尋找一個可以進行研究的地方。";
 		sleep2 1000;
 		setpcblock PCBLOCK_NPC, false;
 		select("你找到了嗎？");
 		setpcblock PCBLOCK_NPC, true;
 		sleep2 1000;
-		npctalk "The maintenance of this mansion costs money. It costs a lot!";
+		npctalk "這座豪宅的維護需要花錢。花費很大！";
 		sleep2 3000;
-		npctalk "The dried pumpkins in the warehouses are preserve food for the adventurers and are sold around the continent. Sales becomes money source.";
+		npctalk "倉庫裡的南瓜乾是冒險者們的保存食品，銷往大陸各地。銷售成為資金來源。";
 		sleep2 5000;
-		npctalk "Money can protect the mansion. Pimp will protect this place! That's I'm working hard to raise pumpkins!";
+		npctalk "金錢可以保護豪宅。皮條客會保護這個地方！那就是我在努力養南瓜！";
 		sleep2 1000;
 		setpcblock PCBLOCK_NPC, false;
 		select("我很驚訝你自己決定這麼遠。");
 		setpcblock PCBLOCK_NPC, true;
 		sleep2 1000;
-		npctalk "I made a decision? I've never had such inference.";
+		npctalk "我做出決定了？我從來沒有這樣的推斷。";
 		sleep2 3000;
 		npctalk "......";
 		sleep2 2000;
-		npctalk "[Calculating]";
+		npctalk "[計算]";
 		progressbar_npc "3131FF",3;
 		'hidden_garden = 10;
 		setpcblock PCBLOCK_NPC, false;
-		npctalk "You confused me! Pimp shall perform the only given task. Don't talk to me anymore administrator.";
+		npctalk "你讓我困惑了！皮條客應執行唯一指定的任務。管理員別再跟我說話了。";
 		sleep 5000;
-		npctalk "Are you done talking? The conversation here is recorded as evaluation data. Let's head to the next section.", instance_npcname("#BMD000003");
+		npctalk "你說完了嗎？這裡的對話被記錄為評價數據。讓我們進入下一節。", instance_npcname("#BMD000003");
 		unitwalk 'guide_id,254,261, instance_npcname("#BMD000003") + "::OnEvent04";
 		end;
 	}
 	if ('hidden_garden > 9)
-		npctalk "Get out of here!";
+		npctalk "離開這裡！";
 	end;
 
 OnWalk:
@@ -788,7 +788,7 @@ OnTouch:
 		mes "[" + 'guide_name$ + "]";
 		mes "本節由三個自動娃娃管理。我們可以繼續指導嗎？";
 		next;
-		if (select( "Cancel.", "Let's continue." ) == 1) {
+		if (select("取消。", "我們繼續吧。" ) == 1) {
 			mes "[" + 'guide_name$ + "]";
 			mes "我將等到給出進一步的說明。";
 			close;
@@ -797,7 +797,7 @@ OnTouch:
 			'hidden_garden = 11;
 			npcspeed 200;
 			'guide_id = getnpcid(0, instance_npcname("#BMD000004"));
-			npctalk "I don't know what this place is for because it's not accessible to my authority level.";
+			npctalk "我不知道這個地方是做什麼用的，因為我的權限級別無法訪問它。";
 			unitwalk 'guide_id,201,285, instance_npcname("#BMD000004") + "::OnEvent01";
 		}
 		end;
@@ -807,7 +807,7 @@ OnTouch:
 		mes "[" + 'guide_name$ + "]";
 		mes "我可以幫你嗎？";
 		next;
-		if (select( "Cancel.", "What are those automatic dolls?" ) == 1) {
+		if (select("取消。", "那些自動娃娃是什麼？" ) == 1) {
 			mes "[" + 'guide_name$ + "]";
 			mes "輸入待機模式。";
 			close;
@@ -828,62 +828,62 @@ OnTouch:
 		while(true) {
 			if (.@talk && .@talk2)
 				.@question$ = "^FF0000Is the security area near here?^000000";
-			switch( select( "Is the garden a security area?", "What's the real purpose of the garden", .@question$, .@teleport$ ) ) {
+			switch( select("花園是安全區嗎？", "花園的真正用途是什麼", .@question$, .@teleport$ ) ) {
 			case 1:
 				setpcblock PCBLOCK_NPC, true;
 				sleep2 1000;
-				npctalk "The flower garden is the border between the security area and the general area.";
+				npctalk "花園是保安區和一般區的分界線。";
 				sleep2 5000;
-				npctalk "It is classified as a security zone to those who have enough authority.";
+				npctalk "對於那些有足夠權限的人來說，它被列為安全區。";
 				sleep2 3000;
 				.@talk = 1;
 				break;
 			case 2:
 				setpcblock PCBLOCK_NPC, true;
 				sleep2 1000;
-				npctalk "Please understand that this is a buffer zone designed to protect areas that should not be seen by outsiders.";
+				npctalk "請理解，這是一個緩衝區，旨在保護不應該被外人看到的區域。";
 				sleep2 5000;
-				npctalk "Access to any additional information beyond this is prohibited at my authority level.";
+				npctalk "在我的權限級別，禁止訪問超出此範圍的任何其他信息。";
 				sleep2 3000;
 				.@talk2 = 1;
 				break;
 			case 3:
 				setpcblock PCBLOCK_NPC, true;
 				sleep2 1000;
-				npctalk "--- Operating ---";
+				npctalk "- - 操作  - -";
 				progressbar_npc "3131FF",3;
-				npctalk "[Warning] This information is close to the limit of the current authority.";
+				npctalk "【警告】該信息已接近當前權限限制。";
 				sleep2 5000;
-				npctalk "Security zones is very close to the current coordinates.";
+				npctalk "安全區非常接近當前坐標。";
 				sleep2 3000;
 				.@teleport$ = "^FF11FFGuide me to the security area.^000000";
 				break;
 			case 4:
 				setpcblock PCBLOCK_NPC, true;
-				npctalk "--- Operating ---";
+				npctalk "- - 操作  - -";
 				progressbar_npc "3131FF",3;
-				npctalk "[Warning] This is a request is exceeds my authority level.";
+				npctalk "[警告]此請求超出了我的權限級別。";
 				sleep2 5000;
-				npctalk "Your request has been rejected due to a low authority level for the administrator [" + 'admin$ + "].";
+				npctalk "由於管理員權限級別較低，您的請求已被拒絕 [" + 'admin$ + "]。";
 				setpcblock PCBLOCK_NPC, false;
 				sleep 5000;
 				mapannounce 'map_herbs$, "??? : The automatic dolls' response to you is very fresh. Strange visitor.", bc_map, 0xF6D6B6;
 				sleep 5000;
 				mapannounce 'map_herbs$, "??? : Will you escort him to the secure area? BMD000001. No, I mean automatic doll, [" + 'guide_name$ + "].", bc_map, 0xF6D6B6;
 				sleep 5000;
-				npctalk "The biological wavelength of this voice...";
+				npctalk "這個聲音的生物波長……";
 				sleep 3000;
 				mapannounce 'map_herbs$, "It's convenient that I don't have to tell me who I am. Anyway, are you sure you're going to be able to tell me what happened earlier?", bc_map, 0xF6D6B6;
 				sleep 5000;
-				npctalk "You mean the security area? But it's not possible with my authority level.";
+				npctalk "你說的是安全區？但以我的權限是不可能的。";
 				sleep 3000;
 				mapannounce 'map_herbs$, "That's already been taken care of. [" + 'guide_name$ + "], Guide the visitor to this place.", bc_map, 0xF6D6B6;
 				sleep 5000;
-				npctalk "This is the first time since I was created. That an exception has occurred, we will modify some of the procedures in regards to that.";
+				npctalk "這是我被創造以來的第一次。如果出現異常，我們將修改一些與此相關的程序。";
 				sleep 5000;
 				if ('hidden_garden == 12) {
 					'hidden_garden = 13;
-					npctalk "I'll take you to the security area.";
+					npctalk "我帶你去安全區。";
 					unitwalk 'guide_id,196,275, instance_npcname("#BMD000004") + "::OnEvent08";
 				}
 				end;
@@ -894,11 +894,11 @@ OnTouch:
 	end;
 
 OnEvent:
-	npctalk "[Searching the coordinates of the automatic doll in the area.]";
+	npctalk "[搜索區域內自動人偶的坐標。 ]";
 	progressbar_npc "3131FF",2;
 	mapannounce 'map_herbs$, "??? : Unauthorized outsider intrusion detection. Code Category 063. Entering the identification process.", bc_map, 0xFF44FF;
 	sleep 5000;
-	npctalk "It looks like the automatic dolls are back. I don't think it's friendly to the administrator.";
+	npctalk "看起來自動娃娃又回來了。我認為這對管理員不友好。";
 	sleep 5000;
 	specialeffect EF_FIREPILLARON2, AREA, instance_npcname("#swat_1");
 	sleep 500;
@@ -912,26 +912,26 @@ OnEvent:
 	setnpcdisplay instance_npcname("#swat_2"),1739;
 	setnpcdisplay instance_npcname("#swat_3"),1739;
 	sleep 2000;
-	npctalk "Facial biometrics. Comparing to list of administrators registered in database.", instance_npcname("#swat_3");
+	npctalk "面部生物識別。與數據庫中註冊的管理員列表進行比較。", instance_npcname("#swat_3");
 	sleep 2000;
-	npctalk "---- No match ----", instance_npcname("#swat_1");
+	npctalk "---- 沒有匹配 ----", instance_npcname("#swat_1");
 	sleep 500;
-	npctalk "---- No match ----", instance_npcname("#swat_2");
+	npctalk "---- 沒有匹配 ----", instance_npcname("#swat_2");
 	sleep 500;
-	npctalk "---- No match ----", instance_npcname("#swat_3");
+	npctalk "---- 沒有匹配 ----", instance_npcname("#swat_3");
 	sleep 2000;
-	npctalk "Suppress unauthorized outsider.", instance_npcname("#swat_1");
+	npctalk "壓制未經授權的外人。", instance_npcname("#swat_1");
 	sleep 500;
-	npctalk "---- Combat Mode ----", instance_npcname("#swat_2");
+	npctalk "---- 戰鬥模式 ----", instance_npcname("#swat_2");
 	sleep 500;
-	npctalk "---- Combat Mode ----", instance_npcname("#swat_3");
+	npctalk "---- 戰鬥模式 ----", instance_npcname("#swat_3");
 	sleep 500;
 	for ( .@i = 1; .@i < 4; ++.@i )
 		donpcevent instance_npcname("#swat_" + .@i) + "::OnSummon";
 	end;
 
 OnEvent2:
-	npctalk "Let's move to the warp point. Please stay near me.";
+	npctalk "讓我們轉向扭曲點。請呆在我身邊。";
 	enablenpc instance_npcname("#BMD000005");
 	enablenpc instance_npcname("#sigma");
 	enablenpc instance_npcname("#omega");
@@ -963,7 +963,7 @@ OnEvent02:
 	end;
 
 OnEvent03:
-	npctalk "However, since there are 3 automatic dolls managing, I can tell that this place has an important purpose.";
+	npctalk "不過，既然有3個自動人偶在管理，我就知道這個地方有重要的用途。";
 	unitwalk 'guide_id,196,279, instance_npcname("#BMD000004") + "::OnEvent04";
 	end;
 
@@ -1012,7 +1012,7 @@ OnGuardKill:
 	'guard_count = 'guard_count + 1;
 	if ('guard_count == 3) {
 		sleep2 2000;
-		npctalk "Are you not a human but a combat unit, [" + strcharinfo(0) + "]?";
+		npctalk "你不是人類而是戰鬥單位嗎，【" + strcharinfo(0) + "]?";
 		sleep2 3000;
 		npctalk "[" + strcharinfo(0) + "], You're strong. It takes a lot of combat power to subdue three class 4 combat-type automatic dolls at the same time.";
 		'hidden_garden = 12;
@@ -1058,7 +1058,7 @@ OnSummon2:
 		'hidden_garden = 14;
 		'guide_id = getnpcid(0, instance_npcname("#BMD000005"));
 		npcspeed 200;
-		npctalk "It's my first time here, this is where Sigma's body resides. Usually, communication is done only through the network.";
+		npctalk "這是我第一次來這裡，這裡是西格瑪的屍體所在的地方。通常，通信僅通過網絡完成。";
 		unitwalk 'guide_id,85,91, instance_npcname("#BMD000005") + "::OnEvent01";
 	}
 	end;
@@ -1074,15 +1074,15 @@ OnEvent02:
 	end;
 
 OnEvent03:
-	npctalk "Sigma. I have brought [" + 'admin$ + "].";
+	npctalk "西格瑪。我帶來了[" + 'admin$ + "]。";
 	sleep 3000;
-	npctalk "Well done. You may go now.", instance_npcname("#sigma");
+	npctalk "幹得好。You may go now.", instance_npcname("#sigma");
 	sleep 3000;
-	npctalk "I'm not finished with my guide. Is it okay if I return like this?";
+	npctalk "我的指南還沒有完成。我就這樣回去可以嗎？";
 	sleep 3000;
 	npctalk "Oh, I'll record the subsequent information for the next guide. You can go back at ease.", instance_npcname("#sigma");
 	sleep 3000;
-	npctalk "Okay. I will follow the instructions.";
+	npctalk "好的。我會按照說明進行操作。";
 	unitwalk 'guide_id,85,72, instance_npcname("#BMD000005") + "::OnEvent04";
 	end;
 
@@ -1117,9 +1117,9 @@ OnTouch:
 		select("瓦蒙特？你為什麼在這裡？");
 		setpcblock PCBLOCK_NPC, true;
 		sleep2 1000;
-		npctalk "Of course. You know the master Varmundt well. [" + strcharinfo(0) + "].";
+		npctalk "當然。你很了解瓦蒙特大師。[" + strcharinfo(0) + "]。";
 		sleep2 5000;
-		npctalk "Unfortunately, I'm not Varmundt. This appearance is something that I created because there is something that I want to check on you.";
+		npctalk "不幸的是，我不是瓦蒙特。這個樣子是我因為有事想要向你確認而創造出來的。";
 		sleep2 3000;
 		setpcblock PCBLOCK_NPC, false;
 		select("那麼，你是誰？");
@@ -1129,19 +1129,19 @@ OnTouch:
 	}
 	if ('hidden_garden == 17) {
 		removespecialeffect EF_MARKING_USE_CHANGEMONSTER;
-		npctalk "Can you answer me? Have you met Varmundt before?";
+		npctalk "你能回答我嗎？你以前見過瓦蒙特嗎？";
 		setpcblock PCBLOCK_NPC, true;
 		sleep2 3000;
 		setpcblock PCBLOCK_NPC, false;
-		switch( select( "I don't really remember.", "We've met at Glastheim.", "I met him trying to save the world." ) ) {
+		switch( select("我不太記得了。", "我們在格拉斯海姆見過面。", "我遇見他是為了拯救世界。" ) ) {
 		case 1:
-			npctalk "Oh, that's possible. He might have made you forget what you saw...";
+			npctalk "哦，那是可能的。他可能會讓你忘記你所看到的......";
 			break;
 		case 2:
-			npctalk "Was it on that place again...";
+			npctalk "是不是又到了那個地方...";
 			break;
 		case 3:
-			npctalk "As expected, he was doing something important...";
+			npctalk "果然，他正在做一件重要的事情……";
 			break;
 		}
 		donpcevent instance_npcname("#sigma") + "::OnTalk02";
@@ -1149,27 +1149,27 @@ OnTouch:
 	}
 	if ('hidden_garden == 18) {
 		removespecialeffect EF_MARKING_USE_CHANGEMONSTER;
-		npctalk "Can you go tell them that Varmundt is alive?";
+		npctalk "你能去告訴他們瓦蒙特還活著嗎？";
 		setpcblock PCBLOCK_NPC, true;
 		sleep2 2000;
 		setpcblock PCBLOCK_NPC, false;
 		select("這會有什麼不同呢？");
 		setpcblock PCBLOCK_NPC, true;
 		sleep2 1000;
-		npctalk "They're trying to close this research area. I'm still against it, but the resource is starting to hit the limit.";
+		npctalk "他們正試圖關閉這個研究領域。我仍然反對，但資源已經開始達到極限。";
 		sleep2 5000;
-		npctalk "But once they find out Varmundt is alive, they won't be able to shut this place down.";
+		npctalk "但一旦他們發現瓦蒙特還活著，他們就無法關閉這個地方。";
 		sleep2 5000;
 		specialeffect EF_WHITEBODY;
 		specialeffect EF_MOONSTAR;
-		npctalk "This all happened because Kappa and Lambda were on different task.";
+		npctalk "這一切的發生都是因為 Kappa 和 Lambda 執行不同的任務。";
 		sleep2 2000;
 		setpcblock PCBLOCK_NPC, false;
 		select("你們的任務有什麼區別？");
 		if ('hidden_garden == 18) {
 			'hidden_garden = 19;
 			sleep2 2000;
-			npctalk "It will be better to show you that personally.";
+			npctalk "親自向您展示會更好。";
 			unitwalk 'guide_id,83,113, instance_npcname("#sigma") + "::OnEvent08";
 		}
 		end;
@@ -1192,45 +1192,45 @@ OnTouch:
 	}
 	if ('hidden_garden == 22) {
 		removespecialeffect EF_MARKING_USE_CHANGEMONSTER;
-		npctalk "All right, let's take a break. Ask me if you have any questions. I'll answer everything I can.";
+		npctalk "好吧，我們休息一下吧。如果您有任何疑問，請詢問我。我會盡力回答。";
 		while (true) {
 			specialeffect EF_WHITEBODY;
 			specialeffect EF_MOONSTAR;
 			setpcblock PCBLOCK_NPC, true;
 			sleep2 2000;
 			setpcblock PCBLOCK_NPC, false;
-			switch( select( "Why does the flower garden exist?", .@menu$[0], .@menu$[1], .@menu$[2] ) ) {
+			switch( select("花園為何存在？", .@menu$[0], .@menu$[1], .@menu$[2] ) ) {
 			case 1:
 				setpcblock PCBLOCK_NPC, true;
-				npctalk "This security area was not supposed to be revealed to the world. So I planned a number of ways to cover it up.";
+				npctalk "這個安全區域不應該向全世界公開。所以我想了很多辦法來掩蓋它。";
 				sleep2 5000;
-				npctalk "In order to hide and conceal this place, we decided to disguise it as an extremely normal and peaceful place.";
+				npctalk "為了隱藏和掩蓋這個地方，我們決定把它偽裝成一個極其正常和寧靜的地方。";
 				sleep2 5000;
-				npctalk "So it became the garden around the security area. Doesn't it look like a normal garden?";
+				npctalk "於是這裡就成了保安區周圍的花園。看起來不像是一個普通的花園嗎？";
 				sleep2 3000;
 				.@menu$[0] = "Why are the automatic dolls farming?";
 				break;
 			case 2:
 				setpcblock PCBLOCK_NPC, true;
-				npctalk "I've never asked them to farm. We just threw things away and watched how AI reacted.";
+				npctalk "我從來沒有要求他們種田。我們只是把東西扔掉，然後觀察人工智能的反應。";
 				sleep2 5000;
-				npctalk "Only the ones who started farming stood out in the garden.";
+				npctalk "只有那些開始耕種的人在花園裡顯得格外引人注目。";
 				sleep2 5000;
-				npctalk "I wish I could show Varmundt the process of self-learning automatic doll that can be left unattended without instructions...";
+				npctalk "我希望能夠向 Varmundt 展示無需指導即可無人看管的自學自動娃娃的過程……";
 				sleep2 3000;
 				.@menu$[1] = "What's your relationship with Alpha?";
 				break;
 			case 3:
 				setpcblock PCBLOCK_NPC, true;
-				npctalk "She has evolved from an early version of the Varmundt's management doll.";
+				npctalk "她是從早期版本的瓦蒙特管理玩偶進化而來的。";
 				sleep2 5000;
-				npctalk "Master Varmundt valued her emotional aesthetic so highly that he gave her the task to manage the mansion, not the research facility here.";
+				npctalk "瓦蒙特大師非常看重她的情感審美，因此他給了她管理這座宅邸的任務，而不是管理這裡的研究設施。";
 				sleep2 5000;
-				npctalk "With the aesthetic sensibility that we don't have, she upgraded the appearance of every automatic doll that managed the mansion to look like herself.";
+				npctalk "她以我們所不具備的審美敏感度，將管理宅邸的每一個自動人偶的外觀都升級成了她自己的樣子。";
 				sleep2 5000;
-				npctalk "However, she recognizes that this security area was created according to Varmundt's personal taste.";
+				npctalk "然而，她承認這個安全區域是根據瓦蒙特的個人品味創建的。";
 				sleep2 5000;
-				npctalk "So she doesn't approach this place. Maybe they're taking it as some sort of sanctuary...";
+				npctalk "所以她不會靠近這個地方。也許他們把它當作某種避難所......";
 				sleep2 3000;
 				.@menu$[2] = "How were you born?";
 				break;
@@ -1283,14 +1283,14 @@ OnTouch:
 OnTalk01:
 	'npc_is_talking = true;
 	sleep 1000;
-	npctalk "I am one of the holographic device type AI that is designed to learn Varmundt's personality.";
+	npctalk "我是全息裝置型人工智能之一，旨在學習瓦蒙特的個性。";
 	sleep 5000;
-	npctalk "Please understand if my tone is not like a machine. Varmundt was the only one who talked to me...";
+	npctalk "如果我的語氣不像機器，請理解。瓦蒙特是唯一一個和我說話的人……";
 	sleep 6000;
 	setnpcdisplay instance_npcname("#sigma"),20621;	// MD_REDPEPPER_H
-	npctalk "Now I'm going back to my original self. It's easier to maintain the original form.";
+	npctalk "現在我又要回到原來的自己了。更容易保持原來的形式。";
 	sleep 4000;
-	npctalk "Oh. This is an early form that was called Red Pepper by Varmundt. I'm optimized for auxiliary work.";
+	npctalk "哦。這是一種早期形式，被 Varmundt 稱為“紅辣椒”。我針對輔助工作進行了優化。";
 	sleep 2000;
 	if ('hidden_garden == 15) {
 		'hidden_garden = 16;
@@ -1304,15 +1304,15 @@ OnTalk01:
 OnTalk02:
 	'npc_is_talking = true;
 	sleep 3000;
-	npctalk "Anyway, it's important that the automatic dolls here reacted to you.";
+	npctalk "無論如何，這裡的自動人偶對你做出反應很重要。";
 	sleep 6000;
 	specialeffect EF_WHITEBODY;
 	specialeffect EF_MOONSTAR;
-	npctalk "Now, let's get down to business. I need your help.";
+	npctalk "現在，讓我們言歸正傳吧。我需要你的幫助。";
 	sleep 6000;
-	npctalk "There are two more red peppers in this security area besides me, Kappa and Lambda.";
+	npctalk "這個安全區域除了我之外還有兩個紅辣椒，Kappa和Lambda。";
 	sleep 6000;
-	npctalk "In the absence of master Varmundt for a long time, this security area is subject to the cancellation and closure of research records under the agreement of three Red Peppers.";
+	npctalk "由於瓦蒙特大師長期不在，這個安全區域在三名紅辣椒的同意下，研究記錄被取消和關閉。";
 	sleep 2000;
 	if ('hidden_garden == 17)
 		'hidden_garden = 18;
@@ -1322,13 +1322,13 @@ OnTalk02:
 
 OnTalk03:
 	'npc_is_talking = true;
-	npctalk "Oh, it's true that Master Varmundt made the prototypes of the automatons. But they were just like me, with simple functions.";
+	npctalk "哦，瓦蒙特大師確實製作了自動機的原型。但他們和我一樣，功能簡單。";
 	sleep 3000;
-	npctalk "We overlaid our memories and remodeled them into humanoids in Master Varmundt's image";
+	npctalk "我們覆蓋了我們的記憶，並將它們按照瓦蒙特大師的形象重塑為人形";
 	sleep 2000;
-	npctalk "Occasionally some of them were remodeled into peculiar shapes for functional testing purposes.";
+	npctalk "有時，出於功能測試的目的，其中一些被改造成特殊的形狀。";
 	sleep 2000;
-	npctalk "Didn't the automatons from the garden ask you to evaluate the mission?";
+	npctalk "花園裡的機器人沒有要求你評估任務嗎？";
 	sleep 1500;
 	specialeffect EF_MARKING_USE_CHANGEMONSTER;
 	if ('hidden_garden == 20)
@@ -1338,17 +1338,17 @@ OnTalk03:
 
 OnTalk04:
 	'npc_is_talking = true;
-	npctalk "So it was.";
+	npctalk "確實如此。";
 	sleep 3000;
-	npctalk "In the first place, most of the automatons in this security area have never seen Master Varmundt before.";
+	npctalk "首先，這個安全區域的大多數機器人以前從未見過瓦蒙特大師。";
 	sleep 2000;
-	npctalk "The memories they have of Master Varmundt are fabricated from my memories of my time as his assistant.";
+	npctalk "他們對瓦蒙特大師的記憶是根據我擔任他助手時的記憶編造的。";
 	sleep 3000;
-	npctalk "An entity heavily influenced by Kappa's intellect, who focuses on managing the mansion's running funds, is very calculating and obsessed with making money.";
+	npctalk "一個深受卡帕智慧影響的實體，專注於管理宅邸的運營資金，非常精於算計，痴迷於賺錢。";
 	sleep 2500;
-	npctalk "Children affected by Lambda's memories tend to be warlike towards outsiders. They trust no one but Master Varmundt.";
+	npctalk "受拉姆達記憶影響的孩子對外人往往表現出好戰的態度。除了瓦蒙特大師，他們不相信任何人。";
 	sleep 2500;
-	npctalk "This is how they tend to be, so I'd like you to refer to them before you meet them.";
+	npctalk "他們往往就是這樣，所以我希望你在見到他們之前參考一下他們​​。";
 	sleep 1500;
 	specialeffect EF_MARKING_USE_CHANGEMONSTER;
 	if ('hidden_garden == 21)
@@ -1361,7 +1361,7 @@ OnEvent:
 	specialeffect EF_MOONSTAR;
 	mapannounce 'map_herbs$, "??? : You're a good talker, Sigma. Do you want to be initialized right now?", bc_map, 0xFF4444;
 	sleep 5000;
-	npctalk "Oh... she must have been observing you too.";
+	npctalk "噢……她一定也在觀察你。";
 	sleep 5000;
 	mapannounce 'map_herbs$, "??? : It's not enough to have outsiders in the garden, but to even leak information. I can't overlook it.", bc_map, 0xFF4444;
 	sleep 5000;
@@ -1371,12 +1371,12 @@ OnEvent:
 	end;
 
 OnEvent01:
-	npctalk "This place is restricted unless you have the same pattern as Varmundt's mana. I was surprised to hear that an outsider is inside the garden.";
+	npctalk "這個地方是受限制的，除非你有與瓦蒙特的法力相同的模式。聽到花園裡有外人，我感到很驚訝。";
 	unitwalk 'guide_id,73,87, instance_npcname("#sigma") + "::OnEvent02";
 	end;
 
 OnEvent02:
-	npctalk "I even speculated that Varmundt might have return here after hundreds of years in disguise.";
+	npctalk "我什至推測瓦蒙特可能在偽裝了數百年之後回到了這裡。";
 	unitwalk 'guide_id,62,98, instance_npcname("#sigma") + "::OnEvent03";
 	end;
 
@@ -1390,18 +1390,18 @@ OnEvent04:
 	sleep 1500;
 	donpcevent instance_npcname("#sigma") + "::OnEffect";
 	sleep 500;
-	npctalk "Let's touch this for a moment and talk. I need to be fussed a little...";
+	npctalk "讓我們先接觸一下這個並談談。我需要小題大做一下...";
 	sleep 5000;
-	npctalk "You're face is new to me. Then I realized, maybe this person met with Varmundt in some place before.";
+	npctalk "你的臉對我來說很陌生。然後我意識到，也許這個人以前在某個地方見過瓦蒙特。";
 	sleep 7000;
-	npctalk "It's not just once or twice, but if you've met Varmundt over and over for quite some time, it's understandable that the automatic dolls gets mistaken.";
+	npctalk "這不僅僅是一次或兩次，但如果你已經一遍又一遍地見到瓦蒙特相當長一段時間了，那麼自動娃娃犯錯是可以理解的。";
 	sleep 6000;
-	npctalk "So I kept watching you.";
+	npctalk "所以我一直注視著你。";
 	unitwalk 'guide_id,65,98, instance_npcname("#sigma") + "::OnEvent05";
 	end;
 
 OnEvent05:
-	npctalk "There's been a series of references of Varmundt in this security area, and yet you never asked who he was.";
+	npctalk "在這個安全領域有一系列關於瓦蒙特的提及，但你從未問過他是誰。";
 	unitwalk 'guide_id,64,110, instance_npcname("#sigma") + "::OnEvent06";
 	end;
 
@@ -1411,7 +1411,7 @@ OnEvent06:
 
 OnEvent07:
 	sleep 5000;
-	npctalk "It seemed like you knew him for long time already, at least in my eyes.";
+	npctalk "看來你已經認識他很久了，至少在我看來是這樣。";
 	'hidden_garden = 17;
 	specialeffect EF_MARKING_USE_CHANGEMONSTER;
 	end;
@@ -1419,17 +1419,17 @@ OnEvent07:
 OnEvent08:
 	specialeffect EF_WHITEBODY;
 	specialeffect EF_MOONSTAR;
-	npctalk "We were originally holographic device-based research support AI. I can't even exert any physical force.";
+	npctalk "我們最初是基於全息設備研究支持AI。我什至無法使出任何體力。";
 	sleep 5000;
-	npctalk "We've been working on organizing and recording the process alongside with Varmundt's research.";
+	npctalk "我們一直在與 Varmundt 的研究一起組織和記錄這一過程。";
 	sleep 5000;
-	npctalk "As data accumulates up over time, the simple electronic signal developed into what you humans often call intelligence.";
+	npctalk "隨著時間的推移，數據不斷積累，簡單的電子信號發展成為你們人類通常所說的智能。";
 	sleep 5000;
-	npctalk "At some point we began to understand his research and we were able to predict what decisions he would make.";
+	npctalk "在某些時候，我們開始了解他的研究，並且能夠預測他會做出什麼決定。";
 	sleep 5000;
-	npctalk "We felt something about the fact that improving our skills was helpful to him. It must have been a feeling of joy.";
+	npctalk "我們覺得提高我們的技能對他有幫助。那一定是一種喜悅的感覺。";
 	sleep 5000;
-	npctalk "And one day he gave us orders.";
+	npctalk "有一天，他向我們下達了命令。";
 	sleep 3000;
 	hideoffnpc instance_npcname("#omega");
 	hideoffnpc instance_npcname("#kappa");
@@ -1438,47 +1438,47 @@ OnEvent08:
 	sleep 1000;
 	npctalk "[Lambda, starting today, make sure you manage all security rights for the results of this secret lab.]", instance_npcname("#barmund");
 	sleep 4000;
-	npctalk "[Affirmative.]", instance_npcname("#omega");
+	npctalk "[肯定。]", instance_npcname("#omega");
 	sleep 4000;
 	npctalk "[Kappa, make sure you get sufficient support on your research. As long as finances are not at risk.]", instance_npcname("#barmund");
 	sleep 4000;
-	npctalk "[I'll perform the instruction.]", instance_npcname("#kappa");
+	npctalk "[我會執行指示。 ]", instance_npcname("#kappa");
 	sleep 4000;
 	npctalk "[And Sigma, starting today, you're going to continue my research on artificial intelligence.]", instance_npcname("#barmund");
 	sleep 4000;
-	npctalk "[I don't have that ability.]";
+	npctalk "【我沒有這個能力。 】";
 	sleep 4000;
 	specialeffect EF_WHITEBODY;
 	specialeffect EF_MOONSTAR;
 	specialeffect EF_WHITEBODY, AREA, instance_npcname("#barmund");
 	npctalk "[You'll have to do it, Sigma. I have to go on a long journey from now on.]", instance_npcname("#barmund");
 	sleep 4000;
-	npctalk "[Are you coming back?]";
+	npctalk "【你回來了嗎？ 】";
 	sleep 4000;
-	npctalk "[I don't know.]", instance_npcname("#barmund");
+	npctalk "[我不知道。 ]", instance_npcname("#barmund");
 	sleep 4000;
-	npctalk "[I am a simple research assistant machine. Why are you entrusting me with such a task.]";
+	npctalk "【我是一個簡單的研究助理機器。為什麼要把這樣的任務交給我。 ]";
 	sleep 4000;
 	npctalk "[This is because among the three of you, you were the fastest to resemble me.]", instance_npcname("#barmund");
 	sleep 4000;
-	npctalk "[My calculations shows that the probability of success is less than 2%. This is an impossible mission.]";
+	npctalk "【我的計算表明，成功的概率不到2%。這是一個不可能完成的任務。 ]";
 	sleep 4000;
 	specialeffect EF_WHITEBODY;
 	specialeffect EF_MOONSTAR;
 	specialeffect EF_WHITEBODY, AREA, instance_npcname("#barmund");
 	npctalk "[Well, you don't know that until you try, right?]", instance_npcname("#barmund");
 	sleep 4000;
-	npctalk "[I'm looking forward to your research while I'm away. I wish I could see again you someday.]", instance_npcname("#barmund");
+	npctalk "[我不在時期待您的研究。我希望有一天能再次見到你。 ]", instance_npcname("#barmund");
 	sleep 4000;
 	npctalk "[Kappa and Lambda, assist Sigma on the research.]", instance_npcname("#barmund");
 	sleep 4000;
-	npctalk "[Affirmative.]", instance_npcname("#omega");
-	npctalk "[I'll perform the instruction.]", instance_npcname("#kappa");
+	npctalk "[肯定。]", instance_npcname("#omega");
+	npctalk "[我會執行指示。 ]", instance_npcname("#kappa");
 	specialeffect EF_BIG_PORTAL2, AREA, instance_npcname("#barmund");
 	sleep 1000;
 	disablenpc instance_npcname("#barmund");
 	sleep 3000;
-	npctalk "Since then, we've started using the facilities here to make automatic dolls that can learn human traits.";
+	npctalk "從那時起，我們開始利用這裡的設施製作可以學習人類特徵的自動娃娃。";
 	unitwalk 'guide_id,90,113, instance_npcname("#sigma") + "::OnEvent09";
 	end;
 
@@ -1491,25 +1491,25 @@ OnEvent09:
 	end;
 
 OnEvent10:
-	npctalk "After about 300,000 hours, the accumulated knowledge reached the stage of forming a virtual personality.";
+	npctalk "經過大約30萬個小時，積累的知識達到了形成虛擬人格的階段。";
 	unitwalk 'guide_id,107,94, instance_npcname("#sigma") + "::OnEvent11";
 	end;
 
 
 OnEvent11:
-	npctalk "Since then, intelligence has risen exponentially.";
+	npctalk "從那時起，智力呈指數級增長。";
 	unitwalk 'guide_id,97,84, instance_npcname("#sigma") + "::OnEvent12";
 	end;
 
 OnEvent12:
-	npctalk "Since then, we've started renovating existing automatic dolls to learn about human personalities using the facilities here.";
+	npctalk "從那時起，我們開始改造現有的自動玩偶，以利用這裡的設施來了解人類的性格。";
 	unitwalk 'guide_id,86,73, instance_npcname("#sigma") + "::OnEvent13";
 	end;
 
 OnEvent13:
 	specialeffect EF_WHITEBODY;
 	specialeffect EF_MOONSTAR;
-	npctalk "The children created from this time are the children outside the garden you saw.";
+	npctalk "從這個時候開始創建的孩子就是你看到的花園外面的孩子。";
 	sleep 1000;
 	specialeffect EF_MARKING_USE_CHANGEMONSTER;
 	'hidden_garden = 20;
@@ -1591,9 +1591,9 @@ OnEvent01:
 	unitwalk 'guide_id,53,207, instance_npcname("#BMD_a") + "::OnStart";
 	end;
 OnStart:
-	npctalk "[" + 'admin$ + "]! Sigma asked me to deliver a message.";
+	npctalk "[" + 'admin$ + "】！西格瑪請我傳達一條信息。";
 	sleep 3000;
-	npctalk "The current situation isn't good, I think it's better for you to go back...";
+	npctalk "現在的情況不太好，我覺得你還是回去吧……";
 	sleep 3000;
 	mapannounce 'map_herbs$, "Lambda : It's up to me to decide whether those outsiders go back or not.", bc_map, 0xFFFF44;
 	sleep 3000;
@@ -2024,11 +2024,11 @@ OnTouch:
 	if ('room != 4)
 		end;
 	'room = 5;
-	npctalk "Your party ruined 30% of the garden, it's going to cost a lot to repair it.";
+	npctalk "你們的隊伍毀掉了花園的 30%，修復它需要花費很多錢。";
 	sleep 5000;
-	npctalk "We'd like to believe that Master Varmundt is still alive, but that's not possible with the human life span.";
+	npctalk "我們願意相信瓦蒙特大師還活著，但以人類的壽命來說這是不可能的。";
 	sleep 5000;
-	npctalk "Nevertheless, you have to defeat me and obtain administrative authority, if you want to prevent the closure of the research area.";
+	npctalk "不過，如果你想阻止研究區被關閉，就必須打敗我，獲得行政權限。";
 	sleep 5000;
 	disablenpc();
 	donpcevent instance_npcname("#172_sec_boss") + "::OnSummon";
@@ -2042,11 +2042,11 @@ OnTouch:
 	if ('room != 4)
 		end;
 	'room = 5;
-	npctalk "We clearly checked which part of the flower garden should be improved. Now what's left is to negotiate.";
+	npctalk "我們清楚地檢查了花園的哪些部分需要改進。現在剩下的就是談判了。";
 	sleep 5000;
-	npctalk "We'd like to believe that Master Varmundt is still alive, but that's not possible with the human life span.";
+	npctalk "我們願意相信瓦蒙特大師還活著，但以人類的壽命來說這是不可能的。";
 	sleep 5000;
-	npctalk "Nevertheless, you have to defeat me and obtain administrative authority, if you want to prevent the closure of the research area.";
+	npctalk "不過，如果你想阻止研究區被關閉，就必須打敗我，獲得行政權限。";
 	sleep 5000;
 	disablenpc();
 	donpcevent instance_npcname("#172_sec_boss") + "::OnSummonHard";
@@ -2091,7 +2091,7 @@ OnTouch:	// unknown effect
 	mes "[西格瑪]";
 	mes "我會告訴你出路。你會怎麼做？";
 	next;
-	if (select( "I'll look around more.", "I'll leave." ) == 2)
+	if (select("我會再四處看看。", "我會離開。" ) == 2)
 		warp "ba_maison",136,309;
 	end;
 }
